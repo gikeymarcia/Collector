@@ -39,16 +39,14 @@
 	#### Saving data into $_SESSION
 	$currentTrial['Response']['Response1']	= $_POST['Response'];
 	$currentTrial['Response']['RT']			= $_POST['RT'];
+	@$currentTrial['Response']['RTkey']		= $_POST['RTkey'];
+	@$currentTrial['Response']['RTlast']	= $_POST['RTlast'];
 	
 	#### Calculating and saving accuracy for trials with responses given
-	if( ($trialType == 'test') OR 	($trialType == 'testpic') OR
-		($trialType == 'copy') OR	($trialType == 'freerecall') OR
-		($trialType == 'jol') ) {
+	if( ($trialType == 'test')	OR 	($trialType == 'testpic') OR
+		($trialType == 'copy')	OR	($trialType == 'freerecall') OR
+		($trialType == 'jol')	OR	($trialType == 'mcpic') ) {
 			
-		$currentTrial['Response']['RTkey']	= $_POST['RTkey'];
-		$currentTrial['Response']['RTkey']	= $_POST['RTlast'];
-		
-		
 		if(($trialType != 'jol') && ($trialType != 'freerecall')) {
 			similar_text($responseClean, $answerClean, $Acc);
 			$currentTrial['Response']['Accuracy'] = $Acc;
@@ -61,62 +59,7 @@
 		}
 	}
 	
-	#### Writing to data file
-	$fileName = 'subjects/Output_Session'.$_SESSION['Session'].'_'.$_SESSION['Username'].'.txt';
-	$add = array(		$_SESSION['Username'],
-						$_SESSION['ExperimentName'],
-						$_SESSION['Session'],
-						$_SESSION['Position'],
-						date("c"),
-						$_SESSION['Condition']['Number'],
-						$_SESSION['Condition']['Stimuli'],
-						$_SESSION['Condition']['Order'],
-						$_SESSION['Condition']['Condition Description'],
-						$_SESSION['Condition']['Condition Notes'],
-					);
-	$addHeader = array(	'Username',
-						'ExperimentName',
-						'Session',
-						'Trial',
-						'Date',
-						'Condition Number',
-						'Stimuli File',
-						'Order File',
-						'Condition Description',
-						'Condition Notes',
-					);
 	
-	// If the output file doesnt exist then write headers
- 	if (is_file($fileName) == FALSE) {
-		$Header1	= $_SESSION['Header1'];
-		$Header2	= $_SESSION['Header2'];
-		for($i=count($addHeader)-1; $i >=0; $i--) {
-			array_unshift($Header1,"");									// add blanks to beginning of $Header1
-			array_unshift($Header2,$addHeader[$i]);						// add column names to beginning of $Header2
-		}
-				
-		// combine header info into 1 line
-		$combinedHeader = array();
-		for($i=0; $i<count($Header1); $i++) {
-			$combinedHeader[] = $Header1[$i].'*'.$Header2[$i];
-		}
-		arrayToLine($combinedHeader,$fileName);
-	}
-	// write line of data
-	$Header1	=& $_SESSION['Header1'];
-	$Header2	=& $_SESSION['Header2'];
-	$data		=  array();
-	foreach ($add as $value) {
-		$data[] = $value;
-	}
-	$junk = array( '\n' , '\t' , '\r' , chr(10) , chr(13) );
-	for($pos=0; $pos<count($Header1); $pos++) {
-		// from Nate:  replaces returns (which are a 13 and a 10, I guess) with HTML line breaks
-		$dataBit = str_replace($junk,' <br /> ', $currentTrial[$Header1[$pos]][$Header2[$pos]]);
-		$data[] = $dataBit;
-	}
-	arrayToLine($data,$fileName);
-	###########################################
 	
 	
 	#### Showing the feedback

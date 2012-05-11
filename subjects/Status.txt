@@ -1,0 +1,3 @@
+Username	Date	Session #	Begin/End?	Condition #	Words File	Order File	Condition Description	User Agent Info
+weohighijn	2012-05-11T23:00:35+00:00	Session 1	Session Start	Condition# 8	Words/FullStim.txt	Orders/Demo.txt	only one long ass study trial	Mozilla/5.0 (Windows NT 6.1; WOW64; rv:12.0) Gecko/20100101 Firefox/12.0
+weohighijn	2012-05-11T23:02:20+00:00	Session 1	Session End	Condition# 8	Words/FullStim.txt	Orders/Demo.txt	only one long ass study trial	Mozilla/5.0 (Windows NT 6.1; WOW64; rv:12.0) Gecko/20100101 Firefox/12.0
