@@ -1,63 +1,60 @@
 <?php
-// fixes problems reading files saved on mac
-ini_set('auto_detect_line_endings', true);
-// start the session at the top of each page
-session_start();
-if ($_SESSION['Debug'] == FALSE) {
-	error_reporting(0);
-}
-// Loads all of my custom PHP functions
-require("CustomFunctions.php");
-
-
-// are we done with all presentations?  if so, send to done.php
-if (array_key_exists($_SESSION['Position'], $_SESSION['Trials']) == FALSE) {
-	// echo '<meta http-equiv="refresh" content="0; url=FinalQuestions.php">';
-	header("Location: FinalQuestions.php");
-	exit;
-}
-
-
-// setting up easier to use and read aliases(shortcuts) of $_SESSION data
-$condition	=& $_SESSION['Condition'];
-$currentPos	=& $_SESSION['Position'];
-$currentTrial =& $_SESSION['Trials'][$currentPos];
-	$cue	=& $_SESSION['Trials'][$currentPos]['Stimuli']['Cue'];
-	$target	=& $_SESSION['Trials'][$currentPos]['Stimuli']['Target'];
-	$answer	=& $_SESSION['Trials'][$currentPos]['Stimuli']['Answer'];
-	$trialType = trim(strtolower($_SESSION['Trials'][$currentPos]['Info']['Trial Type']));
-	$item = trim(strtolower($currentTrial['Info']['Item']));
-
-
-// if we hit a *newfile* then the experiment is over (this means that we don't ask FinalQuestions until the last session of the experiment)
-if($item == '*newfile*') {
-	header("Location: done.php");
-	exit;
-}
-
-
-// if just coming from instructions then record that data into a file
-if(@$_POST['PrevTrial'] == "Instruction") {
-	$instructFile = 'subjects/InstructionsData.txt';
-	if(is_file($instructFile) == FALSE) {
-		$instructHeader = array('Username','RT','Fails');
-		arrayToLine($instructHeader,$instructFile);
+	ini_set('auto_detect_line_endings', true);				// fixes problems reading files saved on mac
+	session_start();										// start the session at the top of each page
+	if ($_SESSION['Debug'] == FALSE) {
+		error_reporting(0);
 	}
-	$instructData = array(	$_SESSION['Username'], $_POST['RT'], $_POST['Fails'] );
-	arrayToLine($instructData,$instructFile);
-}
+	require("CustomFunctions.php");							// Loads all of my custom PHP functions
 
 
-// if there is another item coming up then set it as $nextTrial
-if(array_key_exists($currentPos+1, $_SESSION['Trials'])) {
-	$nextTrial =& $_SESSION['Trials'][$currentPos + 1];
-} else { $nextTrial = FALSE;}
+	// are we done with all presentations?  if so, send to done.php
+	if (array_key_exists($_SESSION['Position'], $_SESSION['Trials']) == FALSE) {
+		// echo '<meta http-equiv="refresh" content="0; url=FinalQuestions.php">';
+		header("Location: FinalQuestions.php");
+		exit;
+	}
 
 
-// if there has been a previous item then set it as $previousTrial
-if($currentTrial>1) {
-	$previousTrial =& $_SESSION['Trials'][$currentPos - 1];
-} else { $previousTrial = FALSE;}
+	// setting up easier to use and read aliases(shortcuts) of $_SESSION data
+	$condition		=& $_SESSION['Condition'];
+	$currentPos		=& $_SESSION['Position'];
+	$currentTrial	=& $_SESSION['Trials'][$currentPos];
+		$cue		=& $_SESSION['Trials'][$currentPos]['Stimuli']['Cue'];
+		$target		=& $_SESSION['Trials'][$currentPos]['Stimuli']['Target'];
+		$answer		=& $_SESSION['Trials'][$currentPos]['Stimuli']['Answer'];
+		$trialType	=  trim(strtolower($_SESSION['Trials'][$currentPos]['Info']['Trial Type']));
+		$item		=  trim(strtolower($currentTrial['Info']['Item']));
+
+
+	// if we hit a *newfile* then the experiment is over (this means that we don't ask FinalQuestions until the last session of the experiment)
+	if($item == '*newfile*') {
+		header("Location: done.php");
+		exit;
+	}
+	
+	
+	// if just coming from instructions then record that data into a file
+	if(@$_POST['PrevTrial'] == "Instruction") {
+		$instructFile = 'subjects/InstructionsData.txt';
+		if(is_file($instructFile) == FALSE) {
+			$instructHeader = array('Username','RT','Fails');
+			arrayToLine($instructHeader,$instructFile);
+		}
+		$instructData = array(	$_SESSION['Username'], $_POST['RT'], $_POST['Fails'] );
+		arrayToLine($instructData,$instructFile);
+	}
+	
+	
+	// if there is another item coming up then set it as $nextTrial
+	if(array_key_exists($currentPos+1, $_SESSION['Trials'])) {
+		$nextTrial =& $_SESSION['Trials'][$currentPos + 1];
+	} else { $nextTrial = FALSE;}
+	
+	
+	// if there has been a previous item then set it as $previousTrial
+	if($currentTrial>1) {
+		$previousTrial =& $_SESSION['Trials'][$currentPos - 1];
+	} else { $previousTrial = FALSE;}
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -74,9 +71,6 @@ if($currentTrial>1) {
 
 
 <?php
-
-	
-	
 	#### determine trial timing
 	// if trial timing is a number then use that and assume computer timed. else use login.php parameter values
 	$timingReported =& trim(strtolower($currentTrial['Info']['Timing']));
@@ -105,7 +99,7 @@ if($currentTrial>1) {
 		$time = 'user';
 	}
 	if($_SESSION['Debug'] == TRUE) {			
-		$time = 1;					## SET ## if debug mode is on all trials will be this many seconds long 
+		$time = 2;					## SET ## if debug mode is on all trials will be this many seconds long 
 	}
 	// hidden field that JQuery/JS uses to submit the trial to feedback.php
 	echo '<div id="Time" class="Hidden">' . $time . '</div>';
@@ -129,8 +123,7 @@ if($currentTrial>1) {
 	#### Presenting different trial types ####
 	// trials without any user input
 	if( ($trialType == 'study') OR ($trialType == 'studypic') OR ($trialType == 'passage') ) {
-		// echo "trial type is $trialType ; no-input should be acceptable!";					#### DEBUG ####
-		// give me the presented elements of each no-input trial type
+		// Study trial type
 		if ($trialType == 'study') {
 			echo '<div class="WordWrap PreCache">
 					<span class="left">'.$cue.'</span>
@@ -138,6 +131,7 @@ if($currentTrial>1) {
 					<span class="right">'.$target.'</span>
 				  </div>';
 		}
+		// StudyPic trial type
 		elseif ($trialType == 'studypic') {
 			echo '<div class="pic PreCache">
 					'. show($cue).
@@ -146,11 +140,13 @@ if($currentTrial>1) {
 			echo '<div class="picWord PreCache">'.$target.'</div>';
 			$formName = $formName.' center';
 		}
+		// Passage trial type
 		elseif($trialType == 'passage') {
 			echo '<div class="passage PreCache">'.$cue.'</div>
 				  <div id="end">End of Passage</div>';
 				  $formName = $formName.' center';
 		}
+		// Instruct trial type
 		elseif ($trialType == 'instruct') {
 			echo '<div id="centerContent PreCache">
 					<div class="instruct">'. $_SESSION['Trials'][$currentPos]['Info']['Order Notes'].'</div>
@@ -172,7 +168,7 @@ if($currentTrial>1) {
 	if(	($trialType == 'test')	OR	($trialType == 'testpic')	OR
 		($trialType == 'copy')	OR	($trialType == 'freerecall')OR
 		($trialType == 'jol')	OR	($trialType == 'mcpic')) {
-		// give me the presented elements of each trial type with input
+		// Test trial type
 		if ($trialType == "test") {
 			echo '<div class="WordWrap">
 					<span class="leftcopy PreCache">'.$cue.'</span>
@@ -186,12 +182,11 @@ if($currentTrial>1) {
 					</form>
 				  </div>';
 		}
-		
+		// TestPic trial type
 		if($trialType == 'testpic') {
 			echo '<div class="pic PreCache">
 					'. show($cue).
 				 '</div>';
-				 
 			$formName = $formName.' center';
 			
 			echo '<form name="'.$formName.'" class="'.$formName.'" action="feedback.php" method="post">
@@ -217,8 +212,8 @@ if($currentTrial>1) {
 				shuffle($MCbuttons);						// turn this line off to maintain the same choice order between-subjects
 				$_SESSION['MCbutton'] = $MCbuttons;
 			}
-			$itemsPerRow = 4;								## SET ## names says it all (use values 1-4; anything bigger causes problems which require css changes)
-			$count = 0;
+			$itemsPerRow	= 4;								## SET ## names says it all (use values 1-4; anything bigger causes problems which require css changes)
+			$count			= 0;
 			echo '<div id="ButtonArea">';
 				foreach ($_SESSION['MCbutton'] as $aButton) {
 					echo '<span class="TestMC PreCache">'.$aButton.'</span>';
@@ -236,7 +231,7 @@ if($currentTrial>1) {
 					<input class="RT Hidden" name="RT" type="text" value="RT" />
 				  </form>';
 		}
-		
+		// Copy trial type
 		if($trialType == 'copy') {
 			echo '<div class="WordWrap PreCache">
 					<span class="left">'.$cue.'</span>
@@ -256,7 +251,7 @@ if($currentTrial>1) {
 					  </form>
 				  </div>';
 		}
-
+		// FreeRecall trial type
 		if($trialType == 'freerecall') {
 			$prompt =& $_SESSION['Trials'][$currentPos]['Info']['Order Notes'];
 			echo '<div class="Prompt PreCache">' . $prompt . '</div>
@@ -268,7 +263,7 @@ if($currentTrial>1) {
 						<input class="RTlast Hidden" name="RTlast" type="text" value="RT" />
 					</form>';
 		}
-		
+		// JOL trial type
 		if($trialType == 'jol') {
 			echo '<div id="jol">How likely are you to correctly remember this item on a later test?</div>
 					<div id="subpoint" class="gray">Type your response on a scale from 0-100 using the entire range of the scale</div>';

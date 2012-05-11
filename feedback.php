@@ -1,12 +1,10 @@
 <?php
-// fixes problems reading files saved on mac
-ini_set('auto_detect_line_endings', true);
-// start the session at the top of each page
-session_start();
-if ($_SESSION['Debug'] == FALSE) {
-	error_reporting(0);
-}
-require("CustomFunctions.php");						// Loads all of my custom PHP functions
+	ini_set('auto_detect_line_endings', true);				// fixes problems reading files saved on mac
+	session_start();										// start the session at the top of each page
+	if ($_SESSION['Debug'] == FALSE) {
+		error_reporting(0);
+	}
+	require("CustomFunctions.php");							// Loads all of my custom PHP functions
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -23,32 +21,32 @@ require("CustomFunctions.php");						// Loads all of my custom PHP functions
 
 <?php
 	#### setting up aliases (for later use)
-	$currentPos =& $_SESSION['Position'];
-	$currentTrial =& $_SESSION['Trials'][$currentPos];
-		$cue =& $_SESSION['Trials'][$currentPos]['Stimuli']['Cue'];
-		$target =& $_SESSION['Trials'][$currentPos]['Stimuli']['Target'];
-		$answer = $_SESSION['Trials'][$currentPos]['Stimuli']['Answer'];
-		$trialType = trim(strtolower($_SESSION['Trials'][$currentPos]['Info']['Trial Type']));
-		$feedback = trim(strtolower($currentTrial['Info']['Feedback']));
-	$time = $_SESSION['FeedbackTime'];
+	$currentPos		=& $_SESSION['Position'];
+	$currentTrial	=& $_SESSION['Trials'][$currentPos];
+		$cue		=& $_SESSION['Trials'][$currentPos]['Stimuli']['Cue'];
+		$target		=& $_SESSION['Trials'][$currentPos]['Stimuli']['Target'];
+		$answer		=  $_SESSION['Trials'][$currentPos]['Stimuli']['Answer'];
+		$trialType	=  trim(strtolower($_SESSION['Trials'][$currentPos]['Info']['Trial Type']));
+		$feedback	=  trim(strtolower($currentTrial['Info']['Feedback']));
+		$time		=  $_SESSION['FeedbackTime'];
 	
 	### getting response and making cleaned up versions (for later comparisons)
-	$response1 = $_POST['Response'];
-	$responseClean = trim(strtolower($response1));
-	$answerClean = trim(strtolower($answer));
-	$Acc = NULL;
+	$response1		= $_POST['Response'];
+	$responseClean	= trim(strtolower($response1));
+	$answerClean	= trim(strtolower($answer));
+	$Acc			= NULL;
 	
-	#### Saving data into $_Session
-	$currentTrial['Response']['Response1'] = $_POST['Response'];
-	$currentTrial['Response']['RT'] = $_POST['RT'];
+	#### Saving data into $_SESSION
+	$currentTrial['Response']['Response1']	= $_POST['Response'];
+	$currentTrial['Response']['RT']			= $_POST['RT'];
 	
 	#### Calculating and saving accuracy for trials with responses given
 	if( ($trialType == 'test') OR 	($trialType == 'testpic') OR
 		($trialType == 'copy') OR	($trialType == 'freerecall') OR
 		($trialType == 'jol') ) {
 			
-		$currentTrial['Response']['RTkey'] = $_POST['RTkey'];
-		$currentTrial['Response']['RTkey'] = $_POST['RTlast'];
+		$currentTrial['Response']['RTkey']	= $_POST['RTkey'];
+		$currentTrial['Response']['RTkey']	= $_POST['RTlast'];
 		
 		
 		if(($trialType != 'jol') && ($trialType != 'freerecall')) {
@@ -88,38 +86,32 @@ require("CustomFunctions.php");						// Loads all of my custom PHP functions
 						'Condition Notes',
 					);
 	
-	// does the output file exist?
-	// if not then write header lines
+	// If the output file doesnt exist then write headers
  	if (is_file($fileName) == FALSE) {
-		$Header1 = $_SESSION['Header1'];
-		$Header2 = $_SESSION['Header2'];
+		$Header1	= $_SESSION['Header1'];
+		$Header2	= $_SESSION['Header2'];
 		for($i=count($addHeader)-1; $i >=0; $i--) {
-			// add blanks to beginning of $Header1
-			array_unshift($Header1,"");
-			// add column names to beginning of $Header2
-			array_unshift($Header2,$addHeader[$i]);
+			array_unshift($Header1,"");									// add blanks to beginning of $Header1
+			array_unshift($Header2,$addHeader[$i]);						// add column names to beginning of $Header2
 		}
-		// arrayToLine($Header1,$fileName);
-		// arrayToLine($Header2,$fileName);
-		
+				
 		// combine header info into 1 line
 		$combinedHeader = array();
 		for($i=0; $i<count($Header1); $i++) {
 			$combinedHeader[] = $Header1[$i].'*'.$Header2[$i];
 		}
-		
 		arrayToLine($combinedHeader,$fileName);
 	}
 	// write line of data
-	$Header1 =& $_SESSION['Header1'];
-	$Header2 =& $_SESSION['Header2'];
-	$data = array();
+	$Header1	=& $_SESSION['Header1'];
+	$Header2	=& $_SESSION['Header2'];
+	$data		=  array();
 	foreach ($add as $value) {
 		$data[] = $value;
 	}
-	$junk = array('\n','\t','\r',chr(10),chr(13));
+	$junk = array( '\n' , '\t' , '\r' , chr(10) , chr(13) );
 	for($pos=0; $pos<count($Header1); $pos++) {
-		// from Nate:  replaces returns (which are a 13 and a 10, I guess) with spaces
+		// from Nate:  replaces returns (which are a 13 and a 10, I guess) with HTML line breaks
 		$dataBit = str_replace($junk,' <br /> ', $currentTrial[$Header1[$pos]][$Header2[$pos]]);
 		$data[] = $dataBit;
 	}

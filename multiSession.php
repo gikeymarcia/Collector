@@ -1,9 +1,9 @@
 <?php
-ini_set('auto_detect_line_endings', true);			// fixes problems reading files saved on mac
-@session_destroy();									// destory any possible previous sessions and suppress warnings
-//session_start();									// starts a new session
-$_SESSION['Debug']=FALSE;							// turns debug mode on and off   ## SET ##
-require("CustomFunctions.php");						// Loads all of my custom PHP functions
+	ini_set('auto_detect_line_endings', true);			// fixes problems reading files saved on mac
+	@session_destroy();									// destory any possible previous sessions and suppress warnings
+	session_start();									// starts a new session
+	$_SESSION['Debug']=FALSE;							// turns debug mode on and off   ## SET ##
+	require("CustomFunctions.php");						// Loads all of my custom PHP functions
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"

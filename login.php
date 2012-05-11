@@ -1,15 +1,12 @@
 <?php
-// fixes problems reading files saved on mac
-ini_set('auto_detect_line_endings', true);
-# Start the session at the top of every page
-@session_destroy();
-session_start();
-@$_SESSION['Debug'] = $_GET['Debug'];
-if ($_SESSION['Debug'] == FALSE) {
-	error_reporting(0);
-}
-// Loads all of my custom PHP functions
-require("CustomFunctions.php");
+	ini_set('auto_detect_line_endings', true);				// fixes problems reading files saved on mac
+	@session_destroy();
+	session_start();										// Start the session at the top of every page
+	@$_SESSION['Debug'] = $_GET['Debug'];
+	if ($_SESSION['Debug'] == FALSE) {
+		error_reporting(0);
+	}
+	require("CustomFunctions.php");							// Loads all of my custom PHP functions
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -44,33 +41,35 @@ require("CustomFunctions.php");
 		
 		
 		#### Grabbing submitted info
-		$_SESSION['Username']	= trim($_GET['Username']);						// grab Username from URL
-		$_SESSION['Session']	= trim($_GET['Session']);							// grab session# from URL
-		if( $_SESSION['Session'] < 1 ){											// if session is not set then set to 1
+		$_SESSION['Username']	= trim($_GET['Username']);			// grab Username from URL
+		$_SESSION['Session']	= trim($_GET['Session']);			// grab session# from URL
+		if( $_SESSION['Session'] < 1 ){								// if session is not set then set to 1
 			$_SESSION['Session'] = 1;
 		}
-		else { $_SESSION['Demographics'] = FALSE; }								// skip demographics for all but session1
+		else { $_SESSION['Demographics'] = FALSE; }					// skip demographics for all but session1
 		$selectedCondition = trim($_GET['Condition']);
 		
 		
 		#### Code to automatically choose condition assignment
-		$Conditions = GetFromFile("Conditions.txt");							// Loading conditions info
+		$Conditions = GetFromFile("Conditions.txt");				// Loading conditions info
 		$logFile =& $_SESSION["LoginCounter Location"];
 		if( $selectedCondition == 'Auto') {
-			// Read counter file & save value
-			if(file_exists($logFile) ) {
+			
+			if(file_exists($logFile) ) {							// Read counter file & save value
 				$fileHandle = fopen ($logFile, "r");
 				$loginCount = fgets($fileHandle);
 				fclose($fileHandle);
 			} else { $loginCount = 1; }
-			// write new old value + 1 to login counter
+			// write old value + 1 to login counter
 			$fileHandle = fopen($logFile, "w");
 			fputs($fileHandle, $loginCount + 1);
 			fclose($fileHandle);
-			// cycles through current condition assignment based on login counter
-			$conditionNumber = ( ($loginCount-1) % (count($Conditions)-2) ) +1;
+			
+			$conditionNumber = ( ($loginCount-1) % (count($Conditions)-2) ) +1;		// cycles through current condition assignment based on login counter
 		}
-		else( $conditionNumber = $selectedCondition);							// if condition is manually choosen then honor choice
+		else{
+			$conditionNumber = $selectedCondition;									// if condition is manually choosen then honor choice
+		}
 		
 		
 		#### loads condition info into $_Session['Condition']
@@ -135,13 +134,13 @@ require("CustomFunctions.php");
 			for ($count=2; $count<count($order); $count++) {
 				$Trials[$count-1]['Stimuli']	= $stimuli[ ($order[$count]['Item']) ];			// adding 'Stimuli', as an array, to each position of $Trials
 				$Trials[$count-1]['Info']		= $order[$count];								// adding 'Info', as an array, to each position of $Trials
-				$Trials[$count-1]['Response']	= array(	"Response1" => NULL,				// adding 'Response', as an array, to each position of $Trials
-															"Response2" => NULL,
-															"RT" => NULL,
-															"RTkey" => NULL,
-															"strictAcc" => NULL,
-															"lenientAcc" => NULL,
-															"Accuracy" => NULL);
+				$Trials[$count-1]['Response']	= array(	"Response1"		=> NULL,			// adding 'Response', as an array, to each position of $Trials
+															"Response2"		=> NULL,
+															"RT"			=> NULL,
+															"RTkey"			=> NULL,
+															"strictAcc"		=> NULL,
+															"lenientAcc"	=> NULL,
+															"Accuracy"		=> NULL);
 															
 				// on trials where there is no Stimuli info (e.g., freerecall) keep same Stimuli structure but fill with 'n/a' values
 				// I need a consistent Trial structure to do all of the automatic output adjustment I do later on
@@ -232,8 +231,8 @@ require("CustomFunctions.php");
 		
 		#### Establishing $_SESSION['Trials'] as the place where all experiment trials are stored
 		// session1 $Trials also contains trials for other sessions but test.php sends to done.php once a *newfile* shows up
-		$_SESSION['Trials'] = $Trials;
-		$_SESSION['Position'] = 1;
+		$_SESSION['Trials']		= $Trials;
+		$_SESSION['Position']	= 1;
 		// Readable($_SESSION['Trials'], '$_SESSION[\'Trials\']');										#### DEBUG ####
 		
 		

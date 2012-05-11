@@ -1,11 +1,11 @@
-	<?php
+<?php
 	ini_set('auto_detect_line_endings', true);			// fixes problems reading files saved on mac
-	session_start();									// starts the session
 	@session_destroy();									// destory any possible previous sessions and suppress warnings
+	session_start();									// starts the session
 	$_SESSION['Debug']=FALSE;							// turns debug mode on and off   ## SET ##
 	$selector = TRUE;									// ## SET ##; Show (TRUE) or hide (FALSE) the condition selector
 	require("CustomFunctions.php");						// Loads all of my custom PHP functions
-	?>
+?>
 	
 	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">

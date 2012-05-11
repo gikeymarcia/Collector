@@ -1,18 +1,15 @@
 <?php
-// fixes problems reading files saved on mac
-ini_set('auto_detect_line_endings', true);
-// start the session at the top of each page
-session_start();
-if ($_SESSION['Debug'] == FALSE) {
-	error_reporting(0);
-}
-// Loads all of my custom PHP functions
-require("CustomFunctions.php");
-
-$currentPos =& $_SESSION['Position'];
-$currentTrial =& $_SESSION['Trials'][$currentPos];
-// pulls in the specified tetris time from the order file, column "Timing"
-$time = trim($currentTrial['Info']['Timing']);
+	ini_set('auto_detect_line_endings', true);				// fixes problems reading files saved on mac
+	session_start();										// start the session at the top of each page
+	if ($_SESSION['Debug'] == FALSE) {
+		error_reporting(0);
+	}
+	require("CustomFunctions.php");							// Loads all of my custom PHP functions
+	
+	$currentPos		=& $_SESSION['Position'];
+	$currentTrial	=& $_SESSION['Trials'][$currentPos];
+	// pulls in the specified tetris time from the order file, column "Timing"
+	$time			=  trim($currentTrial['Info']['Timing']);
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"

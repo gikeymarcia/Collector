@@ -1,13 +1,10 @@
 <?php
-// fixes problems reading files saved on mac
-ini_set('auto_detect_line_endings', true);
-// start the session at the top of each page
-session_start();
-if ($_SESSION['Debug'] == FALSE) {
-	error_reporting(0);
-}
-// Loads all of my custom PHP functions
-require("CustomFunctions.php");
+	ini_set('auto_detect_line_endings', true);			// fixes problems reading files saved on mac
+	session_start();									// start the session at the top of each page
+	if ($_SESSION['Debug'] == FALSE) {
+		error_reporting(0);
+	}
+	require("CustomFunctions.php");						// Loads all of my custom PHP functions
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -24,8 +21,10 @@ require("CustomFunctions.php");
 
 <?php
 	## SET ## Change the email address to your email
-	echo 'Thank you for your participation!<br /><br />
-		If you have any questions about the experiment please email YOURemail@yourdomain.com <br />';
+	echo '<div id="donePage">
+			<h2>Thank you for your participation!</h2>
+			<p>If you have any questions about the experiment please email YOURemail@yourdomain.com</p>
+		  </div>';
 		
 	// readable($_SESSION['Trials']);
 	
@@ -56,16 +55,14 @@ require("CustomFunctions.php");
 						"Condition Description",
 						"User Agent Info"
 					 );
-	// if the file doesn't exist, write the header
- 	if (is_file("subjects/Status.txt") == FALSE) {
+	if (is_file("subjects/Status.txt") == FALSE) {					// if the file doesn't exist, write the header
  		arrayToLine ($UserDataHeader, "subjects/Status.txt");
  	}
-	// write $UserData to "subjects/Status.txt"
-	arrayToLine ($UserData, "subjects/Status.txt");
+	arrayToLine ($UserData, "subjects/Status.txt");					// write $UserData to "subjects/Status.txt"
 	########
 	
-	// destry the session so it doesn't interfere with any future experiments
-	session_destroy();
+	
+	session_destroy();												// destry the session so it doesn't interfere with any future experiments
 	
 	#### TO DO ####
 	/*
