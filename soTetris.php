@@ -49,7 +49,7 @@
 		echo '<div id="time" class="Hidden">'.$time.'</div>';
 		
 		// this piece of php refreshes the page after the specified amount of time
-		echo '<meta http-equiv= "refresh" content="'.$time.'; url=feedback.php">';
+		echo '<meta http-equiv= "refresh" content="'.$time.'; url=postTrial.php">';
 		
 		#### Pre-cache next trial
 		echo '<div class="Hidden">';

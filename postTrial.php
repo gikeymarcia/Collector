@@ -130,18 +130,17 @@
 	// echo $_POST['RT'].'<br />';											#### DEBUG ####
 	
 	
-	// progresses the trial counter
-	$currentPos++;
+	
 
 	// if showing feedback use feedback time or else use 0
 	if($feedback == 'yes'){
-		echo '<meta http-equiv="refresh" content="'.$time.'; url=test.php">';						// comment out this line to stop feedback from auto advancing
+		echo '<meta http-equiv="refresh" content="'.$time.'; url=next.php">';						// comment out this line to stop feedback from auto advancing
 	}
 	else {
-		echo '<meta http-equiv="refresh" content="0; url=test.php">';
+		echo '<meta http-equiv="refresh" content="0; url=next.php">';
 	}
 	
-	// echo '<a href="test.php".">Click Here to continue</a>';										// uncomment to let participants continue at their own pace
+	// echo '<a href="next.php".">Click Here to continue</a>';										// uncomment to let participants continue at their own pace
 ?>
 </body>
 </html>

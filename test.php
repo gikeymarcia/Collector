@@ -101,7 +101,7 @@
 	if($_SESSION['Debug'] == TRUE) {			
 		$time = 2;					## SET ## if debug mode is on all trials will be this many seconds long 
 	}
-	// hidden field that JQuery/JS uses to submit the trial to feedback.php
+	// hidden field that JQuery/JS uses to submit the trial to postTrial.php
 	echo '<div id="Time" class="Hidden">' . $time . '</div>';
 	
 	
@@ -155,7 +155,7 @@
 		
 		// give the form a different name for user and comuputer timed
 		// I use formname + JQuery to hide the submit button when the form is a computer timed form
-		echo '<form name="'.$formName.'" class="'.$formName.'" action="feedback.php" method="post">
+		echo '<form name="'.$formName.'" class="'.$formName.'" action="postTrial.php" method="post">
 				<input type="submit" id="FormSubmitButton" value="Done">
 				<input class="RTkey Hidden" name="RTkey" type="text" value="no keypress trial" />
 				<input class="RT Hidden" name="RT" type="text" value="" />
@@ -173,7 +173,7 @@
 			echo '<div class="WordWrap">
 					<span class="leftcopy PreCache">'.$cue.'</span>
 					<span class="dividercopy">:</span>
-					<form name="'.$formName.'" class="'.$formName.' leftfloat PreCache" action="feedback.php" method="post">
+					<form name="'.$formName.'" class="'.$formName.' leftfloat PreCache" action="postTrial.php" method="post">
 						<input class="Textbox Right PreCache" name="Response" type="text" value=""/>
 						<input type="submit" id="FormSubmitButton" value="Submit">
 						<input class="RTkey Hidden" name="RTkey" type="text" value="RTkey" />
@@ -189,7 +189,7 @@
 				 '</div>';
 			$formName = $formName.' center';
 			
-			echo '<form name="'.$formName.'" class="'.$formName.'" action="feedback.php" method="post">
+			echo '<form name="'.$formName.'" class="'.$formName.'" action="postTrial.php" method="post">
 					<input class="Textbox picWord PreCache" name="Response" type="text" value=""/><br />
 					<input type="submit" id="FormSubmitButton" value="Submit">
 					<input class="RTkey Hidden" name="RTkey" type="text" value="RTkey" />
@@ -226,7 +226,7 @@
 			echo '</div>';
 			
 			$formName = $formName.' center';
-			echo '<form name="'.$formName.'" class="'.$formName.'" action="feedback.php" method="post">
+			echo '<form name="'.$formName.'" class="'.$formName.'" action="postTrial.php" method="post">
 					<input class="Textbox Hidden" name="Response" type="text" value=""/><br />
 					<input class="RT Hidden" name="RT" type="text" value="RT" />
 				  </form>';
@@ -242,7 +242,7 @@
 				  <div class="WordWrap PreCache">
 				  	<span class="leftcopy">'.$cue.'</span>
 				  	<span class="dividercopy">:</span>
-				  	<form name="'.$formName.'" class="'.$formName.' leftfloat" action="feedback.php" method="post">
+				  	<form name="'.$formName.'" class="'.$formName.' leftfloat" action="postTrial.php" method="post">
 					  	<input class="Textbox" name="Response" type="text" value=""/>
 					  	<input type="submit" id="FormSubmitButton" value="Submit">
 						<input class="RTkey Hidden" name="RTkey" type="text" value="RTkey" />
@@ -255,7 +255,7 @@
 		if($trialType == 'freerecall') {
 			$prompt =& $_SESSION['Trials'][$currentPos]['Info']['Order Notes'];
 			echo '<div class="Prompt PreCache">' . $prompt . '</div>
-					<form name="'.$formName.'" class="'.$formName.'" action="feedback.php" method="post">
+					<form name="'.$formName.'" class="'.$formName.'" action="postTrial.php" method="post">
 						<textarea rows="20" cols="60" name="Response" class="PreCache" wrap="physical" value=""></textarea><br />
 						<input type="submit" id="FormSubmitButton" value="Submit" />
 						<input class="RTkey Hidden" name="RTkey" type="text" value="RTkey" />
@@ -268,7 +268,7 @@
 			echo '<div id="jol">How likely are you to correctly remember this item on a later test?</div>
 					<div id="subpoint" class="gray">Type your response on a scale from 0-100 using the entire range of the scale</div>';
 			
-			echo '<form name="'.$formName.'" class="'.$formName.'" action="feedback.php" method="post">
+			echo '<form name="'.$formName.'" class="'.$formName.'" action="postTrial.php" method="post">
 					<input class="Textbox" name="Response" type="text" value=""/><br />
 					<input type="submit" id="FormSubmitButton" value="Submit">
 					<input class="RTkey Hidden" name="RTkey" type="text" value="RTkey" />
