@@ -1,0 +1,16 @@
+Stimuli	Stimuli	Stimuli	Stimuli	Stimuli	Info	Info	Info	Info	Info	Info	Response	Response	Response	Response	Response	Response	Response
+Cue	Target	Answer	Shuffle	Stimuli Notes	Item	Trial Type	Feedback	Timing	Order Notes	Shuffle	Response1	Response2	RT	RTkey	strictAcc	lenientAcc	Accuracy
+Word	Pair	Pair	bananna	high associates	2	Study	No	User	study trials	OFF								
+Dog	Cat	Cat	bananna	high associates	3	Study	No	Computer	study trials	OFF								
+Funny	Bone	bonez	bananna	high associates	4	Study	No	7	study trials	OFF								
+Whale	Rocket	Rocket	zoinks	low associate	5	Test	Yes	Computer	inputs	OFF								
+Laptop	Swing	Swing	zoinks	low associate	6	Copy	No	8	inputs	OFF								
+Whale	Rocket	Rocket	zoinks	low associate	5	JOL	No	User	inputs	OFF								
+<p>GRE scores are a pre requisite for admissions to programs of graduate study offered by colleges in the US, Canada and some other countries. The GRE General test does not assess your knowledge in any particular area of study; rather it is a test of your verbal reasoning, critical thinking, quantitative reasoning and analytical writing skills. For the purpose of testing these skills, the GRE exam format is based on three sections. These are the Verbal Reasoning, Quantitative Reasoning and the Analytical Writing sections.</p>
+<p>The Verbal Reasoning section of the GRE is a test of your abilities to analyze a given text by deriving information from it. Your skills related to understanding the structure of sentences and analyzing the relationships between the words contained therein are tested by this section of the GRE. This section of the GRE consists of questions based on analogies, antonyms, sentence completions and reading comprehension. You will generally be presented with three or more GRE reading comprehension passages in the Verbal Reasoning section.</p>
+<p>The GRE reading comprehension questions will test your ability to analyze a given passage. You will have to read the passage carefully to grasp the actual meaning that is intended to be conveyed through the passage. This can be achieved by studying the GRE reading comprehension passage from all perspectives. You will have to identify all ideas that have been presented in the GRE reading comprehension passage either explicitly or implicitly. You should be familiar with the process of segregating the conclusions from the arguments that have been presented in the GRE reading comprehension passage. This would be essential for answering the questions that follow the given passage.</p>
+	N/A	N/A	bananna	Critical Passage	11	Passage	No	User	new trials	OFF								
+n/a	n/a	n/a	n/a	n/a	0	StepOut	N/A	20	soTetris.php	OFF								
+n/a	n/a	n/a	n/a	n/a	0	FreeRecall	N/A	15	Write down everything you can remember that has happened so far in this experiment.	OFF								
+images/bringing it all back home.jpg	Bob Dylan	Bob Dylan	picturebank	album covers	8	StudyPic	No	User	whatever I want	OFF								
+images/bringing it all back home.jpg	Bob Dylan	Bob Dylan	picturebank	album covers	8	TestPic	Yes	Computer	whatever I want	OFF								

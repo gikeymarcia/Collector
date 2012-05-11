@@ -23,10 +23,10 @@
 	#### setting up aliases (for later use)
 	$currentPos		=& $_SESSION['Position'];
 	$currentTrial	=& $_SESSION['Trials'][$currentPos];
-		$cue		=& $_SESSION['Trials'][$currentPos]['Stimuli']['Cue'];
-		$target		=& $_SESSION['Trials'][$currentPos]['Stimuli']['Target'];
-		$answer		=  $_SESSION['Trials'][$currentPos]['Stimuli']['Answer'];
-		$trialType	=  trim(strtolower($_SESSION['Trials'][$currentPos]['Info']['Trial Type']));
+		$cue		=& $currentTrial['Stimuli']['Cue'];
+		$target		=& $currentTrial['Stimuli']['Target'];
+		$answer		=  $currentTrial['Stimuli']['Answer'];
+		$trialType	=  trim(strtolower($currentTrial['Info']['Trial Type']));
 		$feedback	=  trim(strtolower($currentTrial['Info']['Feedback']));
 		$time		=  $_SESSION['FeedbackTime'];
 	

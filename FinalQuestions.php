@@ -135,7 +135,7 @@ require("CustomFunctions.php");						// Loads all of my custom PHP functions
 										</li>
 									</div>
 								</ul>
-								<br />
+								<br style="clear: both;" />
 								<input type="submit" value="Submit" id="FormSubmitButton"/>
 								<?php
 							}
