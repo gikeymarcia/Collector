@@ -1,0 +1,5 @@
+Item	Trial Type	Feedback	Timing	Order Notes	Shuffle	JOL
+2	jol		User	blocked	study block1	
+2	jol		User	blocked	study block1	
+2	jol		User	blocked	study block1	
+2	jol		User	blocked	study block1	

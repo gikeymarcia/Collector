@@ -1,0 +1,22 @@
+Item	Trial Type	Feedback	Timing	Order Notes	Shuffle
+2	Study		User	blocked	study block1
+2	Study		User	blocked	study block1
+3	Copy		User	blocked	study block1
+3	Copy		User	blocked	study block1
+2	Test	Yes	User	blocked	test block 1
+3	Test		User	interleaved	test block 1
+5	StudyPic		User	hard	PICS
+5	StudyPic		User	hard	PICS
+6	TestPic		User	easy	PICS
+6	TestPic		User	easy	PICS
+8	Passage		User	idiot proof	OFF
+8	Passage		User	idiot proof	OFF
+0	FreeRecall		User	Write down everything you can remember about that last crap you read	end
+0	FreeRecall		User	Write down stuff again.  Tell me about your day	end
+0	stepout		20	soTetris.php	OFF
+*newfile*					
+5	StudyPic		User	hard	PICS
+6	StudyPic		User	hard	PICS
+*newfile*					
+5	StudyPic		User	hard	PICS
+6	StudyPic		User	hard	PICS

@@ -1,0 +1,17 @@
+Number	Stimuli	Order	Description	Notes	More
+1	Words1.txt	Order1.txt	fun	Easy Blocked 1	1
+13	Words2.txt	Order5.txt	hard	Difficult Interleaved 1	1
+5	Words1.txt	Order5.txt	boring	Easy Interleaved 1	1
+9	Words2.txt	Order1.txt	fun	Difficult Blocked 1	1
+14	Words2.txt	Order6.txt	hard	Difficult Interleaved 2	2
+10	Words2.txt	Order2.txt	boring	Difficult Blocked 2	2
+2	Words1.txt	Order2.txt	fun	Easy Blocked 2	2
+6	Words1.txt	Order6.txt	hard	Easy Interleaved 2	2
+3	Words1.txt	Order3.txt	boring	Easy Blocked 3	3
+7	Words1.txt	Order5.txt	fun	Easy Interleaved 1	3
+11	Words2.txt	Order3.txt	hard	Difficult Blocked 3	3
+15	Words2.txt	Order5.txt	boring	Difficult Interleaved 1	3
+16	Words2.txt	Order6.txt	fun	Difficult Interleaved 2	4
+8	Words1.txt	Order6.txt	hard	Easy Interleaved 2	4
+12	Words2.txt	Order4.txt	boring	Difficult Blocked 4	4
+4	Words1.txt	Order4.txt	fun	Easy Blocked 4	4

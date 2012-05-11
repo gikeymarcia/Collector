@@ -1,0 +1,9 @@
+Item	Trial Type	Feedback	Timing	Notes	Shuffle
+2	Study	no	Computer	blocked	
+3	StudyPic	no	User	interleaved	
+4	Test	yes	User	hard	
+5	TestPic	no	30	easy	
+6	Passage	yes	300	idiot proof	
+whatever	stepout	NA	180	soTetris.html	
+8	Study	yes	Computer	punishment	
+9	FreeRecall	no	User	"reward ""to be recalled"""	

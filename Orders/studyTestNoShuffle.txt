@@ -1,0 +1,7 @@
+Item	Trial Type	Feedback	Timing	Order Notes	Shuffle
+2	Study	no	User	Showing 3 trials in order	OFF
+3	Study	no	User	Showing 3 trials in order	OFF
+4	Study	no	User	Showing 3 trials in order	OFF
+2	Test	no	User	Showing 3 trials in order	OFF
+3	Test	Yes	User	Showing 3 trials in order	OFF
+4	Test	no	User	Showing 3 trials in order	OFF

@@ -1,0 +1,4 @@
+Item	Trial Type	Feedback	Timing	Order Notes	Shuffle
+8	Mcpic	No	User	ala kornell and bjork 2008	OFF
+9	Mcpic	No	Computer	ala kornell and bjork 2008	OFF
+10	Mcpic	No	10	ala kornell and bjork 2008	OFF

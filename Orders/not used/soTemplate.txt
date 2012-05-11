@@ -1,0 +1,3 @@
+Item	Trial Type	Feedback	Timing	Order Notes	Shuffle	JOL
+0	StepOut		15	soTemplate.php	OFF	
+0	StepOut		45	soTemplate.php	OFF	

@@ -1,0 +1,2 @@
+Item	Trial Type	Feedback	Timing	Order Notes	Shuffle	JOL
+5	StudyPic		User	hard	PICS	

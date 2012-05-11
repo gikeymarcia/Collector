@@ -1,0 +1,25 @@
+Number	ProbType1	ProbType2	ProbType3	Relatedness	Scheduling	Description	Original Order
+1	triP.txt	triA.txt	triV.txt	related	blocked	triP triA triV rel block	3
+2	cirP.txt	cirA.txt	cirV.txt	related	mixed	cirP cirA cirV rel mix	10
+3	triP.txt	triA.txt	triV.txt	related	blocked	triP triA triV rel block	3
+4	recP.txt	cirA.txt	triV.txt	unrelated	blocked	recP cirA triV unrel block	6
+5	cirP.txt	cirA.txt	cirV.txt	related	mixed	cirP cirA cirV rel mix	10
+6	cirP.txt	triA.txt	recV.txt	unrelated	mixed	cirP triA recV unrel mix	14
+7	triP.txt	recA.txt	cirV.txt	unrelated	mixed	triP recA cirV unrel mix	18
+8	cirP.txt	recA.txt	triV.txt	unrelated	mixed	cirP recA triV unrel mix	13
+9	cirP.txt	triA.txt	recV.txt	unrelated	blocked	cirP triA recV unrel block	5
+10	recP.txt	recA.txt	recV.txt	related	blocked	recP recA recV rel block	2
+11	triP.txt	triA.txt	triV.txt	related	mixed	triP triA triV rel mix	12
+12	cirP.txt	recA.txt	triV.txt	unrelated	blocked	cirP recA triV unrel block	4
+13	recP.txt	recA.txt	recV.txt	related	mixed	recP recA recV rel mix	11
+14	recP.txt	recA.txt	recV.txt	related	mixed	recP recA recV rel mix	11
+15	recP.txt	recA.txt	recV.txt	related	blocked	recP recA recV rel block	2
+16	cirP.txt	cirA.txt	cirV.txt	related	blocked	cirP cirA cirV rel block	1
+17	triP.txt	recA.txt	cirV.txt	unrelated	blocked	triP recA cirV unrel block	9
+18	recP.txt	triA.txt	cirV.txt	unrelated	blocked	recP triA cirV unrel block	7
+19	cirP.txt	cirA.txt	cirV.txt	related	blocked	cirP cirA cirV rel block	1
+20	triP.txt	triA.txt	triV.txt	related	mixed	triP triA triV rel mix	12
+21	triP.txt	cirA.txt	recV.txt	unrelated	mixed	triP cirA recV unrel mix	17
+22	triP.txt	cirA.txt	recV.txt	unrelated	blocked	triP cirA recV unrel block	8
+23	recP.txt	triA.txt	cirV.txt	unrelated	mixed	recP triA cirV unrel mix	16
+24	recP.txt	cirA.txt	triV.txt	unrelated	mixed	recP cirA triV unrel mix	15

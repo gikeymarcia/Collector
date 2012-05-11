@@ -1,0 +1,134 @@
+body {	padding-left: 30px;	font-family: Kreon, sans-serif;	font-size: 110%;	}
+h1 {	font-size: 2em;	color: #333333;	padding-top: 30px;	text-align: center;	}
+h2 {	}
+h3 {	}
+p {		}
+input	{	}
+table {		font-size: 1em;	margin: 0 auto;	}
+table td {	background: #f5f5f5;	padding: 5px;	}
+img {		display: block;	margin-left: auto;	margin-right: auto;	}
+form	{}
+option	{}
+
+
+/*Divs used across multiple pages*/
+.ExpContainer {	text-align: center;	color: #000000;	font-size: 1em;	margin: 0 auto;	width: 800px;	}
+.Prompt	{	padding-top: 20px; width: 500px;}
+.Textbox	{}
+#SubmitButton	{}
+.Hidden, .PreCache	{	display:none;	}
+
+
+/*index.php specific css*/
+#LoginPosition {text-align: center;	font-size: 1em;		}
+.Dropdown	{}
+
+
+/*instructions.php specific css*/
+#Instructions	{}
+#ReadyButtonText{	margin: 0 auto;	background: #00FFFF;	width: 10em;	text-align: center;	padding: 2em;	}
+#Q1	{	padding: 7em;}
+.MCbutton{ cursor: pointer;	}
+
+
+/*BasicInfo specific css*/
+#content { margin-left: auto; margin-right: auto; width: 70%; min-width: 400px; max-width: 800px; padding: 15px;}
+.Question { padding-bottom: 20px; /*outline: dashed 1px #666666;*/ padding-left: 10px; width: 85%}
+p.Ask {color: #000000; font-size: 1.1em;  }
+input.radio {  }
+
+.leftfloat {float: left;}
+
+
+
+
+textarea { margin-bottom: 10px; font-family: Arial, Helvetica, san-serif;}
+input.submit {}
+
+.WordWrap { margin: 20px auto 0; } 
+.left, .divider, .right { font-size: 2em;}
+.leftcopy, .dividercopy { font-size: 2em; line-height: 1em; float: left; padding-right: 5px;}
+form.UserTiming, form.ComputerTiming{  }
+.gray { color: #666666;}
+
+.center {text-align: center;}
+.Feedback {font-size: 2em;}
+.picWord { text-align: center; font-size: 2em;}
+
+.pic { padding-bottom: 20px;} 
+.Textbox { width: 200px; padding: 0 5px; font-size: 1.5em;}
+
+.passage {min-width: 400px; max-width: 800px; margin: 0 auto; font-family: Times New Roman, serif; font-size: .9em; line-height: 1.6em;}
+.passage p { padding-bottom: 10px;}
+#end { margin: 0 auto; color: red; text-align: center; font-size: 2em;}
+
+
+#SubmitButton	{ background: #566673; color: #fff; cursor: pointer; width: 80px; padding: 5px;  border-radius: 5px; margin: 20px auto 0;}
+#SubmitButton:hover { background: #3e5365;}
+
+#FormSubmitButton	{ background: #566673; color: #fff; cursor: pointer; width: 80px; padding: 5px;  border-radius: 5px; }
+#FormSubmitButton:hover { background: #3e5365;}
+
+.padtop60 { padding-top: 60px; }
+.martop60 { margin-top: 60px;}
+
+/*Instructions.php css*/
+#centerContent { width: 66%; max-width: 800px; min-width: 450px;margin-left: auto; margin-right: auto;}
+.Instruct {margin-left: atuo; margin-top: 5%;}
+.readcheck { background: #f2f1f1; padding: 20px; width: 50%; margin-top: 17%;}
+ol.list  li{  width: 80%; margin-bottom: 15px; background: #ffffff; outline: dotted 2px black; }
+
+
+
+
+#jol { font-size: 2em; padding-top: 20px; max-width: 600px;}
+#subpoint { padding-top: 20px; padding-bottom: 10px; color: #191935;max-width: 600px;}
+
+/*stepout related css*/
+h1.stepout { width: 700px; margin:20px auto 20px;}
+#StepoutInstructions {width: 550px; margin-top: 30px; margin-left: auto; margin-right: auto;}
+#StepoutInstructions p {font-size: 1.1em;}
+#Clock { float: right; padding: 4px 8px 8px 8px; font-size: 1.1em; background: #9cb0d4; color: #fbfdff; margin-right: 25px; margin-top: 15px;}
+	#Clock span { margin-bottom: 20px;}
+	.Countdown { font-size: 2em; font-family: Orbitron, serif; text-align: center; margin-top: 5px; background: #ddeeff; color: #3c3c3c; }
+#Tetris { margin-left: auto; margin-right: auto; width: 550px; height:650px; /*outline: dashed red;*/}
+.cont { font-size: 2em; text-align: center;}
+
+/*Final Question related css*/
+#FQlocation { width: 55%; margin: 5% auto auto auto; font-size: 1.1em; min-width: 350px;}
+	#FQlocation li {margin-bottom: 5px; list-style: none;}
+	#FQlocation p {margin-bottom: 5px; list-style: none;}
+	#FQlocation ul {margin-top: 10px;}
+	#FQlocation .Textbox { width: 75%;}
+#FQ {font-size:1.1em; font-style:bold; margin-bottom: 0px}
+	#FQ	p {color:#666666; padding-left: 3%}
+#Likert { max-width: 600px;}
+	#Likert li	{ width:13%; float: left; padding-right: 1.2%}
+	#Likert input {padding-left: 4%; margin-right: auto; }
+	#Likert p	{ text-align: left; margin-left: 9%; /*outline:dashed red; */margin-top: 2px}
+	
+/*Testing stuff for Centering*/
+#all { width: 850px; margin: 0px auto auto auto; padding-top:150px; font-size: 3em;}
+	.Cue {width: 400px; text-align: right; float: left}
+	.middle {width: 50px; text-align: center; float: left}
+	.tar {width: 400px; text-align: left;float: left;}
+	#buttz {margin-left: 40%; margin-right: 40%; clear: both; width: 30%; padding-top:2%;}
+	.theButton { width: 20%}
+
+/*css for the math page*/
+#Math { width: 850px; margin: 85px auto auto auto}
+#Math img {margin-bottom: 30px}
+#operation { background: #e0e0e0; padding: 15px}
+#operation input:first-child { margin-left: 100px}
+#operation input:focus {background:#f1f8ff}
+#operation select { width: 70px; text-align: center;}
+	#operation .textInput { width: 75px; font-size: 1.5em;}
+	.selector {font-size: 1.5em}
+
+/*multiple choice test trials*/
+#ButtonArea {	width: 800px;	margin: 20px auto auto auto;	/*padding:30px; border-radius: 12px; background: #F5F5F5*/}
+#ButtonArea span {	width: 150px; font-size: 1.3em;
+					margin-right: 35px; margin-bottom: 20px; padding: 3px; background: #566673; color: #fff;
+					border-radius: 5px;	text-align: center; outline:groove 2px;
+					cursor: pointer;	float:left; }
+#ButtonArea span:hover {background: #3e5365;}
