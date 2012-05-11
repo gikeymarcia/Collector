@@ -14,7 +14,7 @@ option	{}
 /*Divs used across multiple pages*/
 .ExpContainer {	text-align: center;	color: #000000;	font-size: 1em;	margin: 0 auto;	width: 800px;	}
 .Prompt	{	padding-top: 20px; width: 500px;}
-.Textbox	{}
+.Textbox	{margin-bottom: 15px}
 #SubmitButton	{}
 .Hidden, .PreCache	{	display:none;	}
 
