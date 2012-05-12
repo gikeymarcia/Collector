@@ -157,9 +157,7 @@
 		// I use formname + JQuery to hide the submit button when the form is a computer timed form
 		echo '<form name="'.$formName.'" class="'.$formName.'" action="postTrial.php" method="post">
 				<input type="submit" id="FormSubmitButton" value="Done">
-				<input class="RTkey Hidden" name="RTkey" type="text" value="no keypress trial" />
 				<input class="RT Hidden" name="RT" type="text" value="" />
-				<input class="RTlast Hidden" name="RTlast" type="text" value="no keypress trial" />
 			  </form>';
 	}
 
@@ -299,7 +297,7 @@
 	// echo '<div class="Trial">';
 		// echo "Trial Number: {$currentPos} <br />";
 		// echo "Trial Type: {$trialType}<br />";
-		// echo "Feedback: {$currentTrial['Info']['Feedback']} <br />";
+		// echo "Post Trial: {$currentTrial['Info']['Post Trial']} <br />";
 		// echo "Trial timing: {$currentTrial['Info']['Timing']} <br />";
 		// echo "Trial Time (seconds): {$time}";
 		// echo "<br />";

@@ -1,6 +1,0 @@
-Username	FinalQuestions	Trial	Question	Type	RT	Response
-weohighijn	FinalQuestions	1	Did the experiment go smoothly or were there problems? (Note: Your compensation will not depend on your answer below, so please be honest.)!!!	Radio	4150	
-weohighijn	FinalQuestions	2	Have you participated in this experiment (or another experiment using the same learning materials) before?	Radio	3350	
-weohighijn	FinalQuestions	3	How much fun was this experiment?    <p>1 being very fun  --  7 being the MOST FUN EVER</p>	Likert	3900	
-weohighijn	FinalQuestions	4	Were you doing anything else while this experiment was going on?  You will get credit no matter how you respond here.	Text	1850	
-weohighijn	FinalQuestions	5	Which of the following problems did you have?	Checkbox	2950	none

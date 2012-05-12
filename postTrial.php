@@ -27,8 +27,10 @@
 		$target		=& $currentTrial['Stimuli']['Target'];
 		$answer		=  $currentTrial['Stimuli']['Answer'];
 		$trialType	=  trim(strtolower($currentTrial['Info']['Trial Type']));
-		$feedback	=  trim(strtolower($currentTrial['Info']['Feedback']));
+		$postTrial	=  trim(strtolower($currentTrial['Info']['Post Trial']));
+		// $feedback	=  trim(strtolower($currentTrial['Info']['Feedback']));
 		$time		=  $_SESSION['FeedbackTime'];
+	
 	
 	### getting response and making cleaned up versions (for later comparisons)
 	$response1		= $_POST['Response'];
@@ -36,34 +38,43 @@
 	$answerClean	= trim(strtolower($answer));
 	$Acc			= NULL;
 	
+	
 	#### Saving data into $_SESSION
 	$currentTrial['Response']['Response1']	= $_POST['Response'];
 	$currentTrial['Response']['RT']			= $_POST['RT'];
 	@$currentTrial['Response']['RTkey']		= $_POST['RTkey'];
 	@$currentTrial['Response']['RTlast']	= $_POST['RTlast'];
 	
-	#### Calculating and saving accuracy for trials with responses given
+	
+	#### Calculating and saving accuracy for trials in  which this would be appropriate (excluding JOL and FreeRecall)
 	if( ($trialType == 'test')	OR 	($trialType == 'testpic') OR
-		($trialType == 'copy')	OR	($trialType == 'freerecall') OR
-		($trialType == 'jol')	OR	($trialType == 'mcpic') ) {
-			
-		if(($trialType != 'jol') && ($trialType != 'freerecall')) {
-			similar_text($responseClean, $answerClean, $Acc);
-			$currentTrial['Response']['Accuracy'] = $Acc;
-			if($Acc == 100) {
-				$currentTrial['Response']['strictAcc'] = 1;
-			} else {	$currentTrial['Response']['strictAcc'] = 0;	}
-			if($Acc >= 75) {											## SET ## determines the % match required to count an answer as 1(correct) or 0(incorrect)
-				$currentTrial['Response']['lenientAcc'] = 1;
-			} else {	$currentTrial['Response']['lenientAcc'] = 0;	}
-		}
+		($trialType == 'copy')	OR	($trialType == 'mcpic') ) {
+		
+		similar_text($responseClean, $answerClean, $Acc);
+		$currentTrial['Response']['Accuracy'] = $Acc;
+		if($Acc == 100) {
+			$currentTrial['Response']['strictAcc'] = 1;
+		} else {	$currentTrial['Response']['strictAcc'] = 0;	}
+		if($Acc >= 75) {											## SET ## determines the % match required to count an answer as 1(correct) or 0(incorrect)
+			$currentTrial['Response']['lenientAcc'] = 1;
+		} else {	$currentTrial['Response']['lenientAcc'] = 0;	}
+		// if(($trialType != 'jol') && ($trialType != 'freerecall')) {
+			// similar_text($responseClean, $answerClean, $Acc);
+			// $currentTrial['Response']['Accuracy'] = $Acc;
+			// if($Acc == 100) {
+				// $currentTrial['Response']['strictAcc'] = 1;
+			// } else {	$currentTrial['Response']['strictAcc'] = 0;	}
+			// if($Acc >= 75) {											## SET ## determines the % match required to count an answer as 1(correct) or 0(incorrect)
+				// $currentTrial['Response']['lenientAcc'] = 1;
+			// } else {	$currentTrial['Response']['lenientAcc'] = 0;	}
+		// }
 	}
 	
 	
 	
 	
 	#### Showing the feedback
-	if($feedback == 'yes') {
+	if($postTrial == 'feedback') {
 		echo '<div class="Feedback">
 				<div class="gray">The correct answer was:</div>
 					<span>' . show($answer).'</span>
@@ -76,7 +87,7 @@
 	
 
 	// if showing feedback use feedback time or else use 0
-	if($feedback == 'yes'){
+	if($postTrial == 'feedback'){
 		echo '<meta http-equiv="refresh" content="'.$time.'; url=next.php">';						// comment out this line to stop feedback from auto advancing
 	}
 	else {

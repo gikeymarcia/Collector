@@ -1,4 +1,4 @@
-Item	Trial Type	Feedback	Timing	Order Notes	Shuffle
+Item	Trial Type	Post Trial	Timing	Order Notes	Shuffle
 2	Study		User	blocked	study block1
 2	Study		User	blocked	study block1
 3	Copy		User	blocked	study block1

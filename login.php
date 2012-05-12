@@ -138,9 +138,12 @@
 															"Response2"		=> NULL,
 															"RT"			=> NULL,
 															"RTkey"			=> NULL,
+															"RTlast"		=> NULL,
 															"strictAcc"		=> NULL,
 															"lenientAcc"	=> NULL,
-															"Accuracy"		=> NULL);
+															"Accuracy"		=> NULL,
+															"JOL"			=> NULL,
+														);
 															
 				// on trials where there is no Stimuli info (e.g., freerecall) keep same Stimuli structure but fill with 'n/a' values
 				// I need a consistent Trial structure to do all of the automatic output adjustment I do later on
