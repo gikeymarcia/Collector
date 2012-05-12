@@ -35,20 +35,23 @@
 	#### Calculating and saving accuracy for trials in  which this would be appropriate (excluding JOL and FreeRecall)
 	if( ($trialType == 'test')	OR 	($trialType == 'testpic') OR
 		($trialType == 'copy')	OR	($trialType == 'mcpic') ) {
-		
+		// determining similarity
 		similar_text($responseClean, $answerClean, $Acc);
 		$currentTrial['Response']['Accuracy'] = $Acc;
-		if($Acc == 100) {
+		// scoring and saving
+		if($Acc == 100):
 			$currentTrial['Response']['strictAcc'] = 1;
-		} else {	$currentTrial['Response']['strictAcc'] = 0;	}
-		if($Acc >= 75) {											## SET ## determines the % match required to count an answer as 1(correct) or 0(incorrect)
+		else:
+			$currentTrial['Response']['strictAcc'] = 0;
+		endif;
+		if($Acc >= 75):												## SET ## determines the % match required to count an answer as 1(correct) or 0(incorrect)
 			$currentTrial['Response']['lenientAcc'] = 1;
-		} else {	$currentTrial['Response']['lenientAcc'] = 0;	}
+		else:
+			$currentTrial['Response']['lenientAcc'] = 0;
+		endif;
 	}
 		
-	if($postTrial == 'no') {
-		header("Location: next.php");
-	}
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -64,9 +67,11 @@
 <body>
 
 <?php
-	
-	
-	
+	if($postTrial == 'no') {
+		echo "this is working <br />";
+		echo '<meta http-equiv="refresh" content="0; url=next.php">';
+		exit;
+	}
 	
 	
 	#### Showing the feedback
@@ -80,8 +85,6 @@
 	// echo $_POST['RT'].'<br />';											#### DEBUG ####
 	
 	
-	
-
 	// if showing feedback use feedback time or else use 0
 	if($postTrial == 'feedback'){
 		echo '<meta http-equiv="refresh" content="'.$time.'; url=next.php">';						// comment out this line to stop feedback from auto advancing
