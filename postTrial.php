@@ -5,21 +5,8 @@
 		error_reporting(0);
 	}
 	require("CustomFunctions.php");							// Loads all of my custom PHP functions
-?>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<link href="css/global.css" rel="stylesheet" type="text/css" />
-	<link href='http://fonts.googleapis.com/css?family=Kreon' rel='stylesheet' type='text/css' />
-	<title>Test/Presentation</title>
-</head>
-
-<body>
-
-<?php
+	
+	
 	#### setting up aliases (for later use)
 	$currentPos		=& $_SESSION['Position'];
 	$currentTrial	=& $_SESSION['Trials'][$currentPos];
@@ -28,7 +15,6 @@
 		$answer		=  $currentTrial['Stimuli']['Answer'];
 		$trialType	=  trim(strtolower($currentTrial['Info']['Trial Type']));
 		$postTrial	=  trim(strtolower($currentTrial['Info']['Post Trial']));
-		// $feedback	=  trim(strtolower($currentTrial['Info']['Feedback']));
 		$time		=  $_SESSION['FeedbackTime'];
 	
 	
@@ -58,17 +44,27 @@
 		if($Acc >= 75) {											## SET ## determines the % match required to count an answer as 1(correct) or 0(incorrect)
 			$currentTrial['Response']['lenientAcc'] = 1;
 		} else {	$currentTrial['Response']['lenientAcc'] = 0;	}
-		// if(($trialType != 'jol') && ($trialType != 'freerecall')) {
-			// similar_text($responseClean, $answerClean, $Acc);
-			// $currentTrial['Response']['Accuracy'] = $Acc;
-			// if($Acc == 100) {
-				// $currentTrial['Response']['strictAcc'] = 1;
-			// } else {	$currentTrial['Response']['strictAcc'] = 0;	}
-			// if($Acc >= 75) {											## SET ## determines the % match required to count an answer as 1(correct) or 0(incorrect)
-				// $currentTrial['Response']['lenientAcc'] = 1;
-			// } else {	$currentTrial['Response']['lenientAcc'] = 0;	}
-		// }
 	}
+		
+	if($postTrial == 'no') {
+		header("Location: next.php");
+	}
+?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link href="css/global.css" rel="stylesheet" type="text/css" />
+	<link href='http://fonts.googleapis.com/css?family=Kreon' rel='stylesheet' type='text/css' />
+	<title>Test/Presentation</title>
+</head>
+
+<body>
+
+<?php
+	
 	
 	
 	
