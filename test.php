@@ -71,6 +71,13 @@
 
 
 <?php
+	// go to stepout page if this is a stepout trial
+	if ($trialType == 'stepout') {
+		$page = trim( $currentTrial['Info']['Order Notes'] );
+		echo '<meta http-equiv="refresh" content="0; url='.$page.'">';
+	}
+	
+	
 	#### determine trial timing
 	// if trial timing is a number then use that and assume computer timed. else use login.php parameter values
 	$timingReported =& trim(strtolower($currentTrial['Info']['Timing']));
@@ -101,17 +108,9 @@
 	if($_SESSION['Debug'] == TRUE) {			
 		$time = 2;					## SET ## if debug mode is on all trials will be this many seconds long 
 	}
-	// hidden field that JQuery/JS uses to submit the trial to feedback.php
+	// hidden field that JQuery/JS uses to submit the trial to postTrial.php
 	echo '<div id="Time" class="Hidden">' . $time . '</div>';
-	
-	
-	// go to stepout page if this is a stepout trial
-	if ($trialType == 'stepout') {
-		$page = trim( $currentTrial['Info']['Order Notes'] );
-		echo '<meta http-equiv="refresh" content="0; url='.$page.'">';
-	}
-	
-	
+		
 	// changing form classname based on user or computer timing.  I use the classname to do JQuerty magic
 	if($time == 'user'):
 		$formName = 'UserTiming';
@@ -155,11 +154,9 @@
 		
 		// give the form a different name for user and comuputer timed
 		// I use formname + JQuery to hide the submit button when the form is a computer timed form
-		echo '<form name="'.$formName.'" class="'.$formName.'" action="feedback.php" method="post">
-				<input type="submit" id="FormSubmitButton" value="Done">
-				<input class="RTkey Hidden" name="RTkey" type="text" value="no keypress trial" />
-				<input class="RT Hidden" name="RT" type="text" value="" />
-				<input class="RTlast Hidden" name="RTlast" type="text" value="no keypress trial" />
+		echo '<form name="'.$formName.'" class="'.$formName.'" action="postTrial.php" method="post">
+				<input	name="RT"	type="text"	value=""	class="RT Hidden"	/>
+				<input	type="submit" id="FormSubmitButton" value="Done">
 			  </form>';
 	}
 
@@ -173,12 +170,12 @@
 			echo '<div class="WordWrap">
 					<span class="leftcopy PreCache">'.$cue.'</span>
 					<span class="dividercopy">:</span>
-					<form name="'.$formName.'" class="'.$formName.' leftfloat PreCache" action="feedback.php" method="post">
-						<input class="Textbox Right PreCache" name="Response" type="text" value=""/>
-						<input type="submit" id="FormSubmitButton" value="Submit">
-						<input class="RTkey Hidden" name="RTkey" type="text" value="RTkey" />
-						<input class="RT Hidden" name="RT" type="text" value="RT" />
-						<input class="RTlast Hidden" name="RTlast" type="text" value="RT" />
+					<form name="'.$formName.'" class="'.$formName.' leftfloat PreCache" action="postTrial.php" method="post">
+						<input	name="Response"	type="text"	value=""		class="Textbox Right PreCache"	/>
+						<input	name="RT"		type="text"	value="RT"		class="RT Hidden"		/>
+						<input	name="RTkey"	type="text"	value="RTkey"	class="RTkey Hidden" 	/>
+						<input	name="RTlast"	type="text"	value="RT"		class="RTlast Hidden" 	/>
+						<input type="submit" id="FormSubmitButton" value="Submit"	/>
 					</form>
 				  </div>';
 		}
@@ -189,18 +186,18 @@
 				 '</div>';
 			$formName = $formName.' center';
 			
-			echo '<form name="'.$formName.'" class="'.$formName.'" action="feedback.php" method="post">
-					<input class="Textbox picWord PreCache" name="Response" type="text" value=""/><br />
-					<input type="submit" id="FormSubmitButton" value="Submit">
-					<input class="RTkey Hidden" name="RTkey" type="text" value="RTkey" />
-					<input class="RT Hidden" name="RT" type="text" value="RT" />
-					<input class="RTlast Hidden" name="RTlast" type="text" value="RT" />
+			echo '<form name="'.$formName.'" class="'.$formName.'" action="postTrial.php" method="post">
+					<input  name="Response" type="text" value=""		class="Textbox picWord PreCache" />	<br />
+					<input	name="RT"		type="text"	value="RT"		class="RT Hidden"		/>
+					<input	name="RTkey"	type="text"	value="RTkey"	class="RTkey Hidden" 	/>
+					<input	name="RTlast"	type="text"	value="RT"		class="RTlast Hidden" 	/>
+					<input	type="submit" id="FormSubmitButton" value="Submit"	/>
 				  </form>';
 		}
 		
 		// MCpic trial type
 		if($trialType == 'mcpic') {
-			
+			// show the image
 			echo '<div class="pic PreCache">
 					'. show($cue).
 				 '</div>';		
@@ -209,26 +206,27 @@
 			$MCbuttons = array( "Hawkins", "Cat2", "Cat3", "Cat4", "Cat6", "Cat6", "Cat7", "Ocean Fish", "Cat9", "Cat10", "Cat11", "Cloud Fish");
 			
 			if($_SESSION['MCbutton'] == FALSE) {
-				shuffle($MCbuttons);						// turn this line off to maintain the same choice order between-subjects
+				shuffle($MCbuttons);							// turn this line off to maintain the same choice order between-subjects
 				$_SESSION['MCbutton'] = $MCbuttons;
 			}
 			$itemsPerRow	= 4;								## SET ## names says it all (use values 1-4; anything bigger causes problems which require css changes)
 			$count			= 0;
+			// display the MC button choices
 			echo '<div id="ButtonArea">';
-				foreach ($_SESSION['MCbutton'] as $aButton) {
-					echo '<span class="TestMC PreCache">'.$aButton.'</span>';
-					$count++;
-					if ($count == $itemsPerRow) {
-						echo '<br style="clear: both;"/>';
-						$count = 0;
-					}
+			foreach ($_SESSION['MCbutton'] as $aButton) {
+				echo '<span class="TestMC PreCache">'.$aButton.'</span>';
+				$count++;
+				if ($count == $itemsPerRow) {
+					echo '<br style="clear: both;"/>';
+					$count = 0;
 				}
+			}
 			echo '</div>';
 			
 			$formName = $formName.' center';
-			echo '<form name="'.$formName.'" class="'.$formName.'" action="feedback.php" method="post">
-					<input class="Textbox Hidden" name="Response" type="text" value=""/><br />
-					<input class="RT Hidden" name="RT" type="text" value="RT" />
+			echo '<form name="'.$formName.'" class="'.$formName.'" action="postTrial.php" method="post">
+					<input	name="Response"	type="text"	value=""	class="Textbox Hidden"	/>	<br />
+					<input	name="RT"		type="text"	value="RT"	class="RT Hidden"		/>
 				  </form>';
 		}
 		// Copy trial type
@@ -242,12 +240,12 @@
 				  <div class="WordWrap PreCache">
 				  	<span class="leftcopy">'.$cue.'</span>
 				  	<span class="dividercopy">:</span>
-				  	<form name="'.$formName.'" class="'.$formName.' leftfloat" action="feedback.php" method="post">
-					  	<input class="Textbox" name="Response" type="text" value=""/>
-					  	<input type="submit" id="FormSubmitButton" value="Submit">
-						<input class="RTkey Hidden" name="RTkey" type="text" value="RTkey" />
-						<input class="RT Hidden" name="RT" type="text" value="RT" />
-						<input class="RTlast Hidden" name="RTlast" type="text" value="RT" />
+				  	<form name="'.$formName.'" class="'.$formName.' leftfloat" action="postTrial.php" method="post">
+					  	<input 	name="Response" type="text" value=""		class="Textbox"			/>
+					  	<input	name="RT"		type="text"	value="RT"		class="RT Hidden"		/>
+						<input	name="RTkey"	type="text"	value="RTkey"	class="RTkey Hidden" 	/>
+						<input	name="RTlast"	type="text"	value="RT"		class="RTlast Hidden" 	/>
+						<input	type="submit" id="FormSubmitButton" value="Submit"	/>
 					  </form>
 				  </div>';
 		}
@@ -255,12 +253,12 @@
 		if($trialType == 'freerecall') {
 			$prompt =& $_SESSION['Trials'][$currentPos]['Info']['Order Notes'];
 			echo '<div class="Prompt PreCache">' . $prompt . '</div>
-					<form name="'.$formName.'" class="'.$formName.'" action="feedback.php" method="post">
-						<textarea rows="20" cols="60" name="Response" class="PreCache" wrap="physical" value=""></textarea><br />
-						<input type="submit" id="FormSubmitButton" value="Submit" />
-						<input class="RTkey Hidden" name="RTkey" type="text" value="RTkey" />
-						<input class="RT Hidden" name="RT" type="text" value="RT" />
-						<input class="RTlast Hidden" name="RTlast" type="text" value="RT" />
+					<form name="'.$formName.'" class="'.$formName.'" action="postTrial.php" method="post">
+						<textarea rows="20" cols="60" name="Response" class="PreCache" wrap="physical" value=""></textarea>	<br />
+						<input	name="RT"		type="text"	value="RT"		class="RT Hidden"		/>
+						<input	name="RTkey"	type="text"	value="RTkey"	class="RTkey Hidden" 	/>
+						<input	name="RTlast"	type="text"	value="RT"		class="RTlast Hidden" 	/>
+						<input	type="submit" id="FormSubmitButton" value="Submit"	/>
 					</form>';
 		}
 		// JOL trial type
@@ -268,12 +266,12 @@
 			echo '<div id="jol">How likely are you to correctly remember this item on a later test?</div>
 					<div id="subpoint" class="gray">Type your response on a scale from 0-100 using the entire range of the scale</div>';
 			
-			echo '<form name="'.$formName.'" class="'.$formName.'" action="feedback.php" method="post">
-					<input class="Textbox" name="Response" type="text" value=""/><br />
-					<input type="submit" id="FormSubmitButton" value="Submit">
-					<input class="RTkey Hidden" name="RTkey" type="text" value="RTkey" />
-					<input class="RT Hidden" name="RT" type="text" value="RT" />
-					<input class="RTlast Hidden" name="RTlast" type="text" value="RT" />
+			echo '<form name="'.$formName.'" class="'.$formName.'" action="postTrial.php" method="post">
+					<input	name="Response"	type="text"	value=""		class="Textbox"			/>	<br />
+					<input	name="RT"		type="text"	value="RT"		class="RT Hidden"		/>
+					<input	name="RTkey"	type="text"	value="RTkey"	class="RTkey Hidden" 	/>
+					<input	name="RTlast"	type="text"	value="RT"		class="RTlast Hidden" 	/>
+					<input	type="submit" id="FormSubmitButton" value="Submit"	/>
 				  </form>';
 		}
 	}
@@ -299,7 +297,7 @@
 	// echo '<div class="Trial">';
 		// echo "Trial Number: {$currentPos} <br />";
 		// echo "Trial Type: {$trialType}<br />";
-		// echo "Feedback: {$currentTrial['Info']['Feedback']} <br />";
+		// echo "Post Trial: {$currentTrial['Info']['Post Trial']} <br />";
 		// echo "Trial timing: {$currentTrial['Info']['Timing']} <br />";
 		// echo "Trial Time (seconds): {$time}";
 		// echo "<br />";
