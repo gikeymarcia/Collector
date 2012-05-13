@@ -1,6 +1,6 @@
 Item	Trial Type	Post Trial	Timing	Order Notes	Shuffle
 2	Study	No	User	study trials	OFF
-3	Study	No	Computer	study trials	OFF
+3	Study	JOL	Computer	study trials	OFF
 4	Study	No	7	study trials	OFF
 5	Test	Feedback	Computer	inputs	OFF
 6	Copy	No	8	inputs	OFF
@@ -8,5 +8,6 @@ Item	Trial Type	Post Trial	Timing	Order Notes	Shuffle
 11	Passage	No	User	new trials	OFF
 0	StepOut	N/A	20	soTetris.php	OFF
 0	FreeRecall	N/A	15	Write down everything you can remember that has happened so far in this experiment.	OFF
-8	StudyPic	No	User	whatever I want	OFF
-8	TestPic	Feedback	Computer	whatever I want	OFF
+8	StudyPic	JOL	User	whatever I want	OFF
+9	TestPic	Feedback	Computer	whatever I want	OFF
+10	Mcpic	JOL	Computer	whatever I want	OFF

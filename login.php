@@ -31,11 +31,11 @@
 		$_SESSION['LoginCounter Location'] = "LoginCounter/1.txt";				// Change to restart condition cycling
 		// these timings only apply when trials are set as "Computer" timing
 		$_SESSION['StudyTime']		= 3;										// in seconds/trial (Study/StudyPic/Instruct)
-		$_SESSION['TestTime'] 		= 5;										// in seconds/trial (Test/TestPic/Copy)
+		$_SESSION['TestTime'] 		= 5;										// in seconds/trial (Test/TestPic/Copy/MCpic)
 		$_SESSION['PassageTime']	= 10;										// in seconds/trial (Passage)
 		$_SESSION['FreeRecallTime'] = 2;										// in seconds/trial (FreeRecall)
-		$_SESSION['jolTime'] 		= 2;										// in seconds/trial	(JOL)
-		$_SESSION['FeedbackTime']	= 2;										// in seconds/trial
+		$_SESSION['jolTime'] 		= user;										// in seconds/trial	(JOL) - can also use value 'user'
+		$_SESSION['FeedbackTime']	= user;										// in seconds/trial - can also use value 'user'
 		$_SESSION['Demographics']	= FALSE;									// Can be TRUE or FALSE
 		##### Parameters END #####
 		
@@ -143,6 +143,8 @@
 															"lenientAcc"	=> NULL,
 															"Accuracy"		=> NULL,
 															"JOL"			=> NULL,
+															"postRT"		=> NULL,
+															"postRTkey"		=> NULL,
 														);
 															
 				// on trials where there is no Stimuli info (e.g., freerecall) keep same Stimuli structure but fill with 'n/a' values

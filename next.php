@@ -9,9 +9,14 @@
 		$target		=& $currentTrial['Stimuli']['Target'];
 		$answer		=  $currentTrial['Stimuli']['Answer'];
 		$trialType	=  trim(strtolower($currentTrial['Info']['Trial Type']));
-		$feedback	=  trim(strtolower($currentTrial['Info']['Feedback']));
-		$time		=  $_SESSION['FeedbackTime'];
-    
+		// $feedback	=  trim(strtolower($currentTrial['Info']['Feedback']));
+	
+	
+	#### grabbing responses from postTrial
+	@$currentTrial['Response']['JOL']		= $_POST['JOL'];
+	@$currentTrial['Response']['postRT']	= $_POST['RT'];
+	@$currentTrial['Response']['postRTkey']	= $_POST['RTkey'];
+	
 	
 	#### Writing to data file
 	$fileName = 'subjects/Output_Session'.$_SESSION['Session'].'_'.$_SESSION['Username'].'.txt';
@@ -52,7 +57,7 @@
 		}
 		arrayToLine($combinedHeader,$fileName);
 	}
-	// write line of data
+	// write line of data for this trial
 	$Header1	=& $_SESSION['Header1'];
 	$Header2	=& $_SESSION['Header2'];
 	$data		=  array();
@@ -84,6 +89,6 @@
 </head>
 
 <body>
-	// send back to test
+	<!-- send back to test -->
 	<meta http-equiv="refresh" content="0; url=test.php">
 </body>

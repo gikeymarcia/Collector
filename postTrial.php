@@ -67,33 +67,64 @@
 <body>
 
 <?php
-	if($postTrial == 'no') {
-		echo "this is working <br />";
-		echo '<meta http-equiv="refresh" content="0; url=next.php">';
-		exit;
+	#### trial timing code
+	if($postTrial == 'feedback') {
+		$time = $_SESSION['FeedbackTime'];
 	}
+	elseif ($postTrial == 'jol') {
+		$time = $_SESSION['jolTime'];
+	}
+	// hidden field that JQuery/JS uses to submit the trial to next.php
+	echo '<div id="Time" class="Hidden">' . $time . '</div>';
 	
+	// changing form classname based on user or computer timing.  I use the classname to do JQuerty magic
+	if($time == 'user'):
+		$formName = 'UserTiming';
+	else:
+		$formName = 'ComputerTiming';
+	endif;
 	
-	#### Showing the feedback
+	#### Showing feedback
 	if($postTrial == 'feedback') {
 		echo '<div class="Feedback">
 				<div class="gray">The correct answer was:</div>
 					<span>' . show($answer).'</span>
 			  </div>';
+		// Hidden form that collects RT and progresses trial to next.php
+		echo '<form name="'.$formName.'" class="'.$formName.'" action="next.php" method="post">
+				<input class="RT Hidden" name="RT" type="text" value="RT" />
+				<input type="submit" id="FormSubmitButton" value="Submit">
+			  </form>';
+	}
+	elseif ($postTrial == 'jol') {
+		echo '<div id="jol">How likely are you to correctly remember this item on a later test?</div>
+			  <div id="subpoint" class="gray">Type your response on a scale from 0-100 using the entire range of the scale</div>';
+			
+			echo '<form name="'.$formName.'" class="'.$formName.'" action="next.php" method="post">
+					<input class="Textbox"		name="JOL"		type="text" value=""/><br />
+					<input class="RT Hidden"	name="RT"		type="text" value="RT" />
+					<input class="RTkey Hidden" name="RTkey"	type="text" value="RTkey" />
+					<input type="submit" id="FormSubmitButton" value="Submit">
+				  </form>';
+	}
+	else {
+		echo '<meta http-equiv="refresh" content="0; url=next.php">';
 	}
 	// echo $_POST['Response'].'<br />';									#### DEBUG ####
 	// echo $_POST['RT'].'<br />';											#### DEBUG ####
 	
 	
-	// if showing feedback use feedback time or else use 0
-	if($postTrial == 'feedback'){
-		echo '<meta http-equiv="refresh" content="'.$time.'; url=next.php">';						// comment out this line to stop feedback from auto advancing
-	}
-	else {
-		echo '<meta http-equiv="refresh" content="0; url=next.php">';
-	}
+	// // if showing feedback use feedback time or else use 0
+	// if($postTrial == 'feedback'){
+		// echo '<meta http-equiv="refresh" content="'.$time.'; url=next.php">';						// comment out this line to stop feedback from auto advancing
+	// }
+	// else {
+		// echo '<meta http-equiv="refresh" content="0; url=next.php">';
+	// }
 	
 	// echo '<a href="next.php".">Click Here to continue</a>';										// uncomment to let participants continue at their own pace
 ?>
+	<script src="javascript/jquery-1.7.2.min.js" type="text/javascript"> </script>
+	<script src="javascript/test.js" type="text/javascript"> </script>
 </body>
 </html>
