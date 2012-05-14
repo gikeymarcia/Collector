@@ -1,9 +1,0 @@
-Item	Trial Type	Post Trial	Timing	Order Notes	Shuffle
-2	Study	No	User	low assoc	block1
-6	Study	No	User	hi assoc	block1
-2	Study	No	Computer	low assoc	compBlock
-6	Study	No	Computer	hi assoc	compBlock
-2	Study	No	7	low assoc	custom time
-6	Study	No	14	hi assoc	custom time
-2	Test	No	Computer	low assoc	x
-6	Test	Feedback	15	hi assoc	x

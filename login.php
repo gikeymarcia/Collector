@@ -27,15 +27,15 @@
 		echo '<noscript>	<h1>	You must enable javascript to participate!!!	</h1>	</noscript>';
 		
 		##### Parameters #####			## SET ##
-		$_SESSION['ExperimentName']	= "Generic v2";								// Recorded in datafile and can be useful. 
+		$_SESSION['ExperimentName']	= "FRET Confusion v1";								// Recorded in datafile and can be useful. 
 		$_SESSION['LoginCounter Location'] = "LoginCounter/1.txt";				// Change to restart condition cycling
 		// these timings only apply when trials are set as "Computer" timing
-		$_SESSION['StudyTime']		= 3;										// in seconds/trial (Study/StudyPic/Instruct)
-		$_SESSION['TestTime'] 		= 5;										// in seconds/trial (Test/TestPic/Copy/MCpic)
+		$_SESSION['StudyTime']		= 13;										// in seconds/trial (Study/StudyPic/Instruct)
+		$_SESSION['TestTime'] 		= 8;										// in seconds/trial (Test/TestPic/Copy/MCpic)
 		$_SESSION['PassageTime']	= 10;										// in seconds/trial (Passage)
 		$_SESSION['FreeRecallTime'] = 2;										// in seconds/trial (FreeRecall)
 		$_SESSION['jolTime'] 		= user;										// in seconds/trial	(JOL) - can also use value 'user'
-		$_SESSION['FeedbackTime']	= user;										// in seconds/trial - can also use value 'user'
+		$_SESSION['FeedbackTime']	= 5;										// in seconds/trial - can also use value 'user'
 		$_SESSION['Demographics']	= FALSE;									// Can be TRUE or FALSE
 		##### Parameters END #####
 		

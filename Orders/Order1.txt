@@ -1,0 +1,123 @@
+Item	Trial Type	Post Trial	Timing	Order Notes	Shuffle	Phase
+2	Study	No	Computer	study only	1st third	Study Phase
+3	Test	Feedback	Computer	right	1st third	Study Phase
+4	Study	No	Computer	study only	1st third	Study Phase
+5	Test	Feedback	Computer	right	1st third	Study Phase
+6	Study	No	Computer	study only	1st third	Study Phase
+7	Test	Feedback	Computer	right	1st third	Study Phase
+8	Study	No	Computer	study only	1st third	Study Phase
+9	Test	Feedback	Computer	right	1st third	Study Phase
+10	Study	No	Computer	study only	1st third	Study Phase
+11	Test	Feedback	Computer	right	1st third	Study Phase
+12	Study	No	Computer	study only	1st third	Study Phase
+13	Test	Feedback	Computer	wrong	1st third	Study Phase
+14	Study	No	Computer	study only	1st third	Study Phase
+15	Test	Feedback	Computer	wrong	1st third	Study Phase
+16	Study	No	Computer	study only	1st third	Study Phase
+17	Test	Feedback	Computer	wrong	1st third	Study Phase
+18	Study	No	Computer	study only	1st third	Study Phase
+19	Test	Feedback	Computer	wrong	1st third	Study Phase
+20	Study	No	Computer	study only	1st third	Study Phase
+21	Test	Feedback	Computer	wrong	1st third	Study Phase
+22	Study	No	Computer	study only	2nd third	Study Phase
+23	Test	Feedback	Computer	right	2nd third	Study Phase
+24	Study	No	Computer	study only	2nd third	Study Phase
+25	Test	Feedback	Computer	right	2nd third	Study Phase
+26	Study	No	Computer	study only	2nd third	Study Phase
+27	Test	Feedback	Computer	right	2nd third	Study Phase
+28	Study	No	Computer	study only	2nd third	Study Phase
+29	Test	Feedback	Computer	right	2nd third	Study Phase
+30	Study	No	Computer	study only	2nd third	Study Phase
+31	Test	Feedback	Computer	right	2nd third	Study Phase
+32	Study	No	Computer	study only	2nd third	Study Phase
+33	Test	Feedback	Computer	wrong	2nd third	Study Phase
+34	Study	No	Computer	study only	2nd third	Study Phase
+35	Test	Feedback	Computer	wrong	2nd third	Study Phase
+36	Study	No	Computer	study only	2nd third	Study Phase
+37	Test	Feedback	Computer	wrong	2nd third	Study Phase
+38	Study	No	Computer	study only	2nd third	Study Phase
+39	Test	Feedback	Computer	wrong	2nd third	Study Phase
+40	Study	No	Computer	study only	2nd third	Study Phase
+41	Test	Feedback	Computer	wrong	2nd third	Study Phase
+42	Study	No	Computer	study only	3rd third	Study Phase
+43	Test	Feedback	Computer	right	3rd third	Study Phase
+44	Study	No	Computer	study only	3rd third	Study Phase
+45	Test	Feedback	Computer	right	3rd third	Study Phase
+46	Study	No	Computer	study only	3rd third	Study Phase
+47	Test	Feedback	Computer	right	3rd third	Study Phase
+48	Study	No	Computer	study only	3rd third	Study Phase
+49	Test	Feedback	Computer	right	3rd third	Study Phase
+50	Study	No	Computer	study only	3rd third	Study Phase
+51	Test	Feedback	Computer	right	3rd third	Study Phase
+52	Study	No	Computer	study only	3rd third	Study Phase
+53	Test	Feedback	Computer	wrong	3rd third	Study Phase
+54	Study	No	Computer	study only	3rd third	Study Phase
+55	Test	Feedback	Computer	wrong	3rd third	Study Phase
+56	Study	No	Computer	study only	3rd third	Study Phase
+57	Test	Feedback	Computer	wrong	3rd third	Study Phase
+58	Study	No	Computer	study only	3rd third	Study Phase
+59	Test	Feedback	Computer	wrong	3rd third	Study Phase
+60	Study	No	Computer	study only	3rd third	Study Phase
+61	Test	Feedback	Computer	wrong	3rd third	Study Phase
+0	StepOut	No	300	soTetris.php	OFF	Distractor
+0	Instruct	No	15	telling people to get ready for the test	OFF	Intermission
+2	Test	No	User	study only	1st third	Test Phase
+3	Test	No	User	right	1st third	Test Phase
+4	Test	No	User	study only	1st third	Test Phase
+5	Test	No	User	right	1st third	Test Phase
+6	Test	No	User	study only	1st third	Test Phase
+7	Test	No	User	right	1st third	Test Phase
+8	Test	No	User	study only	1st third	Test Phase
+9	Test	No	User	right	1st third	Test Phase
+10	Test	No	User	study only	1st third	Test Phase
+11	Test	No	User	right	1st third	Test Phase
+12	Test	No	User	study only	1st third	Test Phase
+13	Test	No	User	wrong	1st third	Test Phase
+14	Test	No	User	study only	1st third	Test Phase
+15	Test	No	User	wrong	1st third	Test Phase
+16	Test	No	User	study only	1st third	Test Phase
+17	Test	No	User	wrong	1st third	Test Phase
+18	Test	No	User	study only	1st third	Test Phase
+19	Test	No	User	wrong	1st third	Test Phase
+20	Test	No	User	study only	1st third	Test Phase
+21	Test	No	User	wrong	1st third	Test Phase
+22	Test	No	User	study only	2nd third	Test Phase
+23	Test	No	User	right	2nd third	Test Phase
+24	Test	No	User	study only	2nd third	Test Phase
+25	Test	No	User	right	2nd third	Test Phase
+26	Test	No	User	study only	2nd third	Test Phase
+27	Test	No	User	right	2nd third	Test Phase
+28	Test	No	User	study only	2nd third	Test Phase
+29	Test	No	User	right	2nd third	Test Phase
+30	Test	No	User	study only	2nd third	Test Phase
+31	Test	No	User	right	2nd third	Test Phase
+32	Test	No	User	study only	2nd third	Test Phase
+33	Test	No	User	wrong	2nd third	Test Phase
+34	Test	No	User	study only	2nd third	Test Phase
+35	Test	No	User	wrong	2nd third	Test Phase
+36	Test	No	User	study only	2nd third	Test Phase
+37	Test	No	User	wrong	2nd third	Test Phase
+38	Test	No	User	study only	2nd third	Test Phase
+39	Test	No	User	wrong	2nd third	Test Phase
+40	Test	No	User	study only	2nd third	Test Phase
+41	Test	No	User	wrong	2nd third	Test Phase
+42	Test	No	User	study only	3rd third	Test Phase
+43	Test	No	User	right	3rd third	Test Phase
+44	Test	No	User	study only	3rd third	Test Phase
+45	Test	No	User	right	3rd third	Test Phase
+46	Test	No	User	study only	3rd third	Test Phase
+47	Test	No	User	right	3rd third	Test Phase
+48	Test	No	User	study only	3rd third	Test Phase
+49	Test	No	User	right	3rd third	Test Phase
+50	Test	No	User	study only	3rd third	Test Phase
+51	Test	No	User	right	3rd third	Test Phase
+52	Test	No	User	study only	3rd third	Test Phase
+53	Test	No	User	wrong	3rd third	Test Phase
+54	Test	No	User	study only	3rd third	Test Phase
+55	Test	No	User	wrong	3rd third	Test Phase
+56	Test	No	User	study only	3rd third	Test Phase
+57	Test	No	User	wrong	3rd third	Test Phase
+58	Test	No	User	study only	3rd third	Test Phase
+59	Test	No	User	wrong	3rd third	Test Phase
+60	Test	No	User	study only	3rd third	Test Phase
+61	Test	No	User	wrong	3rd third	Test Phase

@@ -1,7 +1,0 @@
-Cue	Target	Answer	Shuffle	Stimuli Notes
-Dog	Cat	Cat	bananna	high associates
-Word	Pair	Pair	bananna	high associates
-Funny	Bone	bonez	bananna	high associates
-Mountain	Door	Door	zoinks	low associate
-Whale	Rocket	Rocket	zoinks	low associate
-Laptop	Swing	Swing	zoinks	low associate

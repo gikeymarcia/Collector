@@ -1,3 +1,0 @@
-Item	Trial Type	Post Trial	Timing	Order Notes	Shuffle	JOL
-0	StepOut		15	soTetris.php	OFF	
-0	StepOut		45	soTetris.php	OFF	

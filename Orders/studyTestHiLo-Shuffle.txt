@@ -1,9 +1,0 @@
-Item	Trial Type	Post Trial	Timing	Order Notes	Shuffle
-2	Study	No	User	mass	Study Phase
-2	Study	No	User	mass	Study Phase
-2	Study	No	User	mass	Study Phase
-6	Study	No	User	mass	Study Phase
-6	Study	No	User	mass	Study Phase
-6	Study	No	User	mass	Study Phase
-2	Test	No	User	Showing 3 trials in order	Test Phase
-6	Test	Feedback	User	Showing 3 trials in order	Test Phase

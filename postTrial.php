@@ -32,6 +32,21 @@
 	@$currentTrial['Response']['RTlast']	= $_POST['RTlast'];
 	
 	
+	#### saving past responses for later (you're right) feedbck
+	// create session if it isn't created yet
+	if(isset($_SESSION['PastResponse']) == FALSE) {
+		$_SESSION['PastResponse'] = array();
+	}
+	if(	$trialType == 'test' &&
+		$currentTrial['Info']['Phase'] == 'Study Phase' &&
+		$currentTrial['Info']['Order Notes'] == 'right') {
+			
+		$_SESSION['PastResponse'][$cue] = $_POST['Response'];
+	}
+	if($_SESSION['PastResponse'][])
+	
+	
+	
 	#### Calculating and saving accuracy for trials in  which this would be appropriate (excluding JOL and FreeRecall)
 	if( ($trialType == 'test')	OR 	($trialType == 'testpic') OR
 		($trialType == 'copy')	OR	($trialType == 'mcpic') ) {

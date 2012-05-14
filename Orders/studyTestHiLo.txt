@@ -1,9 +1,0 @@
-Item	Trial Type	Post Trial	Timing	Order Notes	Shuffle
-2	Study	No	User	mass	OFF
-2	Study	No	User	mass	OFF
-2	Study	No	User	mass	OFF
-6	Study	No	User	mass	OFF
-6	Study	No	User	mass	OFF
-6	Study	No	User	mass	OFF
-2	Test	No	User	Showing 3 trials in order	OFF
-6	Test	Feedback	User	Showing 3 trials in order	OFF
