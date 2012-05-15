@@ -88,13 +88,13 @@
 	if($postTrial == 'feedback') {
 		echo '<div class="Feedback">
 				<div class="gray">The correct answer was:</div>
-					<span>' . show($answer).'</span>
-			  </div>';
+					<span>' . show($answer).'</span>';
 		// Hidden form that collects RT and progresses trial to next.php
 		echo '<form name="'.$formName.'" class="'.$formName.'" action="next.php" method="post">
 				<input class="RT Hidden" name="RT" type="text" value="RT" />
 				<input type="submit" id="FormSubmitButton" value="Submit">
 			  </form>';
+		echo '</div>';
 	}
 	elseif ($postTrial == 'jol') {
 		echo '<div id="jol">How likely are you to correctly remember this item on a later test?</div>

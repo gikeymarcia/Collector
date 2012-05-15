@@ -52,7 +52,7 @@ form.UserTiming, form.ComputerTiming{  }
 .gray { color: #666666;}
 
 .center {text-align: center;}
-.Feedback {font-size: 2em;}
+.Feedback {font-size: 2em; margin: 25px auto auto 25px;}
 .picWord { text-align: center; font-size: 2em;}
 
 .pic { padding-bottom: 20px;} 
