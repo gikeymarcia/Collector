@@ -26,8 +26,8 @@
 	
 	
 	#### Saving data into $_SESSION
-	$currentTrial['Response']['Response1']	= $_POST['Response'];
-	$currentTrial['Response']['RT']			= $_POST['RT'];
+	@$currentTrial['Response']['Response1']	= $_POST['Response'];
+	@$currentTrial['Response']['RT']			= $_POST['RT'];
 	@$currentTrial['Response']['RTkey']		= $_POST['RTkey'];
 	@$currentTrial['Response']['RTlast']	= $_POST['RTlast'];
 	
@@ -107,8 +107,8 @@
 	#### Showing feedback
 	if($postTrial == 'feedback') {
 		echo '<div class="Feedback">
-				<div class="gray">The correct answer was:</div>
-					<span>' . show($answer).'</span>';
+				<div class="gray">The correct answer is:</div>
+					<span>' . show($cue).' : '.show($answer).'</span>';
 		// Hidden form that collects RT and progresses trial to next.php
 		echo '<form name="'.$formName.'" class="'.$formName.'" action="next.php" method="post">
 				<input class="RT Hidden" name="RT" type="text" value="RT" />
