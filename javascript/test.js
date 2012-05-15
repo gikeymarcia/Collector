@@ -17,6 +17,7 @@
 
 	
 	window.onload = function() {
+		timer		= 0;
 		$(".PreCache").removeClass("PreCache");
 		setInterval(addtime,interval);
 	}
@@ -44,6 +45,7 @@
 		}
 		// submit form if time is up
 		if (timer >= (trialTime*1000)) {
+			timer		= 0;
 			$("form").submit();
 		}
 	}
@@ -59,7 +61,7 @@
 	
 	
 	// disable enter key for FreeRecall (textarea) with class="ComputerTiming"
-	$(".ComputerTiming").bind("keypress",function(e){
+	$(".ComputerTiming").bind("keypress",function(e) {
 		if( $('form').attr('name') == 'ComputerTiming') {
 			if(e.keyCode == 13) return false;
 		}
