@@ -76,9 +76,7 @@ form.UserTiming, form.ComputerTiming{  }
 #centerContent { width: 66%; max-width: 800px; min-width: 450px;margin-left: auto; margin-right: auto;}
 .Instruct {margin-left: auto; margin-top: 5%;}
 .readcheck { background: #f2f1f1; padding: 20px; width: 50%; margin-top: 17%;}
-ol.list  li{  width: 80%; margin-bottom: 15px; background: #ffffff; outline: dotted 2px black; }
-
-
+ol.list  li{  width: 80%; margin-bottom: 15px; background: #ffffff; outline: dotted 2px black; padding: 5px; }
 
 
 #jol { font-size: 2em; padding-top: 20px; max-width: 600px;}
