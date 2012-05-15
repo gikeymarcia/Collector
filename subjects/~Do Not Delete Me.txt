@@ -1,1 +1,0 @@
-I need to keep a placeholder file here because git (the version control system I use) doesn't recognize empty folders. For you, the user, it is fine to delete this file as long as you do not plan to use git to fetch new versions of genric from my git repository.
