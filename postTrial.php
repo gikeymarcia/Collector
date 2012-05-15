@@ -37,14 +37,19 @@
 	if(isset($_SESSION['PastResponse']) == FALSE) {
 		$_SESSION['PastResponse'] = array();
 	}
+	// if it's a you're right trial then save response to pastresponse array
 	if(	$trialType == 'test' &&
 		$currentTrial['Info']['Phase'] == 'Study Phase' &&
 		$currentTrial['Info']['Order Notes'] == 'right') {
-			
+		
 		$_SESSION['PastResponse'][$cue] = $_POST['Response'];
+		$answerClean	= trim(strtolower($_POST['Response']));
+		$responseClean	= trim(strtolower($_POST['Response']));
 	}
-	if($_SESSION['PastResponse'][])
-	
+	// if this is a you're right trial then set answer to your previous response
+	if(isset($_SESSION['PastResponse'][$cue])) {
+		
+	}
 	
 	
 	#### Calculating and saving accuracy for trials in  which this would be appropriate (excluding JOL and FreeRecall)
