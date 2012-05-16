@@ -1,64 +1,64 @@
 Item	Trial Type	Post Trial	Timing	Order Notes	Shuffle	Phase	Initial Block
 2	Study	No	Computer	study only	1	Study Phase	1
 3	Test	Feedback	Computer	right	1	Study Phase	1
-4	Study	Feedback	Computer	wrong	1	Study Phase	1
+4	Test	Feedback	Computer	wrong	1	Study Phase	1
 5	Study	No	Computer	study only	1	Study Phase	1
 6	Test	Feedback	Computer	right	1	Study Phase	1
-7	Study	Feedback	Computer	wrong	1	Study Phase	1
-8	Study	No	Computer	study only	1	Study Phase	2
-9	Test	Feedback	Computer	right	1	Study Phase	2
-10	Study	Feedback	Computer	wrong	1	Study Phase	2
-11	Study	No	Computer	study only	1	Study Phase	2
-12	Test	Feedback	Computer	right	1	Study Phase	2
-13	Study	Feedback	Computer	wrong	1	Study Phase	2
-14	Study	No	Computer	study only	2	Study Phase	3
-15	Test	Feedback	Computer	right	2	Study Phase	3
-16	Study	Feedback	Computer	wrong	2	Study Phase	3
-17	Study	No	Computer	study only	2	Study Phase	3
-18	Test	Feedback	Computer	right	2	Study Phase	3
-19	Study	Feedback	Computer	wrong	2	Study Phase	3
-20	Study	No	Computer	study only	2	Study Phase	4
-21	Test	Feedback	Computer	right	2	Study Phase	4
-22	Study	Feedback	Computer	wrong	2	Study Phase	4
-23	Study	No	Computer	study only	2	Study Phase	4
-24	Test	Feedback	Computer	right	2	Study Phase	4
-25	Study	Feedback	Computer	wrong	2	Study Phase	4
-26	Study	No	Computer	study only	3	Study Phase	5
-27	Test	Feedback	Computer	right	3	Study Phase	5
-28	Study	Feedback	Computer	wrong	3	Study Phase	5
-29	Study	No	Computer	study only	3	Study Phase	5
-30	Test	Feedback	Computer	right	3	Study Phase	5
-31	Study	Feedback	Computer	wrong	3	Study Phase	5
-32	Study	No	Computer	study only	3	Study Phase	6
-33	Test	Feedback	Computer	right	3	Study Phase	6
-34	Study	Feedback	Computer	wrong	3	Study Phase	6
-35	Study	No	Computer	study only	3	Study Phase	6
-36	Test	Feedback	Computer	right	3	Study Phase	6
-37	Study	Feedback	Computer	wrong	3	Study Phase	6
-38	Study	No	Computer	study only	4	Study Phase	7
-39	Test	Feedback	Computer	right	4	Study Phase	7
-40	Study	Feedback	Computer	wrong	4	Study Phase	7
-41	Study	No	Computer	study only	4	Study Phase	7
-42	Test	Feedback	Computer	right	4	Study Phase	7
-43	Study	Feedback	Computer	wrong	4	Study Phase	7
-44	Study	No	Computer	study only	4	Study Phase	8
-45	Test	Feedback	Computer	right	4	Study Phase	8
-46	Study	Feedback	Computer	wrong	4	Study Phase	8
-47	Study	No	Computer	study only	4	Study Phase	8
-48	Test	Feedback	Computer	right	4	Study Phase	8
-49	Study	Feedback	Computer	wrong	4	Study Phase	8
-50	Study	No	Computer	study only	5	Study Phase	9
-51	Test	Feedback	Computer	right	5	Study Phase	9
-52	Study	Feedback	Computer	wrong	5	Study Phase	9
-53	Study	No	Computer	study only	5	Study Phase	9
-54	Test	Feedback	Computer	right	5	Study Phase	9
-55	Study	Feedback	Computer	wrong	5	Study Phase	9
-56	Study	No	Computer	study only	5	Study Phase	10
-57	Test	Feedback	Computer	right	5	Study Phase	10
-58	Study	Feedback	Computer	wrong	5	Study Phase	10
-59	Study	No	Computer	study only	5	Study Phase	10
-60	Test	Feedback	Computer	right	5	Study Phase	10
-61	Study	Feedback	Computer	wrong	5	Study Phase	10
+7	Test	Feedback	Computer	wrong	1	Study Phase	1
+8	Study	No	Computer	study only	2	Study Phase	2
+9	Test	Feedback	Computer	right	2	Study Phase	2
+10	Test	Feedback	Computer	wrong	2	Study Phase	2
+11	Study	No	Computer	study only	2	Study Phase	2
+12	Test	Feedback	Computer	right	2	Study Phase	2
+13	Test	Feedback	Computer	wrong	2	Study Phase	2
+14	Study	No	Computer	study only	3	Study Phase	3
+15	Test	Feedback	Computer	right	3	Study Phase	3
+16	Test	Feedback	Computer	wrong	3	Study Phase	3
+17	Study	No	Computer	study only	3	Study Phase	3
+18	Test	Feedback	Computer	right	3	Study Phase	3
+19	Test	Feedback	Computer	wrong	3	Study Phase	3
+20	Study	No	Computer	study only	4	Study Phase	4
+21	Test	Feedback	Computer	right	4	Study Phase	4
+22	Test	Feedback	Computer	wrong	4	Study Phase	4
+23	Study	No	Computer	study only	4	Study Phase	4
+24	Test	Feedback	Computer	right	4	Study Phase	4
+25	Test	Feedback	Computer	wrong	4	Study Phase	4
+26	Study	No	Computer	study only	5	Study Phase	5
+27	Test	Feedback	Computer	right	5	Study Phase	5
+28	Test	Feedback	Computer	wrong	5	Study Phase	5
+29	Study	No	Computer	study only	5	Study Phase	5
+30	Test	Feedback	Computer	right	5	Study Phase	5
+31	Test	Feedback	Computer	wrong	5	Study Phase	5
+32	Study	No	Computer	study only	6	Study Phase	6
+33	Test	Feedback	Computer	right	6	Study Phase	6
+34	Test	Feedback	Computer	wrong	6	Study Phase	6
+35	Study	No	Computer	study only	6	Study Phase	6
+36	Test	Feedback	Computer	right	6	Study Phase	6
+37	Test	Feedback	Computer	wrong	6	Study Phase	6
+38	Study	No	Computer	study only	7	Study Phase	7
+39	Test	Feedback	Computer	right	7	Study Phase	7
+40	Test	Feedback	Computer	wrong	7	Study Phase	7
+41	Study	No	Computer	study only	7	Study Phase	7
+42	Test	Feedback	Computer	right	7	Study Phase	7
+43	Test	Feedback	Computer	wrong	7	Study Phase	7
+44	Study	No	Computer	study only	8	Study Phase	8
+45	Test	Feedback	Computer	right	8	Study Phase	8
+46	Test	Feedback	Computer	wrong	8	Study Phase	8
+47	Study	No	Computer	study only	8	Study Phase	8
+48	Test	Feedback	Computer	right	8	Study Phase	8
+49	Test	Feedback	Computer	wrong	8	Study Phase	8
+50	Study	No	Computer	study only	9	Study Phase	9
+51	Test	Feedback	Computer	right	9	Study Phase	9
+52	Test	Feedback	Computer	wrong	9	Study Phase	9
+53	Study	No	Computer	study only	9	Study Phase	9
+54	Test	Feedback	Computer	right	9	Study Phase	9
+55	Test	Feedback	Computer	wrong	9	Study Phase	9
+56	Study	No	Computer	study only	10	Study Phase	10
+57	Test	Feedback	Computer	right	10	Study Phase	10
+58	Test	Feedback	Computer	wrong	10	Study Phase	10
+59	Study	No	Computer	study only	10	Study Phase	10
+60	Test	Feedback	Computer	right	10	Study Phase	10
+61	Test	Feedback	Computer	wrong	10	Study Phase	10
 0	StepOut	No	300	soTetris.php	OFF	Distractor	OFF
 0	Instruct	No	User	<h3> Get ready for the final test</h3> <br />On this test we will show you the first word and your job is to type the correct answer that goes with that word.	OFF	Intermission	OFF
 2	Test	No	User	study only	1	Test Phase	1
