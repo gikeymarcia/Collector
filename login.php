@@ -36,7 +36,7 @@
 		$_SESSION['FreeRecallTime'] = 2;										// in seconds/trial (FreeRecall)
 		$_SESSION['jolTime'] 		= user;										// in seconds/trial	(JOL) - can also use value 'user'
 		$_SESSION['FeedbackTime']	= user;										// in seconds/trial - can also use value 'user'
-		$_SESSION['Demographics']	= FALSE;									// Can be TRUE or FALSE
+		$_SESSION['Demographics']	= TRUE;									// Can be TRUE or FALSE
 		##### Parameters END #####
 		
 		

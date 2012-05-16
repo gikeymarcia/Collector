@@ -101,12 +101,11 @@
 		elseif ($trialType == 'jol') {
 			$time = $_SESSION['jolTime'];
 		}
-	}
-	else {
+	} else {
 		$time = 'user';
 	}
 	if($_SESSION['Debug'] == TRUE) {
-		$time = 2;					## SET ## if debug mode is on all trials will be this many seconds long 
+		$time = 2;					## SET ## if debug mode is on all trials will be this many seconds long
 	}
 	// hidden field that JQuery/JS uses to submit the trial to postTrial.php
 	echo '<div id="Time" class="Hidden">' . $time . '</div>';
@@ -227,7 +226,7 @@
 			}
 			echo '</div>';
 			
-			$formClass = $formName.' center';
+			$formClass = $formClass.' center';
 			echo '<form name="'.$formName.'" class="'.$formClass.'" action="postTrial.php" method="post">
 					<input	name="Response"	type="text"	value=""	class="Textbox Hidden"	/>	<br />
 					<input	name="RT"		type="text"	value="RT"	class="RT Hidden"		/>

@@ -19,7 +19,6 @@
 
 <body>
 	
-	
 	<div id="content">
 		<h2>Basic Information</h2>
 		
