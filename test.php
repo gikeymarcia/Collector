@@ -123,7 +123,7 @@
 	#### Presenting different trial types ####
 	// trials without any user input
 	## ADD ## if your trial has no input then add it to the if line below
-	if( ($trialType == 'study') OR ($trialType == 'studypic') OR ($trialType == 'passage') ) {
+	if( ($trialType == 'study') OR ($trialType == 'studypic') OR ($trialType == 'passage') OR ($trialType == 'instruct')) {
 		// Study trial type
 		if ($trialType == 'study') {
 			echo '<div class="WordWrap PreCache">
@@ -150,7 +150,7 @@
 		// Instruct trial type
 		elseif ($trialType == 'instruct') {
 			echo '<div id="centerContent PreCache">
-					<div class="instruct">'. $_SESSION['Trials'][$currentPos]['Info']['Order Notes'].'</div>
+					<div class="instruct">'. $currentTrial['Info']['Order Notes'].'</div>
 				  </div>';
 		}
 		## ADD ## your new trial should be an elseif here (if it has no user input)
@@ -255,7 +255,7 @@
 		}
 		// FreeRecall trial type
 		elseif($trialType == 'freerecall') {
-			$prompt =& $_SESSION['Trials'][$currentPos]['Info']['Order Notes'];
+			$prompt =& $currentTrial['Info']['Order Notes'];
 			echo '<div id="centerContent">
 				<div class="Prompt PreCache">' . $prompt . '</div>
 					<form name="'.$formName.'" class="'.$formClass.'" action="postTrial.php" method="post">
@@ -269,7 +269,8 @@
 		}
 		// JOL trial type
 		elseif($trialType == 'jol') {
-			echo '<div id="jol">How likely are you to correctly remember this item on a later test?</div>
+			echo '<div id="JOLpos">
+					<div id="jol">How likely are you to correctly remember this item on a later test?</div>
 					<div id="subpoint" class="gray">Type your response on a scale from 0-100 using the entire range of the scale</div>';
 			
 			echo '<form name="'.$formName.'" class="'.$formClass.'" action="postTrial.php" method="post">
@@ -278,7 +279,8 @@
 					<input	name="RTkey"	type="text"	value="RTkey"	class="RTkey Hidden" 	/>
 					<input	name="RTlast"	type="text"	value="RT"		class="RTlast Hidden" 	/>
 					<input	id="FormSubmitButton"	type="submit"	class="Hidden"	value="Submit"	/>
-				  </form>';
+				  </form>
+				 </div>';
 		}
 		## ADD ## your new trial should be an elseif here (if it has user input)
 	}
