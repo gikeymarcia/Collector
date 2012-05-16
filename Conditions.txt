@@ -8,3 +8,4 @@ Number	Stimuli	Order	Condition Description	Condition Notes
 7	Words/WordPairMixed.txt	Orders/Timings.txt	walk people through it all	timing is very flexible
 8	Words/FullStim.txt	Orders/Demo.txt	only one long ass study trial	testing
 9	Words/FullStim.txt	Orders/TestMC.txt	Example of multiple choice test	3 test MC trials in a row
+10	Words/FullStim.txt	Orders/All Trials.txt	Examples of all presentations	user controlled so I can edit css

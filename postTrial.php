@@ -101,6 +101,7 @@
 	}
 	#### Showing JOL
 	elseif ($postTrial == 'jol') {
+		echo '<div id="JOLpos">';
 		echo '<div id="jol">How likely are you to correctly remember this item on a later test?</div>
 			  <div id="subpoint" class="gray">Type your response on a scale from 0-100 using the entire range of the scale</div>';
 			
@@ -110,6 +111,7 @@
 					<input class="RTkey Hidden" name="RTkey"	type="text" value="RTkey" />
 					<input	id="FormSubmitButton"	type="submit"	class="Hidden"	value="Submit"	/>
 				  </form>';
+		echo '</div>';
 	}
 	## ADD ## put your own elseif here for a new post-trial type
 	#### moving onto next trial

@@ -154,13 +154,14 @@
 				  </div>';
 		}
 		## ADD ## your new trial should be an elseif here (if it has no user input)
-		
+		echo '<div id="buttPos">';
 		// give the form a different name for user and comuputer timed
 		// I use formname + JQuery to hide the submit button when the form is a computer timed form
 		echo '<form name="'.$formName.'" class="'.$formClass.'" action="postTrial.php" method="post">
 				<input	name="RT"	type="text"		value=""	class="RT Hidden"	/>
 				<input	id="FormSubmitButton"	type="submit"	class="Hidden"	value="Done"	/>
 			  </form>';
+		echo '</div>';
 	}
 	
 	
@@ -255,14 +256,16 @@
 		// FreeRecall trial type
 		elseif($trialType == 'freerecall') {
 			$prompt =& $_SESSION['Trials'][$currentPos]['Info']['Order Notes'];
-			echo '<div class="Prompt PreCache">' . $prompt . '</div>
+			echo '<div id="centerContent">
+				<div class="Prompt PreCache">' . $prompt . '</div>
 					<form name="'.$formName.'" class="'.$formClass.'" action="postTrial.php" method="post">
 						<textarea rows="20" cols="60" name="Response" class="PreCache" wrap="physical" value=""></textarea>	<br />
 						<input	name="RT"		type="text"	value="RT"		class="RT Hidden"		/>
 						<input	name="RTkey"	type="text"	value="RTkey"	class="RTkey Hidden" 	/>
 						<input	name="RTlast"	type="text"	value="RT"		class="RTlast Hidden" 	/>
 						<input	id="FormSubmitButton"	type="submit"	class="Hidden"	value="Submit"	/>
-					</form>';
+					</form>
+					</div>';
 		}
 		// JOL trial type
 		elseif($trialType == 'jol') {
