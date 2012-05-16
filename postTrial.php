@@ -101,9 +101,11 @@
 	
 	// Classname tells the program whether to show user or computer timed version
 	if($time == 'user'):
-		$formName = 'UserTiming';
+		$formName	= 'UserTiming';
+		$formClass	= 'UserTiming';
 	else:
-		$formName = 'ComputerTiming';
+		$formName	= 'ComputerTiming';
+		$formClass	= 'ComputerTiming';
 	endif;
 	
 	#### Showing feedback
@@ -112,23 +114,25 @@
 				<div class="gray">The correct answer is</div>
 					<span>' . show($cue).' : '.show($answer).'</span>';
 		// Hidden form that collects RT and progresses trial to next.php
-		echo '<form name="'.$formName.'" class="'.$formName.'" action="next.php" method="post">
+		echo '<form name="'.$formName.'" class="'.$formClass.'" action="next.php" method="post">
 				<input class="RT Hidden" name="RT" type="text" value="RT" />
-				<input type="submit" id="FormSubmitButton" value="Submit">
+				<input	id="FormSubmitButton"	type="submit"	class="Hidden"	value="Done"	/>
 			  </form>';
 		echo '</div>';
 	}
 	#### Showing JOL
 	elseif ($postTrial == 'jol') {
+		echo '<div id="JOLpos">';
 		echo '<div id="jol">How likely are you to correctly remember this item on a later test?</div>
 			  <div id="subpoint" class="gray">Type your response on a scale from 0-100 using the entire range of the scale</div>';
 			
-			echo '<form name="'.$formName.'" class="'.$formName.'" action="next.php" method="post">
+			echo '<form name="'.$formName.'" class="'.$formClass.'" action="next.php" method="post">
 					<input class="Textbox"		name="JOL"		type="text" value=""/><br />
 					<input class="RT Hidden"	name="RT"		type="text" value="RT" />
 					<input class="RTkey Hidden" name="RTkey"	type="text" value="RTkey" />
-					<input type="submit" id="FormSubmitButton" value="Submit">
+					<input	id="FormSubmitButton"	type="submit"	class="Hidden"	value="Submit"	/>
 				  </form>';
+		echo '</div>';
 	}
 	## ADD ## put your own elseif here for a new post-trial type
 	#### moving onto next trial

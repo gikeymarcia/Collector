@@ -9,13 +9,13 @@ table td {	background: #f5f5f5;	padding: 5px;	}
 img {		display: block;	margin-left: auto;	margin-right: auto;	}
 form	{}
 option	{}
+select	{font-size: 1.1em; font-family: Kreon, sans-serif;}
 
 
 /*Divs used across multiple pages*/
 .ExpContainer {	text-align: center;	color: #000000;	font-size: 1em;	margin: 0 auto;	width: 800px;	}
-.Prompt	{	padding-top: 20px; width: 500px;}
-.Textbox	{margin-bottom: 15px}
-#SubmitButton	{}
+.Prompt	{	width: 500px; margin-top: 80px; margin-bottom: 15px; font-size: 1.2em}
+.Textbox {	margin-bottom: 7px}
 .Hidden, .PreCache	{	display:none;	}
 
 
@@ -32,11 +32,21 @@ option	{}
 
 
 /*BasicInfo specific css*/
-#content { margin-left: auto; margin-right: auto; width: 70%; min-width: 400px; max-width: 800px; padding: 15px;}
-.Question { padding-bottom: 20px; /*outline: dashed 1px #666666;*/ padding-left: 10px; width: 85%}
-p.Ask {color: #000000; font-size: 1.1em;  }
+#content {
+	margin-left: auto;	margin-right: auto;
+	width: 70%; min-width: 400px; max-width: 800px;
+	font-size: 1em
+	}
+.Question { 
+	margin-top: 15px; margin-bottom: 35px;
+	width: 85%;
+	}
+.Question select {font-size: .9em}
+.Question select:focus {font-size: .9em; background: #fefef0}
+.Question input {font-size: 1em}
+.Question input:focus {background: #fefef0}
+p.Ask {color: #000000; font-size: 1.1em;  margin: 0px auto 4px auto;}
 input.radio {  }
-
 .leftfloat {float: left;}
 
 
@@ -45,28 +55,47 @@ input.radio {  }
 textarea { margin-bottom: 10px; font-family: Arial, Helvetica, san-serif;}
 input.submit {}
 
-.WordWrap { margin: 20px auto 0; } 
-.left, .divider, .right { font-size: 2em;}
-.leftcopy, .dividercopy { font-size: 2em; line-height: 1em; float: left; padding-right: 5px;}
+.WordWrap {
+		margin: 120px auto 0;
+		width: 100%; min-width: 700px; max-width: 1500px;
+		}
+.left {width: 48%; float: left; text-align: right; font-size: 4em;}
+.divider {width: 4%; float: left; text-align: center; font-size: 4em;}
+.right {width: 48%; float: left; text-align: left; font-size: 4em;}
+#buttPos {width: 90px; margin-left: auto; margin-right: auto; }
+
+
+.leftcopy { line-height: 1em; float: left; padding-right: 0px; width: 48%; text-align:right; font-size: 4em;}
+.dividercopy {line-height: 1em; float: left; padding-right: 0px; width: 4%; font-size: 4em; text-align:center}
+.WordWrap form {width: 47%; font-size: 1.5em}
+.WordWrap .Textbox {width: 350px; font-size: 2.1em}
+.WordWrap #FormSubmitButton {width: 350px; clear:left; margin: 5px auto 10px auto}
 form.UserTiming, form.ComputerTiming{  }
 .gray { color: #666666;}
 
-.center {text-align: center;}
-.Feedback {font-size: 2em; margin: 25px auto auto 25px;}
-.picWord { text-align: center; font-size: 2em;}
 
-.pic { padding-bottom: 20px;} 
-.Textbox { width: 200px; padding: 0 5px; font-size: 1.5em;}
+
+.center {text-align: center;}
+.Feedback {font-size: 2em; margin: 120px auto auto auto; width: 800px; font-size: 3em}
+.Feedback .gray { font-size: .5em}
+.Feedback span {font-size: 1.5em; text-align: center; width:100%}
+
+.pic { padding-bottom: 20px; margin-top: 20px;}
+.picWord { text-align: center; font-size: 3em; margin-bottom: 10px;}
+.pic .Textbox {font-size: 2em;}
+
+
+.Textbox { width: 200px; padding: 0 5px; font-size: 1.5em; font-family: Kreon, sans-serif;}
 
 .passage {min-width: 400px; max-width: 800px; margin: 0 auto; font-family: Times New Roman, serif; font-size: .9em; line-height: 1.6em;}
 .passage p { padding-bottom: 10px;}
 #end { margin: 0 auto; color: red; text-align: center; font-size: 2em;}
 
 
-#SubmitButton	{ background: #566673; color: #fff; cursor: pointer; width: 80px; padding: 5px;  border-radius: 5px; margin: 20px auto 0;}
+#SubmitButton	{ background: #566673; color: #fff; cursor: pointer; width: 80px; padding: 5px;  border-radius: 5px; margin: 10px auto 0;}
 #SubmitButton:hover { background: #3e5365;}
 
-#FormSubmitButton	{ background: #566673; color: #fff; cursor: pointer; width: 80px; padding: 5px;  border-radius: 5px; }
+#FormSubmitButton	{ background: #566673; color: #fff; cursor: pointer; width: 80px; padding: 5px;  border-radius: 5px;}
 #FormSubmitButton:hover { background: #3e5365;}
 
 .padtop60 { padding-top: 60px; }
@@ -74,13 +103,14 @@ form.UserTiming, form.ComputerTiming{  }
 
 /*Instructions.php css*/
 #centerContent { width: 66%; max-width: 800px; min-width: 450px;margin-left: auto; margin-right: auto;}
-.Instruct {margin-left: auto; margin-top: 5%;}
-.readcheck { background: #f2f1f1; padding: 20px; width: 50%; margin-top: 17%;}
-ol.list  li{  width: 80%; margin-bottom: 15px; background: #ffffff; outline: dotted 2px black; padding: 5px; }
+.Instruct {margin-left: auto; margin-top: 5%; font-size: 1.1em}
+.readcheck { background: #f2f1f1; padding: 20px; width: 50%; margin-top: 150px; border-radius: 10px;}
+ol.list  li{  width: 80%; margin-bottom: 15px; background: #ffffff; outline: dotted 2px black; padding: 5px;}
 
 
+#JOLpos {width: 650px; margin: 120px auto 0px auto; }
 #jol { font-size: 2em; padding-top: 20px; max-width: 600px;}
-#subpoint { padding-top: 20px; padding-bottom: 10px; color: #191935;max-width: 600px;}
+#subpoint { padding-top: 15px; padding-bottom: 10px; color: #191935;max-width: 600px; }
 
 /*stepout related css*/
 h1.stepout { width: 700px; margin:20px auto 20px;}
@@ -93,12 +123,12 @@ h1.stepout { width: 700px; margin:20px auto 20px;}
 .cont { font-size: 2em; text-align: center;}
 
 /*Final Question related css*/
-#FQlocation { width: 55%; margin: 5% auto auto auto; font-size: 1.1em; min-width: 350px;}
+#FQlocation { width: 750px; margin: 50px auto auto auto; font-size: 1.1em; min-width: 350px;}
 	#FQlocation li {margin-bottom: 5px; list-style: none;}
 	#FQlocation p {margin-bottom: 5px; list-style: none;}
 	#FQlocation ul {margin-top: 10px;}
 	#FQlocation .Textbox { width: 75%;}
-#FQ {font-size:1.1em; font-weight:bold; margin-bottom: 0px}
+#FQ {font-size:1.1em; margin-bottom: 0px}
 	#FQ	p {color:#666666; padding-left: 3%}
 #Likert { max-width: 600px;}
 	#Likert li	{ width:13%; float: left; padding-right: 1.2%}
