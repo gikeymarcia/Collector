@@ -113,9 +113,11 @@
 		
 	// changing form classname based on user or computer timing.  I use the classname to do JQuerty magic
 	if($time == 'user'):
-		$formName = 'UserTiming';
+		$formName	= 'UserTiming';
+		$formClass	= 'UserTiming';
 	else:
-		$formName = 'ComputerTiming';
+		$formName	= 'ComputerTiming';
+		$formClass	= 'ComputerTiming';
 	endif;
 	
 	
@@ -138,13 +140,13 @@
 				 '</div>';
 			
 			echo '<div class="picWord PreCache">'.$target.'</div>';
-			$formName = $formName.' center';
+			$formClass = $formClass.' center';
 		}
 		// Passage trial type
 		elseif($trialType == 'passage') {
 			echo '<div class="passage PreCache">'.fixBadChars($cue).'</div>
 				  <div id="end">End of Passage</div>';
-				  $formName = $formName.' center';
+				  $formClass = $formClass.' center';
 		}
 		// Instruct trial type
 		elseif ($trialType == 'instruct') {
@@ -156,9 +158,9 @@
 		
 		// give the form a different name for user and comuputer timed
 		// I use formname + JQuery to hide the submit button when the form is a computer timed form
-		echo '<form name="'.$formName.'" class="'.$formName.'" action="postTrial.php" method="post">
-				<input	name="RT"	type="text"	value=""	class="RT Hidden"	/>
-				<input	type="submit" id="FormSubmitButton" value="Done">
+		echo '<form name="'.$formName.'" class="'.$formClass.'" action="postTrial.php" method="post">
+				<input	name="RT"	type="text"		value=""	class="RT Hidden"	/>
+				<input	id="FormSubmitButton"	type="submit"	class="Hidden"	value="Done"	/>
 			  </form>';
 	}
 	
@@ -173,12 +175,12 @@
 			echo '<div class="WordWrap">
 					<span class="leftcopy PreCache">'.$cue.'</span>
 					<span class="dividercopy">:</span>
-					<form name="'.$formName.'" class="'.$formName.' leftfloat PreCache" action="postTrial.php" method="post">
+					<form name="'.$formName.'" class="'.$formClass.' leftfloat PreCache" action="postTrial.php" method="post">
 						<input	name="Response"	type="text"	value=""		class="Textbox Right PreCache"	/>
 						<input	name="RT"		type="text"	value="RT"		class="RT Hidden"		/>
 						<input	name="RTkey"	type="text"	value="RTkey"	class="RTkey Hidden" 	/>
 						<input	name="RTlast"	type="text"	value="RT"		class="RTlast Hidden" 	/>
-						<input type="submit" id="FormSubmitButton" value="Submit"	/>
+						<input	id="FormSubmitButton"	type="submit"	class="Hidden"	value="Submit"	/>
 					</form>
 				  </div>';
 		}
@@ -187,14 +189,14 @@
 			echo '<div class="pic PreCache">
 					'. show($cue).
 				 '</div>';
-			$formName = $formName.' center';
+			$formClass = $formClass.' center';
 			
-			echo '<form name="'.$formName.'" class="'.$formName.'" action="postTrial.php" method="post">
+			echo '<form name="'.$formName.'" class="'.$formClass.'" action="postTrial.php" method="post">
 					<input  name="Response" type="text" value=""		class="Textbox picWord PreCache" />	<br />
 					<input	name="RT"		type="text"	value="RT"		class="RT Hidden"		/>
 					<input	name="RTkey"	type="text"	value="RTkey"	class="RTkey Hidden" 	/>
 					<input	name="RTlast"	type="text"	value="RT"		class="RTlast Hidden" 	/>
-					<input	type="submit" id="FormSubmitButton" value="Submit"	/>
+					<input	id="FormSubmitButton"	type="submit"	class="Hidden"	value="Submit"	/>
 				  </form>';
 		}
 		
@@ -204,7 +206,6 @@
 			echo '<div class="pic PreCache">
 					'. show($cue).
 				 '</div>';		
-			
 			## SET ## If you're going to use MCpic trials then you should change the category names in $MCbuttons
 			$MCbuttons = array( "Hawkins", "Cat2", "Cat3", "Cat4", "Cat6", "Cat6", "Cat7", "Ocean Fish", "Cat9", "Cat10", "Cat11", "Cloud Fish");
 			
@@ -226,8 +227,8 @@
 			}
 			echo '</div>';
 			
-			$formName = $formName.' center';
-			echo '<form name="'.$formName.'" class="'.$formName.'" action="postTrial.php" method="post">
+			$formClass = $formName.' center';
+			echo '<form name="'.$formName.'" class="'.$formClass.'" action="postTrial.php" method="post">
 					<input	name="Response"	type="text"	value=""	class="Textbox Hidden"	/>	<br />
 					<input	name="RT"		type="text"	value="RT"	class="RT Hidden"		/>
 				  </form>';
@@ -243,12 +244,12 @@
 				  <div class="WordWrap PreCache">
 				  	<span class="leftcopy">'.$cue.'</span>
 				  	<span class="dividercopy">:</span>
-				  	<form name="'.$formName.'" class="'.$formName.' leftfloat" action="postTrial.php" method="post">
+				  	<form name="'.$formName.'" class="'.$formClass.' leftfloat" action="postTrial.php" method="post">
 					  	<input 	name="Response" type="text" value=""		class="Textbox"			/>
 					  	<input	name="RT"		type="text"	value="RT"		class="RT Hidden"		/>
 						<input	name="RTkey"	type="text"	value="RTkey"	class="RTkey Hidden" 	/>
 						<input	name="RTlast"	type="text"	value="RT"		class="RTlast Hidden" 	/>
-						<input	type="submit" id="FormSubmitButton" value="Submit"	/>
+						<input	id="FormSubmitButton"	type="submit"	class="Hidden"	value="Submit"	/>
 					  </form>
 				  </div>';
 		}
@@ -256,12 +257,12 @@
 		elseif($trialType == 'freerecall') {
 			$prompt =& $_SESSION['Trials'][$currentPos]['Info']['Order Notes'];
 			echo '<div class="Prompt PreCache">' . $prompt . '</div>
-					<form name="'.$formName.'" class="'.$formName.'" action="postTrial.php" method="post">
+					<form name="'.$formName.'" class="'.$formClass.'" action="postTrial.php" method="post">
 						<textarea rows="20" cols="60" name="Response" class="PreCache" wrap="physical" value=""></textarea>	<br />
 						<input	name="RT"		type="text"	value="RT"		class="RT Hidden"		/>
 						<input	name="RTkey"	type="text"	value="RTkey"	class="RTkey Hidden" 	/>
 						<input	name="RTlast"	type="text"	value="RT"		class="RTlast Hidden" 	/>
-						<input	type="submit" id="FormSubmitButton" value="Submit"	/>
+						<input	id="FormSubmitButton"	type="submit"	class="Hidden"	value="Submit"	/>
 					</form>';
 		}
 		// JOL trial type
@@ -269,12 +270,12 @@
 			echo '<div id="jol">How likely are you to correctly remember this item on a later test?</div>
 					<div id="subpoint" class="gray">Type your response on a scale from 0-100 using the entire range of the scale</div>';
 			
-			echo '<form name="'.$formName.'" class="'.$formName.'" action="postTrial.php" method="post">
+			echo '<form name="'.$formName.'" class="'.$formClass.'" action="postTrial.php" method="post">
 					<input	name="Response"	type="text"	value=""		class="Textbox"			/>	<br />
 					<input	name="RT"		type="text"	value="RT"		class="RT Hidden"		/>
 					<input	name="RTkey"	type="text"	value="RTkey"	class="RTkey Hidden" 	/>
 					<input	name="RTlast"	type="text"	value="RT"		class="RTlast Hidden" 	/>
-					<input	type="submit" id="FormSubmitButton" value="Submit"	/>
+					<input	id="FormSubmitButton"	type="submit"	class="Hidden"	value="Submit"	/>
 				  </form>';
 		}
 		## ADD ## your new trial should be an elseif here (if it has user input)

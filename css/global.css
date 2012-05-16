@@ -98,7 +98,7 @@ h1.stepout { width: 700px; margin:20px auto 20px;}
 	#FQlocation p {margin-bottom: 5px; list-style: none;}
 	#FQlocation ul {margin-top: 10px;}
 	#FQlocation .Textbox { width: 75%;}
-#FQ {font-size:1.1em; font-weight:bold; margin-bottom: 0px}
+#FQ {font-size:1.1em; margin-bottom: 0px}
 	#FQ	p {color:#666666; padding-left: 3%}
 #Likert { max-width: 600px;}
 	#Likert li	{ width:13%; float: left; padding-right: 1.2%}

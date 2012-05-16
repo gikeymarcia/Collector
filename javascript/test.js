@@ -32,9 +32,9 @@
 	});
 	
 	
-	// hide SubmitButton if the form name is 'ComputerTimed'
-	if($("form").attr('name') == 'ComputerTiming') {
-		$("#FormSubmitButton").addClass('Hidden');
+	// show SubmitButton if the form name is 'UserTiming'
+	if($("form").attr('name') == 'UserTiming') {
+		$("#FormSubmitButton").removeClass('Hidden');
 	}
 	
 	// timer function
