@@ -27,7 +27,7 @@
 	
 	#### Saving data into $_SESSION
 	@$currentTrial['Response']['Response1']	= $_POST['Response'];
-	@$currentTrial['Response']['RT']			= $_POST['RT'];
+	@$currentTrial['Response']['RT']		= $_POST['RT'];
 	@$currentTrial['Response']['RTkey']		= $_POST['RTkey'];
 	@$currentTrial['Response']['RTlast']	= $_POST['RTlast'];
 	
@@ -43,12 +43,13 @@
 		$currentTrial['Info']['Order Notes'] == 'right') {
 		
 		$_SESSION['PastResponse'][$cue] = $_POST['Response'];
+		$answer			= ucwords(htmlspecialchars($_POST['Response']));
 		$answerClean	= trim(strtolower($_POST['Response']));
 		$responseClean	= trim(strtolower($_POST['Response']));
 	}
-	// if this is a you're right trial then set answer to your previous response
-	if(isset($_SESSION['PastResponse'][$cue])) {
-		
+	// if this is a you're right trial and part of the test phase set answer to your previous response
+	if($currentTrial['Info']['Phase'] == 'Test Phase') {
+		$answerClean	= trim(strtolower($_SESSION['PastResponse'][$cue]));
 	}
 	
 	
