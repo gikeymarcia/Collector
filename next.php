@@ -16,6 +16,7 @@
 	@$currentTrial['Response']['JOL']		= $_POST['JOL'];
 	@$currentTrial['Response']['postRT']	= $_POST['RT'];
 	@$currentTrial['Response']['postRTkey']	= $_POST['RTkey'];
+	## ADD ## if you've made a new post-trial type that collects data then you need to record that data into $currentTrial['Response']['whatever name']
 	
 	
 	#### Writing to data file

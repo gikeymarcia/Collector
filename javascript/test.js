@@ -15,27 +15,29 @@
 	var keypress	= 0;
 	var trialTime	= $("#Time").html();
 
-	
+	// on pageload reset timer, show pre-cached, start timer, focus on textboxes
 	window.onload = function() {
-		timer		= 0;
-		$(".PreCache").removeClass("PreCache");
+		if(trialTime != 0) {
+			$(".PreCache").removeClass("PreCache");
+		}
 		setInterval(addtime,interval);
+		$(".Textbox:first").focus();
+		$("textarea").focus();
 	}
+	
+	
+	// on DOM ready reset timer
+	$("document").ready( function(){
+		timer		= 0;
+	});
+	
 	
 	// hide SubmitButton if the form name is 'ComputerTimed'
 	if($("form").attr('name') == 'ComputerTiming') {
 		$("#FormSubmitButton").addClass('Hidden');
 	}
 	
-	
-	// on pageload focus onto item with class="Textbox"
-	$("document").ready( function(){
-		// $("#FormSubmitButton").focus();			// turned off auto-focus onto formsubmitbuttons because it lead to annoying behavior
-		$(".Textbox:first").focus();
-		$("textarea").focus();
-	});
-	
-	
+	// timer function
 	function addtime() {
 		timer = timer + interval;
 		// update RT field with timer value

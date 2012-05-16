@@ -1,13 +1,10 @@
 <?php
-// fixes problems reading files saved on mac
-ini_set('auto_detect_line_endings', true);
-// start the session at the top of each page
-session_start();
-// if ($_SESSION['Debug'] == FALSE) {
-	// error_reporting(0);
-// }
-// Loads all of my custom PHP functions
-require("CustomFunctions.php");
+	ini_set('auto_detect_line_endings', true);				// fixes problems reading files saved on mac
+	session_start();										// start the session at the top of each page
+	if ($_SESSION['Debug'] == FALSE) {
+		error_reporting(0);
+	}
+	require("CustomFunctions.php");							// Loads all of my custom PHP functions
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"

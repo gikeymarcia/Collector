@@ -30,7 +30,6 @@
 					<p> Please enter your UCLA email address below</p>					<!--## SET ## change this for mTurk-->
 					
 					<input class="Textbox" style="width:400px;" name="Username" type="text" value=""/>
-					
 					<br />
 					<?php
 					if ($selector == TRUE) {
@@ -52,7 +51,6 @@
 							}
 						?>
 					</select>
-					<br />
 					<!-- <input class="Button Hidden" type="submit" value="Login"> -->
 					<div id="SubmitButton">Submit</div>
 				</form>

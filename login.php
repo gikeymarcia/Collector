@@ -21,7 +21,7 @@
 
 
 <body>
-
+	
 	<?php
 		echo '<h1>Please wait while we load the experiment...</h1>';
 		echo '<noscript>	<h1>	You must enable javascript to participate!!!	</h1>	</noscript>';
@@ -51,17 +51,17 @@
 		
 		
 		#### Code to automatically choose condition assignment
-		$Conditions = GetFromFile("Conditions.txt");				// Loading conditions info
-		$logFile =& $_SESSION["LoginCounter Location"];
+		$Conditions	=  GetFromFile("Conditions.txt");				// Loading conditions info
+		$logFile	=& $_SESSION["LoginCounter Location"];
 		if( $selectedCondition == 'Auto') {
 			
 			if(file_exists($logFile) ) {							// Read counter file & save value
-				$fileHandle = fopen ($logFile, "r");
-				$loginCount = fgets($fileHandle);
+				$fileHandle	= fopen ($logFile, "r");
+				$loginCount	= fgets($fileHandle);
 				fclose($fileHandle);
 			} else { $loginCount = 1; }
 			// write old value + 1 to login counter
-			$fileHandle = fopen($logFile, "w");
+			$fileHandle	= fopen($logFile, "w");
 			fputs($fileHandle, $loginCount + 1);
 			fclose($fileHandle);
 			
@@ -114,8 +114,7 @@
 	 	if (is_file("subjects/Status.txt") == FALSE) {
 	 		arrayToLine ($UserDataHeader, "subjects/Status.txt");
 	 	}
-		// write $UserData to "subjects/Status.txt"
-		arrayToLine ($UserData, "subjects/Status.txt");
+		arrayToLine ($UserData, "subjects/Status.txt");						// write $UserData to "subjects/Status.txt"
 		###########################################################################
 		
 		
@@ -145,19 +144,17 @@
 															"JOL"			=> NULL,
 															"postRT"		=> NULL,
 															"postRTkey"		=> NULL,
+															## ADD ## if you're going to collect any responses you need to create the response placeholder here
 														);
 															
-				// on trials where there is no Stimuli info (e.g., freerecall) keep same Stimuli structure but fill with 'n/a' values
-				// I need a consistent Trial structure to do all of the automatic output adjustment I do later on
+				// on trials with no Stimuli info (e.g., freerecall) keep the same Stimuli structure but fill with 'n/a' values
+				// I need a consistent Trial structure to do all of the automatic output creation I do later on
 				if($Trials[$count-1]['Stimuli'] == NULL) {
 					$stim		=& $Trials[$count-1]['Stimuli'];
-					## TO DO ## make program search for a stimuli != NULL;  If [2] is null this breaks
 					$stim		=  $stimuli[2];
 					$stimKey	= array_keys($stim);
 					$empty		= array_fill_keys($stimKey, 'n/a');
 					$Trials[$count-1]['Stimuli'] = $empty;
-					// readable($Trials[$count-1]['Stimuli']);						#### DEBUG ####
-					// echo 'this null thing can be true!'.($count-1).'<br />';	#### DEBUG ####
 				}
 			}
 			
@@ -208,16 +205,16 @@
 			
 			}
 		}
-		#### Loading up $Trials with for multisession experiments
+		#### Loading up $Trials for multisession experiments
 		else {
 			// Load headers from correct stimuli files	
-			$fileNumber		= $_SESSION['Session'];
-			$sessionFile	= 'subjects/'.$_SESSION['Username'].'_Session'.$fileNumber.'_StimuliFile.txt';
-			$openSession	= fopen($sessionFile, 'r');
-			$header1		= fgetcsv($openSession,0,"\t");
-			$header2		= fgetcsv($openSession,0,"\t");
-			$_SESSION['Header1'] = $header1;
-			$_SESSION['Header2'] = $header2;
+			$fileNumber				= $_SESSION['Session'];
+			$sessionFile			= 'subjects/'.$_SESSION['Username'].'_Session'.$fileNumber.'_StimuliFile.txt';
+			$openSession			= fopen($sessionFile, 'r');
+			$header1				= fgetcsv($openSession,0,"\t");
+			$header2				= fgetcsv($openSession,0,"\t");
+			$_SESSION['Header1']	= $header1;
+			$_SESSION['Header2']	= $header2;
 			
 			// Loading up $Trials for this Username and Session
 			$Trials		= array();

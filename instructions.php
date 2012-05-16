@@ -26,20 +26,22 @@
 			
 		</div>
 			<!-- ## SET ## This ensures that they read your insturctions.  Participants must correctly answer something about the procedure -->
-			<div class="readcheck"> Should you pay close attention?  (hint: Answer is in the instructions)
+			<div class="readcheck">
+				Should you pay close attention?  (hint: Answer is in the instructions)
 				<ol class="list">
-					<li class="MCbutton wrong" >I don't think so</li>
-					<li class="MCbutton wrong" >Nope</li>
-					<li class="MCbutton" id="correct">Yes</li>
-					<li class="MCbutton wrong" >I can't read.</li>
+					<li class="MCbutton wrong"			>	I don't think so	</li>
+					<li class="MCbutton wrong"			>	Nope				</li>
+					<li class="MCbutton" id="correct"	>	Yes					</li>
+					<li class="MCbutton wrong"			>	I can't read.		</li>
 				</ol>
 		</div>
+		
 		<div class="Hidden" id="RT" >Click to begin the experiment</div>
 		
 		<form class="" name="Login" action="test.php" method="Post">
-			<input name="RT" class="RT Hidden" type="text" value="0" />
-			<input name="Fails" class="Fails Hidden" type="text" value="0" />
-			<input name="PrevTrial" class="Hidden" type="text" value="Instruction" />
+			<input	name="RT"			class="RT Hidden"		type="text"	value="0"			/>
+			<input	name="Fails"		class="Fails Hidden"	type="text"	value="0"			/>
+			<input	name="PrevTrial"	class="Hidden"			type="text"	value="Instruction" />
 		</form>
 	</div>
 	
@@ -49,15 +51,10 @@
 		echo show($_SESSION['Trials'][1]['Stimuli']['Cue']);
 		echo show($_SESSION['Trials'][1]['Stimuli']['Target']);
 		echo show($_SESSION['Trials'][1]['Stimuli']['Answer']);
-		foreach ($_SESSION['Trials'] as $trial) {
-			echo show($trial['Stimuli']['Cue']);
-			echo show($trial['Stimuli']['Target']);
-			echo show($trial['Stimuli']['Answer']);
-		}
 	echo '</div>';
 	
 	?>
 
-	<script src="javascript/jquery-1.7.2.min.js" type="text/javascript"></script>					<!-- JQuery javascript library (makes basic functions much easier -->
+	<script src="javascript/jquery-1.7.2.min.js" type="text/javascript"></script>				<!-- JQuery javascript library (makes basic functions much easier) -->
 	<script src="javascript/jsCode.js" type="text/javascript"> </script>						<!-- Your own javascript file -->
 </body> </html>
