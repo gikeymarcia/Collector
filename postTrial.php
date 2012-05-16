@@ -15,11 +15,11 @@
 		$answer		=  $currentTrial['Stimuli']['Answer'];
 		$trialType	=  trim(strtolower($currentTrial['Info']['Trial Type']));
 		$postTrial	=  trim(strtolower($currentTrial['Info']['Post Trial']));
-		$time		=  $_SESSION['FeedbackTime'];
+		// $time		=  $_SESSION['FeedbackTime'];
 	
 	
 	### getting response and making cleaned up versions (for later comparisons)
-	$response1		= $_POST['Response'];
+	@$response1		= $_POST['Response'];
 	$responseClean	= trim(strtolower($response1));
 	$answerClean	= trim(strtolower($answer));
 	$Acc			= NULL;
@@ -27,9 +27,10 @@
 	
 	#### Saving data into $_SESSION
 	@$currentTrial['Response']['Response1']	= $_POST['Response'];
-	@$currentTrial['Response']['RT']			= $_POST['RT'];
+	@$currentTrial['Response']['RT']		= $_POST['RT'];
 	@$currentTrial['Response']['RTkey']		= $_POST['RTkey'];
 	@$currentTrial['Response']['RTlast']	= $_POST['RTlast'];
+	## ADD ## if you've created a new inputname on test.php you need to capture data here
 	
 	
 	#### Calculating and saving accuracy for trials in  which this would be appropriate (excluding JOL and FreeRecall)
@@ -67,17 +68,17 @@
 <body>
 
 <?php
-	#### trial timing code
-	if($postTrial == 'feedback') {
+	#### trial timing code		## ADD ## tell program which timing to use for your new post-trial type
+	if($postTrial == 'feedback'):
 		$time = $_SESSION['FeedbackTime'];
-	}
-	elseif ($postTrial == 'jol') {
+	elseif ($postTrial == 'jol'):
 		$time = $_SESSION['jolTime'];
-	}
-	// hidden field that JQuery/JS uses to submit the trial to next.php
-	echo '<div id="Time" class="Hidden">' . $time . '</div>';
+	endif;
+	if($_SESSION['Debug'] == TRUE) {	$time = 2;	}						// use this time for debugging  ## SET ##
 	
-	// changing form classname based on user or computer timing.  I use the classname to do JQuerty magic
+	echo '<div id="Time" class="Hidden">' . $time . '</div>';				// hidden field that JQuery/JS uses to submit the trial to next.php
+	
+	// Classname tells the program whether to show user or computer timed version
 	if($time == 'user'):
 		$formName = 'UserTiming';
 	else:
@@ -87,7 +88,7 @@
 	#### Showing feedback
 	if($postTrial == 'feedback') {
 		echo '<div class="Feedback">
-				<div class="gray">The correct answer is:</div>
+				<div class="gray">The correct answer is</div>
 					<span>' . show($cue).' : '.show($answer).'</span>';
 		// Hidden form that collects RT and progresses trial to next.php
 		echo '<form name="'.$formName.'" class="'.$formName.'" action="next.php" method="post">
@@ -96,6 +97,7 @@
 			  </form>';
 		echo '</div>';
 	}
+	#### Showing JOL
 	elseif ($postTrial == 'jol') {
 		echo '<div id="jol">How likely are you to correctly remember this item on a later test?</div>
 			  <div id="subpoint" class="gray">Type your response on a scale from 0-100 using the entire range of the scale</div>';
@@ -107,22 +109,12 @@
 					<input type="submit" id="FormSubmitButton" value="Submit">
 				  </form>';
 	}
+	## ADD ## put your own elseif here for a new post-trial type
+	#### moving onto next trial
 	else {
 		echo '<meta http-equiv="refresh" content="0; url=next.php">';
 	}
-	// echo $_POST['Response'].'<br />';									#### DEBUG ####
-	// echo $_POST['RT'].'<br />';											#### DEBUG ####
-	
-	
-	// // if showing feedback use feedback time or else use 0
-	// if($postTrial == 'feedback'){
-		// echo '<meta http-equiv="refresh" content="'.$time.'; url=next.php">';						// comment out this line to stop feedback from auto advancing
-	// }
-	// else {
-		// echo '<meta http-equiv="refresh" content="0; url=next.php">';
-	// }
-	
-	// echo '<a href="next.php".">Click Here to continue</a>';										// uncomment to let participants continue at their own pace
+
 ?>
 	<script src="javascript/jquery-1.7.2.min.js" type="text/javascript"> </script>
 	<script src="javascript/test.js" type="text/javascript"> </script>

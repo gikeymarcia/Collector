@@ -5,16 +5,15 @@
 		error_reporting(0);
 	}
 	require("CustomFunctions.php");							// Loads all of my custom PHP functions
-
-
+	
+	
 	// are we done with all presentations?  if so, send to done.php
 	if (array_key_exists($_SESSION['Position'], $_SESSION['Trials']) == FALSE) {
-		// echo '<meta http-equiv="refresh" content="0; url=FinalQuestions.php">';
 		header("Location: FinalQuestions.php");
 		exit;
 	}
-
-
+	
+	
 	// setting up easier to use and read aliases(shortcuts) of $_SESSION data
 	$condition		=& $_SESSION['Condition'];
 	$currentPos		=& $_SESSION['Position'];
@@ -24,8 +23,8 @@
 		$answer		=& $currentTrial['Stimuli']['Answer'];
 		$trialType	=  trim(strtolower($currentTrial['Info']['Trial Type']));
 		$item		=  trim(strtolower($currentTrial['Info']['Item']));
-
-
+	
+	
 	// if we hit a *newfile* then the experiment is over (this means that we don't ask FinalQuestions until the last session of the experiment)
 	if($item == '*newfile*') {
 		header("Location: done.php");
@@ -37,10 +36,10 @@
 	if(@$_POST['PrevTrial'] == "Instruction") {
 		$instructFile = 'subjects/InstructionsData.txt';
 		if(is_file($instructFile) == FALSE) {
-			$instructHeader = array('Username','RT','Fails');
+			$instructHeader = array('Username','Timestamp', 'RT','Fails');
 			arrayToLine($instructHeader,$instructFile);
 		}
-		$instructData = array(	$_SESSION['Username'], $_POST['RT'], $_POST['Fails'] );
+		$instructData = array(	$_SESSION['Username'], date('c'), $_POST['RT'], $_POST['Fails'] );
 		arrayToLine($instructData,$instructFile);
 	}
 	
@@ -52,7 +51,7 @@
 	
 	
 	// if there has been a previous item then set it as $previousTrial
-	if($currentTrial>1) {
+	if($currentTrial > 1) {
 		$previousTrial =& $_SESSION['Trials'][$currentPos - 1];
 	} else { $previousTrial = FALSE;}
 ?>
@@ -68,8 +67,8 @@
 </head>
 
 <body>
-
-
+	
+	
 <?php
 	// go to stepout page if this is a stepout trial
 	if ($trialType == 'stepout') {
@@ -84,7 +83,8 @@
 	if(is_numeric($timingReported)) {
 		$time = $timingReported;
 	}
-	elseif ($timingReported == "computer") {
+	elseif ($timingReported == 'computer') {
+		## ADD ## you'll need to tell the program which default 'computer' timing to use for your new trial
 		if( ($trialType == 'study') OR ($trialType == 'studypic') OR ($trialType == 'instruct') ) {
 			$time = $_SESSION['StudyTime'];
 		}
@@ -105,7 +105,7 @@
 	else {
 		$time = 'user';
 	}
-	if($_SESSION['Debug'] == TRUE) {			
+	if($_SESSION['Debug'] == TRUE) {
 		$time = 2;					## SET ## if debug mode is on all trials will be this many seconds long 
 	}
 	// hidden field that JQuery/JS uses to submit the trial to postTrial.php
@@ -117,10 +117,11 @@
 	else:
 		$formName = 'ComputerTiming';
 	endif;
-
-
+	
+	
 	#### Presenting different trial types ####
 	// trials without any user input
+	## ADD ## if your trial has no input then add it to the if line below
 	if( ($trialType == 'study') OR ($trialType == 'studypic') OR ($trialType == 'passage') ) {
 		// Study trial type
 		if ($trialType == 'study') {
@@ -151,6 +152,7 @@
 					<div class="instruct">'. $_SESSION['Trials'][$currentPos]['Info']['Order Notes'].'</div>
 				  </div>';
 		}
+		## ADD ## your new trial should be an elseif here (if it has no user input)
 		
 		// give the form a different name for user and comuputer timed
 		// I use formname + JQuery to hide the submit button when the form is a computer timed form
@@ -159,9 +161,10 @@
 				<input	type="submit" id="FormSubmitButton" value="Done">
 			  </form>';
 	}
-
+	
 	
 	// trials with user input
+	## ADD ## if your trial has input then add it to the if line below
 	if(	($trialType == 'test')	OR	($trialType == 'testpic')	OR
 		($trialType == 'copy')	OR	($trialType == 'freerecall')OR
 		($trialType == 'jol')	OR	($trialType == 'mcpic')) {
@@ -180,7 +183,7 @@
 				  </div>';
 		}
 		// TestPic trial type
-		if($trialType == 'testpic') {
+		elseif($trialType == 'testpic') {
 			echo '<div class="pic PreCache">
 					'. show($cue).
 				 '</div>';
@@ -196,7 +199,7 @@
 		}
 		
 		// MCpic trial type
-		if($trialType == 'mcpic') {
+		elseif($trialType == 'mcpic') {
 			// show the image
 			echo '<div class="pic PreCache">
 					'. show($cue).
@@ -230,7 +233,7 @@
 				  </form>';
 		}
 		// Copy trial type
-		if($trialType == 'copy') {
+		elseif($trialType == 'copy') {
 			echo '<div class="WordWrap PreCache">
 					<span class="left">'.$cue.'</span>
 					<span class="divider">:</span>
@@ -250,7 +253,7 @@
 				  </div>';
 		}
 		// FreeRecall trial type
-		if($trialType == 'freerecall') {
+		elseif($trialType == 'freerecall') {
 			$prompt =& $_SESSION['Trials'][$currentPos]['Info']['Order Notes'];
 			echo '<div class="Prompt PreCache">' . $prompt . '</div>
 					<form name="'.$formName.'" class="'.$formName.'" action="postTrial.php" method="post">
@@ -262,7 +265,7 @@
 					</form>';
 		}
 		// JOL trial type
-		if($trialType == 'jol') {
+		elseif($trialType == 'jol') {
 			echo '<div id="jol">How likely are you to correctly remember this item on a later test?</div>
 					<div id="subpoint" class="gray">Type your response on a scale from 0-100 using the entire range of the scale</div>';
 			
@@ -274,6 +277,7 @@
 					<input	type="submit" id="FormSubmitButton" value="Submit"	/>
 				  </form>';
 		}
+		## ADD ## your new trial should be an elseif here (if it has user input)
 	}
 	
 	
@@ -286,7 +290,7 @@
 	
 	
 	
-	#### Diagnostics ####		un comment these to get tons of info about a dislpayed trial
+	#### Diagnostics ####		un comment these to get tons of info about each trial
 	// echo "<div>";
 		// echo "Condition #: {$_SESSION['Condition']['Number']} <br />";
 		// echo "Condition Stim File: {$_SESSION['Condition']['Stimuli']} <br />";
