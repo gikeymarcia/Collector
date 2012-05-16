@@ -23,7 +23,7 @@
 	## SET ## Change the email address to your email
 	echo '<div id="donePage">
 			<h2>Thank you for your participation!</h2>
-			<p>If you have any questions about the experiment please email YOURemail@yourdomain.com</p>
+			<p>If you have any questions about the experiment please email gikeymarcia@gmail.com</p>
 		  </div>';
 		
 	// readable($_SESSION['Trials']);

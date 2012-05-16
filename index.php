@@ -3,7 +3,7 @@
 	@session_destroy();									// destory any possible previous sessions and suppress warnings
 	session_start();									// starts the session
 	$_SESSION['Debug']=FALSE;							// turns debug mode on and off   ## SET ##
-	$selector = TRUE;									// ## SET ##; Show (TRUE) or hide (FALSE) the condition selector
+	$selector = FALSE;									// ## SET ##; Show (TRUE) or hide (FALSE) the condition selector
 	require("CustomFunctions.php");						// Loads all of my custom PHP functions
 ?>
 	
@@ -23,8 +23,7 @@
 		
 			<div id="LoginPosition"> 
 				<h1>Welcome to the experiment!</h1>
-				<p>This experiment will run for approximately 25 minutes.								<!--## SET ## give intro description for your exp-->
-				Your goal is to learn some information</p>
+				<p>In this experiment you will be tasked with guessing the word that will be presented.  This experiment will run for approximately 30 minutes.								<!--## SET ## give intro description for your exp--></p>
 				
 				<form name="Login" action="login.php" method="get">
 					<p> Please enter your UCLA email address below</p>					<!--## SET ## change this for mTurk-->

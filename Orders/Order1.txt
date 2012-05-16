@@ -1,123 +1,123 @@
 Item	Trial Type	Post Trial	Timing	Order Notes	Shuffle	Phase	Initial Block
 2	Study	No	Computer	study only	1	Study Phase	1
 3	Test	Feedback	Computer	right	1	Study Phase	1
-4	Study	No	Computer	study only	1	Study Phase	1
-5	Test	Feedback	Computer	wrong	1	Study Phase	1
-6	Study	No	Computer	study only	1	Study Phase	1
-7	Test	Feedback	Computer	right	1	Study Phase	1
-8	Study	No	Computer	study only	1	Study Phase	1
-9	Test	Feedback	Computer	wrong	1	Study Phase	1
-10	Study	No	Computer	study only	1	Study Phase	1
-11	Test	Feedback	Computer	right	1	Study Phase	1
-12	Study	No	Computer	study only	1	Study Phase	1
-13	Test	Feedback	Computer	wrong	1	Study Phase	1
-14	Study	No	Computer	study only	2	Study Phase	2
-15	Test	Feedback	Computer	right	2	Study Phase	2
-16	Study	No	Computer	study only	2	Study Phase	2
-17	Test	Feedback	Computer	wrong	2	Study Phase	2
-18	Study	No	Computer	study only	2	Study Phase	2
-19	Test	Feedback	Computer	right	2	Study Phase	2
-20	Study	No	Computer	study only	2	Study Phase	2
-21	Test	Feedback	Computer	wrong	2	Study Phase	2
-22	Study	No	Computer	study only	2	Study Phase	2
-23	Test	Feedback	Computer	right	2	Study Phase	2
-24	Study	No	Computer	study only	2	Study Phase	2
-25	Test	Feedback	Computer	wrong	2	Study Phase	2
-26	Study	No	Computer	study only	3	Study Phase	3
-27	Test	Feedback	Computer	right	3	Study Phase	3
-28	Study	No	Computer	study only	3	Study Phase	3
-29	Test	Feedback	Computer	wrong	3	Study Phase	3
-30	Study	No	Computer	study only	3	Study Phase	3
-31	Test	Feedback	Computer	right	3	Study Phase	3
-32	Study	No	Computer	study only	3	Study Phase	3
-33	Test	Feedback	Computer	wrong	3	Study Phase	3
-34	Study	No	Computer	study only	3	Study Phase	3
-35	Test	Feedback	Computer	right	3	Study Phase	3
-36	Study	No	Computer	study only	3	Study Phase	3
-37	Test	Feedback	Computer	wrong	3	Study Phase	3
-38	Study	No	Computer	study only	4	Study Phase	4
-39	Test	Feedback	Computer	right	4	Study Phase	4
-40	Study	No	Computer	study only	4	Study Phase	4
-41	Test	Feedback	Computer	wrong	4	Study Phase	4
-42	Study	No	Computer	study only	4	Study Phase	4
-43	Test	Feedback	Computer	right	4	Study Phase	4
-44	Study	No	Computer	study only	4	Study Phase	4
-45	Test	Feedback	Computer	wrong	4	Study Phase	4
-46	Study	No	Computer	study only	4	Study Phase	4
-47	Test	Feedback	Computer	right	4	Study Phase	4
-48	Study	No	Computer	study only	4	Study Phase	4
-49	Test	Feedback	Computer	wrong	4	Study Phase	4
-50	Study	No	Computer	study only	5	Study Phase	5
-51	Test	Feedback	Computer	right	5	Study Phase	5
-52	Study	No	Computer	study only	5	Study Phase	5
-53	Test	Feedback	Computer	wrong	5	Study Phase	5
-54	Study	No	Computer	study only	5	Study Phase	5
-55	Test	Feedback	Computer	right	5	Study Phase	5
-56	Study	No	Computer	study only	5	Study Phase	5
-57	Test	Feedback	Computer	wrong	5	Study Phase	5
-58	Study	No	Computer	study only	5	Study Phase	5
-59	Test	Feedback	Computer	right	5	Study Phase	5
-60	Study	No	Computer	study only	5	Study Phase	5
-61	Test	Feedback	Computer	wrong	5	Study Phase	5
+4	Study	Feedback	Computer	wrong	1	Study Phase	1
+5	Study	No	Computer	study only	1	Study Phase	1
+6	Test	Feedback	Computer	right	1	Study Phase	1
+7	Study	Feedback	Computer	wrong	1	Study Phase	1
+8	Study	No	Computer	study only	1	Study Phase	2
+9	Test	Feedback	Computer	right	1	Study Phase	2
+10	Study	Feedback	Computer	wrong	1	Study Phase	2
+11	Study	No	Computer	study only	1	Study Phase	2
+12	Test	Feedback	Computer	right	1	Study Phase	2
+13	Study	Feedback	Computer	wrong	1	Study Phase	2
+14	Study	No	Computer	study only	2	Study Phase	3
+15	Test	Feedback	Computer	right	2	Study Phase	3
+16	Study	Feedback	Computer	wrong	2	Study Phase	3
+17	Study	No	Computer	study only	2	Study Phase	3
+18	Test	Feedback	Computer	right	2	Study Phase	3
+19	Study	Feedback	Computer	wrong	2	Study Phase	3
+20	Study	No	Computer	study only	2	Study Phase	4
+21	Test	Feedback	Computer	right	2	Study Phase	4
+22	Study	Feedback	Computer	wrong	2	Study Phase	4
+23	Study	No	Computer	study only	2	Study Phase	4
+24	Test	Feedback	Computer	right	2	Study Phase	4
+25	Study	Feedback	Computer	wrong	2	Study Phase	4
+26	Study	No	Computer	study only	3	Study Phase	5
+27	Test	Feedback	Computer	right	3	Study Phase	5
+28	Study	Feedback	Computer	wrong	3	Study Phase	5
+29	Study	No	Computer	study only	3	Study Phase	5
+30	Test	Feedback	Computer	right	3	Study Phase	5
+31	Study	Feedback	Computer	wrong	3	Study Phase	5
+32	Study	No	Computer	study only	3	Study Phase	6
+33	Test	Feedback	Computer	right	3	Study Phase	6
+34	Study	Feedback	Computer	wrong	3	Study Phase	6
+35	Study	No	Computer	study only	3	Study Phase	6
+36	Test	Feedback	Computer	right	3	Study Phase	6
+37	Study	Feedback	Computer	wrong	3	Study Phase	6
+38	Study	No	Computer	study only	4	Study Phase	7
+39	Test	Feedback	Computer	right	4	Study Phase	7
+40	Study	Feedback	Computer	wrong	4	Study Phase	7
+41	Study	No	Computer	study only	4	Study Phase	7
+42	Test	Feedback	Computer	right	4	Study Phase	7
+43	Study	Feedback	Computer	wrong	4	Study Phase	7
+44	Study	No	Computer	study only	4	Study Phase	8
+45	Test	Feedback	Computer	right	4	Study Phase	8
+46	Study	Feedback	Computer	wrong	4	Study Phase	8
+47	Study	No	Computer	study only	4	Study Phase	8
+48	Test	Feedback	Computer	right	4	Study Phase	8
+49	Study	Feedback	Computer	wrong	4	Study Phase	8
+50	Study	No	Computer	study only	5	Study Phase	9
+51	Test	Feedback	Computer	right	5	Study Phase	9
+52	Study	Feedback	Computer	wrong	5	Study Phase	9
+53	Study	No	Computer	study only	5	Study Phase	9
+54	Test	Feedback	Computer	right	5	Study Phase	9
+55	Study	Feedback	Computer	wrong	5	Study Phase	9
+56	Study	No	Computer	study only	5	Study Phase	10
+57	Test	Feedback	Computer	right	5	Study Phase	10
+58	Study	Feedback	Computer	wrong	5	Study Phase	10
+59	Study	No	Computer	study only	5	Study Phase	10
+60	Test	Feedback	Computer	right	5	Study Phase	10
+61	Study	Feedback	Computer	wrong	5	Study Phase	10
 0	StepOut	No	300	soTetris.php	OFF	Distractor	OFF
 0	Instruct	No	User	<h3> Get ready for the final test</h3> <br />On this test we will show you the first word and your job is to type the correct answer that goes with that word.	OFF	Intermission	OFF
 2	Test	No	User	study only	1	Test Phase	1
 3	Test	No	User	right	1	Test Phase	1
-4	Test	No	User	study only	1	Test Phase	1
-5	Test	No	User	wrong	1	Test Phase	1
-6	Test	No	User	study only	1	Test Phase	1
-7	Test	No	User	right	1	Test Phase	1
-8	Test	No	User	study only	1	Test Phase	1
-9	Test	No	User	wrong	1	Test Phase	1
-10	Test	No	User	study only	1	Test Phase	1
-11	Test	No	User	right	1	Test Phase	1
-12	Test	No	User	study only	1	Test Phase	1
-13	Test	No	User	wrong	1	Test Phase	1
-14	Test	No	User	study only	1	Test Phase	2
-15	Test	No	User	right	1	Test Phase	2
-16	Test	No	User	study only	1	Test Phase	2
-17	Test	No	User	wrong	1	Test Phase	2
-18	Test	No	User	study only	1	Test Phase	2
-19	Test	No	User	right	1	Test Phase	2
-20	Test	No	User	study only	1	Test Phase	2
-21	Test	No	User	wrong	1	Test Phase	2
-22	Test	No	User	study only	2	Test Phase	2
-23	Test	No	User	right	2	Test Phase	2
-24	Test	No	User	study only	2	Test Phase	2
-25	Test	No	User	wrong	2	Test Phase	2
-26	Test	No	User	study only	2	Test Phase	3
-27	Test	No	User	right	2	Test Phase	3
-28	Test	No	User	study only	2	Test Phase	3
-29	Test	No	User	wrong	2	Test Phase	3
-30	Test	No	User	study only	2	Test Phase	3
-31	Test	No	User	right	2	Test Phase	3
-32	Test	No	User	study only	2	Test Phase	3
-33	Test	No	User	wrong	2	Test Phase	3
-34	Test	No	User	study only	2	Test Phase	3
-35	Test	No	User	right	2	Test Phase	3
-36	Test	No	User	study only	2	Test Phase	3
-37	Test	No	User	wrong	2	Test Phase	3
-38	Test	No	User	study only	2	Test Phase	4
-39	Test	No	User	right	2	Test Phase	4
-40	Test	No	User	study only	2	Test Phase	4
-41	Test	No	User	wrong	2	Test Phase	4
-42	Test	No	User	study only	3	Test Phase	4
-43	Test	No	User	right	3	Test Phase	4
-44	Test	No	User	study only	3	Test Phase	4
-45	Test	No	User	wrong	3	Test Phase	4
-46	Test	No	User	study only	3	Test Phase	4
-47	Test	No	User	right	3	Test Phase	4
-48	Test	No	User	study only	3	Test Phase	4
-49	Test	No	User	wrong	3	Test Phase	4
-50	Test	No	User	study only	3	Test Phase	5
-51	Test	No	User	right	3	Test Phase	5
-52	Test	No	User	study only	3	Test Phase	5
-53	Test	No	User	wrong	3	Test Phase	5
-54	Test	No	User	study only	3	Test Phase	5
-55	Test	No	User	right	3	Test Phase	5
-56	Test	No	User	study only	3	Test Phase	5
-57	Test	No	User	wrong	3	Test Phase	5
-58	Test	No	User	study only	3	Test Phase	5
-59	Test	No	User	right	3	Test Phase	5
-60	Test	No	User	study only	3	Test Phase	5
-61	Test	No	User	wrong	3	Test Phase	5
+4	Test	No	User	wrong	1	Test Phase	1
+5	Test	No	User	study only	1	Test Phase	1
+6	Test	No	User	right	1	Test Phase	1
+7	Test	No	User	wrong	1	Test Phase	1
+8	Test	No	User	study only	1	Test Phase	2
+9	Test	No	User	right	1	Test Phase	2
+10	Test	No	User	wrong	1	Test Phase	2
+11	Test	No	User	study only	1	Test Phase	2
+12	Test	No	User	right	1	Test Phase	2
+13	Test	No	User	wrong	1	Test Phase	2
+14	Test	No	User	study only	1	Test Phase	3
+15	Test	No	User	right	1	Test Phase	3
+16	Test	No	User	wrong	1	Test Phase	3
+17	Test	No	User	study only	1	Test Phase	3
+18	Test	No	User	right	1	Test Phase	3
+19	Test	No	User	wrong	1	Test Phase	3
+20	Test	No	User	study only	1	Test Phase	4
+21	Test	No	User	right	1	Test Phase	4
+22	Test	No	User	wrong	2	Test Phase	4
+23	Test	No	User	study only	2	Test Phase	4
+24	Test	No	User	right	2	Test Phase	4
+25	Test	No	User	wrong	2	Test Phase	4
+26	Test	No	User	study only	2	Test Phase	5
+27	Test	No	User	right	2	Test Phase	5
+28	Test	No	User	wrong	2	Test Phase	5
+29	Test	No	User	study only	2	Test Phase	5
+30	Test	No	User	right	2	Test Phase	5
+31	Test	No	User	wrong	2	Test Phase	5
+32	Test	No	User	study only	2	Test Phase	6
+33	Test	No	User	right	2	Test Phase	6
+34	Test	No	User	wrong	2	Test Phase	6
+35	Test	No	User	study only	2	Test Phase	6
+36	Test	No	User	right	2	Test Phase	6
+37	Test	No	User	wrong	2	Test Phase	6
+38	Test	No	User	study only	2	Test Phase	7
+39	Test	No	User	right	2	Test Phase	7
+40	Test	No	User	wrong	2	Test Phase	7
+41	Test	No	User	study only	2	Test Phase	7
+42	Test	No	User	right	3	Test Phase	7
+43	Test	No	User	wrong	3	Test Phase	7
+44	Test	No	User	study only	3	Test Phase	8
+45	Test	No	User	right	3	Test Phase	8
+46	Test	No	User	wrong	3	Test Phase	8
+47	Test	No	User	study only	3	Test Phase	8
+48	Test	No	User	right	3	Test Phase	8
+49	Test	No	User	wrong	3	Test Phase	8
+50	Test	No	User	study only	3	Test Phase	9
+51	Test	No	User	right	3	Test Phase	9
+52	Test	No	User	wrong	3	Test Phase	9
+53	Test	No	User	study only	3	Test Phase	9
+54	Test	No	User	right	3	Test Phase	9
+55	Test	No	User	wrong	3	Test Phase	9
+56	Test	No	User	study only	3	Test Phase	10
+57	Test	No	User	right	3	Test Phase	10
+58	Test	No	User	wrong	3	Test Phase	10
+59	Test	No	User	study only	3	Test Phase	10
+60	Test	No	User	right	3	Test Phase	10
+61	Test	No	User	wrong	3	Test Phase	10

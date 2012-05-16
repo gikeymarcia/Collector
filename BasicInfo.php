@@ -60,8 +60,6 @@
 		</div>
 		
 <!-- 		## SET ##	The text below should be set.  Usually we use this area for providing the equivalent of an informed consent form -->
-		<div id="Constent">Informed Consent: Learning Words and Remembering Facts</div>	
-		<textarea rows="20" cols="60" wrap="physical">This is the informed consent form.  You can put whatever you want here.</textarea>
 		
 		<br />
 		
