@@ -49,7 +49,10 @@
 		echo '<div id="time" class="Hidden">'.$time.'</div>';
 		
 		// this piece of php refreshes the page after the specified amount of time
-		echo '<meta http-equiv= "refresh" content="'.$time.'; url=postTrial.php">';
+		// echo '<meta http-equiv= "refresh" content="'.$time.'; url=postTrial.php">';
+		
+		// this hidden and empty form is submitted to progress the page
+		echo '<form id="loadingForm" action="postTrial.php" method="get"> </form>';
 		
 		#### Pre-cache next trial
 		echo '<div class="Hidden">';
@@ -69,16 +72,19 @@
 		
 		function countdown() {
 			timer = timer-1;
-			$(".Countdown").html(timer);
-			if(timer < 6) {
-				if(timer == 5) {
-					// hide these things when timer hits 5 seconds
-					$("EMBED").addClass("Hidden");
-					$("#Clock").addClass("Hidden");
-					$("#StepoutInstructions").addClass("Hidden");
-					$("h1").addClass("Hidden");
-					$("#Tetris").html("<div class=\"cont\">Get ready to continue in ...  <div class=\"Countdown\">5</div></div>");
-				}
+			if(timer >= 0) {
+				$(".Countdown").html(timer);
+			}
+			if(timer == 5) {
+				// hide these things when timer hits 5 seconds
+				$("EMBED").addClass("Hidden");
+				$("#Clock").addClass("Hidden");
+				$("#StepoutInstructions").addClass("Hidden");
+				$("h1").addClass("Hidden");
+				$("#Tetris").html("<div class=\"cont\">Get ready to continue in ...  <div class=\"Countdown\">5</div></div>");
+			}
+			if(timer <= 0) {
+				$('#loadingForm').submit();
 			}
 		}
 	</script>

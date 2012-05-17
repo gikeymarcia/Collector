@@ -110,15 +110,32 @@
 	
 	#### Showing feedback
 	if($postTrial == 'feedback') {
-		echo '<div class="Feedback">
-				<div class="gray">The correct answer is</div>
+		if($trialType == 'studypic' OR $trialType == 'testpic' OR $trialType == 'mcpic') {
+			echo '<div class="Feedback">
+					<div class="gray">The correct answer is</div>
+						<span>'	. show($cue)	. '</span>
+						<div class="fbWord">
+							'	. show($answer)	. '
+						</div>';
+			// Hidden form that collects RT and progresses trial to next.php
+			echo '<form name="'.$formName.'" class="'.$formClass.'" action="next.php" method="post">
+					<input class="RT Hidden" name="RT" type="text" value="RT" />
+					<input	id="FormSubmitButton"	type="submit"	value="Done"	/>
+				  </form>';
+			echo '</div>';
+		}
+		else {
+			echo '<div class="Feedback">
+					<div class="gray">The correct answer is</div>
 					<span>' . show($cue).' : '.show($answer).'</span>';
-		// Hidden form that collects RT and progresses trial to next.php
-		echo '<form name="'.$formName.'" class="'.$formClass.'" action="next.php" method="post">
-				<input class="RT Hidden" name="RT" type="text" value="RT" />
-				<input	id="FormSubmitButton"	type="submit"	class="Hidden"	value="Done"	/>
-			  </form>';
-		echo '</div>';
+			// Hidden form that collects RT and progresses trial to next.php
+			echo '<form name="'.$formName.'" class="'.$formClass.'" action="next.php" method="post">
+					<input	class="RT Hidden" name="RT" type="text"	value="RT" />
+					<input	id="FormSubmitButton"	type="submit"	value="Done"	/>
+				  </form>';
+			echo '</div>';
+		}
+		
 	}
 	#### Showing JOL
 	elseif ($postTrial == 'jol') {
@@ -130,7 +147,7 @@
 					<input class="Textbox"		name="JOL"		type="text" value=""/><br />
 					<input class="RT Hidden"	name="RT"		type="text" value="RT" />
 					<input class="RTkey Hidden" name="RTkey"	type="text" value="RTkey" />
-					<input	id="FormSubmitButton"	type="submit"	class="Hidden"	value="Submit"	/>
+					<input	id="FormSubmitButton"	type="submit"	value="Submit"	/>
 				  </form>';
 		echo '</div>';
 	}
