@@ -60,7 +60,9 @@
 		
 		function countdown() {
 			timer = timer-1;
-			$(".Countdown").html(timer);
+			if(timer >= 0) {
+				$(".Countdown").html(timer);
+			}
 			if(timer < 6) {
 				if(timer == 5) {
 					// hide these things when timer hits 5 seconds
