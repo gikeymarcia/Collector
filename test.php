@@ -65,6 +65,7 @@
 	<link href='http://fonts.googleapis.com/css?family=Kreon' rel='stylesheet' type='text/css' />
 	<title>Test/Presentation</title>
 </head>
+<?php flush(); ?>
 
 <body>
 	
@@ -139,7 +140,7 @@
 				 '</div>';
 			
 			echo '<div class="picWord PreCache">'.$target.'</div>';
-			$formClass = $formClass.' center';
+			$formClass = $formClass.' center'; 
 		}
 		// Passage trial type
 		elseif($trialType == 'passage') {
@@ -149,7 +150,7 @@
 		}
 		// Instruct trial type
 		elseif ($trialType == 'instruct') {
-			echo '<div id="centerContent PreCache">
+			echo '<div id="centerContent" class="PreCache">
 					<div class="instruct">'. $currentTrial['Info']['Order Notes'].'</div>
 				  </div>';
 		}
@@ -176,10 +177,10 @@
 					<span class="leftcopy PreCache">'.$cue.'</span>
 					<span class="dividercopy">:</span>
 					<form name="'.$formName.'" class="'.$formClass.' leftfloat PreCache" action="postTrial.php" method="post">
-						<input	name="Response"	type="text"	value=""		class="Textbox Right PreCache"	/>
-						<input	name="RT"		type="text"	value="RT"		class="RT Hidden"		/>
+						<input	name="Response"	type="text"	value=""			class="Textbox Right PreCache"	/>
+						<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
 						<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
-						<input	name="RTlast"	type="text"	value="no press"		class="RTlast Hidden" 	/>
+						<input	name="RTlast"	type="text"	value="no press"	class="RTlast Hidden" 	/>
 						<input	id="FormSubmitButton"	type="submit"	class="Hidden"	value="Submit"	/>
 					</form>
 				  </div>';
@@ -192,10 +193,10 @@
 			$formClass = $formClass.' center';
 			
 			echo '<form name="'.$formName.'" class="'.$formClass.'" action="postTrial.php" method="post">
-					<input  name="Response" type="text" value=""		class="Textbox picWord PreCache" />	<br />
-					<input	name="RT"		type="text"	value="RT"		class="RT Hidden"		/>
+					<input  name="Response" type="text" value=""			class="Textbox picWord PreCache" />	<br />
+					<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
 					<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
-					<input	name="RTlast"	type="text"	value="no press"		class="RTlast Hidden" 	/>
+					<input	name="RTlast"	type="text"	value="no press"	class="RTlast Hidden" 	/>
 					<input	id="FormSubmitButton"	type="submit"	class="Hidden"	value="Submit"	/>
 				  </form>';
 		}
@@ -229,7 +230,7 @@
 			
 			$formClass = $formClass.' center';
 			echo '<form name="'.$formName.'" class="'.$formClass.'" action="postTrial.php" method="post">
-					<input	name="Response"	type="text"	value=""	class="Textbox Hidden"	/>	<br />
+					<input	name="Response"	type="text"	value="no press"	class="Textbox Hidden"	/>	<br />
 					<input	name="RT"		type="text"	value="RT"	class="RT Hidden"		/>
 				  </form>';
 		}
@@ -245,10 +246,10 @@
 				  	<span class="leftcopy">'.$cue.'</span>
 				  	<span class="dividercopy">:</span>
 				  	<form name="'.$formName.'" class="'.$formClass.' leftfloat" action="postTrial.php" method="post">
-					  	<input 	name="Response" type="text" value=""		class="Textbox"			/>
-					  	<input	name="RT"		type="text"	value="RT"		class="RT Hidden"		/>
-						<input	name="RTkey"	type="text"	value="RTkey"	class="RTkey Hidden" 	/>
-						<input	name="RTlast"	type="text"	value="RT"		class="RTlast Hidden" 	/>
+					  	<input 	name="Response" type="text" value=""			class="Textbox"			/>
+					  	<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
+						<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
+						<input	name="RTlast"	type="text"	value="no press"	class="RTlast Hidden" 	/>
 						<input	id="FormSubmitButton"	type="submit"	class="Hidden"	value="Submit"	/>
 					  </form>
 				  </div>';
@@ -260,9 +261,9 @@
 				<div class="Prompt PreCache">' . $prompt . '</div>
 					<form name="'.$formName.'" class="'.$formClass.'" action="postTrial.php" method="post">
 						<textarea rows="20" cols="60" name="Response" class="PreCache" wrap="physical" value=""></textarea>	<br />
-						<input	name="RT"		type="text"	value="RT"		class="RT Hidden"		/>
-						<input	name="RTkey"	type="text"	value="RTkey"	class="RTkey Hidden" 	/>
-						<input	name="RTlast"	type="text"	value="RT"		class="RTlast Hidden" 	/>
+						<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
+						<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
+						<input	name="RTlast"	type="text"	value="no press"	class="RTlast Hidden" 	/>
 						<input	id="FormSubmitButton"	type="submit"	class="Hidden"	value="Submit"	/>
 					</form>
 					</div>';
@@ -274,10 +275,10 @@
 					<div id="subpoint" class="gray">Type your response on a scale from 0-100 using the entire range of the scale</div>';
 			
 			echo '<form name="'.$formName.'" class="'.$formClass.'" action="postTrial.php" method="post">
-					<input	name="Response"	type="text"	value=""		class="Textbox"			/>	<br />
-					<input	name="RT"		type="text"	value="RT"		class="RT Hidden"		/>
-					<input	name="RTkey"	type="text"	value="RTkey"	class="RTkey Hidden" 	/>
-					<input	name="RTlast"	type="text"	value="RT"		class="RTlast Hidden" 	/>
+					<input	name="Response"	type="text"	value=""			class="Textbox"			/>	<br />
+					<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
+					<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
+					<input	name="RTlast"	type="text"	value="no press"	class="RTlast Hidden" 	/>
 					<input	id="FormSubmitButton"	type="submit"	class="Hidden"	value="Submit"	/>
 				  </form>
 				 </div>';

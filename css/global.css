@@ -1,165 +1,289 @@
-body {	padding-left: 30px;	font-family: Kreon, sans-serif;	font-size: 110%;}
-h1 {	font-size: 2em;	color: #333333;	padding-top: 30px;	text-align: center;	}
-h2 {	}
-h3 {	}
-p {		}
-input	{	}
-table {		font-size: 1em;	margin: 0 auto;	}
-table td {	background: #f5f5f5;	padding: 5px;	}
-img {		display: block;	margin-left: auto;	margin-right: auto;	}
-form	{}
-option	{}
-select	{/*font-size: 1.1em; font-family: Kreon, sans-serif;*/}
+body
+	{	/*padding-left: 30px;*/	font-family: Kreon, sans-serif;	font-size: 110%;	}
+h1
+	{	font-size: 2em;	color: #333333;	padding-top: 30px;	text-align: center;	}
+h2
+	{	}
+h3
+	{	}
+p
+	{	}
+input
+	{	}
+table
+	{	font-size: 1em;	margin: 0 auto;	}
+	table td
+		{	background: #f5f5f5;	padding: 5px;	}
+img
+	{	display: block;	margin-left: auto;	margin-right: auto;	}
+form
+	{	}
+option
+	{	}
+select
+	{	}
+
 
 
 /*Divs used across multiple pages*/
-.ExpContainer {	text-align: center;	color: #000000;	font-size: 1em;	margin: 0 auto;	width: 800px;	}
-.Prompt	{	width: 500px; margin-top: 80px; margin-bottom: 15px; font-size: 1.2em}
-.Textbox {	margin-bottom: 7px}
-.Hidden, .PreCache	{	display:none;	}
+.ExpContainer
+	{	text-align: center;	color: #000000;	font-size: 1em;	margin: 0 auto;	width: 800px;	}
+.Prompt
+	{	width: 500px; margin-top: 80px; margin-bottom: 15px; font-size: 1.2em;	}
+.Textbox
+	{	margin-bottom: 7px;	}
+.Hidden, .PreCache
+	{	display:none;	}
+
 
 
 /*index.php specific css*/
-#LoginPosition {text-align: center;	font-size: 1em;		}
-.Dropdown	{}
+#LoginPosition
+	{	text-align: center;	font-size: 1em;	}
+.Dropdown
+	{	}
+
 
 
 /*instructions.php specific css*/
-#Instructions	{}
-#ReadyButtonText{	margin: 0 auto;	background: #00FFFF;	width: 10em;	text-align: center;	padding: 2em;	}
-#Q1	{	padding: 7em;}
-.MCbutton{ cursor: pointer;	}
+#Instructions
+	{	}
+#ReadyButtonText
+	{	margin: 0 auto;	background: #00FFFF;	width: 10em;	text-align: center;	padding: 2em;	}
+#Q1
+	{	padding: 7em;	}
+.MCbutton
+	{	cursor: pointer;	}
+
 
 
 /*BasicInfo specific css*/
-#content {
-	margin-left: auto;	margin-right: auto;
-	width: 70%; min-width: 400px; max-width: 800px;
-	font-size: 1em
-	}
-.Question { 
-	margin-top: 15px; margin-bottom: 35px;
-	width: 85%;
-	}
-.Question select {font-size: .9em}
-/*.Question select:focus {font-size: .9em; background: #fefef0}*/
-.Question input {font-size: 1em}
-/*.Question input:focus {background: #fefef0}*/
-p.Ask {color: #000000; font-size: 1.1em;  margin: 0px auto 4px auto;}
-input.radio {  }
-.leftfloat {float: left;}
+#content
+	{	margin-left: auto;	margin-right: auto;
+		width: 70%; min-width: 400px; max-width: 800px;
+		font-size: 1em;	}
+.Question
+	{	margin-top: 15px; margin-bottom: 35px;
+		width: 85%;	}
+	.Question select
+		{	font-size: .9em;	}
+	.Question input
+		{	font-size: 1em;	}
+p.Ask
+	{	color: #000000; font-size: 1.1em;  margin: 0px auto 4px auto;	}
+input.radio
+	{	}
+.leftfloat
+	{	float: left;	}
+/*Also used in FreeRecall trials*/
+textarea
+	{	margin-bottom: 10px; font-family: Arial, Helvetica, san-serif;	}
 
 
 
-
-textarea { margin-bottom: 10px; font-family: Arial, Helvetica, san-serif;}
-input.submit {}
-
-.WordWrap {
-		margin: 120px auto 0;
-		width: 100%; min-width: 700px; max-width: 1500px;
-		}
-.left {width: 48%; float: left; text-align: right; font-size: 4em;}
-.divider {width: 4%; float: left; text-align: center; font-size: 4em;}
-.right {width: 48%; float: left; text-align: left; font-size: 4em;}
-#buttPos {width: 90px; margin-left: auto; margin-right: auto; }
-
-
-.leftcopy { line-height: 1em; float: left; padding-right: 0px; width: 48%; text-align:right; font-size: 4em;}
-.dividercopy {line-height: 1em; float: left; padding-right: 0px; width: 4%; font-size: 4em; text-align:center}
-.WordWrap form {width: 47%; font-size: 1.5em}
-.WordWrap .Textbox {width: 350px; font-size: 2.1em}
-.WordWrap #FormSubmitButton {width: 350px; clear:left; margin: 5px auto 10px auto}
-form.UserTiming, form.ComputerTiming{  }
-.gray { color: #666666;}
-
-
-
-.center {text-align: center;}
-.Feedback {font-size: 2em; margin: 120px auto auto auto; width: 800px; font-size: 3em}
-.Feedback .gray { font-size: .5em}
-.Feedback span {font-size: 1.3em; text-align: center; width:100%}
-
-.pic { padding-bottom: 20px; margin-top: 20px;}
-.picWord { text-align: center; font-size: 3em; margin-bottom: 10px;}
-.pic .Textbox {font-size: 2em;}
+/*Study, Test, and Copy Trial CSS*/
+.WordWrap
+	{	margin: 120px auto 0;
+		width: 100%; min-width: 700px; max-width: 1500px;	}
+	.WordWrap form
+		{	width: 47%; font-size: 1.5em;	}
+	.WordWrap .Textbox
+		{	width: 350px; font-size: 2.1em;	}
+	.WordWrap #FormSubmitButton
+		{	width: 350px; clear:left; margin: 5px auto 10px auto;	}
+.left
+	{	width: 48%;	float: left;
+		text-align: right; font-size: 4em;	}
+.divider
+	{	width: 4%; float: left;
+		text-align: center; font-size: 4em;	}
+.right
+	{	width: 48%; float: left;
+		text-align: left; font-size: 4em;	}
+.leftcopy
+	{	line-height: 1em; float: left; padding-right: 0px; width: 48%; text-align:right; font-size: 4em;	}
+.dividercopy
+	{	line-height: 1em; float: left; padding-right: 0px; width: 4%; font-size: 4em; text-align:center;	}
+#buttPos
+	{	width: 90px;
+		margin-left: auto; margin-right: auto;	}
 
 
-.Textbox { width: 200px; padding: 0 5px; font-size: 1.5em; font-family: Kreon, sans-serif;}
+/*.ComputerTiming #FormSubmitButton
+	{	display:none;	}*/
 
-.passage {min-width: 400px; max-width: 800px; margin: 0 auto; font-family: Times New Roman, serif; font-size: .9em; line-height: 1.6em;}
-.passage p { padding-bottom: 10px;}
-#end { margin: 0 auto; color: red; text-align: center; font-size: 2em;}
+.gray
+	{	color: #666666;	}
 
 
-#SubmitButton	{ background: #566673; color: #fff; cursor: pointer; width: 80px; padding: 5px;  border-radius: 5px; margin: 10px auto 0;}
-#SubmitButton:hover { background: #3e5365;}
+.fbWord
+		{	width: 750px; margin: 15px auto 10px auto;	text-align:center;	font-size: 1.3em;}
 
-#FormSubmitButton	{ background: #566673; color: #fff; cursor: pointer; width: 80px; padding: 5px;  border-radius: 5px;}
-#FormSubmitButton:hover { background: #3e5365;}
+.center
+	{	text-align: center;	}
+.Feedback
+	{	font-size: 2em; margin: 100px auto auto auto; width: 800px; font-size: 3em;	}
+	.Feedback .gray
+		{	font-size: .5em	}
+	.Feedback span
+		{	font-size: 1.3em; text-align: center; width:100%;}
+	
+.pic
+	{	padding-bottom: 20px; margin-top: 20px;	}
+	.pic .Textbox
+		{	font-size: 2em;	}
+.picWord
+	{	text-align: center; font-size: 3em; margin-bottom: 10px;	}
 
-.padtop60 { padding-top: 60px; }
-.martop60 { margin-top: 60px;}
+
+
+.Textbox
+	{	width: 200px; padding: 0 5px; font-size: 1.5em; font-family: Kreon, sans-serif;	}
+
+/*Passage trial CSS*/
+.passage
+	{	min-width: 400px; max-width: 800px; margin: 0 auto; font-family: Times New Roman, serif; font-size: .9em; line-height: 1.6em;	}
+	.passage p
+		{	padding-bottom: 10px;	}
+#end
+	{	margin: 0 auto; color: red; text-align: center; font-size: 2em;	}
+
+
+#SubmitButton
+	{	background: #566673; color: #fff; cursor: pointer; width: 80px; padding: 5px;  border-radius: 5px; margin: 10px auto 0;	}
+	#SubmitButton:hover
+		{	background: #3e5365;	}
+
+#FormSubmitButton
+	{	background: #566673; color: #fff; cursor: pointer; width: 80px; padding: 5px;  border-radius: 5px;	}
+	#FormSubmitButton:hover
+		{	background: #3e5365;	}
+
+.padtop60
+	{	padding-top: 60px;	}
+.martop60
+	{	margin-top: 60px;	}
+
+
 
 /*Instructions.php css*/
-#centerContent { width: 66%; max-width: 800px; min-width: 450px;margin-left: auto; margin-right: auto;}
-.Instruct {margin-left: auto; margin-top: 5%; font-size: 1.1em}
-.readcheck { background: #f2f1f1; padding: 20px; width: 50%; margin-top: 150px; border-radius: 10px;}
-ol.list  li{  width: 80%; margin-bottom: 15px; background: #ffffff; outline: dotted 2px black; padding: 5px;}
+#centerContent
+	{	width: 66%; max-width: 800px; min-width: 450px;
+		margin-left: auto; margin-right: auto;	}
+.Instruct
+	{	margin-left: auto; margin-top: 5%; font-size: 1.1em;	}
+.readcheck
+	{	background: #f2f1f1; padding: 20px; width: 50%; margin-top: 150px; border-radius: 10px;	}
+ol.list  li
+	{	width: 80%; margin-bottom: 15px; background: #ffffff; outline: dotted 2px black; padding: 5px;	}
 
 
-#JOLpos {width: 650px; margin: 120px auto 0px auto; }
-#jol { font-size: 2em; padding-top: 20px; max-width: 600px;}
-#subpoint { padding-top: 15px; padding-bottom: 10px; color: #191935;max-width: 600px; }
+
+/*JOL trials and post-trial css*/
+#JOLpos
+	{	width: 650px; margin: 120px auto 0px auto;	}
+#jol
+	{	font-size: 2em; padding-top: 20px; max-width: 600px;	}
+#subpoint
+	{	padding-top: 15px; padding-bottom: 10px; color: #191935;max-width: 600px;	}
+
+
 
 /*stepout related css*/
-h1.stepout { width: 700px; margin:20px auto 20px;}
-#StepoutInstructions {width: 550px; margin-top: 30px; margin-left: auto; margin-right: auto;}
-#StepoutInstructions p {font-size: 1.1em;}
-#Clock { float: right; padding: 4px 8px 8px 8px; font-size: 1.1em; background: #9cb0d4; color: #fbfdff; margin-right: 25px; margin-top: 15px;}
-	#Clock span { margin-bottom: 20px;}
-	.Countdown { font-size: 2em; font-family: Orbitron, serif; text-align: center; margin-top: 5px; background: #ddeeff; color: #3c3c3c; }
-#Tetris { margin-left: auto; margin-right: auto; width: 550px; height:650px; /*outline: dashed red;*/}
-.cont { font-size: 2em; text-align: center;}
+h1.stepout
+	{	width: 700px; margin:20px auto 20px;	}
+#StepoutInstructions
+	{	width: 550px; margin-top: 30px; margin-left: auto; margin-right: auto;	}
+#StepoutInstructions p
+	{	font-size: 1.1em;	}
+#Clock
+	{	float: right; padding: 4px 8px 8px 8px; font-size: 1.1em; background: #9cb0d4; color: #fbfdff; margin-right: 25px; margin-top: 15px;	}
+	#Clock span
+		{	margin-bottom: 20px;	}
+.Countdown
+	{	font-size: 2em; font-family: Orbitron, serif; text-align: center; margin-top: 5px; background: #ddeeff; color: #3c3c3c;	}
+#Tetris
+	{	margin-left: auto; margin-right: auto; width: 550px; height:650px;	}
+.cont
+	{	font-size: 2em; text-align: center;	}
+
+
 
 /*Final Question related css*/
-#FQlocation { width: 750px; margin: 50px auto auto auto; font-size: 1.1em; min-width: 350px;}
-	#FQlocation li {margin-bottom: 5px; list-style: none;}
-	#FQlocation p {margin-bottom: 5px; list-style: none;}
-	#FQlocation ul {margin-top: 10px;}
-	#FQlocation .Textbox { width: 75%;}
-#FQ {font-size:1.1em; margin-bottom: 0px}
-	#FQ	p {color:#666666; padding-left: 3%}
-#Likert { max-width: 600px;}
-	#Likert li	{ width:13%; float: left; padding-right: 1.2%}
-	#Likert input {padding-left: 4%; margin-right: auto; }
-	#Likert p	{ text-align: left; margin-left: 9%; /*outline:dashed red; */margin-top: 2px}
+#FQlocation
+	{	width: 750px; margin: 50px auto auto auto; font-size: 1.1em; min-width: 350px;	}
+	#FQlocation li
+		{	margin-bottom: 5px; list-style: none;	}
+	#FQlocation p
+		{	margin-bottom: 5px; list-style: none;	}
+	#FQlocation ul
+		{	margin-top: 10px;	}
+	#FQlocation .Textbox
+		{	width: 75%;	}
+#FQ
+	{	font-size:1.1em; margin-bottom: 0px;	}
+	#FQ	p
+		{	color:#666666; padding-left: 3%;	}
+#Likert
+	{	max-width: 600px;	}
+	#Likert li
+		{	width:13%; float: left; padding-right: 1.2%;	}
+	#Likert input
+		{	padding-left: 4%; margin-right: auto;	}
+	#Likert p
+		{	text-align: left; margin-left: 9%; margin-top: 2px;	}
+	
+	
 	
 /*Testing stuff for Centering*/
-#all { width: 850px; margin: 0px auto auto auto; padding-top:150px; font-size: 3em;}
-	.Cue {width: 400px; text-align: right; float: left}
-	.middle {width: 50px; text-align: center; float: left}
-	.tar {width: 400px; text-align: left;float: left;}
-	#buttz {margin-left: 40%; margin-right: 40%; clear: both; width: 30%; padding-top:2%;}
-	.theButton { width: 20%}
+#all
+	{	width: 850px; margin: 0px auto auto auto; padding-top:150px; font-size: 3em;	}
+	.Cue
+		{	width: 400px; text-align: right; float: left;	}
+	.middle
+		{	width: 50px; text-align: center; float: left;	}
+	.tar
+		{	width: 400px; text-align: left;float: left;		}
+	#buttz
+		{	margin-left: 40%; margin-right: 40%; clear: both; width: 30%; padding-top:2%;	}
+	.theButton
+		{	width: 20%;	}
+
+
 
 /*css for the math page*/
-#Math { width: 850px; margin: 85px auto auto auto}
-#Math img {margin-bottom: 30px}
-#operation { background: #e0e0e0; padding: 15px}
-#operation input:first-child { margin-left: 100px}
-#operation input:focus {background:#f1f8ff}
-#operation select { width: 70px; text-align: center;}
-	#operation .textInput { width: 75px; font-size: 1.5em;}
-	.selector {font-size: 1.5em}
+#Math
+	{	width: 850px; margin: 85px auto auto auto;	}
+#Math img
+	{	margin-bottom: 30px;	}
+#operation
+	{	background: #e0e0e0; padding: 15px;	}
+	#operation input:first-child
+		{	margin-left: 100px;	}
+	#operation input:focus
+		{	background:#f1f8ff;	}
+	#operation select
+		{	width: 70px; text-align: center;	}
+	#operation .textInput
+		{	width: 75px; font-size: 1.5em;	}
+.selector
+	{	font-size: 1.5em;	}
 
-/*multiple choice test trials*/
-#ButtonArea {	width: 800px;	margin: 20px auto auto auto;	/*padding:30px; border-radius: 12px; background: #F5F5F5*/}
-#ButtonArea span {	width: 150px; font-size: 1.3em;
-					margin-right: 35px; margin-bottom: 20px; padding: 3px; background: #566673; color: #fff;
-					border-radius: 5px;	text-align: center; outline:groove 2px;
-					cursor: pointer;	float:left; }
-#ButtonArea span:hover {background: #3e5365;}
+
+
+/*MCpic test trial css*/
+#ButtonArea
+	{	width: 800px;	margin: 20px auto auto auto;	}
+#ButtonArea span
+	{	width: 150px; font-size: 1.3em;
+		margin-right: 35px; margin-bottom: 20px; padding: 3px; background: #566673; color: #fff;
+		border-radius: 5px;	text-align: center; outline:groove 2px;
+		cursor: pointer;	float:left; 	}
+#ButtonArea span:hover
+	{	background: #3e5365;	}
+
+
 
 /*done.php css*/
-#donePage {width: 650px; margin-left: 50px; margin-top: 30px;}
+#donePage
+	{	width: 650px; margin-left: 50px; margin-top: 30px;	}
