@@ -83,3 +83,23 @@
 		$(".Textbox").attr("value",clicked);
 		$("form").submit();
 	});
+	
+	// Prevent the backspace key from navigating back.
+	// MAGIC!!! found on stackoverflow (http://stackoverflow.com/questions/1495219/how-can-i-prevent-the-backspace-key-from-navigating-back)
+	$(document).unbind('keydown').bind('keydown', function (event) {
+	    var doPrevent = false;
+	    if (event.keyCode === 8) {
+	        var d = event.srcElement || event.target;
+	        if ((d.tagName.toUpperCase() === 'INPUT' && d.type.toUpperCase() === 'TEXT') 
+	             || d.tagName.toUpperCase() === 'TEXTAREA') {
+	            doPrevent = d.readOnly || d.disabled;
+	        }
+	        else {
+	            doPrevent = true;
+	        }
+	    }
+	
+	    if (doPrevent) {
+	        event.preventDefault();
+	    }
+	});

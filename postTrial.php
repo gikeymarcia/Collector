@@ -15,7 +15,6 @@
 		$answer		=  $currentTrial['Stimuli']['Answer'];
 		$trialType	=  trim(strtolower($currentTrial['Info']['Trial Type']));
 		$postTrial	=  trim(strtolower($currentTrial['Info']['Post Trial']));
-		// $time		=  $_SESSION['FeedbackTime'];
 	
 	
 	### getting response and making cleaned up versions (for later comparisons)
@@ -89,6 +88,7 @@
 	
 	#### Showing feedback
 	if($postTrial == 'feedback') {
+		// picture trial version of feedback
 		if($trialType == 'studypic' OR $trialType == 'testpic' OR $trialType == 'mcpic') {
 			echo '<div class="Feedback">
 					<div class="gray">The correct answer is</div>
@@ -103,6 +103,7 @@
 				  </form>';
 			echo '</div>';
 		}
+		// version of feedback for everything else
 		else {
 			echo '<div class="Feedback">
 					<div class="gray">The correct answer is</div>

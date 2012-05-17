@@ -1,4 +1,5 @@
 Thumbs.db
 desktop.ini
-.dropbox
-.project
+*.dropbox
+*.project
+*.orig
