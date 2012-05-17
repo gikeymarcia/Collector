@@ -178,8 +178,8 @@
 					<form name="'.$formName.'" class="'.$formClass.' leftfloat PreCache" action="postTrial.php" method="post">
 						<input	name="Response"	type="text"	value=""		class="Textbox Right PreCache"	/>
 						<input	name="RT"		type="text"	value="RT"		class="RT Hidden"		/>
-						<input	name="RTkey"	type="text"	value="RTkey"	class="RTkey Hidden" 	/>
-						<input	name="RTlast"	type="text"	value="RT"		class="RTlast Hidden" 	/>
+						<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
+						<input	name="RTlast"	type="text"	value="no press"		class="RTlast Hidden" 	/>
 						<input	id="FormSubmitButton"	type="submit"	class="Hidden"	value="Submit"	/>
 					</form>
 				  </div>';
@@ -194,8 +194,8 @@
 			echo '<form name="'.$formName.'" class="'.$formClass.'" action="postTrial.php" method="post">
 					<input  name="Response" type="text" value=""		class="Textbox picWord PreCache" />	<br />
 					<input	name="RT"		type="text"	value="RT"		class="RT Hidden"		/>
-					<input	name="RTkey"	type="text"	value="RTkey"	class="RTkey Hidden" 	/>
-					<input	name="RTlast"	type="text"	value="RT"		class="RTlast Hidden" 	/>
+					<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
+					<input	name="RTlast"	type="text"	value="no press"		class="RTlast Hidden" 	/>
 					<input	id="FormSubmitButton"	type="submit"	class="Hidden"	value="Submit"	/>
 				  </form>';
 		}
