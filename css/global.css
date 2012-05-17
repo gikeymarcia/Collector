@@ -109,8 +109,11 @@ textarea
 		margin-left: auto; margin-right: auto;	}
 
 
-/*.ComputerTiming #FormSubmitButton
-	{	display:none;	}*/
+
+/* Hides button on computer timing trials*/
+.ComputerTiming #FormSubmitButton
+	{	display:none;	}
+
 
 .gray
 	{	color: #666666;	}

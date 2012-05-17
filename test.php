@@ -160,7 +160,7 @@
 		// I use formname + JQuery to hide the submit button when the form is a computer timed form
 		echo '<form name="'.$formName.'" class="'.$formClass.'" action="postTrial.php" method="post">
 				<input	name="RT"	type="text"		value=""	class="RT Hidden"	/>
-				<input	id="FormSubmitButton"	type="submit"	class="Hidden"	value="Done"	/>
+				<input	id="FormSubmitButton"	type="submit"	value="Done"	/>
 			  </form>';
 		echo '</div>';
 	}
@@ -181,7 +181,7 @@
 						<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
 						<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
 						<input	name="RTlast"	type="text"	value="no press"	class="RTlast Hidden" 	/>
-						<input	id="FormSubmitButton"	type="submit"	class="Hidden"	value="Submit"	/>
+						<input	id="FormSubmitButton"	type="submit"	value="Submit"	/>
 					</form>
 				  </div>';
 		}
@@ -197,7 +197,7 @@
 					<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
 					<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
 					<input	name="RTlast"	type="text"	value="no press"	class="RTlast Hidden" 	/>
-					<input	id="FormSubmitButton"	type="submit"	class="Hidden"	value="Submit"	/>
+					<input	id="FormSubmitButton"	type="submit"	value="Submit"	/>
 				  </form>';
 		}
 		
@@ -250,7 +250,7 @@
 					  	<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
 						<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
 						<input	name="RTlast"	type="text"	value="no press"	class="RTlast Hidden" 	/>
-						<input	id="FormSubmitButton"	type="submit"	class="Hidden"	value="Submit"	/>
+						<input	id="FormSubmitButton"	type="submit"	value="Submit"	/>
 					  </form>
 				  </div>';
 		}
@@ -264,7 +264,7 @@
 						<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
 						<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
 						<input	name="RTlast"	type="text"	value="no press"	class="RTlast Hidden" 	/>
-						<input	id="FormSubmitButton"	type="submit"	class="Hidden"	value="Submit"	/>
+						<input	id="FormSubmitButton"	type="submit"	value="Submit"	/>
 					</form>
 					</div>';
 		}
@@ -279,7 +279,7 @@
 					<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
 					<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
 					<input	name="RTlast"	type="text"	value="no press"	class="RTlast Hidden" 	/>
-					<input	id="FormSubmitButton"	type="submit"	class="Hidden"	value="Submit"	/>
+					<input	id="FormSubmitButton"	type="submit"	value="Submit"	/>
 				  </form>
 				 </div>';
 		}

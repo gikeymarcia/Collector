@@ -31,11 +31,11 @@
 		timer		= 0;
 	});
 	
-	
-	// show SubmitButton if the form name is 'UserTiming'
-	if($("form").attr('name') == 'UserTiming') {
-		$("#FormSubmitButton").removeClass('Hidden');
-	}
+	//  turned this off because i could replicate the functionality with CSS (.ComputerTiming #FormSubmitButton)
+	// // show SubmitButton if the form name is 'UserTiming'
+	// if($("form").attr('name') == 'UserTiming') {
+		// $("#FormSubmitButton").removeClass('Hidden');
+	// }
 	
 	// timer function
 	function addtime() {
@@ -61,14 +61,14 @@
 		if(e.keyCode == 13) return true;
 	});
 	
-	
-	// disable enter key for FreeRecall (textarea) with class="ComputerTiming"
-	$(".ComputerTiming").bind("keypress",function(e) {
-		if( $('form').attr('name') == 'ComputerTiming') {
-			if(e.keyCode == 13) return false;
-		}
-		if(e.keyCode == 13) return true;
-	});
+	// turned this off so people can do line returns in big textareas
+	// // disable enter key for FreeRecall (textarea) with class="ComputerTiming"
+	// $(".ComputerTiming").bind("keypress",function(e) {
+		// if( $('form').attr('name') == 'ComputerTiming') {
+			// if(e.keyCode == 13) return false;
+		// }
+		// if(e.keyCode == 13) return true;
+	// });
 	
 	
 	// updates last keypress value each time a key is pressed
