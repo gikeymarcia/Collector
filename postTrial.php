@@ -40,9 +40,11 @@
 	// if it's a test trial during the study phase then save past responses
 	if(	$trialType == 'test' &&	$currentTrial['Info']['Phase'] == 'Study Phase' ) {
 		$_SESSION['PastResponse'][$cue] = $_POST['Response'];
-		$answer			= ucwords(htmlspecialchars($_POST['Response']));
-		$answerClean	= trim(strtolower($_POST['Response']));
-		$responseClean	= trim(strtolower($_POST['Response']));
+		if($currentTrial['Info']['Order Notes'] == 'right') {
+			$answer			= ucwords(htmlspecialchars($_POST['Response']));
+			$answerClean	= trim(strtolower($_POST['Response']));
+			$responseClean	= trim(strtolower($_POST['Response']));
+		}
 	}
 	// if this the test phase then save past response for this trial and compare this response to past response
 	if($currentTrial['Info']['Phase'] == 'Test Phase'	&&	$currentTrial['Info']['Order Notes'] != 'study only') {
@@ -52,7 +54,7 @@
 		$currentTrial['Response']['PastResponse']	= $_SESSION['PastResponse'][$cue];
 		$pastMatch = null;
 		similar_text($responseClean, strtolower(trim($_SESSION['PastResponse'][$cue])), $pastMatch);					// compare response clean to past answer given (intrusion measure)
-		$currentTrial['Response']['PastMatch'] == $pastMatch;
+		$currentTrial['Response']['PastMatch'] = $pastMatch;
 	}
 	
 	

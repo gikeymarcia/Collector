@@ -51,7 +51,7 @@
 						$FQ['Question'],
 						$FQ['Type'],
 						$RT,
-						$checked);
+						$formData);
 		arrayToLine($data,$fileName);
 	}
 	

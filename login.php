@@ -27,7 +27,7 @@
 		echo '<noscript>	<h1>	You must enable javascript to participate!!!	</h1>	</noscript>';
 		
 		##### Parameters #####			## SET ##
-		$_SESSION['ExperimentName']	= "FRET Confusion v1.1";								// Recorded in datafile and can be useful. 
+		$_SESSION['ExperimentName']	= "FRET Confusion v1.2";								// Recorded in datafile and can be useful. 
 		$_SESSION['LoginCounter Location'] = "LoginCounter/1.txt";				// Change to restart condition cycling
 		// these timings only apply when trials are set as "Computer" timing
 		$_SESSION['StudyTime']		= 13;										// in seconds/trial (Study/StudyPic/Instruct)
