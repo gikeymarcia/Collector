@@ -9,7 +9,6 @@
 		$target		=& $currentTrial['Stimuli']['Target'];
 		$answer		=  $currentTrial['Stimuli']['Answer'];
 		$trialType	=  trim(strtolower($currentTrial['Info']['Trial Type']));
-		// $feedback	=  trim(strtolower($currentTrial['Info']['Feedback']));
 	
 	
 	#### grabbing responses from postTrial
