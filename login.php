@@ -134,13 +134,14 @@
 				$Trials[$count-1]['Stimuli']	= $stimuli[ ($order[$count]['Item']) ];			// adding 'Stimuli', as an array, to each position of $Trials
 				$Trials[$count-1]['Info']		= $order[$count];								// adding 'Info', as an array, to each position of $Trials
 				$Trials[$count-1]['Response']	= array(	"Response1"		=> NULL,			// adding 'Response', as an array, to each position of $Trials
-															"Response2"		=> NULL,
 															"RT"			=> NULL,
 															"RTkey"			=> NULL,
 															"RTlast"		=> NULL,
 															"strictAcc"		=> NULL,
 															"lenientAcc"	=> NULL,
 															"Accuracy"		=> NULL,
+															"PastResponse"	=> NULL,
+															"PastMatch"		=> NULL,
 															"JOL"			=> NULL,
 															"postRT"		=> NULL,
 															"postRTkey"		=> NULL,

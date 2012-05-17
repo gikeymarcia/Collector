@@ -7,7 +7,7 @@ var Fails		= 0;
 
 // do these things when everything has loaded
 window.onload = function () {
-	$('#loadingForm').submit();
+	$("#loadingForm").submit();
 	setInterval(addtime,interval);
 }
 

@@ -19,7 +19,7 @@
 		<div class="Instruct">
 			<!-- ## SET ## Change the instructions text to match your task. You start and end new paragraphs with <p>paragraph here</p>-->
 			<p>	In this study you will see a mixture of intact word pairs (for example, "Word:Pair") and incomplete word pairs (for example, "Word:_____).  When you are shown incomplete pairs you should try to guess which word will fill in the blank.  Sometimes your answer will be correct and sometimes the correct answer will be selected by the computer.  After each guess we will tell you the correct answer and your job is to remember this answer.  When you are shown intact pairs there is no guessing involved but you should still try to remember the correct answer.  At the end of the experiment you will be shown the first word of each pair (Word:_____) and your job is to remember the correct response</p>
-			<p>Please take this task very serisouly.  We are interested in how the brain responds to informatin you have generated as compared to when the computer chooses the answer for you.  Your concentration on this task in the lab will help improve our research design for later when we give participants this task in an fMRI brain scanner</p>
+			<p>Please take this task very serisouly.  We are interested in how the brain responds to information you have generated as compared to when the computer chooses the answer for you.  Your concentration on this task in the lab will help improve our research design for later when we give participants this task in an fMRI brain scanner</p>
 						
 		</div>
 			<!-- ## SET ## This ensures that they read your insturctions.  Participants must correctly answer something about the procedure -->

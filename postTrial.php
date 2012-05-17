@@ -37,19 +37,22 @@
 	if(isset($_SESSION['PastResponse']) == FALSE) {
 		$_SESSION['PastResponse'] = array();
 	}
-	// if it's a you're right trial then save response to pastresponse array
-	if(	$trialType == 'test' &&
-		$currentTrial['Info']['Phase'] == 'Study Phase' &&
-		$currentTrial['Info']['Order Notes'] == 'right') {
-		
+	// if it's a test trial during the study phase then save past responses
+	if(	$trialType == 'test' &&	$currentTrial['Info']['Phase'] == 'Study Phase' ) {
 		$_SESSION['PastResponse'][$cue] = $_POST['Response'];
 		$answer			= ucwords(htmlspecialchars($_POST['Response']));
 		$answerClean	= trim(strtolower($_POST['Response']));
 		$responseClean	= trim(strtolower($_POST['Response']));
 	}
-	// if this is a you're right trial and part of the test phase set answer to your previous response
-	if($currentTrial['Info']['Phase'] == 'Test Phase') {
-		$answerClean	= trim(strtolower($_SESSION['PastResponse'][$cue]));
+	// if this the test phase then save past response for this trial and compare this response to past response
+	if($currentTrial['Info']['Phase'] == 'Test Phase'	&&	$currentTrial['Info']['Order Notes'] != 'study only') {
+		if($currentTrial['Info']['Order Notes'] == 'right') {															// scoring for 'right' trials will be compared to past responses
+			$answerClean	= trim(strtolower($_SESSION['PastResponse'][$cue]));
+		}
+		$currentTrial['Response']['PastResponse']	= $_SESSION['PastResponse'][$cue];
+		$pastMatch = null;
+		similar_text($responseClean, strtolower(trim($_SESSION['PastResponse'][$cue])), $pastMatch);					// compare response clean to past answer given (intrusion measure)
+		$currentTrial['Response']['PastMatch'] == $pastMatch;
 	}
 	
 	
