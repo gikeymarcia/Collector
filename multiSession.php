@@ -15,7 +15,7 @@
 	<link href='http://fonts.googleapis.com/css?family=Kreon' rel='stylesheet' type='text/css' />
 	<title>Experiment Login Page</title>
 </head>
-
+<?php flush(); ?>
 <body>
 	
 	<div class="ExpContainer">

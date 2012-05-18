@@ -16,15 +16,22 @@
 	<link href='http://fonts.googleapis.com/css?family=Kreon' rel='stylesheet' type='text/css' />
 	<title>Done!</title>
 </head>
-
+<?php flush(); ?>
 <body>	
 
 <?php
-	## SET ## Change the email address to your email
-	echo '<div id="donePage">
-			<h2>Thank you for your participation!</h2>
-			<p>If you have any questions about the experiment please email YOURemail@yourdomain.com</p>
-		  </div>';
+	if($_SESSION['NextExp'] == FALSE) {
+		## SET ## Change the email address to your email
+		echo '<div id="donePage">
+				<h2>Thank you for your participation!</h2>
+				<p>If you have any questions about the experiment please email YOURemail@yourdomain.com</p>
+			  </div>';
+	} else {
+		echo "<h2>Experiment will resume in 5 seconds.</h2>";
+		$nextLink = 'http://'.$_SESSION['NextExp'];
+		echo '<meta http-equiv="refresh" content="5; url='.$nextLink.'login.php?Username='.$_SESSION['Username'].'&Condition=Auto">';
+	}
+	
 		
 	// readable($_SESSION['Trials']);
 	

@@ -22,7 +22,7 @@
 	<link href='http://fonts.googleapis.com/css?family=Orbitron:700' rel='stylesheet' type='text/css'>
 	<title>Tetris</title>
 </head>
-
+<?php flush(); ?>
 <body>
 <!-- 	## SET ##  Delete the next three lines to remove the constant countdown on the page-->
 	<div id="Clock"><span>Seconds remaining</span>

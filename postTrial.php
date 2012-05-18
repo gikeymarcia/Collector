@@ -63,7 +63,7 @@
 	<link href='http://fonts.googleapis.com/css?family=Kreon' rel='stylesheet' type='text/css' />
 	<title>Test/Presentation</title>
 </head>
-
+<?php flush(); ?>
 <body>
 
 <?php

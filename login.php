@@ -18,7 +18,7 @@
 	<link href='http://fonts.googleapis.com/css?family=Kreon' rel='stylesheet' type='text/css' />
 	<title>Preparing the Experiment</title>
 </head>
-
+<?php flush();	?>
 
 <body>
 	
@@ -36,7 +36,8 @@
 		$_SESSION['FreeRecallTime'] = 2;										// in seconds/trial (FreeRecall)
 		$_SESSION['jolTime'] 		= user;										// in seconds/trial	(JOL) - can also use value 'user'
 		$_SESSION['FeedbackTime']	= user;										// in seconds/trial - can also use value 'user'
-		$_SESSION['Demographics']	= TRUE;									// Can be TRUE or FALSE
+		$_SESSION['Demographics']	= TRUE;										// Can be TRUE or FALSE
+		$_SESSION['NextExp']		= FALSE;									// to link use format "www.cogfog.com/Generic/" do not forget the www and the ending "/"
 		##### Parameters END #####
 		
 		
@@ -134,7 +135,6 @@
 				$Trials[$count-1]['Stimuli']	= $stimuli[ ($order[$count]['Item']) ];			// adding 'Stimuli', as an array, to each position of $Trials
 				$Trials[$count-1]['Info']		= $order[$count];								// adding 'Info', as an array, to each position of $Trials
 				$Trials[$count-1]['Response']	= array(	"Response1"		=> NULL,			// adding 'Response', as an array, to each position of $Trials
-															"Response2"		=> NULL,
 															"RT"			=> NULL,
 															"RTkey"			=> NULL,
 															"RTlast"		=> NULL,
@@ -236,16 +236,6 @@
 		$_SESSION['Trials']		= $Trials;
 		$_SESSION['Position']	= 1;
 		// Readable($_SESSION['Trials'], '$_SESSION[\'Trials\']');										#### DEBUG ####
-		
-		
-		### PRE-CACHES All cues, targets, and answers used in experiment ####
-		echo '<div class="PreCache">';
-			foreach ($Trials as $Trial) {
-				echo show($Trial['Stimuli']['Cue']).' <br />';
-				echo show($Trial['Stimuli']['Target']).' <br />';
-				echo show($Trial['Stimuli']['Answer']).' <br />';
-			}
-		echo '</div>';
 		
 		
 		#### Send participant to next phase of experiment (demographics or test.php)

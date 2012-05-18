@@ -1,5 +1,5 @@
 var timer		= 0;
-var interval	= 50;				// ## SET ##, The smaller the interval the more CPU power needed.  # = timing accuracy in ms
+var interval	= 100;				// ## SET ##, The smaller the interval the more CPU power needed.  # = timing accuracy in ms
 var keypress	= 0;
 var trialTime	= $("#Time").html();
 var Fails		= 0;
@@ -8,7 +8,10 @@ var Fails		= 0;
 // do these things when everything has loaded
 window.onload = function () {
 	$("#loadingForm").submit();
+	$("#waiting").addClass("Hidden");
+	$(".readcheck").removeClass("Hidden");
 	setInterval(addtime,interval);
+	
 }
 
 

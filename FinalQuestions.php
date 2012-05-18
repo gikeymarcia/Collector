@@ -13,7 +13,7 @@ require("CustomFunctions.php");						// Loads all of my custom PHP functions
 	<link href='http://fonts.googleapis.com/css?family=Kreon' rel='stylesheet' type='text/css' />
 	<title>Final Questions</title>
 </head>
-
+<?php flush(); ?>
 <body>
 	
 	<h1>Final Questions</h1>

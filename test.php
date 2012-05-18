@@ -289,7 +289,7 @@
 	
 	#### Pre-Cache Next trial ####
 	echo '<div class="Hidden">';
-			echo show($nextTrial['Stimuli']['Cue']).'<br />';
+			echo show($nextTrial['Stimuli']['Cue']).'	<br />';
 			echo show($nextTrial['Stimuli']['Target']).'<br />';
 			echo show($nextTrial['Stimuli']['Answer']).'<br />';
 	echo '</div>';

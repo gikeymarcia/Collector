@@ -54,6 +54,8 @@ select
 	{	padding: 7em;	}
 .MCbutton
 	{	cursor: pointer;	}
+#waiting
+	{	margin-top: 100px;	text-align:left; font-size: 1.5em;}
 
 
 
@@ -125,7 +127,7 @@ textarea
 .center
 	{	text-align: center;	}
 .Feedback
-	{	font-size: 2em; margin: 100px auto auto auto; width: 800px; font-size: 3em;	}
+	{	font-size: 2em; margin: 100px auto auto 35%; font-size: 3em;	min-width: 450px; }
 	.Feedback .gray
 		{	font-size: .5em	}
 	.Feedback span

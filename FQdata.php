@@ -1,5 +1,5 @@
 <?php
-	session_start();									// starts a the session
+	session_start();									// starts the session
 	require("CustomFunctions.php");						// Loads all of my custom PHP functions
 	
 	

@@ -88,7 +88,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link href="css/global.css" rel="stylesheet" type="text/css" />
 	<link href='http://fonts.googleapis.com/css?family=Kreon' rel='stylesheet' type='text/css' />
-	<title>Test/Presentation</title>
+	<title>Next</title>
 </head>
 
 <body>

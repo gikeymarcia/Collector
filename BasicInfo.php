@@ -16,7 +16,7 @@
 	<link href='http://fonts.googleapis.com/css?family=Kreon' rel='stylesheet' type='text/css' />
 	<title>Basic Information</title>
 </head>
-
+<?php flush(); ?>
 <body>
 	
 	<div id="content">
