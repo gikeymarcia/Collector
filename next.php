@@ -18,6 +18,15 @@
 	## ADD ## if you've made a new post-trial type that collects data then you need to record that data into $currentTrial['Response']['whatever name']
 	
 	
+	#### Calculating time difference from current to last trial
+	if( isset($_SESSION['Timestamp']) ) {
+		$timeDif = date('U') - $_SESSION['Timestamp'];
+	} else {
+		$timeDif = '-';
+	}
+	$_SESSION['Timestamp'] = date('U');
+	
+	
 	#### Writing to data file
 	$fileName = 'subjects/Output_Session'.$_SESSION['Session'].'_'.$_SESSION['Username'].'.txt';
 	$add = array(		$_SESSION['Username'],
@@ -25,6 +34,7 @@
 						$_SESSION['Session'],
 						$_SESSION['Position'],
 						date("c"),
+						$timeDif,
 						$_SESSION['Condition']['Number'],
 						$_SESSION['Condition']['Stimuli'],
 						$_SESSION['Condition']['Order'],
@@ -36,6 +46,7 @@
 						'Session',
 						'Trial',
 						'Date',
+						'TimeDif',
 						'Condition Number',
 						'Stimuli File',
 						'Order File',
