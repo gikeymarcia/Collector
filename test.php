@@ -298,7 +298,7 @@
 	
 	#### Diagnostics ####		un comment these to get tons of info about each trial
 	// echo "<div>";
-		// echo "Condition #: {$_SESSION['Condition']['Number']} <br />";
+		// echo "Condition #: {$_SESSION['Condition']['Number']} <br />"; 
 		// echo "Condition Stim File: {$_SESSION['Condition']['Stimuli']} <br />";
 		// echo "Condition Order File: {$_SESSION['Condition']['Order']} <br />";
 		// echo "Condition description: {$_SESSION['Condition']['Condition Description']} <br />";
