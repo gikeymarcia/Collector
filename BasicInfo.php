@@ -22,7 +22,7 @@
 	<div id="content">
 		<h2>Basic Information</h2>
 		
-	<form name="Demographics" action="BasicInfoData.php" method="post">
+	<form name="Demographics" action="BasicInfoData.php" method="post"	autocomplete="off">
 		
 		<div class="Question">
 			<p class="Ask">What is your gender?</p>
@@ -32,7 +32,7 @@
 		
 		<div class="Question">
 			<p class="Ask">What is your age?</p>
-			<input type="text" value="" name="Age" />
+			<input type="text" value="" name="Age" autocomplete="off" />
 		</div>
 				
 		<div class="Question">
@@ -56,7 +56,7 @@
 				
 		<div class="Question">
 			<p class="Ask">In what country do you live?</p>
-			<input type="text" value="" name="Country" size="30" />
+			<input type="text" value="" name="Country" size="30"	autocomplete="off" />
 		</div>
 		
 <!-- 		## SET ##	The text below should be set.  Usually we use this area for providing the equivalent of an informed consent form -->

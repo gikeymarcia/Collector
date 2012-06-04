@@ -25,14 +25,14 @@
 			<p>This part will run for approximately 15 minutes.								<!--## SET ## give multisession description for your exp-->
 			Your goal is to remember things from last time</p>
 			
-			<form name="Login" action="login.php" mehtod="get">
+			<form name="Login"  action="login.php"  mehtod="get"  autocomplete="off">
 				<p> Please enter the email address you used last time</p>					<!--## SET ## change this for mTurk-->
-				<input class="Textbox" id="TextboxComputerTimed" style="width:400px;" name="Username" type="text" value=""/>
+				<input class="Textbox" id="TextboxComputerTimed" style="width:400px;"  name="Username"  type="text"  value=""  autocomplete="off"/>
 				
 				<br />
 				
 				<p> Which session would you like?</p>
-				<input class="Textbox" id="TextboxComputerTimed" style="width:400px;" name="Session" type="text" value=""/>
+				<input class="Textbox"  id="TextboxComputerTimed"  style="width:400px;"  name="Session"  type="text"  value=""  autocomplete="off"/>
 				
 				<div id="SubmitButton">Submit</div>
 			</form>

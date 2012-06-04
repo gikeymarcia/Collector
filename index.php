@@ -26,10 +26,10 @@
 				<p>This experiment will run for approximately 25 minutes.								<!--## SET ## give intro description for your exp-->
 				Your goal is to learn some information</p>
 				
-				<form name="Login" action="login.php" method="get">
+				<form name="Login"	autocomplete="off" 	action="login.php"	method="get">
 					<p> Please enter your UCLA email address below</p>					<!--## SET ## change this for mTurk-->
 					
-					<input class="Textbox" style="width:400px;" name="Username" type="text" value=""/>
+					<input class="Textbox"	style="width:400px;"	name="Username"	type="text"	value=""	autocomplete="off"/>
 					<br />
 					<?php
 					if ($selector == TRUE) {

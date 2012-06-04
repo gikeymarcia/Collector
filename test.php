@@ -176,8 +176,8 @@
 			echo '<div class="WordWrap">
 					<span class="leftcopy PreCache">'.$cue.'</span>
 					<span class="dividercopy">:</span>
-					<form name="'.$formName.'" class="'.$formClass.' leftfloat PreCache" action="postTrial.php" method="post">
-						<input	name="Response"	type="text"	value=""			class="Textbox Right PreCache"	/>
+					<form name="'.$formName.'" class="'.$formClass.' leftfloat PreCache"  autocomplete="off"  action="postTrial.php"  method="post">
+						<input	name="Response"	type="text"	value=""			class="Textbox Right PreCache"	autocomplete="off" />
 						<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
 						<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
 						<input	name="RTlast"	type="text"	value="no press"	class="RTlast Hidden" 	/>
@@ -192,8 +192,8 @@
 				 '</div>';
 			$formClass = $formClass.' center';
 			
-			echo '<form name="'.$formName.'" class="'.$formClass.'" action="postTrial.php" method="post">
-					<input  name="Response" type="text" value=""			class="Textbox picWord PreCache" />	<br />
+			echo '<form name="'.$formName.'" class="'.$formClass.'"  autocomplete="off"  action="postTrial.php"  method="post">
+					<input  name="Response" type="text" value=""			class="Textbox picWord PreCache" autocomplete="off" />	<br />
 					<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
 					<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
 					<input	name="RTlast"	type="text"	value="no press"	class="RTlast Hidden" 	/>
@@ -245,8 +245,8 @@
 				  <div class="WordWrap PreCache">
 				  	<span class="leftcopy">'.$cue.'</span>
 				  	<span class="dividercopy">:</span>
-				  	<form name="'.$formName.'" class="'.$formClass.' leftfloat" action="postTrial.php" method="post">
-					  	<input 	name="Response" type="text" value=""			class="Textbox"			/>
+				  	<form name="'.$formName.'" class="'.$formClass.' leftfloat"  autocomplete="off"  action="postTrial.php"  method="post">
+					  	<input 	name="Response" type="text" value=""			class="Textbox"			autocomplete="off" />
 					  	<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
 						<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
 						<input	name="RTlast"	type="text"	value="no press"	class="RTlast Hidden" 	/>
@@ -259,7 +259,7 @@
 			$prompt =& $currentTrial['Info']['Order Notes'];
 			echo '<div id="centerContent">
 				<div class="Prompt PreCache">' . $prompt . '</div>
-					<form name="'.$formName.'" class="'.$formClass.'" action="postTrial.php" method="post">
+					<form name="'.$formName.'" class="'.$formClass.'"  autocomplete="off"  action="postTrial.php"  method="post">
 						<textarea rows="20" cols="60" name="Response" class="PreCache" wrap="physical" value=""></textarea>	<br />
 						<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
 						<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
@@ -274,8 +274,8 @@
 					<div id="jol">How likely are you to correctly remember this item on a later test?</div>
 					<div id="subpoint" class="gray">Type your response on a scale from 0-100 using the entire range of the scale</div>';
 			
-			echo '<form name="'.$formName.'" class="'.$formClass.'" action="postTrial.php" method="post">
-					<input	name="Response"	type="text"	value=""			class="Textbox"			/>	<br />
+			echo '<form name="'.$formName.'" class="'.$formClass.'"  autocomplete="off"  action="postTrial.php"  method="post">
+					<input	name="Response"	type="text"	value=""			class="Textbox"			autocomplete="off" />	<br />
 					<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
 					<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
 					<input	name="RTlast"	type="text"	value="no press"	class="RTlast Hidden" 	/>

@@ -69,7 +69,7 @@ require("CustomFunctions.php");						// Loads all of my custom PHP functions
 		
 		<div id="FQlocation">
 			<div id="FQ"><?php echo $Q ?></div>
-			<form name="FinalQuestion" action="FQdata.php" method="post">
+			<form name="FinalQuestion"  autocomplete="off"  action="FQdata.php"  method="post">
 						<?php
 							// radio button code
 							if($type == 'radio') {
@@ -143,7 +143,7 @@ require("CustomFunctions.php");						// Loads all of my custom PHP functions
 							elseif ($type == 'text') {?>
 								<ul>
 									<li>
-										<input type="text" name="formData" class="Textbox" />
+										<input type="text" name="formData" class="Textbox" autocomplete="off" />
 									</li>
 									
 									<li>
