@@ -37,9 +37,6 @@
 		timer = timer + interval;
 		// update RT field with timer value
 		$(".RT").attr("value",timer);
-		// if(keypress < 1) {
-			// $(".RTkey").attr("value",timer);
-		// }
 		// submit form if time is up
 		if (timer >= (trialTime*1000)) {
 			timer		= 0;

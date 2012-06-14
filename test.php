@@ -111,7 +111,7 @@
 	// hidden field that JQuery/JS uses to submit the trial to postTrial.php
 	echo '<div id="Time" class="Hidden">' . $time . '</div>';
 		
-	// changing form classname based on user or computer timing.  I use the classname to do JQuerty magic
+	// changing form name and class based on user or computer timing.  I use the class name to do JQuerty magic
 	if($time == 'user'):
 		$formName	= 'UserTiming';
 		$formClass	= 'UserTiming';

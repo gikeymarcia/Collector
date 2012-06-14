@@ -78,8 +78,8 @@
 	// removing chars that screw up output file
 	$junk = array( '\n' , '\t' , '\r' , chr(10) , chr(13) );
 	for($pos=0; $pos<count($Header1); $pos++) {
-		$dataBit = str_replace($junk,' <br /> ', $currentTrial[$Header1[$pos]][$Header2[$pos]]);
-		$data[] = $dataBit;
+		$dataBit	= str_replace($junk,' <br /> ', $currentTrial[$Header1[$pos]][$Header2[$pos]]);
+		$data[]		= $dataBit;
 	}
 	arrayToLine($data,$fileName);										// write data line to the file
 	###########################################
@@ -88,21 +88,7 @@
     // progresses the trial counter
 	$currentPos++;
 	
+	// redirects the page to test.php after running all of the above code
 	header("Location: test.php");
 	exit;
 ?>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<link href="css/global.css" rel="stylesheet" type="text/css" />
-	<link href='http://fonts.googleapis.com/css?family=Kreon' rel='stylesheet' type='text/css' />
-	<title>Next</title>
-</head>
-
-<body>
-	<!-- send back to test -->
-	<meta http-equiv="refresh" content="0; url=test.php">
-</body>

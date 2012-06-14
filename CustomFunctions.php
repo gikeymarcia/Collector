@@ -65,12 +65,12 @@
 	#### custom function to read from tab delimited data files;  pos 0 & 1 are blank,  header names are array keys
 	function GetFromFile($fileLoc) {
 		
-		$file = fopen($fileLoc, 'r');					// open the file passed through the function arguement
-		$keys = fgetcsv($file, 0, "\t");				// pulling header data from top row of file
-		$out = array(0 => 0, 1 => 0);					// leave positions 0 and 1 blank (so when I call $array[#] it will corespond to the row in excel)
+		$file	= fopen($fileLoc, 'r');					// open the file passed through the function arguement
+		$keys	= fgetcsv($file, 0, "\t");				// pulling header data from top row of file
+		$out	= array(0 => 0, 1 => 0);				// leave positions 0 and 1 blank (so when I call $array[#] it will corespond to the row in excel)
 		while ($line = fgetcsv($file, 0, "\t")) {		// capture each remaining line from the file
-			$tOut = array_combine($keys, $line);		// combine the line of data with the header	
-			$out[] = $tOut;								// add this combined header<->line array to the ouput array
+			$tOut	= array_combine($keys, $line);		// combine the line of data with the header	
+			$out[]	= $tOut;							// add this combined header<->line array to the ouput array
 		}
 		return $out;
 	}
@@ -88,20 +88,20 @@
 	
 	
 	
-	#### finish this function
-	function setIf ($posted, $session) {
-		global $$session;
-		if($posted == TRUE) {
-			$$session = $posted;
-		}
-	}
+	#### finish this function (currently does nothing and I've forgotten what I was even aiming to accomplish here)
+	// function setIf ($posted, $session) {
+		// global $$session;
+		// if($posted == TRUE) {
+			// $$session = $posted;
+		// }
+	// }
 	
 	#### add html image tags to images but simply returns things that are not images
 	function show($string){
-		$stringLower = strtolower($string);					// make lowercase version of input
-		$findJPG = strpos($stringLower, '.jpg');			// look for file extensions in the input
-		$findGIF = strpos($stringLower, '.gif');
-		$findPNG = strpos($stringLower, '.png');
+		$stringLower	= strtolower($string);					// make lowercase version of input
+		$findJPG		= strpos($stringLower, '.jpg');			// look for file extensions in the input
+		$findGIF		= strpos($stringLower, '.gif');
+		$findPNG		= strpos($stringLower, '.png');
 		
 		// if I found any of the above image file extensions, add html image tags
 		// else, simply echo the orignal input (not the lowercase version)
@@ -129,9 +129,9 @@
 	
 	#### custom function to shuffle the middle of an array (excluding 1st and last items)
 	function ShuffleMiddle($arrayIn) {
-		$zero = array_shift($arrayIn);
-		$first = array_shift($arrayIn);									// pull off the 1st item
-		$last = array_pop($arrayIn);									// pull off last item
+		$zero	= array_shift($arrayIn);
+		$first	= array_shift($arrayIn);								// pull off the 1st item
+		$last	= array_pop($arrayIn);									// pull off last item
 		shuffle($arrayIn);												// shuffle middle
 		array_unshift($arrayIn, $first);								// put back 1st item
 		array_unshift($arrayIn, $zero);									// put back 0 item

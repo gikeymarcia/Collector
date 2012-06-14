@@ -34,8 +34,6 @@
 	
 		
 	// readable($_SESSION['Trials']);
-	
-	// Place google form embed code below (not necessary now that i've written FinalQuestions.php)
 ?>
 
 <?php	
@@ -70,12 +68,6 @@
 	
 	
 	session_destroy();												// destry the session so it doesn't interfere with any future experiments
-	
-	#### TO DO ####
-	/*
-	 * write code that allows me to automatically send someone to a new experiment
-	 * this code should pass on username and i guess it will have to use Auto condition selection
-	 */
 ?>
 	<script src="javascript/jquery-1.7.2.min.js" type="text/javascript"> </script>
 	<script src="javascript/jsCode.js" type="text/javascript"> </script>

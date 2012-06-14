@@ -8,11 +8,11 @@
 	
 	$DemographicsFile = 'subjects/demographics.txt';
 	
-	$gender = $_POST['Gender'];
-	$age = $_POST['Age'];
-	$education = $_POST['Education'];
-	$english = $_POST['English'];
-	$country = $_POST['Country'];
+	$gender		= $_POST['Gender'];
+	$age		= $_POST['Age'];
+	$education	= $_POST['Education'];
+	$english	= $_POST['English'];
+	$country	= $_POST['Country'];
 	
 	$header = array(	'Username',
 						'Gender',

@@ -21,9 +21,9 @@ require("CustomFunctions.php");						// Loads all of my custom PHP functions
 	<?php
 		// if this is the first time on FinalQuestions.php then load questions from file
 		if(isset($_SESSION['FinalQs']) == FALSE) {
-			$fQ = GetFromFile('FinalQuestions.txt');
-			$_SESSION['FinalQs'] = $fQ;
-			$_SESSION['FQpos'] = 2;
+			$fQ						= GetFromFile('FinalQuestions.txt');
+			$_SESSION['FinalQs']	= $fQ;
+			$_SESSION['FQpos']		= 2;
 		}
 		
 		
@@ -34,21 +34,21 @@ require("CustomFunctions.php");						// Loads all of my custom PHP functions
 		
 		
 		// setting up aliases (makes all later code easier to read)
-		$allFQs =& $_SESSION['FinalQs'];
-		$pos =& $_SESSION['FQpos'];
-			$FQ =& $allFQs[$pos];							// all info about current final question
-				$Q = $FQ['Question'];						// the question on this trial
-				$type = trim(strtolower($FQ['Type']));		// format of Q to display for this trial
-			$options = array(0=> NULL);
+		$allFQs		=&	$_SESSION['FinalQs'];
+		$pos		=&	$_SESSION['FQpos'];
+		$FQ			=&	$allFQs[$pos];							// all info about current final question
+		$Q			=	$FQ['Question'];						// the question on this trial
+		$type		=	trim(strtolower($FQ['Type']));			// type of question to display for this trial (i.e, likert, text, radio, checkbox)
+		$options	=	array(0=> NULL);
 		
 		
 		// loading values into $options
 		for ($i=1; isset($FQ[$i]); $i++) {
 			if($FQ[$i] != '') {
-				$rawString = $FQ[$i];
-				$split = explode('|', $rawString);
-				$temp = array( 'value' => $split[0], 'text' => $split[1]);
-				$options[] = $temp;
+				$rawString	= $FQ[$i];
+				$split		= explode('|', $rawString);
+				$temp		= array( 'value' => $split[0], 'text' => $split[1]);
+				$options[]	= $temp;
 				// echo 'found fq #'.$i.'  and it is  '.$FQ[$i].'<br />';
 			}
 		}
@@ -157,13 +157,6 @@ require("CustomFunctions.php");						// Loads all of my custom PHP functions
 			</form>
 		</div>
 	
-	
-
-	
-
-	
-
-	
 	<!-- textbox final question -->
 <!-- 	<div id="FQlocation">
 		<div id="FQ">This is the place where you can ask textbox questions.</div>
@@ -180,17 +173,12 @@ require("CustomFunctions.php");						// Loads all of my custom PHP functions
 			<input name="RT" class="RT Hidden" type="text" value=""/>
 		</form>
 	</div> -->
-
-	
-	
-	
-	
 	
 	<!-- Likert scale question -->
 <!-- 	<div id="FQlocation">
 		<div id="FQ">
-			How much of a douche do you think this guy really is?
-			<p>1 being a total shit -- 7 being the best thing ever</p>
+			Ask whatever likert question you would like to
+			<p>If you follow the question with paragraph tag you can describe your 1-7 scale</p>
 		</div>
 		<form name="FinalQuestion" action="FQdata.php" method="post">
 			<ul>
@@ -279,7 +267,6 @@ require("CustomFunctions.php");						// Loads all of my custom PHP functions
 			<input name="RT" class="RT Hidden" type="text" value=""/>
 		</form>
 	</div> -->
-	
 	
 	<script src="javascript/jquery-1.7.2.min.js" type="text/javascript"> </script>
 	<!-- This script was meant for instructions but does what I need for here (updates RT)-->

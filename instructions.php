@@ -60,9 +60,9 @@
 			echo '<br />';
 		}
 	echo '</div>';
-	
 	?>
-
-	<script src="javascript/jquery-1.7.2.min.js" type="text/javascript"></script>				<!-- JQuery javascript library (makes basic functions much easier) -->
-	<script src="javascript/jsCode.js" type="text/javascript"> </script>						<!-- Your own javascript file -->
-</body> </html>
+	
+	<script	src="javascript/jquery-1.7.2.min.js"	type="text/javascript"	>	</script>				<!-- JQuery javascript library (makes basic functions much easier) -->
+	<script	src="javascript/jsCode.js"				type="text/javascript"	>	</script>				<!-- Your own javascript file -->
+</body>
+</html>

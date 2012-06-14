@@ -43,8 +43,8 @@
 						
 						<?php
 							#### Display conditions as choices
-							$Conditions = GetFromFile("Conditions.txt");					// load from condition file
-							$tempCond = SortByKey($Conditions, 'Number');
+							$Conditions	= GetFromFile("Conditions.txt");					// load from condition file
+							$tempCond	= SortByKey($Conditions, 'Number');
 							
 							for($i=2; $i<count($tempCond); $i++) {							// output all possible condition choices
 								echo '<option value=\'' . $tempCond[$i]['Number'] . '\'>' . $tempCond[$i]['Number'] . '</option>';

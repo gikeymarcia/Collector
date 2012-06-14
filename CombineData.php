@@ -8,10 +8,9 @@
 <body>
 
 <?php
-$dataDir = opendir("subjects/");										// tells us where to begin looking for data files
-$combined = array();													// declares array that will eventually be written to the All Data file
-
-$fileCount=0;
+$dataDir	= opendir("subjects/");										// tells us where to begin looking for data files
+$combined	= array();													// declares array that will eventually be written to the All Data file
+$fileCount	= 0;
 
 echo '<h2>The Following are all of the files being used to aggregate data</h2>';
 
@@ -30,8 +29,8 @@ while( ($file = readdir($dataDir)) != FALSE) {							// finds each file in the '
 }
 
 #### Writing all data as tab delimited .txt file into "subjects/" folder
-$theFile = 'subjects/All Data - '.date("Y")."-".date("m")."-".date("d").' - '.date("U").'.txt';				// sets file to write to-- filename formatted as 'All Data - 2011-11-17 - #s since Unix Epoch.txt'
-$txt = fopen($theFile,'w');
+$theFile	= 'subjects/All Data - '.date("Y")."-".date("m")."-".date("d").' - '.date("U").'.txt';				// sets file to write to-- filename formatted as 'All Data - 2011-11-17 - #s since Unix Epoch.txt'
+$txt		= fopen($theFile,'w');
 foreach ($combined as $one){
     $line = implode("\t", $one);
     fwrite($txt,$line);

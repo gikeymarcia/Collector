@@ -20,7 +20,7 @@
 	<link href="css/global.css" rel="stylesheet" type="text/css" />
 	<link href='http://fonts.googleapis.com/css?family=Kreon' rel='stylesheet' type='text/css' />
 	<link href='http://fonts.googleapis.com/css?family=Orbitron:700' rel='stylesheet' type='text/css'>
-	<title>Tetris</title>
+	<title>Stepout</title>
 </head>
 <?php flush(); ?>
 <body>
@@ -79,25 +79,3 @@
 
 </body>
 </html>
-
-	
-	<!-- <center><table width="500"><TR><Td>
-	<br><br>
-	
-	<h1>Tetris</h1>
-	<p>Try to achieve the highest score possible.</p>
-	<p>Move the pieces from side to side using the <b>left</b> and <b>right arrows</b>.
-	<br>Press <b>X</b> or the <b>Up arrow</b> to rotate right; press <b>Z</b> to rotate left. 
-	<br>Drop the piece into place with the <b>space bar</b>.</p>
-	<br/>
-	<font size = "6"> <b> If you lose rety for a higher score <b/><u>
-	<br/>
-	<br/>
-	
-	<EMBED src="http://www.cogfog.com/nblox.swf" menu="false" 
-	quality="high" WIDTH=500 HEIGHT=550 TYPE="application/x-shockwave-flash" 
-	PLUGINSPAGE="http://www.macromedia.com/go/getflashplayer/"><br> -->
-	
-	
-		
-	<!-- </td></tr></table></center> -->
