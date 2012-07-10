@@ -1,3 +1,9 @@
+/* Generic 2.00a1
+	A program for running experiments on the web
+	Copyright 2012 Mikey Garcia & Nate Kornell
+*/
+
+
 var timer		= 0;
 var interval	= 100;				// ## SET ##, The smaller the interval the more CPU power needed.  # = timing accuracy in ms
 var keypress	= 0;

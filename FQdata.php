@@ -1,3 +1,8 @@
+<!-- Generic 2.00a1
+	A program for running experiments on the web
+	Copyright 2012 Mikey Garcia & Nate Kornell
+-->
+
 <?php
 	session_start();									// starts the session
 	require("CustomFunctions.php");						// Loads all of my custom PHP functions

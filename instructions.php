@@ -1,3 +1,8 @@
+<!-- Generic 2.00a1
+	A program for running experiments on the web
+	Copyright 2012 Mikey Garcia & Nate Kornell
+-->
+
 <?php
 	####  good place to pull in values and/or compute things that'll be inserted into the HTML below
 	session_start();

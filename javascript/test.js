@@ -1,3 +1,8 @@
+/* Generic 2.00a1
+	A program for running experiments on the web
+	Copyright 2012 Mikey Garcia & Nate Kornell
+*/
+
 /*
 #### JQuery notes
 	if selecting class="Name"
@@ -6,8 +11,6 @@
 		$("#ThisOne")
 	if selecting by tag (e.g., all <p> or all <li>)
 		$("p") || $("li")
-
-####
 */
 
 	var timer		= 0;
