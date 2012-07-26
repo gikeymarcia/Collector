@@ -1,3 +1,20 @@
+Collector
+A program for running experiments on the web
+Copyright 2012 Mikey Garcia & Nate Kornell
+
+What is Collector?
+	Collector is a program designed to run psychology experiments on the web.
+How do I run this program?
+	To run locally (on your machine) you should install WAMP/MAMP/LAMP if you're using Windows/Mac/Linux and then copy the collector files into your localhost directory.  From there use a modern web browser to navigate to index.php (where the experiments begin)
+What language is Collector written in?
+	Collector is written mostly in PHP although some of the functionality is achieved through javascript/Jquery.  Formatting of the presentations is controlled mostly by HTML4 and CSS2
+	The breakdown is roughtly ~70% PHP, 15% HTML, 10% CSS, 5% javascript/JQuery
+Do I need to ask anyone if I want to use Collector?
+	No.  Collector is distributed under the GNU GPLv3 license (full text can be found in the documentation folder).  You are free to use, modify, and distribute this program as you wish.  If distribute a modified version of this program you are required to make your modified version available to the public under the same GNU GPLv3 license of the original program.
+
+
+	
+	
 Automatic Condition Selection
 	Leaving the condiiton selector on "Auto" will let the program cycle through the "Conditions.txt" file to determine each subject's condition assignment
 
