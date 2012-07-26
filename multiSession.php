@@ -1,4 +1,4 @@
-<!-- Generic 2.00a1
+<!-- Collector 1.00.00 alpha1
 	A program for running experiments on the web
 	Copyright 2012 Mikey Garcia & Nate Kornell
 -->
@@ -6,9 +6,9 @@
 <?php
 	ini_set('auto_detect_line_endings', true);			// fixes problems reading files saved on mac
 	@session_destroy();									// destory any possible previous sessions and suppress warnings
-	session_start();									// starts a new session
-	$_SESSION['Debug']=FALSE;							// turns debug mode on and off   ## SET ##
-	require("CustomFunctions.php");						// Loads all of my custom PHP functions
+	session_start();									// start a new session
+	$_SESSION['Debug']=FALSE;							// turn debug mode on or off   ## SET ##
+	require("CustomFunctions.php");						// Load custom PHP functions
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"

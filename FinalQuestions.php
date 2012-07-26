@@ -1,12 +1,11 @@
-<!-- Generic 2.00a1
+<!-- Collector 1.00.00 alpha1
 	A program for running experiments on the web
 	Copyright 2012 Mikey Garcia & Nate Kornell
 -->
 
 <?php
-ini_set('auto_detect_line_endings', true);			// fixes problems reading files saved on mac
-session_start();									// starts the session
-require("CustomFunctions.php");						// Loads all of my custom PHP functions
+require("CustomFunctions.php");							// Load custom PHP functions
+initiateCollector();
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"

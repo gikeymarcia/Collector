@@ -1,4 +1,4 @@
-<!-- Generic 2.00a1
+<!-- Collector 1.00.00 alpha1
 	A program for running experiments on the web
 	Copyright 2012 Mikey Garcia & Nate Kornell
 -->
@@ -82,6 +82,14 @@
 	
 	
 	
+	function initiateCollector() {
+		ini_set('auto_detect_line_endings', true);				// fixes problems reading files saved on mac
+		session_start();										// start the session at the top of each page
+		if ($_SESSION['Debug'] == FALSE) {						// disable error reporting during debug
+			error_reporting(0);
+		}
+	}
+	
 	#### Debug function I use to display arrays in an easy to read fashion
 	function Readable($displayArray, $NameOfDisplayed = "unspecified"){
 		echo "<br />";	
@@ -92,14 +100,6 @@
 	}
 	
 	
-	
-	#### finish this function (currently does nothing and I've forgotten what I was even aiming to accomplish here)
-	// function setIf ($posted, $session) {
-		// global $$session;
-		// if($posted == TRUE) {
-			// $$session = $posted;
-		// }
-	// }
 	
 	#### add html image tags to images but simply returns things that are not images
 	function show($string){
@@ -130,20 +130,6 @@
 		return $input;
 	}
 	
-	
-	
-	#### custom function to shuffle the middle of an array (excluding 1st and last items)
-	function ShuffleMiddle($arrayIn) {
-		$zero	= array_shift($arrayIn);
-		$first	= array_shift($arrayIn);								// pull off the 1st item
-		$last	= array_pop($arrayIn);									// pull off last item
-		shuffle($arrayIn);												// shuffle middle
-		array_unshift($arrayIn, $first);								// put back 1st item
-		array_unshift($arrayIn, $zero);									// put back 0 item
-		$arrayIn[] = $last;												// put back last
-	
-		return $arrayIn;
-	}
 	
 	
 	#### Debug function that was quicker to write than an echo (mostly used it to make sure conditions of an if/for/while were being met)

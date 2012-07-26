@@ -1,12 +1,12 @@
-<!-- Generic 2.00a1
+<!-- Collector 1.00.00 alpha1
 	A program for running experiments on the web
 	Copyright 2012 Mikey Garcia & Nate Kornell
 -->
 
 <?php
 	####  good place to pull in values and/or compute things that'll be inserted into the HTML below
-	session_start();
-	require("CustomFunctions.php");
+	require("CustomFunctions.php");							// Load custom PHP functions
+	initiateCollector();
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -47,7 +47,7 @@
 			</ol>
 		</div>
 		
-		<form class="" name="Login" action="test.php" method="Post">
+		<form class="" name="Login" action="trial.php" method="Post">
 			<input	name="RT"			class="RT Hidden"		type="text"	value="0"			/>
 			<input	name="Fails"		class="Fails Hidden"	type="text"	value="0"			/>
 			<input	name="PrevTrial"	class="Hidden"			type="text"	value="Instruction" />

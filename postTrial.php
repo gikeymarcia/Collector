@@ -1,16 +1,11 @@
-<!-- Generic 2.00a1
+<!-- Collector 1.00.00 alpha1
 	A program for running experiments on the web
 	Copyright 2012 Mikey Garcia & Nate Kornell
 -->
 
 <?php
-	ini_set('auto_detect_line_endings', true);				// fixes problems reading files saved on mac
-	session_start();										// start the session at the top of each page
-	if ($_SESSION['Debug'] == FALSE) {
-		error_reporting(0);
-	}
-	require("CustomFunctions.php");							// Loads all of my custom PHP functions
-	
+	require("CustomFunctions.php");							// Load custom PHP functions
+	initiateCollector();
 	
 	#### setting up aliases (for later use)
 	$currentPos		=& $_SESSION['Position'];
@@ -34,7 +29,7 @@
 	@$currentTrial['Response']['RT']		= $_POST['RT'];
 	@$currentTrial['Response']['RTkey']		= $_POST['RTkey'];
 	@$currentTrial['Response']['RTlast']	= $_POST['RTlast'];
-	## ADD ## if you've created a new inputname on test.php you need to capture data here
+	## ADD ## if you've created a new inputname on trial.php you need to capture data here
 	
 	
 	#### Calculating and saving accuracy for trials in  which this would be appropriate (excluding JOL and FreeRecall)

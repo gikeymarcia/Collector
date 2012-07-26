@@ -1,11 +1,11 @@
-<!-- Generic 2.00a1
+<!-- Collector 1.00.00 alpha1
 	A program for running experiments on the web
 	Copyright 2012 Mikey Garcia & Nate Kornell
 -->
 
 <?php
-	session_start();
-	require("CustomFunctions.php");							// Loads all of my custom PHP functions
+	require("CustomFunctions.php");							// Load custom PHP functions
+	initiateCollector();
 	
 	#### setting up aliases (for later use)
 	$currentPos		=& $_SESSION['Position'];
@@ -93,7 +93,7 @@
     // progresses the trial counter
 	$currentPos++;
 	
-	// redirects the page to test.php after running all of the above code
-	header("Location: test.php");
+	// redirects the page to trial.php after running all of the above code
+	header("Location: trial.php");
 	exit;
 ?>

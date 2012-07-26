@@ -1,4 +1,4 @@
-<!-- Generic 2.00a1
+<!-- Collector 1.00.00 alpha1
 	A program for running experiments on the web
 	Copyright 2012 Mikey Garcia & Nate Kornell
 -->
@@ -32,7 +32,7 @@
 		echo '<noscript>	<h1>	You must enable javascript to participate!!!	</h1>	</noscript>';
 		
 		##### Parameters #####			## SET ##
-		$_SESSION['ExperimentName']	= "Generic v2";								// Recorded in datafile and can be useful. 
+		$_SESSION['ExperimentName']	= "Collector";								// Recorded in datafile and can be useful.
 		$_SESSION['LoginCounter Location'] = "LoginCounter/1.txt";				// Change to restart condition cycling
 		// these timings only apply when trials are set as "Computer" timing
 		$_SESSION['StudyTime']		= 3;										// in seconds/trial (Study/StudyPic/Instruct)
@@ -186,7 +186,6 @@
 					$foreachcount++;
 					continue;
 				}
-				#### TO DO #### Write *newfile* to the session files when it comes up so the page redirect will be able to ask questions only after the final session (where there are no *newfile* lines loaded)
 				// write to next file when we hit a newfile line
 				$item = strtolower(trim($Trial['Info']['Item']));
 				if($item == '*newfile*') {
@@ -200,11 +199,13 @@
 					arrayToLine ($header1, $sessionFile);
 					arrayToLine ($header2, $sessionFile);
 				}
-				
+				#### TO DO #### write code that removes junk characters from session files (see Next.php)
 				// write ['Stimuli'] ['Info'] and ['Response'] data to next line of the file
 				$line = NULL;
+				$junk = array( '\n' , '\t' , '\r' , chr(10) , chr(13) );
 				for($i= 0; $i <= count($header1); $i++) {
-					$line[] = $Trial[$header1[$i]] [$header2[$i]];
+					$replaced = str_replace($junk, '<br /', $Trial[$header1[$i]] [$header2[$i]]);
+					$line[] = $replaced;
 				}
 				arrayToLine($line,$sessionFile);
 			
@@ -237,13 +238,13 @@
 		
 		
 		#### Establishing $_SESSION['Trials'] as the place where all experiment trials are stored
-		// session1 $Trials also contains trials for other sessions but test.php sends to done.php once a *newfile* shows up
+		// session1 $Trials also contains trials for other sessions but trial.php sends to done.php once a *newfile* shows up
 		$_SESSION['Trials']		= $Trials;
 		$_SESSION['Position']	= 1;
 		// Readable($_SESSION['Trials'], '$_SESSION[\'Trials\']');										#### DEBUG ####
 		
 		
-		#### Send participant to next phase of experiment (demographics or test.php)
+		#### Send participant to next phase of experiment (demographics or trial.php)
 		if($_SESSION['Demographics'] == TRUE) {
 			$link = 'BasicInfo.php';
 		}
