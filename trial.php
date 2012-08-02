@@ -1,4 +1,4 @@
-<!-- Collector 1.00.00 alpha1
+<!-- Collector 1.00.00 alpha2
 	A program for running experiments on the web
 	Copyright 2012 Mikey Garcia & Nate Kornell
 -->
@@ -99,6 +99,9 @@
 		elseif ($trialType == 'freerecall') {
 			$time = $_SESSION['FreeRecallTime'];
 		}
+		elseif ($trialType == 'audio') {
+			$time = $_SESSION['AudioTime'];
+		}
 		elseif ($trialType == 'jol') {
 			$time = $_SESSION['jolTime'];
 		}
@@ -124,7 +127,7 @@
 	#### Presenting different trial types ####
 	// trials without any user input
 	## ADD ## if your trial has no input then add it to the if line below
-	if( ($trialType == 'study') OR ($trialType == 'studypic') OR ($trialType == 'passage') OR ($trialType == 'instruct')) {
+	if( ($trialType == 'study') OR ($trialType == 'studypic') OR ($trialType == 'passage') OR ($trialType == 'instruct') OR ($trialType == 'audio')) {
 		// Study trial type
 		if ($trialType == 'study') {
 			echo '<div class="WordWrap PreCache">
@@ -154,7 +157,14 @@
 					<div class="instruct">'. $currentTrial['Info']['Order Notes'].'</div>
 				  </div>';
 		}
+		// Audio trial type
+		elseif ($trialType == 'audio') {
+			echo '<div class="WordWrap PreCache">
+					<audio autoplay>'.$cue.'</audio>
+				  </div>';
+		}
 		## ADD ## your new trial should be an elseif here (if it has no user input)
+		
 		echo '<div id="buttPos">';
 		// give the form a different name for user and comuputer timed
 		// I use formname + JQuery to hide the submit button when the form is a computer timed form
@@ -208,7 +218,7 @@
 					'. show($cue).
 				 '</div>';		
 			## SET ## If you're going to use MCpic trials then you should change the category names in $MCbuttons
-			$MCbuttons = array( "Hawkins", "Cat2", "Cat3", "Cat4", "Cat6", "Cat6", "Cat7", "Ocean Fish", "Cat9", "Cat10", "Cat11", "Cloud Fish");
+			$MCbuttons = array( "Cat1", "Cat2", "Cat3", "Cat4", "Cat6", "Cat6", "Cat7", "Cat 8", "Cat9", "Cat10", "Cat11", "Cat 12");
 			
 			if($_SESSION['MCbutton'] == FALSE) {
 				shuffle($MCbuttons);							// turn this line off to maintain the same choice order between-subjects

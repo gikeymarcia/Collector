@@ -1,4 +1,4 @@
-<!-- Collector 1.00.00 alpha1
+<!-- Collector 1.00.00 alpha2
 	A program for running experiments on the web
 	Copyright 2012 Mikey Garcia & Nate Kornell
 	

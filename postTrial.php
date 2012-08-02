@@ -1,4 +1,4 @@
-<!-- Collector 1.00.00 alpha1
+<!-- Collector 1.00.00 alpha2
 	A program for running experiments on the web
 	Copyright 2012 Mikey Garcia & Nate Kornell
 -->
@@ -51,7 +51,6 @@
 		endif;
 	}
 		
-
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -67,6 +66,10 @@
 <body>
 
 <?php
+	#### Tells the program which page to go to after postTrial
+	// If you want to intercept the trial -> postTrial -> next loop simply change the $comingUp page
+	$comingUp = 'next.php';
+	
 	#### trial timing code		## ADD ## tell program which timing to use for your new post-trial type
 	if($postTrial == 'feedback'):
 		$time = $_SESSION['FeedbackTime'];
@@ -97,7 +100,7 @@
 							'	. show($answer)	. '
 						</div>';
 			// Hidden form that collects RT and progresses trial to next.php
-			echo '<form name="'.$formName.'" class="'.$formClass.'" autocomplete="off" action="next.php" method="post">
+			echo '<form name="'.$formName.'" class="'.$formClass.'" autocomplete="off" action="'.$comingUp.'" method="post">
 					<input class="RT Hidden" name="RT" type="text" value="RT" />
 					<input	id="FormSubmitButton"	type="submit"	value="Done"	/>
 				  </form>';
@@ -109,7 +112,7 @@
 					<div class="gray">The correct answer is</div>
 					<span>' . show($cue).' : '.show($answer).'</span>';
 			// Hidden form that collects RT and progresses trial to next.php
-			echo '<form name="'.$formName.'" class="'.$formClass.'" autocomplete="off" action="next.php" method="post">
+			echo '<form name="'.$formName.'" class="'.$formClass.'" autocomplete="off" action="'.$comingUp.'" method="post">
 					<input	class="RT Hidden" name="RT" type="text"	value="RT" />
 					<input	id="FormSubmitButton"	type="submit"	value="Done"	/>
 				  </form>';
@@ -123,7 +126,7 @@
 		echo '<div id="jol">How likely are you to correctly remember this item on a later test?</div>
 			  <div id="subpoint" class="gray">Type your response on a scale from 0-100 using the entire range of the scale</div>';
 			
-			echo '<form name="'.$formName.'" class="'.$formClass.'"  autocomplete="off"  action="next.php"  method="post">
+			echo '<form name="'.$formName.'" class="'.$formClass.'"  autocomplete="off"  action="'.$comingUp.'"  method="post">
 					<input class="Textbox"		name="JOL"		type="text" value=""	autocomplete="off" /><br />
 					<input class="RT Hidden"	name="RT"		type="text" value="RT" />
 					<input class="RTkey Hidden" name="RTkey"	type="text" value="RTkey" />
@@ -134,7 +137,7 @@
 	## ADD ## put your own elseif here for a new post-trial type
 	#### moving onto next trial
 	else {
-		echo '<meta http-equiv="refresh" content="0; url=next.php">';
+		echo '<meta http-equiv="refresh" content="0; url='.$comingUp.'">';
 	}
 
 ?>

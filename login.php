@@ -1,4 +1,4 @@
-<!-- Collector 1.00.00 alpha1
+<!-- Collector 1.00.00 alpha2
 	A program for running experiments on the web
 	Copyright 2012 Mikey Garcia & Nate Kornell
 -->
@@ -39,6 +39,7 @@
 		$_SESSION['TestTime'] 		= 5;										// in seconds/trial (Test/TestPic/Copy/MCpic)
 		$_SESSION['PassageTime']	= 10;										// in seconds/trial (Passage)
 		$_SESSION['FreeRecallTime'] = 2;										// in seconds/trial (FreeRecall)
+		$_SESSION['AudioTime']		= 5;										// in seconds/trial (Audio)
 		$_SESSION['jolTime'] 		= user;										// in seconds/trial	(JOL) - can also use value 'user'
 		$_SESSION['FeedbackTime']	= user;										// in seconds/trial - can also use value 'user'
 		$_SESSION['Demographics']	= TRUE;										// Can be TRUE or FALSE
