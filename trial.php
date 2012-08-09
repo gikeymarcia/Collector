@@ -141,6 +141,7 @@
 			echo '<div class="pic PreCache">
 					'. show($cue).
 				 '</div>';
+			
 			echo '<div class="picWord PreCache">'.$target.'</div>';
 			$formClass = $formClass.' center'; 
 		}
@@ -159,7 +160,7 @@
 		// Audio trial type
 		elseif ($trialType == 'audio') {
 			echo '<div class="WordWrap PreCache">
-					<audio autoplay><source src="'.$cue.'" /></audio>
+					<audio autoplay>'.$cue.'</audio>
 				  </div>';
 		}
 		## ADD ## your new trial should be an elseif here (if it has no user input)
