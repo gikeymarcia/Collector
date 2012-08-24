@@ -272,7 +272,7 @@ initiateCollector();
 		</form>
 	</div> -->
 	
-	<script src="javascript/jquery-1.7.2.min.js" type="text/javascript"> </script>
+	<script src="javascript/jquery-1.8.0.min.js" type="text/javascript"> </script>
 	<!-- This script was meant for instructions but does what I need for here (updates RT)-->
 	<script src="javascript/jsCode.js" type="text/javascript"> </script>
 

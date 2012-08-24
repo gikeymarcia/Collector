@@ -255,7 +255,7 @@
 		echo '<form id="loadingForm" action="'.$link.'" method="get"> </form>';
 		
 	?>
-	<script src="javascript/jquery-1.7.2.min.js" type="text/javascript"> </script>
+	<script src="javascript/jquery-1.8.0.min.js" type="text/javascript"> </script>
 	<script src="javascript/jsCode.js" type="text/javascript"> </script>
 </body>
 </html>

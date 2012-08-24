@@ -329,7 +329,7 @@
 	// readable($currentTrial, "Current trial");
 	#### Diagnostics ####
 ?>
-	<script src="javascript/jquery-1.7.2.min.js" type="text/javascript"> </script>
+	<script src="javascript/jquery-1.8.0.min.js" type="text/javascript"> </script>
 	<script src="javascript/test.js" type="text/javascript"> </script>
 </body>
 </html>
