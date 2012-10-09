@@ -45,6 +45,38 @@
 	
 	
 	
+	#### Code that block shuffles an array.  Give it an $input array and the key for the grouping factor.
+	function BlockShuffle2( $input , $groupingFactor ){
+		$outputArray = array();
+		$block = NULL;																// load initial item into block
+		for( $arrayPos = 0; $arrayPos < (count($input) ); $arrayPos++ ){
+			$CurrentLine = $input[ $arrayPos ];
+			$NextLine = $input[ $arrayPos+1 ];
+			if($block == NULL){
+				$block[] = $CurrentLine;
+			}
+			if( $CurrentLine[$groupingFactor] == $NextLine[$groupingFactor] ){
+				$block[] = $NextLine;
+				continue;
+			}
+			elseif( $CurrentLine[$groupingFactor] <> $NextLine[$groupingFactor] ){
+				if( strtolower($CurrentLine[$groupingFactor]) <> "off" ){
+					shuffle($block);
+				}
+				$parentBlock[]=$block;
+				$block = NULL;
+				// they have to be the same size because if [a,b,c,d] & [e,f,g,h,i,j] are in different orders than item [5] will be from different sets each time
+			}
+		}
+		foreach ($parentBlock as $childBlock) {
+			foreach ($childBlock as $line) {
+				$outputArray[]=$line;
+			}
+		}
+		return $outputArray;
+	}
+	
+	
 	#### function that converts smart quotes, em dashes, and u's with umlats so they display properly on web browsers
 	function fixBadChars ($string) {
 		// Function from http://shiflett.org/blog/2005/oct/convert-smart-quotes-with-php

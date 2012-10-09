@@ -1,0 +1,20 @@
+Item	Trial Type	Post Trial	Timing	Order Notes	Shuffle
+0	Instruct	No	User	<h2>Welcome to the Collector tutorial!</h2><p>This condition is designed to help familiarize you with the three primary files that you will be modifying when creating your experiments.</p>	Off
+0	Instruct	No	User	"The three primary files are: Conditions.txt, an order file, and a stimuli file.<br/><br/>Each of the above files are tab-delimited text files.  Basically, they are excel spreadsheets saved as text files."	Off
+0	Instruct	No	User	"The first file I want you to open is Conditions.txt.  This file is located in the main Collector folder and should be opened in Excel.  Once you have opened the file click ""Done"" below."	Off
+0	Instruct	No	User	"<p>Now that the file is opened you should take note of the first row of cells (Number/Stimuli/Order/Condition Description/Condition Notes)</p><p>These cells are the headers that tell you what information goes into each column.  Each row below the headers is a different condition in the experiment.  This instructional condition is condition number 1. <p/>Find the row that correspond to condition 1 and the click ""Done"" below."	Off
+0	Instruct	No	User	"For each condition in an experiment we must give:<ol><li>the 'Number' which tells us the order conditions will be cycled through</li><li>the 'Stimuli' tells the program which set of stimuli will be displayed</li><li>the 'Order' tells the program which file will determine the presentation order for a given condition</li><li>the 'Condition Description' and 'Condition Notes' are for you to leave either a more detailed description of what a conditon is (e.g., ""blocked practice of male faces"")  or to leave whatever notes about your conditions that you think will be useful during data analysis.</li></ol><br /><br/> Each of the above pieces of information about a given condition will be recorded with every line of data collected for that particular experiment."	
+0	Instruct	No	User	"Look at the row for condition 'Number' 1 and open up the correct 'Stimuli' file.  Remember to open the file use Excel or some other spreadsheet program.  Click ""Done"" when you've opened up the file<p>Hint: a string of text follwed by '/' denotes a folder (e.g., 'image/dog.jpg' points to a file 'dog.jpg' inside of the folder 'image').</p>"	
+0	Instruct	No	User	"You should have opened the file 'LearningWordsFiles.txt'.  If you did not then look over the conditions.txt file until you understand why 'LearningWordsFiles.txt' corresponds to condition 1.<p>Take note of the first row of cells (Cue/Target/Answer/Shuffle/Stimuli Notes).  Just as with conditons.txt, these cells are the headers which tell you what information goes into each column.  Each row below the headers is a piece of stimuli.</p>"	
+2	Study	No	User	study trials	OFF
+3	Study	JOL	Computer	study trials	OFF
+4	Study	No	7	study trials	OFF
+5	Test	Feedback	Computer	inputs	OFF
+6	Copy	No	8	inputs	OFF
+5	JOL	No	User	inputs	OFF
+11	Passage	No	User	new trials	OFF
+0	StepOut	N/A	20	soTetris.php	OFF
+0	FreeRecall	N/A	15	Write down everything you can remember that has happened so far in this experiment.	OFF
+8	StudyPic	JOL	User	whatever I want	OFF
+9	TestPic	Feedback	Computer	whatever I want	OFF
+10	Mcpic	JOL	Computer	whatever I want	OFF

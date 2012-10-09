@@ -42,7 +42,7 @@
 		$_SESSION['AudioTime']		= 5;										// in seconds/trial (Audio)
 		$_SESSION['jolTime'] 		= user;										// in seconds/trial	(JOL) - can also use value 'user'
 		$_SESSION['FeedbackTime']	= user;										// in seconds/trial - can also use value 'user'
-		$_SESSION['Demographics']	= TRUE;										// Can be TRUE or FALSE
+		$_SESSION['Demographics']	= FALSE;									// Can be TRUE or FALSE
 		$_SESSION['NextExp']		= FALSE;									// to link use format "www.cogfog.com/Generic/" do not forget the www and the ending "/"
 		##### Parameters END #####
 		
