@@ -8,9 +8,9 @@
 	
 	#### Write array to a line of a tab delimited text file (if mode is not specified it uses "a")
 	function arrayToLine ($array, $fileLocation, $mode = "a"){
-			$fileHandle = fopen($fileLocation, $mode);					// write tab delimited array values
-			fputs($fileHandle , implode( "\t" , $array) );				// add a newline at the end of the array
-			fputs($fileHandle , "\n" );
+			$fileHandle = fopen($fileLocation, $mode);
+			fputs($fileHandle , implode( "\t" , $array) );				// write tab delimited array values
+			fputs($fileHandle , "\n" );									// add a newline at the end of the array
 			fclose($fileHandle);
 	}
 	
@@ -19,61 +19,80 @@
 	#### Code that block shuffles an array.  Give it an $input array and the key for the grouping factor.
 	function BlockShuffle( $input , $groupingFactor ){
 		$outputArray = array();
-		$block = NULL;																// load initial item into block
-		for( $arrayPos = 0; $arrayPos < (count($input) ); $arrayPos++ ){
-			$CurrentLine = $input[ $arrayPos ];
-			$NextLine = $input[ $arrayPos+1 ];
-			if($block == NULL){
-				$block[] = $CurrentLine;
-			}
-			if( $CurrentLine[$groupingFactor] == $NextLine[$groupingFactor] ){
-				$block[] = $NextLine;
-				continue;
-			}
-			elseif( $CurrentLine[$groupingFactor] <> $NextLine[$groupingFactor] ){
-				if( strtolower($CurrentLine[$groupingFactor]) <> "off" ){
-					shuffle($block);
+		
+		// Use this logic when second-order shuffling is present
+		if(array_key_exists($groupingFactor.'2', $input[2])) {
+			// creates a hierarchical structure of higher order blocks which contain lower order blocks which contain specific items
+			$holder	 = array();
+			$HiCount = 0;
+			$LoCount = 0;
+			$holder[$HiCount][$LoCount][] = $input[0];									// load initial item into first pos
+			for( $arrayPos = 0; $arrayPos < (count($input) ); $arrayPos++ ){
+				$CurrentLine = $input[ $arrayPos ];
+				$NextLine	 = $input[ $arrayPos+1 ];
+				if( $CurrentLine[$groupingFactor.'2'] == $NextLine[$groupingFactor.'2'] ){
+					if ($CurrentLine[$groupingFactor] == $NextLine[$groupingFactor]) {
+						$holder[$HiCount][$LoCount][] = $NextLine;
+						continue;
+					}
+					else {
+						$LoCount++;
+						$holder[$HiCount][$LoCount][] = $NextLine;
+						continue;
+					}
 				}
-				foreach ($block as $line) {
-					$outputArray[]=$line;
+				elseif( $CurrentLine[$groupingFactor.'2'] <> $NextLine[$groupingFactor.'2'] ){
+					$HiCount++;
+					$LoCount = 0;
+					$holder[$HiCount][$LoCount][] = $NextLine;
+					continue;
 				}
-				$block = NULL;
-			}
-		}
-		return $outputArray;
-	}
-	
-	
-	
-	#### Code that block shuffles an array.  Give it an $input array and the key for the grouping factor.
-	function BlockShuffle2( $input , $groupingFactor ){
-		$outputArray = array();
-		$block = NULL;																// load initial item into block
-		for( $arrayPos = 0; $arrayPos < (count($input) ); $arrayPos++ ){
-			$CurrentLine = $input[ $arrayPos ];
-			$NextLine = $input[ $arrayPos+1 ];
-			if($block == NULL){
-				$block[] = $CurrentLine;
-			}
-			if( $CurrentLine[$groupingFactor] == $NextLine[$groupingFactor] ){
-				$block[] = $NextLine;
-				continue;
-			}
-			elseif( $CurrentLine[$groupingFactor] <> $NextLine[$groupingFactor] ){
-				if( strtolower($CurrentLine[$groupingFactor]) <> "off" ){
-					shuffle($block);
+			}			// runs through the heirarchical structure and shuffles where applicable
+			for ($hi=0; $hi < count($holder); $hi++) {
+				if (trim(strtolower($holder[$hi][0][0][$groupingFactor.'2'])) <> 'off') {
+					shuffle($holder[$hi]);
 				}
-				$parentBlock[]=$block;
-				$block = NULL;
-				// they have to be the same size because if [a,b,c,d] & [e,f,g,h,i,j] are in different orders than item [5] will be from different sets each time
+				for ($lo=0; $lo < count($holder[$hi]) ; $lo++) {
+					if (trim(strtolower($holder[$hi][$lo][0][$groupingFactor])) <> 'off') {
+						shuffle($holder[$hi][$lo]);
+					}
+				}
 			}
-		}
-		foreach ($parentBlock as $childBlock) {
-			foreach ($childBlock as $line) {
-				$outputArray[]=$line;
+			// items are now higher and lower order shuffled so simply place them into outputArray
+			foreach ($holder as $outer) {
+				foreach ($outer as $inner) {
+					foreach ($inner as $item) {
+						$outputArray[] = $item;											// put the item into the next available output position
+					}
+				}
 			}
+			return $outputArray;
 		}
-		return $outputArray;
+		// Use this logic when second order shuffling is NOT present
+		else {
+			$block = NULL;
+			for( $arrayPos = 0; $arrayPos < (count($input) ); $arrayPos++ ){
+				$CurrentLine = $input[ $arrayPos ];
+				$NextLine = $input[ $arrayPos+1 ];
+				if($block == NULL){
+					$block[] = $CurrentLine;
+				}
+				if( $CurrentLine[$groupingFactor] == $NextLine[$groupingFactor] ){
+					$block[] = $NextLine;
+					continue;
+				}
+				elseif( $CurrentLine[$groupingFactor] <> $NextLine[$groupingFactor] ){
+					if( strtolower($CurrentLine[$groupingFactor]) <> "off" ){
+						shuffle($block);
+					}
+					foreach ($block as $line) {
+						$outputArray[]=$line;
+					}
+					$block = NULL;
+				}
+			}
+			return $outputArray;
+		}
 	}
 	
 	
@@ -100,11 +119,13 @@
 	
 	
 	#### custom function to read from tab delimited data files;  pos 0 & 1 are blank,  header names are array keys
-	function GetFromFile($fileLoc) {
+	function GetFromFile($fileLoc, $padding = TRUE) {
 		
 		$file	= fopen($fileLoc, 'r');					// open the file passed through the function arguement
 		$keys	= fgetcsv($file, 0, "\t");				// pulling header data from top row of file
-		$out	= array(0 => 0, 1 => 0);				// leave positions 0 and 1 blank (so when I call $array[#] it will corespond to the row in excel)
+		if ($padding == TRUE):
+			$out	= array(0 => 0, 1 => 0);			// leave positions 0 and 1 blank (so when I call $array[#] it will corespond to the row in excel)
+		endif;
 		while ($line = fgetcsv($file, 0, "\t")) {		// capture each remaining line from the file
 			$tOut	= array_combine($keys, $line);		// combine the line of data with the header	
 			$out[]	= $tOut;							// add this combined header<->line array to the ouput array

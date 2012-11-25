@@ -131,6 +131,8 @@
 			$stimuli = GetFromFile($_SESSION['Condition']['Stimuli']);
 			$stimuli = BlockShuffle($stimuli, "Shuffle");
 			
+			//Readable($stimuli,'shuffled stimuli *fingers crossed*');							// uncomment this line to see what your shuffled stimuli file looks like
+			
 			// load and block shuffle order for this condition
 			$order = GetFromFile($_SESSION['Condition']['Order']);
 			$order = BlockShuffle($order, "Shuffle");
@@ -252,7 +254,7 @@
 		else {
 			$link = 'instructions.php';
 		}
-		echo '<form id="loadingForm" action="'.$link.'" method="get"> </form>';
+		echo '<form id="loadingForm" action="'.$link.'" method="get"> </form>';							// commenting this line out will stop experiment from progressing past login.php (good to check diagnostics)
 		
 	?>
 	<script src="javascript/jquery-1.8.0.min.js" type="text/javascript"> </script>

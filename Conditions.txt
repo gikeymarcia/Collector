@@ -11,3 +11,4 @@ Number	Stimuli	Order	Condition Description	Condition Notes
 10	Words/FullStim.txt	Orders/TestMC.txt	Example of multiple choice test	3 test MC trials in a row
 11	Words/FullStim.txt	Orders/All Trials.txt	Examples of all presentations	user controlled so I can edit css
 12	Words/FullStim.txt	Orders/Instruct only.txt	For styling instructions trials	user controlled so I can edit css
+13	Words/TestWordsShuffle.txt	Order/TestOrderShuffle.txt	Look at Stimuli File for example of second-order shuffle (advanced feature)	
