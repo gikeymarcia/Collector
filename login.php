@@ -86,7 +86,6 @@
 		else{
 			$conditionNumber = $selectedCondition;									// if condition is manually choosen then honor choice
 		}
-		echo $conditionNumber.'<br/>';												// THIS SHOULD BE REMOVED LATER
 		
 		
 		#### loads condition info into $_Session['Condition']
