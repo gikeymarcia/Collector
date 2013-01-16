@@ -47,6 +47,15 @@
 		##### Parameters END #####
 		
 		
+		##### Error Checking Code ####
+		$found	= FALSE;														// will use this later to determine when loops fail
+		$errors	= array('Count' => 0, 'Details' =>array()  );					// the array to keep count and details of errors
+		if (file_exists("Conditions.txt") == FALSE):							// does conditions exist? (error checking)
+			$errors['Count']++;
+			$errors['Details'][] = 'No "Conditions.txt" found';
+		endif;
+		
+		
 		#### Grabbing submitted info
 		$_SESSION['Username']	= trim($_GET['Username']);			// grab Username from URL
 		$_SESSION['Session']	= trim($_GET['Session']);			// grab session# from URL
@@ -58,7 +67,7 @@
 		
 		
 		#### Code to automatically choose condition assignment
-		$Conditions	=  GetFromFile("Conditions.txt");				// Loading conditions info
+		$Conditions	=  GetFromFile("Conditions.txt", FALSE);		// Loading conditions info
 		$logFile	=& $_SESSION["LoginCounter Location"];
 		if( $selectedCondition == 'Auto') {
 			
@@ -83,8 +92,26 @@
 		foreach ($Conditions as $Acond) {
 			if($Acond['Number'] == $conditionNumber) {
 				$_SESSION['Condition'] = $Acond;
+				$found = TRUE;
 				break;
 			}
+		}
+		
+		##### Error Checking Code ####
+		// did we fail to find the condition information?
+		if($found == FALSE) {
+			$errors['Count']++;
+			$errors['Details'][] = 'Could not find the selected condition #'.$conditionNumber.' in Conditions.txt';
+		}
+		// does this condition point to a valid stimuli file?
+		if (file_exists($_SESSION['Condition']['Stimuli']) == FALSE) {
+			$errors['Count']++;
+			$errors['Details'][] = 'No stimuli file found at '.$_SESSION['Condition']['Stimuli'];
+		}
+		// does this condition point to a valid order file?
+		if (file_exists($_SESSION['Condition']['Order']) == FALSE) {
+			$errors['Count']++;
+			$errors['Details'][] = 'No order file found at '.$_SESSION['Condition']['Order'];
 		}
 		// echo 'Username = '.$_SESSION['Username'].'</br>';											#### DEBUG ####
 		// Readable($Conditions, "conditions loaded in");												#### DEBUG ####
@@ -245,6 +272,18 @@
 		$_SESSION['Trials']		= $Trials;
 		$_SESSION['Position']	= 1;
 		// Readable($_SESSION['Trials'], '$_SESSION[\'Trials\']');										#### DEBUG ####
+		
+		
+		#### Output errors & Stop progression
+		if ($errors['Count'] > 0) {																		// if there is an error
+			echo '<b>'.$errors['Count'].' error(s) found in your code!</b> <br/>';						// tell me how many
+			foreach ($errors['Details'] as $errorCode) {												// give details of each error
+				echo $errorCode;
+				echo '<br/>';
+			}
+		echo '<br/><br/>The program will not run until you have addressed the above errors';
+		exit;																							//  ## SET ## if you want to program to run when an error is hit then comment out this line of code
+		}
 		
 		
 		#### Send participant to next phase of experiment (demographics or trial.php)
