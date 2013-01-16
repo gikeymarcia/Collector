@@ -90,7 +90,6 @@
 		
 		#### loads condition info into $_Session['Condition']
 		$Conditions	=  GetFromFile("Conditions.txt", FALSE);				// Loading conditions info
-		// Readable($Conditions, "result of GetFromFile");						// THIS SHOULD BE REMOVED LATER-------------------------------------
 		foreach ($Conditions as $Acond) {
 			if($Acond['Number'] == $conditionNumber) {
 				$_SESSION['Condition'] = $Acond;
@@ -115,9 +114,6 @@
 			$errors['Count']++;
 			$errors['Details'][] = 'No order file found at '.$_SESSION['Condition']['Order'];
 		}
-		
-		
-		Readable($_SESSION['Condition'], "loaded condition info");				// THIS SHOULD BE REMOVED LATER-------------------------------------
 		// echo 'Username = '.$_SESSION['Username'].'</br>';											#### DEBUG ####
 		// Readable($Conditions, "conditions loaded in");												#### DEBUG ####
 		// echo "{$loginCount} logins and should be using condition {$conditionNumber}<br />";			#### DEBUG ####
@@ -289,7 +285,6 @@
 		echo '<br/><br/>The program will not run until you have addressed the above errors';
 		exit;																							//  ## SET ## if you want to program to run when an error is hit then comment out this line of code
 		}
-		
 		
 		
 		#### Send participant to next phase of experiment (demographics or trial.php)
