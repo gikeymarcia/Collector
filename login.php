@@ -280,14 +280,14 @@
 		
 		
 		#### Output errors & Stop progression
-		if ($errors['Count'] > 0){																		// if there is an error
+		if ($errors['Count'] > 0) {																		// if there is an error
 			echo '<b>'.$errors['Count'].' error(s) found in your code!</b> <br/>';						// tell me how many
 			foreach ($errors['Details'] as $errorCode) {												// give details of each error
 				echo $errorCode;
 				echo '<br/>';
 			}
-		echo 'the program will not run until you have addressed the above errors';						// comment out these two lines if you don't want to stop for error checking
-		exit;
+		echo '<br/><br/>The program will not run until you have addressed the above errors';
+		exit;																							//  ## SET ## if you want to program to run when an error is hit then comment out this line of code
 		}
 		
 		
@@ -299,7 +299,7 @@
 		else {
 			$link = 'instructions.php';
 		}
-		//echo '<form id="loadingForm" action="'.$link.'" method="get"> </form>';							// commenting this line out will stop experiment from progressing past login.php (good to check diagnostics)
+		echo '<form id="loadingForm" action="'.$link.'" method="get"> </form>';							// commenting this line out will stop experiment from progressing past login.php (good to check diagnostics)
 		
 	?>
 	<script src="javascript/jquery-1.8.0.min.js" type="text/javascript"> </script>
