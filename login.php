@@ -67,7 +67,7 @@
 		
 		
 		#### Code to automatically choose condition assignment
-		$Conditions	=  GetFromFile("Conditions.txt", FALSE);				// Loading conditions info
+		$Conditions	=  GetFromFile("Conditions.txt", FALSE);		// Loading conditions info
 		$logFile	=& $_SESSION["LoginCounter Location"];
 		if( $selectedCondition == 'Auto') {
 			
