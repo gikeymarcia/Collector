@@ -281,7 +281,7 @@
 		
 		#### Output errors & Stop progression
 		if ($errors['Count'] > 0){																		// if there is an error
-			echo $errors['Count'].' error(s) found in your code! <br/>';								// tell me how many
+			echo '<b>'.$errors['Count'].' error(s) found in your code!</b> <br/>';						// tell me how many
 			foreach ($errors['Details'] as $errorCode) {												// give details of each error
 				echo $errorCode;
 				echo '<br/>';
