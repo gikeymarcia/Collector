@@ -143,6 +143,28 @@
 		}
 	}
 	
+	
+	#### checking if a key exists within a GetFromFile array;  returns TRUE/FALSE
+	function keyCheck ($array, $key, $errorArray, $searched) {
+		foreach ($array as $line) {
+			if ($line == 0) {
+				continue;
+			}
+			else {
+				if(array_key_exists($key, $line) == TRUE) {
+					return $errorArray;
+				}
+				else {
+					$errorArray['Count']++;
+					$errorArray['Details'][] = 'Did not find required column <b>'. $key.'</b> within '.$searched;
+					return $errorArray;
+				}
+			}
+		}
+		return $errorArray;
+	}
+	
+	
 	#### Debug function I use to display arrays in an easy to read fashion
 	function Readable($displayArray, $NameOfDisplayed = "unspecified"){
 		echo "<br />";	

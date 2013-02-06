@@ -113,10 +113,25 @@
 			$errors['Count']++;
 			$errors['Details'][] = 'No order file found at '.$_SESSION['Condition']['Order'];
 		}
+		// checking required columns from Stimuli file
+		$temp = GetFromFile($_SESSION['Condition']['Stimuli']);
+		$errors = keyCheck( $temp, 'Cue'	,	$errors, $_SESSION['Condition']['Stimuli'] );
+		$errors = keyCheck( $temp, 'Target'	,	$errors, $_SESSION['Condition']['Stimuli'] );
+		$errors = keyCheck( $temp, 'Answer'	,	$errors, $_SESSION['Condition']['Stimuli'] );
+		$errors = keyCheck( $temp, 'Shuffle',	$errors, $_SESSION['Condition']['Stimuli'] );
+		// checking required columns from Order file
+		$temp = GetFromFile($_SESSION['Condition']['Order']);
+		$errors = keyCheck( $temp, 'Item'		,	$errors, $_SESSION['Condition']['Order'] );
+		$errors = keyCheck( $temp, 'Trial Type'	,	$errors, $_SESSION['Condition']['Order'] );
+		$errors = keyCheck( $temp, 'Timing'		,	$errors, $_SESSION['Condition']['Order'] );
+		$errors = keyCheck( $temp, 'Post Trial'	,	$errors, $_SESSION['Condition']['Order'] );
+		$errors = keyCheck( $temp, 'Shuffle'	,	$errors, $_SESSION['Condition']['Order'] );		
+		$temp = null;
 		// echo 'Username = '.$_SESSION['Username'].'</br>';											#### DEBUG ####
 		// Readable($Conditions, "conditions loaded in");												#### DEBUG ####
 		// echo "{$loginCount} logins and should be using condition {$conditionNumber}<br />";			#### DEBUG ####
 		// Readable($_SESSION["Condition"],"this is what you're getting for condition:");				#### DEBUG ####
+		#### End of error checking
 		
 		
 		#### Record info about the person starting the experiment to StatusFile.txt
