@@ -29,7 +29,12 @@
 			$holder[$HiCount][$LoCount][] = $input[0];									// load initial item into first pos
 			for( $arrayPos = 0; $arrayPos < (count($input) ); $arrayPos++ ){
 				$CurrentLine = $input[ $arrayPos ];
-				$NextLine	 = $input[ $arrayPos+1 ];
+				if(isset($input[$arrayPos+1]) == FALSE) {								// check that there is a next line
+					continue;
+				}
+				else {																	// save nextline for later inserting
+					$NextLine	 = $input[ $arrayPos+1 ];
+				}
 				if( $CurrentLine[$groupingFactor.'2'] == $NextLine[$groupingFactor.'2'] ){
 					if ($CurrentLine[$groupingFactor] == $NextLine[$groupingFactor]) {
 						$holder[$HiCount][$LoCount][] = $NextLine;
@@ -73,7 +78,12 @@
 			$block = NULL;
 			for( $arrayPos = 0; $arrayPos < (count($input) ); $arrayPos++ ){
 				$CurrentLine = $input[ $arrayPos ];
-				$NextLine = $input[ $arrayPos+1 ];
+				if(isset($input[$arrayPos+1]) == FALSE) {								// check that there is a next line
+					continue;
+				}
+				else {																	// save nextline for later inserting
+					$NextLine	 = $input[ $arrayPos+1 ];
+				}
 				if($block == NULL){
 					$block[] = $CurrentLine;
 				}
