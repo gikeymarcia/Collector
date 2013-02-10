@@ -305,28 +305,31 @@
 	
 	
 	
-	#### Diagnostics ####		un comment these to get tons of info about each trial
-	// echo "<div>";
-		// echo "Condition #: {$_SESSION['Condition']['Number']} <br />"; 
-		// echo "Condition Stim File: {$_SESSION['Condition']['Stimuli']} <br />";
-		// echo "Condition Order File: {$_SESSION['Condition']['Order']} <br />";
-		// echo "Condition description: {$_SESSION['Condition']['Condition Description']} <br />";
-	// echo "</div>";
-	// echo "<br />";
-	// echo '<div class="Trial">';
-		// echo "Trial Number: {$currentPos} <br />";
-		// echo "Trial Type: {$trialType}<br />";
-		// echo "Post Trial: {$currentTrial['Info']['Post Trial']} <br />";
-		// echo "Trial timing: {$currentTrial['Info']['Timing']} <br />";
-		// echo "Trial Time (seconds): {$time}";
-		// echo "<br />";
-	// echo '</div>';
-	// echo '<div>
-			// cue: '.show($cue).'<br />
-			// target: '.show($target).'<br />
-			// answer: '.show($answer).'<br />
-		// </div>';
-	// readable($currentTrial, "Current trial");
+	#### Diagnostics ####
+	$diagnostics = FALSE;			// turn on diagnostics to see lots about each trial
+	if ($diagnostics == TRUE) {
+		echo "<div>";
+			echo "Condition #: {$_SESSION['Condition']['Number']} <br />"; 
+			echo "Condition Stim File: {$_SESSION['Condition']['Stimuli']} <br />";
+			echo "Condition Order File: {$_SESSION['Condition']['Order']} <br />";
+			echo "Condition description: {$_SESSION['Condition']['Condition Description']} <br />";
+		echo "</div>";
+		echo "<br />";
+		echo '<div class="Trial">';
+			echo "Trial Number: {$currentPos} <br />";
+			echo "Trial Type: {$trialType}<br />";
+			echo "Post Trial: {$currentTrial['Info']['Post Trial']} <br />";
+			echo "Trial timing: {$currentTrial['Info']['Timing']} <br />";
+			echo "Trial Time (seconds): {$time}";
+			echo "<br />";
+		echo '</div>';
+		echo '<div>
+				cue: '.show($cue).'<br />
+				target: '.show($target).'<br />
+				answer: '.show($answer).'<br />
+			</div>';
+		readable($currentTrial, "Current trial");
+	} 
 	#### Diagnostics ####
 ?>
 	<script src="javascript/jquery-1.8.0.min.js" type="text/javascript"> </script>

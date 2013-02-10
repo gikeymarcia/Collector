@@ -248,7 +248,7 @@
 				// write ['Stimuli'] ['Info'] and ['Response'] data to next line of the file
 				$line = NULL;
 				$junk = array( '\n' , '\t' , '\r' , chr(10) , chr(13) );
-				for($i= 0; $i <= count($header1); $i++) {
+				for($i= 0; $i < count($header1); $i++) {
 					$replaced = str_replace($junk, '<br /', $Trial[$header1[$i]] [$header2[$i]]);
 					$line[] = $replaced;
 				}
