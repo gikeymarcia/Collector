@@ -22,6 +22,7 @@
 		
 		// Use this logic when second-order shuffling is present
 		if(array_key_exists($groupingFactor.'2', $input[2])) {
+			echo "double shuffle <br />";
 			// creates a hierarchical structure of higher order blocks which contain lower order blocks which contain specific items
 			$holder	 = array();
 			$HiCount = 0;
@@ -75,15 +76,17 @@
 		}
 		// Use this logic when second order shuffling is NOT present
 		else {
+			echo "single shuffle <br />";
 			$block = NULL;
 			for( $arrayPos = 0; $arrayPos < (count($input) ); $arrayPos++ ){
 				$CurrentLine = $input[ $arrayPos ];
-				if(isset($input[$arrayPos+1]) == FALSE) {								// check that there is a next line
-					continue;
-				}
-				else {																	// save nextline for later inserting
-					$NextLine	 = $input[ $arrayPos+1 ];
-				}
+				$NextLine	 = $input[ $arrayPos+1 ];
+				// if(isset($input[$arrayPos+1]) == FALSE) {								// check that there is a next line
+					// continue;
+				// }
+				// else {																	// save nextline for later inserting
+					// $NextLine	 = $input[ $arrayPos+1 ];
+				// }
 				if($block == NULL){
 					$block[] = $CurrentLine;
 				}
