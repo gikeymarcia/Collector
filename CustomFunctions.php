@@ -22,7 +22,6 @@
 		
 		// Use this logic when second-order shuffling is present
 		if(array_key_exists($groupingFactor.'2', $input[2])) {
-			echo "double shuffle <br />";
 			// creates a hierarchical structure of higher order blocks which contain lower order blocks which contain specific items
 			$holder	 = array();
 			$HiCount = 0;
@@ -76,32 +75,27 @@
 		}
 		// Use this logic when second order shuffling is NOT present
 		else {
-			echo "single shuffle <br />";
-			$block = NULL;
-			for( $arrayPos = 0; $arrayPos < (count($input) ); $arrayPos++ ){
-				$CurrentLine = $input[ $arrayPos ];
-				$NextLine	 = $input[ $arrayPos+1 ];
-				// if(isset($input[$arrayPos+1]) == FALSE) {								// check that there is a next line
-					// continue;
-				// }
-				// else {																	// save nextline for later inserting
-					// $NextLine	 = $input[ $arrayPos+1 ];
-				// }
-				if($block == NULL){
-					$block[] = $CurrentLine;
+			$blockNum = 0;
+			$temp = array();
+			$temp[$blockNum][] = $input[0];						// start by loading initial item into temp
+			// load items into array that groups as blocks then as items within blocks. e.g., $temp[$blockNum][#]
+			for ($pos=0; $pos < count($input); $pos++) { 		// go through all items
+				$currentLine = $input[$pos];					// set currentLine for comparison
+				if(isset($input[$pos+1])) {						// if there is another line to add
+					$nextLine = $input[$pos+1];						// grab it
+				} else {	continue;	}							// or stop loading
+				if($currentLine[$groupingFactor ] !== $nextLine[$groupingFactor]) {		// if the nextline uses a different shuffle then change blockNum
+					$blockNum++;
 				}
-				if( $CurrentLine[$groupingFactor] == $NextLine[$groupingFactor] ){
-					$block[] = $NextLine;
-					continue;
+				$temp[$blockNum][] = $nextLine;					// loading nextLine into the correct $temp block of items
+			}
+			// shuffle appropriate blocks then load into output
+			foreach ($temp as $group) {
+				if(trim(strtolower($group[0][$groupingFactor])) != 'off') {
+					shuffle($group);
 				}
-				elseif( $CurrentLine[$groupingFactor] <> $NextLine[$groupingFactor] ){
-					if( strtolower($CurrentLine[$groupingFactor]) <> "off" ){
-						shuffle($block);
-					}
-					foreach ($block as $line) {
-						$outputArray[]=$line;
-					}
-					$block = NULL;
+				foreach ($group as $line) {
+					$outputArray[] = $line;					
 				}
 			}
 			return $outputArray;

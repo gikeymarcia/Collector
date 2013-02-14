@@ -171,16 +171,13 @@
 		if($_SESSION['Session'] == 1) {
 			// load and block shuffle stimuli for this condition
 			$stimuli = GetFromFile($_SESSION['Condition']['Stimuli']);
-			Readable($stimuli,'UNshuffled stimuli');
 			$stimuli = BlockShuffle($stimuli, "Shuffle");
 			
-			Readable($stimuli,'shuffled stimuli *fingers crossed*');							// uncomment this line to see what your shuffled stimuli file looks like
+			// Readable($stimuli,'shuffled stimuli *fingers crossed*');							// uncomment this line to see what your shuffled stimuli file looks like
 			
 			// load and block shuffle order for this condition
 			$order = GetFromFile($_SESSION['Condition']['Order']);
-			Readable($order, 'order unshuffled');
 			$order = BlockShuffle($order, "Shuffle");
-			Readable($order, 'order SHUFFLED');
 						
 			// Load entire experiment into $Trials[1-X] where X is the number of trials
 			$Trials = array(0=> 0);
@@ -289,7 +286,7 @@
 		// session1 $Trials also contains trials for other sessions but trial.php sends to done.php once a *newfile* shows up
 		$_SESSION['Trials']		= $Trials;
 		$_SESSION['Position']	= 1;
-		Readable($_SESSION['Trials'], '$_SESSION[\'Trials\']');										#### DEBUG ####
+		// Readable($_SESSION['Trials'], '$_SESSION[\'Trials\']');										#### DEBUG ####
 		
 		
 		#### Output errors & Stop progression
@@ -311,7 +308,7 @@
 		else {
 			$link = 'instructions.php';
 		}
-		//echo '<form id="loadingForm" action="'.$link.'" method="get"> </form>';							// commenting this line out will stop experiment from progressing past login.php (good to check diagnostics)
+		echo '<form id="loadingForm" action="'.$link.'" method="get"> </form>';							// commenting this line out will stop experiment from progressing past login.php (good to check diagnostics)
 		
 	?>
 	<script src="javascript/jquery-1.8.0.min.js" type="text/javascript"> </script>
