@@ -4,8 +4,9 @@
 -->
 
 <?php
-require("CustomFunctions.php");							// Load custom PHP functions
-initiateCollector();
+	ini_set('auto_detect_line_endings', true);			// fixes problems reading files saved on mac
+	require("CustomFunctions.php");						// Load custom PHP functions
+	initiateCollector();
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -25,7 +26,16 @@ initiateCollector();
 	<?php
 		// if this is the first time on FinalQuestions.php then load questions from file
 		if(isset($_SESSION['FinalQs']) == FALSE) {
-			$fQ						= GetFromFile('FinalQuestions.txt');
+			$fQ	= GetFromFile('FinalQuestions.txt');
+			// loop that deletes trailing empty positions from $fQ array
+			for ($i=count($fQ); $i >0; $i--) { 
+				if($fQ[$i] == null) {
+					unset($fQ[$i]);
+				}
+				else {
+					break;
+				}
+			}
 			$_SESSION['FinalQs']	= $fQ;
 			$_SESSION['FQpos']		= 2;
 		}

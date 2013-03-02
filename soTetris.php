@@ -11,6 +11,7 @@
 	$currentTrial	=& $_SESSION['Trials'][$currentPos];
 	// pulls in the specified tetris time from the order file, column "Timing"
 	$time			=  trim($currentTrial['Info']['Timing']);
+	if($_SESSION['Debug'] == TRUE) {	$time = 2;	}
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
