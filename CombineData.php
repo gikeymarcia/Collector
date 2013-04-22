@@ -1,8 +1,3 @@
-<!-- Collector 1.00.00 alpha2
-	A program for running experiments on the web
-	Copyright 2012 Mikey Garcia & Nate Kornell
--->
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
@@ -13,6 +8,10 @@
 <body>
 
 <?php
+/*	Collector
+	A program for running experiments on the web
+	Copyright 2012 Mikey Garcia & Nate Kornell
+ */
 	$dataDir	= opendir("subjects/");										// tells us where to begin looking for data files
 	$combined	= array();													// declares array that will eventually be written to the All Data file
 	$fileCount	= 0;

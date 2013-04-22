@@ -1,9 +1,8 @@
-<!-- Collector 1.00.00 alpha2
+<?php
+/*	Collector
 	A program for running experiments on the web
 	Copyright 2012 Mikey Garcia & Nate Kornell
--->
-
-<?php
+ */
 	require("CustomFunctions.php");							// Load custom PHP functions
 	initiateCollector();
 	
@@ -80,7 +79,7 @@
 	
 	#### determine trial timing
 	// if trial timing is a number then use that and assume computer timed. else use login.php parameter values
-	$timingReported =& trim(strtolower($currentTrial['Info']['Timing']));
+	$timingReported = trim(strtolower($currentTrial['Info']['Timing']));
 	if(is_numeric($timingReported)) {
 		$time = $timingReported;
 	}

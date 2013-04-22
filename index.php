@@ -1,4 +1,5 @@
-<!-- Collector 1.00.00 alpha2
+<?php
+/*	Collector
 	A program for running experiments on the web
 	Copyright 2012 Mikey Garcia & Nate Kornell
 	
@@ -14,9 +15,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
-	-->
-
-<?php
+ */
 	ini_set('auto_detect_line_endings', true);			// fixes problems reading files saved on mac
 	@session_destroy();									// destory any possible previous sessions and suppress warnings
 	session_start();									// starts the session

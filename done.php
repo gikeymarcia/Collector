@@ -1,9 +1,8 @@
-<!-- Collector 1.00.00 alpha2
+<?php
+/*	Collector
 	A program for running experiments on the web
 	Copyright 2012 Mikey Garcia & Nate Kornell
--->
-
-<?php
+ */
 	ini_set('auto_detect_line_endings', true);			// fixes problems reading files saved on mac
 	session_start();									// start the session at the top of each page
 	if ($_SESSION['Debug'] == FALSE) {

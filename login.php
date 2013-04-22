@@ -1,9 +1,8 @@
-<!-- Collector 1.00.00 alpha2
+<?php
+/*	Collector
 	A program for running experiments on the web
 	Copyright 2012 Mikey Garcia & Nate Kornell
--->
-
-<?php
+ */
 	ini_set('auto_detect_line_endings', true);				// fixes problems reading files saved on mac
 	@session_destroy();
 	session_start();										// Start the session at the top of every page
@@ -81,7 +80,7 @@
 			fputs($fileHandle, $loginCount + 1);
 			fclose($fileHandle);
 			
-			$conditionNumber = ( ($loginCount-1) % (count($Conditions)-2) ) +1;		// cycles through current condition assignment based on login counter
+			$conditionNumber = ( $loginCount % count($Conditions)) +1;				// cycles through current condition assignment based on login counter
 		}
 		else{
 			$conditionNumber = $selectedCondition;									// if condition is manually choosen then honor choice

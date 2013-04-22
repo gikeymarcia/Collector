@@ -1,9 +1,11 @@
-<!-- Collector 1.00.00 alpha2
+<?php
+/*	Collector
 	A program for running experiments on the web
 	Copyright 2012 Mikey Garcia & Nate Kornell
--->
+ */
 
-<?php	#### #### CUSTOM FUNCTIONS #### ####
+
+	#### #### CUSTOM FUNCTIONS #### ####
 
 	
 	#### Write array to a line of a tab delimited text file (if mode is not specified it uses "a")

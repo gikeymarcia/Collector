@@ -1,9 +1,8 @@
-<!-- Collector 1.00.00 alpha2
+<?php
+/*	Collector
 	A program for running experiments on the web
 	Copyright 2012 Mikey Garcia & Nate Kornell
--->
-
-<?php
+ */
 	require("CustomFunctions.php");							// Load custom PHP functions
 	initiateCollector();
 
