@@ -276,6 +276,11 @@
 					$Trials[$tPos][$header1[$i]][$header2[$i]] = $line[$i];
 				}
 			}
+			#### ERROR Checking if the session file doesn't exist ####
+			if (file_exists($sessionFile) == FALSE) {
+				echo "<br/><br/>Could not find your session {$_SESSION['Session']} file at {$sessionFile}";
+				exit;
+			}
 		}
 		// readable($header1,'header top');																#### DEBUG ####
 		// readable($header2,'header 2nd');																#### DEBUG ####
@@ -289,7 +294,7 @@
 		
 		
 		#### Output errors & Stop progression
-		if ($errors['Count'] > 0) {																		// if there is an error
+		if ($errors['Count'] > 0 AND $_SESSION['Session'] == 1 ) {										// if there is an error (only stops for session 1 errors)
 			echo '<b>'.$errors['Count'].' error(s) found in your code!</b> <br/>';						// tell me how many
 			foreach ($errors['Details'] as $errorCode) {												// give details of each error
 				echo $errorCode;
