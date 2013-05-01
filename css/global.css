@@ -132,7 +132,14 @@ textarea
 		{	font-size: .5em	}
 	.Feedback span
 		{	font-size: 1.3em; text-align: center; width:100%;}
-	
+.FeedbackPic
+	{	font-size: 2em; margin: 25px auto auto auto; font-size: 3em;	min-width: 450px; }
+	.FeedbackPic input
+		{ margin: auto}
+	.FeedbackPic .gray
+		{	font-size: .75em; margin: auto auto 5px 50px;	}
+	.FeedbackPic form
+		{	text-align:center	}
 .pic
 	{	padding-bottom: 20px; margin-top: 20px;	}
 	.pic .Textbox

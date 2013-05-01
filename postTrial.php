@@ -92,7 +92,7 @@
 	if($postTrial == 'feedback') {
 		// picture trial version of feedback
 		if($trialType == 'studypic' OR $trialType == 'testpic' OR $trialType == 'mcpic') {
-			echo '<div class="Feedback">
+			echo '<div class="FeedbackPic">
 					<div class="gray">The correct answer is</div>
 						<span>'	. show($cue)	. '</span>
 						<div class="fbWord">
