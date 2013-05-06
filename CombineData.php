@@ -10,7 +10,7 @@
 <?php
 /*	Collector
 	A program for running experiments on the web
-	Copyright 2012 Mikey Garcia & Nate Kornell
+	Copyright 2012-2013 Mikey Garcia & Nate Kornell
  */
 	$dataDir	= opendir("subjects/");										// tells us where to begin looking for data files
 	$combined	= array();													// declares array that will eventually be written to the All Data file

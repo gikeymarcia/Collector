@@ -1,7 +1,7 @@
 <?php
 /*	Collector
 	A program for running experiments on the web
-	Copyright 2012 Mikey Garcia & Nate Kornell
+	Copyright 2012-2013 Mikey Garcia & Nate Kornell
  */
 	ini_set('auto_detect_line_endings', true);			// fixes problems reading files saved on mac
 	@session_destroy();									// destory any possible previous sessions and suppress warnings

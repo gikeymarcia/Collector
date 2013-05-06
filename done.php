@@ -1,7 +1,7 @@
 <?php
 /*	Collector
 	A program for running experiments on the web
-	Copyright 2012 Mikey Garcia & Nate Kornell
+	Copyright 2012-2013 Mikey Garcia & Nate Kornell
  */
 	ini_set('auto_detect_line_endings', true);			// fixes problems reading files saved on mac
 	session_start();									// start the session at the top of each page
@@ -70,8 +70,9 @@
 	arrayToLine ($UserData, "subjects/Status.txt");					// write $UserData to "subjects/Status.txt"
 	########
 	
-	
+	$_SESSION = array();											// clear out all session info
 	session_destroy();												// destry the session so it doesn't interfere with any future experiments
+	
 ?>
 	<script src="javascript/jquery-1.8.0.min.js" type="text/javascript"> </script>
 	<script src="javascript/jsCode.js" type="text/javascript"> </script>

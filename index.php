@@ -1,7 +1,7 @@
 <?php
 /*	Collector
 	A program for running experiments on the web
-	Copyright 2012 Mikey Garcia & Nate Kornell
+	Copyright 2012-2013 Mikey Garcia & Nate Kornell
 	
 	
 	This program is free software: you can redistribute it and/or modify
@@ -17,8 +17,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 	ini_set('auto_detect_line_endings', true);			// fixes problems reading files saved on mac
-	@session_destroy();									// destory any possible previous sessions and suppress warnings
 	session_start();									// starts the session
+	$_SESSION = array();								// reset session
 	$_SESSION['Debug']=FALSE;							// turns debug mode on and off   ## SET ##
 	$selector = TRUE;									// ## SET ##; Show (TRUE) or hide (FALSE) the condition selector
 	require("CustomFunctions.php");						// Loads all of my custom PHP functions
