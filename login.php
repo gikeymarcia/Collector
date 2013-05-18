@@ -4,8 +4,8 @@
 	Copyright 2012-2013 Mikey Garcia & Nate Kornell
  */
 	ini_set('auto_detect_line_endings', true);				// fixes problems reading files saved on mac
-	@session_destroy();
 	session_start();										// Start the session at the top of every page
+	$_SESSION = array();									// reset session so it doesn't contain any information from a previous login attempt
 	@$_SESSION['Debug'] = $_GET['Debug'];
 	if ($_SESSION['Debug'] == FALSE) {
 		error_reporting(0);
