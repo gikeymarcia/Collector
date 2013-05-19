@@ -152,7 +152,7 @@
 		// Instruct trial type
 		elseif ($trialType == 'instruct') {
 			echo '<div id="centerContent" class="PreCache">
-					<div class="instruct">'. $currentTrial['Info']['Order Notes'].'</div>
+					<div class="Instruct">'. $currentTrial['Info']['Order Notes'].'</div>
 				  </div>';
 		}
 		// Audio trial type

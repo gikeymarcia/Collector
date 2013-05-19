@@ -183,7 +183,7 @@ textarea
 	{	width: 66%; max-width: 800px; min-width: 450px;
 		margin-left: auto; margin-right: auto;	}
 .Instruct
-	{	margin-left: auto; margin-top: 5%; font-size: 1.1em;	}
+	{	margin: 35px auto 50px auto;	font-size: 1.1em;}
 .readcheck
 	{	background: #f2f1f1; padding: 20px; width: 50%; margin-top: 150px; border-radius: 10px;	}
 ol.list  li
