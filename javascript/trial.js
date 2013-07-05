@@ -18,6 +18,12 @@
 	var keypress	= 0;
 	var trialTime	= $("#Time").html();
 
+	// on DOM ready reset timer
+	$("document").ready( function(){
+		timer		= 0;
+	});
+	
+	
 	// on pageload reset timer, show pre-cached, start timer, focus on textboxes
 	window.onload = function() {
 		if(trialTime != 0) {
@@ -29,35 +35,34 @@
 	}
 	
 	
-	// on DOM ready reset timer
-	$("document").ready( function(){
-		timer		= 0;
-	});
-	
-	
 	// timer function
 	function addtime() {
 		timer = timer + interval;
-		// update RT field with timer value
-		$(".RT").attr("value",timer);
-		// submit form if time is up
-		if (timer >= (trialTime*1000)) {
-			timer		= 0;
+		if (timer >= (trialTime*1000)) {			// submit form if time is up
+			$(".RT").attr("value",timer);			// update RT field with timer value
+			timer = 0;
 			$("form").submit();
 		}
 	}
 	
 	
-	// Disable enter key for textboxes with class "Textbox" inside of forms named "ComputerTiming"
+	// intercept FormSubmitButton click
+	$("#FormSubmitButton").click(function(){
+		$(".RT").attr("value",timer);				// put RT into hidden field
+		$("form").submit();							// submit values to server
+	});
+	
+	
+	// Disable enter key inside class "Textbox" when form is named "ComputerTiming"
 	$(".Textbox").bind("keypress",function(e){
-		if( $('form').attr('name') == 'ComputerTiming') {
+		if( $("form").attr("name") == "ComputerTiming") {
 			if(e.keyCode == 13) return false;
 		}
 		if(e.keyCode == 13) return true;
 	});
 	
 	
-	// updates last keypress value each time a key is pressed
+	// updates last keypress value each time a key is pressed (for textboxes)
 	$(".Textbox").keypress(function(){
 		keypress++;
 		if(keypress == 1) {
@@ -67,7 +72,7 @@
 	});
 	
 	
-	// updates last keypress value each time a key is pressed
+	// updates last keypress value each time a key is pressed (for textareas)
 	$("textarea").keypress(function(){
 		keypress++;
 		if(keypress == 1) {
@@ -77,21 +82,23 @@
 	});
 	
 	
-	// updates the response value when a MC button is pressed; then submits the form
+	// updates the response value when a MC button is pressed
 	$(".TestMC").click(function(){
 		var clicked = $(this).html();
 		$(".Textbox").attr("value",clicked);
-		$("form").submit();
+		if( $("form").attr("name") == "UserTiming") {
+			$("form").submit();
+		}
 	});
 	
 	// Prevent the backspace key from navigating back.
 	// MAGIC!!! found on stackoverflow (http://stackoverflow.com/questions/1495219/how-can-i-prevent-the-backspace-key-from-navigating-back)
-	$(document).unbind('keydown').bind('keydown', function (event) {
+	$(document).unbind("keydown").bind("keydown", function (event) {
 	    var doPrevent = false;
 	    if (event.keyCode === 8) {
 	        var d = event.srcElement || event.target;
-	        if ((d.tagName.toUpperCase() === 'INPUT' && d.type.toUpperCase() === 'TEXT') 
-	             || d.tagName.toUpperCase() === 'TEXTAREA') {
+	        if ((d.tagName.toUpperCase() === "INPUT" && d.type.toUpperCase() === "TEXT") 
+	             || d.tagName.toUpperCase() === "TEXTAREA") {
 	            doPrevent = d.readOnly || d.disabled;
 	        }
 	        else {
