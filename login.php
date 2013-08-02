@@ -36,9 +36,9 @@
 		// these timings only apply when trials are set as "Computer" timing
 		$_SESSION['StudyTime']		= 3;										// in seconds/trial (Study/StudyPic/Instruct)
 		$_SESSION['TestTime'] 		= 5;										// in seconds/trial (Test/TestPic/Copy/MCpic)
-		$_SESSION['PassageTime']	= 10;										// in seconds/trial (Passage)
+		$_SESSION['PassageTime']	= 3;										// in seconds/trial (Passage)
 		$_SESSION['FreeRecallTime'] = 2;										// in seconds/trial (FreeRecall)
-		$_SESSION['AudioTime']		= 5;										// in seconds/trial (Audio)
+		$_SESSION['AudioTime']		= 3;										// in seconds/trial (Audio)
 		$_SESSION['jolTime'] 		= user;										// in seconds/trial	(JOL) - can also use value 'user'
 		$_SESSION['FeedbackTime']	= user;										// in seconds/trial - can also use value 'user'
 		$_SESSION['Demographics']	= FALSE;									// Can be TRUE or FALSE

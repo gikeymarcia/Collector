@@ -12,3 +12,4 @@ Number	Stimuli	Order	Condition Description	Condition Notes
 11	Words/FullStim.txt	Orders/All Trials.txt	Examples of all presentations	user controlled so I can edit css
 12	Words/FullStim.txt	Orders/Instruct only.txt	For styling instructions trials	user controlled so I can edit css
 13	Words/TestWordsShuffle.txt	Orders/TestOrderShuffle.txt	Look at Stimuli File for example of second-order shuffle (advanced feature)	
+14	Words/FullStim.txt	Orders/TimingTesterFile.txt	checking new timing code	please work
