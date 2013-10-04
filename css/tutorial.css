@@ -1,0 +1,24 @@
+body
+	{	font-family: Kreon, sans-serif;	font-size: 110%;	width: 750px; margin: 35px auto auto auto}
+h1
+	{	font-size: 2em;	color: #333333;	}
+h2
+	{	}
+h3
+	{	}
+p
+	{	margin-left: 25px}
+input
+	{	}
+img
+	{	display: block;	margin-left: auto;	margin-right: auto;	}
+form
+	{	}
+option
+	{	}
+select
+	{	}
+li
+	{	padding-bottom: 35px}
+li span
+	{	color:#777777;	margin-left: 10px}
