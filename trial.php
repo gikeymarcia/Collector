@@ -20,8 +20,8 @@
 		$cue		=& $currentTrial['Stimuli']['Cue'];
 		$target		=& $currentTrial['Stimuli']['Target'];
 		$answer		=& $currentTrial['Stimuli']['Answer'];
-		$trialType	=  trim(strtolower($currentTrial['Info']['Trial Type']));
-		$item		=  trim(strtolower($currentTrial['Info']['Item']));
+		$trialType	=  trim(strtolower($currentTrial['Procedure']['Trial Type']));
+		$item		=  trim(strtolower($currentTrial['Procedure']['Item']));
 	
 	
 	// if we hit a *newfile* then the experiment is over (this means that we don't ask FinalQuestions until the last session of the experiment)
@@ -72,14 +72,14 @@
 <?php
 	// go to stepout page if this is a stepout trial
 	if ($trialType == 'stepout') {
-		$page = trim( $currentTrial['Info']['Order Notes'] );
+		$page = trim( $currentTrial['Procedure']['Procedure Notes'] );
 		echo '<meta http-equiv="refresh" content="0; url='.$page.'">';
 	}
 	
 	
 	#### determine trial timing
 	// if trial timing is a number then use that and assume computer timed. else use login.php parameter values
-	$timingReported = trim(strtolower($currentTrial['Info']['Timing']));
+	$timingReported = trim(strtolower($currentTrial['Procedure']['Timing']));
 	if(is_numeric($timingReported)) {
 		$time = $timingReported;
 	}
@@ -152,7 +152,7 @@
 		// Instruct trial type
 		elseif ($trialType == 'instruct') {
 			echo '<div id="centerContent" class="PreCache">
-					<div class="Instruct">'. $currentTrial['Info']['Order Notes'].'</div>
+					<div class="Instruct">'. $currentTrial['Procedure']['Procedure Notes'].'</div>
 				  </div>';
 		}
 		// Audio trial type
@@ -163,7 +163,7 @@
 		}
 		## ADD ## your new trial should be an elseif here (if it has no user input)
 		
-		echo '<div id="buttPos">';
+		echo '<div id="buttPos" class="PreCache">';
 		// give the form a different name for user and comuputer timed
 		// I use formname + JQuery to hide the submit button when the form is a computer timed form
 		echo '<form name="'.$formName.'" class="'.$formClass.'" action="postTrial.php" method="post">
@@ -264,7 +264,7 @@
 		}
 		// FreeRecall trial type
 		elseif($trialType == 'freerecall') {
-			$prompt =& $currentTrial['Info']['Order Notes'];
+			$prompt =& $currentTrial['Procedure']['Procedure Notes'];
 			echo '<div id="centerContent">
 				<div class="Prompt PreCache">' . $prompt . '</div>
 					<form name="'.$formName.'" class="'.$formClass.'"  autocomplete="off"  action="postTrial.php"  method="post">
@@ -310,15 +310,15 @@
 		echo "<div>";
 			echo "Condition #: {$_SESSION['Condition']['Number']} <br />"; 
 			echo "Condition Stim File: {$_SESSION['Condition']['Stimuli']} <br />";
-			echo "Condition Order File: {$_SESSION['Condition']['Order']} <br />";
+			echo "Condition Order File: {$_SESSION['Condition']['Procedure']} <br />";
 			echo "Condition description: {$_SESSION['Condition']['Condition Description']} <br />";
 		echo "</div>";
 		echo "<br />";
 		echo '<div class="Trial">';
 			echo "Trial Number: {$currentPos} <br />";
 			echo "Trial Type: {$trialType}<br />";
-			echo "Post Trial: {$currentTrial['Info']['Post Trial']} <br />";
-			echo "Trial timing: {$currentTrial['Info']['Timing']} <br />";
+			echo "Post Trial: {$currentTrial['Procedure']['Post Trial']} <br />";
+			echo "Trial timing: {$currentTrial['Procedure']['Timing']} <br />";
 			echo "Trial Time (seconds): {$time}";
 			echo "<br />";
 		echo '</div>';

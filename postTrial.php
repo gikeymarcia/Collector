@@ -12,8 +12,8 @@
 		$cue		=& $currentTrial['Stimuli']['Cue'];
 		$target		=& $currentTrial['Stimuli']['Target'];
 		$answer		=  $currentTrial['Stimuli']['Answer'];
-		$trialType	=  trim(strtolower($currentTrial['Info']['Trial Type']));
-		$postTrial	=  trim(strtolower($currentTrial['Info']['Post Trial']));
+		$trialType	=  trim(strtolower($currentTrial['Procedure']['Trial Type']));
+		$postTrial	=  trim(strtolower($currentTrial['Procedure']['Post Trial']));
 	
 	
 	### getting response and making cleaned up versions (for later comparisons)

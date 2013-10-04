@@ -107,10 +107,10 @@
 			$errors['Count']++;
 			$errors['Details'][] = 'No stimuli file found at '.$_SESSION['Condition']['Stimuli'];
 		}
-		// does this condition point to a valid order file?
-		if (file_exists($_SESSION['Condition']['Order']) == FALSE) {
+		// does this condition point to a valid procedure file?
+		if (file_exists($_SESSION['Condition']['Procedure']) == FALSE) {
 			$errors['Count']++;
-			$errors['Details'][] = 'No order file found at '.$_SESSION['Condition']['Order'];
+			$errors['Details'][] = 'No procedure file found at '.$_SESSION['Condition']['Procedure'];
 		}
 		// checking required columns from Stimuli file
 		$temp = GetFromFile($_SESSION['Condition']['Stimuli']);
@@ -119,12 +119,12 @@
 		$errors = keyCheck( $temp, 'Answer'	,	$errors, $_SESSION['Condition']['Stimuli'] );
 		$errors = keyCheck( $temp, 'Shuffle',	$errors, $_SESSION['Condition']['Stimuli'] );
 		// checking required columns from Order file
-		$temp = GetFromFile($_SESSION['Condition']['Order']);
-		$errors = keyCheck( $temp, 'Item'		,	$errors, $_SESSION['Condition']['Order'] );
-		$errors = keyCheck( $temp, 'Trial Type'	,	$errors, $_SESSION['Condition']['Order'] );
-		$errors = keyCheck( $temp, 'Timing'		,	$errors, $_SESSION['Condition']['Order'] );
-		$errors = keyCheck( $temp, 'Post Trial'	,	$errors, $_SESSION['Condition']['Order'] );
-		$errors = keyCheck( $temp, 'Shuffle'	,	$errors, $_SESSION['Condition']['Order'] );		
+		$temp = GetFromFile($_SESSION['Condition']['Procedure']);
+		$errors = keyCheck( $temp, 'Item'		,	$errors, $_SESSION['Condition']['Procedure'] );
+		$errors = keyCheck( $temp, 'Trial Type'	,	$errors, $_SESSION['Condition']['Procedure'] );
+		$errors = keyCheck( $temp, 'Timing'		,	$errors, $_SESSION['Condition']['Procedure'] );
+		$errors = keyCheck( $temp, 'Post Trial'	,	$errors, $_SESSION['Condition']['Procedure'] );
+		$errors = keyCheck( $temp, 'Shuffle'	,	$errors, $_SESSION['Condition']['Procedure'] );		
 		$temp = null;
 		// echo 'Username = '.$_SESSION['Username'].'</br>';											#### DEBUG ####
 		// Readable($Conditions, "conditions loaded in");												#### DEBUG ####
@@ -142,7 +142,7 @@
 							"Session Start" ,
 							"Condition# {$_SESSION['Condition']['Number']}",
 							$_SESSION['Condition']['Stimuli'],
-							$_SESSION['Condition']['Order'],
+							$_SESSION['Condition']['Procedure'],
 							$_SESSION['Condition']['Condition Description'],
 							$_SERVER['HTTP_USER_AGENT']
 						 );
@@ -174,15 +174,15 @@
 			
 			// Readable($stimuli,'shuffled stimuli *fingers crossed*');							// uncomment this line to see what your shuffled stimuli file looks like
 			
-			// load and block shuffle order for this condition
-			$order = GetFromFile($_SESSION['Condition']['Order']);
-			$order = BlockShuffle($order, "Shuffle");
+			// load and block shuffle procedure for this condition
+			$procedure = GetFromFile($_SESSION['Condition']['Procedure']);
+			$procedure = BlockShuffle($procedure, "Shuffle");
 						
 			// Load entire experiment into $Trials[1-X] where X is the number of trials
 			$Trials = array(0=> 0);
-			for ($count=2; $count<count($order); $count++) {
-				$Trials[$count-1]['Stimuli']	= $stimuli[ ($order[$count]['Item']) ];			// adding 'Stimuli', as an array, to each position of $Trials
-				$Trials[$count-1]['Info']		= $order[$count];								// adding 'Info', as an array, to each position of $Trials
+			for ($count=2; $count<count($procedure); $count++) {
+				$Trials[$count-1]['Stimuli']	= $stimuli[ ($procedure[$count]['Item']) ];			// adding 'Stimuli', as an array, to each position of $Trials
+				$Trials[$count-1]['Procedure']	= $procedure[$count];								// adding 'Procedure', as an array, to each position of $Trials
 				$Trials[$count-1]['Response']	= array(	"Response1"		=> NULL,			// adding 'Response', as an array, to each position of $Trials
 															"RT"			=> NULL,
 															"RTkey"			=> NULL,
@@ -231,7 +231,7 @@
 					continue;
 				}
 				// write to next file when we hit a newfile line
-				$item = strtolower(trim($Trial['Info']['Item']));
+				$item = strtolower(trim($Trial['Procedure']['Item']));
 				if($item == '*newfile*') {
 					$fileNumber++;
 					continue;
@@ -244,7 +244,7 @@
 					arrayToLine ($header2, $sessionFile);
 				}
 				#### TO DO #### write code that removes junk characters from session files (see Next.php)
-				// write ['Stimuli'] ['Info'] and ['Response'] data to next line of the file
+				// write ['Stimuli'] ['Procedure'] and ['Response'] data to next line of the file
 				$line = NULL;
 				$junk = array( '\n' , '\t' , '\r' , chr(10) , chr(13) );
 				for($i= 0; $i < count($header1); $i++) {

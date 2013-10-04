@@ -12,7 +12,7 @@
 		$cue		=& $currentTrial['Stimuli']['Cue'];
 		$target		=& $currentTrial['Stimuli']['Target'];
 		$answer		=  $currentTrial['Stimuli']['Answer'];
-		$trialType	=  trim(strtolower($currentTrial['Info']['Trial Type']));
+		$trialType	=  trim(strtolower($currentTrial['Procedure']['Trial Type']));
 	
 	
 	#### grabbing responses from postTrial
@@ -41,7 +41,7 @@
 						$timeDif,
 						$_SESSION['Condition']['Number'],
 						$_SESSION['Condition']['Stimuli'],
-						$_SESSION['Condition']['Order'],
+						$_SESSION['Condition']['Procedure'],
 						$_SESSION['Condition']['Condition Description'],
 						$_SESSION['Condition']['Condition Notes'],
 					);

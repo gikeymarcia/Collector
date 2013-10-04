@@ -47,7 +47,7 @@ Trial Types
 	Instruct
 			Allows you to give participants instructions during the experiment.
 			Instruct trials are special because they do not correspond to a line in the stimuli file.
-			To call an instruct trial you insert item (0), trial type(Instruct), and Order Notes (instructions and/or HTML code).
+			To call an instruct trial you insert item (0), trial type(Instruct), and Procedure Notes (instructions and/or HTML code).
 			See the Order file used in Condition1 for an example.
 	Audio
 			Allows you to use audio clips as stimuli.  When you use this trial type you need to put the path to your audio file in the 'Cue' column (e.g., if your audio file is in a folder called sounds you would use  'sounds/random.mp3' ).  Audio uses the HTML5 <audio> tag so it will only work on a modern web browser.  To be safe I would recommend using Chrome or Firefox v10+

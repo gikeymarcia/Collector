@@ -49,7 +49,7 @@
 						"Session End" ,
 						"Condition# {$_SESSION['Condition']['Number']}",
 						$_SESSION['Condition']['Stimuli'],
-						$_SESSION['Condition']['Order'],
+						$_SESSION['Condition']['Procedure'],
 						$_SESSION['Condition']['Condition Description'],
 						$_SERVER['HTTP_USER_AGENT']
 					 );
@@ -60,7 +60,7 @@
 						"Begin/End?" ,
 						"Condition #",
 						"Words File",
-						"Order File",
+						"Procedure File",
 						"Condition Description",
 						"User Agent Info"
 					 );

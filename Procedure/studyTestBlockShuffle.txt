@@ -1,4 +1,4 @@
-Item	Trial Type	Post Trial	Timing	Order Notes	Shuffle
+Item	Trial Type	Post Trial	Timing	Procedure Notes	Shuffle
 2	Study	No	User	Showing 3 trials in order	studygroup
 3	Study	No	User	Showing 3 trials in order	studygroup
 4	Study	No	User	Showing 3 trials in order	studygroup

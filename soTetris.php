@@ -9,7 +9,7 @@
 	$currentPos		=& $_SESSION['Position'];
 	$currentTrial	=& $_SESSION['Trials'][$currentPos];
 	// pulls in the specified tetris time from the order file, column "Timing"
-	$time			=  trim($currentTrial['Info']['Timing']);
+	$time			=  trim($currentTrial['Procedure']['Timing']);
 	if($_SESSION['Debug'] == TRUE) {	$time = 2;	}
 ?>
 

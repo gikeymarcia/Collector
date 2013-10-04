@@ -9,7 +9,7 @@
 	$currentPos		=& $_SESSION['Position'];
 	$currentTrial	=& $_SESSION['Trials'][$currentPos];
 	// pulls in the specified timing from the order file, column "Timing"
-	$time			=  trim($currentTrial['Info']['Timing']);
+	$time			=  trim($currentTrial['Procedure']['Timing']);
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"

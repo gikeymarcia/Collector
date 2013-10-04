@@ -1,4 +1,4 @@
-Item	Trial Type	Post Trial	Timing	Order Notes	Shuffle
+Item	Trial Type	Post Trial	Timing	Procedure Notes	Shuffle
 2	Study	No	User	mass	Study Phase
 2	Study	No	User	mass	Study Phase
 2	Study	No	User	mass	Study Phase
