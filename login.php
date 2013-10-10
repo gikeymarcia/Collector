@@ -118,7 +118,7 @@
 		$errors = keyCheck( $temp, 'Target'	,	$errors, $_SESSION['Condition']['Stimuli'] );
 		$errors = keyCheck( $temp, 'Answer'	,	$errors, $_SESSION['Condition']['Stimuli'] );
 		$errors = keyCheck( $temp, 'Shuffle',	$errors, $_SESSION['Condition']['Stimuli'] );
-		// checking required columns from Order file
+		// checking required columns from Procedure file
 		$temp = GetFromFile($_SESSION['Condition']['Procedure']);
 		$errors = keyCheck( $temp, 'Item'		,	$errors, $_SESSION['Condition']['Procedure'] );
 		$errors = keyCheck( $temp, 'Trial Type'	,	$errors, $_SESSION['Condition']['Procedure'] );
