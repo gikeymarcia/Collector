@@ -65,6 +65,14 @@
 		$selectedCondition = trim($_GET['Condition']);
 		
 		
+		#### Checking username is 3 characters or longer
+		if(strlen($_SESSION['Username']) < 3) {
+			echo '<h1>Error: Login username must be 3 characters or longer</h1>
+					<h1>Click <a href="index.php">here</a> to enter a valid username</h1>';
+			exit;
+		}
+		
+		
 		#### Code to automatically choose condition assignment
 		$Conditions	=  GetFromFile("Conditions.txt", FALSE);		// Loading conditions info
 		$logFile	=& $_SESSION["LoginCounter Location"];
