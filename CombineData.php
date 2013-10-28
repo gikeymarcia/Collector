@@ -38,7 +38,7 @@
 	foreach ($combined as $one){
 	    $line = implode("\t", $one);
 	    fwrite($txt,$line);
-		fwrite($txt, "\n");
+		fwrite($txt, PHP_EOL);
 	}
 	
 	echo '<br /><br />  <h2>Number of Data Files Used</h2>';

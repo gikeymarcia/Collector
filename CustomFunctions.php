@@ -12,7 +12,7 @@
 	function arrayToLine ($array, $fileLocation, $mode = "a"){
 			$fileHandle = fopen($fileLocation, $mode);
 			fputs($fileHandle , implode( "\t" , $array) );				// write tab delimited array values
-			fputs($fileHandle , "\n" );									// add a newline at the end of the array
+			fputs($fileHandle , PHP_EOL );								// add a newline at the end of the array
 			fclose($fileHandle);
 	}
 	
