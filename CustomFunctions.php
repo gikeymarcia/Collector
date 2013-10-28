@@ -136,7 +136,10 @@
 			$out	= array(0 => 0, 1 => 0);			// leave positions 0 and 1 blank (so when I call $array[#] it will corespond to the row in excel)
 		endif;
 		while ($line = fgetcsv($file, 0, "\t")) {		// capture each remaining line from the file
-			$tOut	= array_combine($keys, $line);		// combine the line of data with the header	
+			$tOut	= array_combine($keys, $line);		// combine the line of data with the header
+			if(isBlankLine($tOut)) {					// do not include blank lines in output
+				continue;
+			}
 			$out[]	= $tOut;							// add this combined header<->line array to the ouput array
 		}
 		return $out;
@@ -150,6 +153,17 @@
 		if ($_SESSION['Debug'] == FALSE) {						// disable error reporting during debug
 			error_reporting(0);
 		}
+	}
+	
+	
+	
+	function isBlankLine($array) {								// if an array is empty, all positions == "", return TRUE
+		foreach ($array as $item) {
+			if($item <> "") {
+				return FALSE;
+			}
+		}
+		return TRUE;
 	}
 	
 	
