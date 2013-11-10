@@ -86,9 +86,21 @@
 	$(".TestMC").click(function(){
 		var clicked = $(this).html();
 		$(".Textbox").attr("value",clicked);
+		
+		if(keypress == 0) {								// setting first and/or last keypress times
+			$(".RTkey").attr("value",timer);
+			keypress++;
+		}
+		else {
+			$(".RTlast").attr("value",timer);
+		}
+		
 		if( $("form").attr("name") == "UserTiming") {
+			$(".RT").attr("value",timer);
 			$("form").submit();
 		}
+		$(".TestMC").css("background","#566673");		// remove highlighting from all buttons
+		$(this).css("background","#00ac86");			// add highlighting to clicked button
 	});
 	
 	// Prevent the backspace key from navigating back.

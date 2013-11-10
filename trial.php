@@ -238,7 +238,9 @@
 			
 			$formClass = $formClass.' center';
 			echo '<form name="'.$formName.'" class="'.$formClass.'" action="postTrial.php" method="post">
-					<input	name="Response"	type="text"	value="no press"	class="Textbox Hidden"	/>	<br />
+					<input	name="Response"	type="text"	value="no press"	class="Textbox Hidden"	/>
+					<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
+					<input	name="RTlast"	type="text"	value="no press"	class="RTlast Hidden" 	/>
 					<input	name="RT"		type="text"	value="RT"	class="RT Hidden"		/>
 				  </form>';
 		}
