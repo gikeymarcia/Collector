@@ -1,14 +1,14 @@
 Item	Trial Type	Post Trial	Timing	Order Notes	Shuffle
 2	Study	No	User		OFF
-3	StudyPic	No	User		OFF
+8	StudyPic	No	User		OFF
 11	Passage	No	User		OFF
 0	Instruct	No	User	This is a user-timed instruct trial	OFF
 14	Audio	No	User		OFF
 2	Study	No	Computer		OFF
-3	StudyPic	No	Computer		OFF
+9	StudyPic	No	Computer		OFF
 11	Passage	No	Computer		OFF
 0	Instruct	No	Computer	This is a comp-timed instruct trial	OFF
-14	Audio	No	User		OFF
+14	Audio	No	Computer		OFF
 2	Test	No	User		OFF
 3	TestPic	No	User		OFF
 3	MCpic	No	User		OFF
