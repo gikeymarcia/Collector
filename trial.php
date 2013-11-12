@@ -78,33 +78,41 @@
 	
 	
 	#### determine trial timing
-	// if trial timing is a number then use that and assume computer timed. else use login.php parameter values
 	$timingReported = trim(strtolower($currentTrial['Info']['Timing']));
-	if(is_numeric($timingReported)) {
+	// set $time to computer-timing trial as default
+	switch ($timingReported) {
+			// ## ADD ## if your new trial has a default timing it should be a [case 'newTrial':] above the timing it will use
+			case 'study':
+			case 'studypic':
+			case 'instruct':
+				$time = $_SESSION['StudyTime'];
+				break;
+			case 'test':
+			case 'testpic':
+			case 'copy':
+			case 'mcpic':
+				$time = $_SESSION['TestTime'];
+				break;
+			case 'passage':
+				$time = $_SESSION['PassageTime'];
+				break;
+			case 'freerecall':
+				$time = $_SESSION['FreeRecallTime'];
+				break;
+			case 'audio':
+				$time = $_SESSION['AudioTime'];
+				break;
+			case 'jol':
+				$time = $_SESSION['jolTime'];
+				break;
+			default:										// set to 5s timing if no computer timing is specified
+				$time = 5;
+				break;
+		}
+	if(is_numeric($timingReported)) {						// if timing is manually set then override computer timing for this trial
 		$time = $timingReported;
 	}
-	elseif ($timingReported == 'computer') {
-		## ADD ## you'll need to tell the program which default 'computer' timing to use for your new trial
-		if( ($trialType == 'study') OR ($trialType == 'studypic') OR ($trialType == 'instruct') ) {
-			$time = $_SESSION['StudyTime'];
-		}
-		elseif( ($trialType == 'test') OR ($trialType == 'testpic') OR
-				($trialType == 'copy') OR ($trialType == 'mcpic') ) {
-			$time = $_SESSION['TestTime'];
-		}
-		elseif ($trialType == 'passage') {
-			$time = $_SESSION['PassageTime'];
-		}
-		elseif ($trialType == 'freerecall') {
-			$time = $_SESSION['FreeRecallTime'];
-		}
-		elseif ($trialType == 'audio') {
-			$time = $_SESSION['AudioTime'];
-		}
-		elseif ($trialType == 'jol') {
-			$time = $_SESSION['jolTime'];
-		}
-	} else {
+	elseif ($timingReported <> 'computer') {				// set user-timing if timing isn't numberic or computer timing 
 		$time = 'user';
 	}
 	if($_SESSION['Debug'] == TRUE) {
