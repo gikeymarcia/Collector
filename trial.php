@@ -79,9 +79,9 @@
 	
 	#### determine trial timing
 	$timingReported = trim(strtolower($currentTrial['Info']['Timing']));
-	// set $time to computer-timing trial as default
+	// set $time to computer-timing as default
 	switch ($timingReported) {
-			// ## ADD ## if your new trial has a default timing it should be a [case 'newTrial':] above the timing it will use
+			// ## ADD ## if your new trial has a default timing it should be a (case 'newTrial':) above the timing it will use
 			case 'study':
 			case 'studypic':
 			case 'instruct':
@@ -112,15 +112,16 @@
 	if(is_numeric($timingReported)) {						// if timing is manually set then override computer timing for this trial
 		$time = $timingReported;
 	}
-	elseif ($timingReported <> 'computer') {				// set user-timing if timing isn't numberic or computer timing 
+	elseif ($timingReported <> 'computer') {				// set user-timing if timing isn't numeric or computer timing 
 		$time = 'user';
 	}
 	if($_SESSION['Debug'] == TRUE) {
 		$time = 2;					## SET ## if debug mode is on all trials will be this many seconds long
 	}
-	// hidden field that JQuery/JS uses to submit the trial to postTrial.php
+	// hidden field that JQuery/JavaScript uses to submit the trial to postTrial.php
 	echo '<div id="Time" class="Hidden">' . $time . '</div>';
-		
+	
+
 	// changing form name and class based on user or computer timing.  I use the class name to do JQuerty magic
 	if($time == 'user'):
 		$formName	= 'UserTiming';
