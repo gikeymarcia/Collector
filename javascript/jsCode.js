@@ -18,13 +18,13 @@ window.onload = function () {
 	$(".readcheck").removeClass("Hidden");
 	setInterval(addtime,interval);
 	
-}
+};
 
 
 // on DOM ready focus onto item with class="Textbox"
 	$("document").ready( function(){
 		$(".Textbox").focus();
-	})
+	});
 
 
 // Disable enter key for textboxes with id="TextboxComputerTimed"
