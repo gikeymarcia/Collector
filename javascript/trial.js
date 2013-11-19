@@ -27,18 +27,20 @@
 	// on pageload reset timer, show pre-cached, start timer, focus on textboxes
 	window.onload = function() {
 		if(trialTime != 0) {
-			$(".PreCache").removeClass("PreCache");
+			$(".PreCache").addClass("DuringTrial");			// add class that does nothing (but lets us know what used to be hidden)
+			$(".PreCache").removeClass("PreCache");			// remove class that hides the content
 		}
 		setInterval(addtime,interval);
 		$(".Textbox:first").focus();
 		$("textarea").focus();
-	}
+	};
 	
 	
 	// timer function
 	function addtime() {
 		timer = timer + interval;
 		if (timer >= (trialTime*1000)) {			// submit form if time is up
+			$(".DuringTrial").addClass("PreCache");	// hide content
 			$(".RT").attr("value",timer);			// update RT field with timer value
 			timer = 0;
 			$("form").submit();
@@ -48,6 +50,7 @@
 	
 	// intercept FormSubmitButton click
 	$("#FormSubmitButton").click(function(){
+		$(".DuringTrial").addClass("PreCache");		// hide content
 		$(".RT").attr("value",timer);				// put RT into hidden field
 		$("form").submit();							// submit values to server
 	});
@@ -90,12 +93,14 @@
 		if(keypress == 0) {								// setting first and/or last keypress times
 			$(".RTkey").attr("value",timer);
 			keypress++;
+			$(".RTlast").attr("value",timer);
 		}
 		else {
 			$(".RTlast").attr("value",timer);
 		}
 		
 		if( $("form").attr("name") == "UserTiming") {
+			$(".DuringTrial").addClass("PreCache");		// hide content
 			$(".RT").attr("value",timer);
 			$("form").submit();
 		}

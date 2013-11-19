@@ -15,9 +15,9 @@ Item	Trial Type	Post Trial	Timing	Order Notes	Shuffle
 2	Copy	No	User		OFF
 0	FreeRecall	No	User	type stuff!!!!!	OFF
 2	JOL	No	User		OFF
-2	Test	No	User		OFF
-8	TestPic	No	User		OFF
-8	MCpic	No	User		OFF
-2	Copy	No	User		OFF
-0	FreeRecall	No	User	type stuff!!!!!	OFF
-2	JOL	No	User		OFF
+2	Test	No	Computer		OFF
+8	TestPic	No	Computer		OFF
+8	MCpic	No	Computer		OFF
+2	Copy	No	Computer		OFF
+0	FreeRecall	No	Computer	type stuff!!!!!	OFF
+2	JOL	No	Computer		OFF
