@@ -18,46 +18,54 @@
 	var keypress	= 0;
 	var trialTime	= $("#Time").html();
 
-	// on pageload reset timer, show pre-cached, start timer, focus on textboxes
-	window.onload = function() {
-		if(trialTime != 0) {
-			$(".PreCache").removeClass("PreCache");
-		}
-		setInterval(addtime,interval);
-		$(".Textbox:first").focus();
-		$("textarea").focus();
-	}
-	
-	
 	// on DOM ready reset timer
 	$("document").ready( function(){
 		timer		= 0;
 	});
 	
 	
+	// on pageload reset timer, show pre-cached, start timer, focus on textboxes
+	window.onload = function() {
+		if(trialTime != 0) {
+			$(".PreCache").addClass("DuringTrial");			// add class that does nothing (but lets us know what used to be hidden)
+			$(".PreCache").removeClass("PreCache");			// remove class that hides the content
+		}
+		setInterval(addtime,interval);
+		$(".Textbox:first").focus();
+		$("textarea").focus();
+	};
+	
+	
 	// timer function
 	function addtime() {
 		timer = timer + interval;
-		// update RT field with timer value
-		$(".RT").attr("value",timer);
-		// submit form if time is up
-		if (timer >= (trialTime*1000)) {
-			timer		= 0;
+		if (timer >= (trialTime*1000)) {			// submit form if time is up
+			$(".DuringTrial").addClass("PreCache");	// hide content
+			$(".RT").attr("value",timer);			// update RT field with timer value
+			timer = 0;
 			$("form").submit();
 		}
 	}
 	
 	
-	// Disable enter key for textboxes with class "Textbox" inside of forms named "ComputerTiming"
+	// intercept FormSubmitButton click
+	$("#FormSubmitButton").click(function(){
+		$(".DuringTrial").addClass("PreCache");		// hide content
+		$(".RT").attr("value",timer);				// put RT into hidden field
+		$("form").submit();							// submit values to server
+	});
+	
+	
+	// Disable enter key inside class "Textbox" when form is named "ComputerTiming"
 	$(".Textbox").bind("keypress",function(e){
-		if( $('form').attr('name') == 'ComputerTiming') {
+		if( $("form").attr("name") == "ComputerTiming") {
 			if(e.keyCode == 13) return false;
 		}
 		if(e.keyCode == 13) return true;
 	});
 	
 	
-	// updates last keypress value each time a key is pressed
+	// updates last keypress value each time a key is pressed (for textboxes)
 	$(".Textbox").keypress(function(){
 		keypress++;
 		if(keypress == 1) {
@@ -67,7 +75,7 @@
 	});
 	
 	
-	// updates last keypress value each time a key is pressed
+	// updates last keypress value each time a key is pressed (for textareas)
 	$("textarea").keypress(function(){
 		keypress++;
 		if(keypress == 1) {
@@ -77,11 +85,27 @@
 	});
 	
 	
-	// updates the response value when a MC button is pressed; then submits the form
+	// updates the response value when a MC button is pressed
 	$(".TestMC").click(function(){
 		var clicked = $(this).html();
 		$(".Textbox").attr("value",clicked);
-		$("form").submit();
+		
+		if(keypress == 0) {								// setting first and/or last keypress times
+			$(".RTkey").attr("value",timer);
+			keypress++;
+			$(".RTlast").attr("value",timer);
+		}
+		else {
+			$(".RTlast").attr("value",timer);
+		}
+		
+		if( $("form").attr("name") == "UserTiming") {
+			$(".DuringTrial").addClass("PreCache");		// hide content
+			$(".RT").attr("value",timer);
+			$("form").submit();
+		}
+		$(".TestMC").css("background","#566673");		// remove highlighting from all buttons
+		$(this).css("background","#00ac86");			// add highlighting to clicked button
 	});
 	
 	// Prevent the backspace key from navigating back.
@@ -90,8 +114,8 @@
 	    var doPrevent = false;
 	    if (event.keyCode === 8) {
 	        var d = event.srcElement || event.target;
-	        if ((d.tagName.toUpperCase() === 'INPUT' && d.type.toUpperCase() === 'TEXT') 
-	             || d.tagName.toUpperCase() === 'TEXTAREA') {
+	        if ((d.tagName.toUpperCase() === "INPUT" && d.type.toUpperCase() === "TEXT") 
+	             || d.tagName.toUpperCase() === "TEXTAREA") {
 	            doPrevent = d.readOnly || d.disabled;
 	        }
 	        else {
