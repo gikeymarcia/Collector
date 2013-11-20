@@ -131,6 +131,7 @@
 		$formClass	= 'ComputerTiming';
 	endif;
 	
+	$noInputTrials = array ( 'study',  'studypic',  'passage',  'instruct',  'audio' );
 	
 	#### Presenting different trial types ####
 	// trials without any user input
