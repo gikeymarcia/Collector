@@ -1,0 +1,11 @@
+Item	Trial Type	Post Trial	Timing	Procedure Notes	Shuffle
+2	Study	No	User	study trials	OFF
+2	Test	Feedback	User	study trials	OFF
+2	Copy	JOL	User	study trials	OFF
+3	StudyPic	No	User	inputs	OFF
+3	TestPic	Feedback	User	inputs	OFF
+3	MCpic	JOL	User	inputs	OFF
+4	Passage	No	User	new trials	OFF
+5	Audio	No	User	Write down everything you can remember that has happened so far in this experiment.	OFF
+0	Instruct	No	User	<em>Listen</em> to me <b>or else</b>	OFF
+0	FreeRecall	No	User	Tell me everything you remember from this experiment	OFF
