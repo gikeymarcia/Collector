@@ -120,8 +120,7 @@
 	}
 	// hidden field that JQuery/JavaScript uses to submit the trial to postTrial.php
 	echo '<div id="Time" class="Hidden">' . $time . '</div>';
-	
-
+		
 	// changing form name and class based on user or computer timing.  I use the class name to do JQuerty magic
 	if($time == 'user'):
 		$formName	= 'UserTiming';
@@ -131,110 +130,99 @@
 		$formClass	= 'ComputerTiming';
 	endif;
 	
-	$noInputTrials = array ( 'study',  'studypic',  'passage',  'instruct',  'audio' );
+	
 	
 	#### Presenting different trial types ####
-	// trials without any user input
-	## ADD ## if your trial has no input then add it to the if line below
-	if( ($trialType == 'study') OR ($trialType == 'studypic') OR ($trialType == 'passage') OR ($trialType == 'instruct') OR ($trialType == 'audio')) {
-		// Study trial type
-		if ($trialType == 'study') {
+	$trialFail = FALSE;																			// this will be used to show diagnostic information when a specific trial isn't working
+	$noInputTrials = array ( 'study',  'studypic',  'passage',  'instruct',  'audio' );			## ADD ## if you've created a new trial type without user input it should be in this array in all lowercase
+	switch ($trialType) {
+			
+		// Audio trial type (no input)
+		case 'audio':
+			echo '<div class="WordWrap PreCache">
+					<audio autoplay><source src="'.$cue.'" /></audio>
+				  </div>';
+			break;
+			
+			
+		// Copy trial type
+		case 'copy':
 			echo '<div class="WordWrap PreCache">
 					<span class="left">'.$cue.'</span>
 					<span class="divider">:</span>
 					<span class="right">'.$target.'</span>
+				  </div>
+				  
+				  <div class="WordWrap PreCache">
+				  	<span class="leftcopy">'.$cue.'</span>
+				  	<span class="dividercopy">:</span>
+				  	<form name="'.$formName.'" class="'.$formClass.' leftfloat"  autocomplete="off"  action="postTrial.php"  method="post">
+					  	<input 	name="Response" type="text" value=""			class="Textbox"			autocomplete="off" />
+					  	<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
+						<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
+						<input	name="RTlast"	type="text"	value="no press"	class="RTlast Hidden" 	/>
+						<input	id="FormSubmitButton"	type="submit"	value="Submit"	/>
+					  </form>
 				  </div>';
-		}
-		// StudyPic trial type
-		elseif ($trialType == 'studypic') {
-			echo '<div class="pic PreCache">
-					'. show($cue).
-				 '</div>';
-			echo '<div class="picWord PreCache">'.$target.'</div>';
-			$formClass = $formClass.' center'; 
-		}
-		// Passage trial type
-		elseif($trialType == 'passage') {
-			echo '<div class="passage PreCache">'.fixBadChars($cue).'</div>
-				  <div id="end">End of Passage</div>';
-				  $formClass = $formClass.' center';
-		}
-		// Instruct trial type
-		elseif ($trialType == 'instruct') {
-			echo '<div id="centerContent" class="PreCache">
-					<div class="Instruct">'. $currentTrial['Procedure']['Procedure Notes'].'</div>
-				  </div>';
-		}
-		// Audio trial type
-		elseif ($trialType == 'audio') {
-			echo '<div class="WordWrap PreCache">
-					<audio autoplay><source src="'.$cue.'" /></audio>
-				  </div>';
-		}
-		## ADD ## your new trial should be an elseif here (if it has no user input)
-		
-		echo '<div id="buttPos" class="PreCache">';
-		// give the form a different name for user and comuputer timed
-		// I use formname + JQuery to hide the submit button when the form is a computer timed form
-		echo '<form name="'.$formName.'" class="'.$formClass.'" action="postTrial.php" method="post">
-				<input	name="RT"	type="text"		value=""	class="RT Hidden"	/>
-				<input	id="FormSubmitButton"	type="submit"	value="Done"	/>
-			  </form>';
-		echo '</div>';
-	}
-	
-	
-	// trials with user input
-	## ADD ## if your trial has input then add it to the if line below
-	if(	($trialType == 'test')	OR	($trialType == 'testpic')	OR
-		($trialType == 'copy')	OR	($trialType == 'freerecall')OR
-		($trialType == 'jol')	OR	($trialType == 'mcpic')) {
-		// Test trial type
-		if ($trialType == "test") {
-			echo '<div class="WordWrap">
-					<span class="leftcopy PreCache">'.$cue.'</span>
-					<span class="dividercopy">:</span>
-					<form name="'.$formName.'" class="'.$formClass.' leftfloat PreCache"  autocomplete="off"  action="postTrial.php"  method="post">
-						<input	name="Response"	type="text"	value=""			class="Textbox Right PreCache"	autocomplete="off" />
+			break;
+			
+			
+		// FreeRecall trial type
+		case 'freerecall':
+			$prompt =& $currentTrial['Procedure']['Procedure Notes'];
+			echo '<div id="centerContent">
+				<div class="Prompt PreCache">' . $prompt . '</div>
+					<form name="'.$formName.'" class="'.$formClass.'"  autocomplete="off"  action="postTrial.php"  method="post">
+						<textarea rows="20" cols="60" name="Response" class="PreCache" wrap="physical" value=""></textarea>	<br />
 						<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
 						<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
 						<input	name="RTlast"	type="text"	value="no press"	class="RTlast Hidden" 	/>
 						<input	id="FormSubmitButton"	type="submit"	value="Submit"	/>
 					</form>
+					</div>';
+			break;
+			
+			
+		// Instruct trial type (no input)
+		case 'instruct':
+			echo '<div id="centerContent" class="PreCache">
+					<div class="Instruct">'. $currentTrial['Procedure']['Procedure Notes'].'</div>
 				  </div>';
-		}
-		// TestPic trial type
-		elseif($trialType == 'testpic') {
-			echo '<div class="pic PreCache">
-					'. show($cue).
-				 '</div>';
-			$formClass = $formClass.' center';
+			break;
+			
+			
+		// JOL trial type
+		case 'jol':
+			echo '<div id="JOLpos">
+					<div id="jol">How likely are you to correctly remember this item on a later test?</div>
+					<div id="subpoint" class="gray">Type your response on a scale from 0-100 using the entire range of the scale</div>';
 			
 			echo '<form name="'.$formName.'" class="'.$formClass.'"  autocomplete="off"  action="postTrial.php"  method="post">
-					<input  name="Response" type="text" value=""			class="Textbox picWord PreCache" autocomplete="off" />	<br />
+					<input	name="Response"	type="text"	value=""			class="Textbox"			autocomplete="off" />	<br />
 					<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
 					<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
 					<input	name="RTlast"	type="text"	value="no press"	class="RTlast Hidden" 	/>
 					<input	id="FormSubmitButton"	type="submit"	value="Submit"	/>
-				  </form>';
-		}
-		
+				  </form>
+				 </div>';
+			break;
+			
+			
 		// MCpic trial type
-		elseif($trialType == 'mcpic') {
+		case 'mcpic':
+			## SET ## If you're going to use MCpic trials then you should change the category names in $MCbuttons
+			$MCbuttons 		= array( "Cat1", "Cat2", "Cat3", "Cat4", "Cat6", "Cat6", "Cat7", "Cat 8", "Cat9", "Cat10", "Cat11", "Cat 12");
+			$itemsPerRow	= 4;							## SET ## names says it all (use values 1-4; anything bigger causes problems which require css changes)
+			if($_SESSION['MCbutton'] == FALSE) {			// shuffle button position before presenting for the 1st time
+				shuffle($MCbuttons);						// turn this line off to maintain the same choice order between-subjects
+				$_SESSION['MCbutton'] = $MCbuttons;
+			}
 			// show the image
 			echo '<div class="pic PreCache">
 					'. show($cue).
 				 '</div>';		
-			## SET ## If you're going to use MCpic trials then you should change the category names in $MCbuttons
-			$MCbuttons = array( "Cat1", "Cat2", "Cat3", "Cat4", "Cat6", "Cat6", "Cat7", "Cat 8", "Cat9", "Cat10", "Cat11", "Cat 12");
-			
-			if($_SESSION['MCbutton'] == FALSE) {
-				shuffle($MCbuttons);							// turn this line off to maintain the same choice order between-subjects
-				$_SESSION['MCbutton'] = $MCbuttons;
-			}
-			$itemsPerRow	= 4;								## SET ## names says it all (use values 1-4; anything bigger causes problems which require css changes)
-			$count			= 0;
 			// display the MC button choices
+			$count = 0;
 			echo '<div id="ButtonArea">';
 			foreach ($_SESSION['MCbutton'] as $aButton) {
 				echo '<span class="TestMC PreCache">'.$aButton.'</span>';
@@ -253,60 +241,97 @@
 					<input	name="RTlast"	type="text"	value="no press"	class="RTlast Hidden" 	/>
 					<input	name="RT"		type="text"	value="RT"	class="RT Hidden"		/>
 				  </form>';
-		}
-		// Copy trial type
-		elseif($trialType == 'copy') {
+			break;
+			
+			
+		// Passage trial type (no input)
+		case 'passage':
+			echo '<div class="passage PreCache">'.fixBadChars($cue).'</div>
+				  <div id="end">End of Passage</div>';
+				  $formClass = $formClass.' center';
+			break;
+			
+			
+		// Study trial type (no input)
+		case 'study':
 			echo '<div class="WordWrap PreCache">
 					<span class="left">'.$cue.'</span>
 					<span class="divider">:</span>
 					<span class="right">'.$target.'</span>
-				  </div>
-				  
-				  <div class="WordWrap PreCache">
-				  	<span class="leftcopy">'.$cue.'</span>
-				  	<span class="dividercopy">:</span>
-				  	<form name="'.$formName.'" class="'.$formClass.' leftfloat"  autocomplete="off"  action="postTrial.php"  method="post">
-					  	<input 	name="Response" type="text" value=""			class="Textbox"			autocomplete="off" />
-					  	<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
-						<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
-						<input	name="RTlast"	type="text"	value="no press"	class="RTlast Hidden" 	/>
-						<input	id="FormSubmitButton"	type="submit"	value="Submit"	/>
-					  </form>
 				  </div>';
-		}
-		// FreeRecall trial type
-		elseif($trialType == 'freerecall') {
-			$prompt =& $currentTrial['Procedure']['Procedure Notes'];
-			echo '<div id="centerContent">
-				<div class="Prompt PreCache">' . $prompt . '</div>
-					<form name="'.$formName.'" class="'.$formClass.'"  autocomplete="off"  action="postTrial.php"  method="post">
-						<textarea rows="20" cols="60" name="Response" class="PreCache" wrap="physical" value=""></textarea>	<br />
+			break;
+			
+			
+		// StudyPic trial type (no input)
+		case 'studypic':
+			echo '<div class="pic PreCache">
+					'. show($cue).
+				 '</div>';
+			echo '<div class="picWord PreCache">'.$target.'</div>';
+			$formClass = $formClass.' center';
+			break;
+			
+			
+		// Test trial type
+		case 'test':
+			echo '<div class="WordWrap">
+					<span class="leftcopy PreCache">'.$cue.'</span>
+					<span class="dividercopy">:</span>
+					<form name="'.$formName.'" class="'.$formClass.' leftfloat PreCache"  autocomplete="off"  action="postTrial.php"  method="post">
+						<input	name="Response"	type="text"	value=""			class="Textbox Right PreCache"	autocomplete="off" />
 						<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
 						<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
 						<input	name="RTlast"	type="text"	value="no press"	class="RTlast Hidden" 	/>
 						<input	id="FormSubmitButton"	type="submit"	value="Submit"	/>
 					</form>
-					</div>';
-		}
-		// JOL trial type
-		elseif($trialType == 'jol') {
-			echo '<div id="JOLpos">
-					<div id="jol">How likely are you to correctly remember this item on a later test?</div>
-					<div id="subpoint" class="gray">Type your response on a scale from 0-100 using the entire range of the scale</div>';
+				  </div>';
+			break;
+			
+			
+		// TestPic trial type
+		case 'testpic':
+			echo '<div class="pic PreCache">
+					'. show($cue).
+				 '</div>';
+			$formClass = $formClass.' center';
 			
 			echo '<form name="'.$formName.'" class="'.$formClass.'"  autocomplete="off"  action="postTrial.php"  method="post">
-					<input	name="Response"	type="text"	value=""			class="Textbox"			autocomplete="off" />	<br />
+					<input  name="Response" type="text" value=""			class="Textbox picWord PreCache" autocomplete="off" />	<br />
 					<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
 					<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
 					<input	name="RTlast"	type="text"	value="no press"	class="RTlast Hidden" 	/>
 					<input	id="FormSubmitButton"	type="submit"	value="Submit"	/>
-				  </form>
-				 </div>';
-		}
-		## ADD ## your new trial should be an elseif here (if it has user input)
+				  </form>';
+			break;
+			
+			
+		## ADD ## your new trial should be a switch statement here (e.g., case 'yourTrialName':)  don't forget to add the break; after outputting your new trial
+		
+		default:
+			echo '<h2>Could not find the following trial type: <b>'.$trialType.'</b></h2>
+					<p>Check your procedure file to make sure everything is in order. 
+					All information about this trial is dispalyed below.</p>';
+			$trialFail = TRUE;
+			echo '<div id="buttPos" class="PreCache">
+				<form name="'.$formName.'" class="'.$formClass.'" action="postTrial.php" method="post">
+					<input	name="RT"	type="text"		value=""	class="RT Hidden"	/>
+					<input	id="FormSubmitButton"	type="submit"	value="Done"	/>
+			  	</form>
+			  </div>';
+			break;
+	}
+	// append the hidden form for all noInput trials
+	if (in_array($trialType, $noInputTrials)) {
+		// give the form a different name for user and comuputer timed (so I can hide it with CSS)
+		echo '<div id="buttPos" class="PreCache">
+				<form name="'.$formName.'" class="'.$formClass.'" action="postTrial.php" method="post">
+					<input	name="RT"	type="text"		value=""	class="RT Hidden"	/>
+					<input	id="FormSubmitButton"	type="submit"	value="Done"	/>
+			  	</form>
+			  </div>';
 	}
 	
-	
+
 	#### Pre-Cache Next trial ####
 	echo '<div class="Hidden">';
 			echo show($nextTrial['Stimuli']['Cue']).'	<br />';
@@ -317,8 +342,8 @@
 	
 	
 	#### Diagnostics ####
-	$diagnostics = FALSE;			// turn on diagnostics to see lots about each trial
-	if ($diagnostics == TRUE) {
+	$diagnostics = TRUE;			// ## SET ## turn on diagnostics to see lots about each trial
+	if ($diagnostics == TRUE OR $trialFail == TRUE) {
 		echo "<div>";
 			echo "Condition #: {$_SESSION['Condition']['Number']} <br />"; 
 			echo "Condition Stim File: {$_SESSION['Condition']['Stimuli']} <br />";
@@ -339,7 +364,7 @@
 				target: '.show($target).'<br />
 				answer: '.show($answer).'<br />
 			</div>';
-		readable($currentTrial, "Current trial");
+		readable($currentTrial, "the Current trial");
 	} 
 	#### Diagnostics ####
 ?>
