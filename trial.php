@@ -274,10 +274,10 @@
 			
 		// Test trial type
 		case 'test':
-			echo '<div class="WordWrap">
-					<span class="leftcopy PreCache">'.$cue.'</span>
+			echo '<div class="WordWrap PreCache">
+					<span class="leftcopy">'.$cue.'</span>
 					<span class="dividercopy">:</span>
-					<form name="'.$formName.'" class="'.$formClass.' leftfloat PreCache"  autocomplete="off"  action="postTrial.php"  method="post">
+					<form name="'.$formName.'" class="'.$formClass.' leftfloat"  autocomplete="off"  action="postTrial.php"  method="post">
 						<input	name="Response"	type="text"	value=""			class="Textbox Right PreCache"	autocomplete="off" />
 						<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
 						<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
@@ -295,7 +295,7 @@
 				 '</div>';
 			$formClass = $formClass.' center';
 			
-			echo '<form name="'.$formName.'" class="'.$formClass.'"  autocomplete="off"  action="postTrial.php"  method="post">
+			echo '<form name="'.$formName.'" class="'.$formClass.' PreCache"  autocomplete="off"  action="postTrial.php"  method="post">
 					<input  name="Response" type="text" value=""			class="Textbox picWord PreCache" autocomplete="off" />	<br />
 					<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
 					<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
@@ -342,7 +342,7 @@
 	
 	
 	#### Diagnostics ####
-	$diagnostics = TRUE;			// ## SET ## turn on diagnostics to see lots about each trial
+	$diagnostics = FALSE;			// ## SET ## turn on diagnostics to see lots about each trial
 	if ($diagnostics == TRUE OR $trialFail == TRUE) {
 		echo "<div>";
 			echo "Condition #: {$_SESSION['Condition']['Number']} <br />"; 
