@@ -77,60 +77,10 @@
 	}
 	
 	
-	#### determine trial timing
+	// variables I'll need and/or set in trialTiming() function
 	$timingReported = trim(strtolower($currentTrial['Procedure']['Timing']));
-	// set $time to computer-timing as default
-	switch ($timingReported) {
-			// ## ADD ## if your new trial has a default timing it should be a (case 'newTrial':) above the timing it will use
-			case 'study':
-			case 'studypic':
-			case 'instruct':
-				$time = $_SESSION['StudyTime'];
-				break;
-			case 'test':
-			case 'testpic':
-			case 'copy':
-			case 'mcpic':
-				$time = $_SESSION['TestTime'];
-				break;
-			case 'passage':
-				$time = $_SESSION['PassageTime'];
-				break;
-			case 'freerecall':
-				$time = $_SESSION['FreeRecallTime'];
-				break;
-			case 'audio':
-				$time = $_SESSION['AudioTime'];
-				break;
-			case 'jol':
-				$time = $_SESSION['jolTime'];
-				break;
-			default:										// set to 5s timing if no computer timing is specified
-				$time = 5;
-				break;
-		}
-	if(is_numeric($timingReported)) {						// if timing is manually set then override computer timing for this trial
-		$time = $timingReported;
-	}
-	elseif ($timingReported <> 'computer') {				// set user-timing if timing isn't numeric or computer timing 
-		$time = 'user';
-	}
-	if($_SESSION['Debug'] == TRUE) {
-		$time = 2;					## SET ## if debug mode is on all trials will be this many seconds long
-	}
-	// hidden field that JQuery/JavaScript uses to submit the trial to postTrial.php
-	echo '<div id="Time" class="Hidden">' . $time . '</div>';
-		
-	// changing form name and class based on user or computer timing.  I use the class name to do JQuerty magic
-	if($time == 'user'):
-		$formName	= 'UserTiming';
-		$formClass	= 'UserTiming';
-	else:
-		$formName	= 'ComputerTiming';
-		$formClass	= 'ComputerTiming';
-	endif;
-	
-	
+	$formClass	= '';
+	$time		= '';
 	
 	#### Presenting different trial types ####
 	$trialFail = FALSE;																			// this will be used to show diagnostic information when a specific trial isn't working
@@ -139,14 +89,26 @@
 			
 		// Audio trial type (no input)
 		case 'audio':
+			$compTime = 5;					// time in seconds to use for 'computer' timing
+			trialTiming();					// determines timing and user/computer timing mode
 			echo '<div class="WordWrap PreCache">
 					<audio autoplay><source src="'.$cue.'" /></audio>
+				  </div>';
+			// the hidden form below collects RT and displays the 'Done' button for user timed trials
+			echo '<div id="buttPos" class="PreCache">
+					<form class="'.$formClass.'" action="postTrial.php" method="post">
+						<input	name="RT"	type="text"		value=""	class="RT Hidden"	/>
+						<input	id="FormSubmitButton"	type="submit"	value="Done"	/>
+				  	</form>
 				  </div>';
 			break;
 			
 			
 		// Copy trial type
 		case 'copy':
+			$compTime = 8;					// time in seconds to use for 'computer' timing
+			trialTiming();					// determines timing and user/computer timing mode
+			
 			echo '<div class="WordWrap PreCache">
 					<span class="left">'.$cue.'</span>
 					<span class="divider">:</span>
@@ -156,7 +118,7 @@
 				  <div class="WordWrap PreCache">
 				  	<span class="leftcopy">'.$cue.'</span>
 				  	<span class="dividercopy">:</span>
-				  	<form name="'.$formName.'" class="'.$formClass.' leftfloat"  autocomplete="off"  action="postTrial.php"  method="post">
+				  	<form class="'.$formClass.' leftfloat"  autocomplete="off"  action="postTrial.php"  method="post">
 					  	<input 	name="Response" type="text" value=""			class="Textbox"			autocomplete="off" />
 					  	<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
 						<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
@@ -169,10 +131,13 @@
 			
 		// FreeRecall trial type
 		case 'freerecall':
+			$compTime = 60;					// time in seconds to use for 'computer' timing
+			trialTiming();					// determines timing and user/computer timing mode
+			
 			$prompt =& $currentTrial['Procedure']['Procedure Notes'];
 			echo '<div id="centerContent">
 				<div class="Prompt PreCache">' . $prompt . '</div>
-					<form name="'.$formName.'" class="'.$formClass.'"  autocomplete="off"  action="postTrial.php"  method="post">
+					<form class="'.$formClass.'"  autocomplete="off"  action="postTrial.php"  method="post">
 						<textarea rows="20" cols="60" name="Response" class="PreCache" wrap="physical" value=""></textarea>	<br />
 						<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
 						<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
@@ -185,19 +150,32 @@
 			
 		// Instruct trial type (no input)
 		case 'instruct':
+			$compTime = 5;					// time in seconds to use for 'computer' timing
+			trialTiming();					// determines timing and user/computer timing mode
+			
 			echo '<div id="centerContent" class="PreCache">
 					<div class="Instruct">'. $currentTrial['Procedure']['Procedure Notes'].'</div>
+				  </div>';
+			// the hidden form below collects RT and displays the 'Done' button for user timed trials
+			echo '<div id="buttPos" class="PreCache">
+					<form class="'.$formClass.'" action="postTrial.php" method="post">
+						<input	name="RT"	type="text"		value=""	class="RT Hidden"	/>
+						<input	id="FormSubmitButton"	type="submit"	value="Done"	/>
+				  	</form>
 				  </div>';
 			break;
 			
 			
 		// JOL trial type
 		case 'jol':
+			$compTime = 8;					// time in seconds to use for 'computer' timing
+			trialTiming();					// determines timing and user/computer timing mode
+			
 			echo '<div id="JOLpos">
 					<div id="jol">How likely are you to correctly remember this item on a later test?</div>
 					<div id="subpoint" class="gray">Type your response on a scale from 0-100 using the entire range of the scale</div>';
 			
-			echo '<form name="'.$formName.'" class="'.$formClass.'"  autocomplete="off"  action="postTrial.php"  method="post">
+			echo '<form class="'.$formClass.'"  autocomplete="off"  action="postTrial.php"  method="post">
 					<input	name="Response"	type="text"	value=""			class="Textbox"			autocomplete="off" />	<br />
 					<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
 					<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
@@ -210,6 +188,9 @@
 			
 		// MCpic trial type
 		case 'mcpic':
+			$compTime = 8;					// time in seconds to use for 'computer' timing
+			trialTiming();					// determines timing and user/computer timing mode
+			
 			## SET ## If you're going to use MCpic trials then you should change the category names in $MCbuttons
 			$MCbuttons 		= array( "Cat1", "Cat2", "Cat3", "Cat4", "Cat6", "Cat6", "Cat7", "Cat 8", "Cat9", "Cat10", "Cat11", "Cat 12");
 			$itemsPerRow	= 4;							## SET ## names says it all (use values 1-4; anything bigger causes problems which require css changes)
@@ -235,7 +216,7 @@
 			echo '</div>';
 			
 			$formClass = $formClass.' center';
-			echo '<form name="'.$formName.'" class="'.$formClass.'" action="postTrial.php" method="post">
+			echo '<form class="'.$formClass.'" action="postTrial.php" method="post">
 					<input	name="Response"	type="text"	value="no press"	class="Textbox Hidden"	/>
 					<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
 					<input	name="RTlast"	type="text"	value="no press"	class="RTlast Hidden" 	/>
@@ -246,38 +227,71 @@
 			
 		// Passage trial type (no input)
 		case 'passage':
+			$compTime = 60;					// time in seconds to use for 'computer' timing
+			trialTiming();					// determines timing and user/computer timing mode
+			
 			echo '<div class="passage PreCache">'.fixBadChars($cue).'</div>
 				  <div id="end">End of Passage</div>';
 				  $formClass = $formClass.' center';
+			// the hidden form below collects RT and displays the 'Done' button for user timed trials
+			echo '<div id="buttPos" class="PreCache">
+					<form class="'.$formClass.'" action="postTrial.php" method="post">
+						<input	name="RT"	type="text"		value=""	class="RT Hidden"	/>
+						<input	id="FormSubmitButton"	type="submit"	value="Done"	/>
+				  	</form>
+				  </div>';
 			break;
 			
 			
 		// Study trial type (no input)
 		case 'study':
+			$compTime = 5;					// time in seconds to use for 'computer' timing
+			trialTiming();					// determines timing and user/computer timing mode
+			
 			echo '<div class="WordWrap PreCache">
 					<span class="left">'.$cue.'</span>
 					<span class="divider">:</span>
 					<span class="right">'.$target.'</span>
+				  </div>';
+			// the hidden form below collects RT and displays the 'Done' button for user timed trials
+			echo '<div id="buttPos" class="PreCache">
+					<form class="'.$formClass.'" action="postTrial.php" method="post">
+						<input	name="RT"	type="text"		value=""	class="RT Hidden"	/>
+						<input	id="FormSubmitButton"	type="submit"	value="Done"	/>
+				  	</form>
 				  </div>';
 			break;
 			
 			
 		// StudyPic trial type (no input)
 		case 'studypic':
+			$compTime = 5;					// time in seconds to use for 'computer' timing
+			trialTiming();					// determines timing and user/computer timing mode
+			
 			echo '<div class="pic PreCache">
 					'. show($cue).
 				 '</div>';
 			echo '<div class="picWord PreCache">'.$target.'</div>';
 			$formClass = $formClass.' center';
+			// the hidden form below collects RT and displays the 'Done' button for user timed trials
+			echo '<div id="buttPos" class="PreCache">
+					<form class="'.$formClass.'" action="postTrial.php" method="post">
+						<input	name="RT"	type="text"		value=""	class="RT Hidden"	/>
+						<input	id="FormSubmitButton"	type="submit"	value="Done"	/>
+				  	</form>
+				  </div>';
 			break;
 			
 			
 		// Test trial type
 		case 'test':
+			$compTime = 8;					// time in seconds to use for 'computer' timing
+			trialTiming();					// determines timing and user/computer timing mode
+			
 			echo '<div class="WordWrap PreCache">
 					<span class="leftcopy">'.$cue.'</span>
 					<span class="dividercopy">:</span>
-					<form name="'.$formName.'" class="'.$formClass.' leftfloat"  autocomplete="off"  action="postTrial.php"  method="post">
+					<form class="'.$formClass.' leftfloat"  autocomplete="off"  action="postTrial.php"  method="post">
 						<input	name="Response"	type="text"	value=""			class="Textbox Right PreCache"	autocomplete="off" />
 						<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
 						<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
@@ -290,12 +304,15 @@
 			
 		// TestPic trial type
 		case 'testpic':
+			$compTime = 8;					// time in seconds to use for 'computer' timing
+			trialTiming();					// determines timing and user/computer timing mode
+			
 			echo '<div class="pic PreCache">
 					'. show($cue).
 				 '</div>';
 			$formClass = $formClass.' center';
 			
-			echo '<form name="'.$formName.'" class="'.$formClass.' PreCache"  autocomplete="off"  action="postTrial.php"  method="post">
+			echo '<form class="'.$formClass.' PreCache"  autocomplete="off"  action="postTrial.php"  method="post">
 					<input  name="Response" type="text" value=""			class="Textbox picWord PreCache" autocomplete="off" />	<br />
 					<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
 					<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
@@ -312,24 +329,19 @@
 					<p>Check your procedure file to make sure everything is in order. 
 					All information about this trial is dispalyed below.</p>';
 			$trialFail = TRUE;
+			$time = 'user';
+			// default trial is always user timing so you can click 'Done' and progress through the experiment
 			echo '<div id="buttPos" class="PreCache">
-				<form name="'.$formName.'" class="'.$formClass.'" action="postTrial.php" method="post">
+				<form name="UserTiming" class="UserTiming" action="postTrial.php" method="post">
 					<input	name="RT"	type="text"		value=""	class="RT Hidden"	/>
 					<input	id="FormSubmitButton"	type="submit"	value="Done"	/>
 			  	</form>
 			  </div>';
 			break;
 	}
-	// append the hidden form for all noInput trials
-	if (in_array($trialType, $noInputTrials)) {
-		// give the form a different name for user and comuputer timed (so I can hide it with CSS)
-		echo '<div id="buttPos" class="PreCache">
-				<form name="'.$formName.'" class="'.$formClass.'" action="postTrial.php" method="post">
-					<input	name="RT"	type="text"		value=""	class="RT Hidden"	/>
-					<input	id="FormSubmitButton"	type="submit"	value="Done"	/>
-			  	</form>
-			  </div>';
-	}
+	
+	// hidden field that JQuery/JavaScript uses to submit the trial to postTrial.php
+	echo '<div id="Time" class="Hidden">' . $time . '</div>';
 	
 
 	#### Pre-Cache Next trial ####
@@ -364,7 +376,7 @@
 				target: '.show($target).'<br />
 				answer: '.show($answer).'<br />
 			</div>';
-		readable($currentTrial, "the Current trial");
+		readable($currentTrial, "information loaded about the Current trial");
 	} 
 	#### Diagnostics ####
 ?>

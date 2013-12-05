@@ -56,9 +56,9 @@
 	});
 	
 	
-	// Disable enter key inside class "Textbox" when form is named "ComputerTiming"
+	// Disable enter key inside class "Textbox" when form has the class "ComputerTiming"
 	$(".Textbox").bind("keypress",function(e){
-		if( $("form").attr("name") == "ComputerTiming") {
+		if( $("form").hasClass("ComputerTiming")) {
 			if(e.keyCode == 13) return false;
 		}
 		if(e.keyCode == 13) return true;
@@ -99,7 +99,7 @@
 			$(".RTlast").attr("value",timer);
 		}
 		
-		if( $("form").attr("name") == "UserTiming") {
+		if( $("form").hasClass("UserTiming")) {
 			$(".DuringTrial").addClass("PreCache");		// hide content
 			$(".RT").attr("value",timer);
 			$("form").submit();

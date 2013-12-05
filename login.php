@@ -33,16 +33,12 @@
 		##### Parameters #####			## SET ##
 		$_SESSION['ExperimentName']	= "Collector";								// Recorded in datafile and can be useful.
 		$_SESSION['LoginCounter Location'] = "LoginCounter/1.txt";				// Change to restart condition cycling
-		// these timings only apply when trials are set as "Computer" timing
-		$_SESSION['StudyTime']		= 3;										// in seconds/trial (Study/StudyPic/Instruct)
-		$_SESSION['TestTime'] 		= 5;										// in seconds/trial (Test/TestPic/Copy/MCpic)
-		$_SESSION['PassageTime']	= 3;										// in seconds/trial (Passage)
-		$_SESSION['FreeRecallTime'] = 2;										// in seconds/trial (FreeRecall)
-		$_SESSION['AudioTime']		= 3;										// in seconds/trial (Audio)
-		$_SESSION['jolTime'] 		= 5;										// in seconds/trial	(JOL) - can also use value 'user'
-		$_SESSION['FeedbackTime']	= user;										// in seconds/trial - can also use value 'user'
 		$_SESSION['Demographics']	= FALSE;									// Can be TRUE or FALSE
 		$_SESSION['NextExp']		= FALSE;									// to link use format "www.cogfog.com/Generic/" do not forget the www and the ending "/"
+		// post-trial timing values
+		$_SESSION['jolTime'] 		= 5;										// in seconds/trial	(JOL) - can also use value 'user'
+		$_SESSION['FeedbackTime']	= user;										// in seconds/trial - can also use value 'user'
+		$_SESSION['debugTiming']	= 1;										// timing for all trials when in debug mode
 		##### Parameters END #####
 		
 		

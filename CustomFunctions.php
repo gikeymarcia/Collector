@@ -229,6 +229,38 @@
 	}
 	
 	
+	#### function to determine which timing to apply to the current trial
+	function trialTiming(){
+		global $formClass;
+		global $time;
+		global $compTime;
+		global $timingReported;
+		global $_SESSION;
+		
+		if (is_numeric($timingReported)) {				// use manually set time if possible
+			$time = $timingReported;
+		}
+		elseif ($timingReported <> 'computer') {		// if not manual or computer then timing is user
+			$time = 'user';
+		}
+		elseif (isset($compTime)) {						// if a $compTime is set then use that
+			$time = $compTime;
+		}
+		else { $time = 5; }								// default compTime if none is set
+		
+		if($_SESSION['Debug'] == TRUE) {
+			$time = 1;									## SET ## if debug mode is on all trials will be this many seconds long
+		}
+		
+		if($time == 'user'):
+			$formClass	= 'UserTiming';
+		else:
+			$formClass	= 'ComputerTiming';
+		endif;
+		
+	}
+	
+	
 	
 	#### Debug function that was quicker to write than an echo (mostly used it to make sure conditions of an if/for/while were being met)
 	function x($input="this is working"){
