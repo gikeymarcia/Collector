@@ -116,6 +116,14 @@ textarea
 /* Hides button on computer timing trials*/
 .ComputerTiming #FormSubmitButton
 	{	display:none;	}
+	
+/* Trial Diagnostics css */
+#Diagnostics {
+	font-family: Consolas, monaco, monospace;
+	padding: 75px 20px 0px 20px;
+	clear: both;
+	font-size: .9em;
+}
 
 
 .gray
@@ -261,26 +269,6 @@ h1.stepout
 		{	margin-left: 40%; margin-right: 40%; clear: both; width: 30%; padding-top:2%;	}
 	.theButton
 		{	width: 20%;	}
-
-
-
-/*css for the math page*/
-#Math
-	{	width: 850px; margin: 85px auto auto auto;	}
-#Math img
-	{	margin-bottom: 30px;	}
-#operation
-	{	background: #e0e0e0; padding: 15px;	}
-	#operation input:first-child
-		{	margin-left: 100px;	}
-	#operation input:focus
-		{	background:#f1f8ff;	}
-	#operation select
-		{	width: 70px; text-align: center;	}
-	#operation .textInput
-		{	width: 75px; font-size: 1.5em;	}
-.selector
-	{	font-size: 1.5em;	}
 
 
 

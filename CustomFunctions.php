@@ -199,20 +199,25 @@
 	
 	
 	
-	#### add html image tags to images but simply returns things that are not images
+	#### add html tags for images and audio files but do nothing to everything else
 	function show($string){
 		$stringLower	= strtolower($string);					// make lowercase version of input
 		$findJPG		= strpos($stringLower, '.jpg');			// look for file extensions in the input
 		$findGIF		= strpos($stringLower, '.gif');
 		$findPNG		= strpos($stringLower, '.png');
+		$findMP3		= strpos($stringLower, '.mp3');
+		$findOGG		= strpos($stringLower, '.ogg');
 		
-		// if I found any of the above image file extensions, add html image tags
-		// else, simply echo the orignal input (not the lowercase version)
+		// if I found an image file extension, add html image tags
 		if( $findGIF == TRUE || $findJPG == TRUE || $findPNG == TRUE){
 			$string = '<img src="'.$string.'">';
 		}
+		// if I found an audio file extension, add pre-cache code
+		elseif ($findMP3 == TRUE || $findOGG == TRUE) {
+			$string = '<source src="'.$string.'"/>';
+		}
 		else {
-			// don't change input string if it doesn't contain an image extension
+			// leave input as-is if no audio or image extensions are found
 		}
 		return $string;
 	}
@@ -233,6 +238,7 @@
 	function trialTiming(){
 		global $formClass;
 		global $time;
+		global $minTime;
 		global $compTime;
 		global $timingReported;
 		global $_SESSION;
@@ -252,11 +258,16 @@
 			$time = 1;									## SET ## if debug mode is on all trials will be this many seconds long
 		}
 		
-		if($time == 'user'):
+		if($time == 'user') {
 			$formClass	= 'UserTiming';
-		else:
+		} else {
 			$formClass	= 'ComputerTiming';
-		endif;
+		}
+		
+		// if minTime exists and is a number
+		if( isset($_SESSION['Trials'][$_SESSION['Position']]['Procedure']['MinTime']) && is_numeric($_SESSION['Trials'][$_SESSION['Position']]['Procedure']['MinTime']) ) {
+			$minTime = $_SESSION['Trials'][$_SESSION['Position']]['Procedure']['MinTime'];
+		}
 		
 	}
 	

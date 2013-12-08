@@ -81,6 +81,7 @@
 	$timingReported = trim(strtolower($currentTrial['Procedure']['Timing']));
 	$formClass	= '';
 	$time		= '';
+	$minTime	= 'not present (unless set)';
 	
 	#### Presenting different trial types ####
 	$trialFail = FALSE;																			// this will be used to show diagnostic information when a specific trial isn't working
@@ -135,8 +136,8 @@
 			trialTiming();					// determines timing and user/computer timing mode
 			
 			$prompt =& $currentTrial['Procedure']['Procedure Notes'];
-			echo '<div id="centerContent">
-				<div class="Prompt PreCache">' . $prompt . '</div>
+			echo '<div id="centerContent" class="PreCache">
+				<div class="Prompt">' . $prompt . '</div>
 					<form class="'.$formClass.'"  autocomplete="off"  action="postTrial.php"  method="post">
 						<textarea rows="20" cols="60" name="Response" class="PreCache" wrap="physical" value=""></textarea>	<br />
 						<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
@@ -171,7 +172,7 @@
 			$compTime = 8;					// time in seconds to use for 'computer' timing
 			trialTiming();					// determines timing and user/computer timing mode
 			
-			echo '<div id="JOLpos">
+			echo '<div id="JOLpos" class="PreCache">
 					<div id="jol">How likely are you to correctly remember this item on a later test?</div>
 					<div id="subpoint" class="gray">Type your response on a scale from 0-100 using the entire range of the scale</div>';
 			
@@ -231,7 +232,7 @@
 			trialTiming();					// determines timing and user/computer timing mode
 			
 			echo '<div class="passage PreCache">'.fixBadChars($cue).'</div>
-				  <div id="end">End of Passage</div>';
+				  <div id="end" class="PreCache">End of Passage</div>';
 				  $formClass = $formClass.' center';
 			// the hidden form below collects RT and displays the 'Done' button for user timed trials
 			echo '<div id="buttPos" class="PreCache">
@@ -312,7 +313,7 @@
 				 '</div>';
 			$formClass = $formClass.' center';
 			
-			echo '<form class="'.$formClass.' PreCache"  autocomplete="off"  action="postTrial.php"  method="post">
+			echo '<form class="'.$formClass.' PreCache"  autocomplete="off"  action="postTrial.php"  method="post" class="PreCache">
 					<input  name="Response" type="text" value=""			class="Textbox picWord PreCache" autocomplete="off" />	<br />
 					<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
 					<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
@@ -341,7 +342,8 @@
 	}
 	
 	// hidden field that JQuery/JavaScript uses to submit the trial to postTrial.php
-	echo '<div id="Time" class="Hidden">' . $time . '</div>';
+	echo '<div id="Time"	class="Hidden">' . $time . '</div>';
+	echo '<div id="minTime"	class="Hidden">' . $minTime . '</div>';
 	
 
 	#### Pre-Cache Next trial ####
@@ -356,27 +358,26 @@
 	#### Diagnostics ####
 	$diagnostics = FALSE;			// ## SET ## turn on diagnostics to see lots about each trial
 	if ($diagnostics == TRUE OR $trialFail == TRUE) {
-		echo "<div>";
-			echo "Condition #: {$_SESSION['Condition']['Number']} <br />"; 
-			echo "Condition Stim File: {$_SESSION['Condition']['Stimuli']} <br />";
-			echo "Condition Order File: {$_SESSION['Condition']['Procedure']} <br />";
-			echo "Condition description: {$_SESSION['Condition']['Condition Description']} <br />";
-		echo "</div>";
-		echo "<br />";
-		echo '<div class="Trial">';
-			echo "Trial Number: {$currentPos} <br />";
-			echo "Trial Type: {$trialType}<br />";
-			echo "Post Trial: {$currentTrial['Procedure']['Post Trial']} <br />";
-			echo "Trial timing: {$currentTrial['Procedure']['Timing']} <br />";
-			echo "Trial Time (seconds): {$time}";
-			echo "<br />";
-		echo '</div>';
-		echo '<div>
-				cue: '.show($cue).'<br />
-				target: '.show($target).'<br />
-				answer: '.show($answer).'<br />
-			</div>';
+		echo "<div id='Diagnostics'>
+				<ul>
+					<li> Condition #: 			{$_SESSION['Condition']['Number']}					</li>
+					<li> Condition Stim File:	{$_SESSION['Condition']['Stimuli']}					</li>
+					<li> Condition Order File:	{$_SESSION['Condition']['Procedure']}				</li>
+					<li> Condition description:	{$_SESSION['Condition']['Condition Description']}	</li>
+					<br/>
+					<li> Trial Number:			{$currentPos}										</li>
+					<li> Trial Type:			{$trialType}										</li>
+					<li> Post Trial:			{$currentTrial['Procedure']['Post Trial']}			</li>
+					<li> Trial timing:			{$currentTrial['Procedure']['Timing']}				</li>
+					<li> Trial Time (seconds):	{$time}												</li>
+					<br/>
+					<li> Cue: ".				show($cue)."										</li>
+					<li> Target:".				show($target)."										</li>
+					<li> Answer:".				show($answer)."										</li>
+				</ul>";
 		readable($currentTrial, "information loaded about the Current trial");
+		readable($_SESSION['Trials'], "information loaded THE ENTIRE EXPERIMENT!!!");
+		echo "</div>";
 	} 
 	#### Diagnostics ####
 ?>
