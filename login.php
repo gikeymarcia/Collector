@@ -319,7 +319,7 @@
 		echo '<form id="loadingForm" action="'.$link.'" method="get"> </form>';							// commenting this line out will stop experiment from progressing past login.php (good to check diagnostics)
 		
 	?>
-	<script src="javascript/jquery-1.8.0.min.js" type="text/javascript"> </script>
+	<script src="http://code.jquery.com/jquery-1.8.0.min.js" type="text/javascript"> </script>
 	<script src="javascript/jsCode.js" type="text/javascript"> </script>
 </body>
 </html>

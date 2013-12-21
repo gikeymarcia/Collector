@@ -60,7 +60,7 @@
 		echo '</div>';
 	?>
 	
-	<script src="javascript/jquery-1.8.0.min.js" type="text/javascript"> </script>
+	<script src="http://code.jquery.com/jquery-1.8.0.min.js" type="text/javascript"> </script>
 	<script type="text/javascript">
 		var timer = $("#time").html();
 		var interval = 1000;
