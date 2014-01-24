@@ -8,6 +8,7 @@
 	
 	// are we done with all presentations?  if so, send to done.php
 	if (array_key_exists($_SESSION['Position'], $_SESSION['Trials']) == FALSE) {
+		$_SESSION['finishedTrials'] = TRUE;											// stops people from skipping to the end
 		header("Location: FinalQuestions.php");
 		exit;
 	}

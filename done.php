@@ -5,6 +5,13 @@
  */
 	ini_set('auto_detect_line_endings', true);			// fixes problems reading files saved on mac
 	session_start();									// start the session at the top of each page
+	
+	// if someone skipped to done.php without doing all trials
+	if ($_SESSION['finishedTrials'] <> TRUE) {
+		header("Location: http://www.youtube.com/watch?v=oHg5SJYRHA0");			// rick roll
+		exit;
+	}
+	
 	if ($_SESSION['Debug'] == FALSE) {
 		error_reporting(0);
 	}
