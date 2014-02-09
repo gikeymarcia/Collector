@@ -128,20 +128,23 @@
 	
 	
 	#### custom function to read from tab delimited data files;  pos 0 & 1 are blank,  header names are array keys
-	function GetFromFile($fileLoc, $padding = TRUE) {
-		
+	function GetFromFile($fileLoc, $padding = TRUE, $delimiter = "\t") {
 		$file	= fopen($fileLoc, 'r');					// open the file passed through the function arguement
-		$keys	= fgetcsv($file, 0, "\t");				// pulling header data from top row of file
+		$keys	= fgetcsv($file, 0, $delimiter);		// pulling header data from top row of file
 		if ($padding == TRUE):
 			$out	= array(0 => 0, 1 => 0);			// leave positions 0 and 1 blank (so when I call $array[#] it will corespond to the row in excel)
 		endif;
-		while ($line = fgetcsv($file, 0, "\t")) {		// capture each remaining line from the file
+		while ($line = fgetcsv($file, 0, $delimiter)) {		// capture each remaining line from the file
+			while (count($keys) > count($line)) {			// make sure each line has the right # of columns
+				$line[] = '';
+			}
 			$tOut	= array_combine($keys, $line);		// combine the line of data with the header
 			if(isBlankLine($tOut)) {					// do not include blank lines in output
 				continue;
 			}
 			$out[]	= $tOut;							// add this combined header<->line array to the ouput array
 		}
+		fclose($file);
 		return $out;
 	}
 	
@@ -157,7 +160,21 @@
 	
 	
 	
-	function isBlankLine($array) {								// if an array is empty, all positions == "", return TRUE
+	#### function that returns TRUE or FALSE if a string is found in another string
+	function inString ($needle, $haystack, $caseSensitive = FALSE){
+		if ($caseSensitive == FALSE) {
+			$haystack = strtolower($haystack);
+			$needle = strtolower($needle);
+		}
+		if (strpos($haystack, $needle) !== FALSE) {
+			return TRUE;
+		} else { return FALSE; }
+	}
+	
+	
+	
+	#### if an array is empty, all positions == "", return TRUE
+	function isBlankLine($array) {
 		foreach ($array as $item) {
 			if($item <> "") {
 				return FALSE;
@@ -189,12 +206,13 @@
 	
 	
 	#### Debug function I use to display arrays in an easy to read fashion
-	function Readable($displayArray, $NameOfDisplayed = "unspecified"){
-		echo "<br />";	
-		echo "Below is the array for <b>{$NameOfDisplayed}</b>";
-		echo '<pre>';
-		print_r($displayArray);
-		echo '</pre>';
+	function Readable($displayArray, $name = "unspecified"){
+		echo '<div>';
+		echo 	'<h3 class="collapsibleTitle"> Array for: '.$name.'<em> (click to open/close)</em> </h3> ';
+		echo 		'<pre>';
+						print_r($displayArray);
+		echo  		'</pre>';
+		echo  '</div>';
 	}
 	
 	

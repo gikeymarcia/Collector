@@ -58,3 +58,17 @@ $(".wrong").click(function(){
 	alert('Please carefully read the instructions again.');
 	$(".Fails").attr("value",Fails);
 });
+
+
+// allows for the collapsing of Readable() outputs
+$(".collapsibleTitle").click(function() {
+	var change = $(this).parent().children().not(".collapsibleTitle");
+	if($(this).hasClass("hiding")) {
+		change.show(350);
+		$(this).removeClass("hiding");
+	}
+	else {
+		$(this).addClass("hiding");
+		change.hide(350);
+	}
+});

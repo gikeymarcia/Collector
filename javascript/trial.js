@@ -125,6 +125,20 @@
 	});
 	
 	
+	// allows for the collapsing of Readable() outputs
+	$(".collapsibleTitle").click(function() {
+		var change = $(this).parent().children().not(".collapsibleTitle");
+		if($(this).hasClass("hiding")) {
+			change.show(350);
+			$(this).removeClass("hiding");
+		}
+		else {
+			$(this).addClass("hiding");
+			change.hide(350);
+		}
+	});
+	
+	
 	// Prevent the backspace key from navigating back.
 	// MAGIC!!! found on stackoverflow (http://stackoverflow.com/questions/1495219/how-can-i-prevent-the-backspace-key-from-navigating-back)
 	$(document).unbind('keydown').bind('keydown', function (event) {
