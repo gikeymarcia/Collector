@@ -39,6 +39,10 @@
 		$_SESSION['jolTime'] 		= 5;										// in seconds/trial	(JOL) - can also use value 'user'
 		$_SESSION['FeedbackTime']	= user;										// in seconds/trial - can also use value 'user'
 		$_SESSION['debugTiming']	= 1;										// timing for all trials when in debug mode
+		// Mturk Mode settings
+		$_SESSION['mTurkMode']		= FALSE;										// use mTurk mode (TRUE) or not (FALSE)
+			$_SESSION['verifCode']	= 'boom goes the dynamite';					// code that shows on done.php
+			$_SESSION['checkPrev']	= TRUE;										// use files in eligibility/ folder to check past participation 	
 		##### Parameters END #####
 		
 		
@@ -64,8 +68,12 @@
 		#### Checking username is 3 characters or longer
 		if(strlen($_SESSION['Username']) < 3) {
 			echo '<h1>Error: Login username must be 3 characters or longer</h1>
-					<h1>Click <a href="index.php">here</a> to enter a valid username</h1>';
+					<h2>Click <a href="index.php">here</a> to enter a valid username</h2>';
 			exit;
+		}
+		
+		if($_SESSION['checkPrev'] == TRUE AND $_SESSION['mTurkMode'] == TRUE) {
+			include	'check.php';
 		}
 		
 		
@@ -148,19 +156,23 @@
 							$_SESSION['Condition']['Stimuli'],
 							$_SESSION['Condition']['Procedure'],
 							$_SESSION['Condition']['Condition Description'],
-							$_SERVER['HTTP_USER_AGENT']
+							$_SERVER['HTTP_USER_AGENT'],
+							$_SERVER["REMOTE_ADDR"],
+							'N/A'
 						 );
 		// header row for the Status File
 		$UserDataHeader = array(
-							"Username" ,
-							"Date" ,
-							"Session #" ,
-							"Begin/End?" ,
-							"Condition #",
-							"Words File",
-							"Order File",
-							"Condition Description",
-							"User Agent Info"
+							'Username' ,
+							'Date' ,
+							'Session #' ,
+							'Begin/End?' ,
+							'Condition #',
+							'Words File',
+							'Order File',
+							'Condition Description',
+							'User Agent Info', 
+							'IP',
+							'Inclusion Notes'
 						 );
 		// if the file doesn't exist, write the header
 	 	if (is_file("subjects/Status.txt") == FALSE) {

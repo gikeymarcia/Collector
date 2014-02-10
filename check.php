@@ -3,8 +3,10 @@
 	A program for running experiments on the web
 	Copyright 2012-2013 Mikey Garcia & Nate Kornell
  */
-	include 'CustomFunctions.php';
-	#### variables needed for this page
+ 	if(!isset($_SESSION)) {
+ 		include 'CustomFunctions.php';
+ 	}
+ 	#### variables needed for this page
 	$folder	= "eligibility/";						// where to look for files containing workers
 	$files	= scandir($folder);						// list all files containing workers
 	$toCheck = null;								// who to check for eligibility
@@ -15,7 +17,6 @@
 	$ip = $_SERVER["REMOTE_ADDR"];					// user's ip address
 	$ipFilename = 'rejected-IP.txt';				// name of bad IP file
 	$ipPath = $folder.$ipFilename;					// path to bad IP file
-	
 	
 	#### make a master list of unique user IDs (lowercase and trimmed)
 	foreach ($files as $file) {						// check all files
@@ -39,15 +40,14 @@
 			}
 		}
 	}
-	
-	
+		
 	
 	#### show prompt if going to to this while not logged in
 	if(isset($_SESSION)) {										// if there is a session initiated already
 		$toCheck = $_SESSION['Username'];						// use username if logged in
 	} else {
 		echo '<form method="POST" action="">
-				<p> Whose eligibility would you like to check? </br>
+				<p> Whose eligibility would you like to check? <br/>
 				<em>Checking from '.count($uniques).' workers within '.count($checked).' files</em>  </p>
 				<input type="text" name="worker" class="eCheck" />
 				<input type="submit" value="Eligible?" />
@@ -62,8 +62,7 @@
 	#### running checks
 	if(isset($toCheck)) {										// if there is something to check then check it
 		$noCaseCheck = trim(strtolower($toCheck));				// all lowercase version of ID to check
-		
-		
+				
 		####  check if we've already told this person not to come back (BOOM, headshot)
 		if(isset($_SESSION) AND file_exists($ipPath)) {			// check IPs if logged in and there is a badIP file
 			$badIPs = GetFromFile($ipPath, FALSE);
@@ -73,7 +72,7 @@
 				}
 			}
 		}
-		rejectCheck($noGo);									// print errors
+		
 		
 		
 		#### check if this user has previously participated
@@ -81,22 +80,21 @@
 			$noGo[] = 'Sorry, you are not eligible to participate in this study 
 					   because you have participated in a previous version of this experiment before.';
 			// log their IP to stop them from logging in again
-			$ipFile = fopen($ipPath, 'a');
 			if(!is_file($ipPath)) {
-				echo '<h1>no such file</h1>';
-				fputs($ipFile, 'gooooooo');
+				$ipFile = fopen($ipPath, 'a');
+				fputs($ipFile, 'ip address');					// write header
+				fputs($ipFile, PHP_EOL);						// write newline character
+				fputs($ipFile, $ip);							// write IP to file
+				fputs($ipFile, PHP_EOL);						// write newline character
+			} else {
+				$ipFile = fopen($ipPath, 'a');
+				fputs($ipFile, $ip);							// write IP to file
+				fputs($ipFile, PHP_EOL);						// write newline character
 			}
-			fputs($ipFile, $ip);							// write IP to file
-			fputs($ipFile, PHP_EOL);						// write newline character
+			
 		}
 		rejectCheck($noGo);									// print errors
 	}
-
-	// if(!is_file($ipPath)) {
-		// echo '<h1>no such file</h1>';
-		// $ipFile = fopen($ipPath, 'a');
-		// fputs($ipFile, 'ip address');
-	// }
 	
 	#### check if this user has previously logged in
 		/*
@@ -113,9 +111,12 @@
 	
 	if(count($noGo) == 0 AND isset($toCheck) AND !isset($_SESSION)) {
 		echo '<h2>User <b>'.$toCheck.'</b> is eligible to participate</h2>';
-	}	
-	Readable($files, 'Files in directory');
-	Readable($uniques, 'Previous iteration workers');
+	}
+	// show all users to people who want to login
+	if(!isset($_SESSION)) {
+		Readable($files, 'Files in directory');
+		Readable($uniques, 'Previous iteration workers');
+	}
 	
 	
 	#### functions and scripting needed to make this page work
@@ -130,17 +131,15 @@
 		}
 	}
 	
+	if(!isset($_SESSION)) {
+		echo '<script src="http://code.jquery.com/jquery-1.8.0.min.js" type="text/javascript"> </script>';
+		echo  '<script src="javascript/jsCode.js" type="text/javascript"> </script>';
+	}
+	
 	#### style to make the page looks right
 	echo "<style>
 			.eCheck { background:#A4DBFC; }
 			p { font-size: 1.3em; }
 		  </style>";
-	
-	if(!isset($_SESSION)) {
-		echo '<script src="http://code.jquery.com/jquery-1.8.0.min.js" type="text/javascript"> </script>';
-		echo  '<script src="javascript/jsCode.js" type="text/javascript"> </script>';
-	}
 	####################
-	
-	
 ?>
