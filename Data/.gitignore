@@ -1,0 +1,15 @@
+Thumbs.db
+desktop.ini
+*.dropbox
+*.project
+*.orig
+*.txt
+.settings/
+
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db

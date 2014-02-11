@@ -3,7 +3,8 @@
 	A program for running experiments on the web
 	Copyright 2012-2013 Mikey Garcia & Nate Kornell
  */
-	require("CustomFunctions.php");							// Load custom PHP functions
+	require 'CustomFunctions.php';							// Load custom PHP functions
+	require 'fileLocations.php';					// sends file to the right place
 	initiateCollector();
 	
 	// are we done with all presentations?  if so, send to done.php
@@ -33,8 +34,8 @@
 	
 	
 	// if just coming from instructions then record that data into a file
-	if(@$_POST['PrevTrial'] == "Instruction") {
-		$instructFile = 'subjects/InstructionsData.txt';
+	if(@$_POST['PrevTrial'] == 'Instruction') {
+		$instructFile = $up.$dataF.'InstructionsData.txt';
 		if(is_file($instructFile) == FALSE) {
 			$instructHeader = array('Username','Timestamp', 'RT','Fails');
 			arrayToLine($instructHeader,$instructFile);
@@ -63,7 +64,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link href="css/global.css" rel="stylesheet" type="text/css" />
 	<link href='http://fonts.googleapis.com/css?family=Kreon' rel='stylesheet' type='text/css' />
-	<title>Test/Presentation</title>
+	<title>Trial</title>
 </head>
 <?php flush(); ?>
 

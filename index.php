@@ -21,7 +21,9 @@
 	$_SESSION = array();								// reset session so it doesn't contain any information from a previous login attempt
 	$_SESSION['Debug']=FALSE;							// turns debug mode on and off   ## SET ##
 	$selector = TRUE;									// ## SET ##; Show (TRUE) or hide (FALSE) the condition selector
-	require("CustomFunctions.php");						// Loads all of my custom PHP functions
+	require 'Code/CustomFunctions.php';						// Loads all of my custom PHP functions
+	require 'Code/fileLocations.php';						// sends file to the right place
+	
 ?>
 	
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -29,7 +31,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<link href="css/global.css" rel="stylesheet" type="text/css" />
+	<link href="<?php echo $codeF; ?>css/global.css" rel="stylesheet" type="text/css" />
 	<link href='http://fonts.googleapis.com/css?family=Kreon' rel='stylesheet' type='text/css' />
 	<title>Experiment Login Page</title>
 </head>
@@ -43,7 +45,7 @@
 			<p>This experiment will run for approximately 25 minutes.				<!--## SET ## give intro description for your exp-->
 			Your goal is to learn some information</p>
 			
-			<form name="Login"	autocomplete="off" 	action="login.php"	method="get">
+			<form name="Login"	autocomplete="off" 	action="<?php echo $codeF;?>login.php"	method="get">
 				<p> Please enter your UCLA email address below</p>					<!--## SET ## change this for mTurk-->
 				
 				<input class="Textbox"	style="width:400px;"	name="Username"	type="text"	value=""	autocomplete="off"/>
@@ -60,7 +62,7 @@
 					
 					<?php
 						#### Display conditions as choices
-						$Conditions	= GetFromFile("Conditions.txt");					// load from condition file
+						$Conditions	= GetFromFile($expFiles.'Conditions.txt');					// load from condition file
 						$tempCond	= SortByKey($Conditions, 'Number');
 						
 						for($i=2; $i<count($tempCond); $i++) {							// output all possible condition choices
@@ -78,17 +80,17 @@
 	<div class="Hidden">
 		<!-- put things here you want to precache -->
 	</div>
-	<?php
 	
-	#### Auto submit Username and Condition to login.php if $_SESSION['Debug']==TRUE
-	if($_SESSION['Debug'] == TRUE) {
-		echo '<meta http-equiv="refresh" content="1; url=login.php?Username='.'Debug'.date('U').'&Condition=Auto&Debug=TRUE">';
-	}
+	<?php
+		#### Auto submit Username and Condition to login.php if $_SESSION['Debug']==TRUE
+		if($_SESSION['Debug'] == TRUE) {
+			echo '<meta http-equiv="refresh" content="1; url='.$codeF.'login.php?Username='.'Debug'.date('U').'&Condition=Auto&Debug=TRUE">';
+		}
 	?>
 
 	<!-- #### how to insert javascript written in separate files #### -->
 	<script src="http://code.jquery.com/jquery-1.8.0.min.js" type="text/javascript"> </script>
-	<script src="javascript/jsCode.js" type="text/javascript"> </script>
+	<script src="<?php echo $codeF; ?>javascript/jsCode.js" type="text/javascript"> </script>
 
 <!--################# to do #################	-->
 

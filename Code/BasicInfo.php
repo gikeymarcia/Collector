@@ -8,7 +8,8 @@
 	if ($_SESSION['Debug'] == FALSE) {
 		error_reporting(0);
 	}
-	require("CustomFunctions.php");							// Loads all of my custom PHP functions
+	require 'CustomFunctions.php';							// Loads all of my custom PHP functions
+	require 'fileLocations.php';							// sends file to the right place
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"

@@ -4,7 +4,8 @@
 	Copyright 2012-2013 Mikey Garcia & Nate Kornell
  */
 	ini_set('auto_detect_line_endings', true);			// fixes problems reading files saved on mac
-	require("CustomFunctions.php");						// Load custom PHP functions
+	require 'CustomFunctions.php';						// Load custom PHP functions
+	require 'fileLocations.php';						// sends file to the right place
 	initiateCollector();
 ?>
 
@@ -25,7 +26,7 @@
 	<?php
 		// if this is the first time on FinalQuestions.php then load questions from file
 		if(isset($_SESSION['FinalQs']) == FALSE) {
-			$fQ	= GetFromFile('FinalQuestions.txt');
+			$fQ	= GetFromFile($up.$expFiles.'FinalQuestions.txt');
 			// loop that deletes trailing empty positions from $fQ array
 			for ($i=count($fQ); $i >0; $i--) { 
 				if($fQ[$i] == null) {

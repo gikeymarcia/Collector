@@ -8,9 +8,11 @@
 	if ($_SESSION['Debug'] == FALSE) {
 		error_reporting(0);
 	}
-	require("CustomFunctions.php");							// Loads all of my custom PHP functions
+	require 'CustomFunctions.php';							// Loads all of my custom PHP functions
+	require 'fileLocations.php';							// sends file to the right place
 	
-	$DemographicsFile = 'subjects/demographics.txt';
+	
+	$DemographicsFile = $up.$dataF.'demographics.txt';
 	
 	$gender		= $_POST['Gender'];
 	$age		= $_POST['Age'];
@@ -40,6 +42,6 @@
 	// write user demographics data to demographics file
 	arrayToLine($data,$DemographicsFile);
 	
-	header("Location: instructions.php");
+	header("Location: {$up}{$expFiles}instructions.php");
 	exit;
 ?>

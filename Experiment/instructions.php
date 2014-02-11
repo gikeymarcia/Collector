@@ -6,7 +6,8 @@
  
  
 	####  good place to pull in values and/or compute things that'll be inserted into the HTML below
-	require("CustomFunctions.php");							// Load custom PHP functions
+	require '../Code/fileLocations.php';					// sends file to the right place
+	require $up.$codeF.'CustomFunctions.php';							// Load custom PHP functions
 	initiateCollector();
 ?>
 
@@ -15,7 +16,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<link href="css/global.css" rel="stylesheet" type="text/css" />
+	<link href="<?php echo $up.$codeF ?>css/global.css" rel="stylesheet" type="text/css" />
 	<link href='http://fonts.googleapis.com/css?family=Kreon' rel='stylesheet' type='text/css' />
 	<title>Experiment Instructions</title>
 </head>
@@ -48,7 +49,7 @@
 			</ol>
 		</div>
 		
-		<form class="" name="Login" action="trial.php" method="Post">
+		<form class="" name="Login" action="<?php echo $up.$codeF; ?>trial.php" method="Post">
 			<input	name="RT"			class="RT Hidden"		type="text"	value="0"			/>
 			<input	name="Fails"		class="Fails Hidden"	type="text"	value="0"			/>
 			<input	name="PrevTrial"	class="Hidden"			type="text"	value="Instruction" />
@@ -69,6 +70,6 @@
 	?>
 	
 	<script	src="http://code.jquery.com/jquery-1.8.0.min.js"	type="text/javascript"	>	</script>				<!-- JQuery javascript library (makes basic functions much easier) -->
-	<script	src="javascript/jsCode.js"				type="text/javascript"	>	</script>				<!-- Your own javascript file -->
+	<script	src="<?php echo $up.$codeF;?>javascript/jsCode.js"				type="text/javascript"	>	</script>				<!-- Your own javascript file -->
 </body>
 </html>

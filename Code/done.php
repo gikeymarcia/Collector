@@ -5,6 +5,7 @@
  */
 	ini_set('auto_detect_line_endings', true);			// fixes problems reading files saved on mac
 	session_start();									// start the session at the top of each page
+	require 'fileLocations.php';						// sends file to the right place
 	
 	// if someone skipped to done.php without doing all trials
 	if ($_SESSION['finishedTrials'] <> TRUE) {
@@ -15,7 +16,7 @@
 	if ($_SESSION['Debug'] == FALSE) {
 		error_reporting(0);
 	}
-	require("CustomFunctions.php");						// Loads all of my custom PHP functions
+	require 'CustomFunctions.php';						// Loads all of my custom PHP functions
 	
 	#### TO-DO ####
 	$finalNotes = '';
@@ -53,7 +54,7 @@
 	} else {
 		echo "<h2>Experiment will resume in 5 seconds.</h2>";
 		$nextLink = 'http://'.$_SESSION['NextExp'];
-		echo '<meta http-equiv="refresh" content="5; url='.$nextLink.'login.php?Username='.$_SESSION['Username'].'&Condition=Auto">';
+		echo '<meta http-equiv="refresh" content="5; url='.$nextLink.'Code/login.php?Username='.$_SESSION['Username'].'&Condition=Auto">';
 	}
 	
 		
@@ -65,8 +66,8 @@
 	$UserData = array(
 						$_SESSION['Username'] ,
 						date('c') ,
-						"Session " . $_SESSION['Session'] ,
-						"Session End" ,
+						'Session '.$_SESSION['Session'] ,
+						'Session End' ,
 						"Condition# {$_SESSION['Condition']['Number']}",
 						$_SESSION['Condition']['Stimuli'],
 						$_SESSION['Condition']['Procedure'],
@@ -88,10 +89,10 @@
 						'IP',
 						'Inclusion Notes'
 					 );
-	if (is_file("subjects/Status.txt") == FALSE) {					// if the file doesn't exist, write the header
- 		arrayToLine ($UserDataHeader, "subjects/Status.txt");
+	if (is_file($up.$dataF.'Status.txt') == FALSE) {					// if the file doesn't exist, write the header
+ 		arrayToLine ($UserDataHeader, $up.$dataF.'Status.txt');
  	}
-	arrayToLine ($UserData, "subjects/Status.txt");					// write $UserData to "subjects/Status.txt"
+	arrayToLine ($UserData, $up.$dataF.'Status.txt');					// write $UserData to "subjects/Status.txt"
 	########
 	
 	$_SESSION = array();											// clear out all session info

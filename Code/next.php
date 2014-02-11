@@ -3,7 +3,8 @@
 	A program for running experiments on the web
 	Copyright 2012-2013 Mikey Garcia & Nate Kornell
  */
-	require("CustomFunctions.php");							// Load custom PHP functions
+	require 'CustomFunctions.php';							// Load custom PHP functions
+	require 'fileLocations.php';							// sends file to the right place
 	initiateCollector();
 	
 	#### setting up aliases (for later use)
@@ -32,7 +33,7 @@
 	
 	
 	#### Writing to data file
-	$fileName = 'subjects/Output_Session'.$_SESSION['Session'].'_'.$_SESSION['Username'].'.txt';
+	$fileName = $up.$dataF.'Output_Session'.$_SESSION['Session'].'_'.$_SESSION['Username'].'.txt';
 	$add = array(		$_SESSION['Username'],
 						$_SESSION['ExperimentName'],
 						$_SESSION['Session'],

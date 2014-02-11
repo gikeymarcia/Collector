@@ -3,7 +3,8 @@
 	A program for running experiments on the web
 	Copyright 2012-2013 Mikey Garcia & Nate Kornell
  */
-	require("CustomFunctions.php");							// Load custom PHP functions
+	require 'CustomFunctions.php';							// Load custom PHP functions
+	require 'fileLocations.php';							// sends file to the right place
 	initiateCollector();
 	
 	
@@ -21,7 +22,7 @@
 	
 	
 	//write header if file doesn't exist
-	$fileName = 'subjects/FinalQuestionsData.txt';
+	$fileName = $up.$dataF.'FinalQuestionsData.txt';
 	if (is_file($fileName) == FALSE) {
 		$header = array(	'Username',
 							'FinalQuestions',

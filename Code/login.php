@@ -10,7 +10,8 @@
 	if ($_SESSION['Debug'] == FALSE) {
 		error_reporting(0);
 	}
-	require("CustomFunctions.php");							// Loads all of my custom PHP functions
+	require 'CustomFunctions.php';							// Loads all of my custom PHP functions
+	require 'fileLocations.php';							// sends file to the right place
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -31,8 +32,8 @@
 		echo '<noscript>	<h1>	You must enable javascript to participate!!!	</h1>	</noscript>';
 		
 		##### Parameters #####			## SET ##
-		$_SESSION['ExperimentName']	= "Collector";								// Recorded in datafile and can be useful.
-		$_SESSION['LoginCounter Location'] = "LoginCounter/1.txt";				// Change to restart condition cycling
+		$_SESSION['ExperimentName']	= 'Collector';								// Recorded in datafile and can be useful.
+		$_SESSION['LoginCounter Location'] = 'Counter/1.txt';					// Change to restart condition cycling
 		$_SESSION['Demographics']	= FALSE;									// Can be TRUE or FALSE
 		$_SESSION['NextExp']		= FALSE;									// to link use format "www.cogfog.com/Generic/" do not forget the www and the ending "/"
 		// post-trial timing values
@@ -46,10 +47,19 @@
 		##### Parameters END #####
 		
 		
+		#### Make sure all the necessary folders exist
+		// $thisFolder = $dataF.$_SESSION['ExperimentName'];
+		$needed = array( $up.$dataF,  $up.$dataF.'Counter/', $up.$dataF.'eligibility/');
+		foreach ($needed as $dir) {
+			if (!file_exists($dir)) {						// if the folder doesn't exist
+			    mkdir($dir, 0777, true);					// make it
+			}
+		}
+		
 		##### Error Checking Code ####
 		$found	= FALSE;														// will use this later to determine when loops fail
 		$errors	= array('Count' => 0, 'Details' =>array()  );					// the array to keep count and details of errors
-		if (file_exists("Conditions.txt") == FALSE):							// does conditions exist? (error checking)
+		if (file_exists($up.$expFiles.'Conditions.txt') == FALSE):							// does conditions exist? (error checking)
 			$errors['Count']++;
 			$errors['Details'][] = 'No "Conditions.txt" found';
 		endif;
@@ -68,7 +78,7 @@
 		#### Checking username is 3 characters or longer
 		if(strlen($_SESSION['Username']) < 3) {
 			echo '<h1>Error: Login username must be 3 characters or longer</h1>
-					<h2>Click <a href="index.php">here</a> to enter a valid username</h2>';
+					<h2>Click <a href="'.$up.'index.php">here</a> to enter a valid username</h2>';
 			exit;
 		}
 		
@@ -78,11 +88,11 @@
 		
 		
 		#### Code to automatically choose condition assignment
-		$Conditions	=  GetFromFile("Conditions.txt", FALSE);		// Loading conditions info
-		$logFile	=& $_SESSION["LoginCounter Location"];
+		$Conditions	=  GetFromFile($up.$expFiles.'Conditions.txt', FALSE);		// Loading conditions info
+		$logFile	=& $up.$expFiles.$_SESSION["LoginCounter Location"];
 		if( $selectedCondition == 'Auto') {
 			
-			if(file_exists($logFile) ) {							// Read counter file & save value
+			if(file_exists($logFile) ) {										// Read counter file & save value
 				$fileHandle	= fopen ($logFile, "r");
 				$loginCount	= fgets($fileHandle);
 				fclose($fileHandle);
@@ -115,23 +125,23 @@
 			$errors['Details'][] = 'Could not find the selected condition #'.$conditionNumber.' in Conditions.txt';
 		}
 		// does this condition point to a valid stimuli file?
-		if (file_exists($_SESSION['Condition']['Stimuli']) == FALSE) {
+		if (file_exists($up.$expFiles.$_SESSION['Condition']['Stimuli']) == FALSE) {
 			$errors['Count']++;
 			$errors['Details'][] = 'No stimuli file found at '.$_SESSION['Condition']['Stimuli'];
 		}
 		// does this condition point to a valid procedure file?
-		if (file_exists($_SESSION['Condition']['Procedure']) == FALSE) {
+		if (file_exists($up.$expFiles.$_SESSION['Condition']['Procedure']) == FALSE) {
 			$errors['Count']++;
 			$errors['Details'][] = 'No procedure file found at '.$_SESSION['Condition']['Procedure'];
 		}
 		// checking required columns from Stimuli file
-		$temp = GetFromFile($_SESSION['Condition']['Stimuli']);
+		$temp = GetFromFile($up.$expFiles.$_SESSION['Condition']['Stimuli']);
 		$errors = keyCheck( $temp, 'Cue'	,	$errors, $_SESSION['Condition']['Stimuli'] );
 		$errors = keyCheck( $temp, 'Target'	,	$errors, $_SESSION['Condition']['Stimuli'] );
 		$errors = keyCheck( $temp, 'Answer'	,	$errors, $_SESSION['Condition']['Stimuli'] );
 		$errors = keyCheck( $temp, 'Shuffle',	$errors, $_SESSION['Condition']['Stimuli'] );
 		// checking required columns from Procedure file
-		$temp = GetFromFile($_SESSION['Condition']['Procedure']);
+		$temp = GetFromFile($up.$expFiles.$_SESSION['Condition']['Procedure']);
 		$errors = keyCheck( $temp, 'Item'		,	$errors, $_SESSION['Condition']['Procedure'] );
 		$errors = keyCheck( $temp, 'Trial Type'	,	$errors, $_SESSION['Condition']['Procedure'] );
 		$errors = keyCheck( $temp, 'Timing'		,	$errors, $_SESSION['Condition']['Procedure'] );
@@ -150,8 +160,8 @@
 		$UserData = array(
 							$_SESSION['Username'] ,
 							date('c') ,
-							"Session " . $_SESSION['Session'] ,
-							"Session Start" ,
+							'Session ' . $_SESSION['Session'] ,
+							'Session Start' ,
 							"Condition# {$_SESSION['Condition']['Number']}",
 							$_SESSION['Condition']['Stimuli'],
 							$_SESSION['Condition']['Procedure'],
@@ -175,40 +185,40 @@
 							'Inclusion Notes'
 						 );
 		// if the file doesn't exist, write the header
-	 	if (is_file("subjects/Status.txt") == FALSE) {
-	 		arrayToLine ($UserDataHeader, "subjects/Status.txt");
+	 	if (is_file($up.$dataF.'Status.txt') == FALSE) {
+	 		arrayToLine ($UserDataHeader, $up.$dataF.'Status.txt');
 	 	}
-		arrayToLine ($UserData, "subjects/Status.txt");						// write $UserData to "subjects/Status.txt"
+		arrayToLine ($UserData, $up.$dataF.'Status.txt');						// write $UserData to "subjects/Status.txt"
 		###########################################################################
 		
 		
 		#### Load all Stimuli and Info for this participant's condition then combine to create the experiment
 		if($_SESSION['Session'] == 1) {
 			// load and block shuffle stimuli for this condition
-			$stimuli = GetFromFile($_SESSION['Condition']['Stimuli']);
-			$stimuli = BlockShuffle($stimuli, "Shuffle");
+			$stimuli = GetFromFile($up.$expFiles.$_SESSION['Condition']['Stimuli']);
+			$stimuli = BlockShuffle($stimuli, 'Shuffle');
 			
 			// Readable($stimuli,'shuffled stimuli *fingers crossed*');							// uncomment this line to see what your shuffled stimuli file looks like
 			
 			// load and block shuffle procedure for this condition
-			$procedure = GetFromFile($_SESSION['Condition']['Procedure']);
-			$procedure = BlockShuffle($procedure, "Shuffle");
+			$procedure = GetFromFile($up.$expFiles.$_SESSION['Condition']['Procedure']);
+			$procedure = BlockShuffle($procedure, 'Shuffle');
 						
 			// Load entire experiment into $Trials[1-X] where X is the number of trials
 			$Trials = array(0=> 0);
 			for ($count=2; $count<count($procedure); $count++) {
 				$Trials[$count-1]['Stimuli']	= $stimuli[ ($procedure[$count]['Item']) ];			// adding 'Stimuli', as an array, to each position of $Trials
 				$Trials[$count-1]['Procedure']	= $procedure[$count];								// adding 'Procedure', as an array, to each position of $Trials
-				$Trials[$count-1]['Response']	= array(	"Response1"		=> NULL,			// adding 'Response', as an array, to each position of $Trials
-															"RT"			=> NULL,
-															"RTkey"			=> NULL,
-															"RTlast"		=> NULL,
-															"strictAcc"		=> NULL,
-															"lenientAcc"	=> NULL,
-															"Accuracy"		=> NULL,
-															"JOL"			=> NULL,
-															"postRT"		=> NULL,
-															"postRTkey"		=> NULL,
+				$Trials[$count-1]['Response']	= array(	'Response1'		=> NULL,			// adding 'Response', as an array, to each position of $Trials
+															'RT'			=> NULL,
+															'RTkey'			=> NULL,
+															'RTlast'		=> NULL,
+															'strictAcc'		=> NULL,
+															'lenientAcc'	=> NULL,
+															'Accuracy'		=> NULL,
+															'JOL'			=> NULL,
+															'postRT'		=> NULL,
+															'postRTkey'		=> NULL,
 															## ADD ## if you're going to collect any responses you need to create the response placeholder here
 														);
 															
@@ -254,7 +264,7 @@
 				}
 				
 				// if file doesn't exist then write the 2 header lines
-				$sessionFile = 'subjects/'.$_SESSION['Username'].'_Session'.$fileNumber.'_StimuliFile.txt';
+				$sessionFile = $up.$dataF.$_SESSION['Username'].'_Session'.$fileNumber.'_StimuliFile.txt';
 				if(is_file($sessionFile) == FALSE) {
 					arrayToLine ($header1, $sessionFile);
 					arrayToLine ($header2, $sessionFile);
@@ -275,7 +285,7 @@
 		else {
 			// Load headers from correct stimuli files	
 			$fileNumber				= $_SESSION['Session'];
-			$sessionFile			= 'subjects/'.$_SESSION['Username'].'_Session'.$fileNumber.'_StimuliFile.txt';
+			$sessionFile			= $up.$dataF.$_SESSION['Username'].'_Session'.$fileNumber.'_StimuliFile.txt';
 			$openSession			= fopen($sessionFile, 'r');
 			$header1				= fgetcsv($openSession,0,"\t");
 			$header2				= fgetcsv($openSession,0,"\t");
@@ -326,7 +336,7 @@
 			$link = 'BasicInfo.php';
 		}
 		else {
-			$link = 'instructions.php';
+			$link = $up.$expFiles.'instructions.php';
 		}
 		echo '<form id="loadingForm" action="'.$link.'" method="get"> </form>';							// commenting this line out will stop experiment from progressing past login.php (good to check diagnostics)
 		

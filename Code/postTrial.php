@@ -3,7 +3,8 @@
 	A program for running experiments on the web
 	Copyright 2012-2013 Mikey Garcia & Nate Kornell
  */
-	require("CustomFunctions.php");							// Load custom PHP functions
+	require 'CustomFunctions.php';							// Load custom PHP functions
+	require 'fileLocations.php';							// sends file to the right place
 	initiateCollector();
 	
 	#### setting up aliases (for later use)
@@ -59,7 +60,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link href="css/global.css" rel="stylesheet" type="text/css" />
 	<link href='http://fonts.googleapis.com/css?family=Kreon' rel='stylesheet' type='text/css' />
-	<title>Test/Presentation</title>
+	<title>PostTrial</title>
 </head>
 <?php flush(); ?>
 <body>

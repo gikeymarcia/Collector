@@ -226,12 +226,19 @@
 		$findMP3		= strpos($stringLower, '.mp3');
 		$findOGG		= strpos($stringLower, '.ogg');
 		
+		
 		// if I found an image file extension, add html image tags
 		if( $findGIF == TRUE || $findJPG == TRUE || $findPNG == TRUE){
+			if(!inString('www.', $string)) {								// navigate path to Experiment folder (unless linking to external image)
+				$string = '../Experiment/'.$string;
+			}
 			$string = '<img src="'.$string.'">';
 		}
 		// if I found an audio file extension, add pre-cache code
 		elseif ($findMP3 == TRUE || $findOGG == TRUE) {
+			if(!inString('www.', $string)) {							// navigate path to Experiment folder (unless linking to external image)
+				$string = '../Experiment/'.$string;
+			}
 			$string = '<source src="'.$string.'"/>';
 		}
 		else {
