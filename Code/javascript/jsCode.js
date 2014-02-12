@@ -56,7 +56,7 @@ $("#correct").click(function(){
 $(".wrong").click(function(){
 	Fails++;
 	alert('Please carefully read the instructions again.');
-	$(".Fails").attr("value",Fails);
+	$(".Fails").prop("value",Fails);
 });
 
 
