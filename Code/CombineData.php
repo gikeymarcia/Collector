@@ -22,6 +22,7 @@
 	
 	
 	// remove non-output files
+	$outTemp = array();
 	foreach ($OutFiles as $file) {
 		if(inString('Output_Session', $file)) {
 			$outTemp[] = $file;
