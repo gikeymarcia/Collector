@@ -42,7 +42,7 @@ window.onload = function () {
 
 function addtime(){
 	timer = timer + interval;
-	$(".RT").attr("value",timer);
+	$(".RT").prop("value",timer);
 }
 
 
