@@ -33,7 +33,7 @@
 		
 		##### Parameters #####			## SET ##
 		$_SESSION['ExperimentName']	= 'Collector';								// Recorded in datafile and can be useful.
-		$_SESSION['LoginCounter Location'] = 'Counter/1.txt';					// Change to restart condition cycling
+		$_SESSION['CounterFile']	= '1.txt';									// Change to restart condition cycling
 		$_SESSION['Demographics']	= FALSE;									// Can be TRUE or FALSE
 		$_SESSION['NextExp']		= FALSE;									// to link use format "www.cogfog.com/Generic/" do not forget the www and the ending "/"
 		// post-trial timing values
@@ -49,7 +49,7 @@
 		
 		#### Make sure all the necessary folders exist
 		// $thisFolder = $dataF.$_SESSION['ExperimentName'];
-		$needed = array( $up.$dataF,  $up.$dataF.'Counter/', $up.$dataF.'eligibility/');
+		$needed = array( $up.$dataF,  $up.$dataF.'Counter/', $up.$expFiles.'eligibility/');
 		foreach ($needed as $dir) {
 			if (!file_exists($dir)) {						// if the folder doesn't exist
 			    mkdir($dir, 0777, true);					// make it
@@ -88,8 +88,8 @@
 		
 		
 		#### Code to automatically choose condition assignment
-		$Conditions	=  GetFromFile($up.$expFiles.'Conditions.txt', FALSE);		// Loading conditions info
-		$logFile	=& $up.$expFiles.$_SESSION["LoginCounter Location"];
+		$Conditions	= GetFromFile($up.$expFiles.'Conditions.txt', FALSE);		// Loading conditions info
+		$logFile	= $up.$dataF.$countF.$_SESSION['CounterFile'];
 		if( $selectedCondition == 'Auto') {
 			
 			if(file_exists($logFile) ) {										// Read counter file & save value

@@ -4,9 +4,10 @@
 	Copyright 2012-2013 Mikey Garcia & Nate Kornell
  */
  	#### setting file locations ####
-	$up = '../';
-	$dataF = 'Data/';
-	$codeF = 'Code/';
+	$up		= '../';
+	$dataF	= 'Data/';
+	$codeF	= 'Code/';
 	$expFiles = 'Experiment/';			// hard coded into show()
-	$stimF = 'Stimuli/';
+	$stimF	= 'Stimuli/';
+	$countF	= 'Counter/';
 ?>

@@ -12,38 +12,77 @@
 	A program for running experiments on the web
 	Copyright 2012-2013 Mikey Garcia & Nate Kornell
  */
-	$dataDir	= opendir("subjects/");										// tells us where to begin looking for data files
-	$combined	= array();													// declares array that will eventually be written to the All Data file
-	$fileCount	= 0;
+ 	require 'fileLocations.php';											// sends file to the right place
+ 	require 'CustomFunctions.php';
 	
-	// echo '<h2>The Following are all of the files being used to aggregate data</h2>';
+	$OutFiles	= scandir($up.$dataF);
+	$finalQ		= array();													// will hold finalQuestions data
+	$instruct	= array();													// will hold instructions data
+	$status		= array();													// will hold status.txt data
 	
-	#### While loop that loads all test file data into $combined
-	while( ($file = readdir($dataDir)) != FALSE) {							// finds each file in the 'subjects/' directory
-		if(strpos($file, 'put_Session') == TRUE) {							// if filename matches output format (contains "put_Session")
-			// echo $file."<br />";											// Show filename of each file used (proof that I'm selecting the correct files) -- turned off because I don't want people to see participant email addresses
-			$fileCount++;
-			
-			#loading data from individual file into '$combined' array
-			$currentData =  fopen('subjects/'.$file, 'r');					// opening currently selected file from "subjects/" directory
-			while( $line = fgetcsv($currentData, 0, "\t") ) {				// starts a loop that reads lines of data
-				$combined[]= $line;											// save each line into $combined array
+	
+	// remove non-output files
+	foreach ($OutFiles as $file) {
+		if(inString('Output_Session', $file)) {
+			$outTemp[] = $file;
+		}
+		if(inString('FinalQuestionsData.txt', $file)) {
+			$finalQ = GetFromFile($up.$dataF.$file);
+		}
+		if(inString('InstructionsData.txt', $file)) {
+			$instruct = GetFromFile($up.$dataF.$file);
+		}
+		if(inString('Status.txt', $file)) {
+			$status = GetFromFile($up.$dataF.$file);
+		}
+	}
+	$OutFiles = $outTemp;
+	Readable($OutFiles, count($OutFiles).' output files scanned');
+	
+	#### Get all headers across all output files
+	$allHeaders = array();
+	foreach ($OutFiles as $file) {
+		$loc	= $up.$dataF.$file;
+		$handle = fopen($loc, 'r');
+		$row	= fgets($handle);
+		$pieces	= explode("\t",$row);
+		foreach ($pieces as $col) {
+			if(!in_array(trim($col), $allHeaders)) {
+				// echo 'adding :'.$col.'<br>';
+				$allHeaders[] = trim($col);
 			}
 		}
 	}
+	// fwrite(  fopen($up.$dataF.'headers.txt','w'),  implode("\t", $allHeaders)  );
+	Readable($allHeaders,'these are all unique headers');
 	
-	#### Writing all data as tab delimited .txt file into "subjects/" folder
-	$theFile	= 'subjects/All Data - '.date("Y")."-".date("m")."-".date("d").' - '.date("U").'.txt';				// sets file to write to-- filename formatted as 'All Data - 2011-11-17 - #s since Unix Epoch.txt'
-	$txt		= fopen($theFile,'w');
-	foreach ($combined as $one){
-	    $line = implode("\t", $one);
-	    fwrite($txt,$line);
-		fwrite($txt, PHP_EOL);
+	
+	
+	#### Combine all output using common headers
+	$combineLoc = $up.$dataF.'All Data - '.date("Y")."-".date("m")."-".date("d").' - '.date("U").'.txt';
+	$handle = fopen($combineLoc, 'a');
+	$delimiter = "\t";
+	fwrite($handle, implode($delimiter, $allHeaders));					// write common file headers
+	fwrite($handle, PHP_EOL);
+	
+	
+	foreach ($OutFiles as $oneSS) {										// for each output file
+		$temp = GetFromFile($up.$dataF.$oneSS, FALSE);
+		foreach ($temp as $trial) {										// for each trial
+			$thisLine = array();											// clear holder line
+			foreach ($allHeaders as $col) {									// for each unique header (across all output files)
+				if(!isset($trial[$col])) {									// if the column doesn't exist then set it to blank
+					$trial[$col] = '';
+				}
+				$thisLine[] = $trial[$col];									// build array representing this line
+			}
+			fwrite($handle, implode($delimiter, $thisLine).PHP_EOL);		// write newline
+		}
 	}
+	fclose($handle);
 	
-	echo '<br /><br />  <h2>Number of Data Files Used</h2>';
-	echo $fileCount;
 ?>
-
+	<script src="http://code.jquery.com/jquery-1.8.0.min.js" type="text/javascript"> </script>
+	<script src="javascript/jsCode.js" type="text/javascript"> </script>
 </body>
 </html>
