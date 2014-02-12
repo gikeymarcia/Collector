@@ -8,7 +8,7 @@
 		require 'fileLocations.php';				// sends file to the right place
  	}
  	#### variables needed for this page
-	$folder	= $up.$dataF.'eligibility/';			// where to look for files containing workers
+	$folder	= $up.$expFiles.'eligibility/';			// where to look for files containing workers
 	$files	= scandir($folder);						// list all files containing workers
 	$toCheck = null;								// who to check for eligibility
 	$checked = array();								// list of all the files that were checked
