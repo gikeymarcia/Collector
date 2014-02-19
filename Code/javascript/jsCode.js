@@ -42,7 +42,7 @@ window.onload = function () {
 
 function addtime(){
 	timer = timer + interval;
-	$(".RT").attr("value",timer);
+	$(".RT").prop("value",timer);
 }
 
 
@@ -56,7 +56,7 @@ $("#correct").click(function(){
 $(".wrong").click(function(){
 	Fails++;
 	alert('Please carefully read the instructions again.');
-	$(".Fails").attr("value",Fails);
+	$(".Fails").prop("value",Fails);
 });
 
 
