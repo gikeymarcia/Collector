@@ -87,7 +87,6 @@
 	
 	#### Presenting different trial types ####
 	$trialFail = FALSE;																			// this will be used to show diagnostic information when a specific trial isn't working
-	$noInputTrials = array ( 'study',  'studypic',  'passage',  'instruct',  'audio' );			## ADD ## if you've created a new trial type without user input it should be in this array in all lowercase
 	switch ($trialType) {
 			
 		// Audio trial type (no input)
@@ -95,7 +94,7 @@
 			$compTime = 5;					// time in seconds to use for 'computer' timing
 			trialTiming();					// determines timing and user/computer timing mode
 			echo '<div class="WordWrap PreCache">
-					<audio autoplay><source src="'.$cue.'" /></audio>
+					<audio autoplay><source src="'.$up.$expFiles.$cue.'" /></audio>
 				  </div>';
 			// the hidden form below collects RT and displays the 'Done' button for user timed trials
 			echo '<div id="buttPos" class="PreCache">
