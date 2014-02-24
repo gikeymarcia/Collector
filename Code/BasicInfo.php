@@ -30,18 +30,18 @@
 	<form name="Demographics" action="BasicInfoData.php" method="post"	autocomplete="off">
 		
 		<div class="Question">
-			<p class="Ask">What is your gender?</p>
+			<p>What is your gender?</p>
 			<input type="radio"	value="Male"	class="radio"	name="Gender"	/>	Male	<br />
 			<input type="radio"	value="Female"	class="radio"	name="Gender"	/>	Female	<br />
 		</div>
 		
 		<div class="Question">
-			<p class="Ask">What is your age?</p>
+			<p>What is your age?</p>
 			<input type="text" value="" name="Age" autocomplete="off" />
 		</div>
 				
 		<div class="Question">
-			<p class="Ask">Which of the following best describes your highest achieved education level?</p>
+			<p>Which of the following best describes your highest achieved education level?</p>
 			<select name="Education">
 				<option selected="selected">Select Level</option>
 				<option>	Some High School							</option>
@@ -54,13 +54,13 @@
 		</div>
 				
 		<div class="Question">
-			<p class="Ask">Do you speak English fluently?</p>
+			<p>Do you speak English fluently?</p>
 			<input	type="radio"	name="English"	value="Fluent"		/>	Yes, I am fluent in English		<br />
 			<input	type="radio"	name="English"	value="Non-Fluent"	/>	No, I am not fluent in English	<br />
 		</div>
 				
 		<div class="Question">
-			<p class="Ask">In what country do you live?</p>
+			<p>In what country do you live?</p>
 			<input type="text" value="" name="Country" size="30"	autocomplete="off" />
 		</div>
 		
