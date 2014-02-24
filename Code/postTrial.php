@@ -62,10 +62,11 @@
 	<link href='http://fonts.googleapis.com/css?family=Kreon' rel='stylesheet' type='text/css' />
 	<title>PostTrial</title>
 </head>
-<?php flush(); ?>
-<body>
 
+<body>
 <?php
+	flush();
+	
 	#### Tells the program which page to go to after postTrial
 	// If you want to intercept the trial -> postTrial -> next loop simply change the $comingUp page
 	$comingUp = 'next.php';
@@ -141,6 +142,13 @@
 	}
 
 ?>
+	<br>
+		<div id="showTimer" class="Hidden">
+			<div> Start (ms):	<span id="start">	</span>	</div>
+			<div> Current (ms):	<span id="current">	</span>	</div>
+			<div> Timer (ms):	<span id="dif">		</span>	</div>
+		</div>
+	
 	<script	src="http://code.jquery.com/jquery-1.8.0.min.js"	type="text/javascript">	</script>
 	<script	src="javascript/trial.js"				type="text/javascript">	</script>
 </body>

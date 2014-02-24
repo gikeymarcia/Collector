@@ -7,13 +7,6 @@
 	require 'fileLocations.php';					// sends file to the right place
 	initiateCollector();
 	
-	// are we done with all presentations?  if so, send to done.php
-	if (array_key_exists($_SESSION['Position'], $_SESSION['Trials']) == FALSE) {
-		$_SESSION['finishedTrials'] = TRUE;											// stops people from skipping to the end
-		header("Location: FinalQuestions.php");
-		exit;
-	}
-	
 	
 	// setting up easier to use and read aliases(shortcuts) of $_SESSION data
 	$condition		=& $_SESSION['Condition'];
@@ -66,10 +59,8 @@
 	<link href='http://fonts.googleapis.com/css?family=Kreon' rel='stylesheet' type='text/css' />
 	<title>Trial</title>
 </head>
-<?php flush(); ?>
-
+<?php flush();	?>
 <body>
-	
 	
 <?php
 	// go to stepout page if this is a stepout trial
@@ -345,6 +336,17 @@
 	// hidden field that JQuery/JavaScript uses to submit the trial to postTrial.php
 	echo '<div id="Time"	class="Hidden">' . $time . '</div>';
 	echo '<div id="minTime"	class="Hidden">' . $minTime . '</div>';
+	
+	?>
+		<!-- the following lines are placeholders for a debug function that shows timer values -->
+		<br>
+		<div id="showTimer" class="Hidden">
+			<div> Start (ms):	<span id="start">	</span>	</div>
+			<div> Current (ms):	<span id="current">	</span>	</div>
+			<div> Timer (ms):	<span id="dif">		</span>	</div>
+		</div>
+		
+	<?php
 	
 
 	#### Pre-Cache Next trial ####

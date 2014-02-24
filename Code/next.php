@@ -93,6 +93,13 @@
     // progresses the trial counter
 	$currentPos++;
 	
+	// are we done with all presentations? if so, send to finalQuestions.php
+	if (array_key_exists($currentPos, $_SESSION['Trials']) == FALSE) {
+		$_SESSION['finishedTrials'] = TRUE;											// stops people from skipping to the end
+		header("Location: FinalQuestions.php");
+		exit;
+	}
+	
 	// redirects the page to trial.php after running all of the above code
 	header("Location: trial.php");
 	exit;

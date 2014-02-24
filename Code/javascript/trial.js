@@ -12,15 +12,20 @@
 	if selecting by tag (e.g., all <p> or all <li>)
 		$("p") || $("li")
 */
-
 	var timer		= 0;
-	var interval	= 10;				// ## SET ##, The smaller the interval the more CPU power needed.  # = timing accuracy in ms
+	var interval	= 10;				// ## SET ##, The smaller the interval the more CPU power needed.  # = timing accuracy for ending trials in ms
 	var keypress	= 0;
 	var trialTime	= $("#Time").html();
 	var minTime		= $("#minTime").html();
 	var MCpickColor = "#00ac86";
 	
-
+	var startTime	= Date.now();						// take a snapshot of the current system time
+	var currentTime	= Date.now();
+	var last		= Date.now();
+	var showTimer	= false;								// ## SET ##, change to `true` or `false` without tickmarks
+	
+	
+	
 	// do when structure (HTML) but not necessarily all content has loaded
 	$("document").ready( function(){
 		timer		= 0;									// reset the timer
@@ -28,6 +33,7 @@
 			$("#FormSubmitButton").css("display","none");		// hide submit button
 			$(".Textbox").addClass("noEnter");					// disable enter from submitting the trial
 		}
+		
 		if( $("form").hasClass("ComputerTiming")) {			// if trial is ComputerTiming
 			$(".Textbox").addClass("noEnter");					// disable enter from submitting the trial
 		}
@@ -40,30 +46,53 @@
 			$(".PreCache").addClass("DuringTrial");			// add class that does nothing (but lets us know what used to be hidden)
 			$(".PreCache").removeClass("PreCache");			// remove class that hides the content
 		}
-		setInterval(addtime,interval);
+		startTime	= Date.now();							// take a snapshot of the current system time
+		window.tickTock = setInterval(getTime,interval);	// start the timer
 		$(".Textbox:first").focus();
 		$("textarea").focus();
 	};
 	
 	
+	// unhide counter if you've set showTimer == true
+	if(showTimer == true) {
+		$("#showTimer").removeClass("Hidden");
+		$("#start").html(startTime);
+	}
+	
+	
 	// timer function
-	function addtime() {
-		timer = timer + interval;
-		if (timer >= (minTime*1000)) {						// when minimum time is reached
+	function getTime() {
+		currentTime = Date.now();
+		timer = currentTime - startTime;
+		
+		if (timer > (minTime*1000)) {						// when minimum time is reached
 			$("#FormSubmitButton").css("display","inline");		// show 'Done' / 'Submit' button
 			$(".Textbox").removeClass("noEnter");				// allow enter to progress the trial
 		}
+		
 		if (timer >= (trialTime*1000)) {					// if time is up
 			$(".DuringTrial").addClass("PreCache");				// hide content
 			$(".RT").prop("value",timer);						// update RT field with timer value
 			timer = 0;											// reset timer
 			$("form").submit();									// submit form
+			clearInterval(tickTock);							// stop timer from running again
+		}
+		
+		// DEBUG function that updates shown timer ~ every 100ms
+		if (showTimer == true) {
+			if( (currentTime - last) > 100) {
+				last = currentTime;
+				$("#current").html(currentTime);
+				$("#dif").html(timer);
+			}
 		}
 	}
 	
 	
 	// intercept FormSubmitButton click
 	$("#FormSubmitButton").click(function(){		// when 'Done' / 'Submit' is pressed
+		getTime();										// get ms accurate time
+		clearInterval(tickTock);						// stop timer from running again
 		$(".DuringTrial").addClass("PreCache");			// hide content
 		$(".RT").prop("value",timer);					// update RT field with timer value
 		$("form").submit();								// submit form
@@ -80,6 +109,7 @@
 		}
 		else {
 			// monitor and log first/last keypress
+			getTime();									// get ms accurate time
 			keypress++;									// increment counter
 			if(keypress == 1) {							// on first keypress
 				$(".RTkey").prop("value",timer);			// set 'RTkey' time
@@ -92,6 +122,7 @@
 	
 	// updates last keypress value each time a key is pressed (for textareas)
 	$("textarea").keypress(function(){
+		getTime();									// get ms accurate time
 		keypress++;
 		if(keypress == 1) {
 			$(".RTkey").prop("value",timer);
@@ -102,20 +133,21 @@
 	
 	// updates the response value when a MC button is pressed
 	$(".TestMC").click(function(){
+		getTime();										// get ms accurate time
 		var clicked = $(this).html();
 		$(".Textbox").prop("value",clicked);
 				
-		if(keypress == 0) {								// setting first and/or last keypress times
+		if(keypress == 0) {								// set first keypress times
 			originalColor = $(".TestMC").css("background");
 			$(".RTkey").prop("value",timer);
 			keypress++;
-			$(".RTlast").prop("value",timer);
 		}
-		else {
-			$(".RTlast").prop("value",timer);
-		}
+		$(".RTlast").prop("value",timer);				// set last keypress time
+		
 		
 		if( $("form").hasClass("UserTiming")) {			// if 'user' timing
+			getTime();										// get ms accurate time
+			clearInterval(tickTock);						// stop timer from running again
 			$(".DuringTrial").addClass("PreCache");			// hide content
 			$(".RT").prop("value",timer);					// update RT field with timer value
 			$("form").submit();								// submit form
