@@ -10,7 +10,7 @@
 <?php
 /*	Collector
 	A program for running experiments on the web
-	Copyright 2012-2013 Mikey Garcia & Nate Kornell
+	Copyright 2012-2014 Mikey Garcia & Nate Kornell
  */
  	require 'fileLocations.php';											// sends file to the right place
  	require 'CustomFunctions.php';
