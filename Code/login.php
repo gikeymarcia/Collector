@@ -6,12 +6,15 @@
 	ini_set('auto_detect_line_endings', true);				// fixes problems reading files saved on mac
 	session_start();										// Start the session at the top of every page
 	$_SESSION = array();									// reset session so it doesn't contain any information from a previous login attempt
-	@$_SESSION['Debug'] = $_GET['Debug'];
+	
+	require 'CustomFunctions.php';							// Loads all of my custom PHP functions
+	require 'fileLocations.php';							// sends file to the right place
+	require $up.$expFiles.'settings.php';					// experiment variables
+	
+	$_SESSION['Debug'] = $debugMode;
 	if ($_SESSION['Debug'] == FALSE) {
 		error_reporting(0);
 	}
-	require 'CustomFunctions.php';							// Loads all of my custom PHP functions
-	require 'fileLocations.php';							// sends file to the right place
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -31,25 +34,12 @@
 		echo '<h1>Please wait while we load the experiment...</h1>';
 		echo '<noscript>	<h1>	You must enable javascript to participate!!!	</h1>	</noscript>';
 		
-		##### Parameters #####			## SET ##
-		$_SESSION['ExperimentName']	= 'Collector';								// Recorded in datafile and can be useful.
-		$_SESSION['CounterFile']	= '1.txt';									// Change to restart condition cycling
-		$_SESSION['Demographics']	= FALSE;									// Can be TRUE or FALSE
-		$_SESSION['NextExp']		= FALSE;									// to link use format "www.cogfog.com/Generic/" do not forget the www and the ending "/"
-		// post-trial timing values
-		$_SESSION['jolTime'] 		= 5;										// in seconds/trial	(JOL) - can also use value 'user'
-		$_SESSION['FeedbackTime']	= user;										// in seconds/trial - can also use value 'user'
-		$_SESSION['debugTiming']	= 1;										// timing for all trials when in debug mode
-		// Mturk Mode settings
-		$_SESSION['mTurkMode']		= FALSE;										// use mTurk mode (TRUE) or not (FALSE)
-			$_SESSION['verifCode']	= 'boom goes the dynamite';					// code that shows on done.php
-			$_SESSION['checkPrev']	= TRUE;										// use files in eligibility/ folder to check past participation 	
-		##### Parameters END #####
-		
 		
 		#### Make sure all the necessary folders exist
-		// $thisFolder = $dataF.$_SESSION['ExperimentName'];
-		$needed = array( $up.$dataF,  $up.$dataF.'Counter/', $up.$expFiles.'eligibility/');
+		// $thisFolder = $dataF.$experimentName;
+		$needed = array(	$up.$dataF,
+							$up.$dataF.'Counter/',
+							$up.$expFiles.'eligibility/');
 		foreach ($needed as $dir) {
 			if (!file_exists($dir)) {						// if the folder doesn't exist
 			    mkdir($dir, 0777, true);					// make it
@@ -71,7 +61,7 @@
 		if( $_SESSION['Session'] < 1 ){								// if session is not set then set to 1
 			$_SESSION['Session'] = 1;
 		}
-		else { $_SESSION['Demographics'] = FALSE; }					// skip demographics for all but session1
+		else { $doDemographics = FALSE; }					// skip demographics for all but session1
 		$selectedCondition = trim($_GET['Condition']);
 		
 		
@@ -82,14 +72,14 @@
 			exit;
 		}
 		
-		if($_SESSION['checkPrev'] == TRUE AND $_SESSION['mTurkMode'] == TRUE) {
+		if($checkElig == TRUE AND $mTurkMode == TRUE) {
 			include	'check.php';
 		}
 		
 		
 		#### Code to automatically choose condition assignment
 		$Conditions	= GetFromFile($up.$expFiles.'Conditions.txt', FALSE);		// Loading conditions info
-		$logFile	= $up.$dataF.$countF.$_SESSION['CounterFile'];
+		$logFile	= $up.$dataF.$countF.$loginCounterName;
 		if( $selectedCondition == 'Auto') {
 			
 			if(file_exists($logFile) ) {										// Read counter file & save value
@@ -326,13 +316,15 @@
 				echo $errorCode;
 				echo '<br/>';
 			}
-		echo '<br/><br/>The program will not run until you have addressed the above errors';
-		exit;																							//  ## SET ## if you want to program to run when an error is hit then comment out this line of code
-		}
+		if ($stopForErrors == TRUE) {
+			echo '<br/><br/>The program will not run until you have addressed the above errors';
+			// show information about $_SESSION['Trials'], 
+			exit;
+		}		}
 		
 		
 		#### Send participant to next phase of experiment (demographics or trial.php)
-		if($_SESSION['Demographics'] == TRUE) {
+		if($doDemographics == TRUE) {
 			$link = 'BasicInfo.php';
 		}
 		else {

@@ -6,6 +6,7 @@
 	ini_set('auto_detect_line_endings', true);			// fixes problems reading files saved on mac
 	session_start();									// start the session at the top of each page
 	require 'fileLocations.php';						// sends file to the right place
+	require $up.$expFiles.'settings.php';				// experiment variables
 	
 	// if someone skipped to done.php without doing all trials
 	if ($_SESSION['finishedTrials'] <> TRUE) {
@@ -42,18 +43,18 @@
 <body>	
 
 <?php
-	if($_SESSION['NextExp'] == FALSE) {
-		## SET ## Change the email address to your email
+	
+	if($nextExperiment == FALSE) {
 		echo '<div id="donePage">
 				<h2>Thank you for your participation!</h2>
-				<p>If you have any questions about the experiment please email YOURemail@yourdomain.com</p>
+				<p>If you have any questions about the experiment please email '.$experimenterEmail.'</p>
 			  </div>';
-		if ($_SESSION['mTurkMode'] == TRUE) {
-			echo '<h3>Your verification code is: '.$_SESSION['verifCode'].'</h3>';
+		if ($mTurkMode == TRUE) {
+			echo '<h3>Your verification code is: '.$verifcation.'</h3>';
 		}
 	} else {
 		echo "<h2>Experiment will resume in 5 seconds.</h2>";
-		$nextLink = 'http://'.$_SESSION['NextExp'];
+		$nextLink = 'http://'.$nextExperiment;
 		echo '<meta http-equiv="refresh" content="5; url='.$nextLink.'Code/login.php?Username='.$_SESSION['Username'].'&Condition=Auto">';
 	}
 	

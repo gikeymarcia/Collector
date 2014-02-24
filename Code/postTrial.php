@@ -3,8 +3,10 @@
 	A program for running experiments on the web
 	Copyright 2012-2014 Mikey Garcia & Nate Kornell
  */
-	require 'CustomFunctions.php';							// Load custom PHP functions
 	require 'fileLocations.php';							// sends file to the right place
+	require $up.$expFiles.'settings.php';					// experiment variables
+	require 'CustomFunctions.php';							// Load custom PHP functions
+	
 	initiateCollector();
 	
 	#### setting up aliases (for later use)
@@ -44,7 +46,7 @@
 		else:
 			$currentTrial['Response']['strictAcc'] = 0;
 		endif;
-		if($Acc >= 75):												## SET ## determines the % match required to count an answer as 1(correct) or 0(incorrect)
+		if($Acc >= $lenientCriteria):
 			$currentTrial['Response']['lenientAcc'] = 1;
 		else:
 			$currentTrial['Response']['lenientAcc'] = 0;
@@ -73,11 +75,11 @@
 	
 	#### trial timing code		## ADD ## tell program which timing to use for your new post-trial type
 	if($postTrial == 'feedback'):
-		$time = $_SESSION['FeedbackTime'];
+		$time = $feedbackTime;
 	elseif ($postTrial == 'jol'):
-		$time = $_SESSION['jolTime'];
+		$time = $jolTime;
 	endif;
-	if($_SESSION['Debug'] == TRUE) {	$time = 2;	}						// use this time for debugging  ## SET ##
+	if($_SESSION['Debug'] == TRUE) {	$time = $debugTime;	}
 	
 	echo '<div id="Time" class="Hidden">' . $time . '</div>';				// hidden field that JQuery/JS uses to submit the trial to next.php
 	

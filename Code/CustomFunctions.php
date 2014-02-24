@@ -280,7 +280,7 @@
 		else { $time = 5; }								// default compTime if none is set
 		
 		if($_SESSION['Debug'] == TRUE) {
-			$time = 1;									## SET ## if debug mode is on all trials will be this many seconds long
+			$time = $debugTime;
 		}
 		
 		if($time == 'user') {

@@ -19,11 +19,12 @@
 	ini_set('auto_detect_line_endings', true);			// fixes problems reading files saved on mac
 	session_start();									// starts the session
 	$_SESSION = array();								// reset session so it doesn't contain any information from a previous login attempt
-	$_SESSION['Debug']=FALSE;							// turns debug mode on and off   ## SET ##
-	$selector = TRUE;									// ## SET ##; Show (TRUE) or hide (FALSE) the condition selector
-	require 'Code/CustomFunctions.php';						// Loads all of my custom PHP functions
-	require 'Code/fileLocations.php';						// sends file to the right place
 	
+	require 'Code/fileLocations.php';					// sends file to the right place
+	require $codeF.'CustomFunctions.php';				// Loads all of my custom PHP functions
+	require	$expFiles.'settings.php';					// experiment variables
+
+	$_SESSION['Debug'] = $debugMode;					// turns debug mode on and off
 ?>
 	
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -42,16 +43,16 @@
 	
 		<div id="LoginPosition"> 
 			<h1>Welcome to the experiment!</h1>
-			<p>This experiment will run for approximately 25 minutes.				<!--## SET ## give intro description for your exp-->
-			Your goal is to learn some information</p>
+			
+			<?php echo $expDescription; ?>
 			
 			<form name="Login"	autocomplete="off" 	action="<?php echo $codeF;?>login.php"	method="get">
-				<p> Please enter your UCLA email address below</p>					<!--## SET ## change this for mTurk-->
+				<?php echo $askForLogin;?>
 				
 				<input class="Textbox"	style="width:400px;"	name="Username"	type="text"	value=""	autocomplete="off"/>
 				<br />
 				<?php
-				if ($selector == TRUE) {
+				if ($showConditionSelector == TRUE) {
 					echo '<select class="Dropdown" name="Condition">';
 				}
 				else {

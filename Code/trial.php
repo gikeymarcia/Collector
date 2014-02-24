@@ -3,8 +3,10 @@
 	A program for running experiments on the web
 	Copyright 2012-2014 Mikey Garcia & Nate Kornell
  */
-	require 'CustomFunctions.php';							// Load custom PHP functions
-	require 'fileLocations.php';					// sends file to the right place
+	
+	require 'fileLocations.php';							// sends file to the right place
+	require $up.$expFiles.'settings.php';					// experiment variables
+	require 'CustomFunctions.php';							// Loads all of my custom PHP functions
 	initiateCollector();
 	
 	
@@ -184,9 +186,8 @@
 			$compTime = 8;					// time in seconds to use for 'computer' timing
 			trialTiming();					// determines timing and user/computer timing mode
 			
-			## SET ## If you're going to use MCpic trials then you should change the category names in $MCbuttons
-			$MCbuttons 		= array( "Cat1", "Cat2", "Cat3", "Cat4", "Cat6", "Cat6", "Cat7", "Cat 8", "Cat9", "Cat10", "Cat11", "Cat 12");
-			$itemsPerRow	= 4;							## SET ## names says it all (use values 1-4; anything bigger causes problems which require css changes)
+			$MCbuttons 		= $MultiChoiceButtons;
+			$itemsPerRow	= 4;
 			if($_SESSION['MCbutton'] == FALSE) {			// shuffle button position before presenting for the 1st time
 				shuffle($MCbuttons);						// turn this line off to maintain the same choice order between-subjects
 				$_SESSION['MCbutton'] = $MCbuttons;
@@ -359,8 +360,7 @@
 	
 	
 	#### Diagnostics ####
-	$diagnostics = FALSE;			// ## SET ## turn on diagnostics to see lots about each trial
-	if ($diagnostics == TRUE OR $trialFail == TRUE) {
+	if ($trialDiagnostics == TRUE OR $trialFail == TRUE) {
 		echo "<div id='Diagnostics'>
 				<ul>
 					<li> Condition #: 			{$_SESSION['Condition']['Number']}					</li>
