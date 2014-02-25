@@ -6,7 +6,7 @@
 	ini_set('auto_detect_line_endings', true);			// fixes problems reading files saved on mac
 	session_start();									// start the session at the top of each page
 	require 'fileLocations.php';						// sends file to the right place
-	require $up.$expFiles.'settings.php';				// experiment variables
+	require $up.$expFiles.'Settings.php';				// experiment variables
 	
 	// if someone skipped to done.php without doing all trials
 	if ($_SESSION['finishedTrials'] <> TRUE) {
@@ -50,7 +50,7 @@
 				<p>If you have any questions about the experiment please email '.$experimenterEmail.'</p>
 			  </div>';
 		if ($mTurkMode == TRUE) {
-			echo '<h3>Your verification code is: '.$verifcation.'</h3>';
+			echo '<div id="donePage"> <h3>Your verification code is: '.$verifcation.'</h3></div>';
 		}
 	} else {
 		echo "<h2>Experiment will resume in 5 seconds.</h2>";

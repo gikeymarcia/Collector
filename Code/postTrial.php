@@ -4,7 +4,7 @@
 	Copyright 2012-2014 Mikey Garcia & Nate Kornell
  */
 	require 'fileLocations.php';							// sends file to the right place
-	require $up.$expFiles.'settings.php';					// experiment variables
+	require $up.$expFiles.'Settings.php';					// experiment variables
 	require 'CustomFunctions.php';							// Load custom PHP functions
 	
 	initiateCollector();

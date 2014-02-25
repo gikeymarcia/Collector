@@ -22,7 +22,7 @@
 	
 	require 'Code/fileLocations.php';					// sends file to the right place
 	require $codeF.'CustomFunctions.php';				// Loads all of my custom PHP functions
-	require	$expFiles.'settings.php';					// experiment variables
+	require	$expFiles.'Settings.php';					// experiment variables
 
 	$_SESSION['Debug'] = $debugMode;					// turns debug mode on and off
 ?>

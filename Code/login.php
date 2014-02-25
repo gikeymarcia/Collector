@@ -9,7 +9,7 @@
 	
 	require 'CustomFunctions.php';							// Loads all of my custom PHP functions
 	require 'fileLocations.php';							// sends file to the right place
-	require $up.$expFiles.'settings.php';					// experiment variables
+	require $up.$expFiles.'Settings.php';					// experiment variables
 	
 	$_SESSION['Debug'] = $debugMode;
 	if ($_SESSION['Debug'] == FALSE) {

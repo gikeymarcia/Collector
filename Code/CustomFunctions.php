@@ -267,6 +267,7 @@
 		global $compTime;
 		global $timingReported;
 		global $_SESSION;
+		global $debugTime;
 		
 		if (is_numeric($timingReported)) {				// use manually set time if possible
 			$time = $timingReported;
