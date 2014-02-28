@@ -114,6 +114,10 @@
 			$errors['Count']++;
 			$errors['Details'][] = 'Could not find the selected condition #'.$conditionNumber.' in Conditions.txt';
 		}
+		// does the condition file have the required headers?
+		$errors = keyCheck( $Conditions,	'Number',		$errors,	'Conditons.txt' );
+		$errors = keyCheck( $Conditions,	'Stimuli',		$errors,	'Conditons.txt' );
+		$errors = keyCheck( $Conditions,	'Procedure',	$errors,	'Conditons.txt' );
 		// does this condition point to a valid stimuli file?
 		if (file_exists($up.$expFiles.$_SESSION['Condition']['Stimuli']) == FALSE) {
 			$errors['Count']++;
@@ -330,7 +334,22 @@
 		else {
 			$link = $up.$expFiles.'instructions.php';
 		}
-		echo '<form id="loadingForm" action="'.$link.'" method="get"> </form>';							// commenting this line out will stop experiment from progressing past login.php (good to check diagnostics)
+		
+		
+		if ($stopAtLogin == TRUE) {												// if things are going wrong this info will help you figure out when the program broke
+			Readable($_SESSION['Condition'],	'Condition information');
+			Readable($stimuli, 					'Stimuli file in use');
+			Readable($procedure,				'Procedure file in use');
+			Readable($_SESSION['Trials'],		'$_SESSION["Trials"] array');
+			echo '<form action ="'.$link.'" method="get">
+					<input type="submit" value="Press here to continue to experiment"/>
+				  </form>';
+					
+		}
+		else {
+			echo '<form id="loadingForm" action="'.$link.'" method="get"> </form>';
+		}
+		
 		
 	?>
 	<script src="http://code.jquery.com/jquery-1.8.0.min.js" type="text/javascript"> </script>

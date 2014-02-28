@@ -13,6 +13,7 @@
  	$debugMode = FALSE;							// Can be `TRUE` or `FALSE` (without ticks)
 	$debugTime = 1;								// trial length (in seconds) when in debug mode
 	$trialDiagnostics	= FALSE;				// show trial diagnostics? `TRUE` or `FALSE`
+	$stopAtLogin = FALSE;
 	
 	//mTurk Mode
 	$mTurkMode		= FALSE;					// turn on mTurkMode? `TRUE` or `FALSE` (without ticks)
