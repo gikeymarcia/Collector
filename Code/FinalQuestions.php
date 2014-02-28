@@ -28,7 +28,7 @@
 		if(isset($_SESSION['FinalQs']) == FALSE) {
 			$fQ	= GetFromFile($up.$expFiles.'FinalQuestions.txt');
 			// loop that deletes trailing empty positions from $fQ array
-			for ($i=count($fQ); $i >0; $i--) { 
+			for ($i=count($fQ)-1; $i >0; $i--) { 
 				if($fQ[$i] == null) {
 					unset($fQ[$i]);
 				}
