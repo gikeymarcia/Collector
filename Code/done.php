@@ -69,7 +69,7 @@
 						date('c') ,
 						'Session '.$_SESSION['Session'] ,
 						'Session End' ,
-						"Condition# {$_SESSION['Condition']['Number']}",
+						$_SESSION['Condition']['Number'],
 						$_SESSION['Condition']['Stimuli'],
 						$_SESSION['Condition']['Procedure'],
 						$_SESSION['Condition']['Condition Description'],

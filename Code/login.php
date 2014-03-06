@@ -156,7 +156,7 @@
 							date('c') ,
 							'Session ' . $_SESSION['Session'] ,
 							'Session Start' ,
-							"Condition# {$_SESSION['Condition']['Number']}",
+							$_SESSION['Condition']['Number'],
 							$_SESSION['Condition']['Stimuli'],
 							$_SESSION['Condition']['Procedure'],
 							$_SESSION['Condition']['Condition Description'],
