@@ -303,6 +303,53 @@
 	function x($input="this is working"){
 		echo "<p>{$input}</p>";
 	}
+	
+	function FileExists( $filePath, $altExtensions = TRUE ) {
+		//if( is_file($filePath) ) { return $filePath; }
+		$path_parts = pathinfo($filePath);
+		$returnPath = './';
+		$fileDirs = explode( '/', $path_parts['dirname'] );
+		if( $fileDirs === array( '.' ) ) { $fileDirs = array(); }
+		$fileName = $path_parts['basename'];
+		foreach( $fileDirs as $dir ) {
+			if( is_dir( $returnPath.$dir.'/' ) ) {
+				$returnPath .= $dir.'/';
+				continue;
+			} else {
+				$scan = scandir($returnPath);
+				foreach( $scan as $entry ) {
+					if( strtolower($entry) === strtolower($dir) ) {
+						$returnPath .= $entry.'/';
+						continue 2;
+					}
+				}
+				return FALSE;
+			}
+		}
+		if( is_file($returnPath.$fileName) ) { return substr($returnPath,2).$fileName; }
+		$scan = scandir($returnPath);
+		$lowerFile = strtolower($fileName);
+		foreach( $scan as $entry ) {
+			if( strtolower($entry) === $lowerFile ) {
+				return substr($returnPath,2).$entry;
+			}
+		}
+		if( $altExtensions ) {
+			$baseFileName = strtolower($path_parts['filename']);
+			foreach( $scan as $entry ) {
+				if( !is_file( $returnPath.$entry ) ) { continue; }
+				if( strpos($entry, '.') === FALSE ) {
+					$entryName = strtolower($entry);
+				} else {
+					$entryName = strtolower(substr($entry, 0, strpos($entry, '.') ));
+				}
+				if( $entryName === $baseFileName ) {
+					return substr($returnPath,2).$entry;
+				}
+			}
+		}
+		return FALSE;
+	}
 
 
 ?>
