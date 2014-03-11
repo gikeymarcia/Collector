@@ -225,6 +225,7 @@
 		$findPNG		= strpos($stringLower, '.png');
 		$findMP3		= strpos($stringLower, '.mp3');
 		$findOGG		= strpos($stringLower, '.ogg');
+		$findWAV		= strpos($stringLower, '.wav');
 		
 		
 		// if I found an image file extension, add html image tags
@@ -235,7 +236,7 @@
 			$string = '<img src="'.$string.'">';
 		}
 		// if I found an audio file extension, add pre-cache code
-		elseif ($findMP3 == TRUE || $findOGG == TRUE) {
+		elseif ($findMP3 == TRUE || $findOGG == TRUE || $findWAV == TRUE) {
 			if(!inString('www.', $string)) {							// navigate path to Experiment folder (unless linking to external image)
 				$string = '../Experiment/'.$string;
 			}

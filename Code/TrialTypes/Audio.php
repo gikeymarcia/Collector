@@ -2,7 +2,9 @@
 	$compTime = 5;					// time in seconds to use for 'computer' timing
 	trialTiming();					// determines timing and user/computer timing mode
 	echo '<div class="WordWrap PreCache">
-			<audio autoplay><source src="'.$up.$expFiles.$cue.'" /></audio>
+			<audio src="'.$expFiles.$cue.'" autoplay>
+				<p>Your browser does not support the audio element.</p>
+			</audio>
 		  </div>';
 	// the hidden form below collects RT and displays the 'Done' button for user timed trials
 	echo '<div id="buttPos" class="PreCache">
