@@ -80,7 +80,7 @@
 	
 	#### Presenting different trial types ####
 	$trialFail = FALSE;																			// this will be used to show diagnostic information when a specific trial isn't working
-	$trialFile = FileExists('TrialTypes/'.$trialType);
+	$trialFile = FileExists($trialF.$trialType);
 	include $trialFile;
 	
 	if( $trialFile === FALSE ) {
