@@ -10,4 +10,5 @@
 	$expFiles = 'Experiment/';			// hard coded into show()
 	$stimF	= 'Stimuli/';
 	$countF	= 'Counter/';
+	$scoring = 'scoring.php';
 ?>
