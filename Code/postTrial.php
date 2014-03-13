@@ -18,41 +18,18 @@
 		$trialType	=  trim(strtolower($currentTrial['Procedure']['Trial Type']));
 		$postTrial	=  trim(strtolower($currentTrial['Procedure']['Post Trial']));
 	
+	$customScoring = FALSE;
+	// later there will be code to denote when custom scoring should occur
 	
-	### getting response and making cleaned up versions (for later comparisons)
-	@$response1		= $_POST['Response'];
-	$responseClean	= trim(strtolower($response1));
-	$answerClean	= trim(strtolower($answer));
-	$Acc			= NULL;
-	
-	
-	#### Saving data into $_SESSION
-	@$currentTrial['Response']['Response1']	= $_POST['Response'];
-	@$currentTrial['Response']['RT']		= $_POST['RT'];
-	@$currentTrial['Response']['RTkey']		= $_POST['RTkey'];
-	@$currentTrial['Response']['RTlast']	= $_POST['RTlast'];
-	## ADD ## if you've created a new inputname on trial.php you need to capture data here
-	
-	
-	#### Calculating and saving accuracy for trials in  which this would be appropriate (excluding JOL and FreeRecall)
-	if( ($trialType == 'test')	OR 	($trialType == 'testpic') OR
-		($trialType == 'copy')	OR	($trialType == 'mcpic') ) {
-		// determining similarity
-		similar_text($responseClean, $answerClean, $Acc);
-		$currentTrial['Response']['Accuracy'] = $Acc;
-		// scoring and saving
-		if($Acc == 100):
-			$currentTrial['Response']['strictAcc'] = 1;
-		else:
-			$currentTrial['Response']['strictAcc'] = 0;
-		endif;
-		if($Acc >= $lenientCriteria):
-			$currentTrial['Response']['lenientAcc'] = 1;
-		else:
-			$currentTrial['Response']['lenientAcc'] = 0;
-		endif;
+	// use default scoring scheme if alternative scoring is not denoted
+	if ($customScoring == FALSE) {
+		$scoringFile = FileExists($scoring);
+		require $scoringFile;
 	}
-		
+	
+	#### merging $data into $currentTrial['Response]
+	$currentTrial['Response'] = placeData($data, $currentTrial['Response']);
+	
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"

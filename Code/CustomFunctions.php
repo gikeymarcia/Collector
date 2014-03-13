@@ -205,6 +205,16 @@
 	}
 	
 	
+	#### takes an input ($info) array and merges it into a target array ($place).  Optional, prepend all $info keys with a $keyMod string
+	function placeData ($data, $place, $keyMod = '') {
+		$dataKeys = array_keys($data);
+		foreach ($dataKeys as $key) {
+			$place[$keyMod.$key] = $data[$key];
+		}
+		return $place;
+	}
+	
+	
 	#### Debug function I use to display arrays in an easy to read fashion
 	function Readable($displayArray, $name = "unspecified"){
 		echo '<div>';

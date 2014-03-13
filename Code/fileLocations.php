@@ -11,4 +11,5 @@
 	$stimF	= 'Stimuli/';
 	$countF	= 'Counter/';
 	$trialF	= 'TrialTypes/';
+	$scoring = 'scoring.php';
 ?>
