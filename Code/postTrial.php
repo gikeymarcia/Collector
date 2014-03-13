@@ -25,7 +25,11 @@
 	if ($customScoring == FALSE) {
 		$scoringFile = FileExists($scoring);
 		require $scoringFile;
-	}	
+	}
+	
+	#### merging $data into $currentTrial['Response]
+	$currentTrial['Response'] = placeData($data, $currentTrial['Response']);
+	
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
