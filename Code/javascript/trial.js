@@ -72,7 +72,7 @@
 
 		if (timer >= (trialTime*1000)) {					// if time is up
 			$(".DuringTrial").addClass("precache");				// hide content
-			$(".RT").prop("value",timer);						// update RT field with timer value
+			$("#RT").prop("value",timer);						// update RT field with timer value
 			timer = 0;											// reset timer
 			$("form").submit();									// submit form
 			clearInterval(tickTock);							// stop timer from running again
@@ -94,7 +94,7 @@
 		getTime();										// get ms accurate time
 		clearInterval(tickTock);						// stop timer from running again
 		$(".DuringTrial").addClass("precache");			// hide content
-		$(".RT").prop("value",timer);					// update RT field with timer value
+		$("#RT").prop("value",timer);					// update RT field with timer value
 		$("form").submit();								// submit form
 	});
 
@@ -112,9 +112,9 @@
 			getTime();									// get ms accurate time
 			keypress++;									// increment counter
 			if(keypress == 1) {							// on first keypress
-				$(".RTkey").prop("value",timer);			// set 'RTkey' time
+				$("#RTkey").prop("value",timer);			// set 'RTkey' time
 			}
-			$(".RTlast").prop("value",timer);			// update last keypress time
+			$("#RTlast").prop("value",timer);			// update last keypress time
 		}
 
 	});
@@ -125,9 +125,9 @@
 		getTime();									// get ms accurate time
 		keypress++;
 		if(keypress == 1) {
-			$(".RTkey").prop("value",timer);
+			$("#RTkey").prop("value",timer);
 		}
-		$(".RTlast").prop("value",timer);
+		$("#RTlast").prop("value",timer);
 	});
 
 
@@ -139,17 +139,17 @@
 
 		if(keypress == 0) {								// set first keypress times
 			originalColor = $(".TestMC").css("background");
-			$(".RTkey").prop("value",timer);
+			$("#RTkey").prop("value",timer);
 			keypress++;
 		}
-		$(".RTlast").prop("value",timer);				// set last keypress time
+		$("#RTlast").prop("value",timer);				// set last keypress time
 
 
 		if( $("form").hasClass("UserTiming")) {			// if 'user' timing
 			getTime();										// get ms accurate time
 			clearInterval(tickTock);						// stop timer from running again
 			$(".DuringTrial").addClass("precache");			// hide content
-			$(".RT").prop("value",timer);					// update RT field with timer value
+			$("#RT").prop("value",timer);					// update RT field with timer value
 			$("form").submit();								// submit form
 		}
 		$(".TestMC").css("background",originalColor);	// remove highlighting from all buttons
