@@ -1,0 +1,266 @@
+body
+	{	font-family: Kreon, sans-serif;	font-size: 110%;	}
+h1
+	{	font-size: 2em;	color: #333333;	padding-top: 30px;	text-align: center;	}
+h2
+	{	}
+h3
+	{	}
+p
+	{	}
+input
+	{	}
+table
+	{		}
+img
+	{	display: block;	margin-left: auto;	margin-right: auto;	}
+form
+	{	}
+option
+	{	}
+select
+	{	}
+
+
+
+/*Divs used across multiple pages*/
+.ExpContainer
+	{	text-align: center;	color: #000000;	font-size: 1em;	margin: 0 auto;	width: 800px;	}
+.Prompt
+	{	width: 500px; margin-top: 80px; margin-bottom: 15px; font-size: 1.2em;	}
+.Textbox
+	{	margin-bottom: 7px;	}
+.Hidden, .PreCache
+	{	display:none;	}
+.DuringTrial {}			/*this is here so I can remove precache then put it back when time is up*/
+
+
+
+/*index.php specific css*/
+#LoginPosition
+	{	text-align: center;	font-size: 1em;	}
+.Dropdown
+	{	}
+
+
+
+/*instructions.php specific css*/
+.MCbutton
+	{	cursor: pointer;	}
+#waiting
+	{	margin-top: 100px;	text-align:left; font-size: 1.5em;}
+
+
+
+/*BasicInfo specific css*/
+#content
+	{	margin-left: auto;	margin-right: auto;
+		width: 70%; min-width: 400px; max-width: 800px;
+		font-size: 1em;	}
+.Question
+	{	margin-top: 15px; margin-bottom: 35px;
+		width: 85%;	}
+	.Question select
+		{	font-size: .9em;	}
+	.Question input
+		{	font-size: 1em;	}
+	.Question p {
+		color: #000000; font-size: 1.1em;  margin: 0px auto 4px auto;
+	}
+input.radio
+	{	}
+
+
+/*Also used in FreeRecall trials*/
+textarea
+	{	margin-bottom: 10px; font-family: Arial, Helvetica, san-serif;	}
+
+
+
+/*Study, Test, and Copy Trial CSS*/
+.WordWrap
+	{	margin: 120px auto 0;
+		width: 100%; min-width: 700px; max-width: 1500px;	}
+	.WordWrap form
+		{	width: 47%; font-size: 1.5em;	}
+	.WordWrap .Textbox
+		{	width: 350px; font-size: 2.1em;	}
+	.WordWrap #FormSubmitButton
+		{	width: 350px; clear:left; margin: 5px auto 10px auto;	}
+.left
+	{	width: 48%;	float: left;
+		text-align: right; font-size: 4em;	}
+.leftcopy
+	{	line-height: 1em; float: left; padding-right: 0px; width: 48%; text-align:right; font-size: 4em;	}
+.leftfloat
+	{	float: left;	}
+.divider
+	{	width: 4%; float: left;
+		text-align: center; font-size: 4em;	}
+.dividercopy
+	{	line-height: 1em; float: left; padding-right: 0px; width: 4%; font-size: 4em; text-align:center;	}		
+.right
+	{	width: 48%; float: left;
+		text-align: left; font-size: 4em;	}
+
+
+#buttPos
+	{	width: 90px;
+		margin-left: auto; margin-right: auto;	}
+
+
+
+/* Hides button on computer timing trials*/
+.ComputerTiming #FormSubmitButton
+	{	display:none;	}
+	
+/* Trial Diagnostics css */
+#Diagnostics {
+	font-family: Consolas, monaco, monospace;
+	padding: 75px 20px 0px 20px;
+	clear: both;
+	font-size: .9em;
+}
+
+
+.gray
+	{	color: #666666;	}
+
+
+.fbWord
+		{	width: 750px; margin: 15px auto 10px auto;	text-align:center;	font-size: 1.3em;}
+
+.center
+	{	text-align: center;	}
+.Feedback
+	{	font-size: 2em; margin: 100px auto auto 35%; font-size: 3em;	min-width: 450px; }
+	.Feedback .gray
+		{	font-size: .5em	}
+	.Feedback span
+		{	font-size: 1.3em; text-align: center; width:100%;}
+.FeedbackPic
+	{	font-size: 2em; margin: 25px auto auto auto; font-size: 3em;	min-width: 450px; }
+	.FeedbackPic input
+		{ margin: auto}
+	.FeedbackPic .gray
+		{	font-size: .75em; margin: auto auto 5px 50px;	}
+	.FeedbackPic form
+		{	text-align:center	}
+.pic
+	{	padding-bottom: 20px; margin-top: 20px;	}
+	.pic .Textbox
+		{	font-size: 2em;	}
+.picWord
+	{	text-align: center; font-size: 3em; margin-bottom: 10px;	}
+
+
+
+.Textbox
+	{	width: 200px; padding: 0 5px; font-size: 1.5em; font-family: Kreon, sans-serif;	}
+
+/*Passage trial CSS*/
+.passage
+	{	min-width: 400px; max-width: 800px; margin: 0 auto; font-family: Times New Roman, serif; font-size: .9em; line-height: 1.6em;	}
+	.passage p
+		{	padding-bottom: 10px;	}
+#end
+	{	margin: 0 auto; color: red; text-align: center; font-size: 2em;	}
+
+
+#SubmitButton
+	{	background: #566673; color: #fff; cursor: pointer; width: 80px; padding: 5px;  border-radius: 5px; margin: 10px auto 0;	}
+	#SubmitButton:hover
+		{	background: #3e5365;	}
+
+#FormSubmitButton
+	{	background: #566673; color: #fff; cursor: pointer; width: 80px; padding: 5px;  border-radius: 5px;	}
+	#FormSubmitButton:hover
+		{	background: #3e5365;	}
+
+
+
+/*Instructions.php css*/
+#centerContent
+	{	width: 66%; max-width: 800px; min-width: 450px;
+		margin-left: auto; margin-right: auto;	}
+.Instruct
+	{	margin: 35px auto 50px auto;	font-size: 1.1em;}
+.readcheck
+	{	background: #f2f1f1; padding: 20px; width: 50%; margin-top: 150px; border-radius: 10px;	}
+ol.list  li
+	{	width: 80%; margin-bottom: 15px; background: #ffffff; outline: dotted 2px black; padding: 5px;	}
+
+
+
+/*JOL trials and post-trial css*/
+#JOLpos
+	{	width: 650px; margin: 120px auto 0px auto;	}
+#jol
+	{	font-size: 2em; padding-top: 20px; max-width: 600px;	}
+#subpoint
+	{	padding-top: 15px; padding-bottom: 10px; color: #191935;max-width: 600px;	}
+
+
+
+/*stepout related css*/
+h1.stepout
+	{	width: 700px; margin:20px auto 20px;	}
+#StepoutInstructions
+	{	width: 550px; margin-top: 30px; margin-left: auto; margin-right: auto;	}
+#StepoutInstructions p
+	{	font-size: 1.1em;	}
+#Clock
+	{	float: right; padding: 4px 8px 8px 8px; font-size: 1.1em; background: #9cb0d4; color: #fbfdff; margin-right: 25px; margin-top: 15px;	}
+	#Clock span
+		{	margin-bottom: 20px;	}
+.Countdown
+	{	font-size: 2em; font-family: Orbitron, serif; text-align: center; margin-top: 5px; background: #ddeeff; color: #3c3c3c;	}
+#Tetris
+	{	margin-left: auto; margin-right: auto; width: 550px; height:650px;	}
+.cont
+	{	font-size: 2em; text-align: center;	}
+
+
+
+/*Final Question related css*/
+#FQlocation
+	{	width: 750px; margin: 50px auto auto auto; font-size: 1.1em; min-width: 350px;	}
+	#FQlocation li
+		{	margin-bottom: 5px; list-style: none;	}
+	#FQlocation p
+		{	margin-bottom: 5px; list-style: none;	}
+	#FQlocation ul
+		{	margin-top: 10px;	}
+	#FQlocation .Textbox
+		{	width: 75%;	}
+#FQ
+	{	font-size:1.1em; margin-bottom: 0px;	}
+	#FQ	p
+		{	color:#666666; padding-left: 3%;	}
+#Likert
+	{	max-width: 600px;	}
+	#Likert li
+		{	width:13%; float: left; padding-right: 1.2%;	}
+	#Likert input
+		{	padding-left: 4%; margin-right: auto;	}
+	#Likert p
+		{	text-align: left; margin-left: 9%; margin-top: 2px;	}
+	
+
+
+/*MCpic test trial css*/
+#ButtonArea
+	{	width: 800px;	margin: 20px auto auto auto;	}
+#ButtonArea span
+	{	width: 150px; font-size: 1.3em;
+		margin-right: 35px; margin-bottom: 20px; padding: 3px; background: #566673; color: #fff;
+		border-radius: 5px;	text-align: center; outline:groove 2px;
+		cursor: pointer;	float:left; 	}
+#ButtonArea span:hover
+	{	background: #3e5365;	}
+
+
+
+/*done.php css*/
+#donePage
+	{	width: 650px; margin-left: 50px; margin-top: 30px;	}

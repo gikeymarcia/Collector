@@ -1,190 +1,306 @@
-body
-	{	font-family: Kreon, sans-serif;	font-size: 110%;	}
-h1
-	{	font-size: 2em;	color: #333333;	padding-top: 30px;	text-align: center;	}
-h2
-	{	}
-h3
-	{	}
-p
-	{	}
-input
-	{	}
-table
-	{		}
-img
-	{	display: block;	margin-left: auto;	margin-right: auto;	}
-form
-	{	}
-option
-	{	}
-select
-	{	}
+/*------------------------------------*\
+ *
+ *  Collector Styles
+ * 	Adam Blake
+ *  written for www.CogFog.com
+ *
+\*------------------------------------*/
+
+/*------------------------------------*\
+    CONTENTS
+\*------------------------------------*/
+/**
+ *  RESET
+ *
+ *  COLORS
+ *
+ *  MAIN
+ *  TYPE
+ *  SHARED
+ *  STRUCTURES
+ *
+ *  INDEX
+ *  INSTRUCTIONS
+ *  TRIAL
+ *  SOTETRIS
+ *  FQS
+ *  NO-JS
+ *
+ *  MISC
+ */
 
 
 
-/*Divs used across multiple pages*/
-.ExpContainer
-	{	text-align: center;	color: #000000;	font-size: 1em;	margin: 0 auto;	width: 800px;	}
-.Prompt
-	{	width: 500px; margin-top: 80px; margin-bottom: 15px; font-size: 1.2em;	}
-.Textbox
-	{	margin-bottom: 7px;	}
-.Hidden, .PreCache
-	{	display:none;	}
-.DuringTrial {}			/*this is here so I can remove precache then put it back when time is up*/
 
 
 
-/*index.php specific css*/
-#LoginPosition
-	{	text-align: center;	font-size: 1em;	}
-.Dropdown
-	{	}
+/*------------------------------------*\
+    $RESET
+\*------------------------------------*/
+/**
+ * 	Eric Meyer Reset
+ *  http://meyerweb.com/eric/tools/css/reset/
+ *  v2.0 | 20110126
+ *  License: none (public domain)
+*/
 
-
-
-/*instructions.php specific css*/
-.MCbutton
-	{	cursor: pointer;	}
-#waiting
-	{	margin-top: 100px;	text-align:left; font-size: 1.5em;}
-
-
-
-/*BasicInfo specific css*/
-#content
-	{	margin-left: auto;	margin-right: auto;
-		width: 70%; min-width: 400px; max-width: 800px;
-		font-size: 1em;	}
-.Question
-	{	margin-top: 15px; margin-bottom: 35px;
-		width: 85%;	}
-	.Question select
-		{	font-size: .9em;	}
-	.Question input
-		{	font-size: 1em;	}
-	.Question p {
-		color: #000000; font-size: 1.1em;  margin: 0px auto 4px auto;
-	}
-input.radio
-	{	}
-
-
-/*Also used in FreeRecall trials*/
-textarea
-	{	margin-bottom: 10px; font-family: Arial, Helvetica, san-serif;	}
-
-
-
-/*Study, Test, and Copy Trial CSS*/
-.WordWrap
-	{	margin: 120px auto 0;
-		width: 100%; min-width: 700px; max-width: 1500px;	}
-	.WordWrap form
-		{	width: 47%; font-size: 1.5em;	}
-	.WordWrap .Textbox
-		{	width: 350px; font-size: 2.1em;	}
-	.WordWrap #FormSubmitButton
-		{	width: 350px; clear:left; margin: 5px auto 10px auto;	}
-.left
-	{	width: 48%;	float: left;
-		text-align: right; font-size: 4em;	}
-.leftcopy
-	{	line-height: 1em; float: left; padding-right: 0px; width: 48%; text-align:right; font-size: 4em;	}
-.leftfloat
-	{	float: left;	}
-.divider
-	{	width: 4%; float: left;
-		text-align: center; font-size: 4em;	}
-.dividercopy
-	{	line-height: 1em; float: left; padding-right: 0px; width: 4%; font-size: 4em; text-align:center;	}		
-.right
-	{	width: 48%; float: left;
-		text-align: left; font-size: 4em;	}
-
-
-#buttPos
-	{	width: 90px;
-		margin-left: auto; margin-right: auto;	}
-
-
-
-/* Hides button on computer timing trials*/
-.ComputerTiming #FormSubmitButton
-	{	display:none;	}
-	
-/* Trial Diagnostics css */
-#Diagnostics {
-	font-family: Consolas, monaco, monospace;
-	padding: 75px 20px 0px 20px;
-	clear: both;
-	font-size: .9em;
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+/* reset Firefox button styling */
+button::-moz-focus-inner,
+input[type="reset"]::-moz-focus-inner,
+input[type="button"]::-moz-focus-inner,
+input[type="submit"]::-moz-focus-inner,
+input[type="file"] > input[type="button"]::-moz-focus-inner {
+	padding:0;
+	border:0;
 }
 
 
-.gray
-	{	color: #666666;	}
-
-
-.fbWord
-		{	width: 750px; margin: 15px auto 10px auto;	text-align:center;	font-size: 1.3em;}
-
-.center
-	{	text-align: center;	}
-.Feedback
-	{	font-size: 2em; margin: 100px auto auto 35%; font-size: 3em;	min-width: 450px; }
-	.Feedback .gray
-		{	font-size: .5em	}
-	.Feedback span
-		{	font-size: 1.3em; text-align: center; width:100%;}
-.FeedbackPic
-	{	font-size: 2em; margin: 25px auto auto auto; font-size: 3em;	min-width: 450px; }
-	.FeedbackPic input
-		{ margin: auto}
-	.FeedbackPic .gray
-		{	font-size: .75em; margin: auto auto 5px 50px;	}
-	.FeedbackPic form
-		{	text-align:center	}
-.pic
-	{	padding-bottom: 20px; margin-top: 20px;	}
-	.pic .Textbox
-		{	font-size: 2em;	}
-.picWord
-	{	text-align: center; font-size: 3em; margin-bottom: 10px;	}
 
 
 
-.Textbox
-	{	width: 200px; padding: 0 5px; font-size: 1.5em; font-family: Kreon, sans-serif;	}
-
-/*Passage trial CSS*/
-.passage
-	{	min-width: 400px; max-width: 800px; margin: 0 auto; font-family: Times New Roman, serif; font-size: .9em; line-height: 1.6em;	}
-	.passage p
-		{	padding-bottom: 10px;	}
-#end
-	{	margin: 0 auto; color: red; text-align: center; font-size: 2em;	}
-
-
-#SubmitButton
-	{	background: #566673; color: #fff; cursor: pointer; width: 80px; padding: 5px;  border-radius: 5px; margin: 10px auto 0;	}
-	#SubmitButton:hover
-		{	background: #3e5365;	}
-
-#FormSubmitButton
-	{	background: #566673; color: #fff; cursor: pointer; width: 80px; padding: 5px;  border-radius: 5px;	}
-	#FormSubmitButton:hover
-		{	background: #3e5365;	}
+/*------------------------------------*\
+  	$COLORS
+\*------------------------------------*/
+.brand {
+    color:rgba(0, 85, 166, 1);	/* (dark blue) */
+    *color:#0055A6;
+}
+.secondary {
+	color:rgba(0, 165, 229, 1)	/* (blue) */
+	*color:#00A5E5;
+}
+.action {
+	color:rgba(0, 255, 135, 1)	/* (lime green) */
+	*color:#00FF87;
+}
+.alert {
+	color:rgba(204, 0, 0, 1)	/* (strong red) */
+	*color:#cc0000;
+}
 
 
 
-/*Instructions.php css*/
-#centerContent
-	{	width: 66%; max-width: 800px; min-width: 450px;
-		margin-left: auto; margin-right: auto;	}
-.Instruct
-	{	margin: 35px auto 50px auto;	font-size: 1.1em;}
+
+
+/*------------------------------------*\
+  	$MAIN
+\*------------------------------------*/
+@import url(http://fonts.googleapis.com/css?family=Open+Sans);
+@import url(http://fonts.googleapis.com/css?family=Roboto);
+
+html {
+	font:18px/1.625 "Roboto", Arial, sans-serif;
+	color:#333;	/* dark grey is easier to read */
+	background:#fff;
+	overflow-y:scroll;
+}
+
+body {
+
+}
+
+
+
+
+
+/*------------------------------------*\
+  	$SHARED
+\*------------------------------------*/
+.main-contain {
+	width: 800px;
+}
+
+.textcenter {
+	text-align:center;
+}
+
+.precache,.hidden,#waiting {
+	display:none;
+}
+
+h1,h2,h3,h4,h5,h6,a {
+    color:#0055A6;
+}
+a:hover,a:focus {
+	color:#00A5E5;
+}
+a:active {
+	color:#00FF87;
+}
+
+
+
+
+
+/*------------------------------------*\
+  	$TYPE
+\*------------------------------------*/
+h1 {
+	font-size:2em;
+	padding:10px;
+	margin-bottom:0;
+}
+
+h2 {
+	font-size:1.5em;
+	padding:10px;
+}
+
+a:hover, a:active {
+    outline: none;
+}
+
+
+
+
+
+/*------------------------------------*\
+  	$STRUCTURES
+\*------------------------------------*/
+.main-contain {
+}
+
+/* 	dynamic vertical centering */
+.cframe-outer {
+	display:table;
+	position:absolute;
+	height:100%;
+	width:100%;
+}
+	.cframe-inner {
+		display:table-cell;
+		vertical-align:middle;
+	}
+		.cframe-content {
+			margin:0 auto;
+			width:66%;
+			max-width:600px;
+			min-width:400px;
+		}
+			.cframe-content p {
+				margin-bottom:1.2em;
+			}
+
+/* buttons */
+.button-link {
+    font-family: inherit;
+    font-size: 100%;
+    *font-size: 90%;
+    *overflow: visible;
+    padding: .45em 1em;
+    color: #fff;
+    background-color: #0055A6;
+    text-decoration: none;
+    border-radius: 4px;
+    border:0;
+}
+.button-link-hover,.button-link:hover,.button-link:focus {
+	background-color: #00A5E5;
+}
+.button-link:focus {
+    outline: 0;
+}
+.button-link-active,.button-link:active {
+    box-shadow: 0 0 0 1px #00FF87 inset,0 0 6px #00FF87 inset;
+    *color:#00FF87;
+}
+
+/* forms */
+.collector-form {
+    margin: .5em 0;
+    display: block;
+}
+.collector-form input[type=text],.collector-form input[type=email],.collector-form select,.collector-form textarea {
+    font-family: inherit;
+    font-size: 100%;
+    *font-size: 90%;
+    padding: .4em .6em;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 3px #ddd;
+    border-radius: 4px;
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+}
+.collector-form input[type=text]:focus,.collector-form input[type=email]:focus,.collector-form select:focus,.collector-form textarea:focus,
+.collector-form input[type=text]:hover,.collector-form input[type=email]:hover,.collector-form select:hover,.collector-form textarea:hover {
+    outline: 0;
+    border-color: #00A5E5;
+}
+.collector-form input[type=text][disabled],.collector-form input[type=email][disabled],.collector-form select[disabled],.collector-form textarea[disabled],
+.collector-form input[type=text][disabled]:focus,.collector-form input[type=email][disabled]:focus,.collector-form select[disabled]:focus,.collector-form textarea[disabled]:focus {
+	outline:0;
+	border:0;
+    cursor: not-allowed;
+    background-color: #eaeded;
+    color: #666;
+}
+
+
+
+
+
+/*------------------------------------*\
+  	$INDEX
+\*------------------------------------*/
+.login-pos {
+	width:500px;
+	margin:1.5em auto;
+	text-align:center;
+}
+
+
+
+
+
+/*------------------------------------*\
+  	$INSTRUCTIONS
+\*------------------------------------*/
 .readcheck
 	{	background: #f2f1f1; padding: 20px; width: 50%; margin-top: 150px; border-radius: 10px;	}
 ol.list  li
@@ -192,75 +308,51 @@ ol.list  li
 
 
 
-/*JOL trials and post-trial css*/
-#JOLpos
-	{	width: 650px; margin: 120px auto 0px auto;	}
-#jol
-	{	font-size: 2em; padding-top: 20px; max-width: 600px;	}
-#subpoint
-	{	padding-top: 15px; padding-bottom: 10px; color: #191935;max-width: 600px;	}
 
 
 
-/*stepout related css*/
-h1.stepout
-	{	width: 700px; margin:20px auto 20px;	}
-#StepoutInstructions
-	{	width: 550px; margin-top: 30px; margin-left: auto; margin-right: auto;	}
-#StepoutInstructions p
-	{	font-size: 1.1em;	}
-#Clock
-	{	float: right; padding: 4px 8px 8px 8px; font-size: 1.1em; background: #9cb0d4; color: #fbfdff; margin-right: 25px; margin-top: 15px;	}
-	#Clock span
-		{	margin-bottom: 20px;	}
-.Countdown
-	{	font-size: 2em; font-family: Orbitron, serif; text-align: center; margin-top: 5px; background: #ddeeff; color: #3c3c3c;	}
-#Tetris
-	{	margin-left: auto; margin-right: auto; width: 550px; height:650px;	}
-.cont
-	{	font-size: 2em; text-align: center;	}
+/*------------------------------------*\
+  	$TRIAL
+\*------------------------------------*/
 
 
 
-/*Final Question related css*/
-#FQlocation
-	{	width: 750px; margin: 50px auto auto auto; font-size: 1.1em; min-width: 350px;	}
-	#FQlocation li
-		{	margin-bottom: 5px; list-style: none;	}
-	#FQlocation p
-		{	margin-bottom: 5px; list-style: none;	}
-	#FQlocation ul
-		{	margin-top: 10px;	}
-	#FQlocation .Textbox
-		{	width: 75%;	}
-#FQ
-	{	font-size:1.1em; margin-bottom: 0px;	}
-	#FQ	p
-		{	color:#666666; padding-left: 3%;	}
-#Likert
-	{	max-width: 600px;	}
-	#Likert li
-		{	width:13%; float: left; padding-right: 1.2%;	}
-	#Likert input
-		{	padding-left: 4%; margin-right: auto;	}
-	#Likert p
-		{	text-align: left; margin-left: 9%; margin-top: 2px;	}
-	
-
-
-/*MCpic test trial css*/
-#ButtonArea
-	{	width: 800px;	margin: 20px auto auto auto;	}
-#ButtonArea span
-	{	width: 150px; font-size: 1.3em;
-		margin-right: 35px; margin-bottom: 20px; padding: 3px; background: #566673; color: #fff;
-		border-radius: 5px;	text-align: center; outline:groove 2px;
-		cursor: pointer;	float:left; 	}
-#ButtonArea span:hover
-	{	background: #3e5365;	}
 
 
 
-/*done.php css*/
-#donePage
-	{	width: 650px; margin-left: 50px; margin-top: 30px;	}
+/*------------------------------------*\
+  	$FQS
+\*------------------------------------*/
+
+
+
+
+
+
+/*------------------------------------*\
+  	$NO-JS
+\*------------------------------------*/
+.nojs {
+  background:#fbe7a8;
+  max-width: 900px;
+  min-width: 500px;
+  margin-top: -100px;
+}
+.nojs img {
+    position:absolute;
+    float:left;
+    top:50%;
+    margin: -95px 0 0 15px;
+}
+.nojs .nojs-text {
+    margin-left: 90px;
+    padding: 30px;
+}
+
+
+
+
+
+/*------------------------------------*\
+  	$MISC
+\*------------------------------------*/

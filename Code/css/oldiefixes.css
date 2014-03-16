@@ -1,0 +1,18 @@
+/* 	for dynamic vertical centering */
+.cframe-outer {
+	display:inline-block;
+	top:0;
+}
+	.cframe-inner {
+		display:inline-block;
+		top:50%;
+		position:relative;
+	}
+		.cframe-content {
+			display:inline-block;
+			top:-50%;
+			position:relative;
+		}
+.button-primary {
+	display:inline;
+}
