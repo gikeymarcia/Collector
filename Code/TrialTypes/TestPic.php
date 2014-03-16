@@ -7,7 +7,7 @@
 		 '</div>';
 	$formClass = $formClass.' center';
 	
-	echo '<form class="'.$formClass.' PreCache"  autocomplete="off"  action="postTrial.php"  method="post" class="PreCache">
+	echo '<form class="'.$formClass.' PreCache"  autocomplete="off"  action="'.$postTo.'"  method="post" class="PreCache">
 			<input  name="Response" type="text" value=""			class="Textbox picWord PreCache" autocomplete="off" />	<br />
 			<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
 			<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>

@@ -6,7 +6,7 @@
 			<div id="jol">How likely are you to correctly remember this item on a later test?</div>
 			<div id="subpoint" class="gray">Type your response on a scale from 0-100 using the entire range of the scale</div>';
 
-	echo '<form class="'.$formClass.'"  autocomplete="off"  action="postTrial.php"  method="post">
+	echo '<form class="'.$formClass.'"  autocomplete="off"  action="'.$postTo.'"  method="post">
 			<input	name="Response"	type="text"	value=""			class="Textbox"			autocomplete="off" />	<br />
 			<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
 			<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>

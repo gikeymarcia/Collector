@@ -4,6 +4,7 @@
 	Copyright 2012-2014 Mikey Garcia & Nate Kornell
  */
  	$data= array();
+	$keysNeeded = array('RT', 'Response1', 'RTkey', 'RTlast', 'strictAcc', 'lenientAcc');
 	/*
 	 * Q: Why are we using $data instead of setting values directly into $_SESSION['Trials']?
 	 * A: $data holds all scoring information and once scoring is complete $data is merged into $_SESSION['Trials'][$currentPos]['Response']

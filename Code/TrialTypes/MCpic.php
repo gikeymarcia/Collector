@@ -26,7 +26,7 @@
 	echo '</div>';
 	
 	$formClass = $formClass.' center';
-	echo '<form class="'.$formClass.'" action="postTrial.php" method="post">
+	echo '<form class="'.$formClass.'" action="'.$postTo.'" method="post">
 			<input	name="Response"	type="text"	value="no press"	class="Textbox Hidden"	/>
 			<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
 			<input	name="RTlast"	type="text"	value="no press"	class="RTlast Hidden" 	/>

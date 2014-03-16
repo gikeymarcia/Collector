@@ -5,7 +5,7 @@
 	echo '<div class="WordWrap PreCache">
 			<span class="leftcopy">'.$cue.'</span>
 			<span class="dividercopy">:</span>
-			<form class="'.$formClass.' leftfloat"  autocomplete="off"  action="postTrial.php"  method="post">
+			<form class="'.$formClass.' leftfloat"  autocomplete="off"  action="'.$postTo.'"  method="post">
 				<input	name="Response"	type="text"	value=""			class="Textbox Right PreCache"	autocomplete="off" />
 				<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
 				<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>

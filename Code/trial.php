@@ -79,8 +79,9 @@
 	$minTime	= 'not present (unless set)';
 	
 	#### Presenting different trial types ####
-	$expFiles  = $up.$expFiles;																	// setting relative path to experiments folder for trials launched from this page
-	$trialFail = FALSE;																			// this will be used to show diagnostic information when a specific trial isn't working
+	$expFiles  = $up.$expFiles;													// setting relative path to experiments folder for trials launched from this page
+	$postTo	   = 'postTrial.php';												// tells the trial types which page to submit to
+	$trialFail = FALSE;															// this will be used to show diagnostic information when a specific trial isn't working
 	$trialFile = FileExists($trialF.$trialType);
 	include $trialFile;
 	
@@ -92,14 +93,14 @@
 		$time = 'user';
 		// default trial is always user timing so you can click 'Done' and progress through the experiment
 		echo '<div id="buttPos" class="PreCache">
-			<form name="UserTiming" class="UserTiming" action="postTrial.php" method="post">
+			<form name="UserTiming" class="UserTiming" action="'.$postTo.'" method="post">
 				<input	name="RT"	type="text"		value=""	class="RT Hidden"	/>
 				<input	id="FormSubmitButton"	type="submit"	value="Done"	/>
 			</form>
 		  </div>';
 	}
 	
-	// hidden field that JQuery/JavaScript uses to submit the trial to postTrial.php
+	// hidden field that JQuery/JavaScript uses to submit the trial to $postTo
 	echo '<div id="Time"	class="Hidden">' . $time . '</div>';
 	echo '<div id="minTime"	class="Hidden">' . $minTime . '</div>';
 	
