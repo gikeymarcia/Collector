@@ -172,7 +172,7 @@ body {
 }
 
 /* Hidden objects */
-.precache,.hidden,#waiting,#hidden {
+.precache,.precachenext,.hidden,#waiting,#hidden {
 	display:none;
 }
 .invisible {
@@ -355,6 +355,13 @@ a:hover, a:active {
 /*------------------------------------*\
   	$TRIAL
 \*------------------------------------*/
+/* position buttons lower */
+.button-trial-advance {
+	margin-top:1em;
+	padding:.2em .5em;
+}
+
+
 /* format diagnostics */
 #showTimer {
 	margin-top:2em;
