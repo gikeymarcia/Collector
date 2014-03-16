@@ -7,7 +7,7 @@
 
 	#### #### CUSTOM FUNCTIONS #### ####
 
-	
+
 	#### Write array to a line of a tab delimited text file (if mode is not specified it uses "a")
 	function arrayToLine ($array, $fileLocation, $mode = "a"){
 			$fileHandle = fopen($fileLocation, $mode);
@@ -15,13 +15,13 @@
 			fputs($fileHandle , PHP_EOL );								// add a newline at the end of the array
 			fclose($fileHandle);
 	}
-	
-	
-	
+
+
+
 	#### Code that block shuffles an array.  Give it an $input array and the key for the grouping factor.
 	function BlockShuffle( $input , $groupingFactor ){
 		$outputArray = array();
-		
+
 		// Use this logic when second-order shuffling is present
 		if(array_key_exists($groupingFactor.'2', $input[2])) {
 			// creates a hierarchical structure of higher order blocks which contain lower order blocks which contain specific items
@@ -54,7 +54,7 @@
 					$holder[$HiCount][$LoCount][] = $NextLine;
 					continue;
 				}
-			}			// runs through the heirarchical structure and shuffles where applicable
+			}			// runs through the hierarchical structure and shuffles where applicable
 			for ($hi=0; $hi < count($holder); $hi++) {
 				if (trim(strtolower($holder[$hi][0][0][$groupingFactor.'2'])) <> 'off') {
 					shuffle($holder[$hi]);
@@ -97,14 +97,29 @@
 					shuffle($group);
 				}
 				foreach ($group as $line) {
-					$outputArray[] = $line;					
+					$outputArray[] = $line;
 				}
 			}
 			return $outputArray;
 		}
 	}
-	
-	
+
+    /**
+     *  arrayCleaner
+     *
+     *  Barebones function to prevent passing code along
+     *  This works with nested arrays
+     *
+     *  Add any other cleaning functions you want to it
+     */
+    function arrayCleaner($cleanarr) {
+        if (is_array($cleanarr)) {
+            return(array_map('arrayCleaner', $cleanarr));
+        } else {
+          return htmlspecialchars($cleanarr, ENT_QUOTES);
+        }
+      }
+
 	#### function that converts smart quotes, em dashes, and u's with umlats so they display properly on web browsers
 	function fixBadChars ($string) {
 		// Function from http://shiflett.org/blog/2005/oct/convert-smart-quotes-with-php
@@ -115,7 +130,7 @@
 						chr(148),
 						chr(151),
 						chr(252));
-						
+
 		$replace = array("'",
 						 "'",
 						 '"',
@@ -124,9 +139,9 @@
 						 '&uuml;');
 		return str_replace($search, $replace, $string);
 	}
-	
-	
-	
+
+
+
 	#### custom function to read from tab delimited data files;  pos 0 & 1 are blank,  header names are array keys
 	function GetFromFile($fileLoc, $padding = TRUE, $delimiter = "\t") {
 		$file	= fopen($fileLoc, 'r');					// open the file passed through the function arguement
@@ -147,9 +162,9 @@
 		fclose($file);
 		return $out;
 	}
-	
-	
-	
+
+
+
 	function initiateCollector() {
 		ini_set('auto_detect_line_endings', true);				// fixes problems reading files saved on mac
 		session_start();										// start the session at the top of each page
@@ -157,9 +172,9 @@
 			error_reporting(0);
 		}
 	}
-	
-	
-	
+
+
+
 	#### function that returns TRUE or FALSE if a string is found in another string
 	function inString ($needle, $haystack, $caseSensitive = FALSE){
 		if ($caseSensitive == FALSE) {
@@ -170,9 +185,9 @@
 			return TRUE;
 		} else { return FALSE; }
 	}
-	
-	
-	
+
+
+
 	#### if an array is empty, all positions == "", return TRUE
 	function isBlankLine($array) {
 		foreach ($array as $item) {
@@ -182,8 +197,8 @@
 		}
 		return TRUE;
 	}
-	
-	
+
+
 	#### checking if a key exists within a GetFromFile array;  returns TRUE/FALSE
 	function keyCheck ($array, $key, $errorArray, $searched) {
 		foreach ($array as $line) {
@@ -203,8 +218,8 @@
 		}
 		return $errorArray;
 	}
-	
-	
+
+
 	#### takes an input ($info) array and merges it into a target array ($place).  Optional, prepend all $info keys with a $keyMod string
 	function placeData ($data, $place, $keyMod = '') {
 		$dataKeys = array_keys($data);
@@ -213,20 +228,26 @@
 		}
 		return $place;
 	}
-	
-	
+
+
 	#### Debug function I use to display arrays in an easy to read fashion
-	function Readable($displayArray, $name = "unspecified"){
+	function readable($displayArray, $name = "Untitled array"){
+		// convert to string to prevent parsing code
+		$clean_displayArray = arrayCleaner($displayArray);
+
 		echo '<div>';
-		echo 	'<h3 class="collapsibleTitle"> Array for: '.$name.'<em> (click to open/close)</em> </h3> ';
-		echo 		'<pre>';
-						print_r($displayArray);
-		echo  		'</pre>';
-		echo  '</div>';
+		echo     '<div class="button collapsibleTitle">
+		              <h3>'.$name.'</h3>
+		              <p>(click to open/close)</p>
+		          </div>';
+		echo     '<pre class=hidden>';
+		              print_r($clean_displayArray);
+		echo     '</pre>';
+		echo '</div>';
 	}
-	
-	
-	
+
+
+
 	#### add html tags for images and audio files but do nothing to everything else
 	function show($string){
 		$stringLower	= strtolower($string);					// make lowercase version of input
@@ -236,8 +257,8 @@
 		$findMP3		= strpos($stringLower, '.mp3');
 		$findOGG		= strpos($stringLower, '.ogg');
 		$findWAV		= strpos($stringLower, '.wav');
-		
-		
+
+
 		// if I found an image file extension, add html image tags
 		if( $findGIF == TRUE || $findJPG == TRUE || $findPNG == TRUE){
 			if(!inString('www.', $string)) {								// navigate path to Experiment folder (unless linking to external image)
@@ -257,9 +278,9 @@
 		}
 		return $string;
 	}
-	
-	
-	
+
+
+
 	function SortByKey($input, $key){
 		$sorter = array();											// declare holding array
 		for($i = 0; $i < count($input); $i++){						// load $input sorting key into $sorter
@@ -268,8 +289,8 @@
 		array_multisort($sorter, $input);							// sort by $key value of each condition
 		return $input;
 	}
-	
-	
+
+
 	#### function to determine which timing to apply to the current trial
 	function trialTiming(){
 		global $formClass;
@@ -279,7 +300,7 @@
 		global $timingReported;
 		global $_SESSION;
 		global $debugTime;
-		
+
 		if (is_numeric($timingReported)) {				// use manually set time if possible
 			$time = $timingReported;
 		}
@@ -290,31 +311,31 @@
 			$time = $compTime;
 		}
 		else { $time = 5; }								// default compTime if none is set
-		
+
 		if($_SESSION['Debug'] == TRUE) {
 			$time = $debugTime;
 		}
-		
+
 		if($time == 'user') {
 			$formClass	= 'UserTiming';
 		} else {
 			$formClass	= 'ComputerTiming';
 		}
-		
+
 		// if minTime exists and is a number
 		if( isset($_SESSION['Trials'][$_SESSION['Position']]['Procedure']['MinTime']) && is_numeric($_SESSION['Trials'][$_SESSION['Position']]['Procedure']['MinTime']) ) {
 			$minTime = $_SESSION['Trials'][$_SESSION['Position']]['Procedure']['MinTime'];
 		}
-		
+
 	}
-	
-	
-	
+
+
+
 	#### Debug function that was quicker to write than an echo (mostly used it to make sure conditions of an if/for/while were being met)
 	function x($input="this is working"){
 		echo "<p>{$input}</p>";
 	}
-	
+
 	function FileExists( $filePath, $altExtensions = TRUE ) {
 		//if( is_file($filePath) ) { return $filePath; }
 		$path_parts = pathinfo($filePath);

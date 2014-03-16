@@ -208,6 +208,11 @@ h2 {
 	padding: .8em 0;
 }
 
+h3 {
+	font-size: 1.2em;
+	padding: .8em 0;
+}
+
 p {
 	margin-bottom: 1.1em;
 }
@@ -243,7 +248,7 @@ a:hover, a:active {
 		}
 
 /* buttons */
-.button-link {
+.button {
     font-family: inherit;
     font-size: 100%;
     padding: .45em 1em;
@@ -254,13 +259,13 @@ a:hover, a:active {
     border:0;
     cursor:pointer;
 }
-.button-link-hover,.button-link:hover,.button-link:focus {
+.button-hover,.button:hover,.button:focus {
 	background-color: #00A5E5;
 }
-.button-link:focus {
+.button:focus {
     outline: 0;
 }
-.button-link-active,.button-link:active {
+.button-active,.button:active {
 	background-color:#00FF87;
 }
 
@@ -350,8 +355,25 @@ a:hover, a:active {
 /*------------------------------------*\
   	$TRIAL
 \*------------------------------------*/
-
-
+/* format diagnostics */
+#showTimer {
+	margin-top:2em;
+}
+.diagnostics {
+	margin-top:2em;
+	font-family: Consolas, monaco, monospace;
+	clear: both;
+	font-size: .9em;
+}
+.diagnostics ul {
+	margin-bottom:1em;
+}
+.collapsibleTitle {
+	margin:1em 0;
+}
+.collapsibleTitle h3 {
+	color:#fff;
+}
 
 
 
