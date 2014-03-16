@@ -17,7 +17,6 @@ window.onload = function () {
 	$("#waiting").addClass("hidden");
 	$(".readcheck").removeClass("hidden");
 	setInterval(addtime,interval);
-
 };
 
 
@@ -38,6 +37,11 @@ function addtime(){
 	$("#RT").prop("value",timer);
 }
 
+// reveal readcheck questions
+$("#revealRC").click(function() {
+    $(this).hide();
+    $(".readcheck").show("600");
+});
 
 // submit the form when they click the item with id="correct"
 $("#correct").click(function(){
