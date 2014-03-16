@@ -156,18 +156,25 @@ body {
 }
 
 /* general min/max */
-.login-pos,.cframe-content,.readcheck {
+.login-pos,.cframe-content {
 	max-width:600px;
 	min-width:400px;
 }
 
+/* text alignment */
 .textcenter {
 	text-align:center;
 }
+.textright{
+	text-align:right;
+}
 
 /* Hidden objects */
-.precache,.hidden,#waiting {
+.precache,.hidden,#waiting,#hidden {
 	display:none;
+}
+.invisible {
+	visibility:hidden;
 }
 
 /* Shared colors */
@@ -189,14 +196,18 @@ a:active {
   	$TYPE
 \*------------------------------------*/
 h1 {
-	font-size:2em;
-	padding:10px;
-	margin-bottom:0;
+	font-size: 2em;
+	padding: .2em 0 .8em 0;
+	margin-bottom: 0;
 }
 
 h2 {
-	font-size:1.5em;
-	padding:10px;
+	font-size: 1.5em;
+	padding: .8em 0;
+}
+
+p {
+	margin-bottom: 1.1em;
 }
 
 a:hover, a:active {
@@ -228,9 +239,6 @@ a:hover, a:active {
 			margin:0 auto;
 			width:66%;
 		}
-			.cframe-content p {
-				margin-bottom:1.2em;
-			}
 
 /* buttons */
 .button-link {
@@ -252,8 +260,7 @@ a:hover, a:active {
     outline: 0;
 }
 .button-link-active,.button-link:active {
-    box-shadow: 0 0 0 1px #00FF87 inset,0 0 6px #00FF87 inset;
-    *color:#00FF87;
+	background-color:#00FF87;
 }
 
 /* forms */
@@ -308,19 +315,23 @@ a:hover, a:active {
   	$INSTRUCTIONS
 \*------------------------------------*/
 .readcheck {
+	display:none;
+	width: 60%;
+	margin: 3em auto 1em auto;
 	background: #00FF87;
 	padding: 1.5em;
 	border-radius: 5px;
-	width:50%;
 }
-ol.list  li {
+.readcheck ol li {
 	width: 80%;
-	margin-bottom: 15px;
+	margin:1em auto;
 	background: #fff;
-	outline: dotted 2px black;
+	outline: solid 2px #00a585;
 	padding: 5px;
 }
-
+.readcheck ol li:hover {
+	background: ##00a585;
+}
 
 
 
