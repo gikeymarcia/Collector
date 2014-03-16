@@ -40,7 +40,10 @@ function addtime(){
 // reveal readcheck questions
 $("#revealRC").click(function() {
     $(this).hide();
-    $(".readcheck").show("600");
+    $(".readcheck").slideDown("slow", function() {
+    	var offset = $(".readcheck").offset();
+    	$(document).animate({scrollTo:offset}, 2000);
+    });
 });
 
 // submit the form when they click the item with id="correct"
@@ -50,9 +53,11 @@ $("#correct").click(function(){
 
 
 // when they click an item with class="wrong" add to fail count and alert them to re-read instructions
-$("#wrong").click(function(){
+$(".wrong").click(function(){
 	Fails++;
-	alert('Please carefully read the instructions again.');
+	$(".cframe-outer").animate({"top":"30px"});
+	window.scrollTo(0,0);
+	$(".alert").fadeIn(100).fadeOut(100).fadeIn(100);
 	$("#Fails").prop("value",Fails);
 });
 

@@ -111,16 +111,16 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
     *color:#0055A6;
 }
 .secondary {
-	color:rgba(0, 165, 229, 1)	/* (blue) */
+	color:rgba(0, 165, 229, 1);	/* (blue) */
 	*color:#00A5E5;
 }
 .action {
-	color:rgba(0, 255, 135, 1)	/* (lime green) */
+	color:rgba(0, 255, 135, 1);	/* (lime green) */
 	*color:#00FF87;
 }
 .alert {
-	color:rgba(204, 0, 0, 1)	/* (strong red) */
-	*color:#cc0000;
+	background-color:rgba(128, 0, 0, 1);	/* (strong red) */
+	*background-color:#800000;
 }
 
 
@@ -326,11 +326,20 @@ a:hover, a:active {
 	width: 80%;
 	margin:1em auto;
 	background: #fff;
-	outline: solid 2px #00a585;
+	outline: solid 2px #00a5e5;
 	padding: 5px;
 }
 .readcheck ol li:hover {
-	background: ##00a585;
+	background: #00a5e5;
+}
+
+.alert-instructions {
+	display:none;
+	position:absolute;
+	width:100%;
+	top:0;
+	color:#fff;
+	text-align:center;
 }
 
 

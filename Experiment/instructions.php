@@ -46,10 +46,10 @@ initiateCollector();
             <div class=cframe-content>
                 <div class=readcheck>                Should you pay close attention?  (hint: Answer is in the instructions)
                     <ol>
-                        <li class=MCbutton id=wrong   > I don't think so </li>
-                        <li class=MCbutton id=wrong   > Nope             </li>
+                        <li class="MCbutton wrong"    > I don't think so </li>
+                        <li class="MCbutton wrong"    > Nope             </li>
                         <li class=MCbutton id=correct > Yes              </li>
-                        <li class=MCbutton id=wrong   > I can't read.    </li>
+                        <li class="MCbutton wrong"    > I can't read.    </li>
                     </ol>
                 </div>
             </div>
@@ -63,6 +63,8 @@ initiateCollector();
 
         </div>
     </div>
+
+    <div class="alert alert-instructions">Please carefully read the instructions again.</div>
 
     <div class=precache>
 	<?php
