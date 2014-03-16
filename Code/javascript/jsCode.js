@@ -40,7 +40,7 @@ function addtime(){
 // reveal readcheck questions
 $("#revealRC").click(function() {
     $(this).hide();
-    $(".readcheck").slideDown("slow", function() {
+	$(".readcheck").slideDown("slow", function() {
     	var offset = $(".readcheck").offset();
     	$(document).animate({scrollTo:offset}, 2000);
     });
