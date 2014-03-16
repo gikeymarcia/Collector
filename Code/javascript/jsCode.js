@@ -14,10 +14,10 @@ var Fails		= 0;
 // do these things when everything has loaded
 window.onload = function () {
 	$("#loadingForm").submit();
-	$("#waiting").addClass("Hidden");
-	$(".readcheck").removeClass("Hidden");
+	$("#waiting").addClass("hidden");
+	$(".readcheck").removeClass("hidden");
 	setInterval(addtime,interval);
-	
+
 };
 
 
@@ -33,16 +33,9 @@ window.onload = function () {
 	});
 
 
-// make SubmitButton div submit the form when clicked
-// only used on the login page to stop people who have js disabled
-	$("#SubmitButton").click(function(){
-		$("form").submit();
-	});
-
-
 function addtime(){
 	timer = timer + interval;
-	$(".RT").prop("value",timer);
+	$("#RT").prop("value",timer);
 }
 
 
@@ -53,10 +46,10 @@ $("#correct").click(function(){
 
 
 // when they click an item with class="wrong" add to fail count and alert them to re-read instructions
-$(".wrong").click(function(){
+$("#wrong").click(function(){
 	Fails++;
 	alert('Please carefully read the instructions again.');
-	$(".Fails").prop("value",Fails);
+	$("#Fails").prop("value",Fails);
 });
 
 

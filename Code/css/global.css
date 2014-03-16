@@ -8,6 +8,7 @@
 
 /*------------------------------------*\
     CONTENTS
+    (protip: search $[item] to jump)
 \*------------------------------------*/
 /**
  *  RESET
@@ -154,22 +155,30 @@ body {
 	width: 800px;
 }
 
+/* general min/max */
+.login-pos,.cframe-content,.readcheck {
+	max-width:600px;
+	min-width:400px;
+}
+
 .textcenter {
 	text-align:center;
 }
 
+/* Hidden objects */
 .precache,.hidden,#waiting {
 	display:none;
 }
 
+/* Shared colors */
 h1,h2,h3,h4,h5,h6,a {
-    color:#0055A6;
+    color:#0055A6;	/* brand color */
 }
 a:hover,a:focus {
-	color:#00A5E5;
+	color:#00A5E5;	/* secondary color */
 }
 a:active {
-	color:#00FF87;
+	color:#00FF87;	/* action color */
 }
 
 
@@ -218,8 +227,6 @@ a:hover, a:active {
 		.cframe-content {
 			margin:0 auto;
 			width:66%;
-			max-width:600px;
-			min-width:400px;
 		}
 			.cframe-content p {
 				margin-bottom:1.2em;
@@ -289,7 +296,6 @@ a:hover, a:active {
   	$INDEX
 \*------------------------------------*/
 .login-pos {
-	width:500px;
 	margin:1.5em auto;
 	text-align:center;
 }
@@ -301,10 +307,19 @@ a:hover, a:active {
 /*------------------------------------*\
   	$INSTRUCTIONS
 \*------------------------------------*/
-.readcheck
-	{	background: #f2f1f1; padding: 20px; width: 50%; margin-top: 150px; border-radius: 10px;	}
-ol.list  li
-	{	width: 80%; margin-bottom: 15px; background: #ffffff; outline: dotted 2px black; padding: 5px;	}
+.readcheck {
+	background: #00FF87;
+	padding: 1.5em;
+	border-radius: 5px;
+	width:50%;
+}
+ol.list  li {
+	width: 80%;
+	margin-bottom: 15px;
+	background: #fff;
+	outline: dotted 2px black;
+	padding: 5px;
+}
 
 
 
