@@ -33,7 +33,7 @@ initiateCollector();
                 <p> As many paragraphs as you would like can go here.  Instructions are done.  Time for you to move onto the experiment</p>
 
                 <div class=textcenter id=revealRC>
-                    <button class="button-link">Advance</button>
+                    <button class=button>Advance</button>
                 </div>
             </div>
 

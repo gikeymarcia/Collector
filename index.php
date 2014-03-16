@@ -73,7 +73,7 @@
 				    ?>
 			</select>
 
-			<input class="button-link" type=submit value="Login" />
+			<input class=button type=submit value="Login" />
 		</form>
 	</div>
 

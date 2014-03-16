@@ -63,29 +63,30 @@
 <?php flush();	?>
 <body>
 
-    <?php
-    	// go to stepout page if this is a stepout trial
-    	if ($trialType == 'stepout') {
-    		$page = trim( $currentTrial['Procedure']['Procedure Notes'] );
-    		echo '<meta http-equiv="refresh" content="0; url='.$page.'">';
-    	}
+<?php
+	// go to stepout page if this is a stepout trial
+	if ($trialType == 'stepout') {
+		$page = trim( $currentTrial['Procedure']['Procedure Notes'] );
+		echo '<meta http-equiv="refresh" content="0; url='.$page.'">';
+	}
 
-    	// variables I'll need and/or set in trialTiming() function
-    	$timingReported = trim(strtolower($currentTrial['Procedure']['Timing']));
-    	$formClass	= '';
-    	$time		= '';
-    	$minTime	= 'not present (unless set)';
+	// variables I'll need and/or set in trialTiming() function
+	$timingReported = trim(strtolower($currentTrial['Procedure']['Timing']));
+	$formClass	= '';
+	$time		= '';
+	$minTime	= 'not present (unless set)';
 
-    	#### Presenting different trial types ####
-    	$expFiles  = $up.$expFiles;							// setting relative path to experiments folder for trials launched from this page
-    	$trialFail = FALSE;									// this will be used to show diagnostic information when a specific trial isn't working
-    	$trialFile = FileExists($trialF.$trialType);
-    ?>
+	#### Presenting different trial types ####
+	$expFiles  = $up.$expFiles;							// setting relative path to experiments folder for trials launched from this page
+	$trialFail = FALSE;									// this will be used to show diagnostic information when a specific trial isn't working
+	$trialFile = FileExists($trialF.$trialType);
+?>
 
-    <!-- user visible HTML markup -->
-    <div class=cframe-outer>
-        <div class=cframe-inner>
-            <div class=cframe-content>
+
+<div class=cframe-outer>
+    <div class=cframe-inner>
+        <div class=cframe-content>
+            <!-- user visible HTML markup -->
             <?php
                 if ($trialFile):
                    	include $trialFile;
@@ -94,10 +95,10 @@
             		<p>Check your procedure file to make sure everything is in order. All information about this trial is dispalyed below.</p>';
 
             		<!-- default trial is always user timing so you can click 'Done' and progress through the experiment -->
-            		<div id="buttPos" class="precache">
-            			<form name="UserTiming" class="UserTiming" action="postTrial.php" method="post">
-            				<input name=RT id=RT type=text value="" class=hidden />
-            				<input class=button-link type=submit value="Done" />
+            		<div class=precache>
+            			<form name=UserTiming class=UserTiming action="postTrial.php" method=post>
+            				<input class=hidden id=RT name=RT type=text value=""  />
+            				<input class=button type=submit value="Done" />
             			</form>
             		</div>
             <?php
@@ -105,60 +106,64 @@
                 $time = 'user';
                 endif;
             ?>
+
+            <!-- placeholders for a debug function that shows timer values -->
+            <div id=showTimer class=hidden>
+                <div> Start (ms):   <span id=start>   </span> </div>
+                <div> Current (ms): <span id=current> </span> </div>
+                <div> Timer (ms):   <span id=dif>     </span> </div>
             </div>
+
+             <?php
+                #### Diagnostics ####
+                if ($trialDiagnostics == TRUE OR $trialFail == TRUE) {
+                    // clean the arrays used so that they output strings, not code
+                    $clean_session      = arrayCleaner($_SESSION);
+                    $clean_currentTrial = arrayCleaner($currentTrial);
+                    echo "<div class=diagnostics>
+                            <h2>Diagnostic information</h2>
+                            <ul>
+                                <li> Condition #:           {$clean_session['Condition']['Number']}                </li>
+                                <li> Condition Stim File:   {$clean_session['Condition']['Stimuli']}               </li>
+                                <li> Condition Order File:  {$clean_session['Condition']['Procedure']}             </li>
+                                <li> Condition description: {$clean_session['Condition']['Condition Description']} </li>
+                            </ul>
+                            <ul>
+                                <li> Trial Number:          {$currentPos}                                          </li>
+                                <li> Trial Type:            {$trialType}                                           </li>
+                                <li> Post Trial:            {$clean_currentTrial['Procedure']['Post Trial']}       </li>
+                                <li> Trial timing:          {$clean_currentTrial['Procedure']['Timing']}           </li>
+                                <li> Trial Time (seconds):  {$time}                                                </li>
+                            </ul>
+                            <ul>
+                                <li> Cue: ".                show($cue)."                                        </li>
+                                <li> Target:".              show($target)."                                     </li>
+                                <li> Answer:".              show($answer)."                                     </li>
+                            </ul>";
+                    readable($currentTrial, "Information loaded about the current trial");
+                    readable($_SESSION['Trials'], "Information loaded about the entire experiment");
+                    echo "</div>";
+                }
+            ?>
         </div>
     </div>
+</div>
 
-    <!-- hidden field that JQuery/JavaScript uses to check the timing to postTrial.php -->
-    <div id="Time" class="hidden"><?php echo $time; ?></div>
-    <div id="minTime" class="hidden"><?php echo $minTime; ?></div>
+<!-- hidden field that JQuery/JavaScript uses to check the timing to postTrial.php -->
+<div id=Time class=hidden><?php echo $time; ?></div>
+<div id=minTime class=hidden><?php echo $minTime; ?></div>
 
-    <!-- placeholders for a debug function that shows timer values -->
-    <br />
-    <div id="showTimer" class="hidden">
-    	<div> Start (ms):	<span id="start">	</span>	</div>
-    	<div> Current (ms):	<span id="current">	</span>	</div>
-    	<div> Timer (ms):	<span id="dif">		</span>	</div>
-    </div>
-
-    <!-- Pre-Cache Next trial -->
-    <div class="precache">';
-    	<?php
-    	echo show($nextTrial['Stimuli']['Cue']).'	<br />';
-    	echo show($nextTrial['Stimuli']['Target']).'<br />';
-    	echo show($nextTrial['Stimuli']['Answer']).'<br />';
-        ?>
-    </div>
-
+<!-- Pre-Cache Next trial -->
+<div class=precachenext>
     <?php
-        #### Diagnostics ####
-        if ($trialDiagnostics == TRUE OR $trialFail == TRUE) {
-        	echo "<div id='Diagnostics'>
-        			<ul>
-        				<li> Condition #: 			{$_SESSION['Condition']['Number']}					</li>
-        				<li> Condition Stim File:	{$_SESSION['Condition']['Stimuli']}					</li>
-        				<li> Condition Order File:	{$_SESSION['Condition']['Procedure']}				</li>
-        				<li> Condition description:	{$_SESSION['Condition']['Condition Description']}	</li>
-        				<br/>
-        				<li> Trial Number:			{$currentPos}										</li>
-        				<li> Trial Type:			{$trialType}										</li>
-        				<li> Post Trial:			{$currentTrial['Procedure']['Post Trial']}			</li>
-        				<li> Trial timing:			{$currentTrial['Procedure']['Timing']}				</li>
-        				<li> Trial Time (seconds):	{$time}												</li>
-        				<br/>
-        				<li> Cue: ".				show($cue)."										</li>
-        				<li> Target:".				show($target)."										</li>
-        				<li> Answer:".				show($answer)."										</li>
-        			</ul>";
-        	readable($currentTrial, "information loaded about the Current trial");
-        	readable($_SESSION['Trials'], "information loaded THE ENTIRE EXPERIMENT!!!");
-        	echo "</div>";
-        }
-        #### Diagnostics ####
+    echo show($nextTrial['Stimuli']['Cue']).'   <br />';
+    echo show($nextTrial['Stimuli']['Target']).'<br />';
+    echo show($nextTrial['Stimuli']['Answer']).'<br />';
     ?>
+</div>
 
-	<script src="http://code.jquery.com/jquery-1.8.0.min.js" type="text/javascript"> </script>
-	<script src="javascript/trial.js" type="text/javascript"> </script>
+<script src="http://code.jquery.com/jquery-1.8.0.min.js" type="text/javascript"> </script>
+<script src="javascript/trial.js" type="text/javascript"> </script>
 
 </body>
 </html>
