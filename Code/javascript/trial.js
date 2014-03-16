@@ -18,66 +18,66 @@
 	var trialTime	= $("#Time").html();
 	var minTime		= $("#minTime").html();
 	var MCpickColor = "#00ac86";
-	
+
 	var startTime	= Date.now();						// take a snapshot of the current system time
 	var currentTime	= Date.now();
 	var last		= Date.now();
 	var showTimer	= false;								// ## SET ##, change to `true` or `false` without tickmarks
-	
-	
-	
+
+
+
 	// do when structure (HTML) but not necessarily all content has loaded
 	$("document").ready( function(){
 		timer		= 0;									// reset the timer
 		if (minTime > 0) {									// if a mimnum time is set
-			$("#FormSubmitButton").css("display","none");		// hide submit button
-			$(".Textbox").addClass("noEnter");					// disable enter from submitting the trial
+			$("#FormSubmitButton").addClass("hidden");		// hide submit button
+			$(".Textbox").addClass("noEnter");				// disable enter from submitting the trial
 		}
-		
+
 		if( $("form").hasClass("ComputerTiming")) {			// if trial is ComputerTiming
 			$(".Textbox").addClass("noEnter");					// disable enter from submitting the trial
 		}
 	});
-	
-	
+
+
 	// on pageload reset timer, show pre-cached, start timer, focus on textboxes
 	window.onload = function() {
 		if(trialTime != 0) {
-			$(".PreCache").addClass("DuringTrial");			// add class that does nothing (but lets us know what used to be hidden)
-			$(".PreCache").removeClass("PreCache");			// remove class that hides the content
+			$(".precache").addClass("DuringTrial");			// add class that does nothing (but lets us know what used to be hidden)
+			$(".precache").removeClass("precache");			// remove class that hides the content
 		}
 		startTime	= Date.now();							// take a snapshot of the current system time
 		window.tickTock = setInterval(getTime,interval);	// start the timer
 		$(".Textbox:first").focus();
 		$("textarea").focus();
 	};
-	
-	
+
+
 	// unhide counter if you've set showTimer == true
 	if(showTimer == true) {
 		$("#showTimer").removeClass("Hidden");
 		$("#start").html(startTime);
 	}
-	
-	
+
+
 	// timer function
 	function getTime() {
 		currentTime = Date.now();
 		timer = currentTime - startTime;
-		
+
 		if (timer > (minTime*1000)) {						// when minimum time is reached
 			$("#FormSubmitButton").css("display","inline");		// show 'Done' / 'Submit' button
 			$(".Textbox").removeClass("noEnter");				// allow enter to progress the trial
 		}
-		
+
 		if (timer >= (trialTime*1000)) {					// if time is up
-			$(".DuringTrial").addClass("PreCache");				// hide content
+			$(".DuringTrial").addClass("precache");				// hide content
 			$(".RT").prop("value",timer);						// update RT field with timer value
 			timer = 0;											// reset timer
 			$("form").submit();									// submit form
 			clearInterval(tickTock);							// stop timer from running again
 		}
-		
+
 		// DEBUG function that updates shown timer ~ every 100ms
 		if (showTimer == true) {
 			if( (currentTime - last) > 100) {
@@ -87,21 +87,21 @@
 			}
 		}
 	}
-	
-	
+
+
 	// intercept FormSubmitButton click
 	$("#FormSubmitButton").click(function(){		// when 'Done' / 'Submit' is pressed
 		getTime();										// get ms accurate time
 		clearInterval(tickTock);						// stop timer from running again
-		$(".DuringTrial").addClass("PreCache");			// hide content
+		$(".DuringTrial").addClass("precache");			// hide content
 		$(".RT").prop("value",timer);					// update RT field with timer value
 		$("form").submit();								// submit form
 	});
-	
-	
+
+
 	// keypress related functionality (for textboxes)
 	$("input").bind("keypress",function(e){
-		
+
 		if(e.keyCode == 13) {							// if enter is pressed
 			if($("input").hasClass("noEnter")) {			// disable for all 'noEnter' inputs
 					return false;
@@ -118,8 +118,8 @@
 		}
 
 	});
-	
-	
+
+
 	// updates last keypress value each time a key is pressed (for textareas)
 	$("textarea").keypress(function(){
 		getTime();									// get ms accurate time
@@ -129,55 +129,47 @@
 		}
 		$(".RTlast").prop("value",timer);
 	});
-	
-	
+
+
 	// updates the response value when a MC button is pressed
 	$(".TestMC").click(function(){
 		getTime();										// get ms accurate time
 		var clicked = $(this).html();
 		$(".Textbox").prop("value",clicked);
-				
+
 		if(keypress == 0) {								// set first keypress times
 			originalColor = $(".TestMC").css("background");
 			$(".RTkey").prop("value",timer);
 			keypress++;
 		}
 		$(".RTlast").prop("value",timer);				// set last keypress time
-		
-		
+
+
 		if( $("form").hasClass("UserTiming")) {			// if 'user' timing
 			getTime();										// get ms accurate time
 			clearInterval(tickTock);						// stop timer from running again
-			$(".DuringTrial").addClass("PreCache");			// hide content
+			$(".DuringTrial").addClass("precache");			// hide content
 			$(".RT").prop("value",timer);					// update RT field with timer value
 			$("form").submit();								// submit form
 		}
 		$(".TestMC").css("background",originalColor);	// remove highlighting from all buttons
 		$(this).css("background", MCpickColor);			// add highlighting to clicked button
 	});
-	
-	
-	// allows for the collapsing of Readable() outputs
+
+
+	// allows for the collapsing of readable() outputs
 	$(".collapsibleTitle").click(function() {
-		var change = $(this).parent().children().not(".collapsibleTitle");
-		if($(this).hasClass("hiding")) {
-			change.show(350);
-			$(this).removeClass("hiding");
-		}
-		else {
-			$(this).addClass("hiding");
-			change.hide(350);
-		}
+		$(this).parent().children().not(".collapsibleTitle").toggle(350);
 	});
-	
-	
+
+
 	// Prevent the backspace key from navigating back.
 	// MAGIC!!! found on stackoverflow (http://stackoverflow.com/questions/1495219/how-can-i-prevent-the-backspace-key-from-navigating-back)
 	$(document).unbind('keydown').bind('keydown', function (event) {
 	    var doPrevent = false;
 	    if (event.keyCode === 8) {
 	        var d = event.srcElement || event.target;
-	        if ((d.tagName.toUpperCase() === "INPUT" && d.type.toUpperCase() === "TEXT") 
+	        if ((d.tagName.toUpperCase() === "INPUT" && d.type.toUpperCase() === "TEXT")
 	             || d.tagName.toUpperCase() === "TEXTAREA") {
 	            doPrevent = d.readOnly || d.disabled;
 	        }
@@ -185,7 +177,7 @@
 	            doPrevent = true;
 	        }
 	    }
-	
+
 	    if (doPrevent) {
 	        event.preventDefault();
 	    }
