@@ -11,9 +11,9 @@
     (protip: search $[item] to jump)
 \*------------------------------------*/
 /**
- *  RESET
- *
+ *  IMPORTS
  *  COLORS
+ *	RESET
  *
  *  MAIN
  *  TYPE
@@ -30,6 +30,34 @@
  *  MISC
  */
 
+
+
+
+/*------------------------------------*\
+    $IMPORTS
+\*------------------------------------*/
+@import url(http://fonts.googleapis.com/css?family=Open+Sans);
+@import url(http://fonts.googleapis.com/css?family=Roboto);
+
+
+
+
+
+/*------------------------------------*\
+  	$COLORS
+\*------------------------------------*/
+.brand {
+    color:#0055A6;             /* dark blue; rgba(0,85,166,1) */
+}
+.secondary {
+	color:#00A5E5;             /* blue; rgba(0,165,229,1); */
+}
+.action {
+	color:#00FF87;             /* lime green; rgba(0,255,135,1) */
+}
+.alert {
+	background-color:#800000;  /* strong red; rgba(128,0,0,1) */
+}
 
 
 
@@ -103,38 +131,12 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 
 
 
-/*------------------------------------*\
-  	$COLORS
-\*------------------------------------*/
-.brand {
-    color:rgba(0, 85, 166, 1);	/* (dark blue) */
-    *color:#0055A6;
-}
-.secondary {
-	color:rgba(0, 165, 229, 1);	/* (blue) */
-	*color:#00A5E5;
-}
-.action {
-	color:rgba(0, 255, 135, 1);	/* (lime green) */
-	*color:#00FF87;
-}
-.alert {
-	background-color:rgba(128, 0, 0, 1);	/* (strong red) */
-	*background-color:#800000;
-}
-
-
-
-
 
 /*------------------------------------*\
   	$MAIN
 \*------------------------------------*/
-@import url(http://fonts.googleapis.com/css?family=Open+Sans);
-@import url(http://fonts.googleapis.com/css?family=Roboto);
-
 html {
-	font:18px/1.625 "Roboto", Arial, sans-serif;
+	font:18px/1.625 "Roboto", "Open Sans", Arial, Helvetica, sans-serif;
 	color:#333;	/* dark grey is easier to read */
 	background:#fff;
 	overflow-y:scroll;
@@ -244,14 +246,13 @@ a:hover, a:active {
 .button-link {
     font-family: inherit;
     font-size: 100%;
-    *font-size: 90%;
-    *overflow: visible;
     padding: .45em 1em;
     color: #fff;
     background-color: #0055A6;
     text-decoration: none;
     border-radius: 4px;
     border:0;
+    cursor:pointer;
 }
 .button-link-hover,.button-link:hover,.button-link:focus {
 	background-color: #00A5E5;
@@ -269,9 +270,8 @@ a:hover, a:active {
     display: block;
 }
 .collector-form input[type=text],.collector-form input[type=email],.collector-form select,.collector-form textarea {
-    font-family: inherit;
+    font-family: "Open Sans", Arial, Helvetica, sans-serif;
     font-size: 100%;
-    *font-size: 90%;
     padding: .4em .6em;
     display: inline-block;
     border: 1px solid #ccc;
@@ -328,6 +328,7 @@ a:hover, a:active {
 	background: #fff;
 	outline: solid 2px #00a5e5;
 	padding: 5px;
+	cursor:pointer;
 }
 .readcheck ol li:hover {
 	background: #00a5e5;
