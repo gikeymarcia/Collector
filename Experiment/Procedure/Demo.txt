@@ -11,3 +11,4 @@ Item	Trial Type	Post Trial	Timing	MinTime	Procedure Notes	Shuffle
 8	StudyPic	JOL	User		whatever I want	OFF
 9	TestPic	Feedback	Computer		whatever I want	OFF
 10	Mcpic	JOL	Computer		whatever I want	OFF
+14	Audio	No	User	2	whatever I want	OFF
