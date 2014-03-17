@@ -65,12 +65,6 @@
 <body>
 	
 <?php
-	// go to stepout page if this is a stepout trial
-	if ($trialType == 'stepout') {
-		$page = trim( $currentTrial['Procedure']['Procedure Notes'] );
-		echo '<meta http-equiv="refresh" content="0; url='.$page.'">';
-	}
-	
 	
 	// variables I'll need and/or set in trialTiming() function
 	$timingReported = trim(strtolower($currentTrial['Procedure']['Timing']));
