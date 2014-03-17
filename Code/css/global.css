@@ -173,7 +173,7 @@ body {
 
 /* Hidden objects */
 .precache,.precachenext,.hidden,#waiting,#hidden {
-	display:none;
+	display:none!important;
 }
 .invisible {
 	visibility:hidden;
@@ -274,7 +274,7 @@ a:hover, a:active {
     margin: .5em 0;
     display: block;
 }
-.collector-form input[type=text],.collector-form input[type=email],.collector-form select,.collector-form textarea {
+.collector-form input,.collector-form select,.collector-form textarea {
     font-family: "Open Sans", Arial, Helvetica, sans-serif;
     font-size: 100%;
     padding: .4em .6em;
@@ -377,8 +377,21 @@ a:hover, a:active {
 	text-align:left;
 }
 
+/* copy trials */
+.collector-form .copybox {
+	font-family: "Roboto", "Open Sans", Arial, Helvetica, sans-serif;
+	font-size:100%;
+	color:#333;
+	padding:.15em 0;
+	margin:0 0 0 -3px;
+	width: 90%;
+	vertical-align:top;
+}
+
+
 /* position buttons lower */
-.button-trial-advance {
+input[type="submit"].button-trial-advance {
+	font-size:20px;
 	margin-top:1.2em;
 	padding:.2em .5em;
 }
