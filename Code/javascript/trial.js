@@ -30,7 +30,7 @@
 	$("document").ready( function(){
 		timer		= 0;									// reset the timer
 		if (minTime > 0) {									// if a mimnum time is set
-			$("#FormSubmitButton").addClass("hidden");		// hide submit button
+			$("#FormSubmitButton").addClass("invisible");		// hide submit button
 			$("input:text").addClass("noEnter");	// disable enter from submitting the trial
 		}
 
@@ -65,7 +65,7 @@
 		timer = currentTime - startTime;
 
 		if (timer > (minTime*1000)) {							// when minimum time is reached
-			$("#FormSubmitButton").removeClass("hidden");		// show 'Done' / 'Submit' button
+			$("#FormSubmitButton").removeClass("invisible");		// show 'Done' / 'Submit' button
 			$("input:text").removeClass("noEnter");				// allow enter to progress the trial
 		}
 

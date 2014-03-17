@@ -286,13 +286,13 @@ a:hover, a:active {
        -moz-box-sizing: border-box;
             box-sizing: border-box;
 }
-.collector-form input[type=text]:focus,.collector-form input[type=email]:focus,.collector-form select:focus,.collector-form textarea:focus,
-.collector-form input[type=text]:hover,.collector-form input[type=email]:hover,.collector-form select:hover,.collector-form textarea:hover {
+.collector-form input:focus,.collector-form select:focus,.collector-form textarea:focus,
+.collector-form input:hover,.collector-form select:hover,.collector-form textarea:hover {
     outline: 0;
     border-color: #00A5E5;
 }
-.collector-form input[type=text][disabled],.collector-form input[type=email][disabled],.collector-form select[disabled],.collector-form textarea[disabled],
-.collector-form input[type=text][disabled]:focus,.collector-form input[type=email][disabled]:focus,.collector-form select[disabled]:focus,.collector-form textarea[disabled]:focus {
+.collector-form input[disabled],.collector-form select[disabled],.collector-form textarea[disabled],
+.collector-form input[disabled]:focus,.collector-form select[disabled]:focus,.collector-form textarea[disabled]:focus {
 	outline:0;
 	border:0;
     cursor: not-allowed;
@@ -310,7 +310,7 @@ a:hover, a:active {
   	$INDEX
 \*------------------------------------*/
 .login-pos {
-	margin:1.5em auto;
+	margin:4em auto;
 	text-align:center;
 }
 
@@ -392,7 +392,7 @@ a:hover, a:active {
 /* position buttons lower */
 input[type="submit"].button-trial-advance {
 	font-size:20px;
-	margin-top:1.2em;
+	margin:1.2em 0;
 	padding:.2em .5em;
 }
 

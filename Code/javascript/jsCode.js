@@ -39,11 +39,11 @@ function addtime(){
 
 // reveal readcheck questions
 $("#revealRC").click(function() {
-    $(this).hide();
-	$(".readcheck").slideDown("slow", function() {
-    	var offset = $(".readcheck").offset();
-    	$(document).animate({scrollTo:offset}, 2000);
-    });
+    $("#revealRC").hide();
+	$(".readcheck").slideDown(400, function() {
+		var off = $(".readcheck").offset();
+		$("html, body").animate({scrollTop: off.top}, 500);
+	});
 });
 
 // submit the form when they click the item with id="correct"
