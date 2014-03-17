@@ -98,7 +98,7 @@
             		<div class=precache>
             			<form name=UserTiming class=UserTiming action="postTrial.php" method=post>
             				<input class=hidden id=RT name=RT type=text value=""  />
-            				<input class=button type=submit value="Done" />
+            				<input class=button id=FormSubmitButton type=submit value="Done" />
             			</form>
             		</div>
             <?php

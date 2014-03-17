@@ -31,11 +31,11 @@
 		timer		= 0;									// reset the timer
 		if (minTime > 0) {									// if a mimnum time is set
 			$("#FormSubmitButton").addClass("hidden");		// hide submit button
-			$(".Textbox").addClass("noEnter");				// disable enter from submitting the trial
+			$("input:text").addClass("noEnter");	// disable enter from submitting the trial
 		}
 
 		if( $("form").hasClass("ComputerTiming")) {			// if trial is ComputerTiming
-			$(".Textbox").addClass("noEnter");					// disable enter from submitting the trial
+			$("input:text").addClass("noEnter");			// disable enter from submitting the trial
 		}
 	});
 
@@ -48,8 +48,7 @@
 		}
 		startTime	= Date.now();							// take a snapshot of the current system time
 		window.tickTock = setInterval(getTime,interval);	// start the timer
-		$(".Textbox:first").focus();
-		$("textarea").focus();
+		$('input[type=text]:visible:first').focus();
 	};
 
 
@@ -65,12 +64,12 @@
 		currentTime = Date.now();
 		timer = currentTime - startTime;
 
-		if (timer > (minTime*1000)) {						// when minimum time is reached
-			$("#FormSubmitButton").css("display","inline");		// show 'Done' / 'Submit' button
-			$(".Textbox").removeClass("noEnter");				// allow enter to progress the trial
+		if (timer > (minTime*1000)) {							// when minimum time is reached
+			$("#FormSubmitButton").removeClass("hidden");		// show 'Done' / 'Submit' button
+			$("input:text").removeClass("noEnter");				// allow enter to progress the trial
 		}
 
-		if (timer >= (trialTime*1000)) {					// if time is up
+		if (timer >= (trialTime*1000)) {						// if time is up
 			$(".DuringTrial").addClass("precache");				// hide content
 			$("#RT").prop("value",timer);						// update RT field with timer value
 			timer = 0;											// reset timer

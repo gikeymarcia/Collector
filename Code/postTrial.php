@@ -68,52 +68,63 @@
 		$formName	= 'ComputerTiming';
 		$formClass	= 'ComputerTiming';
 	endif;
+?>
 
-	#### Showing feedback
-	if($postTrial == 'feedback') {
-		// picture trial version of feedback
-		if($trialType == 'studypic' OR $trialType == 'testpic' OR $trialType == 'mcpic') {
-			echo '<div class="FeedbackPic">
-					<div class="gray">The correct answer is</div>
-						<span>'	. show($cue)	. '</span>
-						<div class="fbWord">
-							'	. show($answer)	. '
-						</div>';
-			// Hidden form that collects RT and progresses trial to next.php
-			echo '<form name="'.$formName.'" class="'.$formClass.'" autocomplete="off" action="'.$comingUp.'" method="post">
-					<input class=hidden id=RT  name=RT type=text value="" />
-					<input class=button id=FormSubmitButton  type=submit value="Done"	/>
-				  </form>';
-			echo '</div>';
-		}
-		// version of feedback for everything else
-		else {
-			echo '<div class="Feedback">
-					<div class="gray">The correct answer is</div>
-					<span>' . show($cue).' : '.show($answer).'</span>';
-            // Hidden form that collects RT and progresses trial to next.php
-            echo '<form name="'.$formName.'" class="'.$formClass.'" autocomplete="off" action="'.$comingUp.'" method="post">
-                    <input class=hidden id=RT  name=RT type=text value="" />
-                    <input class=button id=FormSubmitButton  type=submit value="Done"   />
-                  </form>';
-            echo '</div>';
-		}
+<div class=cframe-outer>
+    <div class=cframe-inner>
+        <div class=cframe-content>
+        <?php
+            #### Showing feedback
+            if($postTrial == 'feedback') {
+                // picture trial version of feedback
+		        if($trialType == 'studypic' OR $trialType == 'testpic' OR $trialType == 'mcpic') {
+			        echo '<div class="FeedbackPic">
+					          <div class="gray">The correct answer is</div>
+            					   <span>'	. show($cue)	. '</span>
+            					   <div class="fbWord">
+            					   	'	. show($answer)	. '
+            					   </div>';
+        			// Hidden form that collects RT and progresses trial to next.php
+        			echo '<form name="'.$formName.'" class="'.$formClass.'" autocomplete="off" action="'.$comingUp.'" method="post">
+        					<input class=hidden id=RT  name=RT type=text value="" />
+        					<input class=button id=FormSubmitButton  type=submit value="Done"	/>
+        				  </form>';
+        			echo '</div>';
+        		}
+        		// version of feedback for everything else
+        		else {
+        			echo '<h2>The correct answer was:</h2>
+                          <div class=study>
+                              <span class=study-left>'  .$cue.  '</span>
+                              <span class=study-divider>   :     </span>
+                              <span class=study-right>'.$target.'</span>
+                          </div>';
 
-	}
+                    // Hidden form that collects RT and progresses trial to next.php
+                    echo '<form name="'.$formName.'" class="'.$formClass.' textcenter" autocomplete="off" action="'.$comingUp.'" method="post">
+                              <input class=hidden id=RT  name=RT type=text value="" />
+                              <input class="button button-trial-advance" id=FormSubmitButton  type=submit value="Done"   />
+                          </form>';
+        		}
+
+        	}
 	#### Showing JOL
 	elseif ($postTrial == 'jol') {
-		echo '<div id="JOLpos">';
-		echo '<div id="jol">How likely are you to correctly remember this item on a later test?</div>
-			  <div id="subpoint" class="gray">Type your response on a scale from 0-100 using the entire range of the scale</div>';
+        echo "<div class=textcenter>
+                <h3>How likely are you to correctly recall this item on a later test?</h3>
+                <p>Type your response on a scale from 0-100.</p>
+                <br />
+            </div>
 
-			echo '<form name="'.$formName.'" class="'.$formClass.'"  autocomplete="off"  action="'.$comingUp.'"  method="post">
-					<input class=Textbox         name=JOL   type=text value="" autocomplete=off /><br />
-					<input class=hidden id=RT    name=RT    type=text value="" />
-					<input class=hidden id=RTkey name=RTkey type=text value="" />
-					<input class=button id=FormSubmitButton type=submit value="Submit"	/>
-				  </form>';
-		echo '</div>';
+            <form class='".$formClass." collector-form textcenter'  autocomplete=off  action='".$comingUp."'  method=post>
+                <input  name=Response type=text value='' autocomplete=off />
+                <input class=hidden  id=RT     name=RT       type=text value='RT'       />
+                <input class=hidden  id=RTkey  name=RTkey    type=text value='no press' />
+                <input class=hidden  id=RTlast name=RTlast   type=text value='no press' />
+                <input class=button id=FormSubmitButton type=submit value='Submit'   />
+            </form>";
 	}
+
 	## ADD ## put your own elseif here for a new post-trial type
 	#### moving onto next trial
 	else {
@@ -121,14 +132,18 @@
 	}
 
 ?>
-	<br>
-		<div id="showTimer" class="hidden">
-			<div> Start (ms):	<span id="start">	</span>	</div>
-			<div> Current (ms):	<span id="current">	</span>	</div>
-			<div> Timer (ms):	<span id="dif">		</span>	</div>
+	        <br>
+    		<div id="showTimer" class="hidden">
+    			<div> Start (ms):	<span id="start">	</span>	</div>
+    			<div> Current (ms):	<span id="current">	</span>	</div>
+    			<div> Timer (ms):	<span id="dif">		</span>	</div>
+    		</div>
 		</div>
+    </div>
+</div>
 
-	<script	src="http://code.jquery.com/jquery-1.8.0.min.js"	type="text/javascript">	</script>
-	<script	src="javascript/trial.js"				type="text/javascript">	</script>
+<script	src="http://code.jquery.com/jquery-1.8.0.min.js"	type="text/javascript">	</script>
+<script	src="javascript/trial.js"				type="text/javascript">	</script>
+
 </body>
 </html>
