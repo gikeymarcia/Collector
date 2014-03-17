@@ -357,12 +357,31 @@ a:hover, a:active {
 /*------------------------------------*\
   	$TRIAL
 \*------------------------------------*/
-/* position buttons lower */
-.button-trial-advance {
-	margin-top:1em;
-	padding:.2em .5em;
+/* study trial type */
+.study {
+	font-size:3em;
+}
+.study-left {
+	float:left;
+	width:48%;
+	text-align:right;
+}
+.study-divider {
+	float:left;
+	width:4%;
+	text-align:center;
+}
+.study-right {
+	float:left;
+	width:48%;
+	text-align:left;
 }
 
+/* position buttons lower */
+.button-trial-advance {
+	margin-top:1.2em;
+	padding:.2em .5em;
+}
 
 /* format diagnostics */
 #showTimer {
