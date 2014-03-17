@@ -299,7 +299,9 @@ a:hover, a:active {
     background-color: #eaeded;
     color: #666;
 }
-
+.collector-form option {
+	padding-right: 10px;
+}
 
 
 

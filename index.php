@@ -52,9 +52,9 @@
 			<input name="Username" type="text" value="" autocomplete="off" />
 
                 <?php if ($showConditionSelector == TRUE): ?>
-                <select class="dropdown" name="Condition">
+                <select name=Condition>
 			    <?php else: ?>
-				<select class="dropdown hidden" name="Condition">
+				<select class=hidden name=Condition>
 			    <?php endif; ?>
 
 				    <option selected value='Auto'>Auto</option>
