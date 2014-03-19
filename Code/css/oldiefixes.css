@@ -16,3 +16,10 @@
 .button-primary {
 	display:inline;
 }
+
+.grid > * {
+	margin:0 5px;
+}
+.clearfix {
+
+}

@@ -30,11 +30,12 @@
 	$("document").ready( function(){
 		timer		= 0;									// reset the timer
 		if (minTime > 0) {									// if a mimnum time is set
-			$("#FormSubmitButton").addClass("invisible");		// hide submit button
-			$("input:text").addClass("noEnter");	// disable enter from submitting the trial
+			$("#FormSubmitButton").addClass("invisible");	// hide submit button
+			$("input:text").addClass("noEnter");			// disable enter from submitting the trial
 		}
 
 		if( $("form").hasClass("ComputerTiming")) {			// if trial is ComputerTiming
+			$("#FormSubmitButton").addClass("hidden");		// remove submit button
 			$("input:text").addClass("noEnter");			// disable enter from submitting the trial
 		}
 	});
@@ -89,7 +90,7 @@
 
 
 	// intercept FormSubmitButton click
-	$("#FormSubmitButton").click(function(){		// when 'Done' / 'Submit' is pressed
+	$("#FormSubmitButton").click(function(){			// when 'Done' / 'Submit' is pressed
 		getTime();										// get ms accurate time
 		clearInterval(tickTock);						// stop timer from running again
 		$(".DuringTrial").addClass("precache");			// hide content
@@ -134,7 +135,7 @@
 	$(".TestMC").click(function(){
 		getTime();										// get ms accurate time
 		var clicked = $(this).html();
-		$(".Textbox").prop("value",clicked);
+		$("#Response").prop("value",clicked);
 
 		if(keypress == 0) {								// set first keypress times
 			originalColor = $(".TestMC").css("background");
@@ -145,14 +146,14 @@
 
 
 		if( $("form").hasClass("UserTiming")) {			// if 'user' timing
-			getTime();										// get ms accurate time
-			clearInterval(tickTock);						// stop timer from running again
-			$(".DuringTrial").addClass("precache");			// hide content
-			$("#RT").prop("value",timer);					// update RT field with timer value
-			$("form").submit();								// submit form
+			getTime();								    // get ms accurate time
+			clearInterval(tickTock);					// stop timer from running again
+			$(".DuringTrial").addClass("precache");		// hide content
+			$("#RT").prop("value",timer);				// update RT field with timer value
+			$("form").submit();							// submit form
 		}
-		$(".TestMC").css("background",originalColor);	// remove highlighting from all buttons
-		$(this).css("background", MCpickColor);			// add highlighting to clicked button
+		$(".TestMC").removeClass("button-active");		// remove highlighting from all buttons
+		$(this).addClass("button-active");				// add highlighting to clicked button
 	});
 
 

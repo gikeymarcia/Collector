@@ -67,7 +67,7 @@
     $RESET
 \*------------------------------------*/
 /**
- * 	Eric Meyer Reset
+ * 	Based on Eric Meyer's reset
  *  http://meyerweb.com/eric/tools/css/reset/
  *  v2.0 | 20110126
  *  License: none (public domain)
@@ -89,24 +89,18 @@ time, mark, audio, video {
 	margin: 0;
 	padding: 0;
 	border: 0;
-	font: inherit;
+	font:inherit;
 	vertical-align: baseline;
+	-webkit-box-sizing:border-box;
+	   -moz-box-sizing:border-box;
+	        box-sizing:border-box;
 }
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
-	display: block;
+html {
+	font:18px/1.625 "Roboto", "Open Sans", Arial, Helvetica, sans-serif;
+	color:#333;
 }
 ol, ul {
 	list-style: none;
-}
-blockquote, q {
-	quotes: none;
-}
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
 }
 table {
 	border-collapse: collapse;
@@ -116,34 +110,6 @@ img {
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
-}
-/* reset Firefox button styling */
-button::-moz-focus-inner,
-input[type="reset"]::-moz-focus-inner,
-input[type="button"]::-moz-focus-inner,
-input[type="submit"]::-moz-focus-inner,
-input[type="file"] > input[type="button"]::-moz-focus-inner {
-	padding:0;
-	border:0;
-}
-
-
-
-
-
-
-/*------------------------------------*\
-  	$MAIN
-\*------------------------------------*/
-html {
-	font:18px/1.625 "Roboto", "Open Sans", Arial, Helvetica, sans-serif;
-	color:#333;	/* dark grey is easier to read */
-	background:#fff;
-	overflow-y:scroll;
-}
-
-body {
-
 }
 
 
@@ -199,22 +165,22 @@ a:active {
 \*------------------------------------*/
 h1 {
 	font-size: 2em;
-	padding: .2em 0 .8em 0;
+	padding: .2em 0;
 	margin-bottom: 0;
 }
 
 h2 {
 	font-size: 1.5em;
-	padding: .8em 0;
+	padding: .2em 0;
 }
 
 h3 {
 	font-size: 1.2em;
-	padding: .8em 0;
+	padding: .2em 0;
 }
 
 p {
-	margin-bottom: 1.1em;
+	margin: 1em 0;
 }
 
 a:hover, a:active {
@@ -247,10 +213,85 @@ a:hover, a:active {
 			width:66%;
 		}
 
+/* grids */
+.grid {
+	margin: 0 0 0 -18px;
+}
+.grid-gutterless {
+	margin-left: 0;
+}
+.grid-gutterless > .grid-item {
+	padding-left: 0;
+}
+.grid-item {
+	display: inline-block;
+	padding-left: 18px;
+	vertical-align: top;
+	width:100%;
+}
+.grid-item > div {
+	margin: 0 0 18px;
+}
+.grid-1-10 {
+	width: 10%;
+}
+.grid-1-8 {
+	width: 12.5%;
+}
+.grid-1-5, .grid-2-10 {
+	width: 20%;
+}
+.grid-1-4, .grid-2-8 {
+    width: 25%;
+}
+.grid-3-10 {
+	width: 30%;
+}
+.grid-1-3, .grid-2-6 {
+	width: 33.333%
+}
+.grid-3-8 {
+	width: 37.5%;
+}
+.grid-2-5, .grid-4-10 {
+	width: 40%;
+}
+.grid-1-2, .grid-2-4, .grid-3-6, .grid-4-8, .grid-5-10 {
+    width: 50%;
+}
+.grid-3-5, .grid-6-10 {
+	width: 60%;
+}
+.grid-5-8 {
+	width: 62.5%;
+}
+.grid-2-3, .grid-4-6 {
+	width: 66.666%;
+}
+.grid-7-10 {
+	width: 70%;
+}
+.grid-3-4, .grid-6-8 {
+    width: 75%;
+}
+.grid-4-5, .grid-8-10 {
+	width: 80%;
+}
+.grid-7-8 {
+	width: 87.5%;
+}
+.grid-9-10 {
+	width: 90%;
+}
+.grid-1-1 {
+	margin-left:0px;
+}
+
 /* buttons */
 .button {
     font-family: inherit;
     font-size: 100%;
+    text-align:center;
     padding: .45em 1em;
     color: #fff;
     background-color: #0055A6;
@@ -265,7 +306,7 @@ a:hover, a:active {
 .button:focus {
     outline: 0;
 }
-.button-active,.button:active {
+.button-active,.button-active:hover,.button:active {
 	background-color:#00FF87;
 }
 
@@ -357,6 +398,13 @@ a:hover, a:active {
 /*------------------------------------*\
   	$TRIAL
 \*------------------------------------*/
+/* less obtrusive button for when you just want to advance */
+input[type="submit"].button-trial-advance {
+	font-size:20px;
+	margin:1.2em 0;
+	padding:.2em .5em;
+}
+
 /* study trial type */
 .study {
 	font-size:3em;
@@ -388,12 +436,9 @@ a:hover, a:active {
 	vertical-align:top;
 }
 
-
-/* position buttons lower */
-input[type="submit"].button-trial-advance {
-	font-size:20px;
-	margin:1.2em 0;
-	padding:.2em .5em;
+/* MCpic, StudyPic, TestPic trials */
+.pic {
+	margin-bottom: 24px;
 }
 
 /* format diagnostics */

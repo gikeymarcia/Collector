@@ -82,11 +82,11 @@
 	$trialFile = FileExists($trialF.$trialType);
 ?>
 
-
+<!-- User visible HTML markup in here -->
 <div class=cframe-outer>
     <div class=cframe-inner>
         <div class=cframe-content>
-            <!-- user visible HTML markup -->
+            <!-- trial content -->
             <?php
                 if ($trialFile):
                    	include $trialFile;
