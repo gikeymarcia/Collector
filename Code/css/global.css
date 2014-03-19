@@ -38,6 +38,7 @@
 \*------------------------------------*/
 @import url(http://fonts.googleapis.com/css?family=Open+Sans);
 @import url(http://fonts.googleapis.com/css?family=Roboto);
+@import url(http://fonts.googleapis.com/css?family=Orbitron);
 
 
 
@@ -57,6 +58,16 @@
 }
 .alert {
 	background-color:#800000;  /* strong red; rgba(128,0,0,1) */
+}
+
+.brand-bg {
+	background-color:#0055A6;
+}
+.secondary-bg {
+	background-color:#00A5E5;
+}
+.action-bg {
+	background-color:#00FF87;
 }
 
 
@@ -138,7 +149,7 @@ img {
 }
 
 /* Hidden objects */
-.precache,.precachenext,.hidden,#waiting,#hidden {
+.precache,.precachenext,.hidden,#waiting,#loadingForm {
 	display:none!important;
 }
 .invisible {
@@ -187,7 +198,9 @@ a:hover, a:active {
     outline: none;
 }
 
-
+b, strong {
+	font-weight: 700;
+}
 
 
 
@@ -439,6 +452,45 @@ input[type="submit"].button-trial-advance {
 /* MCpic, StudyPic, TestPic trials */
 .pic {
 	margin-bottom: 24px;
+}
+
+/* stepout pages */
+.stepout-clock {
+	position:fixed;
+	top: 20px;
+	right: 20px;
+	padding: 8px;
+	font-size: 1.1em;
+	color: #fff;
+	background-color: #0055A6;
+	text-align:center;
+}
+	.stepout-clock span {
+		margin-bottom: 20px;
+	}
+	.stepout-clock h3 {
+		color:#fff;
+	}
+
+.tetris-wrap {
+	width:550px;
+	margin:0 auto;
+}
+.tetris-controls {
+	margin: 0 auto 2em auto;
+	width: 400px;
+	border: 3px solid #00A5E5;
+}
+.tetris-wrap h3 {
+	padding:1em 0;
+}
+.tetris-controls p {
+	margin: 0 0 .2em 0;
+	text-align: left;
+}
+.tetris {
+	display:none;
+	margin: 50px 0;
 }
 
 /* format diagnostics */
