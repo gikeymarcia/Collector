@@ -78,6 +78,7 @@
 
 	#### Presenting different trial types ####
 	$expFiles  = $up.$expFiles;							// setting relative path to experiments folder for trials launched from this page
+    $postTo    = 'postTrial.php';
 	$trialFail = FALSE;									// this will be used to show diagnostic information when a specific trial isn't working
 	$trialFile = FileExists($trialF.$trialType);
 ?>
@@ -96,7 +97,7 @@
 
             		<!-- default trial is always user timing so you can click 'Done' and progress through the experiment -->
             		<div class=precache>
-            			<form name=UserTiming class=UserTiming action="postTrial.php" method=post>
+            			<form name=UserTiming class=UserTiming action="<?php echo $postTo; ?>" method=post>
             				<input class=hidden id=RT name=RT type=text value=""  />
             				<input class=button id=FormSubmitButton type=submit value="Done" />
             			</form>
@@ -106,6 +107,10 @@
                 $time = 'user';
                 endif;
             ?>
+
+            <!-- hidden field that JQuery/JavaScript uses to check the timing to $postTo -->
+            <div id=Time class=hidden><?php echo $time; ?></div>
+            <div id=minTime class=hidden><?php echo $minTime; ?></div>
 
             <!-- placeholders for a debug function that shows timer values -->
             <div id=showTimer class=hidden>
@@ -148,10 +153,6 @@
         </div>
     </div>
 </div>
-
-<!-- hidden field that JQuery/JavaScript uses to check the timing to postTrial.php -->
-<div id=Time class=hidden><?php echo $time; ?></div>
-<div id=minTime class=hidden><?php echo $minTime; ?></div>
 
 <!-- Pre-Cache Next trial -->
 <div class=precachenext>

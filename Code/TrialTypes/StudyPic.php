@@ -11,7 +11,7 @@
 
     <!-- response and RT form -->
     <div class="precache textcenter">
-        <form class="<?php echo $formClass; ?>" action="postTrial.php" method=post>
+        <form class="<?php echo $formClass; ?>" <?php echo $postTo; ?> method=post>
             <input class=hidden id=RT name=RT type=text value="" />
             <input class="button button-trial-advance" id=FormSubmitButton type=submit value="Next"" />
         </form>

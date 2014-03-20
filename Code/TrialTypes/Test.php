@@ -6,7 +6,7 @@
     <div class="study precache">
         <span class=study-left>  <?php echo $cue; ?>    </span>
         <span class=study-divider>         :            </span>
-        <form class="<?php echo $formClass; ?> collector-form"  autocomplete="off"  action="postTrial.php"  method="post">
+        <form class="<?php echo $formClass; ?> collector-form"  autocomplete="off"  <?php echo $postTo; ?>  method="post">
             <div class=study-right>
                 <input name=Response type=text value="" class=copybox autocomplete="off" />
             </div>

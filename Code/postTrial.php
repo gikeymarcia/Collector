@@ -47,8 +47,8 @@
 	flush();
 
 	#### Tells the program which page to go to after postTrial
-	// If you want to intercept the trial -> postTrial -> next loop simply change the $comingUp page
-	$comingUp = 'next.php';
++   // If you want to intercept the trial -> postTrial -> next loop simply change the $postTo page
+ +  $postTo = 'next.php';
 
 	#### trial timing code		## ADD ## tell program which timing to use for your new post-trial type
 	if($postTrial == 'feedback'):
@@ -85,7 +85,7 @@
             					   	'	. show($answer)	. '
             					   </div>';
         			// Hidden form that collects RT and progresses trial to next.php
-        			echo '<form name="'.$formName.'" class="'.$formClass.'" autocomplete="off" action="'.$comingUp.'" method="post">
+        			echo '<form name="'.$formName.'" class="'.$formClass.'" autocomplete="off" action="'.$postTo.'" method="post">
         					<input class=hidden id=RT  name=RT type=text value="" />
         					<input class=button id=FormSubmitButton  type=submit value="Done"	/>
         				  </form>';
@@ -101,7 +101,7 @@
                           </div>';
 
                     // Hidden form that collects RT and progresses trial to next.php
-                    echo '<form name="'.$formName.'" class="'.$formClass.' textcenter" autocomplete="off" action="'.$comingUp.'" method="post">
+                    echo '<form name="'.$formName.'" class="'.$formClass.' textcenter" autocomplete="off" action="'.$postTo.'" method="post">
                               <input class=hidden id=RT  name=RT type=text value="" />
                               <input class="button button-trial-advance" id=FormSubmitButton  type=submit value="Done"   />
                           </form>';
@@ -116,7 +116,7 @@
                 <br />
             </div>
 
-            <form class='".$formClass." collector-form textcenter'  autocomplete=off  action='".$comingUp."'  method=post>
+            <form class='".$formClass." collector-form textcenter'  autocomplete=off  action='".$postTo."'  method=post>
                 <input  name=Response type=text value='' autocomplete=off />
                 <input class=hidden  id=RT     name=RT       type=text value='RT'       />
                 <input class=hidden  id=RTkey  name=RTkey    type=text value='no press' />
@@ -128,7 +128,7 @@
 	## ADD ## put your own elseif here for a new post-trial type
 	#### moving onto next trial
 	else {
-		echo '<meta http-equiv="refresh" content="0; url='.$comingUp.'">';
+		echo '<meta http-equiv="refresh" content="0; url='.$postTo.'">';
 	}
 
 ?>

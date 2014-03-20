@@ -43,7 +43,7 @@
         <?php echo $MCGrid; ?>
     </div>
 
-    <form class="<?php echo $formClass; ?>" action="postTrial.php" method="post">
+    <form class="<?php echo $formClass; ?>" <?php echo $postTo; ?> method="post">
     	<input class=hidden name=Response id=Response type=text value''          />
     	<input class=hidden name=RTkey    id=RTkey    type=text value="no press" />
     	<input class=hidden name=RTlast   id=RTlast   type=text value="no press" />
