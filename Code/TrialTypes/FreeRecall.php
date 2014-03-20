@@ -5,7 +5,7 @@
 	$prompt =& $currentTrial['Procedure']['Procedure Notes'];
 ?>
     <div class=prompt><?php echo $prompt; ?> </div>
-    <form class="<?php echo $formClass; ?> collector-form"  autocomplete="off"  <?php echo $postTo; ?>  method="post">
+    <form class="<?php echo $formClass; ?> collector-form"  autocomplete="off"  action="<?php echo $postTo; ?>"  method="post">
         <textarea rows=20 cols=55 name=Response class=precache wrap=physical value=""></textarea>
         <input class=hidden  id=RT     name=RT       type=text value="RT"       />
         <input class=hidden  id=RTkey  name=RTkey    type=text value="no press" />
