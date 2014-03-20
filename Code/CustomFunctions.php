@@ -240,7 +240,7 @@
 		              <h3>'.$name.'</h3>
 		              <p>(click to open/close)</p>
 		          </div>';
-		echo     '<pre class=hidden>';
+		echo     '<pre>';
 		              print_r($clean_displayArray);
 		echo     '</pre>';
 		echo '</div>';
