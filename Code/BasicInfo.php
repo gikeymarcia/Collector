@@ -62,18 +62,17 @@
 			<input type="text" value="" name="Country" size="30"	autocomplete="off" />
 		</div>
 
-        <!-- ## SET ##	Use this area to provide the equivalent of an informed consent form -->
+                <!-- ## SET ##  Use this area to provide the equivalent of an informed consent form -->
 		<div class=consent>
 		    <h3 class=consent-legend>Informed Consent:</h3>
 		    <h3 class="consent-legend textcenter">Learning Words and Remembering Facts</h3>
-            <textarea rows=20 cols=45 wrap=physical>This is the informed consent form.  You can put whatever you want here.</textarea>
-        </div>
+            	    <textarea rows=20 cols=45 wrap=physical>This is the informed consent form.  You can put whatever you want here.</textarea>
+                </div>
 
-        <div class="consent textcenter">
-            <input class=button type=submit value="Submit Basic Info" />
-        </div>
-	</form>
-
+                <div class="consent textcenter">
+                    <input class=button type=submit value="Submit Basic Info" />
+                </div>
+	    </form>
 	</div>
 </body>
 </html>
