@@ -42,39 +42,43 @@
         <meta http-equiv="refresh" content="0;url=<?php echo $codeF; ?>nojs.php" />
     </noscript>
 
-	<div class=login-pos>
-		<h1>Welcome to the experiment!</h1>
+	<div class=cframe-outer>
+	    <div class=cframe-inner>
+	        <div class='cframe-content textcenter login-pos'>
+	            <h1>Welcome to the experiment!</h1>
 
-		<?php echo $expDescription; ?>
+                <?php echo $expDescription; ?>
 
-		<form class=collector-form name="Login"	autocomplete="off" 	action="<?php echo $codeF;?>login.php"	method="get">
-			<?php echo $askForLogin;?>
-			<input name="Username" type="text" value="" autocomplete="off" />
+                <form class=collector-form name="Login" autocomplete="off"  action="<?php echo $codeF;?>login.php"  method="get">
+                    <?php echo $askForLogin;?>
+                    <input name="Username" type="text" value="" autocomplete="off" />
 
-                <?php if ($showConditionSelector == TRUE): ?>
-                <select name=Condition>
-			    <?php else: ?>
-				<select class=hidden name=Condition>
-			    <?php endif; ?>
+                        <?php if ($showConditionSelector == TRUE): ?>
+                        <select name=Condition>
+                        <?php else: ?>
+                        <select class=hidden name=Condition>
+                        <?php endif; ?>
 
-				    <option selected value='Auto'>Auto</option>
+                            <option selected value='Auto'>Auto</option>
 
-				    <?php
-					#### Display conditions as choices ####
+                            <?php
+                            #### Display conditions as choices ####
 
-					// load and sort conditions
-					$Conditions	= GetFromFile($expFiles.'Conditions.txt');
-					$tempCond	= SortByKey($Conditions, 'Number');
+                            // load and sort conditions
+                            $Conditions = GetFromFile($expFiles.'Conditions.txt');
+                            $tempCond   = SortByKey($Conditions, 'Number');
 
-                    // output all possible condition choices
-					for($i=2; $i<count($tempCond); $i++) {
-						echo '<option value="' . $tempCond[$i]['Number'] . '">' . $tempCond[$i]['Number'] . '</option>';
-					}
-				    ?>
-			</select>
+                            // output all possible condition choices
+                            for($i=2; $i<count($tempCond); $i++) {
+                                echo '<option value="' . $tempCond[$i]['Number'] . '">' . $tempCond[$i]['Number'] . '</option>';
+                            }
+                            ?>
+                    </select>
 
-			<input class=button type=submit value="Login" />
-		</form>
+                    <input class=button type=submit value="Login" />
+                </form>
+	        </div>
+	    </div>
 	</div>
 
 	<div class="precache">

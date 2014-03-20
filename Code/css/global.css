@@ -129,12 +129,8 @@ img {
 /*------------------------------------*\
   	$SHARED
 \*------------------------------------*/
-.main-contain {
-	width: 800px;
-}
-
 /* general min/max */
-.login-pos,.cframe-content {
+.main-contain, .cframe-content {
 	max-width:600px;
 	min-width:400px;
 }
@@ -175,7 +171,7 @@ a:active {
 \*------------------------------------*/
 h1 {
 	font-size: 2em;
-	padding: .2em 0;
+	padding: 0 0 .2em 0;
 	margin-bottom: 0;
 }
 
@@ -400,8 +396,12 @@ b, strong {
   	$INDEX
 \*------------------------------------*/
 .login-pos {
-	margin:4em auto;
+	margin:0 auto;
 	text-align:center;
+}
+.login-pos:after {
+	content:' ';
+	margin: 1em;
 }
 
 
