@@ -17,7 +17,7 @@
 
 	//mTurk Mode
 	$mTurkMode		= FALSE;					// turn on mTurkMode? `TRUE` or `FALSE` (without ticks)
-	$verifcation	= 'Shinebox';				// code that shows on done.php
+	$verification	= 'Shinebox';				// code that shows on done.php
 	$checkElig		= FALSE;					// use files in eligibility/ folder to check past participation (mTurkMode must be on to use this)
 
 	// post-trial timing values
