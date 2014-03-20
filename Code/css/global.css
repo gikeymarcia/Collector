@@ -38,7 +38,6 @@
 \*------------------------------------*/
 @import url(http://fonts.googleapis.com/css?family=Open+Sans);
 @import url(http://fonts.googleapis.com/css?family=Roboto);
-@import url(http://fonts.googleapis.com/css?family=Orbitron);
 
 
 
@@ -208,6 +207,8 @@ b, strong {
   	$STRUCTURES
 \*------------------------------------*/
 .main-contain {
+	width: 550px;
+	margin: 0 auto;
 }
 
 /* 	dynamic vertical centering */
@@ -328,6 +329,14 @@ b, strong {
     margin: .5em 0;
     display: block;
 }
+.collector-form fieldset {
+    border: 1px solid silver;
+    margin: 0 2px;
+    padding: .35em .75em .625em .75em;
+}
+.collector-form div.field {
+    padding: .35em .75em .625em .75em;
+}
 .collector-form input,.collector-form select,.collector-form textarea {
     font-family: "Open Sans", Arial, Helvetica, sans-serif;
     font-size: 100%;
@@ -356,7 +365,12 @@ b, strong {
 .collector-form option {
 	padding-right: 10px;
 }
-
+.consent {
+	margin-top: 1em;
+}
+.consent-legend {
+	color:#000;
+}
 
 
 
