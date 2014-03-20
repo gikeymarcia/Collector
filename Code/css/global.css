@@ -329,10 +329,22 @@ b, strong {
     margin: .5em 0;
     display: block;
 }
+.collector-form input[type=radio]:focus,.collector-form input[type=checkbox]:focus {
+    outline: thin dotted #333;
+    outline: 1px auto #129FEA;
+}
+.collector-form input[type=checkbox],.collector-form input[type=radio] {
+    margin: .5em 7px .5em -25px;
+    display: inline-block;
+}
 .collector-form fieldset {
     border: 1px solid silver;
     margin: 0 2px;
     padding: .35em .75em .625em .75em;
+}
+.collector-form label {
+    margin: .3em 0 .3em 25px;
+    display: block;
 }
 .collector-form div.field {
     padding: .35em .75em .625em .75em;
@@ -371,7 +383,17 @@ b, strong {
 .consent-legend {
 	color:#000;
 }
-
+#slider {
+	margin-top:30px;
+}
+.amount {
+	margin-top: 10px;
+	text-align: center;
+}
+.amount input {
+	width: 80px;
+	text-align: center;
+}
 
 
 /*------------------------------------*\

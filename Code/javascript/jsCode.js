@@ -62,15 +62,21 @@ $(".wrong").click(function(){
 });
 
 
-// allows for the collapsing of Readable() outputs
+// allows for the collapsing of readable() outputs
 $(".collapsibleTitle").click(function() {
-	var change = $(this).parent().children().not(".collapsibleTitle");
-	if($(this).hasClass("hiding")) {
-		change.show(350);
-		$(this).removeClass("hiding");
-	}
-	else {
-		$(this).addClass("hiding");
-		change.hide(350);
-	}
+	$(this).parent().children().not(".collapsibleTitle").toggle(350);
+});
+
+// slider for Likert questions
+$(function() {
+	$( "#slider" ).slider({
+		value:1,
+		min: 1,
+		max: 7,
+		step: 1,
+		slide: function( event, ui ) {
+			$( "#amount" ).val( ui.value );
+		}
+	});
+	$( "#amount" ).val( $( "#slider" ).slider( "value" ) );
 });
