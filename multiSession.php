@@ -21,31 +21,31 @@
 </head>
 <?php flush(); ?>
 <body>
-	
+
 	<div class="ExpContainer">
-	
-		<div id="LoginPosition"> 
+
+		<div id="LoginPosition">
 			<h1>Welcome back!</h1>
 			<p>This part will run for approximately 15 minutes.								<!--## SET ## give multisession description for your exp-->
 			Your goal is to remember things from last time</p>
-			
+
 			<form name="Login"  action="login.php"  mehtod="get"  autocomplete="off">
 				<p> Please enter the email address you used last time</p>					<!--## SET ## change this for mTurk-->
 				<input class="Textbox" id="TextboxComputerTimed" style="width:400px;"  name="Username"  type="text"  value=""  autocomplete="off"/>
-				
+
 				<br />
-				
+
 				<p> Which session would you like?</p>
 				<input class="Textbox"  id="TextboxComputerTimed"  style="width:400px;"  name="Session"  type="text"  value=""  autocomplete="off"/>
-				
+
 				<div id="SubmitButton">Submit</div>
 			</form>
-			
+
 		</div>
 	</div>
 
 	<!-- #### how to insert javascript written in separate files #### -->
-	<script src="http://code.jquery.com/jquery-1.8.0.min.js" type="text/javascript"> </script>
+	<script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"> </script>
 	<script src="javascript/jsCode.js" type="text/javascript"> </script>
 
 </body>

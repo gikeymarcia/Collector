@@ -105,7 +105,7 @@
 	session_destroy();												// destry the session so it doesn't interfere with any future experiments
 
 ?>
-	<script src="http://code.jquery.com/jquery-1.8.0.min.js" type="text/javascript"> </script>
+	<script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"> </script>
 	<script src="javascript/jsCode.js" type="text/javascript"> </script>
 </body>
 </html>

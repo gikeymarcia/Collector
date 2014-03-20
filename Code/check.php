@@ -18,17 +18,17 @@
 	$ip = $_SERVER["REMOTE_ADDR"];					// user's ip address
 	$ipFilename = 'rejected-IP.txt';				// name of bad IP file
 	$ipPath = $folder.$ipFilename;					// path to bad IP file
-	
+
 	#### make a master list of unique user IDs (lowercase and trimmed)
 	foreach ($files as $file) {						// check all files
-		
+
 		// set correct delimiter and skip incorrect filetypes
 		if (inString('.txt', $file)) {
 			$delimiter = "\t";
 		} elseif (inString('.csv', $file)) {
 			$delimiter = ',';
 		} else { continue; }
-		
+
 		if($file == $ipFilename) {									// skip reading IP file
 			continue;
 		}
@@ -41,8 +41,8 @@
 			}
 		}
 	}
-		
-	
+
+
 	#### show prompt if going to to this while not logged in
 	if(isset($_SESSION)) {										// if there is a session initiated already
 		$toCheck = $_SESSION['Username'];						// use username if logged in
@@ -57,13 +57,13 @@
 			$toCheck = $_POST['worker'];
 		}
 	}
-	
-	
-	
+
+
+
 	#### running checks
 	if(isset($toCheck)) {										// if there is something to check then check it
 		$noCaseCheck = trim(strtolower($toCheck));				// all lowercase version of ID to check
-				
+
 		####  check if we've already told this person not to come back (BOOM, headshot)
 		if(isset($_SESSION) AND file_exists($ipPath)) {			// check IPs if logged in and there is a badIP file
 			$badIPs = GetFromFile($ipPath, FALSE);
@@ -73,12 +73,12 @@
 				}
 			}
 		}
-		
-		
-		
+
+
+
 		#### check if this user has previously participated
 		if(in_array($noCaseCheck, $uniques)) {
-			$noGo[] = 'Sorry, you are not eligible to participate in this study 
+			$noGo[] = 'Sorry, you are not eligible to participate in this study
 					   because you have participated in a previous version of this experiment before.';
 			// log their IP to stop them from logging in again
 			if(!is_file($ipPath)) {
@@ -92,24 +92,24 @@
 				fputs($ipFile, $ip);							// write IP to file
 				fputs($ipFile, PHP_EOL);						// write newline character
 			}
-			
+
 		}
 		rejectCheck($noGo);									// print errors
 	}
-	
+
 	#### check if this user has previously logged in
 		/*
 		 * This will be completed once I finish updating some other functionality
-		 * 
+		 *
 		 * Planed functionality once completed:
 		 * 	 if a user tries to login and has not been rejected for IP or previous involvment
-		 *   then this function will load up user session, figure out where they last were, 
+		 *   then this function will load up user session, figure out where they last were,
 		 *   reload all stimuli, and continue experiment.
-		 * 
+		 *
 		 *   users who are restarted in this way should be denoted as special cases in status.txt
 		 */
-	
-	
+
+
 	if(count($noGo) == 0 AND isset($toCheck) AND !isset($_SESSION)) {
 		echo '<h2>User <b>'.$toCheck.'</b> is eligible to participate</h2>';
 	}
@@ -118,8 +118,8 @@
 		Readable($files, 'Files in directory');
 		Readable($uniques, 'Previous iteration workers');
 	}
-	
-	
+
+
 	#### functions and scripting needed to make this page work
 	function rejectCheck ($errors) {
 		if (count($errors) > 0) {
@@ -131,12 +131,12 @@
 			}
 		}
 	}
-	
+
 	if(!isset($_SESSION)) {
-		echo '<script src="http://code.jquery.com/jquery-1.8.0.min.js" type="text/javascript"> </script>';
+		echo '<script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"> </script>';
 		echo  '<script src="javascript/jsCode.js" type="text/javascript"> </script>';
 	}
-	
+
 	#### style to make the page looks right
 	echo "<style>
 			.eCheck { background:#A4DBFC; }

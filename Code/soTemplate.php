@@ -28,22 +28,22 @@
 	<div id="Clock"><span>Seconds remaining</span>
 		<div class="Countdown"></div>
 	</div>
-	
-	
+
+
 	<h1 class="stepout">Stepout</h1>
-	
+
 	<div id="StepoutInstructions">
 			<p>You can tell and/or show participants just about anything using a stepout trial.  What is nice about this new soTemplate.php is that you can set the trial timing from the Orderfile<b>(no program tinkering required)</b></p>
 			<p>When time is nearly up this text will disappear and a 5 second countdown will be presented on screen.</p>
 	</div>
-			
-	
+
+
 	<?php
 		echo '<div id="time" class="Hidden">'.$time.'</div>';
-		
+
 		// this hidden and empty form is submitted to progress the page
 		echo '<form id="loadingForm" action="postTrial.php" method="get"> </form>';
-		
+
 		#### Pre-cache next trial
 		echo '<div class="Hidden">';
 			echo show($_SESSION['Trials'][$_SESSION['Position']+1]['Stimuli']['Cue']);
@@ -51,14 +51,14 @@
 			echo show($_SESSION['Trials'][$_SESSION['Position']+1]['Stimuli']['Answer']);
 		echo '</div>';
 	?>
-	<script src="http://code.jquery.com/jquery-1.8.0.min.js" type="text/javascript"> </script>
+	<script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"> </script>
 	<script type="text/javascript">
 		var timer = $("#time").html();
 		var interval = 1000;
 		$(".Countdown").html(timer);
-		
+
 		setInterval(countdown,interval);
-		
+
 		function countdown() {
 			timer = timer-1;
 			if(timer >= 0) {

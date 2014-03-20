@@ -162,7 +162,7 @@
     ?>
 </div>
 
-<script src="http://code.jquery.com/jquery-1.8.0.min.js" type="text/javascript"> </script>
+<script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"> </script>
 <script src="javascript/trial.js" type="text/javascript"> </script>
 
 </body>

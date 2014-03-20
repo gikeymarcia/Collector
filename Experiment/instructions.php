@@ -78,7 +78,7 @@ initiateCollector();
     ?>
     </div>
 
-<script src="http://code.jquery.com/jquery-1.8.0.min.js" type="text/javascript"></script>  <!-- JQuery javascript library (makes basic functions much easier) -->
+<script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"></script>  <!-- JQuery javascript library (makes basic functions much easier) -->
 <script src="<?php echo $up.$codeF;?>javascript/jsCode.js" type="text/javascript"></script>    <!-- Your own javascript file -->
 
 </body>

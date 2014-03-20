@@ -138,8 +138,8 @@
     </div>
 
 
-	<script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"> </script>
-	<script src="javascript/jquery-ui-1.10.4.custom.min.js" type="text/javascript"> </script>
+	<script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"></script>
+	<script src="javascript/jquery-ui-1.10.4.custom.min.js" type="text/javascript"></script>
 	<!-- This script was meant for instructions but does what I need for here (updates RT)-->
 	<script src="javascript/jsCode.js" type="text/javascript"> </script>
 
