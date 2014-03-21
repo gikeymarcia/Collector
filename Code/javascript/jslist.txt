@@ -1,0 +1,40 @@
+Since we absoulutely need JS (because of the timer), we should be using a
+SINGLE file that can be cached on the first visit. This will reduce load times
+because the user doesn't have to download any new scripts, just use those that
+were already downloaded.
+
+	Since we are doing this, add a loading screen to the first page while JS
+	is being loaded the first time
+
+	Also see if we can change the server's Expires/ExpiresDefault to a far
+	futures expire
+	(see http://developer.yahoo.com/performance/rules.html#expires)
+
+
+To Do:
+	Trial
+		disable enter key for computer timed
+			submit form
+		show precache
+		change multiple choice button colors
+		prevent backspace from navigating back
+	Other pages
+		hide items while #waiting (instructions)
+		Readcheck
+			reveal
+			submit on correct
+			alert on fail
+		Tetris reveal
+	Shared
+		Timer
+			RT
+			RTkey
+			RTlast
+			intercept form submit to get RT
+			FormSubmit invisible for minTime
+			countdown timer (tetris)
+			submit forms
+		submit #loadingform (login/stepout)
+		focus on first textbox
+		collapse readable() outputs
+		slider for likert (and JOL?)
