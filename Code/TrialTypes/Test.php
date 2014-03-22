@@ -14,7 +14,7 @@
             <input class=hidden  id=RTkey  name=RTkey    type=text value="no press" />
             <input class=hidden  id=RTlast name=RTlast   type=text value="no press" />
             <div class=textcenter>
-                <input class="button button-trial-advance" type=submit value="Submit"   />
+                <input class="button button-trial-advance" id=FormSubmitButton type=submit value="Submit"   />
             </div>
         </form>
     </div>

@@ -67,9 +67,8 @@
         </div>
 	</div>
 
-<?php echo $time; ?>
     <!-- used to set timer -->
-	<div id=Time class=hidden>10</div>
+	<div id=Time class=hidden><?php echo $time; ?></div>
 
 	<!-- hidden form to advance page -->
 	<form class=hidden action="postTrial.php" method=get></form>

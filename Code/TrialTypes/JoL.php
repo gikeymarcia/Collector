@@ -9,7 +9,7 @@
         <br />
     </div>
 
-    <form class="<?php echo $formClass; ?> collector-form textcenter"  autocomplete=off  <?php echo $postTo; ?>  method="post">
+    <form class="<?php echo $formClass; ?> collector-form textcenter"  autocomplete=off  action=<?php echo $postTo; ?>  method="post">
         <input  name=Response type=text value="" class="" autocomplete=off />
         <input class=hidden  id=RT     name=RT       type=text value="RT"       />
         <input class=hidden  id=RTkey  name=RTkey    type=text value="no press" />

@@ -169,24 +169,39 @@ var COLLECTOR = {
 			var trialTime = parseInt( $("#Time").html() ),
 				minTime	= parseInt( $("#minTime").html() ),
 				startTime = COLLECTOR.startTime,
+				fsubmit = $("#FormSubmitButton");
 				keypress = false;
 
-			// run the timer
-			if (trialTime !== 'NaN') {
-				console.log(startTime);
-				COLLECTOR.timer(trialTime, function() {
-					$("#FormSubmitButton").click();				// see common:init "intercept FormSubmitButton"
-				});
-			}
+			if ( !(isNaN(trialTime)) ) {
+				if (minTime == 0 || isNaN(minTime)) {
+					fsubmit.addClass("hidden");					// hide submit button
+					$(":input").addClass("noEnter");			// disable enter from submitting the trial
 
-			// force user to wait on trial
-			if (minTime > 0) {									// if a minimum time is set
-				$("#FormSubmitButton").addClass("invisible");	// hide submit button
+					COLLECTOR.timer(trialTime, function() {		// run the timer (no minTime set)
+						fsubmit.click();						// see common:init "intercept FormSubmitButton"
+					});
+				} else {
+					$(":input").addClass("noEnter");			// disable enter from submitting the trial
+					fsubmit.prop("disabled", true);				// disable submit button when minTime is set
+
+					COLLECTOR.timer(minTime, function() {		// run the timer
+						fsubmit.prop("disabled", false);		// enable
+						$(":input").removeClass("noEnter");
+
+						var rem = trialTime - minTime;			// calculate remaining time
+						COLLECTOR.timer(rem, function() {		// run timer on remaining time
+							fsubmit.click();					// submit form
+						});
+					});
+				}
+			} else if( !(isNaN(minTime)) ) {
+				fsubmit.prop("disabled", true);					// disable submit button when minTime is set
 				$(":input").addClass("noEnter");				// disable enter from submitting the trial
-			}
-			if( $("form").hasClass("ComputerTiming")) {			// if trial is ComputerTiming
-				$("#FormSubmitButton").addClass("hidden");		// remove submit button
-				$(":input").addClass("noEnter");				// disable enter from submitting the trial
+
+				COLLECTOR.timer(minTime, function() {			// run timer for minTime
+					fsubmit.prop("disabled", false);			// enable
+					$(":input").removeClass("noEnter");
+				});
 			}
 
 			// show trial content
@@ -215,21 +230,21 @@ var COLLECTOR = {
 			// updates the response value when a MC button is pressed
 			$(".TestMC").click(function(){
 				var clicked = $(this).html();
-					$("#Response").prop("value",clicked);			// record which button was clicked
-					$("#RT").val( COLLECTOR.getRT() );				// set RT
+					$("#Response").prop("value",clicked);		// record which button was clicked
+					$("#RT").val( COLLECTOR.getRT() );			// set RT
 
 				// if UserTiming, submit, but only highlight choice otherwise
 				if ($("form").hasClass("UserTiming")) {
-					$("#FormSubmitButton").click();					// see common:init "intercept FormSubmitButton"
+					fsubmit.click();							// see common:init "intercept FormSubmitButton"
 				} else {
 					if(keypress == false) {
-						$("#RTkey").prop( COLLECTOR.getRT() );		// set first keypress times
+						$("#RTkey").prop( COLLECTOR.getRT() );	// set first keypress times
 						keypress == true;
 					}
-					$("#RTlast").prop( COLLECTOR.getRT() );			// update 'RTlast' time
+					$("#RTlast").prop( COLLECTOR.getRT() );		// update 'RTlast' time
 
-					$(".TestMC").removeClass("button-active");		// remove highlighting from all buttons
-					$(this).addClass("button-active");				// add highlighting to clicked button
+					$(".TestMC").removeClass("button-active");	// remove highlighting from all buttons
+					$(this).addClass("button-active");			// add highlighting to clicked button
 				}
 			});
 
@@ -289,6 +304,15 @@ var COLLECTOR = {
 				}
 			});
 			$( "#amount" ).val( $( "#slider" ).slider( "value" ) );
+		}
+	},
+
+	multiSession: {
+		init: function() {
+			// Disable enter key for textboxes
+			$(":input").bind("keypress",function(e){
+				if(e.keyCode == 13) return false;
+			});
 		}
 	}
 };

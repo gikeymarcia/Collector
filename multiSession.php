@@ -23,7 +23,7 @@
 	<title>Experiment Login Page</title>
 </head>
 <?php flush(); ?>
-<body>
+<body data-controller=multiSession>
     <!-- redirect if Javascript is disabled -->
     <noscript>
         <meta http-equiv="refresh" content="0;url=<?php echo $codeF; ?>nojs.php" />
@@ -39,11 +39,11 @@
 
     			<form name=Login class=collector-form action="login.php"  method=get  autocomplete=off>
     				<label>Your username from last time:                         <!--## SET ## change for mTurk -->
-    				    <input id=TextboxComputerTimed name=Username type=text  value="" />
+    				    <input name=Username type=text value="" />
                     </label>
 
     				<label> Which session would you like?
-    				    <input id=TextboxComputerTimed name=Session type=text value="" />
+    				    <input name=Session type=text value="" />
     				</label>
 
                     <br />
@@ -55,7 +55,7 @@
 	</div>
 
 	<script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"> </script>
-	<script src="javascript/collector_1.0.0.js" type="text/javascript"> </script>
+	<script src="<?php echo $codeF; ?>javascript/collector_1.0.0.js" type="text/javascript"> </script>
 
 </body>
 </html>

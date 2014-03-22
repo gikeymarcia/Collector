@@ -38,7 +38,6 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link href="css/global.css" rel="stylesheet" type="text/css" />
-	<link href='http://fonts.googleapis.com/css?family=Kreon' rel='stylesheet' type='text/css' />
 	<title>PostTrial</title>
 </head>
 
@@ -47,8 +46,8 @@
 	flush();
 
 	#### Tells the program which page to go to after postTrial
-+   // If you want to intercept the trial -> postTrial -> next loop simply change the $postTo page
- +  $postTo = 'next.php';
+    // If you want to intercept the trial -> postTrial -> next loop simply change the $postTo page
+    $postTo = 'next.php';
 
 	#### trial timing code		## ADD ## tell program which timing to use for your new post-trial type
 	if($postTrial == 'feedback'):
@@ -78,18 +77,16 @@
             if($postTrial == 'feedback') {
                 // picture trial version of feedback
 		        if($trialType == 'studypic' OR $trialType == 'testpic' OR $trialType == 'mcpic') {
-			        echo '<div class="FeedbackPic">
-					          <div class="gray">The correct answer is</div>
-            					   <span>'	. show($cue)	. '</span>
-            					   <div class="fbWord">
-            					   	'	. show($answer)	. '
-            					   </div>';
+			        echo "<div class='pic'>"
+                              .show($cue)."
+                          </div>
+                          <h2>The correct answer was:</h2>
+                          <h1 class=textcenter>" .show($answer). "</h1>";
         			// Hidden form that collects RT and progresses trial to next.php
-        			echo '<form name="'.$formName.'" class="'.$formClass.'" autocomplete="off" action="'.$postTo.'" method="post">
-        					<input class=hidden id=RT  name=RT type=text value="" />
-        					<input class=button id=FormSubmitButton  type=submit value="Done"	/>
-        				  </form>';
-        			echo '</div>';
+        			echo "<form name={$formName} class='{$formClass} textcenter' autocomplete=off action='{$postTo}' method=post>
+        					<input class=hidden id=RT  name=RT type=text value='' />
+        					<input class=button id=FormSubmitButton  type=submit value='Done' />
+        				  </form>";
         		}
         		// version of feedback for everything else
         		else {
