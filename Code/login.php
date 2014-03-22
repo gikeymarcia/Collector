@@ -32,7 +32,6 @@
 
 	<?php
 		echo '<h1>Please wait while we load the experiment...</h1>';
-		echo '<noscript>	<h1>	You must enable javascript to participate!!!	</h1>	</noscript>';
 
 
 		#### Make sure all the necessary folders exist
@@ -327,7 +326,7 @@
 		}		}
 
 
-		#### Send participant to next phase of experiment (demographics or trial.php)
+		#### Send participant to next phase of experiment (demographics or instructions)
 		if($doDemographics == TRUE) {
 			$link = 'BasicInfo.php';
 		}
@@ -349,9 +348,8 @@
 		else {
 			echo '<form id="loadingForm" action="'.$link.'" method="get"> </form>';
 		}
-
-
 	?>
+
 	<script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"> </script>
 	<script src="javascript/collector_1.0.0.js" type="text/javascript"> </script>
 </body>

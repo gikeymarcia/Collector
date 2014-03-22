@@ -1,32 +1,4 @@
 /**
- *  Code below is from jsCode.js
- */
-
-var keypress	= 0;
-var trialTime	= $("#Time").html();
-
-
-// do these things when everything has loaded
-window.onload = function () {
-	setInterval(addtime,interval);
-};
-
-
-function addtime(){
-	timer = timer + interval;
-	$("#RT").prop("value",timer);
-}
-
-
-
-
-
-
-
-
-
-
-/**
  * 	Code below is from trial.js
  */
 

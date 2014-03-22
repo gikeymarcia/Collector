@@ -19,7 +19,7 @@
 	<title>Final Questions</title>
 </head>
 <?php flush(); ?>
-<body>
+<body data-controller=finalQuestions>
 
 <?php
     // if this is the first time on FinalQuestions.php then load questions from file

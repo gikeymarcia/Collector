@@ -102,29 +102,15 @@ var COLLECTOR = {
 
 	common: {
 		init: function() {
-			//var trialTime = $("#Time").html(),
-			//	minTime	= $("#minTime").html(),
-			var	startTime = new Date().getTime();
+			var startTime = new Date().getTime();
 
-			// if (minTime > 0) {									// if a mimnum time is set
-				// $("#FormSubmitButton").addClass("invisible");	// hide submit button
-				// $("input:text").addClass("noEnter");			// disable enter from submitting the trial
-			// }
-//
-			// if( $("form").hasClass("ComputerTiming")) {			// if trial is ComputerTiming
-				// $("#FormSubmitButton").addClass("hidden");		// remove submit button
-				// $("input:text").addClass("noEnter");			// disable enter from submitting the trial
-			// }
-
-			//$("#loadingForm").submit();
-			//$("#waiting").addClass("hidden");
-			//$(".readcheck").removeClass("hidden");
-			//$(":text").focus();
+			// these happen immediately on load
+			$(':input:enabled:visible:first').focus();			// focus cursor on first input
+			$("#loadingForm").submit();							// submit form to advance page
 
 			function getRT() {
 				var currentTime = new Date().getTime(),
 					RT = startTime - currentTime;
-
 				return RT;
 			}
 
@@ -174,6 +160,20 @@ var COLLECTOR = {
 
 	trial: {
 		init: function() {
+			var trialTime = $("#Time").html(),
+				minTime	= $("#minTime").html(),
+				startTime = new Date().getTime();
+
+			if (minTime > 0) {									// if a mimnum time is set
+				$("#FormSubmitButton").addClass("invisible");	// hide submit button
+				$("input:text").addClass("noEnter");			// disable enter from submitting the trial
+			}
+
+			if( $("form").hasClass("ComputerTiming")) {			// if trial is ComputerTiming
+				$("#FormSubmitButton").addClass("hidden");		// remove submit button
+				$("input:text").addClass("noEnter");			// disable enter from submitting the trial
+			}
+
 			// Disable enter key for textboxes with id="TextboxComputerTimed"
 			$("#TextboxComputerTimed").bind("keypress",function(e){
 				if(e.keyCode == 13) return false;

@@ -37,11 +37,6 @@ initiateCollector();
                 </div>
             </div>
 
-            <h3 id="waiting">
-                Please wait why we load the experiment.... <br />
-                This can take up a few minutes if you are on a slow internet connection.
-            </h3>
-
             <!-- ## SET ## This ensures that they read your instructions.  Participants must correctly answer something about the procedure -->
             <div class=cframe-content>
                 <div class=readcheck>                Should you pay close attention?  (hint: Answer is in the instructions)
