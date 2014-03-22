@@ -15,7 +15,7 @@
  * 	Here are the basics:
  * 	1. All JS code is included in one file in an object-oriented framework
  *  2. The HTML <body> "data-controller" and "data-action" attributes map to keys in the object literal
- *  3. On $(document).ready, we use functions to run the appropriate bits of code. In order they are:
+ *  3. On $(window).load, we use functions to run the appropriate bits of code. In order they are:
  * 		 i.  Common -> init
  * 	    ii.	 [data-controller] -> init
  * 	   iii.  [data-controller] -> [data-action]
@@ -31,21 +31,153 @@
  *
  */
 
-COLLECTOR = {
+var COLLECTOR = {
+
+	/**
+	 *	Timer function
+	 *
+	 *  This countdown timer is for any case where you would want to timeout, like in timed trials
+ 	 *  For other cases where you just want to get the elapsed time, use the "getTime" function
+ 	 *
+ 	 *  @param {Object} 	timeUp: the amount of time the timer runs for
+ 	 *  @param {Function}	callback: the function you want to run when the timer stops
+ 	 *
+ 	 *  Example usage:
+ 	 * 		COLLECTOR.timer(2, function() {
+	 *			$("form").submit();
+	 *		});
+ 	 */
+	timer: function (timeUp, callback) {
+	    // set timer speed, counter, and starting timestamp
+  		var speed = 10,
+  			counter = 0,
+  			elapsed = 0;
+  			start = new Date().getTime();
+
+  		// self-correcting timer instance function (each instance is adjusted based on actual elapsed time)
+  		function instance() {
+  			// work out the real and ideal elapsed time
+  			var real = (counter * speed),
+  				ideal = (new Date().getTime() - start);
+
+  			// increment the counter
+  			counter++;
+
+  			// increment elapsed
+			elapsed += speed;
+
+  			// stop timer at the allotted time
+  			if ( elapsed >= timeUp*1000 ) {
+  				return callback();
+  			}
+
+  			// calculate the difference
+  			var diff = (ideal - real);
+
+  			// delete the difference from the speed of the next instance and run again
+  			(window.setTimeout(function() { instance(); }, (speed - diff) ))/100;
+  		}
+
+  		// start the timer
+		instance();
+	},
+
 	common: {
 		init: function() {
-      		// application-wide code
+			COLLECTOR.timer(2, function() {
+				$("#RT").val(10);
+			});
+
+			$("#loadingForm").submit();
+			$("#waiting").addClass("hidden");
+			$(".readcheck").removeClass("hidden");
+			$(":text").focus();
+
+			// allows for the collapsing of readable() outputs
+			$(".collapsibleTitle").click(function() {
+				$(this).parent().children().not(".collapsibleTitle").toggle(350);
+			});
+
+
 
 		}
 	},
 
-	users: {
+	instructions: {
 		init: function() {
-			// controller-wide code
+			var fails = 0;
+
+			// reveal readcheck questions
+			$("#revealRC").click(function() {
+			    $("#revealRC").hide();
+				$(".readcheck").slideDown(400, function() {
+					var off = $(".readcheck").offset();
+					$("html, body").animate({scrollTop: off.top}, 500);
+				});
+			});
+
+			// submit the form when they click the item with id="correct"
+			$("#correct").click(function(){
+				$("form").submit();
+			});
+
+			// when they click an item with class="wrong" add to fail count and alert them to re-read instructions
+			$(".wrong").click(function(){
+				fails++;
+				$(".cframe-outer").animate({"top":"30px"});
+				window.scrollTo(0,0);
+				$(".alert").fadeIn(100).fadeOut(100).fadeIn(100);
+				$("#Fails").prop("value",fails);
+			});
+		}
+	},
+
+	trial: {
+		init: function() {
+			// Disable enter key for textboxes with id="TextboxComputerTimed"
+			$("#TextboxComputerTimed").bind("keypress",function(e){
+				if(e.keyCode == 13) return false;
+			});
+
+			// Prevent the backspace key from navigating back.
+			// MAGIC!!! found on stackoverflow (http://stackoverflow.com/questions/1495219/how-can-i-prevent-the-backspace-key-from-navigating-back)
+			$(document).unbind('keydown').bind('keydown', function (event) {
+			    var doPrevent = false;
+			    if (event.keyCode === 8) {
+			        var d = event.srcElement || event.target;
+			        if ((d.tagName.toUpperCase() === "INPUT" && d.type.toUpperCase() === "TEXT")
+			             || d.tagName.toUpperCase() === "TEXTAREA") {
+			            doPrevent = d.readOnly || d.disabled;
+			        }
+			        else {
+			            doPrevent = true;
+			        }
+			    }
+
+			    if (doPrevent) {
+			        event.preventDefault();
+			    }
+			});
 		},
 
-		show: function() {
-			// action-specific code
+		stepout: function() {
+
+		}
+	},
+
+	finalQuestions: {
+		init: function() {
+			// slider for Likert questions
+			$( "#slider" ).slider({
+				value:1,
+				min: 1,
+				max: 7,
+				step: 1,
+				slide: function( event, ui ) {
+					$( "#amount" ).val( ui.value );
+				}
+			});
+			$( "#amount" ).val( $( "#slider" ).slider( "value" ) );
 		}
 	}
 };
@@ -71,4 +203,4 @@ UTIL = {
 	}
 };
 
-$( document ).ready( UTIL.init );
+$( window ).load( UTIL.init );

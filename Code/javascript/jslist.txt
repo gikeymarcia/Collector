@@ -30,10 +30,10 @@ To Do:
 			RT
 			RTkey
 			RTlast
-			intercept form submit to get RT
-			FormSubmit invisible for minTime
-			countdown timer (tetris)
-			submit forms
+
+			minTime
+			countdown
+
 		submit #loadingform (login/stepout)
 		focus on first textbox
 		collapse readable() outputs
