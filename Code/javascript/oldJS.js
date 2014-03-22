@@ -51,12 +51,7 @@ function addtime(){
 	if selecting by tag (e.g., all <p> or all <li>)
 		$("p") || $("li")
 */
-	var timer		= 0;
-	var interval	= 10;				// ## SET ##, The smaller the interval the more CPU power needed.  # = timing accuracy for ending trials in ms
 	var keypress	= 0;
-	var trialTime	= $("#Time").html();
-	var minTime		= $("#minTime").html();
-	var MCpickColor = "#00ac86";
 
 	var startTime	= Date.now();						// take a snapshot of the current system time
 	var currentTime	= Date.now();
@@ -92,13 +87,6 @@ function addtime(){
 	};
 
 
-	// unhide counter if you've set showTimer == true
-	if(showTimer == true) {
-		$("#showTimer").removeClass("Hidden");
-		$("#start").html(startTime);
-	}
-
-
 	// timer function
 	function getTime() {
 		currentTime = Date.now();
@@ -117,14 +105,6 @@ function addtime(){
 			clearInterval(tickTock);							// stop timer from running again
 		}
 
-		// DEBUG function that updates shown timer ~ every 100ms
-		if (showTimer == true) {
-			if( (currentTime - last) > 100) {
-				last = currentTime;
-				$("#current").html(currentTime);
-				$("#dif").html(timer);
-			}
-		}
 	}
 
 
@@ -193,45 +173,4 @@ function addtime(){
 		}
 		$(".TestMC").removeClass("button-active");		// remove highlighting from all buttons
 		$(this).addClass("button-active");				// add highlighting to clicked button
-	});
-
-
-
-
-
-/**
- *	code below is from tetris.js
- */
-
-	var timer = $("#Time").html();
-	var interval = 1000;
-	$(".countdown").html(timer);
-
-	setInterval(countdown,interval);
-
-	function countdown() {
-		timer = timer-1;
-		if(timer >= 0) {
-			$(".countdown").html(timer);
-		}
-		if(timer == 5) {
-			// hide clock and show get ready prompt on last 5 secs
-			$(".stepout-clock").hide();
-			$(".tetris-wrap")
-				.addClass("action-bg")
-				.css("margin-top", "30px")
-				.html("<h1>Get ready to continue in ... </h1> <h1 class=countdown>5</h1>");
-		}
-		if(timer <= 0) {
-			$('#loadingForm').submit();
-		}
-	}
-
-	// reveal on clicking start
-	$("#reveal").click(function() {
-	    $("#reveal").hide();
-	    $(".tetris").slideDown(400, function() {
-	        var off = $(".tetris").offset();
-	        $("html, body").animate({scrollTop: off.top}, 500);
-	    });
 	});

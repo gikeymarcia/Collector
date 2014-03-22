@@ -22,7 +22,7 @@
 	<title>Tetris</title>
 </head>
 <?php flush(); ?>
-<body>
+<body data-controller=trial data-action=stepout>
 	<div class=stepout-clock>
 	    <span>Seconds remaining</span>
 		<h3 class=countdown></h3>
@@ -67,9 +67,9 @@
         </div>
 	</div>
 
-
+<?php echo $time; ?>
     <!-- used to set timer -->
-	<div id=Time class=hidden><?php echo $time; ?></div>
+	<div id=Time class=hidden>10</div>
 
 	<!-- hidden form to advance page -->
 	<form id=loadingForm action="postTrial.php" method=get></form>
@@ -84,7 +84,7 @@
     </div>
 
 	<script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"></script>
-    <script src="javascript/tetris.js" type="text/javascript"></script>
+    <script src="javascript/collector_1.0.0.js" type="text/javascript"></script>
 
 </body>
 </html>

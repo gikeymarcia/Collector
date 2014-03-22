@@ -49,7 +49,7 @@ var COLLECTOR = {
 	 *			$("form").submit();
 	 *		}, $("#countdown"));
  	 */
-	timer: function (timeUp, callback, show, countdown) {
+	timer: function (timeUp, callback, show) {
 	    // set timer speed, counter, and starting timestamp
   		var speed = 10,
   			counter = 0,
@@ -62,30 +62,38 @@ var COLLECTOR = {
   			var real = (counter * speed),
   				ideal = (new Date().getTime() - start);
 
-  			// increment the counter
+			// increment the counter
   			counter++;
 
   			// increment elapsed
 			elapsed += speed;
 
+
   			// stop timer at the allotted time
   			if ( elapsed >= timeUp*1000 ) {
+				window.clearTimeout(t);
+
+  				// exit and run callback
   				return callback();
   			}
 
   			// calculate the difference
-  			var diff = (ideal - real);
+  			var diff = ideal - real;
 
-  			// delete the difference from the speed of the next instance and run again
-  			if (show == null) {
-  				timeUp - (window.setTimeout(function() { instance(); }, (speed - diff) ))/100;
-  			} else {
+			// calculate time to show
+  			var timeRemaining = Math.round( timeUp*10 - elapsed/100 )/10;
+			if (Math.round(timeRemaining) == timeRemaining) { timeRemaining += '.0'; }
+
+  			if (show !== null) {
   				if (show.is('input')) {
-  					show.val(Math.floor(timeUp - (window.setTimeout(function() { instance(); }, (speed - diff) ))/100));
+  					show.val( timeRemaining );
   				} else {
-  					show.html(Math.floor(timeUp - (window.setTimeout(function() { instance(); }, (speed - diff) ))/100));
+  					show.html( timeRemaining );
   				}
   			}
+
+  			// delete the difference from the speed of the next instance and run again
+  			var t = (window.setTimeout(function() { instance(); }, (speed - diff) ))/100;
   		}
 
   		// start the timer
@@ -94,10 +102,16 @@ var COLLECTOR = {
 
 	common: {
 		init: function() {
-			$("#loadingForm").submit();
-			$("#waiting").addClass("hidden");
-			$(".readcheck").removeClass("hidden");
-			$(":text").focus();
+			//var trialTime = $("#Time").html(),
+			//	minTime	= $("#minTime").html(),
+			//	startTime = new Date().getTime();
+
+			//$("#loadingForm").submit();
+			//$("#waiting").addClass("hidden");
+			//$(".readcheck").removeClass("hidden");
+
+
+			//$(":text").focus();
 
 			// allows for the collapsing of readable() outputs
 			$(".collapsibleTitle").click(function() {
@@ -156,7 +170,6 @@ var COLLECTOR = {
 			            doPrevent = true;
 			        }
 			    }
-
 			    if (doPrevent) {
 			        event.preventDefault();
 			    }
@@ -164,7 +177,32 @@ var COLLECTOR = {
 		},
 
 		stepout: function() {
+			// get trial time from page and run timer
+			COLLECTOR.timer( $("#Time").html(), function () {
+				// hide game and show get ready prompt for 5 secs
+				$(".stepout-clock").hide();
+				$(".tetris-wrap")
+					.removeClass("tetris-wrap")
+					.html(
+						"<div class=cframe-outer><div class=cframe-inner>\
+							<div class='cframe-content action-bg textcenter'>\
+								<h1>Get ready to continue in ... </h1>\
+								<h1 id=getready></h1>\
+							</div>\
+						</div></div>");
+				COLLECTOR.timer( 5, function() {
+					$('#loadingForm').submit();
+				}, $("#getready"));
+			}, $(".countdown"));
 
+			// reveal on clicking start
+			$("#reveal").click(function() {
+			    $("#reveal").hide();
+			    $(".tetris").slideDown(400, function() {
+			        var off = $(".tetris").offset();
+			        $("html, body").animate({scrollTop: off.top}, 500);
+			    });
+			});
 		}
 	},
 
