@@ -84,6 +84,6 @@
 
 ?>
 	<script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"> </script>
-	<script src="javascript/jsCode.js" type="text/javascript"> </script>
+	<script src="javascript/collector_1.0.0.js" type="text/javascript"> </script>
 </body>
 </html>
