@@ -19,12 +19,8 @@ To Do:
 		change multiple choice button colors
 		prevent backspace from navigating back
 	Other pages
-		hide items while #waiting (instructions)
-		Readcheck
-			reveal
-			submit on correct
-			alert on fail
-		Tetris reveal
+		submit form after #waiting (login)
+
 	Shared
 		Timer
 			RT
@@ -34,7 +30,6 @@ To Do:
 			minTime
 			countdown
 
-		submit #loadingform (login/stepout)
 		focus on first textbox
 		collapse readable() outputs
 		slider for likert (and JOL?)

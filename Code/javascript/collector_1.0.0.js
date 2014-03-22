@@ -34,6 +34,11 @@
 var COLLECTOR = {
 
 	/**
+	 *	Sets starting time to a property we can access anywhere in the namespace
+	 */
+	startTime: new Date().getTime(),
+
+	/**
 	 *	Timer function
 	 *
 	 *  This countdown timer is for any case where you would want to timeout, like in timed trials
@@ -84,7 +89,7 @@ var COLLECTOR = {
   			var timeRemaining = Math.round( timeUp*10 - elapsed/100 )/10;
 			if (Math.round(timeRemaining) == timeRemaining) { timeRemaining += '.0'; }
 
-  			if (show !== null) {
+  			if (show) {
   				if (show.is('input')) {
   					show.val( timeRemaining );
   				} else {
@@ -100,23 +105,24 @@ var COLLECTOR = {
 		instance();
 	},
 
+	getRT: function() {
+		var currentTime = new Date().getTime(),
+			startTime = COLLECTOR.startTime;
+			RT = startTime - currentTime;
+		return RT;
+	},
+
 	common: {
 		init: function() {
-			var startTime = new Date().getTime();
+			var startTime = COLLECTOR.startTime;
 
 			// these happen immediately on load
 			$(':input:enabled:visible:first').focus();			// focus cursor on first input
 			$("#loadingForm").submit();							// submit form to advance page
 
-			function getRT() {
-				var currentTime = new Date().getTime(),
-					RT = startTime - currentTime;
-				return RT;
-			}
-
 			// intercept FormSubmitButton click
 			$("#FormSubmitButton").click(function(){			// when 'Done' / 'Submit' is pressed
-				$("#RT").val( getRT() );						// record RT
+				$("#RT").val( COLLECTOR.getRT() );				// record RT
 				$(".DuringTrial").addClass("precache");			// hide content
 				$("form").submit();								// submit form
 			});
@@ -160,27 +166,75 @@ var COLLECTOR = {
 
 	trial: {
 		init: function() {
-			var trialTime = $("#Time").html(),
-				minTime	= $("#minTime").html(),
-				startTime = new Date().getTime();
+			var trialTime = parseInt( $("#Time").html() ),
+				minTime	= parseInt( $("#minTime").html() ),
+				startTime = COLLECTOR.startTime,
+				keypress = false;
 
-			if (minTime > 0) {									// if a mimnum time is set
-				$("#FormSubmitButton").addClass("invisible");	// hide submit button
-				$("input:text").addClass("noEnter");			// disable enter from submitting the trial
+			// run the timer
+			if (trialTime !== 'NaN') {
+				console.log(startTime);
+				COLLECTOR.timer(trialTime, function() {
+					$("#FormSubmitButton").click();				// see common:init "intercept FormSubmitButton"
+				});
 			}
 
+			// force user to wait on trial
+			if (minTime > 0) {									// if a minimum time is set
+				$("#FormSubmitButton").addClass("invisible");	// hide submit button
+				$(":input").addClass("noEnter");				// disable enter from submitting the trial
+			}
 			if( $("form").hasClass("ComputerTiming")) {			// if trial is ComputerTiming
 				$("#FormSubmitButton").addClass("hidden");		// remove submit button
-				$("input:text").addClass("noEnter");			// disable enter from submitting the trial
+				$(":input").addClass("noEnter");				// disable enter from submitting the trial
 			}
 
-			// Disable enter key for textboxes with id="TextboxComputerTimed"
-			$("#TextboxComputerTimed").bind("keypress",function(e){
-				if(e.keyCode == 13) return false;
+			// show trial content
+			if(trialTime != 0) {
+				$(".precache").addClass("DuringTrial");			// add class that does nothing (but lets us know what used to be hidden)
+				$(".precache").removeClass("precache");			// remove class that hides the content
+			}
+
+			// disable 'noEnter' inputs and gather RTs for keypresses
+			$(":input").bind("keypress",function(e){
+				if(e.keyCode == 13) {							// if enter is pressed
+					if($(this).hasClass("noEnter")) {			// disable for all 'noEnter' inputs
+						return false;
+					}
+				}
+				else {
+					// monitor and log first/last keypress
+					if(keypress == false) {						// on first keypress
+						$("#RTkey").val( COLLECTOR.getRT() );	// set first keypress times
+						keypress = true;
+					}
+					$("#RTlast").prop( COLLECTOR.getRT() );		// update 'RTlast' time
+				}
 			});
 
-			// Prevent the backspace key from navigating back.
-			// MAGIC!!! found on stackoverflow (http://stackoverflow.com/questions/1495219/how-can-i-prevent-the-backspace-key-from-navigating-back)
+			// updates the response value when a MC button is pressed
+			$(".TestMC").click(function(){
+				var clicked = $(this).html();
+					$("#Response").prop("value",clicked);			// record which button was clicked
+					$("#RT").val( COLLECTOR.getRT() );				// set RT
+
+				// if UserTiming, submit, but only highlight choice otherwise
+				if ($("form").hasClass("UserTiming")) {
+					$("#FormSubmitButton").click();					// see common:init "intercept FormSubmitButton"
+				} else {
+					if(keypress == false) {
+						$("#RTkey").prop( COLLECTOR.getRT() );		// set first keypress times
+						keypress == true;
+					}
+					$("#RTlast").prop( COLLECTOR.getRT() );			// update 'RTlast' time
+
+					$(".TestMC").removeClass("button-active");		// remove highlighting from all buttons
+					$(this).addClass("button-active");				// add highlighting to clicked button
+				}
+			});
+
+			// prevent the backspace key from navigating back.
+			// http://stackoverflow.com/questions/1495219/how-can-i-prevent-the-backspace-key-from-navigating-back
 			$(document).unbind('keydown').bind('keydown', function (event) {
 			    var doPrevent = false;
 			    if (event.keyCode === 8) {
@@ -188,8 +242,7 @@ var COLLECTOR = {
 			        if ((d.tagName.toUpperCase() === "INPUT" && d.type.toUpperCase() === "TEXT")
 			             || d.tagName.toUpperCase() === "TEXTAREA") {
 			            doPrevent = d.readOnly || d.disabled;
-			        }
-			        else {
+			        } else {
 			            doPrevent = true;
 			        }
 			    }

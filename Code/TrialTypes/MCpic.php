@@ -48,4 +48,5 @@
     	<input class=hidden name=RTkey    id=RTkey    type=text value="no press" />
     	<input class=hidden name=RTlast   id=RTlast   type=text value="no press" />
     	<input class=hidden name=RT       id=RT       type=text value="RT"       />
+    	<input class=hidden  id=FormSubmitButton type=submit value="Submit"   />
     </form>
