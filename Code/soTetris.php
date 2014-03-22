@@ -72,7 +72,7 @@
 	<div id=Time class=hidden>10</div>
 
 	<!-- hidden form to advance page -->
-	<form id=loadingForm action="postTrial.php" method=get></form>
+	<form class=hidden action="postTrial.php" method=get></form>
 
     <!-- Pre-Cache Next trial -->
     <div class=precachenext>

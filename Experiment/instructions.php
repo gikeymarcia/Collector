@@ -21,7 +21,7 @@ initiateCollector();
 	<title>Experiment Instructions</title>
 </head>
 
-<body>
+<body data-controller=instructions>
 	<div class=cframe-outer>
         <div class=cframe-inner>
             <div class=cframe-content>
@@ -59,6 +59,7 @@ initiateCollector();
                 <input  name=RT        id=RT    type=text value=0 />
                 <input  name=Fails     id=Fails type=text value=0 />
                 <input  name=PrevTrial type=text value=Instruction />
+                <input  id=FormSubmitButton type=submit />
             </form>
 
         </div>
@@ -78,8 +79,8 @@ initiateCollector();
     ?>
     </div>
 
-<script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"></script>  <!-- JQuery javascript library (makes basic functions much easier) -->
-<script src="<?php echo $up.$codeF;?>javascript/jsCode.js" type="text/javascript"></script>    <!-- Your own javascript file -->
+<script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"></script>
+<script src="<?php echo $up.$codeF;?>javascript/collector_1.0.0.js" type="text/javascript"></script>
 
 </body>
 </html>

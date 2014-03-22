@@ -104,14 +104,36 @@ var COLLECTOR = {
 		init: function() {
 			//var trialTime = $("#Time").html(),
 			//	minTime	= $("#minTime").html(),
-			//	startTime = new Date().getTime();
+			var	startTime = new Date().getTime();
+
+			// if (minTime > 0) {									// if a mimnum time is set
+				// $("#FormSubmitButton").addClass("invisible");	// hide submit button
+				// $("input:text").addClass("noEnter");			// disable enter from submitting the trial
+			// }
+//
+			// if( $("form").hasClass("ComputerTiming")) {			// if trial is ComputerTiming
+				// $("#FormSubmitButton").addClass("hidden");		// remove submit button
+				// $("input:text").addClass("noEnter");			// disable enter from submitting the trial
+			// }
 
 			//$("#loadingForm").submit();
 			//$("#waiting").addClass("hidden");
 			//$(".readcheck").removeClass("hidden");
-
-
 			//$(":text").focus();
+
+			function getRT() {
+				var currentTime = new Date().getTime(),
+					RT = startTime - currentTime;
+
+				return RT;
+			}
+
+			// intercept FormSubmitButton click
+			$("#FormSubmitButton").click(function(){			// when 'Done' / 'Submit' is pressed
+				$("#RT").val( getRT() );						// record RT
+				$(".DuringTrial").addClass("precache");			// hide content
+				$("form").submit();								// submit form
+			});
 
 			// allows for the collapsing of readable() outputs
 			$(".collapsibleTitle").click(function() {
@@ -134,8 +156,9 @@ var COLLECTOR = {
 			});
 
 			// submit the form when they click the item with id="correct"
+			// emulates clicking the FormSubmitButton which runs the intercept code in common
 			$("#correct").click(function(){
-				$("form").submit();
+				$("#FormSubmitButton").click();
 			});
 
 			// when they click an item with class="wrong" add to fail count and alert them to re-read instructions
@@ -183,15 +206,9 @@ var COLLECTOR = {
 				$(".stepout-clock").hide();
 				$(".tetris-wrap")
 					.removeClass("tetris-wrap")
-					.html(
-						"<div class=cframe-outer><div class=cframe-inner>\
-							<div class='cframe-content action-bg textcenter'>\
-								<h1>Get ready to continue in ... </h1>\
-								<h1 id=getready></h1>\
-							</div>\
-						</div></div>");
+					.html("<div class=cframe-outer><div class=cframe-inner><div class='cframe-content action-bg textcenter'><h1>Get ready to continue in ... </h1><h1 id=getready></h1></div></div></div>");
 				COLLECTOR.timer( 5, function() {
-					$('#loadingForm').submit();
+					$('form').submit();
 				}, $("#getready"));
 			}, $(".countdown"));
 

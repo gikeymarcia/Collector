@@ -1,14 +1,7 @@
 /**
  *  Code below is from jsCode.js
  */
-/* Collector
-	A program for running experiments on the web
-	Copyright 2012-2013 Mikey Garcia & Nate Kornell
-*/
 
-
-var timer		= 0;
-var interval	= 100;				// ## SET ##, The smaller the interval the more CPU power needed.  # = timing accuracy in ms
 var keypress	= 0;
 var trialTime	= $("#Time").html();
 
@@ -60,21 +53,6 @@ function addtime(){
 
 
 
-	// do when structure (HTML) but not necessarily all content has loaded
-	$("document").ready( function(){
-		timer		= 0;									// reset the timer
-		if (minTime > 0) {									// if a mimnum time is set
-			$("#FormSubmitButton").addClass("invisible");	// hide submit button
-			$("input:text").addClass("noEnter");			// disable enter from submitting the trial
-		}
-
-		if( $("form").hasClass("ComputerTiming")) {			// if trial is ComputerTiming
-			$("#FormSubmitButton").addClass("hidden");		// remove submit button
-			$("input:text").addClass("noEnter");			// disable enter from submitting the trial
-		}
-	});
-
-
 	// on pageload reset timer, show pre-cached, start timer, focus on textboxes
 	window.onload = function() {
 		if(trialTime != 0) {
@@ -108,14 +86,7 @@ function addtime(){
 	}
 
 
-	// intercept FormSubmitButton click
-	$("#FormSubmitButton").click(function(){			// when 'Done' / 'Submit' is pressed
-		getTime();										// get ms accurate time
-		clearInterval(tickTock);						// stop timer from running again
-		$(".DuringTrial").addClass("precache");			// hide content
-		$("#RT").prop("value",timer);					// update RT field with timer value
-		$("form").submit();								// submit form
-	});
+
 
 
 	// keypress related functionality (for textboxes)
