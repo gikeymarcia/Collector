@@ -39,15 +39,17 @@ var COLLECTOR = {
 	 *  This countdown timer is for any case where you would want to timeout, like in timed trials
  	 *  For other cases where you just want to get the elapsed time, use the "getTime" function
  	 *
- 	 *  @param {Object} 	timeUp: the amount of time the timer runs for
+ 	 *  @param {Int} 		timeUp: the amount of time the timer runs for
  	 *  @param {Function}	callback: the function you want to run when the timer stops
+ 	 * 	@param {Object}		show (optional): if included, the timer will send it's current value to this element
+ 	 *
  	 *
  	 *  Example usage:
  	 * 		COLLECTOR.timer(2, function() {
 	 *			$("form").submit();
-	 *		});
+	 *		}, $("#countdown"));
  	 */
-	timer: function (timeUp, callback) {
+	timer: function (timeUp, callback, show, countdown) {
 	    // set timer speed, counter, and starting timestamp
   		var speed = 10,
   			counter = 0,
@@ -75,7 +77,15 @@ var COLLECTOR = {
   			var diff = (ideal - real);
 
   			// delete the difference from the speed of the next instance and run again
-  			(window.setTimeout(function() { instance(); }, (speed - diff) ))/100;
+  			if (show == null) {
+  				timeUp - (window.setTimeout(function() { instance(); }, (speed - diff) ))/100;
+  			} else {
+  				if (show.is('input')) {
+  					show.val(Math.floor(timeUp - (window.setTimeout(function() { instance(); }, (speed - diff) ))/100));
+  				} else {
+  					show.html(Math.floor(timeUp - (window.setTimeout(function() { instance(); }, (speed - diff) ))/100));
+  				}
+  			}
   		}
 
   		// start the timer
@@ -84,10 +94,6 @@ var COLLECTOR = {
 
 	common: {
 		init: function() {
-			COLLECTOR.timer(2, function() {
-				$("#RT").val(10);
-			});
-
 			$("#loadingForm").submit();
 			$("#waiting").addClass("hidden");
 			$(".readcheck").removeClass("hidden");
@@ -97,9 +103,6 @@ var COLLECTOR = {
 			$(".collapsibleTitle").click(function() {
 				$(this).parent().children().not(".collapsibleTitle").toggle(350);
 			});
-
-
-
 		}
 	},
 
