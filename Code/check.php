@@ -6,6 +6,7 @@
  	if(!isset($_SESSION)) {
  		include 'CustomFunctions.php';
 		require 'fileLocations.php';				// sends file to the right place
+		require $up.$expFiles.'Settings.php';       // experiment variables
  	}
  	#### variables needed for this page
 	$folder	= $up.$expFiles.'eligibility/';			// where to look for files containing workers
@@ -19,7 +20,7 @@
 	$ipFilename = 'rejected-IP.txt';				// name of bad IP file
 	$ipPath = $folder.$ipFilename;					// path to bad IP file
 
-	#### make a master list of unique user IDs (lowercase and trimmed)
+    #### make a master list of unique user IDs (lowercase and trimmed)
 	foreach ($files as $file) {						// check all files
 
 		// set correct delimiter and skip incorrect filetypes
@@ -43,7 +44,7 @@
 	}
 
 
-	#### show prompt if going to to this while not logged in
+	#### show prompt if checking while not logged in
 	if(isset($_SESSION)) {										// if there is a session initiated already
 		$toCheck = $_SESSION['Username'];						// use username if logged in
 	} else {
@@ -94,7 +95,9 @@
 			}
 
 		}
-		rejectCheck($noGo);									// print errors
+		if ( !(in_array($ip, $allowedIPs, false)) ) {           // skip the autocheck if IP is allowed
+		    rejectCheck($noGo);                                 // print errors
+        }
 	}
 
 	#### check if this user has previously logged in

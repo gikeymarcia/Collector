@@ -19,6 +19,8 @@
 	$mTurkMode		= FALSE;					// turn on mTurkMode? `TRUE` or `FALSE` (without ticks)
 	$verification	= 'Shinebox';				// code that shows on done.php
 	$checkElig		= FALSE;					// use files in eligibility/ folder to check past participation (mTurkMode must be on to use this)
+	$allowedIPs     = array("::1", "other-ip"); // The IPs in this array will be allowed to participate more than once
+	                                            // ::1 is the default IPv6 loopback -- leave it in so that the check will pass when working locally
 
 	// post-trial timing values
 	$jolTime		= 8;						// in seconds/trial	(JOL) - can also use value 'user'
