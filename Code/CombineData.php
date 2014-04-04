@@ -28,13 +28,13 @@
 			$outTemp[] = $file;
 		}
 		if(inString('FinalQuestionsData.txt', $file)) {
-			$finalQ = GetFromFile($up.$dataF.$file);
+			$finalQ = GetFromFile($up.$dataF.$file, FALSE);
 		}
 		if(inString('InstructionsData.txt', $file)) {
-			$instruct = GetFromFile($up.$dataF.$file);
+			$instruct = GetFromFile($up.$dataF.$file, FALSE);
 		}
 		if(inString('Status.txt', $file)) {
-			$status = GetFromFile($up.$dataF.$file);
+			$status = GetFromFile($up.$dataF.$file, FALSE);
 		}
 	}
 	$OutFiles = $outTemp;
