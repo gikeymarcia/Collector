@@ -6,7 +6,6 @@
 	require 'fileLocations.php';							// sends file to the right place
 	require $up.$expFiles.'Settings.php';					// experiment variables
 	require 'CustomFunctions.php';							// Load custom PHP functions
-
 	initiateCollector();
 
 	#### setting up aliases (for later use)

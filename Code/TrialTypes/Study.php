@@ -1,4 +1,3 @@
-
 <?php
 	$compTime = 5;					// time in seconds to use for 'computer' timing
 	trialTiming();					// determines timing and user/computer timing mode

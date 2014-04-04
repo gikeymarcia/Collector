@@ -17,8 +17,43 @@
 	$uniques = array();								// all the unique workers (no duplicates)
 	$noGo	 = array();								// reasons to exclude someone from participation
 	$ip = $_SERVER["REMOTE_ADDR"];					// user's ip address
-	$ipFilename = 'rejected-IP.txt';				// name of bad IP file
+	$ipFilename = 'rejected-IPs.txt';				// name of bad IP file
 	$ipPath = $folder.$ipFilename;					// path to bad IP file
+
+    #### functions needed to make this page work
+    function rejectCheck ($errors) {
+        if (count($errors) > 0) {
+            foreach ($errors as $stopper) {
+                echo "<h2>{$stopper}</h2>";
+            }
+            if(isset($_SESSION)) {
+                exit;
+            }
+        }
+    }
+
+    /**
+     * logIP function
+     *
+     * Checks if there is an IP reject list then creates the file (if it does
+     * not exist) and adds the current user's IP
+     */
+    function logIP() {
+        global $ipPath, $ip;
+
+        if(!is_file($ipPath)) {
+            $ipFile = fopen($ipPath, 'a');
+            fputs($ipFile, 'ip address');                   // write header
+            fputs($ipFile, PHP_EOL);                        // write newline character
+            fputs($ipFile, $ip);                            // write IP to file
+            fputs($ipFile, PHP_EOL);                        // write newline character
+        } else {
+            $ipFile = fopen($ipPath, 'a');
+            fputs($ipFile, $ip);                            // write IP to file
+            fputs($ipFile, PHP_EOL);                        // write newline character
+        }
+    }
+
 
     #### make a master list of unique user IDs (lowercase and trimmed)
 	foreach ($files as $file) {						// check all files
@@ -59,8 +94,6 @@
 		}
 	}
 
-
-
 	#### running checks
 	if(isset($toCheck)) {										// if there is something to check then check it
 		$noCaseCheck = trim(strtolower($toCheck));				// all lowercase version of ID to check
@@ -75,27 +108,21 @@
 			}
 		}
 
-
+        #### if blacklist is enabled, add IP to reject list
+        if(isset($_SESSION) AND $blacklist) {                    // only blacklist logged in users
+            logIP();
+        }
 
 		#### check if this user has previously participated
 		if(in_array($noCaseCheck, $uniques)) {
 			$noGo[] = 'Sorry, you are not eligible to participate in this study
-					   because you have participated in a previous version of this experiment before.';
-			// log their IP to stop them from logging in again
-			if(!is_file($ipPath)) {
-				$ipFile = fopen($ipPath, 'a');
-				fputs($ipFile, 'ip address');					// write header
-				fputs($ipFile, PHP_EOL);						// write newline character
-				fputs($ipFile, $ip);							// write IP to file
-				fputs($ipFile, PHP_EOL);						// write newline character
-			} else {
-				$ipFile = fopen($ipPath, 'a');
-				fputs($ipFile, $ip);							// write IP to file
-				fputs($ipFile, PHP_EOL);						// write newline character
-			}
+					   because you have participated in a previous version of
+					   this experiment.';
+            logIP();
 
 		}
-		if ( !(in_array($ip, $allowedIPs, false)) ) {           // skip the autocheck if IP is allowed
+
+		if ( !(in_array($ip, $whitelist, false)) ) {            // skip the autocheck if IP is allowed
 		    rejectCheck($noGo);                                 // print errors
         }
 	}
@@ -104,7 +131,7 @@
 		/*
 		 * This will be completed once I finish updating some other functionality
 		 *
-		 * Planed functionality once completed:
+		 * Planned functionality once completed:
 		 * 	 if a user tries to login and has not been rejected for IP or previous involvment
 		 *   then this function will load up user session, figure out where they last were,
 		 *   reload all stimuli, and continue experiment.
@@ -122,19 +149,6 @@
 		Readable($uniques, 'Previous iteration workers');
 	}
 
-
-	#### functions and scripting needed to make this page work
-	function rejectCheck ($errors) {
-		if (count($errors) > 0) {
-			foreach ($errors as $stopper) {
-				echo "<h2>{$stopper}</h2>";
-			}
-			if(isset($_SESSION)) {
-				exit;
-			}
-		}
-	}
-
 	if(!isset($_SESSION)) {
 		echo '<script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"> </script>';
 		echo  '<script src="javascript/collector_1.0.0.js" type="text/javascript"> </script>';
@@ -146,4 +160,3 @@
 			p { font-size: 1.3em; }
 		  </style>";
 	####################
-?>
