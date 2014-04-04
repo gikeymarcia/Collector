@@ -1,0 +1,4 @@
+Order Allow,Deny
+<FilesMatch "^instructions\.php$">
+Allow from all
+</FilesMatch>
