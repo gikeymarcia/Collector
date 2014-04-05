@@ -108,7 +108,7 @@ var COLLECTOR = {
 	getRT: function() {
 		var currentTime = new Date().getTime(),
 			startTime = COLLECTOR.startTime;
-			RT = startTime - currentTime;
+			RT = currentTime - startTime;
 		return RT;
 	},
 
