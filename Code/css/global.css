@@ -590,3 +590,17 @@ input[type="submit"].button-trial-advance {
 /*------------------------------------*\
   	$MISC
 \*------------------------------------*/
+
+
+
+
+
+/*------------------------------------*\
+    $MEDIA
+\*------------------------------------*/
+@media all and (max-width: 980px) {
+    .stepout-clock {
+        opacity: .5;
+        filter:Alpha(opacity=50);
+    }
+}
