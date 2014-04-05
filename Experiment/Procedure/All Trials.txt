@@ -1,11 +1,11 @@
 Item	Trial Type	Post Trial	Timing	Procedure Notes	Shuffle
-2	Study	JOL	User	study trials	OFF
+2	Study	JOL	5	study trials	OFF
 14	Audio	No	User	study trials	OFF
-4	Copy	No	User	study trials	OFF
-11	Passage	No	User	study trials	OFF
-10	StudyPic	Feedback	User	study trials	OFF
-10	TestPic	No	User	inputs	OFF
-10	MCpic	No	User	inputs	OFF
-3	Test	Feedback	User	inputs	OFF
-0	FreeRecall	No	User	Write down everything you can remember that has happened so far in this experiment.	OFF
-0	Instruct	No	User	<h4>Get Ready to Continue</h4><p>In this next section you will be doing a variety of tasks.  Some will be confusing but please stick with them.  There will be a pay off in the end</p>	OFF
+4	Copy	No	5	study trials	OFF
+11	Passage	No	5	study trials	OFF
+10	StudyPic	Feedback	5	study trials	OFF
+10	TestPic	No	5	inputs	OFF
+10	MCpic	No	5	inputs	OFF
+3	Test	Feedback	5	inputs	OFF
+0	FreeRecall	No	5	Write down everything you can remember that has happened so far in this experiment.	OFF
+0	Instruct	No	5	<h4>Get Ready to Continue</h4><p>In this next section you will be doing a variety of tasks.  Some will be confusing but please stick with them.  There will be a pay off in the end</p>	OFF

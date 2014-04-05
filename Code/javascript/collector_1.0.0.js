@@ -119,14 +119,14 @@ var COLLECTOR = {
 			// these happen immediately on load
 			$(':input:enabled:visible:first').focus();			// focus cursor on first input
 			$("#loadingForm").submit();							// submit form to advance page
-
+/*
 			// intercept FormSubmitButton click
 			$("#FormSubmitButton").click(function(){			// when 'Done' / 'Submit' is pressed
 				$("#RT").val( COLLECTOR.getRT() );				// record RT
 				$(".DuringTrial").addClass("precache");			// hide content
 				$("form").submit();								// submit form
 			});
-
+*/
 			// allows for the collapsing of readable() outputs
 			$(".collapsibleTitle").click(function() {
 				$(this).parent().children().not(".collapsibleTitle").toggle(350);

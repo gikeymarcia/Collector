@@ -9,8 +9,8 @@
         <br />
     </div>
 
-    <form class="<?php echo $formClass; ?> collector-form textcenter"  autocomplete=off  action=<?php echo $postTo; ?>  method="post">
-        <input  name=Response type=text value="" class="" autocomplete=off />
+    <form class="<?php echo $formClass; ?> collector-form textcenter"  autocomplete=off  action='<?php echo $postTo; ?>'  method="post">
+        <input  name=Response type=text value="" autocomplete=off />
         <input class=hidden  id=RT     name=RT       type=text value="RT"       />
         <input class=hidden  id=RTkey  name=RTkey    type=text value="no press" />
         <input class=hidden  id=RTlast name=RTlast   type=text value="no press" />

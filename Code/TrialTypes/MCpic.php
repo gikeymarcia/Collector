@@ -44,7 +44,7 @@
     </div>
 
     <form class="<?php echo $formClass; ?>" action="<?php echo $postTo; ?>" method="post">
-    	<input class=hidden name=Response id=Response type=text value''          />
+    	<input class=hidden name=Response id=Response type=text value=''          />
     	<input class=hidden name=RTkey    id=RTkey    type=text value="no press" />
     	<input class=hidden name=RTlast   id=RTlast   type=text value="no press" />
     	<input class=hidden name=RT       id=RT       type=text value="RT"       />
