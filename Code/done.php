@@ -65,21 +65,23 @@
 
 <?php
 	$duration = time() - strtotime( $_SESSION['Start Time'] );
-	$hours = floor( $duration/3600 );
-	$minutes = floor( ($duration - $hours*3600)/60 );
-	$seconds = $duration - $hours*3600 - $minutes*60;
-	if( $hours < 10 AND $hours > 0 ) { $hours = '0'.$hours.':'; } elseif( $hours == 0 ) { $hours = ''; } else { $hours = $hours.':'; }
+	$durationFormatted = $duration;
+	$hours = floor( $durationFormatted/3600 );
+	$minutes = floor( ($durationFormatted - $hours*3600)/60 );
+	$seconds = $durationFormatted - $hours*3600 - $minutes*60;
+	if( $hours   < 10 ) { $hours   = '0'.$hours; }
 	if( $minutes < 10 ) { $minutes = '0'.$minutes; }
 	if( $seconds < 10 ) { $seconds = '0'.$seconds; }
-	$duration = $hours.$minutes.':'.$seconds;
+	$durationFormatted = $hours.':'.$minutes.':'.$seconds;
 	#### Record info about the person ending the experiment to status finish file
 	$data = array(
 						'Username' 					=> $_SESSION['Username'],
 						'ID' 						=> $_SESSION['ID'],
 						'Date' 						=> date('c'),
 						'Duration' 					=> $duration,
+						'Duration_Formatted' 		=> $durationFormatted,
 						'Session' 					=> $_SESSION['Session'],
-						'Condition #'				=> $_SESSION['Condition']['Number'],
+						'Condition_Number'			=> $_SESSION['Condition']['Number'],
 						'Inclusion Notes' 			=> $finalNotes
 					 );
 	arrayToLine($data, $up.$dataF.$_SESSION['DataSubFolder'].$extraDataF.$statusEndFileName.$outExt);
