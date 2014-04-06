@@ -6,7 +6,7 @@
  	#### setting experiment variables ####
  	$experimentName		= 'Collector';			// Recorded in datafile and can be useful
 	$loginCounterName	= '1.txt';				// Change to restart condition cycling
-	$doDemographics		= TRUE;				// Can be TRUE or FALSE
+	$doDemographics		= FALSE;				// Can be TRUE or FALSE
 	$nextExperiment		= FALSE;				// to link use format "www.cogfog.com/Generic/" do not forget the www and the ending "/"
 
  	// debugging functionality
