@@ -50,54 +50,43 @@
 				<p>If you have any questions about the experiment please email '.$experimenterEmail.'</p>
 			  </div>';
 		if ($mTurkMode == TRUE) {
-			echo '<div id="donePage"> <h3>Your verification code is: '.$verifcation.'</h3></div>';
+			echo '<div id="donePage"> <h3>Your verification code is: '.$verification.'</h3></div>';
 		}
 	} else {
 		echo "<h2>Experiment will resume in 5 seconds.</h2>";
 		$nextLink = 'http://'.$nextExperiment;
-		echo '<meta http-equiv="refresh" content="5; url='.$nextLink.'Code/login.php?Username='.$_SESSION['Username'].'&Condition=Auto">';
+		$username = $_SESSION['Debug'] ? $debugName.' '.$_SESSION['Username'] : $_SESSION['Username'];
+		echo '<meta http-equiv="refresh" content="5; url='.$nextLink.'Code/login.php?Username='.urlencode($username).'&Condition=Auto&ID='.$_SESSION['ID'].'">';
 	}
 	
 		
 	// readable($_SESSION['Trials']);
 ?>
 
-<?php	
-	#### Record info about the person ending the experiment to StatusFile.txt
-	$UserData = array(
-						$_SESSION['Username'] ,
-						date('c') ,
-						'Session '.$_SESSION['Session'] ,
-						'Session End' ,
-						$_SESSION['Condition']['Number'],
-						$_SESSION['Condition']['Stimuli'],
-						$_SESSION['Condition']['Procedure'],
-						$_SESSION['Condition']['Condition Description'],
-						$_SERVER['HTTP_USER_AGENT'],
-						$_SERVER["REMOTE_ADDR"],
-						$finalNotes
+<?php
+	$duration = time() - strtotime( $_SESSION['Start Time'] );
+	$hours = floor( $duration/3600 );
+	$minutes = floor( ($duration - $hours*3600)/60 );
+	$seconds = $duration - $hours*3600 - $minutes*60;
+	if( $hours < 10 AND $hours > 0 ) { $hours = '0'.$hours.':'; } elseif( $hours == 0 ) { $hours = ''; } else { $hours = $hours.':'; }
+	if( $minutes < 10 ) { $minutes = '0'.$minutes; }
+	if( $seconds < 10 ) { $seconds = '0'.$seconds; }
+	$duration = $hours.$minutes.':'.$seconds;
+	#### Record info about the person ending the experiment to status finish file
+	$data = array(
+						'Username' 					=> $_SESSION['Username'],
+						'ID' 						=> $_SESSION['ID'],
+						'Date' 						=> date('c'),
+						'Duration' 					=> $duration,
+						'Session' 					=> $_SESSION['Session'],
+						'Condition #'				=> $_SESSION['Condition']['Number'],
+						'Inclusion Notes' 			=> $finalNotes
 					 );
-	$UserDataHeader = array(
-						'Username' ,
-						'Date' ,
-						'Session #' ,
-						'Begin/End?' ,
-						'Condition #',
-						'Words File',
-						'Procedure File',
-						'Condition Description',
-						'User Agent Info',
-						'IP',
-						'Inclusion Notes'
-					 );
-	if (is_file($up.$dataF.'Status.txt') == FALSE) {					// if the file doesn't exist, write the header
- 		arrayToLine ($UserDataHeader, $up.$dataF.'Status.txt');
- 	}
-	arrayToLine ($UserData, $up.$dataF.'Status.txt');					// write $UserData to "subjects/Status.txt"
+	arrayToLine($data, $up.$dataF.$_SESSION['DataSubFolder'].$extraDataF.$statusEndFileName.$outExt);
 	########
 	
 	$_SESSION = array();											// clear out all session info
-	session_destroy();												// destry the session so it doesn't interfere with any future experiments
+	session_destroy();												// destroy the session so it doesn't interfere with any future experiments
 	
 ?>
 	<script src="http://code.jquery.com/jquery-1.8.0.min.js" type="text/javascript"> </script>

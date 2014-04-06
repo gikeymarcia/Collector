@@ -26,7 +26,7 @@
 	<?php
 		// if this is the first time on FinalQuestions.php then load questions from file
 		if(isset($_SESSION['FinalQs']) == FALSE) {
-			$fQ	= GetFromFile($up.$expFiles.'FinalQuestions.txt');
+			$fQ	= GetFromFile($up.$expFiles.$finalQuestionsFileName);
 			// loop that deletes trailing empty positions from $fQ array
 			for ($i=count($fQ)-1; $i >0; $i--) { 
 				if($fQ[$i] == null) {

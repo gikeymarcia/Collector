@@ -6,10 +6,11 @@
  	#### setting experiment variables ####
  	$experimentName		= 'Collector';			// Recorded in datafile and can be useful
 	$loginCounterName	= '1.txt';				// Change to restart condition cycling
-	$doDemographics		= FALSE;				// Can be TRUE or FALSE
+	$doDemographics		= TRUE;				// Can be TRUE or FALSE
 	$nextExperiment		= FALSE;				// to link use format "www.cogfog.com/Generic/" do not forget the www and the ending "/"
 
  	// debugging functionality
+	$debugName = 'tes1';
  	$debugMode = FALSE;							// Can be `TRUE` or `FALSE` (without ticks)
 	$debugTime = 1;								// trial length (in seconds) when in debug mode
 	$trialDiagnostics	= FALSE;				// show trial diagnostics? `TRUE` or `FALSE`
@@ -17,7 +18,7 @@
 
 	//mTurk Mode
 	$mTurkMode		= FALSE;				    // turn on mTurkMode? `TRUE` or `FALSE` (without ticks)
-	$verifcation	= 'Shinebox';				// code that shows on done.php
+	$verification	= 'Shinebox';				// code that shows on done.php
 	$checkElig		= FALSE;				    // use files in eligibility/ folder to check past participation (mTurkMode must be on to use this)
     $blacklist      = FALSE;                    // when true, the same IP cannot participate twice
 	$whitelist      = array("::1", "other-ip"); // The IPs in this array will be allowed to participate more than once
@@ -44,4 +45,5 @@
 
 	// done.php
 	$experimenterEmail = 'gikeymarcia@gmail.com';
+	
 ?>

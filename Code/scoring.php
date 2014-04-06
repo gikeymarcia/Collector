@@ -3,7 +3,7 @@
 	A program for running experiments on the web
 	Copyright 2012-2014 Mikey Garcia & Nate Kornell
  */
- 	$data= array();
+ 	$data = $_POST;
 	$keysNeeded = array('RT', 'Response1', 'RTkey', 'RTlast', 'strictAcc', 'lenientAcc');
 	/*
 	 * Q: Why are we using $data instead of setting values directly into $_SESSION['Trials']?
@@ -12,9 +12,6 @@
 	 *    the program will automatically prepend each stored key with 'post' (e.g., $data['RT'] would be merged as $data['postRT] iF scoring is happening for a postTrial)
 	 */
 	
-	
- 	#### Saving RT (true for all trials)
- 	@$data['RT'] = $_POST['RT'];
  	
  	#### Code that saves and scores information when user input is given
 	if(isset($_POST['Response'])) {											// if there is a response given then do scoring

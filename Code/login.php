@@ -31,46 +31,46 @@
 <body>
 	
 	<?php
-		echo '<h1>Please wait while we load the experiment...</h1>';
-		echo '<noscript>	<h1>	You must enable javascript to participate!!!	</h1>	</noscript>';
-		
-		
-		#### Make sure all the necessary folders exist
-		// $thisFolder = $dataF.$experimentName;
-		$needed = array(	$up.$dataF,
-							$up.$dataF.'Counter/',
-							$up.$expFiles.'eligibility/');
-		foreach ($needed as $dir) {
-			if (!file_exists($dir)) {						// if the folder doesn't exist
-			    mkdir($dir, 0777, true);					// make it
-			}
-		}
-		
-		##### Error Checking Code ####
-		$found	= FALSE;														// will use this later to determine when loops fail
-		$errors	= array('Count' => 0, 'Details' =>array()  );					// the array to keep count and details of errors
-		if (file_exists($up.$expFiles.'Conditions.txt') == FALSE):							// does conditions exist? (error checking)
-			$errors['Count']++;
-			$errors['Details'][] = 'No "Conditions.txt" found';
-		endif;
-		
-		
-		#### Grabbing submitted info
-		$_SESSION['Username']	= trim($_GET['Username']);			// grab Username from URL
-		$_SESSION['Session']	= trim($_GET['Session']);			// grab session# from URL
-		if( $_SESSION['Session'] < 1 ){								// if session is not set then set to 1
-			$_SESSION['Session'] = 1;
-		}
-		else { $doDemographics = FALSE; }					// skip demographics for all but session1
-		$selectedCondition = trim($_GET['Condition']);
-		
-		
 		#### Checking username is 3 characters or longer
-		if(strlen($_SESSION['Username']) < 3) {
+		if(strlen($_GET['Username']) < 3) {
 			echo '<h1>Error: Login username must be 3 characters or longer</h1>
 					<h2>Click <a href="'.$up.'index.php">here</a> to enter a valid username</h2>';
 			exit;
 		}
+		
+		echo '<h1>Please wait while we load the experiment...</h1>';
+		echo '<noscript>	<h1>	You must enable javascript to participate!!!	</h1>	</noscript>';
+		
+		
+		##### Error Checking Code ####
+		$found	= FALSE;														// will use this later to determine when loops fail
+		$errors	= array('Count' => 0, 'Details' =>array()  );					// the array to keep count and details of errors
+		if (file_exists($up.$expFiles.$conditionsFileName) == FALSE):							// does conditions exist? (error checking)
+			$errors['Count']++;
+			$errors['Details'][] = 'No "'.$conditionsFileName.'" found';
+		endif;
+		
+		
+		#### Grabbing submitted info
+		$username = trim($_GET['Username']);						// grab Username from URL
+		if( substr( $username, 0, strlen($debugName) ) === $debugName ) {
+			$_SESSION['Debug'] = TRUE;
+			$username = trim( substr( $username, strlen($debugName) ) );
+		}
+		$_SESSION['Username'] = $username;
+		$_SESSION['DataSubFolder'] = $_SESSION['Debug'] ? $debugF : $nonDebugF;
+		
+		if( !isset( $_SESSION['ID'] ) ) {
+			$_SESSION['ID'] = isset($_GET['ID']) ? $_GET['ID'] : rand_string();
+		}
+		
+		$_SESSION['Session'] = trim($_GET['Session']);				// grab session# from URL
+		if( $_SESSION['Session'] < 1 ){								// if session is not set then set to 1
+			$_SESSION['Session'] = 1;
+		} else { $doDemographics = FALSE; }							// skip demographics for all but session1
+		
+		$selectedCondition = trim($_GET['Condition']);
+		
 		
 		if($checkElig == TRUE AND $mTurkMode == TRUE) {
 			include	'check.php';
@@ -78,11 +78,11 @@
 		
 		
 		#### Code to automatically choose condition assignment
-		$Conditions	= GetFromFile($up.$expFiles.'Conditions.txt', FALSE);		// Loading conditions info
+		$Conditions	= GetFromFile($up.$expFiles.$conditionsFileName, FALSE);		// Loading conditions info
 		$logFile	= $up.$dataF.$countF.$loginCounterName;
 		if( $selectedCondition == 'Auto') {
 			
-			if(file_exists($logFile) ) {										// Read counter file & save value
+			if(file_exists($logFile) ) {											// Read counter file & save value
 				$fileHandle	= fopen ($logFile, "r");
 				$loginCount	= fgets($fileHandle);
 				fclose($fileHandle);
@@ -112,12 +112,12 @@
 		// did we fail to find the condition information?
 		if($found == FALSE) {
 			$errors['Count']++;
-			$errors['Details'][] = 'Could not find the selected condition #'.$conditionNumber.' in Conditions.txt';
+			$errors['Details'][] = 'Could not find the selected condition #'.$conditionNumber.' in '.$conditionsFileName;
 		}
 		// does the condition file have the required headers?
-		$errors = keyCheck( $Conditions,	'Number',		$errors,	'Conditons.txt' );
-		$errors = keyCheck( $Conditions,	'Stimuli',		$errors,	'Conditons.txt' );
-		$errors = keyCheck( $Conditions,	'Procedure',	$errors,	'Conditons.txt' );
+		$errors = keyCheck( $Conditions,	'Number',		$errors,	$conditionsFileName );
+		$errors = keyCheck( $Conditions,	'Stimuli',		$errors,	$conditionsFileName );
+		$errors = keyCheck( $Conditions,	'Procedure',	$errors,	$conditionsFileName );
 		// does this condition point to a valid stimuli file?
 		if (file_exists($up.$expFiles.$_SESSION['Condition']['Stimuli']) == FALSE) {
 			$errors['Count']++;
@@ -148,43 +148,7 @@
 		// Readable($_SESSION["Condition"],"this is what you're getting for condition:");				#### DEBUG ####
 		#### End of error checking
 		
-		
-		#### Record info about the person starting the experiment to StatusFile.txt
-		// information about the user loging in
-		$UserData = array(
-							$_SESSION['Username'] ,
-							date('c') ,
-							'Session ' . $_SESSION['Session'] ,
-							'Session Start' ,
-							$_SESSION['Condition']['Number'],
-							$_SESSION['Condition']['Stimuli'],
-							$_SESSION['Condition']['Procedure'],
-							$_SESSION['Condition']['Condition Description'],
-							$_SERVER['HTTP_USER_AGENT'],
-							$_SERVER["REMOTE_ADDR"],
-							'N/A'
-						 );
-		// header row for the Status File
-		$UserDataHeader = array(
-							'Username' ,
-							'Date' ,
-							'Session #' ,
-							'Begin/End?' ,
-							'Condition #',
-							'Words File',
-							'Order File',
-							'Condition Description',
-							'User Agent Info', 
-							'IP',
-							'Inclusion Notes'
-						 );
-		// if the file doesn't exist, write the header
-	 	if (is_file($up.$dataF.'Status.txt') == FALSE) {
-	 		arrayToLine ($UserDataHeader, $up.$dataF.'Status.txt');
-	 	}
-		arrayToLine ($UserData, $up.$dataF.'Status.txt');						// write $UserData to "subjects/Status.txt"
-		###########################################################################
-		
+		$_SESSION['OutputDelimiter'] = $delimiter;
 		
 		#### Load all Stimuli and Info for this participant's condition then combine to create the experiment
 		if($_SESSION['Session'] == 1) {
@@ -200,7 +164,8 @@
 						
 			// Load entire experiment into $Trials[1-X] where X is the number of trials
 			$Trials = array(0=> 0);
-			for ($count=2; $count<count($procedure); $count++) {
+			$procedureLength = count($procedure);
+			for ($count=2; $count<$procedureLength; $count++) {
 				$Trials[$count-1]['Stimuli']	= $stimuli[ ($procedure[$count]['Item']) ];			// adding 'Stimuli', as an array, to each position of $Trials
 				$Trials[$count-1]['Procedure']	= $procedure[$count];								// adding 'Procedure', as an array, to each position of $Trials
 				$Trials[$count-1]['Response']	= array(	'Response1'		=> NULL,			// adding 'Response', as an array, to each position of $Trials
@@ -227,49 +192,31 @@
 				}
 			}
 			
-			// determine stimuli headers
-			$example = $Trials[1];
-			$header1 = array();
-			$header2 = array();
-			foreach($example as $key => $array) {
-				foreach ($array as $subKey => $value) {
-					$header1[] = $key;
-					$header2[] = $subKey;
-				}
-			}
-			// will use these later to record data
-			$_SESSION['Header1'] = $header1;
-			$_SESSION['Header2'] = $header2;
-			
 			######## Go through $Trials and write session file(s)
-			// session files go into subjects folder and will be formatted as Username_Session1_StimuliFile.txt
-			$fileNumber		= 1;
-			$foreachcount	= 1;
+			// session files go into subjects folder and will be formatted according to the template in fileLocations.php
+			$fileNumber	= 0;
 			foreach ($Trials as $Trial) {
-				if($foreachcount == 1) {
-					$foreachcount++;
-					continue;
-				}
-				// write to next file when we hit a newfile line
-				$item = strtolower(trim($Trial['Procedure']['Item']));
-				if($item == '*newfile*') {
-					$fileNumber++;
+				if( !isset($skippedFirstTrial) OR strtolower(trim($Trial['Procedure']['Item'])) === '*newfile*' ) {
+					$skippedFirstTrial = TRUE;
+					++$fileNumber;
+					$temp = array(
+						'Username' 					=> $_SESSION['Username'],
+						'ID' 						=> $_SESSION['ID'],
+						'Session' 					=> $fileNumber,
+						'Condition' => array(
+							'Condition Number' 		=> $_SESSION['Condition']['Condition Number'],
+							'Condition Notes' 		=> $_SESSION['Condition']['Condition Notes'],
+							'Condition Description' => $_SESSION['Condition']['Condition Description']
+						)
+					);
+					$sessionFile = $up.$dataF.$_SESSION['DataSubFolder'].$expF.ComputeString( $experimentFileName, $temp ).$outExt;
 					continue;
 				}
 				
-				// if file doesn't exist then write the 2 header lines
-				$sessionFile = $up.$dataF.$_SESSION['Username'].'_Session'.$fileNumber.'_StimuliFile.txt';
-				if(is_file($sessionFile) == FALSE) {
-					arrayToLine ($header1, $sessionFile);
-					arrayToLine ($header2, $sessionFile);
-				}
-				#### TO DO #### write code that removes junk characters from session files (see Next.php)
 				// write ['Stimuli'] ['Procedure'] and ['Response'] data to next line of the file
-				$line = NULL;
-				$junk = array( '\n' , '\t' , '\r' , chr(10) , chr(13) );
-				for($i= 0; $i < count($header1); $i++) {
-					$replaced = str_replace($junk, '<br /', $Trial[$header1[$i]] [$header2[$i]]);
-					$line[] = $replaced;
+				$line = array();
+				foreach( $Trial as $key => $set ) {
+					$line += AddPrefixToArray( $key.'*', $set );
 				}
 				arrayToLine($line,$sessionFile);
 			
@@ -279,38 +226,32 @@
 		else {
 			// Load headers from correct stimuli files	
 			$fileNumber				= $_SESSION['Session'];
-			$sessionFile			= $up.$dataF.$_SESSION['Username'].'_Session'.$fileNumber.'_StimuliFile.txt';
-			$openSession			= fopen($sessionFile, 'r');
-			$header1				= fgetcsv($openSession,0,"\t");
-			$header2				= fgetcsv($openSession,0,"\t");
-			$_SESSION['Header1']	= $header1;
-			$_SESSION['Header2']	= $header2;
-			
-			// Loading up $Trials for this Username and Session
-			$Trials		= array();
-			$Trials[0]	= NULL;
-			$tPos		= 0;
-			while($line = fgetcsv($openSession,0,"\t")) {
-				$tPos++;
-				for($i=0; $i < count($line)-1; $i++) {
-					$Trials[$tPos][$header1[$i]][$header2[$i]] = $line[$i];
-				}
-			}
+			$sessionFile 			= $up.$dataF.$_SESSION['DataSubFolder'].$expF.ComputeString( $experimentFileName ).$outExt;
 			#### ERROR Checking if the session file doesn't exist ####
 			if (file_exists($sessionFile) == FALSE) {
 				echo "<br/><br/>Could not find your session {$_SESSION['Session']} file at {$sessionFile}";
 				exit;
 			}
+			$openSession			= fopen($sessionFile, 'r');
+			$headers				= fgetcsv($openSession,0,"\t");
+			foreach( $headers as &$head ) {
+				$head = explode( '*', $heaed );								// Response*RT becomes array( 0 => 'Response', 1 => 'RT' )
+			}
+			unset( $head );
+			
+			// Loading up $Trials for this Username and Session
+			$Trials		= array();
+			$Trials[0]	= NULL;
+			while($line = fgetcsv($openSession,0,"\t")) {
+				$temp = array();
+				foreach( $line as $i => $val ) {
+					$temp[ $head[$i][0] ][ $head[$i][1] ] = $val;			// for "Thing" found under Stimuli*Cue, $temp[ 'Stimuli' ][ 'Cue' ] = "Thing"
+				}
+				$Trials[] = $temp;
+			}
 		}
 		// readable($header1,'header top');																#### DEBUG ####
 		// readable($header2,'header 2nd');																#### DEBUG ####
-		
-		
-		#### Establishing $_SESSION['Trials'] as the place where all experiment trials are stored
-		// session1 $Trials also contains trials for other sessions but trial.php sends to done.php once a *newfile* shows up
-		$_SESSION['Trials']		= $Trials;
-		$_SESSION['Position']	= 1;
-		// Readable($_SESSION['Trials'], '$_SESSION[\'Trials\']');										#### DEBUG ####
 		
 		
 		#### Output errors & Stop progression
@@ -320,11 +261,43 @@
 				echo $errorCode;
 				echo '<br/>';
 			}
-		if ($stopForErrors == TRUE) {
-			echo '<br/><br/>The program will not run until you have addressed the above errors';
-			// show information about $_SESSION['Trials'], 
-			exit;
-		}		}
+			if ($stopForErrors == TRUE) {
+				echo '<br/><br/>The program will not run until you have addressed the above errors';
+				// show information about $_SESSION['Trials'], 
+				exit;
+			}
+		}
+		
+		
+		$outputFile = ComputeString($outputFileName).$outExt;
+		$_SESSION['Output File'] = $up.$dataF.$_SESSION['DataSubFolder'].$outputF.$outputFile;
+		$_SESSION['Start Time'] = date('c');
+		
+		#### Record info about the person starting the experiment to the status start file
+		// information about the user loging in
+		$UserData = array(
+							'Username' 				=> $_SESSION['Username'],
+							'ID' 					=> $_SESSION['ID'],
+							'Date' 					=> $_SESSION['Start Time'],
+							'Session' 				=> $_SESSION['Session'] ,
+							'Condition_Number' 		=> $_SESSION['Condition']['Number'],
+							'Condition_Description' => $_SESSION['Condition']['Condition Description'],
+							'Output_File' 			=> $outputFile,
+							'Stimuli_File' 			=> $_SESSION['Condition']['Stimuli'],
+							'Procedure_File' 		=> $_SESSION['Condition']['Procedure'],
+							'User_Agent_Info' 		=> $_SERVER['HTTP_USER_AGENT'],
+							'IP' 					=> $_SERVER["REMOTE_ADDR"],
+							'Inclusion Notes' 		=> 'N/A'
+						 );
+		arrayToLine($UserData, $up.$dataF.$_SESSION['DataSubFolder'].$extraDataF.$statusBeginFileName.$outExt);
+		###########################################################################
+		
+		
+		#### Establishing $_SESSION['Trials'] as the place where all experiment trials are stored
+		// session1 $Trials also contains trials for other sessions but trial.php sends to done.php once a *newfile* shows up
+		$_SESSION['Trials']		= $Trials;
+		$_SESSION['Position']	= 1;
+		// Readable($_SESSION['Trials'], '$_SESSION[\'Trials\']');										#### DEBUG ####
 		
 		
 		#### Send participant to next phase of experiment (demographics or trial.php)
@@ -332,7 +305,7 @@
 			$link = 'BasicInfo.php';
 		}
 		else {
-			$link = $up.$expFiles.'instructions.php';
+			$link = 'instructions.php';
 		}
 		
 		

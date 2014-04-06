@@ -9,7 +9,7 @@
 		require $up.$expFiles.'Settings.php';       // experiment variables
  	}
  	#### variables needed for this page
-	$folder	= $up.$expFiles.'eligibility/';			// where to look for files containing workers
+	$folder	= $up.$expFiles.$eligF;					// where to look for files containing workers
 	$files	= scandir($folder);						// list all files containing workers
 	$toCheck = null;								// who to check for eligibility
 	$checked = array();								// list of all the files that were checked

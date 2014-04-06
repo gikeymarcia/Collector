@@ -11,37 +11,10 @@
 	require 'CustomFunctions.php';							// Loads all of my custom PHP functions
 	require 'fileLocations.php';							// sends file to the right place
 	
-	
-	$DemographicsFile = $up.$dataF.'demographics.txt';
-	
-	$gender		= $_POST['Gender'];
-	$age		= $_POST['Age'];
-	$education	= $_POST['Education'];
-	$english	= $_POST['English'];
-	$country	= $_POST['Country'];
-	
-	$header = array(	'Username',
-						'Gender',
-						'Age',
-						'Education Level',
-						'English Fluency',
-						'Country of Origin'
-						);
-						
-	$data = array(		$_SESSION['Username'],
-						$gender,
-						$age,
-						$education,
-						$english,
-						$country
-						);
-	// if no demographics file exists then write the file header
-	if(is_file($DemographicsFile) == FALSE) {
-		arrayToLine($header,$DemographicsFile);
-	}
+	$data = array( 'Username' => $_SESSION['Username'], 'ID' => $_SESSION['ID'] ) + $_POST;
 	// write user demographics data to demographics file
-	arrayToLine($data,$DemographicsFile);
+	arrayToLine($data, $up.$dataF.$_SESSION['DataSubFolder'].$extraDataF.$demographicsFileName.$outExt);
 	
-	header("Location: {$up}{$expFiles}instructions.php");
+	header("Location: instructions.php");
 	exit;
 ?>

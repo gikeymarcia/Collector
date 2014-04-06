@@ -8,12 +8,39 @@
 	#### #### CUSTOM FUNCTIONS #### ####
 
 	
-	#### Write array to a line of a tab delimited text file (if mode is not specified it uses "a")
-	function arrayToLine ($array, $fileLocation, $mode = "a"){
-			$fileHandle = fopen($fileLocation, $mode);
-			fputs($fileHandle , implode( "\t" , $array) );				// write tab delimited array values
-			fputs($fileHandle , PHP_EOL );								// add a newline at the end of the array
-			fclose($fileHandle);
+	#### Write array to a line of a tab delimited text file
+	function arrayToLine( $row, $fileName, $d = NULL ) {
+		if( $d === NULL ) {
+			$d = isset( $_SESSION['OutputDelimiter']) ? $_SESSION['OutputDelimiter'] : "\t";
+		}
+		if( !is_dir( dirname($fileName) ) ) {
+			mkdir( dirname($fileName), 0777, true);
+		}
+		foreach( $row as &$datum ) {
+			$datum = str_replace( array( "\r\n", "\n" , "\t" , "\r" , chr(10) , chr(13) ), ' ', $datum );
+		}
+		unset( $datum );
+		if( !is_file($fileName) ) {
+			$file = fopen( $fileName, "w" );
+			fputcsv( $file, array_keys($row), $d );
+			fputcsv( $file, $row, $d );
+		} else {
+			$file = fopen( $fileName, "r+" );
+			$headers = array_flip( fgetcsv( $file, 0, $d ) );
+			$newHeaders = array_diff_key( $row, $headers );
+			if( $newHeaders !== array() ) {
+				$headers = $headers+$newHeaders;
+				$oldData = stream_get_contents($file);
+				rewind($file);
+				fputcsv( $file, array_keys( $headers ), $d );
+				fwrite( $file, $oldData );
+			}
+			fseek( $file, 0, SEEK_END );
+			$row = SortArrayLikeArray( $row, $headers );
+			fputcsv( $file, $row, $d );
+		}
+		fclose( $file );
+		return $row;
 	}
 	
 	
@@ -207,9 +234,8 @@
 	
 	#### takes an input ($info) array and merges it into a target array ($place).  Optional, prepend all $info keys with a $keyMod string
 	function placeData ($data, $place, $keyMod = '') {
-		$dataKeys = array_keys($data);
-		foreach ($dataKeys as $key) {
-			$place[$keyMod.$key] = $data[$key];
+		foreach( $data as $key => $val ) {
+			$place[ $keyMod.$key ] = $val;
 		}
 		return $place;
 	}
@@ -361,6 +387,85 @@
 		}
 		return FALSE;
 	}
+	
+	function ComputeString( $template, $fileData = array() ) {
+		if( $fileData === array() and isset( $_SESSION ) ) {
+			$fileData = $_SESSION;
+		}
+		foreach( $fileData as $key => $value ) {
+			$fileData[ strtolower( $key ) ] = $value;							// so that $username will be found in $fileData['Username']
+		}
+		$templateParts = explode( '_', $template );
+		$outputParts = array();
+		foreach( $templateParts as $part ) {
+			if( strpos( $part, '$' ) === FALSE ) {
+				$outputParts[] = $part;
+			} else {
+				$str = substr( $part, 0, strpos( $part, '$' ) );				// e.g., from 'Sess$Session', get 'Sess'
+				$var = substr( $part, strpos( $part, '$' )+1 );					// e.g., from 'Sess$Session', get 'Session'
+				if( strpos( $var, '[' ) === FALSE ) {
+					if( isset( $fileData[$var] ) AND is_scalar( $fileData[$var] ) ) {
+						$str .= $fileData[$var];
+					} else {
+						$str .= '$'.$var;										// return the '$' so that it is obvious that a variable was searched for and not found
+					}
+				} else {														// if they want $_SESSION['Condition']['Condition Description'], we need to search index by index
+					$key = substr( $var, 0, strpos( $var, '[' ) );
+					$indices = explode( ']', substr( $var, strpos( $var, '[' ) ) );
+					if( isset( $fileData[$key] ) ) {
+						$val = $fileData[$key];
+						foreach( $indices as $i ) {
+							if( strlen($i) === 0 ) { continue; }
+							if( $i[0] !== '[' ) { continue; }
+							if( isset( $val[substr($i, strpos($i,'[')+1)] ) ) {
+								$val = $val[substr($i, strpos($i,'[')+1)];
+							} else {
+								$val = NULL;
+								break;
+							}
+						}
+						if( is_scalar( $val ) ) {
+							$str .= $val;
+						} else {
+							$str .= '$'.$var;
+						}
+					} else {
+						$str .= '$'.$var;										// return the '$' so that it is obvious that a variable was searched for and not found
+					}
+				}
+				$outputParts[] = $str;
+			}
+		}
+		$outputParts = implode( '_', $outputParts );
+		return $outputParts;
+	}
+	
+	function rand_string( $length = 10 ) {
+		$chars = "abcdefghijklmnopqrstuvwxyz0123456789";	
 
+		$size = strlen( $chars );
+		$str = '';
+		for( $i = 0; $i < $length; $i++ ) {
+			$str .= $chars[ rand( 0, $size - 1 ) ];
+		}
+
+		return $str;
+	}
+	
+	function AddPrefixToArray( $pre, $arr ) {
+		$out = array();
+		foreach( $arr as $key => $val ) {
+			$out[ $pre.$key ] = $val;
+		}
+		return $out;
+	}
+	
+	function SortArrayLikeArray( $arr, $template ) {
+		$out = array();
+		foreach( $template as $key => $val ) {
+			$out[$key] = isset( $arr[$key] ) ? $arr[$key] : '';
+		}
+		return $out;
+	}
 
 ?>

@@ -6,7 +6,6 @@
 	ini_set('auto_detect_line_endings', true);			// fixes problems reading files saved on mac
 	session_start();									// starts the session
 	$_SESSION = array();								// reset session so it doesn't contain any information from a previous login attempt
-	$_SESSION['Debug']=FALSE;							// turn debug mode on or off   ## SET ##
 	require("CustomFunctions.php");						// Load custom PHP functions
 ?>
 
