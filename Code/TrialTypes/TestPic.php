@@ -1,17 +1,15 @@
 <?php
 	$compTime = 8;					// time in seconds to use for 'computer' timing
 	trialTiming();					// determines timing and user/computer timing mode
-	
-	echo '<div class="pic PreCache">
-			'. show($cue).
-		 '</div>';
-	$formClass = $formClass.' center';
-	
-	echo '<form class="'.$formClass.' PreCache"  autocomplete="off"  action="'.$postTo.'"  method="post" class="PreCache">
-			<input  name="Response" type="text" value=""			class="Textbox picWord PreCache" autocomplete="off" />	<br />
-			<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
-			<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
-			<input	name="RTlast"	type="text"	value="no press"	class="RTlast Hidden" 	/>
-			<input	id="FormSubmitButton"	type="submit"	value="Submit"	/>
-		  </form>';
 ?>
+	<div class='precache pic'>
+		<?php echo show($cue); ?>
+	</div>
+
+    <form class="<?php echo $formClass; ?> precache collector-form textcenter" action="<?php echo $postTo; ?>" method=post autocomplete=off>
+        <input class=testPic name=Response id=Response type=text value=''         />
+        <input class=hidden  name=RTkey    id=RTkey    type=text value="no press" />
+        <input class=hidden  name=RTlast   id=RTlast   type=text value="no press" />
+        <input class=hidden  name=RT       id=RT       type=text value="RT"       />
+        <input class=button  id=FormSubmitButton type=submit value="Submit"       />
+    </form>

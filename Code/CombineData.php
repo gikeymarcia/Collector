@@ -14,13 +14,13 @@
  */
  	require 'fileLocations.php';											// sends file to the right place
  	require 'CustomFunctions.php';
-	
+
 	$OutFiles	= scandir($up.$dataF);
 	$finalQ		= array();													// will hold finalQuestions data
 	$instruct	= array();													// will hold instructions data
 	$status		= array();													// will hold status.txt data
-	
-	
+
+
 	// remove non-output files
 	$outTemp = array();
 	foreach ($OutFiles as $file) {
@@ -39,7 +39,7 @@
 	}
 	$OutFiles = $outTemp;
 	Readable($OutFiles, count($OutFiles).' output files scanned');
-	
+
 	#### Get all headers across all output files
 	$allHeaders = array();
 	foreach ($OutFiles as $file) {
@@ -56,17 +56,17 @@
 	}
 	// fwrite(  fopen($up.$dataF.'headers.txt','w'),  implode("\t", $allHeaders)  );
 	Readable($allHeaders,'these are all unique headers');
-	
-	
-	
+
+
+
 	#### Combine all output using common headers
 	$combineLoc = $up.$dataF.'All Data - '.date("Y")."-".date("m")."-".date("d").' - '.date("U").'.txt';
 	$handle = fopen($combineLoc, 'a');
 	$delimiter = "\t";
 	fwrite($handle, implode($delimiter, $allHeaders));					// write common file headers
 	fwrite($handle, PHP_EOL);
-	
-	
+
+
 	foreach ($OutFiles as $oneSS) {										// for each output file
 		$temp = GetFromFile($up.$dataF.$oneSS, FALSE);
 		foreach ($temp as $trial) {										// for each trial
@@ -81,9 +81,9 @@
 		}
 	}
 	fclose($handle);
-	
+
 ?>
-	<script src="http://code.jquery.com/jquery-1.8.0.min.js" type="text/javascript"> </script>
-	<script src="javascript/jsCode.js" type="text/javascript"> </script>
+	<script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"> </script>
+	<script src="javascript/collector_1.0.0.js" type="text/javascript"> </script>
 </body>
 </html>

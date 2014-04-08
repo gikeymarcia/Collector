@@ -7,7 +7,7 @@
 	require $up.$expFiles.'Settings.php';					// experiment variables
 	require 'CustomFunctions.php';							// Load custom PHP functions
 	initiateCollector();
-	
+
 	#### setting up aliases (for later use)
 	$currentPos		=& $_SESSION['Position'];
 	$currentTrial	=& $_SESSION['Trials'][$currentPos];
@@ -15,15 +15,15 @@
 		$target		=& $currentTrial['Stimuli']['Target'];
 		$answer		=  $currentTrial['Stimuli']['Answer'];
 		$trialType	=  trim(strtolower($currentTrial['Procedure']['Trial Type']));
-	
-	
+
+
 	#### grabbing responses from postTrial
 	@$currentTrial['Response']['JOL']		= $_POST['JOL'];
 	@$currentTrial['Response']['postRT']	= $_POST['RT'];
 	@$currentTrial['Response']['postRTkey']	= $_POST['RTkey'];
 	## ADD ## if you've made a new post-trial type that collects data then you need to record that data into $currentTrial['Response']['whatever name']
-	
-	
+
+
 	#### Calculating time difference from current to last trial
 	if( isset($_SESSION['Timestamp']) ) {
 		$timeDif = date('U') - $_SESSION['Timestamp'];
@@ -31,8 +31,8 @@
 		$timeDif = '-';
 	}
 	$_SESSION['Timestamp'] = date('U');
-	
-	
+
+
 	#### Writing to data file
 	$fileName = $up.$dataF.'Output_Session'.$_SESSION['Session'].'_'.$_SESSION['Username'].'.txt';
 	$add = array(		$_SESSION['Username'],
@@ -89,18 +89,18 @@
 	}
 	arrayToLine($data,$fileName);										// write data line to the file
 	###########################################
-	
-	
+
+
     // progresses the trial counter
 	$currentPos++;
-	
+
 	// are we done with all presentations? if so, send to finalQuestions.php
 	if (array_key_exists($currentPos, $_SESSION['Trials']) == FALSE) {
 		$_SESSION['finishedTrials'] = TRUE;											// stops people from skipping to the end
 		header("Location: FinalQuestions.php");
 		exit;
 	}
-	
+
 	// redirects the page to trial.php after running all of the above code
 	header("Location: trial.php");
 	exit;
