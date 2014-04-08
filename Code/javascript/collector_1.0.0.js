@@ -106,10 +106,8 @@ var COLLECTOR = {
 	},
 
 	getRT: function() {
-		var currentTime = new Date().getTime(),
-			startTime = COLLECTOR.startTime;
-			RT = currentTime - startTime;
-		return RT;
+		var currentTime = new Date().getTime();
+		return (currentTime - COLLECTOR.startTime);
 	},
 
 	common: {
@@ -119,14 +117,14 @@ var COLLECTOR = {
 			// these happen immediately on load
 			$(':input:enabled:visible:first').focus();			// focus cursor on first input
 			$("#loadingForm").submit();							// submit form to advance page
-/*
+
 			// intercept FormSubmitButton click
 			$("#FormSubmitButton").click(function(){			// when 'Done' / 'Submit' is pressed
 				$("#RT").val( COLLECTOR.getRT() );				// record RT
 				$(".DuringTrial").addClass("precache");			// hide content
 				$("form").submit();								// submit form
 			});
-*/
+
 			// allows for the collapsing of readable() outputs
 			$(".collapsibleTitle").click(function() {
 				$(this).parent().children().not(".collapsibleTitle").toggle(350);
@@ -223,7 +221,7 @@ var COLLECTOR = {
 						$("#RTkey").val( COLLECTOR.getRT() );	// set first keypress times
 						keypress = true;
 					}
-					$("#RTlast").prop( COLLECTOR.getRT() );		// update 'RTlast' time
+					$("#RTlast").val( COLLECTOR.getRT() );		// update 'RTlast' time
 				}
 			});
 
@@ -238,10 +236,10 @@ var COLLECTOR = {
 					fsubmit.click();							// see common:init "intercept FormSubmitButton"
 				} else {
 					if(keypress == false) {
-						$("#RTkey").prop( COLLECTOR.getRT() );	// set first keypress times
+						$("#RTkey").val( COLLECTOR.getRT() );	// set first keypress times
 						keypress == true;
 					}
-					$("#RTlast").prop( COLLECTOR.getRT() );		// update 'RTlast' time
+					$("#RTlast").val( COLLECTOR.getRT() );		// update 'RTlast' time
 
 					$(".TestMC").removeClass("button-active");	// remove highlighting from all buttons
 					$(this).addClass("button-active");			// add highlighting to clicked button
