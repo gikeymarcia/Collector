@@ -39,7 +39,6 @@
 		}
 		
 		echo '<h1>Please wait while we load the experiment...</h1>';
-		echo '<noscript>	<h1>	You must enable javascript to participate!!!	</h1>	</noscript>';
 		
 		
 		##### Error Checking Code ####
@@ -140,7 +139,7 @@
 		$errors = keyCheck( $temp, 'Trial Type'	,	$errors, $_SESSION['Condition']['Procedure'] );
 		$errors = keyCheck( $temp, 'Timing'		,	$errors, $_SESSION['Condition']['Procedure'] );
 		$errors = keyCheck( $temp, 'Post Trial'	,	$errors, $_SESSION['Condition']['Procedure'] );
-		$errors = keyCheck( $temp, 'Shuffle'	,	$errors, $_SESSION['Condition']['Procedure'] );		
+		$errors = keyCheck( $temp, 'Shuffle'	,	$errors, $_SESSION['Condition']['Procedure'] );
 		$temp = null;
 		// echo 'Username = '.$_SESSION['Username'].'</br>';											#### DEBUG ####
 		// Readable($Conditions, "conditions loaded in");												#### DEBUG ####
@@ -224,7 +223,7 @@
 		}
 		#### Loading up $Trials for multisession experiments
 		else {
-			// Load headers from correct stimuli files	
+			// Load headers from correct stimuli files
 			$fileNumber				= $_SESSION['Session'];
 			$sessionFile 			= $up.$dataF.$_SESSION['DataSubFolder'].$expF.ComputeString( $experimentFileName ).$outExt;
 			#### ERROR Checking if the session file doesn't exist ####
@@ -263,7 +262,7 @@
 			}
 			if ($stopForErrors == TRUE) {
 				echo '<br/><br/>The program will not run until you have addressed the above errors';
-				// show information about $_SESSION['Trials'], 
+			// show information about $_SESSION['Trials'],
 				exit;
 			}
 		}
@@ -300,7 +299,7 @@
 		// Readable($_SESSION['Trials'], '$_SESSION[\'Trials\']');										#### DEBUG ####
 		
 		
-		#### Send participant to next phase of experiment (demographics or trial.php)
+		#### Send participant to next phase of experiment (demographics or instructions)
 		if($doDemographics == TRUE) {
 			$link = 'BasicInfo.php';
 		}
@@ -322,10 +321,10 @@
 		else {
 			echo '<form id="loadingForm" action="'.$link.'" method="get"> </form>';
 		}
-		
+		
 		
 	?>
-	<script src="http://code.jquery.com/jquery-1.8.0.min.js" type="text/javascript"> </script>
-	<script src="javascript/jsCode.js" type="text/javascript"> </script>
+	<script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"> </script>
+	<script src="javascript/collector_1.0.0.js" type="text/javascript"> </script>
 </body>
 </html>

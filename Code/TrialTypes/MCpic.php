@@ -1,35 +1,52 @@
 <?php
 	$compTime = 8;					// time in seconds to use for 'computer' timing
 	trialTiming();					// determines timing and user/computer timing mode
-	
-	$MCbuttons 		= $MultiChoiceButtons;
-	$itemsPerRow	= 4;
-	if($_SESSION['MCbutton'] == FALSE) {			// shuffle button position before presenting for the 1st time
-		shuffle($MCbuttons);						// turn this line off to maintain the same choice order between-subjects
-		$_SESSION['MCbutton'] = $MCbuttons;
+
+	#### Set up MC button grid ####
+	// shuffle button positions (first time only) and save to session
+	if($_SESSION['MCbutton'] == false) {
+		$mc = $MultiChoiceButtons;   // set this in Settings.php
+		shuffle($mc);				 // comment out this line to prevent shuffling
+		$_SESSION['MCbutton'] = $mc;
+	} else {
+	    $mc = $_SESSION['MCbutton'];
 	}
-	// show the image
-	echo '<div class="pic PreCache">
-			'. show($cue).
-		 '</div>';		
-	// display the MC button choices
-	$count = 0;
-	echo '<div id="ButtonArea">';
-	foreach ($_SESSION['MCbutton'] as $aButton) {
-		echo '<span class="TestMC PreCache">'.$aButton.'</span>';
-		$count++;
-		if ($count == $itemsPerRow) {
-			echo '<br style="clear: both;"/>';
-			$count = 0;
-		}
-	}
-	echo '</div>';
-	
-	$formClass = $formClass.' center';
-	echo '<form class="'.$formClass.'" action="'.$postTo.'" method="post">
-			<input	name="Response"	type="text"	value="no press"	class="Textbox Hidden"	/>
-			<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
-			<input	name="RTlast"	type="text"	value="no press"	class="RTlast Hidden" 	/>
-			<input	name="RT"		type="text"	value="RT"	class="RT Hidden"		/>
-		  </form>';
+
+    // load setting for items per row (in Settings.php)
+    $perRow = $MCitemsPerRow;
+
+    // generate mc choice grid
+    // note: because the grid is built using "display:inline" whitespace control between grid-items
+    //       or it breaks in Chrome. This is why html comments are added between those divs
+    $MCGrid = '';
+    for ($i=0; $i<count($mc); $i++) {
+        $newitem = "<div class='grid-item grid-1-{$perRow}'>
+                        <div class='button TestMC'>{$mc[$i]}</div>
+                    </div>";
+        if ($i !== (count($mc)-1)) {
+            $newitem .= "<!--";
+        }
+        if ($i !== 0) {
+            $newitem = "-->".$newitem;
+        }
+        $MCGrid .= $newitem;
+    }
 ?>
+
+	<!-- show the image -->
+    <div class='precache pic'>
+		<?php echo show($cue); ?>
+    </div>
+
+	<!-- display the MC button choices -->
+    <div class='precache grid'>
+        <?php echo $MCGrid; ?>
+    </div>
+
+    <form class="<?php echo $formClass; ?>" action="<?php echo $postTo; ?>" method="post">
+    	<input class=hidden name=Response id=Response type=text value=''          />
+    	<input class=hidden name=RTkey    id=RTkey    type=text value="no press" />
+    	<input class=hidden name=RTlast   id=RTlast   type=text value="no press" />
+    	<input class=hidden name=RT       id=RT       type=text value="RT"       />
+    	<input class=hidden  id=FormSubmitButton type=submit value="Submit"   />
+    </form>
