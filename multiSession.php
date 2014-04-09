@@ -1,13 +1,17 @@
 <?php
-/*	Collector
-	A program for running experiments on the web
-	Copyright 2012-2014 Mikey Garcia & Nate Kornell
+/*  Collector
+    A program for running experiments on the web
+    Copyright 2012-2014 Mikey Garcia & Nate Kornell
  */
-	ini_set('auto_detect_line_endings', true);			// fixes problems reading files saved on mac
-	session_start();									// starts the session
-	$_SESSION = array();								// reset session so it doesn't contain any information from a previous login attempt
-	$_SESSION['Debug']=FALSE;							// turn debug mode on or off   ## SET ##
-	require("CustomFunctions.php");						// Load custom PHP functions
+    ini_set('auto_detect_line_endings', true);          // fixes problems reading files saved on mac
+    session_start();                                    // starts the session
+    $_SESSION = array();                                // reset session so it doesn't contain any information from a previous login attempt
+
+    require 'Code/fileLocations.php';                   // sends file to the right place
+    require $codeF.'CustomFunctions.php';               // Loads all of my custom PHP functions
+    require $expFiles.'Settings.php';                   // experiment variables
+
+    $_SESSION['Debug'] = $debugMode;                    // turns debug mode on and off
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -15,38 +19,43 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<link href="css/global.css" rel="stylesheet" type="text/css" />
-	<link href='http://fonts.googleapis.com/css?family=Kreon' rel='stylesheet' type='text/css' />
+	<link href="<?php echo $codeF; ?>css/global.css" rel="stylesheet" type="text/css" />
 	<title>Experiment Login Page</title>
 </head>
 <?php flush(); ?>
-<body>
-	
-	<div class="ExpContainer">
-	
-		<div id="LoginPosition"> 
-			<h1>Welcome back!</h1>
-			<p>This part will run for approximately 15 minutes.								<!--## SET ## give multisession description for your exp-->
-			Your goal is to remember things from last time</p>
-			
-			<form name="Login"  action="login.php"  mehtod="get"  autocomplete="off">
-				<p> Please enter the email address you used last time</p>					<!--## SET ## change this for mTurk-->
-				<input class="Textbox" id="TextboxComputerTimed" style="width:400px;"  name="Username"  type="text"  value=""  autocomplete="off"/>
-				
-				<br />
-				
-				<p> Which session would you like?</p>
-				<input class="Textbox"  id="TextboxComputerTimed"  style="width:400px;"  name="Session"  type="text"  value=""  autocomplete="off"/>
-				
-				<div id="SubmitButton">Submit</div>
-			</form>
-			
+<body data-controller=multiSession>
+    <!-- redirect if Javascript is disabled -->
+    <noscript>
+        <meta http-equiv="refresh" content="0;url=<?php echo $codeF; ?>nojs.php" />
+    </noscript>
+
+    <div class=cframe-outer>
+        <div class=cframe-inner>
+            <div class='cframe-content textcenter login-pos'>
+
+    			<h1>Welcome back!</h1>
+    			<p>This part will run for approximately 15 minutes.	             <!--## SET ## give multisession description for your exp-->
+    			Your goal is to remember things from last time</p>
+
+    			<form name=Login class=collector-form action="login.php"  method=get  autocomplete=off>
+    				<label>Your username from last time:                         <!--## SET ## change for mTurk -->
+    				    <input name=Username type=text value="" />
+                    </label>
+
+    				<label> Which session would you like?
+    				    <input name=Session type=text value="" />
+    				</label>
+
+                    <br />
+				    <input class=button type=submit value="Login" />
+
+			     </form>
+			</div>
 		</div>
 	</div>
 
-	<!-- #### how to insert javascript written in separate files #### -->
-	<script src="http://code.jquery.com/jquery-1.8.0.min.js" type="text/javascript"> </script>
-	<script src="javascript/jsCode.js" type="text/javascript"> </script>
+	<script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"> </script>
+	<script src="<?php echo $codeF; ?>javascript/collector_1.0.0.js" type="text/javascript"> </script>
 
 </body>
 </html>

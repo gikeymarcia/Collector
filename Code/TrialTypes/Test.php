@@ -1,16 +1,20 @@
 <?php
 	$compTime = 8;					// time in seconds to use for 'computer' timing
 	trialTiming();					// determines timing and user/computer timing mode
-	
-	echo '<div class="WordWrap PreCache">
-			<span class="leftcopy">'.$cue.'</span>
-			<span class="dividercopy">:</span>
-			<form class="'.$formClass.' leftfloat"  autocomplete="off"  action="'.$postTo.'"  method="post">
-				<input	name="Response"	type="text"	value=""			class="Textbox Right PreCache"	autocomplete="off" />
-				<input	name="RT"		type="text"	value="RT"			class="RT Hidden"		/>
-				<input	name="RTkey"	type="text"	value="no press"	class="RTkey Hidden" 	/>
-				<input	name="RTlast"	type="text"	value="no press"	class="RTlast Hidden" 	/>
-				<input	id="FormSubmitButton"	type="submit"	value="Submit"	/>
-			</form>
-		  </div>';
 ?>
+
+    <div class="study precache">
+        <span class=study-left>  <?php echo $cue; ?>    </span>
+        <span class=study-divider>         :            </span>
+        <form class="<?php echo $formClass; ?> collector-form"  autocomplete="off"  action="<?php echo $postTo; ?>"  method=post>
+            <div class=study-right>
+                <input name=Response type=text value="" class=copybox autocomplete="off" />
+            </div>
+            <input class=hidden  id=RT     name=RT       type=text value="RT"       />
+            <input class=hidden  id=RTkey  name=RTkey    type=text value="no press" />
+            <input class=hidden  id=RTlast name=RTlast   type=text value="no press" />
+            <div class=textcenter>
+                <input class="button button-trial-advance" id=FormSubmitButton type=submit value="Submit"   />
+            </div>
+        </form>
+    </div>

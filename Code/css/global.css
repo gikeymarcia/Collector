@@ -1,266 +1,607 @@
-body
-	{	font-family: Kreon, sans-serif;	font-size: 110%;	}
-h1
-	{	font-size: 2em;	color: #333333;	padding-top: 30px;	text-align: center;	}
-h2
-	{	}
-h3
-	{	}
-p
-	{	}
-input
-	{	}
-table
-	{		}
-img
-	{	display: block;	margin-left: auto;	margin-right: auto;	}
-form
-	{	}
-option
-	{	}
-select
-	{	}
+/*------------------------------------*\
+ *
+ *  Collector Styles
+ * 	Adam Blake
+ *  written for www.CogFog.com
+ *
+\*------------------------------------*/
+
+/*------------------------------------*\
+    CONTENTS
+    (protip: search $[item] to jump)
+\*------------------------------------*/
+/**
+ *  IMPORTS
+ *  COLORS
+ *	RESET
+ *
+ *  MAIN
+ *  TYPE
+ *  SHARED
+ *  STRUCTURES
+ *
+ *  INDEX
+ *  INSTRUCTIONS
+ *  TRIAL
+ *  SOTETRIS
+ *  FQS
+ *  NO-JS
+ *
+ *  MISC
+ *  MEDIA
+ */
 
 
 
-/*Divs used across multiple pages*/
-.ExpContainer
-	{	text-align: center;	color: #000000;	font-size: 1em;	margin: 0 auto;	width: 800px;	}
-.Prompt
-	{	width: 500px; margin-top: 80px; margin-bottom: 15px; font-size: 1.2em;	}
-.Textbox
-	{	margin-bottom: 7px;	}
-.Hidden, .PreCache
-	{	display:none;	}
-.DuringTrial {}			/*this is here so I can remove precache then put it back when time is up*/
+
+/*------------------------------------*\
+    $IMPORTS
+\*------------------------------------*/
+@import url(http://fonts.googleapis.com/css?family=Open+Sans);
+@import url(http://fonts.googleapis.com/css?family=Roboto);
 
 
 
-/*index.php specific css*/
-#LoginPosition
-	{	text-align: center;	font-size: 1em;	}
-.Dropdown
-	{	}
 
 
+/*------------------------------------*\
+  	$COLORS
+\*------------------------------------*/
+.brand {
+    color:#0055A6;             /* dark blue; rgba(0,85,166,1) */
+}
+.secondary {
+	color:#00A5E5;             /* blue; rgba(0,165,229,1); */
+}
+.action {
+	color:#00FF87;             /* lime green; rgba(0,255,135,1) */
+}
+.alert {
+	background-color:#800000;  /* strong red; rgba(128,0,0,1) */
+}
 
-/*instructions.php specific css*/
-.MCbutton
-	{	cursor: pointer;	}
-#waiting
-	{	margin-top: 100px;	text-align:left; font-size: 1.5em;}
-
-
-
-/*BasicInfo specific css*/
-#content
-	{	margin-left: auto;	margin-right: auto;
-		width: 70%; min-width: 400px; max-width: 800px;
-		font-size: 1em;	}
-.Question
-	{	margin-top: 15px; margin-bottom: 35px;
-		width: 85%;	}
-	.Question select
-		{	font-size: .9em;	}
-	.Question input
-		{	font-size: 1em;	}
-	.Question p {
-		color: #000000; font-size: 1.1em;  margin: 0px auto 4px auto;
-	}
-input.radio
-	{	}
-
-
-/*Also used in FreeRecall trials*/
-textarea
-	{	margin-bottom: 10px; font-family: Arial, Helvetica, san-serif;	}
-
-
-
-/*Study, Test, and Copy Trial CSS*/
-.WordWrap
-	{	margin: 120px auto 0;
-		width: 100%; min-width: 700px; max-width: 1500px;	}
-	.WordWrap form
-		{	width: 47%; font-size: 1.5em;	}
-	.WordWrap .Textbox
-		{	width: 350px; font-size: 2.1em;	}
-	.WordWrap #FormSubmitButton
-		{	width: 350px; clear:left; margin: 5px auto 10px auto;	}
-.left
-	{	width: 48%;	float: left;
-		text-align: right; font-size: 4em;	}
-.leftcopy
-	{	line-height: 1em; float: left; padding-right: 0px; width: 48%; text-align:right; font-size: 4em;	}
-.leftfloat
-	{	float: left;	}
-.divider
-	{	width: 4%; float: left;
-		text-align: center; font-size: 4em;	}
-.dividercopy
-	{	line-height: 1em; float: left; padding-right: 0px; width: 4%; font-size: 4em; text-align:center;	}		
-.right
-	{	width: 48%; float: left;
-		text-align: left; font-size: 4em;	}
-
-
-#buttPos
-	{	width: 90px;
-		margin-left: auto; margin-right: auto;	}
-
-
-
-/* Hides button on computer timing trials*/
-.ComputerTiming #FormSubmitButton
-	{	display:none;	}
-	
-/* Trial Diagnostics css */
-#Diagnostics {
-	font-family: Consolas, monaco, monospace;
-	padding: 75px 20px 0px 20px;
-	clear: both;
-	font-size: .9em;
+.brand-bg {
+	background-color:#0055A6;
+}
+.secondary-bg {
+	background-color:#00A5E5;
+}
+.action-bg {
+	background-color:#00FF87;
 }
 
 
-.gray
-	{	color: #666666;	}
-
-
-.fbWord
-		{	width: 750px; margin: 15px auto 10px auto;	text-align:center;	font-size: 1.3em;}
-
-.center
-	{	text-align: center;	}
-.Feedback
-	{	font-size: 2em; margin: 100px auto auto 35%; font-size: 3em;	min-width: 450px; }
-	.Feedback .gray
-		{	font-size: .5em	}
-	.Feedback span
-		{	font-size: 1.3em; text-align: center; width:100%;}
-.FeedbackPic
-	{	font-size: 2em; margin: 25px auto auto auto; font-size: 3em;	min-width: 450px; }
-	.FeedbackPic input
-		{ margin: auto}
-	.FeedbackPic .gray
-		{	font-size: .75em; margin: auto auto 5px 50px;	}
-	.FeedbackPic form
-		{	text-align:center	}
-.pic
-	{	padding-bottom: 20px; margin-top: 20px;	}
-	.pic .Textbox
-		{	font-size: 2em;	}
-.picWord
-	{	text-align: center; font-size: 3em; margin-bottom: 10px;	}
 
 
 
-.Textbox
-	{	width: 200px; padding: 0 5px; font-size: 1.5em; font-family: Kreon, sans-serif;	}
+/*------------------------------------*\
+    $RESET
+\*------------------------------------*/
+/**
+ * 	Based on Eric Meyer's reset
+ *  http://meyerweb.com/eric/tools/css/reset/
+ *  v2.0 | 20110126
+ *  License: none (public domain)
+*/
 
-/*Passage trial CSS*/
-.passage
-	{	min-width: 400px; max-width: 800px; margin: 0 auto; font-family: Times New Roman, serif; font-size: .9em; line-height: 1.6em;	}
-	.passage p
-		{	padding-bottom: 10px;	}
-#end
-	{	margin: 0 auto; color: red; text-align: center; font-size: 2em;	}
-
-
-#SubmitButton
-	{	background: #566673; color: #fff; cursor: pointer; width: 80px; padding: 5px;  border-radius: 5px; margin: 10px auto 0;	}
-	#SubmitButton:hover
-		{	background: #3e5365;	}
-
-#FormSubmitButton
-	{	background: #566673; color: #fff; cursor: pointer; width: 80px; padding: 5px;  border-radius: 5px;	}
-	#FormSubmitButton:hover
-		{	background: #3e5365;	}
-
-
-
-/*Instructions.php css*/
-#centerContent
-	{	width: 66%; max-width: 800px; min-width: 450px;
-		margin-left: auto; margin-right: auto;	}
-.Instruct
-	{	margin: 35px auto 50px auto;	font-size: 1.1em;}
-.readcheck
-	{	background: #f2f1f1; padding: 20px; width: 50%; margin-top: 150px; border-radius: 10px;	}
-ol.list  li
-	{	width: 80%; margin-bottom: 15px; background: #ffffff; outline: dotted 2px black; padding: 5px;	}
-
-
-
-/*JOL trials and post-trial css*/
-#JOLpos
-	{	width: 650px; margin: 120px auto 0px auto;	}
-#jol
-	{	font-size: 2em; padding-top: 20px; max-width: 600px;	}
-#subpoint
-	{	padding-top: 15px; padding-bottom: 10px; color: #191935;max-width: 600px;	}
-
-
-
-/*stepout related css*/
-h1.stepout
-	{	width: 700px; margin:20px auto 20px;	}
-#StepoutInstructions
-	{	width: 550px; margin-top: 30px; margin-left: auto; margin-right: auto;	}
-#StepoutInstructions p
-	{	font-size: 1.1em;	}
-#Clock
-	{	float: right; padding: 4px 8px 8px 8px; font-size: 1.1em; background: #9cb0d4; color: #fbfdff; margin-right: 25px; margin-top: 15px;	}
-	#Clock span
-		{	margin-bottom: 20px;	}
-.Countdown
-	{	font-size: 2em; font-family: Orbitron, serif; text-align: center; margin-top: 5px; background: #ddeeff; color: #3c3c3c;	}
-#Tetris
-	{	margin-left: auto; margin-right: auto; width: 550px; height:650px;	}
-.cont
-	{	font-size: 2em; text-align: center;	}
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font:inherit;
+	vertical-align: baseline;
+	-webkit-box-sizing:border-box;
+	   -moz-box-sizing:border-box;
+	        box-sizing:border-box;
+}
+html {
+	font:18px/1.625 "Roboto", "Open Sans", Arial, Helvetica, sans-serif;
+	color:#333;
+}
+ol, ul {
+	list-style: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
 
 
 
-/*Final Question related css*/
-#FQlocation
-	{	width: 750px; margin: 50px auto auto auto; font-size: 1.1em; min-width: 350px;	}
-	#FQlocation li
-		{	margin-bottom: 5px; list-style: none;	}
-	#FQlocation p
-		{	margin-bottom: 5px; list-style: none;	}
-	#FQlocation ul
-		{	margin-top: 10px;	}
-	#FQlocation .Textbox
-		{	width: 75%;	}
-#FQ
-	{	font-size:1.1em; margin-bottom: 0px;	}
-	#FQ	p
-		{	color:#666666; padding-left: 3%;	}
-#Likert
-	{	max-width: 600px;	}
-	#Likert li
-		{	width:13%; float: left; padding-right: 1.2%;	}
-	#Likert input
-		{	padding-left: 4%; margin-right: auto;	}
-	#Likert p
-		{	text-align: left; margin-left: 9%; margin-top: 2px;	}
-	
 
 
-/*MCpic test trial css*/
-#ButtonArea
-	{	width: 800px;	margin: 20px auto auto auto;	}
-#ButtonArea span
-	{	width: 150px; font-size: 1.3em;
-		margin-right: 35px; margin-bottom: 20px; padding: 3px; background: #566673; color: #fff;
-		border-radius: 5px;	text-align: center; outline:groove 2px;
-		cursor: pointer;	float:left; 	}
-#ButtonArea span:hover
-	{	background: #3e5365;	}
+/*------------------------------------*\
+  	$SHARED
+\*------------------------------------*/
+/* general min/max */
+.main-contain, .cframe-content {
+	max-width:600px;
+	min-width:400px;
+}
+
+/* text alignment */
+.textcenter {
+	text-align:center;
+}
+.textright{
+	text-align:right;
+}
+
+/* Hidden objects */
+.precache,.precachenext,.hidden,#waiting,#loadingForm {
+	display:none!important;
+}
+.invisible {
+	visibility:hidden;
+}
+
+/* Shared colors */
+h1,h2,h3,h4,h5,h6,a {
+    color:#0055A6;	/* brand color */
+}
+a:hover,a:focus {
+	color:#00A5E5;	/* secondary color */
+}
+a:active {
+	color:#00FF87;	/* action color */
+}
 
 
 
-/*done.php css*/
-#donePage
-	{	width: 650px; margin-left: 50px; margin-top: 30px;	}
+
+
+/*------------------------------------*\
+  	$TYPE
+\*------------------------------------*/
+h1 {
+	font-size: 2em;
+	padding: 0 0 .2em 0;
+	margin-bottom: 0;
+}
+
+h2 {
+	font-size: 1.5em;
+	padding: .2em 0;
+}
+
+h3 {
+	font-size: 1.2em;
+	padding: .2em 0;
+}
+
+p {
+	margin: 1em 0;
+}
+
+a:hover, a:active {
+    outline: none;
+}
+
+strong, b {
+	font-weight: 700;
+}
+em, i {
+	font-style: italic;
+}
+
+
+/*------------------------------------*\
+  	$STRUCTURES
+\*------------------------------------*/
+.main-contain {
+	width: 550px;
+	margin: 0 auto;
+}
+
+/* 	dynamic vertical centering */
+.cframe-outer {
+	display:table;
+	position:absolute;
+	height:100%;
+	width:100%;
+}
+	.cframe-inner {
+		display:table-cell;
+		vertical-align:middle;
+	}
+		.cframe-content {
+			margin:0 auto;
+			width:66%;
+		}
+
+/* grids */
+.grid {
+	margin: 0 0 0 -18px;
+}
+.grid-gutterless {
+	margin-left: 0;
+}
+.grid-gutterless > .grid-item {
+	padding-left: 0;
+}
+.grid-item {
+	display: inline-block;
+	padding-left: 18px;
+	vertical-align: top;
+	width:100%;
+}
+.grid-item > div {
+	margin: 0 0 18px;
+}
+.grid-1-10 {
+	width: 10%;
+}
+.grid-1-8 {
+	width: 12.5%;
+}
+.grid-1-5, .grid-2-10 {
+	width: 20%;
+}
+.grid-1-4, .grid-2-8 {
+    width: 25%;
+}
+.grid-3-10 {
+	width: 30%;
+}
+.grid-1-3, .grid-2-6 {
+	width: 33.333%
+}
+.grid-3-8 {
+	width: 37.5%;
+}
+.grid-2-5, .grid-4-10 {
+	width: 40%;
+}
+.grid-1-2, .grid-2-4, .grid-3-6, .grid-4-8, .grid-5-10 {
+    width: 50%;
+}
+.grid-3-5, .grid-6-10 {
+	width: 60%;
+}
+.grid-5-8 {
+	width: 62.5%;
+}
+.grid-2-3, .grid-4-6 {
+	width: 66.666%;
+}
+.grid-7-10 {
+	width: 70%;
+}
+.grid-3-4, .grid-6-8 {
+    width: 75%;
+}
+.grid-4-5, .grid-8-10 {
+	width: 80%;
+}
+.grid-7-8 {
+	width: 87.5%;
+}
+.grid-9-10 {
+	width: 90%;
+}
+.grid-1-1 {
+	margin-left:0px;
+}
+
+/* buttons */
+.button {
+    font-family: inherit;
+    font-size: 100%;
+    text-align:center;
+    padding: .45em 1em;
+    color: #fff;
+    background-color: #0055A6;
+    text-decoration: none;
+    border-radius: 4px;
+    border:0;
+    cursor:pointer;
+}
+.button-hover,.button:hover,.button:focus {
+	background-color: #00A5E5;
+}
+.button:focus {
+    outline: 0;
+}
+.button-active,.button-active:hover,.button:active {
+	background-color:#00FF87;
+}
+
+/* forms */
+.collector-form {
+    margin: .5em 0;
+    display: block;
+}
+.collector-form input[type=radio]:focus,.collector-form input[type=checkbox]:focus {
+    outline: thin dotted #333;
+    outline: 1px auto #129FEA;
+}
+.collector-form input[type=checkbox],.collector-form input[type=radio] {
+    margin: .5em 7px .5em -25px;
+    display: inline-block;
+}
+.collector-form fieldset {
+    border: 1px solid silver;
+    margin: 0 2px;
+    padding: .35em .75em .625em .75em;
+}
+.collector-form label {
+    margin: .3em 0 .3em 25px;
+    display: block;
+}
+.collector-form div.field {
+    padding: .35em .75em .625em .75em;
+}
+.collector-form input,.collector-form select,.collector-form textarea {
+    font-family: "Open Sans", Arial, Helvetica, sans-serif;
+    font-size: 100%;
+    padding: .4em .6em;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 3px #ddd;
+    border-radius: 4px;
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+}
+.collector-form input:focus,.collector-form select:focus,.collector-form textarea:focus,
+.collector-form input:hover,.collector-form select:hover,.collector-form textarea:hover {
+    outline: 0;
+    border-color: #00A5E5;
+}
+.collector-form input[disabled],.collector-form select[disabled],.collector-form textarea[disabled],
+.collector-form input[disabled]:focus,.collector-form select[disabled]:focus,.collector-form textarea[disabled]:focus {
+	outline:0;
+	border:0;
+    cursor: not-allowed;
+    background-color: #eaeded;
+    color: #666;
+}
+.collector-form option {
+	padding-right: 10px;
+}
+.consent {
+	margin-top: 1em;
+}
+.consent-legend {
+	color:#000;
+}
+#slider {
+	margin-top:30px;
+}
+.amount {
+	margin-top: 10px;
+	text-align: center;
+}
+.amount input {
+	width: 80px;
+	text-align: center;
+}
+
+
+/*------------------------------------*\
+  	$INDEX
+\*------------------------------------*/
+.login-pos {
+	margin:0 auto;
+	text-align:center;
+}
+.login-pos:after {
+	content:' ';
+	margin: 1em;
+}
+
+
+
+
+
+/*------------------------------------*\
+  	$INSTRUCTIONS
+\*------------------------------------*/
+.readcheck {
+	display:none;
+	width: 60%;
+	margin: 3em auto 1em auto;
+	background: #00FF87;
+	padding: 1.5em;
+	border-radius: 5px;
+}
+.readcheck ol li {
+	width: 80%;
+	margin:1em auto;
+	background: #fff;
+	outline: solid 2px #00a5e5;
+	padding: 5px;
+	cursor:pointer;
+}
+.readcheck ol li:hover {
+	background: #00a5e5;
+}
+
+.alert-instructions {
+	display:none;
+	position:absolute;
+	width:100%;
+	top:0;
+	color:#fff;
+	text-align:center;
+}
+
+
+
+
+
+/*------------------------------------*\
+  	$TRIAL
+\*------------------------------------*/
+/* less obtrusive button for when you just want to advance */
+input[type="submit"].button-trial-advance {
+	font-size:20px;
+	margin:1.2em 0;
+	padding:.2em .5em;
+}
+
+/* study trial type */
+.study {
+	font-size:3em;
+}
+.study-left {
+	float:left;
+	width:48%;
+	text-align:right;
+}
+.study-divider {
+	float:left;
+	width:4%;
+	text-align:center;
+}
+.study-right {
+	float:left;
+	width:48%;
+	text-align:left;
+}
+
+/* copy trials */
+.collector-form .copybox {
+	font-family: "Roboto", "Open Sans", Arial, Helvetica, sans-serif;
+	font-size:100%;
+	color:#333;
+	padding:.15em 0;
+	margin:0 0 0 -3px;
+	width: 90%;
+	vertical-align:top;
+}
+
+/* MCpic, StudyPic, TestPic trials */
+.pic {
+	margin-bottom: 24px;
+}
+
+/* stepout pages */
+.stepout-clock {
+	position:fixed;
+	top: 20px;
+	right: 20px;
+	padding: 8px;
+	font-size: 1.1em;
+	color: #fff;
+	background-color: #0055A6;
+	text-align:center;
+}
+	.stepout-clock span {
+		margin-bottom: 20px;
+	}
+	.stepout-clock h3 {
+		color:#fff;
+	}
+
+.tetris-wrap {
+	width:550px;
+	margin:0 auto;
+}
+.tetris-controls {
+	margin: 0 auto 2em auto;
+	width: 400px;
+	border: 3px solid #00A5E5;
+}
+.tetris-wrap h3 {
+	padding:1em 0;
+}
+.tetris-controls p {
+	margin: 0 0 .2em 0;
+	text-align: left;
+}
+.tetris {
+	display:none;
+	margin: 50px 0;
+}
+
+/* format diagnostics */
+#showTimer {
+	margin-top:2em;
+}
+.diagnostics {
+	margin-top:2em;
+	font-family: Consolas, monaco, monospace;
+	clear: both;
+	font-size: .9em;
+}
+.diagnostics ul {
+	margin-bottom:1em;
+}
+.collapsibleTitle {
+	margin:1em 0;
+}
+.collapsibleTitle h3 {
+	color:#fff;
+}
+
+
+
+
+/*------------------------------------*\
+  	$FQS
+\*------------------------------------*/
+
+
+
+
+
+
+/*------------------------------------*\
+  	$NO-JS
+\*------------------------------------*/
+.nojs {
+  background:#fbe7a8;
+  max-width: 900px;
+  min-width: 500px;
+  margin-top: -100px;
+}
+.nojs img {
+    position:absolute;
+    float:left;
+    top:50%;
+    margin: -95px 0 0 15px;
+}
+.nojs .nojs-text {
+    margin-left: 90px;
+    padding: 30px;
+}
+
+
+
+
+
+/*------------------------------------*\
+  	$MISC
+\*------------------------------------*/
+
+
+
+
+
+/*------------------------------------*\
+    $MEDIA
+\*------------------------------------*/
+@media all and (max-width: 980px) {
+    .stepout-clock {
+        opacity: .5;
+        filter:Alpha(opacity=50);
+    }
+}
