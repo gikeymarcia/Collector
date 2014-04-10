@@ -170,6 +170,8 @@ var COLLECTOR = {
 				fsubmit = $("#FormSubmitButton");
 				keypress = false;
 
+
+
 			if ( !(isNaN(trialTime)) ) {
 				if (minTime == 0 || isNaN(minTime)) {
 					fsubmit.addClass("hidden");					// hide submit button
@@ -206,6 +208,7 @@ var COLLECTOR = {
 			if(trialTime != 0) {
 				$(".precache").addClass("DuringTrial");			// add class that does nothing (but lets us know what used to be hidden)
 				$(".precache").removeClass("precache");			// remove class that hides the content
+				$(':input:enabled:visible:first').focus();      // focus cursor on first input
 			}
 
 			// disable 'noEnter' inputs and gather RTs for keypresses
