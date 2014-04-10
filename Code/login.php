@@ -12,9 +12,6 @@
 	require $up.$expFiles.'Settings.php';					// experiment variables
 	
 	$_SESSION['Debug'] = $debugMode;
-	if ($_SESSION['Debug'] == FALSE) {
-		error_reporting(0);
-	}
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -31,12 +28,6 @@
 <body>
 	
 	<?php
-		#### Checking username is 3 characters or longer
-		if(strlen($_GET['Username']) < 3) {
-			echo '<h1>Error: Login username must be 3 characters or longer</h1>
-					<h2>Click <a href="'.$up.'index.php">here</a> to enter a valid username</h2>';
-			exit;
-		}
 		
 		echo '<h1>Please wait while we load the experiment...</h1>';
 		
@@ -56,6 +47,9 @@
 			$_SESSION['Debug'] = TRUE;
 			$username = trim( substr( $username, strlen($debugName) ) );
 		}
+		if ($_SESSION['Debug'] == FALSE) {
+			error_reporting(0);
+		}
 		$_SESSION['Username'] = $username;
 		$_SESSION['DataSubFolder'] = $_SESSION['Debug'] ? $debugF : $nonDebugF;
 		
@@ -63,7 +57,11 @@
 			$_SESSION['ID'] = isset($_GET['ID']) ? $_GET['ID'] : rand_string();
 		}
 		
-		$_SESSION['Session'] = trim($_GET['Session']);				// grab session# from URL
+		if( isset($_GET['Session']) ) {
+			$_SESSION['Session'] = trim($_GET['Session']);				// grab session# from URL
+		} else {
+			$_SESSION['Session'] = 0;
+		}
 		if( $_SESSION['Session'] < 1 ){								// if session is not set then set to 1
 			$_SESSION['Session'] = 1;
 		} else { $doDemographics = FALSE; }							// skip demographics for all but session1
@@ -75,11 +73,21 @@
 			include	'check.php';
 		}
 		
+		#### Checking username is 3 characters or longer
+		if(strlen($_GET['Username']) < 3 AND !$_SESSION['Debug'] ) {
+			echo '<h1>Error: Login username must be 3 characters or longer</h1>
+					<h2>Click <a href="'.$up.'index.php">here</a> to enter a valid username</h2>';
+			exit;
+		}
+		
 		
 		#### Code to automatically choose condition assignment
 		$Conditions	= GetFromFile($up.$expFiles.$conditionsFileName, FALSE);		// Loading conditions info
 		$logFile	= $up.$dataF.$countF.$loginCounterName;
 		if( $selectedCondition == 'Auto') {
+			if( !is_dir( $up.$dataF.$countF ) ) {
+				mkdir( $up.$dataF.$countF, 0777, TRUE );
+			}
 			
 			if(file_exists($logFile) ) {											// Read counter file & save value
 				$fileHandle	= fopen ($logFile, "r");
@@ -203,7 +211,7 @@
 						'ID' 						=> $_SESSION['ID'],
 						'Session' 					=> $fileNumber,
 						'Condition' => array(
-							'Condition Number' 		=> $_SESSION['Condition']['Condition Number'],
+							'Condition Number' 		=> $_SESSION['Condition']['Number'],
 							'Condition Notes' 		=> $_SESSION['Condition']['Condition Notes'],
 							'Condition Description' => $_SESSION['Condition']['Condition Description']
 						)
