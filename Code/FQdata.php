@@ -17,48 +17,29 @@
 	
 	
 	// capture data
-	$formData	= $_POST['formData'];
-	$RT			= $_POST['RT'];
+	$formData = isset($_POST['formData']) ? $_POST['formData'] : '';			// it wouldn't be set, if they left all checkboxes blank
 	
 	
-	//write header if file doesn't exist
-	$fileName = $up.$dataF.'FinalQuestionsData.txt';
-	if (is_file($fileName) == FALSE) {
-		$header = array(	'Username',
-							'FinalQuestions',
-							'Trial',
-							'Question',
-							'Type',
-							'RT',
-							'Response');
-	arrayToLine($header,$fileName);
-	}
+	$fileName = $up.$dataF.$_SESSION['DataSubFolder'].$extraDataF.$finalQuestionsDataFileName.$outExt;
 	
-	// writing each selection to a line of data (for checkbox trials where more than one selection can be made)
-	if(is_array($formData)) {
-		foreach ($formData as $checked) {
-			$data = array(	$_SESSION['Username'],
-							'FinalQuestions',
-							$readablePos,
-							$FQ['Question'],
-							$FQ['Type'],
-							$RT,
-							$checked);
-			arrayToLine($data,$fileName);
+	$data = array(	'Username' 	=> $_SESSION['Username'],
+					'ID' 		=> $_SESSION['ID'],
+					'Trial'		=> $readablePos,
+					'Question' 	=> $FQ['Question'],
+					'Type' 		=> $FQ['Type'],
+					'RT' 		=> $_POST['RT']
+					);
+	
+	if( is_array($_POST['formData']) ) {
+		foreach( $_POST['formData'] as $resp ) {
+			$data['Response'] = $resp;
+			arrayToLine( $data, $fileName );
 		}
+	} else {
+		$data['Response'] = $_POST['formData'];
+		arrayToLine( $data, $fileName );
 	}
 	
-	// writing form data to txt file (non-checkbox trials)
-	else {
-		$data = array(	$_SESSION['Username'],
-						'FinalQuestions',
-						$readablePos,
-						$FQ['Question'],
-						$FQ['Type'],
-						$RT,
-						$formData);
-		arrayToLine($data,$fileName);
-	}
 	
 	// advance counter before sending back to final questions
 	$pos++;

@@ -28,18 +28,6 @@
 	}
 
 
-	// if just coming from instructions then record that data into a file
-	if(@$_POST['PrevTrial'] == 'Instruction') {
-		$instructFile = $up.$dataF.'InstructionsData.txt';
-		if(is_file($instructFile) == FALSE) {
-			$instructHeader = array('Username','Timestamp', 'RT','Fails');
-			arrayToLine($instructHeader,$instructFile);
-		}
-		$instructData = array(	$_SESSION['Username'], date('c'), $_POST['RT'], $_POST['Fails'] );
-		arrayToLine($instructData,$instructFile);
-	}
-
-
 	// if there is another item coming up then set it as $nextTrial
 	if(array_key_exists($currentPos+1, $_SESSION['Trials'])) {
 		$nextTrial =& $_SESSION['Trials'][$currentPos + 1];
@@ -47,9 +35,17 @@
 
 
 	// if there has been a previous item then set it as $previousTrial
-	if($currentTrial > 1) {
+	if($currentPos > 1) {
 		$previousTrial =& $_SESSION['Trials'][$currentPos - 1];
-	} else { $previousTrial = FALSE;}
+	} else {
+		$previousTrial = FALSE;
+		arrayToLine(array( 'Username'=>$_SESSION['Username'], 'ID'=>$_SESSION['ID'], 'Date'=>date('c') )+$_POST, $up.$dataF.$_SESSION['DataSubFolder'].$extraDataF.$instructionsDataFileName.$outExt);
+	}
+	
+	// this only happens once, so that refreshing the page doesn't do anything, and reaching next.php is the only way to update the timestamp
+	if( !isset($_SESSION['Timestamp']) ) {
+		$_SESSION['Timestamp'] = microtime(TRUE);
+	}
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"

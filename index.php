@@ -23,8 +23,6 @@
 	require 'Code/fileLocations.php';					// sends file to the right place
 	require $codeF.'CustomFunctions.php';				// Loads all of my custom PHP functions
 	require	$expFiles.'Settings.php';					// experiment variables
-
-	$_SESSION['Debug'] = $debugMode;					// turns debug mode on and off
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -87,8 +85,8 @@
 
 	<?php
         #### Auto submit Username and Condition to login.php if $_SESSION['Debug']==TRUE
-		if($_SESSION['Debug'] == TRUE) {
-			echo '<meta http-equiv="refresh" content="1; url='.$codeF.'login.php?Username='.'Debug'.date('U').'&Condition=Auto&Debug=TRUE">';
+		if($debugMode == TRUE) {
+			echo '<meta http-equiv="refresh" content="1; url='.$codeF.'login.php?Username='.urlencode($debugName.' Debug '.date('U')).'&Condition=Auto&Debug=TRUE">';
 		}
 	?>
 

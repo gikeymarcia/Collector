@@ -15,7 +15,7 @@
  	require 'fileLocations.php';											// sends file to the right place
  	require 'CustomFunctions.php';
 	
-	$OutFiles	= scandir($up.$dataF);
+	$OutFiles	= scandir($up.$dataF.$nonDebugF.$outputF);
 	$finalQ		= array();													// will hold finalQuestions data
 	$instruct	= array();													// will hold instructions data
 	$status		= array();													// will hold status.txt data
@@ -24,26 +24,25 @@
 	// remove non-output files
 	$outTemp = array();
 	foreach ($OutFiles as $file) {
-		if(inString('Output_Session', $file)) {
+		if(inString('.txt', $file)) {
 			$outTemp[] = $file;
-		}
-		if(inString('FinalQuestionsData.txt', $file)) {
-			$finalQ = GetFromFile($up.$dataF.$file, FALSE);
-		}
-		if(inString('InstructionsData.txt', $file)) {
-			$instruct = GetFromFile($up.$dataF.$file, FALSE);
-		}
-		if(inString('Status.txt', $file)) {
-			$status = GetFromFile($up.$dataF.$file, FALSE);
 		}
 	}
 	$OutFiles = $outTemp;
 	Readable($OutFiles, count($OutFiles).' output files scanned');
 	
+	/*
+	$finalQ 	= GetFromFile($up.$dataF.$nonDebugF.$finalQuestionsDataFileName.$outExt, FALSE);
+	$begin 		= GetFromFile($up.$dataF.$nonDebugF.$statusBeginFileName.$outExt, FALSE);
+	$end 		= GetFromFile($up.$dataF.$nonDebugF.$statusEndFileName.$outExt, FALSE);
+	$demog 		= GetFromFile($up.$dataF.$nonDebugF.$demographicsFileName.$outExt, FALSE);
+	$instruct 	= GetFromFile($up.$dataF.$nonDebugF.$instructionsDataFileName.$outExt, FALSE);
+	*/
+	
 	#### Get all headers across all output files
 	$allHeaders = array();
 	foreach ($OutFiles as $file) {
-		$loc	= $up.$dataF.$file;
+		$loc	= $up.$dataF.$nonDebugF.$outputF.$file;
 		$handle = fopen($loc, 'r');
 		$row	= fgets($handle);
 		$pieces	= explode("\t",$row);
@@ -67,9 +66,9 @@
 	fwrite($handle, PHP_EOL);
 	
 	
-	foreach ($OutFiles as $oneSS) {										// for each output file
-		$temp = GetFromFile($up.$dataF.$oneSS, FALSE);
-		foreach ($temp as $trial) {										// for each trial
+	foreach ($OutFiles as $oneSS) {											// for each output file
+		$temp = GetFromFile($up.$dataF.$nonDebugF.$outputF.$oneSS, FALSE);
+		foreach ($temp as $trial) {											// for each trial
 			$thisLine = array();											// clear holder line
 			foreach ($allHeaders as $col) {									// for each unique header (across all output files)
 				if(!isset($trial[$col])) {									// if the column doesn't exist then set it to blank
