@@ -206,6 +206,7 @@ var COLLECTOR = {
 			if(trialTime != 0) {
 				$(".precache").addClass("DuringTrial");			// add class that does nothing (but lets us know what used to be hidden)
 				$(".precache").removeClass("precache");			// remove class that hides the content
+				$(':input:enabled:visible:first').focus();      // focus cursor on first input
 			}
 
 			// disable 'noEnter' inputs and gather RTs for keypresses
@@ -264,6 +265,11 @@ var COLLECTOR = {
 			    }
 			});
 		},
+
+        passage: function() {
+            // make sure trial is starting at the top of the page
+            $('body').scrollTop(0);
+        },
 
 		stepout: function() {
 			// get trial time from page and run timer
