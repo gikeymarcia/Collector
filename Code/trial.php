@@ -41,6 +41,11 @@
 		$previousTrial = FALSE;
 		arrayToLine(array( 'Username'=>$_SESSION['Username'], 'ID'=>$_SESSION['ID'], 'Date'=>date('c') )+$_POST, $up.$dataF.$_SESSION['DataSubFolder'].$extraDataF.$instructionsDataFileName.$outExt);
 	}
+	
+	// this only happens once, so that refreshing the page doesn't do anything, and reaching next.php is the only way to update the timestamp
+	if( !isset($_SESSION['Timestamp']) ) {
+		$_SESSION['Timestamp'] = microtime(TRUE);
+	}
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"

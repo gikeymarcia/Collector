@@ -25,12 +25,9 @@
 	
 	
 	#### Calculating time difference from current to last trial
-	if( isset($_SESSION['Timestamp']) ) {
-		$timeDif = date('U') - $_SESSION['Timestamp'];
-	} else {
-		$timeDif = '-';
-	}
-	$_SESSION['Timestamp'] = date('U');
+	$oldTime = $_SESSION['Timestamp'];
+	$_SESSION['Timestamp'] = microtime(TRUE);
+	$timeDif = $_SESSION['Timestamp'] - $oldTime;
 	
 	
 	#### Writing to data file

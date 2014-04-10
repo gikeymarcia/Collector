@@ -104,7 +104,7 @@
                     if($type == 'checkbox'): ?>
                         <?php foreach ($options as $choice): ?>
                         <label>
-                            <input type=checkbox name=formData value='<?php echo $choice["value"]; ?>' />
+                            <input type=checkbox name=formData[] value='<?php echo $choice["value"]; ?>' />
                             <?php echo $choice["text"]; ?>
                         </label>
                         <?php endforeach; ?>

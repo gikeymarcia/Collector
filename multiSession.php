@@ -10,8 +10,6 @@
     require 'Code/fileLocations.php';                   // sends file to the right place
     require $codeF.'CustomFunctions.php';               // Loads all of my custom PHP functions
     require $expFiles.'Settings.php';                   // experiment variables
-
-    $_SESSION['Debug'] = $debugMode;                    // turns debug mode on and off
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
