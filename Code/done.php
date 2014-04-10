@@ -53,6 +53,7 @@
             $message .= "<h3>Your verification code is: {$verification}</h3>";
         }
     } else {
+        $message = "<h2>Experiment will resume in 5 seconds.</h2>";
         $nextLink = 'http://'.$nextExperiment;
 		$username = $_SESSION['Debug'] ? $debugName.' '.$_SESSION['Username'] : $_SESSION['Username'];
 		echo '<meta http-equiv="refresh" content="5; url='.$nextLink.'Code/login.php?Username='.urlencode($username).'&Condition=Auto&ID='.$_SESSION['ID'].'">';
