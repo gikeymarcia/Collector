@@ -170,8 +170,6 @@ var COLLECTOR = {
 				fsubmit = $("#FormSubmitButton");
 				keypress = false;
 
-
-
 			if ( !(isNaN(trialTime)) ) {
 				if (minTime == 0 || isNaN(minTime)) {
 					fsubmit.addClass("hidden");					// hide submit button
@@ -267,6 +265,11 @@ var COLLECTOR = {
 			    }
 			});
 		},
+
+        passage: function() {
+            // make sure trial is starting at the top of the page
+            $('body').scrollTop(0);
+        },
 
 		stepout: function() {
 			// get trial time from page and run timer
