@@ -3,8 +3,8 @@
     A program for running experiments on the web
     Copyright 2012-2014 Mikey Garcia & Nate Kornell
  */
-    ini_set('auto_detect_line_endings', true);          // fixes problems reading files saved on mac
-    session_start();                                    // start the session at the top of each page
+    require 'CustomFunctions.php';                          // Load custom PHP functions
+    initiateCollector();
     require 'fileLocations.php';                        // sends file to the right place
     require $up.$expFiles.'Settings.php';               // experiment variables
 
@@ -21,7 +21,6 @@
             error_reporting(0);
         }
     }
-    require 'CustomFunctions.php';                        // Loads all of my custom PHP functions
 
     #### TO-DO ####
     $finalNotes = '';
@@ -69,27 +68,29 @@
     </div>
 
 <?php
-    $duration = time() - strtotime( $_SESSION['Start Time'] );
-    $durationFormatted = $duration;
-    $hours   = floor( $durationFormatted/3600 );
-    $minutes = floor( ($durationFormatted - $hours*3600)/60 );
-    $seconds = $durationFormatted - $hours*3600 - $minutes*60;
-    if( $hours   < 10 ) { $hours   = '0'.$hours;   }
-    if( $minutes < 10 ) { $minutes = '0'.$minutes; }
-    if( $seconds < 10 ) { $seconds = '0'.$seconds; }
-    $durationFormatted = $hours.':'.$minutes.':'.$seconds;
-    #### Record info about the person ending the experiment to status finish file
-    $data = array(
-                        'Username'              => $_SESSION['Username'],
-                        'ID'                    => $_SESSION['ID'],
-                        'Date'                  => date('c'),
-                        'Duration'              => $duration,
-                        'Duration_Formatted'    => $durationFormatted,
-                        'Session'               => $_SESSION['Session'],
-                        'Condition_Number'      => $_SESSION['Condition']['Number'],
-                        'Inclusion Notes'       => $finalNotes
-                     );
-    arrayToLine($data, $up.$dataF.$_SESSION['DataSubFolder'].$extraDataF.$statusEndFileName.$outExt);
+	if( isset( $_SESSION['finishedTrials'] ) ) {
+		$duration = time() - strtotime( $_SESSION['Start Time'] );
+		$durationFormatted = $duration;
+		$hours   = floor( $durationFormatted/3600 );
+		$minutes = floor( ($durationFormatted - $hours*3600)/60 );
+		$seconds = $durationFormatted - $hours*3600 - $minutes*60;
+		if( $hours   < 10 ) { $hours   = '0'.$hours;   }
+		if( $minutes < 10 ) { $minutes = '0'.$minutes; }
+		if( $seconds < 10 ) { $seconds = '0'.$seconds; }
+		$durationFormatted = $hours.':'.$minutes.':'.$seconds;
+		#### Record info about the person ending the experiment to status finish file
+		$data = array(
+							'Username'              => $_SESSION['Username'],
+							'ID'                    => $_SESSION['ID'],
+							'Date'                  => date('c'),
+							'Duration'              => $duration,
+							'Duration_Formatted'    => $durationFormatted,
+							'Session'               => $_SESSION['Session'],
+							'Condition_Number'      => $_SESSION['Condition']['Number'],
+							'Inclusion Notes'       => $finalNotes
+						 );
+		arrayToLine($data, $statusEndCompleteFileName);
+	}
     ########
 
     $_SESSION = array();                        // clear out all session info
