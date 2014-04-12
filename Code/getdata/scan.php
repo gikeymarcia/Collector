@@ -6,6 +6,8 @@
 	require $root.$code.'fileLocations.php';
 	require $root.$code.'CustomFunctions.php';
 	require 'getdataFunctions.php';
+	require $root.$expFiles.'Settings.php';					// experiment variables
+	if( !$allowGetData ) { exit; }
 	
 	
 	#### Column Prefixes ####

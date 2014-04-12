@@ -46,4 +46,7 @@
 	// done.php
 	$experimenterEmail = 'gikeymarcia@gmail.com';
 	
+	// getdata
+	$allowGetData = FALSE;						// set to `TRUE` to allow access to the getdata subfolder of the Code folder
+	
 ?>

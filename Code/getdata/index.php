@@ -3,7 +3,6 @@
 	A program for running experiments on the web
 	Copyright 2012-2014 Mikey Garcia & Nate Kornell
  */
-	$scanning = TRUE;
 	require 'scan.php';
 	
 	$experimentList = array();
