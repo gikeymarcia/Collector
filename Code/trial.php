@@ -13,12 +13,58 @@
 	// setting up easier to use and read aliases(shortcuts) of $_SESSION data
 	$condition		=& $_SESSION['Condition'];
 	$currentPos		=& $_SESSION['Position'];
+	$currentPost 	=& $_SESSION['PostNumber'];
 	$currentTrial	=& $_SESSION['Trials'][$currentPos];
 		$cue		=& $currentTrial['Stimuli']['Cue'];
 		$target		=& $currentTrial['Stimuli']['Target'];
 		$answer		=& $currentTrial['Stimuli']['Answer'];
 		$trialType	=  trim(strtolower($currentTrial['Procedure']['Trial Type']));
 		$item		=  trim(strtolower($currentTrial['Procedure']['Item']));
+	
+	if( $_POST !== array() ) {
+		if( $currentPos === 1 AND $currentPost === -1 ) {
+			// posting from instructions.php
+			$currentPost = 0;
+			arrayToLine(array( 'Username'=>$_SESSION['Username'], 'ID'=>$_SESSION['ID'], 'Date'=>date('c') )+$_POST, $up.$dataF.$_SESSION['DataSubFolder'].$extraDataF.$instructionsDataFileName.$outExt);
+			header('Location: trial.php');
+			exit;
+		} else {
+			if( $currentPost === 0 ) {
+				$trialType = trim(strtolower($currentTrial['Procedure']['Trial Type']));
+			} elseif( $currentPost === 1 AND isset( $currentTrial['Procedure']['Post Trial'] ) ) {
+				$trialType = trim(strtolower($currentTrial['Procedure']['Post Trial']));
+			} else {
+				$trialType = trim(strtolower($currentTrial['Procedure'][ 'Post Trial '.$currentPost ]));
+			}
+			if( $currentPost === 0 ) {
+				$keyMod = '';
+			} else {
+				$keyMod = 'post'.$currentPost.'_';
+			}
+			require $_SESSION['Trial Types'][$trialType]['scoring'];
+			#### merging $data into $currentTrial['Response]
+			$currentTrial['Response'] = placeData($data, $currentTrial['Response'], $keyMod);
+			++$currentPost;
+			
+			if( $currentPost === 1 AND isset( $currentTrial['Procedure']['Post Trial'] ) ) {
+				$trialType = trim(strtolower($currentTrial['Procedure']['Post Trial']));
+			} elseif( isset( $currentTrial['Procedure'][ 'Post Trial '.$currentPost ] ) ) {
+				$trialType = trim(strtolower($currentTrial['Procedure'][ 'Post Trial '.$currentPost ]));
+			} else {
+				$trialType = '';
+			}
+			
+			if( isset( $_SESSION['Trial Types'][$trialType] ) ) {
+				$next = 'trial.php';
+			} else {
+				$next = 'next.php';
+			}
+			
+			header('Location: '.$next);
+			exit;
+		}
+	}
+	
 
 
 	// if we hit a *newfile* then the experiment is over (this means that we don't ask FinalQuestions until the last session of the experiment)
@@ -26,21 +72,20 @@
 		header("Location: done.php");
 		exit;
 	}
+	
+	if( $currentPost === 0 ) {
+		$trialType = trim(strtolower($currentTrial['Procedure']['Trial Type']));
+	} elseif( $currentPost === 1 AND isset( $currentTrial['Procedure']['Post Trial'] ) ) {
+		$trialType = trim(strtolower($currentTrial['Procedure']['Post Trial']));
+	} elseif( isset( $currentTrial['Procedure'][ 'Trial Type '.$currentPost ] ) ) {
+		$trialType = trim(strtolower($currentTrial['Procedure'][ 'Post Trial '.$currentPost ]));
+	}
 
 
 	// if there is another item coming up then set it as $nextTrial
 	if(array_key_exists($currentPos+1, $_SESSION['Trials'])) {
 		$nextTrial =& $_SESSION['Trials'][$currentPos + 1];
 	} else { $nextTrial = FALSE;}
-
-
-	// if there has been a previous item then set it as $previousTrial
-	if($currentPos > 1) {
-		$previousTrial =& $_SESSION['Trials'][$currentPos - 1];
-	} else {
-		$previousTrial = FALSE;
-		arrayToLine(array( 'Username'=>$_SESSION['Username'], 'ID'=>$_SESSION['ID'], 'Date'=>date('c') )+$_POST, $up.$dataF.$_SESSION['DataSubFolder'].$extraDataF.$instructionsDataFileName.$outExt);
-	}
 	
 	// this only happens once, so that refreshing the page doesn't do anything, and reaching next.php is the only way to update the timestamp
 	if( !isset($_SESSION['Timestamp']) ) {
@@ -68,7 +113,7 @@
 
 	#### Presenting different trial types ####
 	$expFiles  = $up.$expFiles;							// setting relative path to experiments folder for trials launched from this page
-    $postTo    = 'postTrial.php';
+    $postTo    = 'trial.php';
 	$trialFail = FALSE;									// this will be used to show diagnostic information when a specific trial isn't working
 	$trialFile = FileExists($trialF.$trialType);
 ?>
@@ -83,7 +128,7 @@
                    	include $trialFile;
                 else: ?>
             		<h2>Could not find the following trial type: <strong><?php echo $trialType; ?></strong></h2>
-            		<p>Check your procedure file to make sure everything is in order. All information about this trial is dispalyed below.</p>';
+            		<p>Check your procedure file to make sure everything is in order. All information about this trial is displayed below.</p>
 
             		<!-- default trial is always user timing so you can click 'Done' and progress through the experiment -->
             		<div class=precache>

@@ -3,8 +3,8 @@
 	A program for running experiments on the web
 	Copyright 2012-2014 Mikey Garcia & Nate Kornell
  */
+	if( $findingKeys ) { return array('RT', 'Response', 'Accuracy', 'RTkey', 'RTlast', 'strictAcc', 'lenientAcc'); }
  	$data = $_POST;
-	$keysNeeded = array('RT', 'Response1', 'RTkey', 'RTlast', 'strictAcc', 'lenientAcc');
 	/*
 	 * Q: Why are we using $data instead of setting values directly into $_SESSION['Trials']?
 	 * A: $data holds all scoring information and once scoring is complete $data is merged into $_SESSION['Trials'][$currentPos]['Response']
@@ -17,7 +17,7 @@
 	if(isset($_POST['Response'])) {											// if there is a response given then do scoring
 		
 		#### Saving values specific to user input trials
-		@$data['Response1']	= $_POST['Response'];
+		@$data['Response']	= $_POST['Response'];
 		@$data['RTkey']		= $_POST['RTkey'];
 		@$data['RTlast']	= $_POST['RTlast'];
 		

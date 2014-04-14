@@ -362,47 +362,68 @@
 		echo "<p>{$input}</p>";
 	}
 
-	function FileExists( $filePath, $altExtensions = TRUE ) {
-		//if( is_file($filePath) ) { return $filePath; }
-		$path_parts = pathinfo($filePath);
-		$returnPath = './';
-		$fileDirs = explode( '/', $path_parts['dirname'] );
-		if( $fileDirs === array( '.' ) ) { $fileDirs = array(); }
-		$fileName = $path_parts['basename'];
-		foreach( $fileDirs as $dir ) {
-			if( is_dir( $returnPath.$dir.'/' ) ) {
-				$returnPath .= $dir.'/';
-				continue;
-			} else {
-				$scan = scandir($returnPath);
-				foreach( $scan as $entry ) {
-					if( strtolower($entry) === strtolower($dir) ) {
-						$returnPath .= $entry.'/';
-						continue 2;
-					}
-				}
-				return FALSE;
+	
+	function FileExists( $filePath, $altExtensions = TRUE, $findDirectories = TRUE ) {
+		if( is_file( $filePath ) ) { return $filePath; }
+		if( is_dir( $filePath ) AND $findDirectories ) {
+			if( substr( $filePath, -1 ) === '/' ) {
+				$filePath = substr( $filePath, 0, -1 );
 			}
+			return $filePath;
 		}
-		if( is_file($returnPath.$fileName) ) { return substr($returnPath,2).$fileName; }
-		$scan = scandir($returnPath);
+		if( $filePath === '' ) { return FALSE; }
+		$path_parts = pathinfo($filePath);
+		$fileName = $path_parts['basename'];
+		if( is_dir( $path_parts['dirname'] ) ) {
+			$dir = $path_parts['dirname'];
+			$pre = ( $dir === '.' AND $filePath[0] !== '.' ) ? 2 : 0;
+		} else {
+			$dirs = explode( '/', $path_parts['dirname'] );
+			if( is_dir( $dirs[0] ) ) {
+				$dir = array_shift($dirs);
+				$pre = 0;
+			} else {
+				$dir = '.';
+				$pre = 2;
+			}
+			foreach( $dirs as $dirPart ) {
+				if( is_dir( $dir.'/'.$dirPart ) ) {
+					$dir .= '/'.$dirPart;
+					continue;
+				} else {
+					$scan = scandir($dir);
+					foreach( $scan as $entry ) {
+						if( strtolower($entry) === strtolower($dirPart) ) {
+							$dir .= '/'.$entry;
+							continue 2;
+						}
+					}
+					return FALSE;
+				}
+			}
+			if( is_file($dir.'/'.$fileName) ) { return substr( $dir.'/'.$fileName, $pre ); }
+			if( is_dir($dir.'/'.$fileName) AND $findDirectories ) { return substr( $dir.'/'.$fileName, $pre ); }
+		}
+		$scan = scandir($dir);
 		$lowerFile = strtolower($fileName);
 		foreach( $scan as $entry ) {
 			if( strtolower($entry) === $lowerFile ) {
-				return substr($returnPath,2).$entry;
+				if( is_dir( $dir.'/'.$entry ) AND !$findDirectories ) { continue; }
+				return substr( $dir.'/'.$entry, $pre );
 			}
 		}
 		if( $altExtensions ) {
 			$baseFileName = strtolower($path_parts['filename']);
 			foreach( $scan as $entry ) {
-				if( !is_file( $returnPath.$entry ) ) { continue; }
+				if( $entry === '.' OR $entry === '..' ) { continue; }
+				if( is_dir($dir.'/'.$entry) AND !$findDirectories ) { continue; }
 				if( strpos($entry, '.') === FALSE ) {
 					$entryName = strtolower($entry);
 				} else {
 					$entryName = strtolower(substr($entry, 0, strpos($entry, '.') ));
 				}
 				if( $entryName === $baseFileName ) {
-					return substr($returnPath,2).$entry;
+					return substr( $dir.'/'.$entry, $pre );
 				}
 			}
 		}
