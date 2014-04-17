@@ -10,7 +10,9 @@
 	$nextExperiment		= FALSE;				// to link use format "www.cogfog.com/Generic/" do not forget the www and the ending "/"
 
  	// debugging functionality
-	$debugName = 'tes1';
+	$checkAllFiles = TRUE;						// if `TRUE`, all cues in all stimuli files will be checked for existence before the experiment
+	$checkCurrentFiles = FALSE;					// if `TRUE`, with each login, the cues for just that session will be checked for file existence
+	$debugName = '';							// create a password here to enable the use of the debug name when logging in
  	$debugMode = FALSE;							// Can be `TRUE` or `FALSE` (without ticks)
 	$debugTime = 1;								// trial length (in seconds) when in debug mode
 	$trialDiagnostics	= FALSE;				// show trial diagnostics? `TRUE` or `FALSE`
