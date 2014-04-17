@@ -43,7 +43,7 @@
 		
 		#### Grabbing submitted info
 		$username = trim($_GET['Username']);						// grab Username from URL
-		if( substr( $username, 0, strlen($debugName) ) === $debugName ) {
+		if( strlen($debugName) > 0 AND substr( $username, 0, strlen($debugName) ) === $debugName ) {
 			$_SESSION['Debug'] = TRUE;
 			$username = trim( substr( $username, strlen($debugName) ) );
 		}
@@ -161,6 +161,48 @@
 		if($_SESSION['Session'] == 1) {
 			// load and block shuffle stimuli for this condition
 			$stimuli = GetFromFile($up.$expFiles.$_SESSION['Condition']['Stimuli']);
+		
+			// setting defaults again here, so that if people downloaded the new Code/ folder without updating their settings, we can proceed as normal
+			if( !isset($checkAllFiles) ) {
+				$checkAllFiles = TRUE;
+			}
+			if( !isset($checkCurrentFiles) ) {
+				$checkCurrentFiles = FALSE;
+			}
+			// check the stimuli for correct image/audio file names, before the shuffle, so that we can tell people which rows the errors are on.
+			if( $checkAllFiles OR $checkCurrentFiles ) {
+				$stimuliFiles = array();
+				if( $checkAllFiles ) {
+					$stimPath = $up.$expFiles.'Stimuli/';
+					$scanStimFiles = scandir( $stimPath );
+					foreach( $scanStimFiles as $fileName ) {
+						if( is_file($stimPath.$fileName) ) {
+							$stimuliFiles[] = $stimPath.$fileName;
+						}
+					}
+				} else {
+					$stimuliFiles[] = $up.$expFiles.$_SESSION['Condition']['Stimuli'];
+				}
+				foreach( $stimuliFiles as $fileName ) {
+					if( $fileName === $up.$expFiles.$_SESSION['Condition']['Stimuli'] ) {
+						$temp = $stimuli;
+					} else {
+						$temp = GetFromFile( $fileName );
+					}
+					foreach( $temp as $i => $row ) {
+						if( $i < 2 ) { continue; }
+						if( show($row['Cue']) !== $row['Cue'] ) {
+							// show() detects a file extension like .png, and will use FileExists to check that it exists
+							// but it will always return a string, for cases where you are showing regular text
+							// using FileExists, we can see if a cue detected as an image by show() is a file that actually exists
+							if( FileExists( '../Experiment/'.$row['Cue'] ) === FALSE ) {
+								$errors['Count']++;
+								$errors['Details'][] = 'Image or audio file "../Experiment/'.$row['Cue'].'" not found for row '.$i.' in Stimuli File "'.basename($fileName).'".';
+							}
+						}
+					}
+				}
+			}
 			$stimuli = BlockShuffle($stimuli, 'Shuffle');
 			
 			// Readable($stimuli,'shuffled stimuli *fingers crossed*');							// uncomment this line to see what your shuffled stimuli file looks like
@@ -242,7 +284,7 @@
 			$openSession			= fopen($sessionFile, 'r');
 			$headers				= fgetcsv($openSession,0,"\t");
 			foreach( $headers as &$head ) {
-				$head = explode( '*', $heaed );								// Response*RT becomes array( 0 => 'Response', 1 => 'RT' )
+				$head = explode( '*', $head );								// Response*RT becomes array( 0 => 'Response', 1 => 'RT' )
 			}
 			unset( $head );
 			
@@ -259,7 +301,6 @@
 		}
 		// readable($header1,'header top');																#### DEBUG ####
 		// readable($header2,'header 2nd');																#### DEBUG ####
-		
 		
 		#### Output errors & Stop progression
 		if ($errors['Count'] > 0 AND $_SESSION['Session'] == 1 ) {										// if there is an error (only stops for session 1 errors)
