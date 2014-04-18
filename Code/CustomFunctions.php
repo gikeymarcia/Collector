@@ -276,7 +276,13 @@
 
 	#### add html tags for images and audio files but do nothing to everything else
 	function show($string){
-		$stringLower	= strtolower($string);					// make lowercase version of input
+		if(!inString('www.', $string)) {								// navigate path to Experiment folder (unless linking to external image)
+			$fileName = '../Experiment/'.$string;
+			if( FileExists($fileName) ) {
+				$fileName = FileExists($fileName);
+			}
+		}
+		$stringLower	= strtolower($fileName);					// make lowercase version of input
 		$findJPG		= strpos($stringLower, '.jpg');			// look for file extensions in the input
 		$findGIF		= strpos($stringLower, '.gif');
 		$findPNG		= strpos($stringLower, '.png');
@@ -287,17 +293,11 @@
 
 		// if I found an image file extension, add html image tags
 		if( $findGIF == TRUE || $findJPG == TRUE || $findPNG == TRUE){
-			if(!inString('www.', $string)) {								// navigate path to Experiment folder (unless linking to external image)
-				$string = '../Experiment/'.$string;
-			}
-			$string = '<img src="'.$string.'">';
+			$string = '<img src="'.$fileName.'">';
 		}
 		// if I found an audio file extension, add pre-cache code
 		elseif ($findMP3 == TRUE || $findOGG == TRUE || $findWAV == TRUE) {
-			if(!inString('www.', $string)) {							// navigate path to Experiment folder (unless linking to external image)
-				$string = '../Experiment/'.$string;
-			}
-			$string = '<source src="'.$string.'"/>';
+			$string = '<source src="'.$fileName.'"/>';
 		}
 		else {
 			// leave input as-is if no audio or image extensions are found
