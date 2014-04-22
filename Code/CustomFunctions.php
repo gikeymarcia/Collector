@@ -195,7 +195,7 @@
 	function initiateCollector() {
 		ini_set('auto_detect_line_endings', true);				// fixes problems reading files saved on mac
 		session_start();										// start the session at the top of each page
-		if ($_SESSION['Debug'] == FALSE) {						// disable error reporting during debug
+		if ( !isset($_SESSION['Debug']) OR $_SESSION['Debug'] == FALSE) {		// disable error reporting during debug
 			error_reporting(0);
 		}
 	}

@@ -68,4 +68,18 @@
 	$outputFileName 	= 'Output_Session$Session_$Username_$ID';
 	$experimentFileName = '$Username_Session$Session_Experiment';
 	
+	if( isset( $_SESSION['Debug'] ) AND $_SESSION['Debug'] === TRUE ) {
+		$dataSubFolder = $debugF;
+	} else {
+		$dataSubFolder = $nonDebugF;
+	}
+	
+	$path = $up.$dataF.$dataSubFolder.$extraDataF;
+	
+	$demoPath 		 = $path.$demographicsFileName.$outExt;
+	$statusBeginPath = $path.$statusBeginFileName.$outExt;
+	$statusEndPath 	 = $path.$statusEndFileName.$outExt;
+	$fqDataPath 	 = $path.$finalQuestionsDataFileName.$outExt;
+	$instructPath 	 = $path.$instructionsDataFileName.$outExt;
+	
 ?>

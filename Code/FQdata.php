@@ -4,8 +4,8 @@
     Copyright 2012-2014 Mikey Garcia & Nate Kornell
  */
     require 'CustomFunctions.php';                      // Load custom PHP functions
-    require 'fileLocations.php';                        // sends file to the right place
     initiateCollector();
+    require 'fileLocations.php';                        // sends file to the right place
 
 
     // setting up aliases for later use
@@ -19,8 +19,6 @@
     // capture data
     $formData = isset($_POST['formData']) ? $_POST['formData'] : '';            // it wouldn't be set, if they left all checkboxes blank
 
-
-    $fileName = $up.$dataF.$_SESSION['DataSubFolder'].$extraDataF.$finalQuestionsDataFileName.$outExt;
     
     $data = array(  'Username'  =>  $_SESSION['Username'],
                     'ID'        =>  $_SESSION['ID'],
@@ -30,14 +28,14 @@
                     'RT'        =>  $_POST['RT']
                   );
 
-    if( is_array($_POST['formData']) ) {
-        foreach( $_POST['formData'] as $resp ) {
+    if( is_array($formData) ) {
+        foreach( $formData as $resp ) {
             $data['Response'] = $resp;
-            arrayToLine( $data, $fileName );
+            arrayToLine( $data, $fqDataPath );
         }
     } else {
-        $data['Response'] = $_POST['formData'];
-        arrayToLine( $data, $fileName );
+        $data['Response'] = $formData;
+        arrayToLine( $data, $fqDataPath );
     }
 
 
