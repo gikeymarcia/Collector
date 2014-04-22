@@ -340,7 +340,7 @@
 							'IP' 					=> $_SERVER["REMOTE_ADDR"],
 							'Inclusion Notes' 		=> 'N/A'
 						 );
-		arrayToLine($UserData, $statusBeginCompleteFileName);
+		arrayToLine($UserData, $statusBeginPath);
 		###########################################################################
 		
 		

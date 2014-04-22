@@ -89,7 +89,7 @@
 							'Condition_Number'      => $_SESSION['Condition']['Number'],
 							'Inclusion Notes'       => $finalNotes
 						 );
-		arrayToLine($data, $statusEndCompleteFileName);
+		arrayToLine($data, $statusEndPath);
 	}
     ########
 

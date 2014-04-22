@@ -31,11 +31,11 @@
     if( is_array($formData) ) {
         foreach( $formData as $resp ) {
             $data['Response'] = $resp;
-            arrayToLine( $data, $finalQuestionsDataCompleteFileName );
+            arrayToLine( $data, $fqDataPath );
         }
     } else {
         $data['Response'] = $formData;
-        arrayToLine( $data, $finalQuestionsDataCompleteFileName );
+        arrayToLine( $data, $fqDataPath );
     }
 
 

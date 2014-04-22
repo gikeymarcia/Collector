@@ -45,7 +45,7 @@
 			,'Date' 	=> date('c') 
 		);
 		$data += $_POST;
-		arrayToLine( $data, $instructionsDataCompleteFileName);
+		arrayToLine( $data, $instructPath);
 	}
 	
 	// this only happens once, so that refreshing the page doesn't do anything, and reaching next.php is the only way to update the timestamp

@@ -9,7 +9,7 @@
 
     $data = array( 'Username' => $_SESSION['Username'], 'ID' => $_SESSION['ID'] ) + $_POST;
     // write user demographics data to demographics file
-    arrayToLine($data, $demographicsCompleteFileName);
+    arrayToLine($data, $demoPath);
     
     header("Location: instructions.php");
     exit;

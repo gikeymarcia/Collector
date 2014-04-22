@@ -76,10 +76,10 @@
 	
 	$path = $up.$dataF.$dataSubFolder.$extraDataF;
 	
-	$demographicsCompleteFileName 		= $path.$demographicsFileName.$outExt;
-	$statusBeginCompleteFileName 		= $path.$statusBeginFileName.$outExt;
-	$statusEndCompleteFileName 			= $path.$statusEndFileName.$outExt;
-	$finalQuestionsDataCompleteFileName = $path.$finalQuestionsDataFileName.$outExt;
-	$instructionsDataCompleteFileName 	= $path.$instructionsDataFileName.$outExt;
+	$demoPath 		 = $path.$demographicsFileName.$outExt;
+	$statusBeginPath = $path.$statusBeginFileName.$outExt;
+	$statusEndPath 	 = $path.$statusEndFileName.$outExt;
+	$fqDataPath 	 = $path.$finalQuestionsDataFileName.$outExt;
+	$instructPath 	 = $path.$instructionsDataFileName.$outExt;
 	
 ?>
