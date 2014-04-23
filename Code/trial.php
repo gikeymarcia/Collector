@@ -4,10 +4,10 @@
 	Copyright 2012-2014 Mikey Garcia & Nate Kornell
  */
 
+    require 'CustomFunctions.php';                          // Load custom PHP functions
+    initiateCollector();
 	require 'fileLocations.php';			// sends file to the right place
 	require $up.$expFiles.'Settings.php';	// experiment variables
-	require 'CustomFunctions.php';			// Loads all of my custom PHP functions
-	initiateCollector();
 
 
 	// setting up easier to use and read aliases(shortcuts) of $_SESSION data
@@ -25,7 +25,13 @@
 		if( $currentPos === 1 AND $currentPost === -1 ) {
 			// posting from instructions.php
 			$currentPost = 0;
-			arrayToLine(array( 'Username'=>$_SESSION['Username'], 'ID'=>$_SESSION['ID'], 'Date'=>date('c') )+$_POST, $up.$dataF.$_SESSION['DataSubFolder'].$extraDataF.$instructionsDataFileName.$outExt);
+			$data = array(
+				 'Username' => $_SESSION['Username']
+				,'ID' 		=> $_SESSION['ID']
+				,'Date' 	=> date('c') 
+			);
+			$data += $_POST;
+			arrayToLine( $data, $instructPath );
 			header('Location: trial.php');
 			exit;
 		} else {
@@ -87,6 +93,13 @@
 		$nextTrial =& $_SESSION['Trials'][$currentPos + 1];
 	} else { $nextTrial = FALSE;}
 	
+		$data = array( 
+			 'Username' => $_SESSION['Username']
+			,'ID' 		=> $_SESSION['ID']
+			,'Date' 	=> date('c') 
+		);
+		$data += $_POST;
+		arrayToLine( $data, $instructPath);
 	// this only happens once, so that refreshing the page doesn't do anything, and reaching next.php is the only way to update the timestamp
 	if( !isset($_SESSION['Timestamp']) ) {
 		$_SESSION['Timestamp'] = microtime(TRUE);

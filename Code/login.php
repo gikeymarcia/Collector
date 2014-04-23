@@ -3,14 +3,12 @@
 	A program for running experiments on the web
 	Copyright 2012-2014 Mikey Garcia & Nate Kornell
  */
-	ini_set('auto_detect_line_endings', true);				// fixes problems reading files saved on mac
-	session_start();										// Start the session at the top of every page
-	$_SESSION = array();									// reset session so it doesn't contain any information from a previous login attempt
-	
-	require 'CustomFunctions.php';							// Loads all of my custom PHP functions
+    require 'CustomFunctions.php';                          // Load custom PHP functions
+    initiateCollector();
 	require 'fileLocations.php';							// sends file to the right place
 	require $up.$expFiles.'Settings.php';					// experiment variables
 	
+	$_SESSION = array();									// reset session so it doesn't contain any information from a previous login attempt
 	$_SESSION['Debug'] = $debugMode;
 ?>
 
@@ -42,20 +40,25 @@
 		
 		
 		#### Grabbing submitted info
-		$username = trim($_GET['Username']);						// grab Username from URL
-		if( strlen($debugName) > 0 AND substr( $username, 0, strlen($debugName) ) === $debugName ) {
-			$_SESSION['Debug'] = TRUE;
-			$username = trim( substr( $username, strlen($debugName) ) );
-		}
-		if ($_SESSION['Debug'] == FALSE) {
-			error_reporting(0);
-		}
-		$_SESSION['Username'] = $username;
-		$_SESSION['DataSubFolder'] = $_SESSION['Debug'] ? $debugF : $nonDebugF;
 		
 		if( !isset( $_SESSION['ID'] ) ) {
 			$_SESSION['ID'] = isset($_GET['ID']) ? $_GET['ID'] : rand_string();
 		}
+		
+		$username = trim($_GET['Username']);						// grab Username from URL
+		if( strlen($debugName) > 0 AND substr( $username, 0, strlen($debugName) ) === $debugName ) {
+			$_SESSION['Debug'] = TRUE;
+			$username = trim( substr( $username, strlen($debugName) ) );
+			if( $username === '' ) { $username = $_SESSION['ID']; }
+		}
+		if ($_SESSION['Debug'] == FALSE) {
+			error_reporting(0);
+		} else {
+			$dataSubFolder = $debugF;
+			$path = $up.$dataF.$dataSubFolder.$extraDataF;
+			$statusBeginCompleteFileName = $path.$statusBeginFileName.$outExt;
+		}
+		$_SESSION['Username'] = $username;
 		
 		if( isset($_GET['Session']) ) {
 			$_SESSION['Session'] = trim($_GET['Session']);				// grab session# from URL
@@ -326,7 +329,7 @@
 							'Condition Description' => $_SESSION['Condition']['Condition Description']
 						)
 					);
-					$sessionFile = $up.$dataF.$_SESSION['DataSubFolder'].$expF.ComputeString( $experimentFileName, $temp ).$outExt;
+					$sessionFile = $up.$dataF.$dataSubFolder.$expF.ComputeString( $experimentFileName, $temp ).$outExt;
 					continue;
 				}
 				
@@ -343,7 +346,7 @@
 		else {
 			// Load headers from correct stimuli files
 			$fileNumber				= $_SESSION['Session'];
-			$sessionFile 			= $up.$dataF.$_SESSION['DataSubFolder'].$expF.ComputeString( $experimentFileName ).$outExt;
+			$sessionFile 			= $up.$dataF.$dataSubFolder.$expF.ComputeString( $experimentFileName ).$outExt;
 			#### ERROR Checking if the session file doesn't exist ####
 			if (file_exists($sessionFile) == FALSE) {
 				echo "<br/><br/>Could not find your session {$_SESSION['Session']} file at {$sessionFile}";
@@ -386,7 +389,7 @@
 		
 		
 		$outputFile = ComputeString($outputFileName).$outExt;
-		$_SESSION['Output File'] = $up.$dataF.$_SESSION['DataSubFolder'].$outputF.$outputFile;
+		$_SESSION['Output File'] = $up.$dataF.$dataSubFolder.$outputF.$outputFile;
 		$_SESSION['Start Time'] = date('c');
 		
 		#### Record info about the person starting the experiment to the status start file
@@ -405,7 +408,7 @@
 							'IP' 					=> $_SERVER["REMOTE_ADDR"],
 							'Inclusion Notes' 		=> 'N/A'
 						 );
-		arrayToLine($UserData, $up.$dataF.$_SESSION['DataSubFolder'].$extraDataF.$statusBeginFileName.$outExt);
+		arrayToLine($UserData, $statusBeginPath);
 		###########################################################################
 		
 		
