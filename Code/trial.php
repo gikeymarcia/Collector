@@ -21,9 +21,18 @@
 		$trialType	=  trim(strtolower($currentTrial['Procedure']['Trial Type']));
 		$item		=  trim(strtolower($currentTrial['Procedure']['Item']));
 	
+	// Whenever Trial.php finds $_POST data, it will try to store that data
+	// immediately, rather than simply holding it through the trial
+	//
+	// This is done by either storing the data in $currentTrial['Response'],
+	// or by redirecting to next.php, where the data is actually recorded
+	// into a file.
+	//
+	// Data from instructions.php is detected by 
 	if( $_POST !== array() ) {
 		if( $currentPos === 1 AND $currentPost === -1 ) {
 			// posting from instructions.php
+			// $currentPost was set to -1 at login.php, but it will only ever be set to 0 in the future, so this only happens at the beginning
 			$currentPost = 0;
 			$data = array(
 				 'Username' => $_SESSION['Username']
@@ -35,13 +44,28 @@
 			header('Location: trial.php');
 			exit;
 		} else {
+			// First, we find the trial type that was just completed.
+			//
+			// If we are on Post 0, that means that its the first trial of 
+			// that procedure row, which would be in the "Trial Type" column.
+			//
+			// Otherwise, we are in one of the post trials.  For the first post
+			// trial, either "Post Trial" or "Post Trial 1" is acceptable,
+			// so we search for both names.
+			//
+			// For additional post trials, the column should always contain the
+			// number, like "Post Trial 2".
+			
+			$procedure = $currentTrial['Procedure'];
+			
 			if( $currentPost === 0 ) {
-				$trialType = trim(strtolower($currentTrial['Procedure']['Trial Type']));
-			} elseif( $currentPost === 1 AND isset( $currentTrial['Procedure']['Post Trial'] ) ) {
-				$trialType = trim(strtolower($currentTrial['Procedure']['Post Trial']));
+				$trialType = $procedure['Trial Type'];
+			} elseif( $currentPost === 1 AND isset( $procedure['Post Trial'] ) ) {
+				$trialType = $procedure['Post Trial'];
 			} else {
-				$trialType = trim(strtolower($currentTrial['Procedure'][ 'Post Trial '.$currentPost ]));
+				$trialType = $procedure[ 'Post Trial '.$currentPost ];
 			}
+			$trialType = strtolower(trim( $trialType ));
 			if( $currentPost === 0 ) {
 				$keyMod = '';
 			} else {
@@ -52,14 +76,35 @@
 			$currentTrial['Response'] = placeData($data, $currentTrial['Response'], $keyMod);
 			++$currentPost;
 			
-			if( $currentPost === 1 AND isset( $currentTrial['Procedure']['Post Trial'] ) ) {
-				$trialType = trim(strtolower($currentTrial['Procedure']['Post Trial']));
-			} elseif( isset( $currentTrial['Procedure'][ 'Post Trial '.$currentPost ] ) ) {
-				$trialType = trim(strtolower($currentTrial['Procedure'][ 'Post Trial '.$currentPost ]));
+			// Now we need to find the current trial type.
+			// once again, we allow for the first post-trial to either be under
+			// "Post Trial" or "Post Trial", and then for additional post-
+			// trials, we require a number.
+			if(  $currentPost === 1  AND  isset( $procedure['Post Trial'] )  ) {
+				$trialType = $procedure['Post Trial'];
+			} elseif(  isset( $procedure[ 'Post Trial '.$currentPost ] )  ) {
+				$trialType = $procedure[ 'Post Trial '.$currentPost ];
 			} else {
 				$trialType = '';
 			}
+			$trialType = strtolower(trim( $trialType ));
 			
+			// Finally, we check if the found trial Type is a valid type.
+			//
+			// At login.php, we scanned the TrialTypes folder to find all the
+			// available types, so we can compare our current entry to that
+			// list.
+			//
+			// It doesn't matter why specifically we didn't find a match, so
+			// its fine to have this column contain nothing ( "" ) or some key
+			// word like "no" or "off".
+			//
+			// It is possible that a trial type would be missed if it was
+			// misspelled in the order file, so experimenters should be careful
+			// to type trial types correctly.  Of course, if they notice that
+			// certain trials simply aren't showing up, it should be
+			// immediately obvious, but people can also check by using the
+			// $stopAtLogin setting, found in the Settings.php file.
 			if( isset( $_SESSION['Trial Types'][$trialType] ) ) {
 				$next = 'trial.php';
 			} else {

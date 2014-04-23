@@ -20,12 +20,13 @@
 			$datum = str_replace( array( "\r\n", "\n" , "\t" , "\r" , chr(10) , chr(13) ), ' ', $datum );
 		}
 		unset( $datum );
-		if( !is_file($fileName) ) {
+		$fileTrue = fileExists( $fileName );
+		if( !$fileTrue ) {
 			$file = fopen( $fileName, "w" );
 			fputcsv( $file, array_keys($row), $d );
 			fputcsv( $file, $row, $d );
 		} else {
-			$file = fopen( $fileName, "r+" );
+			$file = fopen( $fileTrue, "r+" );
 			$headers = array_flip( fgetcsv( $file, 0, $d ) );
 			$newHeaders = array_diff_key( $row, $headers );
 			if( $newHeaders !== array() ) {
