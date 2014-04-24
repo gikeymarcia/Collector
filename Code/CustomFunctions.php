@@ -146,8 +146,18 @@
         } else {
           return htmlspecialchars($cleanarr, ENT_QUOTES);
         }
-      }
+    }
 
+	
+	
+	function camelCase( $str ) {
+		$str = ucwords(strtolower(trim( $str )));
+		$str = str_replace( ' ', '', $str );
+		$str[0] = strtolower($str[0]);
+		return $str;
+	}
+	
+	
 	#### function that converts smart quotes, em dashes, and u's with umlats so they display properly on web browsers
 	function fixBadChars ($string) {
 		// Function from http://shiflett.org/blog/2005/oct/convert-smart-quotes-with-php
@@ -347,11 +357,6 @@
 			$formClass	= 'UserTiming';
 		} else {
 			$formClass	= 'ComputerTiming';
-		}
-
-		// if minTime exists and is a number
-		if( isset($_SESSION['Trials'][$_SESSION['Position']]['Procedure']['MinTime']) && is_numeric($_SESSION['Trials'][$_SESSION['Position']]['Procedure']['MinTime']) ) {
-			$minTime = $_SESSION['Trials'][$_SESSION['Position']]['Procedure']['MinTime'];
 		}
 
 	}

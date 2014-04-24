@@ -18,8 +18,6 @@
 		$cue		=& $currentTrial['Stimuli']['Cue'];
 		$target		=& $currentTrial['Stimuli']['Target'];
 		$answer		=& $currentTrial['Stimuli']['Answer'];
-		$trialType	=  trim(strtolower($currentTrial['Procedure']['Trial Type']));
-		$item		=  trim(strtolower($currentTrial['Procedure']['Item']));
 	
 	// Whenever Trial.php finds $_POST data, it will try to store that data
 	// immediately, rather than simply holding it through the trial
@@ -116,6 +114,50 @@
 		}
 	}
 	
+	
+	#### setting up the aliases from the procedure file
+	if( $currentPost == 0 ) {
+		// If we aren't on a post-trial, we simply go through the current row
+		// in the order file, and look at each column header.  If the header
+		// starts with "post", we skip it.  Otherwise, we set a variable with
+		// that name to that value, using $$column = $value;
+		//
+		// Before we turn the column header into a variable, we first need to
+		// format the header as a proper variable name, so we use the camelCase
+		// function to convert something like "Trial Type" to trialType.
+		foreach( $currentTrial['Procedure'] as $column => $value ) {
+			$column = strtolower(trim( $column ));
+			if( substr( $column, 0, 4 ) === 'post' ) continue;
+			$column = camelCase($column);
+			$$column = $value;
+		}
+	} else {
+		// For post-trials, first we look for an entries that start with
+		// "postX", where X is the number of which post-trial we are on.
+		// For each entry we find, we trim off the "postX " part, so that
+		// something like "Post2 Timing" simply becomes "timing".
+		foreach( $currentTrial['Procedure'] as $column => $value ) {
+			$column = strtolower(trim( $column ));
+			if( substr( $column, 0, strlen( 'post'.$currentPost ) ) === 'post'.$currentPost ) {
+				$column = camelCase($column);
+				$$column = $value;
+			}
+		}
+		// Once we have finished finding our post columns, we can also scan
+		// the procedure row for any values that were set for the original
+		// trial, but not for this post trial.  If we find any, we shall assume
+		// that this post-trial should use the same value, and we create the
+		// alias using the original value.
+		foreach( $currentTrial['Procedure'] as $column => $value ) {
+			$column = strtolower(trim( $column ));
+			if( substr( $column, 0, 4 ) === 'post' ) continue;
+			$column = camelCase($column);
+			if( !isset( $$column ) ) {
+				$$column = $value;
+			}
+		}
+	}
+	
 
 
 	// if we hit a *newfile* then the experiment is over (this means that we don't ask FinalQuestions until the last session of the experiment)
@@ -164,10 +206,12 @@
 
 <?php
 	// variables I'll need and/or set in trialTiming() function
-	$timingReported = trim(strtolower($currentTrial['Procedure']['Timing']));
+	$timingReported = strtolower(trim( $timing ));
 	$formClass	= '';
 	$time		= '';
-	$minTime	= 'not present (unless set)';
+	if( !isset( $minTime ) ) {
+		$minTime	= 'not set';
+	}
 
 	#### Presenting different trial types ####
 	$expFiles  = $up.$expFiles;							// setting relative path to experiments folder for trials launched from this page
