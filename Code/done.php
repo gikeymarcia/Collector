@@ -47,7 +47,7 @@
     // Set the page message
     if($nextExperiment == FALSE) {
         $message = "<h2>Thank you for your participation!</h2>
-                   <p>If you have any questions about the experiment please email {$experimenterEmail}</p>";
+                   <p>If you have any questions about the experiment please email <a href='mailto:{$experimenterEmail}?Subject=Comments%20on%20{$experimentName}' target='_top'>{$experimenterEmail}</a></p>";
         if ($mTurkMode == TRUE) {
             $message .= "<h3>Your verification code is: {$verification}</h3>";
         }
