@@ -128,6 +128,14 @@
                             <input type=text name=formData autocomplete=off />
                             <input class='button' id=FormSubmitButton type=submit value="Submit" />
                         </div>
+                    <?php endif;
+
+                    // textarea code
+                    if ($type == 'textarea'): ?>
+                        <textarea rows=10 cols=50 name=formData wrap=physical value=""></textarea>
+                        <div class=textright>
+                            <input class="button button-trial-advance" id=FormSubmitButton type=submit value="Submit"   />
+                        </div>
                     <?php endif; ?>
 
                     <input name=RT id=RT class=hidden type=text value=""/>
