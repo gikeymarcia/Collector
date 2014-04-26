@@ -65,9 +65,9 @@ var COLLECTOR = {
 		function instance() {
 			var timeRemaining = start + timeUp*1000 - Date.now(),
 				timeFormatted;
-			
+
 			// stop timer at the allotted time
-  			if ( timeRemaining < 1 ) {
+  			if ( timeRemaining < cap/2 ) {
 				window.clearTimeout(t);
 
   				// exit and run callback
@@ -85,8 +85,15 @@ var COLLECTOR = {
 				timeRemaining = Math.min( 20, timeRemaining );
   			}
 
+			if( timeRemaining > cap/speed ) {
+				timeRemaining *= speed;
+				if( timeRemaining < cap/speed/speed ) {
+					timeRemaining += timeRemaining%cap;
+				}
+			}
+
 			// run the timer again, using a percentage of the time remaining
-			var t = window.setTimeout(function() { instance(); }, Math.max( cap, timeRemaining*speed ) );
+			var t = window.setTimeout(function() { instance(); }, Math.max( cap, timeRemaining ) );
 		}
 
   		// start the timer
