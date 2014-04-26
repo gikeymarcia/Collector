@@ -63,7 +63,8 @@ var COLLECTOR = {
 			cap   = 4;
 
 		function instance() {
-			var timeRemaining = start + timeUp*1000 - Date.now();
+			var timeRemaining = start + timeUp*1000 - Date.now(),
+				timeFormatted;
 			
 			// stop timer at the allotted time
   			if ( timeRemaining < 1 ) {
@@ -74,11 +75,14 @@ var COLLECTOR = {
   			}
 
 			if (show) {
+				timeFormatted = Math.round( timeRemaining/100 )/10;
+				if (Math.round(timeFormatted) == timeFormatted) { timeFormatted += '.0'; }
   				if (show.is('input')) {
-  					show.val( timeRemaining );
+  					show.val( timeFormatted );
   				} else {
-  					show.html( timeRemaining );
+  					show.html( timeFormatted );
   				}
+				timeRemaining = Math.min( 20, timeRemaining );
   			}
 
 			// run the timer again, using a percentage of the time remaining
