@@ -36,7 +36,7 @@ var COLLECTOR = {
 	/**
 	 *	Sets starting time to a property we can access anywhere in the namespace
 	 */
-	startTime: new Date().getTime(),
+	startTime: Date.now(),
 
 	/**
 	 *	Timer function
@@ -55,41 +55,25 @@ var COLLECTOR = {
 	 *		}, $("#countdown"));
  	 */
 	timer: function (timeUp, callback, show) {
-	    // set timer speed, counter, and starting timestamp
-  		var speed = 10,
-  			counter = 0,
-  			elapsed = 0;
-  			start = new Date().getTime();
+		// speed is the percentage of timeRemaining that will be used for each setTimeout
+		// cap is the lowest number of ms allowed.  Increase for slower computers.
+		// for HTML5, 4ms is the setTimeout minimum.
+		var speed = .5,
+			start = Date.now(),
+			cap   = 4;
 
-  		// self-correcting timer instance function (each instance is adjusted based on actual elapsed time)
-  		function instance() {
-  			// work out the real and ideal elapsed time
-  			var real = (counter * speed),
-  				ideal = (new Date().getTime() - start);
-
-			// increment the counter
-  			counter++;
-
-  			// increment elapsed
-			elapsed += speed;
-
-
-  			// stop timer at the allotted time
-  			if ( elapsed >= timeUp*1000 ) {
+		function instance() {
+			var timeRemaining = start + timeUp*1000 - Date.now();
+			
+			// stop timer at the allotted time
+  			if ( timeRemaining < 1 ) {
 				window.clearTimeout(t);
 
   				// exit and run callback
   				return callback();
   			}
 
-  			// calculate the difference
-  			var diff = ideal - real;
-
-			// calculate time to show
-  			var timeRemaining = Math.round( timeUp*10 - elapsed/100 )/10;
-			if (Math.round(timeRemaining) == timeRemaining) { timeRemaining += '.0'; }
-
-  			if (show) {
+			if (show) {
   				if (show.is('input')) {
   					show.val( timeRemaining );
   				} else {
@@ -97,9 +81,9 @@ var COLLECTOR = {
   				}
   			}
 
-  			// delete the difference from the speed of the next instance and run again
-  			var t = (window.setTimeout(function() { instance(); }, (speed - diff) ))/100;
-  		}
+			// run the timer again, using a percentage of the time remaining
+			var t = window.setTimeout(function() { instance(); }, Math.max( cap, timeRemaining*speed ) );
+		}
 
   		// start the timer
 		instance();
@@ -343,3 +327,9 @@ UTIL = {
 };
 
 $( window ).load( UTIL.init );
+
+if (!Date.now) {
+	Date.now = function now() {
+		return new Date().getTime();
+	};
+}
