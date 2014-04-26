@@ -101,8 +101,7 @@ var COLLECTOR = {
 	},
 
 	getRT: function() {
-		var currentTime = new Date().getTime();
-		return (currentTime - COLLECTOR.startTime);
+		return Date.now() - COLLECTOR.startTime;
 	},
 
 	common: {
@@ -159,8 +158,8 @@ var COLLECTOR = {
 
 	trial: {
 		init: function() {
-			var trialTime = parseInt( $("#Time").html() ),
-				minTime	= parseInt( $("#minTime").html() ),
+			var trialTime = parseFloat( $("#Time").html() ),
+				minTime	= parseFloat( $("#minTime").html() ),
 				startTime = COLLECTOR.startTime,
 				fsubmit = $("#FormSubmitButton");
 				keypress = false;
@@ -199,6 +198,7 @@ var COLLECTOR = {
 
 			// show trial content
 			if(trialTime != 0) {
+				COLLECTOR.startTime = Date.now();				// resetting the startTime to truly reflect when content was shown
 				$(".precache").addClass("DuringTrial");			// add class that does nothing (but lets us know what used to be hidden)
 				$(".precache").removeClass("precache");			// remove class that hides the content
 				$(':input:enabled:visible:first').focus();      // focus cursor on first input
