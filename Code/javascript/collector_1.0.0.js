@@ -55,12 +55,14 @@ var COLLECTOR = {
 	 *		}, $("#countdown"));
  	 */
 	timer: function (timeUp, callback, show) {
-		// speed is the percentage of timeRemaining that will be used for each setTimeout
-		// cap is the lowest number of ms allowed.  Increase for slower computers.
-		// for HTML5, 4ms is the setTimeout minimum.
-		var speed = .5,
-			start = Date.now(),
-			cap   = 4;
+		// waitPercent is the percentage of timeRemaining that will be used for each setTimeout
+		// waitPercent should be greater than 0, but less than 1
+		// cap is the lowest number of ms allowed per interval.
+		// for HTML5 browsers, 4ms is the setTimeout minimum, so the cap should be at least 4.
+		// for both of these values, increasing them lowers both accuracy and processing requirements
+		var waitPercent = .5,
+			cap         = 4,
+			start = Date.now();
 
 		function instance() {
 			var timeRemaining = start + timeUp*1000 - Date.now(),
@@ -85,15 +87,19 @@ var COLLECTOR = {
 				timeRemaining = Math.min( 20, timeRemaining );
   			}
 
-			if( timeRemaining > cap/speed ) {
-				timeRemaining *= speed;
-				if( timeRemaining < cap/speed/speed ) {
-					timeRemaining += timeRemaining%cap;
-				}
+			if( timeRemaining <= cap*2 ) {
+				// leave timeRemaining as it is, and wait the rest of the time
+			} else if( timeRemaining < cap*3/waitPercent ) {
+				// steer the timer towards cap+1, so that if the last setTimeout
+				// needs to make an adjustment, it's a small one
+				timeRemaining = cap + (timeRemaining-1)%cap;
+			} else {
+				timeRemaining *= waitPercent;
 			}
+			timeRemaining = Math.max( cap, Math.floor(timeRemaining) );
 
 			// run the timer again, using a percentage of the time remaining
-			var t = window.setTimeout(function() { instance(); }, Math.max( cap, timeRemaining ) );
+			var t = window.setTimeout(function() { instance(); }, timeRemaining );
 		}
 
   		// start the timer
@@ -163,6 +169,7 @@ var COLLECTOR = {
 				startTime = COLLECTOR.startTime,
 				fsubmit = $("#FormSubmitButton");
 				keypress = false;
+				COLLECTOR.startTime = Date.now();				// resetting the startTime to truly reflect when content was shown
 
 			if ( !(isNaN(trialTime)) ) {
 				if (minTime == 0 || isNaN(minTime)) {
@@ -198,7 +205,6 @@ var COLLECTOR = {
 
 			// show trial content
 			if(trialTime != 0) {
-				COLLECTOR.startTime = Date.now();				// resetting the startTime to truly reflect when content was shown
 				$(".precache").addClass("DuringTrial");			// add class that does nothing (but lets us know what used to be hidden)
 				$(".precache").removeClass("precache");			// remove class that hides the content
 				$(':input:enabled:visible:first').focus();      // focus cursor on first input
