@@ -19,6 +19,11 @@
 		$target		=& $currentTrial['Stimuli']['Target'];
 		$answer		=& $currentTrial['Stimuli']['Answer'];
 	
+	// this will also create aliases of any columns that apply to the current trial (filtering out "post X" prefixes when necessary)
+	// currentProcedure becomes an array of all columns matched for this trial, using their original column names
+	$currentProcedure = ExtractTrial( $currentTrial['Procedure'], $currentPost );
+	if( !isset( $item ) ) $item = $currentTrial['Procedure']['Item'];
+	
 	// Whenever Trial.php finds $_POST data, it will try to store that data
 	// immediately, rather than simply holding it through the trial
 	//
@@ -26,7 +31,7 @@
 	// or by redirecting to next.php, where the data is actually recorded
 	// into a file.
 	//
-	// Data from instructions.php is detected by 
+	// Data from instructions.php is detected by $currentPost === -1
 	if( $_POST !== array() ) {
 		if( $currentPos === 1 AND $currentPost === -1 ) {
 			// posting from instructions.php
@@ -42,27 +47,6 @@
 			header('Location: trial.php');
 			exit;
 		} else {
-			// First, we find the trial type that was just completed.
-			//
-			// If we are on Post 0, that means that its the first trial of 
-			// that procedure row, which would be in the "Trial Type" column.
-			//
-			// Otherwise, we are in one of the post trials.  For the first post
-			// trial, either "Post Trial" or "Post Trial 1" is acceptable,
-			// so we search for both names.
-			//
-			// For additional post trials, the column should always contain the
-			// number, like "Post Trial 2".
-			
-			$procedure = $currentTrial['Procedure'];
-			
-			if( $currentPost === 0 ) {
-				$trialType = $procedure['Trial Type'];
-			} elseif( $currentPost === 1 AND isset( $procedure['Post Trial'] ) ) {
-				$trialType = $procedure['Post Trial'];
-			} else {
-				$trialType = $procedure[ 'Post Trial '.$currentPost ];
-			}
 			$trialType = strtolower(trim( $trialType ));
 			if( $currentPost === 0 ) {
 				$keyMod = '';
@@ -72,92 +56,29 @@
 			require $_SESSION['Trial Types'][$trialType]['scoring'];
 			#### merging $data into $currentTrial['Response]
 			$currentTrial['Response'] = placeData($data, $currentTrial['Response'], $keyMod);
-			++$currentPost;
 			
+			$next = 'trial.php';
+			$notTrials = array_flip( array( 'off', 'no', '', 'n/a' ) );
 			// Now we need to find the current trial type.
-			// once again, we allow for the first post-trial to either be under
-			// "Post Trial" or "Post Trial", and then for additional post-
-			// trials, we require a number.
-			if(  $currentPost === 1  AND  isset( $procedure['Post Trial'] )  ) {
-				$trialType = $procedure['Post Trial'];
-			} elseif(  isset( $procedure[ 'Post Trial '.$currentPost ] )  ) {
-				$trialType = $procedure[ 'Post Trial '.$currentPost ];
-			} else {
-				$trialType = '';
-			}
-			$trialType = strtolower(trim( $trialType ));
-			
-			// Finally, we check if the found trial Type is a valid type.
-			//
-			// At login.php, we scanned the TrialTypes folder to find all the
-			// available types, so we can compare our current entry to that
-			// list.
-			//
-			// It doesn't matter why specifically we didn't find a match, so
-			// its fine to have this column contain nothing ( "" ) or some key
-			// word like "no" or "off".
-			//
-			// It is possible that a trial type would be missed if it was
-			// misspelled in the order file, so experimenters should be careful
-			// to type trial types correctly.  Of course, if they notice that
-			// certain trials simply aren't showing up, it should be
-			// immediately obvious, but people can also check by using the
-			// $stopAtLogin setting, found in the Settings.php file.
-			if( isset( $_SESSION['Trial Types'][$trialType] ) ) {
-				$next = 'trial.php';
-			} else {
-				$next = 'next.php';
+			while( TRUE ) {
+				++$currentPost;
+				unset( $trialType );	// so we can extract a new one
+				$currentProcedure = ExtractTrial( $currentTrial['Procedure'], $currentPost );
+				if( count($currentProcedure) === 0 ) {
+					$next = 'next.php';
+					break;
+				}
+				$trialType = strtolower(trim( $trialType ));
+				if( isset( $_SESSION['Trial Types'][$trialType] ) ) {
+					$next = 'trial.php';
+					break;
+				}
 			}
 			
 			header('Location: '.$next);
 			exit;
 		}
 	}
-	
-	
-	#### setting up the aliases from the procedure file
-	if( $currentPost == 0 ) {
-		// If we aren't on a post-trial, we simply go through the current row
-		// in the order file, and look at each column header.  If the header
-		// starts with "post", we skip it.  Otherwise, we set a variable with
-		// that name to that value, using $$column = $value;
-		//
-		// Before we turn the column header into a variable, we first need to
-		// format the header as a proper variable name, so we use the camelCase
-		// function to convert something like "Trial Type" to trialType.
-		foreach( $currentTrial['Procedure'] as $column => $value ) {
-			$column = strtolower(trim( $column ));
-			if( substr( $column, 0, 4 ) === 'post' ) continue;
-			$column = camelCase($column);
-			$$column = $value;
-		}
-	} else {
-		// For post-trials, first we look for an entries that start with
-		// "postX", where X is the number of which post-trial we are on.
-		// For each entry we find, we trim off the "postX " part, so that
-		// something like "Post2 Timing" simply becomes "timing".
-		foreach( $currentTrial['Procedure'] as $column => $value ) {
-			$column = strtolower(trim( $column ));
-			if( substr( $column, 0, strlen( 'post'.$currentPost ) ) === 'post'.$currentPost ) {
-				$column = camelCase($column);
-				$$column = $value;
-			}
-		}
-		// Once we have finished finding our post columns, we can also scan
-		// the procedure row for any values that were set for the original
-		// trial, but not for this post trial.  If we find any, we shall assume
-		// that this post-trial should use the same value, and we create the
-		// alias using the original value.
-		foreach( $currentTrial['Procedure'] as $column => $value ) {
-			$column = strtolower(trim( $column ));
-			if( substr( $column, 0, 4 ) === 'post' ) continue;
-			$column = camelCase($column);
-			if( !isset( $$column ) ) {
-				$$column = $value;
-			}
-		}
-	}
-	
 
 
 	// if we hit a *newfile* then the experiment is over (this means that we don't ask FinalQuestions until the last session of the experiment)

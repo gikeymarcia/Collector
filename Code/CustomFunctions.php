@@ -158,6 +158,57 @@
 	}
 	
 	
+	
+	function ExtractTrial($procedureRow, $postNumber) {
+		$output = array();
+		if( $postNumber < 1 ) {
+			foreach( $procedureRow as $column => $value ) {
+				if( substr( strtolower(trim( $column )), 0, 4 ) === 'post' ) continue;
+				$output[trim($column)] = $value;
+			}
+		} elseif( $postNumber == 1 ) {
+			foreach( $procedureRow as $column => $value ) {
+				$col = trim( $column );
+				if( strtolower(substr($col, 0, 4)) === 'post' ) {
+					$col = trim(substr( $col, 4 ));
+					if( is_numeric( $col[0] ) AND $col[0] !== '1' ) continue;
+					if( $col[0] === '1' AND is_numeric( $col[1] ) ) continue; // in case of post-trial 12...
+					if( $col[0] === '1' ) $col = trim(substr( $col, 1 ));
+					$output[ $col ] = $value;
+				}
+			}
+		} else {
+			foreach( $procedureRow as $column => $value ) {
+				$col = trim( $column );
+				if( strtolower(substr($col, 0, 4)) === 'post' ) {
+					$col = trim(substr( $col, 4 ));
+					if( substr( $col, 0, strlen($postNumber) ) == $postNumber ) {
+						$col = substr( $col, strlen($postNumber) );
+						if( is_numeric($col[0]) ) continue;
+						$output[ trim($col) ] = $value;
+					}
+				}
+			}
+		}
+		
+		foreach( $output as $column => $value ) {
+			$name = $column;
+			if( is_numeric($column[0]) ) {
+				$name = '_'.$column;
+			}
+			$name = preg_replace( '/[A-Z]/', ' \\0', $column );
+			$name = camelCase( $name );
+			$name = preg_replace( '/[^0-9a-zA-Z_]/', '', $name );
+			if( $name === 'trial' OR $name === 'trialtype' ) $name = 'trialType';
+			global $$name;
+			if( isset($$name) ) continue;	// aliases won't overwrite existing variables
+			$$name = $value;
+		}
+		return $output;
+	}
+	
+	
+	
 	#### function that converts smart quotes, em dashes, and u's with umlats so they display properly on web browsers
 	function fixBadChars ($string) {
 		// Function from http://shiflett.org/blog/2005/oct/convert-smart-quotes-with-php
@@ -214,6 +265,7 @@
 
 
 	#### function that returns TRUE or FALSE if a string is found in another string
+	#### similar to stripos()
 	function inString ($needle, $haystack, $caseSensitive = FALSE){
 		if ($caseSensitive == FALSE) {
 			$haystack = strtolower($haystack);
@@ -282,7 +334,23 @@
 		echo     '</pre>';
 		echo '</div>';
 	}
-
+	
+	
+	function RemoveLabel($input, $label, $extendLabel = TRUE) {
+		$trimInput = trim(strtolower($input));
+		$trimLabel = trim(strtolower($label)); 
+		$labelLength = strlen($trimLabel);
+		if( substr( $trimInput, 0, $labelLength ) === $trimLabel ){
+			if( $extendLabel === TRUE ) {		//if (my misguided efforts to make things for user-forgiving) end up breaking things, turn this off
+				if(substr($trimInput, $labelLength, 1 ) === 's' ){ $labelLength++;}							//so we can put "labels" in the argument rather than just "label"
+				if(substr($trimInput, $labelLength, 1 ) === ':' OR substr($trimInput, $labelLength, 1) === '=' ){ $labelLength++;} 	//more nice formatting is allowed in the excel file.  labels: yadayada or labels= yadayada
+			}
+			$output = trim(substr(trim($input), $labelLength));
+		}
+		else { $output = $input; }
+		
+		return $output;
+	}
 
 
 	#### add html tags for images and audio files but do nothing to everything else

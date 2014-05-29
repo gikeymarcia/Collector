@@ -145,12 +145,64 @@
 		$errors = keyCheck( $temp, 'Answer'	,	$errors, $_SESSION['Condition']['Stimuli'] );
 		$errors = keyCheck( $temp, 'Shuffle',	$errors, $_SESSION['Condition']['Stimuli'] );
 		// checking required columns from Procedure file
-		$temp = GetFromFile($up.$expFiles.$_SESSION['Condition']['Procedure']);
+		$temp = GetFromFile($up.$expFiles.$_SESSION['Condition']['Procedure'], FALSE);
+		
 		$errors = keyCheck( $temp, 'Item'		,	$errors, $_SESSION['Condition']['Procedure'] );
 		$errors = keyCheck( $temp, 'Trial Type'	,	$errors, $_SESSION['Condition']['Procedure'] );
 		$errors = keyCheck( $temp, 'Timing'		,	$errors, $_SESSION['Condition']['Procedure'] );
-		$errors = keyCheck( $temp, 'Post Trial'	,	$errors, $_SESSION['Condition']['Procedure'] );
 		$errors = keyCheck( $temp, 'Shuffle'	,	$errors, $_SESSION['Condition']['Procedure'] );
+		
+		$PostCount = 0;
+		$trialTypeColumns = array();
+		$notTrials = array( 'off', 'no', '', 'n/a' );
+		$notTrials = array_flip( $notTrials );
+		$trialHeaders = array_flip( array( 'trialType', 'trialtype', 'trial' ) );
+		foreach( $temp[0] as $column => $value ) {
+			$name = strtolower(trim($column));
+			if( substr( $name, 0, 4 ) !== 'post' ) {
+				$name = camelCase( $column );
+				if( isset( $trialHeaders[ $name ] ) ) $trialTypeColumns[0] = $column;
+				continue;
+			}
+			$name = trim(substr( $name, 4 ));
+			$i = 0;
+			while( is_numeric( $name[$i] ) ) { ++$i; }
+			if( $i === 0 ) {
+				$thisPostN = 1;
+			} else {
+				$thisPostN = (int)substr( $name, 0, $i );
+			}
+			$PostCount = max( $PostCount, $thisPostN );
+			$name = camelCase( substr( $name, $i ) );
+			if( isset( $trialHeaders[ $name ] ) ) $trialTypeColumns[ $thisPostN ] = $column;
+		}
+		ksort($trialTypeColumns);
+		
+		for( $i=1; $i<=$PostCount; ++$i ) {
+			$column = $trialTypeColumns[$i];
+			$noPosts = TRUE;
+			foreach( $temp as $row ) {
+				if( !isset( $notTrials[ strtolower(trim($row[$column])) ] ) ) {
+					$noPosts = FALSE;
+					break;
+				}
+			}
+			if( $noPosts ) continue;
+			
+			$needed = array( 'trialType', 'timing' );
+			foreach( $needed as $need ) {
+				unset( $$need );
+			}
+			ExtractTrial( $temp[0], $i );
+			foreach( $needed as $need ) {
+				if( !isset( $$need ) ) {
+					$column = ucwords( preg_replace( '/[A-Z]/', ' \\0', $need ) );
+					$errors['Count']++;
+					$errors['Details'][] = 'Post Trial '.$i.' is missing the '.$column.' column (i.e., add a column called "Post '.$i.' '.$column.'" to the file "'.$_SESSION['Condition']['Procedure'].'" to fix this error).';
+				}
+			}
+		}
+		
 		$temp = null;
 		// echo 'Username = '.$_SESSION['Username'].'</br>';											#### DEBUG ####
 		// Readable($Conditions, "conditions loaded in");												#### DEBUG ####
@@ -214,18 +266,6 @@
 			$procedure = GetFromFile($up.$expFiles.$_SESSION['Condition']['Procedure']);
 			
 			$trialTypes = array();
-			$trialTypeColumns = array( 'Trial Type' );
-			if( isset( $procedure[2]['Post Trial'] ) ) {
-				$trialTypeColumns[] = 'Post Trial';
-			} elseif( isset( $procedure[2]['Post Trial 1'] ) ) {
-				$trialTypeColumns[] = 'Post Trial 1';
-			}
-			$i = 2;
-			while( isset( $procedure[2]['Post Trial '.$i] ) ) {
-				$trialTypeColumns[] = 'Post Trial '.$i;
-			}
-			$notTrials = array( 'off', 'no', '', 'n/a' );
-			$notTrials = array_flip( $notTrials );
 			foreach( $procedure as $i => $row ) {
 				if( $row === 0 ) { continue; }
 				if( $row['Item'] === '*newfile*' ) { continue; }
