@@ -11,3 +11,4 @@ Number	Stimuli	Procedure	Condition Description	Condition Notes
 10	Stimuli/FullStim.txt	Procedure/TestMC.txt	Example of multiple choice test	3 test MC trials in a row
 11	Stimuli/FullStim.txt	Procedure/All Trials.txt	Examples of all presentations	user controlled so I can edit css
 12	Stimuli/TestStimShuffle.txt	Procedure/TestOrderShuffle.txt	Look at Stimuli File for example of second-order shuffle (advanced feature)	This trial is an example of how second order shuffling works.  Look at the Stimuli file and run the experiment to see the output.
+13	Stimuli/TestStimShuffle.txt	Procedure/new.txt	designed to test new system of post trials being regular trials	hope this isn't a pain to debug

@@ -20,12 +20,13 @@
 			$datum = str_replace( array( "\r\n", "\n" , "\t" , "\r" , chr(10) , chr(13) ), ' ', $datum );
 		}
 		unset( $datum );
-		if( !is_file($fileName) ) {
+		$fileTrue = fileExists( $fileName );
+		if( !$fileTrue ) {
 			$file = fopen( $fileName, "w" );
 			fputcsv( $file, array_keys($row), $d );
 			fputcsv( $file, $row, $d );
 		} else {
-			$file = fopen( $fileName, "r+" );
+			$file = fopen( $fileTrue, "r+" );
 			$headers = array_flip( fgetcsv( $file, 0, $d ) );
 			$newHeaders = array_diff_key( $row, $headers );
 			if( $newHeaders !== array() ) {
@@ -145,8 +146,69 @@
         } else {
           return htmlspecialchars($cleanarr, ENT_QUOTES);
         }
-      }
+    }
 
+	
+	
+	function camelCase( $str ) {
+		$str = ucwords(strtolower(trim( $str )));
+		$str = str_replace( ' ', '', $str );
+		$str[0] = strtolower($str[0]);
+		return $str;
+	}
+	
+	
+	#### finding column entires specific to a given $postNumber (e.g., Post 1, Post 2, Post 3)
+	function ExtractTrial($procedureRow, $postNumber) {
+		$output = array();
+		if( $postNumber < 1 ) {
+			foreach( $procedureRow as $column => $value ) {
+				if( substr( strtolower(trim( $column )), 0, 4 ) === 'post' ) continue;
+				$output[trim($column)] = $value;
+			}
+		} elseif( $postNumber == 1 ) {
+			foreach( $procedureRow as $column => $value ) {
+				$col = trim( $column );
+				if( strtolower(substr($col, 0, 4)) === 'post' ) {
+					$col = trim(substr( $col, 4 ));
+					if( is_numeric( $col[0] ) AND $col[0] !== '1' ) continue;
+					if( $col[0] === '1' AND is_numeric( $col[1] ) ) continue; // in case of post-trial 12...
+					if( $col[0] === '1' ) $col = trim(substr( $col, 1 ));
+					$output[ $col ] = $value;
+				}
+			}
+		} else {
+			foreach( $procedureRow as $column => $value ) {
+				$col = trim( $column );
+				if( strtolower(substr($col, 0, 4)) === 'post' ) {
+					$col = trim(substr( $col, 4 ));
+					if( substr( $col, 0, strlen($postNumber) ) == $postNumber ) {
+						$col = substr( $col, strlen($postNumber) );
+						if( is_numeric($col[0]) ) continue;
+						$output[ trim($col) ] = $value;
+					}
+				}
+			}
+		}
+		
+		foreach( $output as $column => $value ) {
+			$name = $column;
+			if( is_numeric($column[0]) ) {
+				$name = '_'.$column;
+			}
+			$name = preg_replace( '/[A-Z]/', ' \\0', $column );
+			$name = camelCase( $name );
+			$name = preg_replace( '/[^0-9a-zA-Z_]/', '', $name );
+			if( $name === 'trial' OR $name === 'trialtype' ) $name = 'trialType';
+			global $$name;
+			if( isset($$name) ) continue;	// aliases won't overwrite existing variables
+			$$name = $value;
+		}
+		return $output;
+	}
+	
+	
+	
 	#### function that converts smart quotes, em dashes, and u's with umlats so they display properly on web browsers
 	function fixBadChars ($string) {
 		// Function from http://shiflett.org/blog/2005/oct/convert-smart-quotes-with-php
@@ -203,6 +265,7 @@
 
 
 	#### function that returns TRUE or FALSE if a string is found in another string
+	#### similar to stripos()
 	function inString ($needle, $haystack, $caseSensitive = FALSE){
 		if ($caseSensitive == FALSE) {
 			$haystack = strtolower($haystack);
@@ -271,7 +334,23 @@
 		echo     '</pre>';
 		echo '</div>';
 	}
-
+	
+	
+	function RemoveLabel($input, $label, $extendLabel = TRUE) {
+		$trimInput = trim(strtolower($input));
+		$trimLabel = trim(strtolower($label)); 
+		$labelLength = strlen($trimLabel);
+		if( substr( $trimInput, 0, $labelLength ) === $trimLabel ){
+			if( $extendLabel === TRUE ) {		//if (my misguided efforts to make things for user-forgiving) end up breaking things, turn this off
+				if(substr($trimInput, $labelLength, 1 ) === 's' ){ $labelLength++;}							//so we can put "labels" in the argument rather than just "label"
+				if(substr($trimInput, $labelLength, 1 ) === ':' OR substr($trimInput, $labelLength, 1) === '=' ){ $labelLength++;} 	//more nice formatting is allowed in the excel file.  labels: yadayada or labels= yadayada
+			}
+			$output = trim(substr(trim($input), $labelLength));
+		}
+		else { $output = $input; }
+		
+		return $output;
+	}
 
 
 	#### add html tags for images and audio files but do nothing to everything else
@@ -348,11 +427,6 @@
 			$formClass	= 'ComputerTiming';
 		}
 
-		// if minTime exists and is a number
-		if( isset($_SESSION['Trials'][$_SESSION['Position']]['Procedure']['MinTime']) && is_numeric($_SESSION['Trials'][$_SESSION['Position']]['Procedure']['MinTime']) ) {
-			$minTime = $_SESSION['Trials'][$_SESSION['Position']]['Procedure']['MinTime'];
-		}
-
 	}
 
 
@@ -362,47 +436,68 @@
 		echo "<p>{$input}</p>";
 	}
 
-	function FileExists( $filePath, $altExtensions = TRUE ) {
-		//if( is_file($filePath) ) { return $filePath; }
-		$path_parts = pathinfo($filePath);
-		$returnPath = './';
-		$fileDirs = explode( '/', $path_parts['dirname'] );
-		if( $fileDirs === array( '.' ) ) { $fileDirs = array(); }
-		$fileName = $path_parts['basename'];
-		foreach( $fileDirs as $dir ) {
-			if( is_dir( $returnPath.$dir.'/' ) ) {
-				$returnPath .= $dir.'/';
-				continue;
-			} else {
-				$scan = scandir($returnPath);
-				foreach( $scan as $entry ) {
-					if( strtolower($entry) === strtolower($dir) ) {
-						$returnPath .= $entry.'/';
-						continue 2;
-					}
-				}
-				return FALSE;
+	
+	function FileExists( $filePath, $altExtensions = TRUE, $findDirectories = TRUE ) {
+		if( is_file( $filePath ) ) { return $filePath; }
+		if( is_dir( $filePath ) AND $findDirectories ) {
+			if( substr( $filePath, -1 ) === '/' ) {
+				$filePath = substr( $filePath, 0, -1 );
 			}
+			return $filePath;
 		}
-		if( is_file($returnPath.$fileName) ) { return substr($returnPath,2).$fileName; }
-		$scan = scandir($returnPath);
+		if( $filePath === '' ) { return FALSE; }
+		$path_parts = pathinfo($filePath);
+		$fileName = $path_parts['basename'];
+		if( is_dir( $path_parts['dirname'] ) ) {
+			$dir = $path_parts['dirname'];
+			$pre = ( $dir === '.' AND $filePath[0] !== '.' ) ? 2 : 0;
+		} else {
+			$dirs = explode( '/', $path_parts['dirname'] );
+			if( is_dir( $dirs[0] ) ) {
+				$dir = array_shift($dirs);
+				$pre = 0;
+			} else {
+				$dir = '.';
+				$pre = 2;
+			}
+			foreach( $dirs as $dirPart ) {
+				if( is_dir( $dir.'/'.$dirPart ) ) {
+					$dir .= '/'.$dirPart;
+					continue;
+				} else {
+					$scan = scandir($dir);
+					foreach( $scan as $entry ) {
+						if( strtolower($entry) === strtolower($dirPart) ) {
+							$dir .= '/'.$entry;
+							continue 2;
+						}
+					}
+					return FALSE;
+				}
+			}
+			if( is_file($dir.'/'.$fileName) ) { return substr( $dir.'/'.$fileName, $pre ); }
+			if( is_dir($dir.'/'.$fileName) AND $findDirectories ) { return substr( $dir.'/'.$fileName, $pre ); }
+		}
+		$scan = scandir($dir);
 		$lowerFile = strtolower($fileName);
 		foreach( $scan as $entry ) {
 			if( strtolower($entry) === $lowerFile ) {
-				return substr($returnPath,2).$entry;
+				if( is_dir( $dir.'/'.$entry ) AND !$findDirectories ) { continue; }
+				return substr( $dir.'/'.$entry, $pre );
 			}
 		}
 		if( $altExtensions ) {
 			$baseFileName = strtolower($path_parts['filename']);
 			foreach( $scan as $entry ) {
-				if( !is_file( $returnPath.$entry ) ) { continue; }
+				if( $entry === '.' OR $entry === '..' ) { continue; }
+				if( is_dir($dir.'/'.$entry) AND !$findDirectories ) { continue; }
 				if( strpos($entry, '.') === FALSE ) {
 					$entryName = strtolower($entry);
 				} else {
 					$entryName = strtolower(substr($entry, 0, strpos($entry, '.') ));
 				}
 				if( $entryName === $baseFileName ) {
-					return substr($returnPath,2).$entry;
+					return substr( $dir.'/'.$entry, $pre );
 				}
 			}
 		}

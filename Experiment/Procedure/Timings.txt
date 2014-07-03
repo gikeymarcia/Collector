@@ -1,4 +1,4 @@
-Item	Trial Type	Post Trial	Timing	MinTime	Procedure Notes	Shuffle
+Item	Trial Type	Post Trial	Timing	Min Time	Procedure Notes	Shuffle
 2	Study	No	User		low assoc	block1
 6	Study	No	User		hi assoc	block1
 2	Study	No	Computer		low assoc	compBlock

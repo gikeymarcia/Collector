@@ -139,19 +139,54 @@
 			$errors['Details'][] = 'No procedure file found at '.$_SESSION['Condition']['Procedure'];
 		}
 		// checking required columns from Stimuli file
-		$temp = GetFromFile($up.$expFiles.$_SESSION['Condition']['Stimuli']);
+		$temp = GetFromFile($up.$expFiles.$_SESSION['Condition']['Stimuli'], FALSE);
 		$errors = keyCheck( $temp, 'Cue'	,	$errors, $_SESSION['Condition']['Stimuli'] );
 		$errors = keyCheck( $temp, 'Target'	,	$errors, $_SESSION['Condition']['Stimuli'] );
 		$errors = keyCheck( $temp, 'Answer'	,	$errors, $_SESSION['Condition']['Stimuli'] );
 		$errors = keyCheck( $temp, 'Shuffle',	$errors, $_SESSION['Condition']['Stimuli'] );
 		// checking required columns from Procedure file
-		$temp = GetFromFile($up.$expFiles.$_SESSION['Condition']['Procedure']);
+		$temp = GetFromFile($up.$expFiles.$_SESSION['Condition']['Procedure'], FALSE);
+		
 		$errors = keyCheck( $temp, 'Item'		,	$errors, $_SESSION['Condition']['Procedure'] );
 		$errors = keyCheck( $temp, 'Trial Type'	,	$errors, $_SESSION['Condition']['Procedure'] );
 		$errors = keyCheck( $temp, 'Timing'		,	$errors, $_SESSION['Condition']['Procedure'] );
-		$errors = keyCheck( $temp, 'Post Trial'	,	$errors, $_SESSION['Condition']['Procedure'] );
 		$errors = keyCheck( $temp, 'Shuffle'	,	$errors, $_SESSION['Condition']['Procedure'] );
 		$temp = null;
+		unset($temp);                                                                 // clear $temp
+        
+        
+        #### Find all of the columns that hold trial types (including 'Post# Trial Type's)
+        $PostCount = 0;                                                                 // counts how many levels of post trials are used (e.g., Post 1, Post 2, Post 3...)
+        $trialTypeColumns = array();                                                    // Give me the column names of all Trial Type columns (e.g., Trial Type, Post 1 Trial Type, Post 2 Trial Type)
+        $proc = GetFromFile($up.$expFiles.$_SESSION['Condition']['Procedure'], FALSE);  // load procedure file without padding
+        foreach ($proc[0] as $column => $value) {                                       // check all procedure file columns (using the first line of procedure)
+            $name = strtolower(trim($column));                                          // get column name (lower case)
+            if (substr($name, 0, 4) !== 'post') {                                       // for non-post trial columns (don't start with 'post')
+                if ($name == 'trial type') {                                                // is this the 'Trial Type' column?
+                    $trialTypeColumns[0] = $column;                                             // log the location of the 'Trial Type' column
+                }
+            } else {                                                                    // for all Post columns
+                $name = strtolower(trim(substr($name, 4)));                                // pull off the 'post' prefix, leading/trailing spaces, and lowercase it
+                $i = 0;                                                                     // start checking at 0th remaining character
+                while (is_numeric($name[$i])) {                                         // while the $i-th character is a #
+                    $i++;                                                                   // check if next char is a #
+                }
+                if ($i === 0) {                                                         // if there wasn't a post # set (e.g., 'post Trial Type')
+                    $errors['Count']++;
+                    $errors['Details'][] = 'Column "' . $column . '" in ' . $_SESSION['Condition']['Procedure']
+                                         . ' needs to be numbered (e.g., "Post<b>1</b> Trial Type")';
+                    continue;
+                } else {                                                                // if a # was found
+                    $thisPostN = (int)substr($name, 0, $i);                                 // characters 0-$i = the post trial #
+                }
+                $PostCount = max($PostCount, $thisPostN);                               // find the highest post count used in the experiment (by checking if the curent post count > the highest post count found)
+                $name = trim(substr($name, $i));                                        // pull off the # from column name and remove any leading/trailing blanks
+                if ($name == 'trial type') {                                            // if this Post column is a 'Trial Type'
+                    $trialTypeColumns[$thisPostN] = $column;                            // log the location of the 'Post{$thisPostN} Trial Type' (e.g., 'Post12 Trial Type')
+                }
+            }
+        }
+        ksort($trialTypeColumns);                                                           // put trial type columns in order within $trialTypeColumns
 		// echo 'Username = '.$_SESSION['Username'].'</br>';											#### DEBUG ####
 		// Readable($Conditions, "conditions loaded in");												#### DEBUG ####
 		// echo "{$loginCount} logins and should be using condition {$conditionNumber}<br />";			#### DEBUG ####
