@@ -13,12 +13,72 @@
 	// setting up easier to use and read aliases(shortcuts) of $_SESSION data
 	$condition		=& $_SESSION['Condition'];
 	$currentPos		=& $_SESSION['Position'];
+	$currentPost 	=& $_SESSION['PostNumber'];
 	$currentTrial	=& $_SESSION['Trials'][$currentPos];
 		$cue		=& $currentTrial['Stimuli']['Cue'];
 		$target		=& $currentTrial['Stimuli']['Target'];
 		$answer		=& $currentTrial['Stimuli']['Answer'];
-		$trialType	=  trim(strtolower($currentTrial['Procedure']['Trial Type']));
-		$item		=  trim(strtolower($currentTrial['Procedure']['Item']));
+	
+	// this will also create aliases of any columns that apply to the current trial (filtering out "post X" prefixes when necessary)
+	// currentProcedure becomes an array of all columns matched for this trial, using their original column names
+	$currentProcedure = ExtractTrial( $currentTrial['Procedure'], $currentPost );
+	if( !isset( $item ) ) $item = $currentTrial['Procedure']['Item'];
+	
+	// Whenever Trial.php finds $_POST data, it will try to store that data
+	// immediately, rather than simply holding it through the trial
+	//
+	// This is done by either storing the data in $currentTrial['Response'],
+	// or by redirecting to next.php, where the data is actually recorded
+	// into a file.
+	//
+	// Data from instructions.php is detected by $currentPost === -1
+	if( $_POST !== array() ) {
+		if( $currentPos === 1 AND $currentPost === -1 ) {
+			// posting from instructions.php
+			// $currentPost was set to -1 at login.php, but it will only ever be set to 0 in the future, so this only happens at the beginning
+			$currentPost = 0;
+			$data = array(
+				 'Username' => $_SESSION['Username']
+				,'ID' 		=> $_SESSION['ID']
+				,'Date' 	=> date('c') 
+			);
+			$data += $_POST;
+			arrayToLine( $data, $instructPath );
+			header('Location: trial.php');
+			exit;
+		} else {
+			$trialType = strtolower(trim( $trialType ));
+			if( $currentPost === 0 ) {
+				$keyMod = '';
+			} else {
+				$keyMod = 'post'.$currentPost.'_';
+			}
+			require $_SESSION['Trial Types'][$trialType]['scoring'];
+			#### merging $data into $currentTrial['Response]
+			$currentTrial['Response'] = placeData($data, $currentTrial['Response'], $keyMod);
+			
+			$next = 'trial.php';
+			$notTrials = array_flip( array( 'off', 'no', '', 'n/a' ) );
+			// Now we need to find the current trial type.
+			while( TRUE ) {
+				++$currentPost;
+				unset( $trialType );	// so we can extract a new one
+				$currentProcedure = ExtractTrial( $currentTrial['Procedure'], $currentPost );
+				if( count($currentProcedure) === 0 ) {
+					$next = 'next.php';
+					break;
+				}
+				$trialType = strtolower(trim( $trialType ));
+				if( isset( $_SESSION['Trial Types'][$trialType] ) ) {
+					$next = 'trial.php';
+					break;
+				}
+			}
+			
+			header('Location: '.$next);
+			exit;
+		}
+	}
 
 
 	// if we hit a *newfile* then the experiment is over (this means that we don't ask FinalQuestions until the last session of the experiment)
@@ -40,13 +100,7 @@
 	if(array_key_exists($currentPos+1, $_SESSION['Trials'])) {
 		$nextTrial =& $_SESSION['Trials'][$currentPos + 1];
 	} else { $nextTrial = FALSE;}
-
-
-	// if there has been a previous item then set it as $previousTrial
-	if($currentPos > 1) {
-		$previousTrial =& $_SESSION['Trials'][$currentPos - 1];
-	} else {
-		$previousTrial = FALSE;
+	
 		$data = array( 
 			 'Username' => $_SESSION['Username']
 			,'ID' 		=> $_SESSION['ID']
@@ -54,8 +108,6 @@
 		);
 		$data += $_POST;
 		arrayToLine( $data, $instructPath);
-	}
-	
 	// this only happens once, so that refreshing the page doesn't do anything, and reaching next.php is the only way to update the timestamp
 	if( !isset($_SESSION['Timestamp']) ) {
 		$_SESSION['Timestamp'] = microtime(TRUE);
@@ -75,7 +127,7 @@
 
 <?php
 	// variables I'll need and/or set in trialTiming() function
-	$timingReported = trim(strtolower($currentTrial['Procedure']['Timing']));
+	$timingReported = strtolower(trim( $timing ));
 	$formClass	= '';
 	$time		= '';
 	if( !isset( $minTime ) ) {

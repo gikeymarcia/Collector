@@ -40,12 +40,11 @@
 		
 		
 		#### Grabbing submitted info
-		
 		if( !isset( $_SESSION['ID'] ) ) {
 			$_SESSION['ID'] = isset($_GET['ID']) ? $_GET['ID'] : rand_string();
 		}
 		
-		$username = trim($_GET['Username']);						// grab Username from URL
+		$username = trim($_GET['Username']);						        // grab Username from URL
 		if( strlen($debugName) > 0 AND substr( $username, 0, strlen($debugName) ) === $debugName ) {
 			$_SESSION['Debug'] = TRUE;
 			$username = trim( substr( $username, strlen($debugName) ) );
@@ -61,7 +60,7 @@
 		$_SESSION['Username'] = $username;
 		
 		if( isset($_GET['Session']) ) {
-			$_SESSION['Session'] = trim($_GET['Session']);				// grab session# from URL
+			$_SESSION['Session'] = trim($_GET['Session']);			// grab session# from URL
 		} else {
 			$_SESSION['Session'] = 0;
 		}
@@ -146,12 +145,10 @@
 		$errors = keyCheck( $temp, 'Shuffle',	$errors, $_SESSION['Condition']['Stimuli'] );
 		// checking required columns from Procedure file
 		$temp = GetFromFile($up.$expFiles.$_SESSION['Condition']['Procedure'], FALSE);
-		
 		$errors = keyCheck( $temp, 'Item'		,	$errors, $_SESSION['Condition']['Procedure'] );
 		$errors = keyCheck( $temp, 'Trial Type'	,	$errors, $_SESSION['Condition']['Procedure'] );
 		$errors = keyCheck( $temp, 'Timing'		,	$errors, $_SESSION['Condition']['Procedure'] );
 		$errors = keyCheck( $temp, 'Shuffle'	,	$errors, $_SESSION['Condition']['Procedure'] );
-		$temp = null;
 		unset($temp);                                                                 // clear $temp
         
         
@@ -187,6 +184,42 @@
             }
         }
         ksort($trialTypeColumns);                                                           // put trial type columns in order within $trialTypeColumns
+                
+        
+        #### Figuring out which trial types are being used and at what level (i.e., Post1, Post2, etc.)
+        $notTrials = array('off'    => TRUE,                                            // if the 'Trial Type' value is one of these then it isn't a trial
+                           'no'     => TRUE,
+                           ''       => TRUE,
+                           'n/a'    => TRUE  );
+        for ($i=1; $i<=$PostCount; ++$i) {                                              // go through all 'Post{$i} Trial Type' columns found above
+            $column = $trialTypeColumns[$i];                                            // get 'Post{$i} Trial Type' column name
+            $noPosts = TRUE;                                                            // start by assuming we aren't using post columns
+            foreach ($proc as $row) {                                                   // go through all the rows in the procedure file
+                $check = strtolower(trim($row[$column]));                                   // get the trimmed and lowercase value of the 'Post{$i} Trial Type' for this row
+            	if (!isset($notTrials[$check])) {                                          // if the value isn't in $notTrials (i.e., isn't turned off)
+            	    $noPosts = FALSE;                                                          // then we are using post columns
+            		break;
+            	}
+            }
+            if ($noPosts == TRUE) {
+                continue;
+            }
+            $needed = array('trialType', 'timing');                                     // every level must have a trial type and a timing
+            foreach ($needed as $need) {
+            	unset($$need);
+            }
+            ExtractTrial($proc[0], $i);
+            foreach ($needed as $need) {
+                if (!isset($$need)) {
+                    $column = ucwords(preg_replace('/[A-Z]/', ' \\0', $need));
+                    $errors['Count']++;
+                    $errors['Details'][] = 'Post Trial ' . $i . ' is missing the ' . $column . ' column (i.e., add a column called 
+                                            "Post' . $i . ' ' . $column . '" to the file "' . $_SESSION['Condition']['Procedure'] . '" to fix this error).';
+                }
+            }
+        }
+        unset($proc);
+        
 		// echo 'Username = '.$_SESSION['Username'].'</br>';											#### DEBUG ####
 		// Readable($Conditions, "conditions loaded in");												#### DEBUG ####
 		// echo "{$loginCount} logins and should be using condition {$conditionNumber}<br />";			#### DEBUG ####
@@ -247,6 +280,73 @@
 			
 			// load and block shuffle procedure for this condition
 			$procedure = GetFromFile($up.$expFiles.$_SESSION['Condition']['Procedure']);
+			
+			$trialTypes = array();
+			foreach( $procedure as $i => $row ) {
+				if( $row === 0 ) { continue; }
+				if( $row['Item'] === '*newfile*' ) { continue; }
+				foreach( $trialTypeColumns as $postNumber => $column ) {
+					$trialType = strtolower(trim( $row[$column] ));
+					if( isset( $notTrials[$trialType] ) ) { continue; }
+					$trialTypes[ $trialType ]['levels'][ $postNumber ] = NULL;
+					if( isset( $trialTypes[ $trialType ]['trial'] ) ) { continue; }			// no need to find the trial type twice
+					$fileName = fileExists( 'TrialTypes/'.$trialType.'.php' );		// fileExists will find both files and folders
+					if( $fileName === FALSE ) {
+						$procName = pathinfo( $up.$expFiles.$_SESSION['Condition']['Procedure'], PATHINFO_FILENAME );
+						$errors['Count']++;
+						$errors['Details'][] = 'The trial type '.$row[$column].' for row '.$i.' in the procedure file '.$procName.' has no file or folder in the "'.$codeF.'TrialTypes/" folder.';
+					}
+					if( is_dir( $fileName ) ) {
+						$display = fileExists( $fileName.'/trial.php', TRUE, FALSE );
+						if( $display === FALSE ) {
+							$procName = pathinfo( $up.$expFiles.$_SESSION['Condition']['Procedure'], PATHINFO_FILENAME );
+							$errors['Count']++;
+							$errors['Details'][] = 'The trial type '.$row[$column].' for row '.$i.' in the procedure file '.$procName.' has a folder in the "'.$codeF.'TrialTypes/" folder, but there is no "trial" file within that folder.';
+						} else {
+							$scoringFile = fileExists( $fileName.'/scoring.php', FALSE, FALSE );
+							if( $scoringFile === FALSE ) {
+								$scoringFile = $scoring;
+							}
+							$trialTypes[ $trialType ]['trial'] = $display;
+							$trialTypes[ $trialType ]['scoring'] = $scoringFile;
+						}
+					} else {
+						$trialTypes[ $trialType ]['trial'] = $fileName;
+						$trialTypes[ $trialType ]['scoring'] = $scoring;
+					}
+				}
+			}
+			$findingKeys = TRUE;
+			$allKeysNeeded = array();
+			$scoringFiles = array();
+			foreach( $trialTypes as $trialType ) {
+				$scoringFiles[ $trialType['scoring'] ] = NULL;
+			}
+			foreach( $scoringFiles as $fileName => &$keys ) {
+				$keys = include $fileName;
+				if( $keys == 1 ) {
+					$keys = array();
+				} elseif( !is_array( $keys ) ) {
+					$keys = array( $keys );
+				}
+				$keys = array_flip( $keys );
+			}
+			unset( $keys );
+			foreach( $trialTypes as $trialType ) {
+				foreach( $trialType['levels'] as $lvl => $null ) {
+					if( $lvl === 0 ) {
+						$allKeysNeeded += $scoringFiles[ $trialType['scoring'] ];
+					} else {
+						$allKeysNeeded += AddPrefixToArray( 'post'.$lvl.'_', $scoringFiles[ $trialType['scoring'] ] );
+					}
+				}
+			}
+			foreach( $allKeysNeeded as &$key ) {
+				$key = NULL;
+			}
+			unset( $key );
+			$_SESSION['Trial Types'] = $trialTypes;
+			
 			$procedure = BlockShuffle($procedure, 'Shuffle');
 						
 			// Load entire experiment into $Trials[1-X] where X is the number of trials
@@ -255,18 +355,7 @@
 			for ($count=2; $count<$procedureLength; $count++) {
 				$Trials[$count-1]['Stimuli']	= $stimuli[ ($procedure[$count]['Item']) ];			// adding 'Stimuli', as an array, to each position of $Trials
 				$Trials[$count-1]['Procedure']	= $procedure[$count];								// adding 'Procedure', as an array, to each position of $Trials
-				$Trials[$count-1]['Response']	= array(	'Response1'		=> NULL,			// adding 'Response', as an array, to each position of $Trials
-															'RT'			=> NULL,
-															'RTkey'			=> NULL,
-															'RTlast'		=> NULL,
-															'strictAcc'		=> NULL,
-															'lenientAcc'	=> NULL,
-															'Accuracy'		=> NULL,
-															'JOL'			=> NULL,
-															'postRT'		=> NULL,
-															'postRTkey'		=> NULL,
-															## ADD ## if you're going to collect any responses you need to create the response placeholder here
-														);
+				$Trials[$count-1]['Response']	= $allKeysNeeded;
 															
 				// on trials with no Stimuli info (e.g., freerecall) keep the same Stimuli structure but fill with 'n/a' values
 				// I need a consistent Trial structure to do all of the automatic output creation I do later on
@@ -383,7 +472,7 @@
 		// session1 $Trials also contains trials for other sessions but trial.php sends to done.php once a *newfile* shows up
 		$_SESSION['Trials']		= $Trials;
 		$_SESSION['Position']	= 1;
-		// Readable($_SESSION['Trials'], '$_SESSION[\'Trials\']');										#### DEBUG ####
+		$_SESSION['PostNumber'] = -1;
 		
 		
 		#### Send participant to next phase of experiment (demographics or instructions)
@@ -399,6 +488,7 @@
 			Readable($_SESSION['Condition'],	'Condition information');
 			Readable($stimuli, 					'Stimuli file in use');
 			Readable($procedure,				'Procedure file in use');
+            readable($trialTypeColumns,         'Procedure columns containing trial types');
 			Readable($_SESSION['Trials'],		'$_SESSION["Trials"] array');
 			echo '<form action ="'.$link.'" method="get">
 					<input type="submit" value="Press here to continue to experiment"/>

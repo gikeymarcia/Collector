@@ -11,17 +11,6 @@
     #### setting up aliases (for later use)
     $currentPos   =& $_SESSION['Position'];
     $currentTrial =& $_SESSION['Trials'][$currentPos];
-        $cue        =& $currentTrial['Stimuli']['Cue'];
-        $target     =& $currentTrial['Stimuli']['Target'];
-        $answer     =  $currentTrial['Stimuli']['Answer'];
-        $trialType  =  trim(strtolower($currentTrial['Procedure']['Trial Type']));
-
-
-    #### grabbing responses from postTrial
-    @$currentTrial['Response']['JOL']       = $_POST['JOL'];
-    @$currentTrial['Response']['postRT']    = $_POST['RT'];
-    @$currentTrial['Response']['postRTkey'] = $_POST['RTkey'];
-    ## ADD ## if you've made a new post-trial type that collects data then you need to record that data into $currentTrial['Response']['whatever name']
 
 
     #### Calculating time difference from current to last trial
@@ -53,6 +42,7 @@
 
     // progresses the trial counter
     $currentPos++;
+	$_SESSION['PostNumber'] = 0;
 
     // are we done with all presentations? if so, send to finalQuestions.php
     if (array_key_exists($currentPos, $_SESSION['Trials']) == FALSE) {
