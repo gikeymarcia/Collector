@@ -6,7 +6,7 @@
     require 'CustomFunctions.php';                          // Load custom PHP functions
     initiateCollector();
     require 'fileLocations.php';                            // sends file to the right place
-    require $up.$expFiles.'Settings.php';                   // experiment variables
+    require $up . $expFiles . 'Settings.php';               // experiment variables
 
     #### setting up aliases (for later use)
     $currentPos   =& $_SESSION['Position'];
@@ -33,10 +33,10 @@
                     'Condition Description' =>  $_SESSION['Condition']['Condition Description'],
                     'Condition Notes'       =>  $_SESSION['Condition']['Condition Notes']
                   );
-    foreach( $currentTrial as $category => $array ) {
-        $data += AddPrefixToArray( $category.'*', $array );
+    foreach ($currentTrial as $category => $array) {
+        $data += AddPrefixToArray($category . '*', $array);
     }
-    arrayToLine($data,$_SESSION['Output File']);                                        // write data line to the file
+    arrayToLine($data, $_SESSION['Output File']);                                       // write data line to the file
     ###########################################
 
 

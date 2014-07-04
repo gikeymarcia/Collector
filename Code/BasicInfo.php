@@ -12,15 +12,13 @@
     require 'fileLocations.php';                            // sends file to the right place
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link href="css/global.css" rel="stylesheet" type="text/css" />
     <title>Basic Information</title>
 </head>
-<?php flush(); ?>
 <body>
     <div class=main-contain>
         <h2 class=textcenter>Basic Information</h2>
@@ -29,8 +27,8 @@
 
             <div class=field>
                 <legend>What is your gender?</legend>
-                <input type="radio"    value="Male"    class="radio"    name="Gender"    />    Male    <br />
-                <input type="radio"    value="Female"    class="radio"    name="Gender"    />    Female    <br />
+                <input type="radio"   value="Male"     class="radio"    name="Gender"    />    Male     <br />
+                <input type="radio"   value="Female"   class="radio"    name="Gender"    />    Female   <br />
             </div>
     
             <div class=field>
@@ -44,17 +42,17 @@
                     <option selected="selected">Select Level</option>
                     <option>    Some High School                            </option>
                     <option>    High School Graduate                        </option>
-                    <option>    Some college, no degree                        </option>
-                    <option>    Associates degree                            </option>
+                    <option>    Some college, no degree                     </option>
+                    <option>    Associates degree                           </option>
                     <option>    Bachelors degree                            </option>
-                    <option>    Graduate degree (Masters, Doctorate, etc.)    </option>
+                    <option>    Graduate degree (Masters, Doctorate, etc.)  </option>
                 </select>
             </div>
     
             <div class=field>
                 <p>Do you speak English fluently?</p>
-                <input    type="radio"    name="English"    value="Fluent"        />    Yes, I am fluent in English        <br />
-                <input    type="radio"    name="English"    value="Non-Fluent"    />    No, I am not fluent in English    <br />
+                <input    type="radio"    name="English"    value="Fluent"        />    Yes, I am fluent in English     <br />
+                <input    type="radio"    name="English"    value="Non-Fluent"    />    No, I am not fluent in English  <br />
             </div>
     
             <div class=field>

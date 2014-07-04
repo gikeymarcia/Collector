@@ -114,9 +114,8 @@
 	}
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link href="css/global.css" rel="stylesheet" type="text/css" />
@@ -194,7 +193,6 @@
                             <ul>
                                 <li> Trial Number:          {$currentPos}                                          </li>
                                 <li> Trial Type:            {$trialType}                                           </li>
-                                <li> Post Trial:            {$clean_currentTrial['Procedure']['Post Trial']}       </li>
                                 <li> Trial timing:          {$clean_currentTrial['Procedure']['Timing']}           </li>
                                 <li> Trial Time (seconds):  {$time}                                                </li>
                             </ul>

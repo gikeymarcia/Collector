@@ -25,17 +25,16 @@
                     'Trial'     =>  $readablePos,
                     'Question'  =>  $FQ['Question'],
                     'Type'      =>  $FQ['Type'],
-                    'RT'        =>  $_POST['RT']
-                  );
+                    'RT'        =>  $_POST['RT']  );
 
-    if( is_array($formData) ) {
-        foreach( $formData as $resp ) {
+    if (is_array($formData)) {
+        foreach ($formData as $resp) {
             $data['Response'] = $resp;
-            arrayToLine( $data, $fqDataPath );
+            arrayToLine($data, $fqDataPath);
         }
     } else {
         $data['Response'] = $formData;
-        arrayToLine( $data, $fqDataPath );
+        arrayToLine($data, $fqDataPath);
     }
 
 

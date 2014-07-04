@@ -1,31 +1,30 @@
 <?php
-/*	Collector
- A program for running experiments on the web
- Copyright 2012-2014 Mikey Garcia & Nate Kornell
+/*  Collector
+    A program for running experiments on the web
+    Copyright 2012-2014 Mikey Garcia & Nate Kornell
  */
 
-####  good place to pull in values and/or compute things that'll be inserted into the HTML below
-require 'fileLocations.php';			// sends file to the right place
-require $up.$expFiles.'Settings.php';	// experiment variables
-require 'CustomFunctions.php';			// Loads all of my custom PHP functions
-// Load custom PHP functions
-initiateCollector();
+    ####  good place to pull in values and/or compute things that'll be inserted into the HTML below
+    require 'fileLocations.php';                    // sends file to the right place
+    require $up . $expFiles . 'Settings.php';       // experiment variables
+    require 'CustomFunctions.php';                  // Loads all of my custom PHP functions
+    // Load custom PHP functions
+    initiateCollector();
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<link href="css/global.css" rel="stylesheet" type="text/css" />
-	<title>Experiment Instructions</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="css/global.css" rel="stylesheet" type="text/css" />
+    <title>Experiment Instructions</title>
 </head>
 
 <body data-controller=instructions>
-	<div class=cframe-outer>
+    <div class=cframe-outer>
         <div class=cframe-inner>
 
-			<?php include FileExists( $up.$expFiles.$instructionsFileName ); ?>
+            <?php include FileExists($up . $expFiles . $instructionsFileName); ?>
 
             <form class=hidden name=Login action="<?php echo $up . $codeF; ?>trial.php" method=post>
                 <input  name=RT        id=RT    type=text value=0 />
@@ -39,10 +38,10 @@ initiateCollector();
     <div class="alert alert-instructions">Please carefully read the instructions again.</div>
 
     <div class=precache>
-	<?php
-	### PRE-CACHES All cues, targets, and answers used in experiment ####
+    <?php
+    ### PRE-CACHES All cues, targets, and answers used in experiment ####
     foreach ($_SESSION['Trials'] as $Trial) {
-        echo show($Trial['Stimuli']['Cue']) . ' ';
+        echo show($Trial['Stimuli']['Cue'])    . ' ';
         echo show($Trial['Stimuli']['Target']) . ' ';
         echo show($Trial['Stimuli']['Answer']) . ' ';
         echo '<br />';

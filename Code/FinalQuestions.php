@@ -9,9 +9,8 @@
 	initiateCollector();
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link href="css/global.css" rel="stylesheet" type="text/css" />
@@ -23,43 +22,43 @@
 
 <?php
     // if this is the first time on FinalQuestions.php then load questions from file
-    if(isset($_SESSION['FinalQs']) == FALSE) {
+    if (isset($_SESSION['FinalQs']) == FALSE) {
 			$fQ	= GetFromFile($up.$expFiles.$finalQuestionsFileName);
         // loop that deletes trailing empty positions from $fQ array
         for ($i=count($fQ)-1; $i >0; $i--) {
-            if($fQ[$i] == null) {
+            if ($fQ[$i] == null) {
                 unset($fQ[$i]);
-            }
-            else {
+            } else {
                 break;
             }
         }
-        $_SESSION['FinalQs']    = $fQ;
-        $_SESSION['FQpos']      = 2;
+        $_SESSION['FinalQs'] = $fQ;
+        $_SESSION['FQpos']   = 2;
     }
 
 
     // sends to done.php if there are no more questions
-    if(isset($_SESSION['FinalQs'][ $_SESSION['FQpos'] ]) == FALSE) {
+    if (isset($_SESSION['FinalQs'][ $_SESSION['FQpos'] ]) == FALSE) {
         echo '<meta http-equiv="refresh" content="0; url=done.php">';
     }
 
 
     // setting up aliases (makes all later code easier to read)
-    $allFQs     =&  $_SESSION['FinalQs'];
-    $pos        =&  $_SESSION['FQpos'];
-    $FQ         =&  $allFQs[$pos];                          // all info about current final question
-    $Q          =   $FQ['Question'];                        // the question on this trial
-    $type       =   trim(strtolower($FQ['Type']));          // type of question to display for this trial (i.e, likert, text, radio, checkbox)
-    $options    =   array();
+    $allFQs  =&  $_SESSION['FinalQs'];
+    $pos     =&  $_SESSION['FQpos'];
+    $FQ      =&  $allFQs[$pos];                          // all info about current final question
+    $Q       =   $FQ['Question'];                        // the question on this trial
+    $type    =   trim(strtolower($FQ['Type']));          // type of question to display for this trial (i.e, likert, text, radio, checkbox)
+    $options =   array();
 
 
     // loading values into $options
     for ($i=1; isset($FQ[$i]); $i++) {
-        if($FQ[$i] != '') {
+        if ($FQ[$i] != '') {
             $rawString  = $FQ[$i];
             $split      = explode('|', $rawString);
-            $temp       = array( 'value' => $split[0], 'text' => $split[1]);
+            $temp       = array('value' => $split[0],
+                                'text'  => $split[1]);
             $options[]  = $temp;
             // echo 'found fq #'.$i.'  and it is  '.$FQ[$i].'<br />';
         }
@@ -72,7 +71,7 @@
 
 
     // if the question starts with '*' then skip it; good for skipping questions when debugging without deleting finalQuestions
-    if($Q[0] == '*') {
+    if ($Q[0] == '*') {
         echo '<meta http-equiv="refresh" content="0; url=FQdata.php">';
         exit;
     }
@@ -88,11 +87,11 @@
 
                     <?php
                     // radio button code
-                    if($type == 'radio'): ?>
+                    if ($type == 'radio'): ?>
                         <?php foreach ($options as $choice): ?>
                         <label>
-                            <input type=radio name=formData value='<?php echo $choice["value"]; ?>' />
-                            <?php echo $choice["text"]; ?>
+                            <input type=radio name=formData value='<?php echo $choice['value']; ?>' />
+                            <?php echo $choice['text']; ?>
                         </label>
                         <?php endforeach; ?>
                         <div class=textcenter>
@@ -104,8 +103,8 @@
                     if($type == 'checkbox'): ?>
                         <?php foreach ($options as $choice): ?>
                         <label>
-                            <input type=checkbox name=formData[] value='<?php echo $choice["value"]; ?>' />
-                            <?php echo $choice["text"]; ?>
+                            <input type=checkbox name=formData[] value='<?php echo $choice['value']; ?>' />
+                            <?php echo $choice['text']; ?>
                         </label>
                         <?php endforeach; ?>
                         <div class=textcenter>

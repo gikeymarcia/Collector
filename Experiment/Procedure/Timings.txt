@@ -1,17 +1,17 @@
-Item	Trial Type	Post Trial	Timing	Min Time	Procedure Notes	Shuffle
-2	Study	No	User		low assoc	block1
-6	Study	No	User		hi assoc	block1
-2	Study	No	Computer		low assoc	compBlock
-6	Study	No	Computer		hi assoc	compBlock
-2	Study	No	7		low assoc	custom time
-6	Study	No	14		hi assoc	custom time
-2	Test	No	Computer		low assoc	x
-6	Test	Feedback	15		hi assoc	x
-2	Study	No	User	2	low assoc	block1
-6	Study	No	User	2	hi assoc	block1
-2	Study	No	Computer	2	low assoc	compBlock
-6	Study	No	Computer	2	hi assoc	compBlock
-2	Study	No	7	2	low assoc	custom time
-6	Study	No	14	2	hi assoc	custom time
-2	Test	No	Computer	2	low assoc	x
-6	Test	Feedback	15	2	hi assoc	x
+Item	Trial Type	Timing	Min Time	Post 1 Trial Type	Post 1 Timing	Procedure Notes	Shuffle
+2	Study	User	-	No	-	low assoc	block1
+6	Study	User	-	No	-	hi assoc	block1
+2	Study	Computer	-	No	-	low assoc	compBlock
+6	Study	Computer	-	No	-	hi assoc	compBlock
+2	Study	7	-	No	-	low assoc	custom time
+6	Study	14	-	No	-	hi assoc	custom time
+2	Test	Computer	-	No	-	low assoc	x
+6	Test	15	-	Feedback	user	hi assoc	x
+2	Study	User	2	No	-	low assoc	block1
+6	Study	User	2	No	-	hi assoc	block1
+2	Study	Computer	2	No	-	low assoc	compBlock
+6	Study	Computer	2	No	-	hi assoc	compBlock
+2	Study	7	2	No	-	low assoc	custom time
+6	Study	14	2	No	-	hi assoc	custom time
+2	Test	Computer	2	No	-	low assoc	x
+6	Test	15	2	Feedback	user	hi assoc	x

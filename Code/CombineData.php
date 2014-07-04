@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html>
 <html>
 <head>
     <title>Here are your data</title>
@@ -15,7 +15,7 @@
      require 'fileLocations.php';                                   // sends file to the right place
      require 'CustomFunctions.php';
     
-    $OutFiles = scandir($up.$dataF.$nonDebugF.$outputF);
+    $OutFiles = scandir($up . $dataF . $nonDebugF . $outputF);
     $finalQ   = array();                                            // will hold finalQuestions data
     $instruct = array();                                            // will hold instructions data
     $status   = array();                                            // will hold status.txt data
@@ -29,7 +29,7 @@
         }
     }
     $OutFiles = $outTemp;
-    Readable($OutFiles, count($OutFiles).' output files scanned');
+    Readable($OutFiles, count($OutFiles) . ' output files scanned');
     
     /*
     $finalQ   = GetFromFile($up.$dataF.$nonDebugF.$finalQuestionsDataFileName.  $outExt, FALSE);
@@ -42,41 +42,41 @@
     #### Get all headers across all output files
     $allHeaders = array();
     foreach ($OutFiles as $file) {
-        $loc    = $up.$dataF.$nonDebugF.$outputF.$file;
+        $loc    = $up . $dataF . $nonDebugF . $outputF . $file;
         $handle = fopen($loc, 'r');
         $row    = fgets($handle);
-        $pieces    = explode("\t",$row);
+        $pieces = explode("\t", $row);
         foreach ($pieces as $col) {
-            if(!in_array(trim($col), $allHeaders)) {
+            if (!in_array(trim($col), $allHeaders)) {
                 // echo 'adding :'.$col.'<br>';
                 $allHeaders[] = trim($col);
             }
         }
     }
     // fwrite(  fopen($up.$dataF.'headers.txt','w'),  implode("\t", $allHeaders)  );
-    Readable($allHeaders,'these are all unique headers');
+    Readable($allHeaders, 'these are all unique headers');
 
 
 
     #### Combine all output using common headers
-    $combineLoc = $up.$dataF.'All Data - '.date("Y")."-".date("m")."-".date("d").' - '.date("U").'.txt';
-    $handle = fopen($combineLoc, 'a');
-    $delimiter = "\t";
+    $combineLoc = $up . $dataF . 'All Data - ' . date("Y") . "-" . date("m") . "-" . date("d") . ' - ' . date("U") . '.txt';
+    $handle     = fopen($combineLoc, 'a');
+    $delimiter  = "\t";
     fwrite($handle, implode($delimiter, $allHeaders));                      // write common file headers
     fwrite($handle, PHP_EOL);
     
     
     foreach ($OutFiles as $oneSS) {                                         // for each output file
-        $temp = GetFromFile($up.$dataF.$nonDebugF.$outputF.$oneSS, FALSE);
+        $temp = GetFromFile($up . $dataF . $nonDebugF . $outputF . $oneSS,  FALSE);
         foreach ($temp as $trial) {                                         // for each trial
             $thisLine = array();                                            // clear holder line
             foreach ($allHeaders as $col) {                                 // for each unique header (across all output files)
-                if(!isset($trial[$col])) {                                  // if the column doesn't exist then set it to blank
+                if (!isset($trial[$col])) {                                 // if the column doesn't exist then set it to blank
                     $trial[$col] = '';
                 }
                 $thisLine[] = $trial[$col];                                 // build array representing this line
             }
-            fwrite($handle, implode($delimiter, $thisLine).PHP_EOL);        // write newline
+            fwrite($handle, implode($delimiter, $thisLine) . PHP_EOL);        // write newline
         }
     }
     fclose($handle);

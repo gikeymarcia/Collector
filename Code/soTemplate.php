@@ -12,9 +12,8 @@
 	$time			=  trim($currentTrial['Procedure']['Timing']);
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link href="css/global.css" rel="stylesheet" type="text/css" />
@@ -42,7 +41,7 @@
 		echo '<div id="time" class="Hidden">'.$time.'</div>';
 		
 		// this hidden and empty form is submitted to progress the page
-		echo '<form id="loadingForm" action="postTrial.php" method="get"> </form>';
+		echo '<form id="loadingForm" action="next.php" method="get"> </form>';
 		
 		#### Pre-cache next trial
 		echo '<div class="Hidden">';
