@@ -129,6 +129,11 @@ var COLLECTOR = {
 			$(".collapsibleTitle").click(function() {
 				$(this).parent().children().not(".collapsibleTitle").toggle(350);
 			});
+			// starts them collapsed
+			$(document).ready(function() {
+                $(".collapsibleTitle").parent().children().not(".collapsibleTitle").toggle(350);
+                window.scrollTo(0, 0);
+            });
 		}
 	},
 

@@ -1,156 +1,168 @@
 <?php
-/*	Collector
-	A program for running experiments on the web
-	Copyright 2012-2014 Mikey Garcia & Nate Kornell
+/*  Collector
+    A program for running experiments on the web
+    Copyright 2012-2014 Mikey Garcia & Nate Kornell
  */
     require 'CustomFunctions.php';                          // Load custom PHP functions
     initiateCollector();
-	require 'fileLocations.php';							// sends file to the right place
-	require $up.$expFiles.'Settings.php';					// experiment variables
-	
-	$_SESSION = array();									// reset session so it doesn't contain any information from a previous login attempt
-	$_SESSION['Debug'] = $debugMode;
+    require 'fileLocations.php';                            // sends files to the right places
+    require $up . $expFiles . 'Settings.php';               // experiment variables
+
+    $_SESSION = array();                                    // reset session so it doesn't contain any information from a previous login attempt
+    $_SESSION['OutputDelimiter'] = $delimiter;
+    $_SESSION['Debug'] = $debugMode;
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<link href="css/global.css" rel="stylesheet" type="text/css" />
-	<link href='http://fonts.googleapis.com/css?family=Kreon' rel='stylesheet' type='text/css' />
-	<title>Preparing the Experiment</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="css/global.css" rel="stylesheet" type="text/css" />
+    <link href='http://fonts.googleapis.com/css?family=Kreon' rel='stylesheet' type='text/css' />
+    <title>Preparing the Experiment</title>
 </head>
-<?php flush();	?>
-
 <body>
-	
-	<?php
-		
-		echo '<h1>Please wait while we load the experiment...</h1>';
-		
-		
-		##### Error Checking Code ####
-		$found	= FALSE;														// will use this later to determine when loops fail
-		$errors	= array('Count' => 0, 'Details' =>array()  );					// the array to keep count and details of errors
-		if (file_exists($up.$expFiles.$conditionsFileName) == FALSE):							// does conditions exist? (error checking)
-			$errors['Count']++;
-			$errors['Details'][] = 'No "'.$conditionsFileName.'" found';
-		endif;
-		
-		
-		#### Grabbing submitted info
-		if( !isset( $_SESSION['ID'] ) ) {
-			$_SESSION['ID'] = isset($_GET['ID']) ? $_GET['ID'] : rand_string();
-		}
-		
-		$username = trim($_GET['Username']);						        // grab Username from URL
-		if( strlen($debugName) > 0 AND substr( $username, 0, strlen($debugName) ) === $debugName ) {
-			$_SESSION['Debug'] = TRUE;
-			$username = trim( substr( $username, strlen($debugName) ) );
-			if( $username === '' ) { $username = $_SESSION['ID']; }
-		}
-		if ($_SESSION['Debug'] == FALSE) {
-			error_reporting(0);
-		} else {
-			$dataSubFolder = $debugF;
-			$path = $up.$dataF.$dataSubFolder.$extraDataF;
-			$statusBeginCompleteFileName = $path.$statusBeginFileName.$outExt;
-		}
-		$_SESSION['Username'] = $username;
-		
-		if( isset($_GET['Session']) ) {
-			$_SESSION['Session'] = trim($_GET['Session']);			// grab session# from URL
-		} else {
-			$_SESSION['Session'] = 0;
-		}
-		if( $_SESSION['Session'] < 1 ){								// if session is not set then set to 1
-			$_SESSION['Session'] = 1;
-		} else { $doDemographics = FALSE; }							// skip demographics for all but session1
-		
-		$selectedCondition = trim($_GET['Condition']);
-		
-		
-		if($checkElig == TRUE AND $mTurkMode == TRUE) {
-			include	'check.php';
-		}
-		
-		#### Checking username is 3 characters or longer
-		if(strlen($_GET['Username']) < 3 AND !$_SESSION['Debug'] ) {
-			echo '<h1>Error: Login username must be 3 characters or longer</h1>
-					<h2>Click <a href="'.$up.'index.php">here</a> to enter a valid username</h2>';
-			exit;
-		}
-		
-		
-		#### Code to automatically choose condition assignment
-		$Conditions	= GetFromFile($up.$expFiles.$conditionsFileName, FALSE);		// Loading conditions info
-		$logFile	= $up.$dataF.$countF.$loginCounterName;
-		if( $selectedCondition == 'Auto') {
-			if( !is_dir( $up.$dataF.$countF ) ) {
-				mkdir( $up.$dataF.$countF, 0777, TRUE );
-			}
-			
-			if(file_exists($logFile) ) {											// Read counter file & save value
-				$fileHandle	= fopen ($logFile, "r");
-				$loginCount	= fgets($fileHandle);
-				fclose($fileHandle);
-			} else { $loginCount = 1; }
-			// write old value + 1 to login counter
-			$fileHandle	= fopen($logFile, "w");
-			fputs($fileHandle, $loginCount + 1);
-			fclose($fileHandle);
-			
-			$conditionNumber = ( $loginCount % count($Conditions)) +1;				// cycles through current condition assignment based on login counter
-		}
-		else{
-			$conditionNumber = $selectedCondition;									// if condition is manually choosen then honor choice
-		}
-		
-		
-		#### loads condition info into $_Session['Condition']
-		foreach ($Conditions as $Acond) {
-			if($Acond['Number'] == $conditionNumber) {
-				$_SESSION['Condition'] = $Acond;
-				$found = TRUE;
-				break;
-			}
-		}
-		
-		##### Error Checking Code ####
-		// did we fail to find the condition information?
-		if($found == FALSE) {
-			$errors['Count']++;
-			$errors['Details'][] = 'Could not find the selected condition #'.$conditionNumber.' in '.$conditionsFileName;
-		}
-		// does the condition file have the required headers?
-		$errors = keyCheck( $Conditions,	'Number',		$errors,	$conditionsFileName );
-		$errors = keyCheck( $Conditions,	'Stimuli',		$errors,	$conditionsFileName );
-		$errors = keyCheck( $Conditions,	'Procedure',	$errors,	$conditionsFileName );
-		// does this condition point to a valid stimuli file?
-		if (file_exists($up.$expFiles.$_SESSION['Condition']['Stimuli']) == FALSE) {
-			$errors['Count']++;
-			$errors['Details'][] = 'No stimuli file found at '.$_SESSION['Condition']['Stimuli'];
-		}
-		// does this condition point to a valid procedure file?
-		if (file_exists($up.$expFiles.$_SESSION['Condition']['Procedure']) == FALSE) {
-			$errors['Count']++;
-			$errors['Details'][] = 'No procedure file found at '.$_SESSION['Condition']['Procedure'];
-		}
-		// checking required columns from Stimuli file
-		$temp = GetFromFile($up.$expFiles.$_SESSION['Condition']['Stimuli'], FALSE);
-		$errors = keyCheck( $temp, 'Cue'	,	$errors, $_SESSION['Condition']['Stimuli'] );
-		$errors = keyCheck( $temp, 'Target'	,	$errors, $_SESSION['Condition']['Stimuli'] );
-		$errors = keyCheck( $temp, 'Answer'	,	$errors, $_SESSION['Condition']['Stimuli'] );
-		$errors = keyCheck( $temp, 'Shuffle',	$errors, $_SESSION['Condition']['Stimuli'] );
-		// checking required columns from Procedure file
-		$temp = GetFromFile($up.$expFiles.$_SESSION['Condition']['Procedure'], FALSE);
-		$errors = keyCheck( $temp, 'Item'		,	$errors, $_SESSION['Condition']['Procedure'] );
-		$errors = keyCheck( $temp, 'Trial Type'	,	$errors, $_SESSION['Condition']['Procedure'] );
-		$errors = keyCheck( $temp, 'Timing'		,	$errors, $_SESSION['Condition']['Procedure'] );
-		$errors = keyCheck( $temp, 'Shuffle'	,	$errors, $_SESSION['Condition']['Procedure'] );
-		unset($temp);                                                                 // clear $temp
+    <?php
+        
+        echo '<h1> Please wait while we load the experiment... </h1>';
+        
+
+        ##### Error Checking Code ####
+        $found  = FALSE;                                                        // will use this later to determine when loops fail
+        $errors = array('Count'   => 0,
+                        'Details' => array()  );
+        if (file_exists($up . $expFiles . $conditionsFileName) == FALSE) {      // does conditions exist? (error checking)
+            $errors['Count']++;
+            $errors['Details'][] = 'No "'.$conditionsFileName.'" found';
+        }
         
         
+        #### Grabbing submitted info
+        $username = trim($_GET['Username']);                        // grab Username from URL
+        $selectedCondition = trim($_GET['Condition']);              // grab Condition from URL
+        if (isset($_GET['Session'])) {
+            $_SESSION['Session'] = trim($_GET['Session']);          // grab session# from URL
+        } else {
+            $_SESSION['Session'] = 1;                               // if session is not set then set to 1
+        }
+        if ($_SESSION['Session'] != 1) {
+            $doDemographics = FALSE;                                // skip demographics for all but session1
+        }
+        
+        
+        #### Making decision about login info
+        // determine user's unique ID
+        if (!isset($_SESSION['ID'])) {
+            if (isset($_GET['ID'])) {
+                $_SESSION['ID'] = $_GET['ID'];
+            } else {
+                $_SESSION['ID'] = rand_string();
+            }
+        }
+        // did we login as debug?
+        if (strlen($debugName) > 0
+            && substr($username, 0, strlen($debugName)) === $debugName
+        ) {
+            $_SESSION['Debug'] = TRUE;
+            $username = trim(substr($username, strlen($debugName)));
+            if ($username === '') { $username = $_SESSION['ID']; }
+        }
+        // set Username
+        $_SESSION['Username'] = $username;
+        
+        
+        if ($_SESSION['Debug'] === TRUE) {
+            $dataSubFolder = $debugF;
+        	$path = $up . $dataF . $dataSubFolder . $extraDataF;
+        	$statusBeginCompleteFileName = $path . $statusBeginFileName . $outExt;
+        } else {
+        	error_reporting(0);
+        }
+         
+        
+        if ($checkElig == TRUE AND $mTurkMode == TRUE) {
+            include	'check.php';
+        }
+        
+        #### Checking username is 3 characters or longer
+        if (strlen($_GET['Username']) < 3
+            AND !$_SESSION['Debug']
+        ) {
+        	echo '<h1> Error: Login username must be 3 characters or longer</h1>
+        			<h2>Click <a href="' . $up . 'index.php">here</a> to enter a valid username</h2>';
+        	exit;
+        }
+        
+        
+        #### Code to automatically choose condition assignment
+        $Conditions	= GetFromFile($up . $expFiles . $conditionsFileName,  FALSE);   // Loading conditions info
+        $logFile	= $up . $dataF . $countF . $loginCounterName;
+        if ($selectedCondition == 'Auto') {
+            if (!is_dir($up . $dataF . $countF)) {
+                mkdir($up . $dataF . $countF,  0777,  TRUE);
+            }
+            
+            if (file_exists($logFile)) {                                            // Read counter file & save value
+                $fileHandle	= fopen($logFile, "r");
+                $loginCount	= fgets($fileHandle);
+                fclose($fileHandle);
+            } else { $loginCount = 1; }
+            // write old value + 1 to login counter
+            $fileHandle	= fopen($logFile, "w");
+            fputs($fileHandle, $loginCount+1);
+            fclose($fileHandle);
+            
+            $conditionNumber = ($loginCount % count($Conditions))+1;                // cycles through current condition assignment based on login counter
+        }
+        else{
+            $conditionNumber = $selectedCondition;                                  // if condition is manually choosen then honor choice
+        }
+        
+        
+        #### loads condition info into $_Session['Condition']
+        foreach ($Conditions as $Acond) {
+            if ($Acond['Number'] == $conditionNumber) {
+                $_SESSION['Condition'] = $Acond;
+                $found = TRUE;
+                break;
+            }
+        }
+        
+        ##### Error Checking Code ####
+        // did we fail to find the condition information?
+        if($found == FALSE) {
+            $errors['Count']++;
+            $errors['Details'][] = 'Could not find the selected condition #'.$conditionNumber.' in '.$conditionsFileName;
+        }
+        // does the condition file have the required headers?
+        $errors = keyCheck($Conditions, 'Number'    , $errors, $conditionsFileName);
+        $errors = keyCheck($Conditions, 'Stimuli'   , $errors, $conditionsFileName);
+        $errors = keyCheck($Conditions, 'Procedure' , $errors, $conditionsFileName);
+        // does this condition point to a valid stimuli file?
+        if (file_exists($up.$expFiles.$_SESSION['Condition']['Stimuli']) == FALSE) {
+        	$errors['Count']++;
+        	$errors['Details'][] = 'No stimuli file found at '.$_SESSION['Condition']['Stimuli'];
+        }
+        // does this condition point to a valid procedure file?
+        if (file_exists($up.$expFiles.$_SESSION['Condition']['Procedure']) == FALSE) {
+        	$errors['Count']++;
+        	$errors['Details'][] = 'No procedure file found at '.$_SESSION['Condition']['Procedure'];
+        }
+        // checking required columns from Stimuli file
+        $temp = GetFromFile($up.$expFiles.$_SESSION['Condition']['Stimuli'], FALSE);
+        $errors = keyCheck($temp, 'Cue'    ,   $errors, $_SESSION['Condition']['Stimuli']);
+        $errors = keyCheck($temp, 'Target' ,   $errors, $_SESSION['Condition']['Stimuli']);
+        $errors = keyCheck($temp, 'Answer' ,   $errors, $_SESSION['Condition']['Stimuli']);
+        $errors = keyCheck($temp, 'Shuffle',   $errors, $_SESSION['Condition']['Stimuli']);
+        // checking required columns from Procedure file
+        $temp = GetFromFile($up.$expFiles.$_SESSION['Condition']['Procedure'], FALSE);
+        $errors = keyCheck($temp, 'Item'       ,   $errors, $_SESSION['Condition']['Procedure']);
+        $errors = keyCheck($temp, 'Trial Type' ,   $errors, $_SESSION['Condition']['Procedure']);
+        $errors = keyCheck($temp, 'Timing'     ,   $errors, $_SESSION['Condition']['Procedure']);
+        $errors = keyCheck($temp, 'Shuffle'    ,   $errors, $_SESSION['Condition']['Procedure']);
+        unset($temp);                                                                 // clear $temp
+        
+/*        
         #### Find all of the columns that hold trial types (including 'Post# Trial Type's)
         $PostCount = 0;                                                                 // counts how many levels of post trials are used (e.g., Post 1, Post 2, Post 3...)
         $trialTypeColumns = array();                                                    // Give me the column names of all Trial Type columns (e.g., Trial Type, Post 1 Trial Type, Post 2 Trial Type)
@@ -183,9 +195,10 @@
             }
         }
         ksort($trialTypeColumns);                                                           // put trial type columns in order within $trialTypeColumns
-                
-        
-        #### Figuring out which trial types are being used and at what level (i.e., Post1, Post2, etc.)
+        readable($trialTypeColumns, 'tyson find trial types');
+
+ *     
+        #### Checking that each Post # has a 'Trial Type' and 'Timing' -- if the 
         $notTrials = array('off'    => TRUE,                                            // if the 'Trial Type' value is one of these then it isn't a trial
                            'no'     => TRUE,
                            ''       => TRUE,
@@ -218,67 +231,107 @@
             }
         }
         unset($proc);
+*/
+
+        #### Find all of the columns that hold trial types (including 'Post# Trial Type's)
+        $trialTypeColumns = array();                                                        // Each position will have the column name of a trial type column
+        $proc = GetFromFile($up . $expFiles . $_SESSION['Condition']['Procedure'], FALSE);  // load procedure file without padding
+        foreach ($proc[0] as $col => $val) {                                                // check all column names
+            $cleanCol = trim(strtolower($col));                                                 // lowercase it + remove trailing/leading whitespace
+            if (substr($cleanCol, -10) == 'trial type') {                                       // if ends with 'trial type'
+                if ($cleanCol == 'trial type') {                                                    // and is trial type
+                    $trialTypeColumns[0] = $col;                                                        // save it
+                } elseif (substr($cleanCol, 0, 4) == 'post') {                                      // if it starts with 'post'
+                    $cleanCol = trim(substr($cleanCol, 4, -10));                                        // drop the 'post' and 'trial type'
+                    if (is_numeric($cleanCol)) {                                                        // if what remains is a # (e.g., '15')
+                        $trialTypeColumns[$cleanCol] = $col;                                                // set $trialTypeColumns[15] to this column name
+                    } else {                                                                            // if not, it should have been a #
+                        $errors['Count']++;
+                        $errors['Details'][] = 'Column "' . $column . '" in ' . $_SESSION['Condition']['Procedure']
+                                             . ' needs to be numbered (e.g., "Post<b>1</b> Trial Type")';
+                    }
+                }
+            }
+        }
         
-		// echo 'Username = '.$_SESSION['Username'].'</br>';											#### DEBUG ####
-		// Readable($Conditions, "conditions loaded in");												#### DEBUG ####
-		// echo "{$loginCount} logins and should be using condition {$conditionNumber}<br />";			#### DEBUG ####
-		// Readable($_SESSION["Condition"],"this is what you're getting for condition:");				#### DEBUG ####
-		#### End of error checking
-		
-		$_SESSION['OutputDelimiter'] = $delimiter;
-		
-		#### Load all Stimuli and Info for this participant's condition then combine to create the experiment
-		if($_SESSION['Session'] == 1) {
-			// load and block shuffle stimuli for this condition
-			$stimuli = GetFromFile($up.$expFiles.$_SESSION['Condition']['Stimuli']);
-		
-			// setting defaults again here, so that if people downloaded the new Code/ folder without updating their settings, we can proceed as normal
-			if( !isset($checkAllFiles) ) {
-				$checkAllFiles = TRUE;
-			}
-			if( !isset($checkCurrentFiles) ) {
-				$checkCurrentFiles = FALSE;
-			}
-			// check the stimuli for correct image/audio file names, before the shuffle, so that we can tell people which rows the errors are on.
-			if( $checkAllFiles OR $checkCurrentFiles ) {
-				$stimuliFiles = array();
-				if( $checkAllFiles ) {
-					$stimPath = $up.$expFiles.'Stimuli/';
-					$scanStimFiles = scandir( $stimPath );
-					foreach( $scanStimFiles as $fileName ) {
-						if( is_file($stimPath.$fileName) ) {
-							$stimuliFiles[] = $stimPath.$fileName;
-						}
-					}
-				} else {
-					$stimuliFiles[] = $up.$expFiles.$_SESSION['Condition']['Stimuli'];
-				}
-				foreach( $stimuliFiles as $fileName ) {
-					if( $fileName === $up.$expFiles.$_SESSION['Condition']['Stimuli'] ) {
-						$temp = $stimuli;
-					} else {
-						$temp = GetFromFile( $fileName );
-					}
-					foreach( $temp as $i => $row ) {
-						if( $i < 2 ) { continue; }
-						if( show($row['Cue']) !== $row['Cue'] ) {
-							// show() detects a file extension like .png, and will use FileExists to check that it exists
-							// but it will always return a string, for cases where you are showing regular text
-							// using FileExists, we can see if a cue detected as an image by show() is a file that actually exists
-							if( FileExists( '../Experiment/'.$row['Cue'] ) === FALSE ) {
-								$errors['Count']++;
-								$errors['Details'][] = 'Image or audio file "../Experiment/'.$row['Cue'].'" not found for row '.$i.' in Stimuli File "'.basename($fileName).'".';
-							}
-						}
-					}
-				}
-			}
+        #### checking that all Post levels have the needed columns
+        $needed = array('Timing');                                                          // if we need more cols in the future they can be added here
+        foreach ($needed as $need) {
+            foreach ($trialTypeColumns as $number => $colName) {                                // check all trial type levels we found
+                if ($number == 0) {
+                    continue;                                                                   // we already checked the non-post level elsewhere in the code
+                }
+                if (!isset($proc[0]['Post' . ' '  . $number . ' ' . $need])) {                  // if the associated needed row doesn't exist (e.g., 'Post 1 Timing')
+                    $errors['Count']++;
+                    $errors['Details'][] = 'Post level ' . $number . ' is missing a "' . $need . '" column (i.e., add a column called 
+                                                "Post ' . $number . ' ' . $need . '" to the file "' . $_SESSION['Condition']['Procedure'] . '" to fix this error).
+                                                <br>
+                                                <em> If you are not using Post level ' . $number . ' you can safely delete the column 
+                                                "Post ' . $number . ' Trial Type" and this will also solve this error.</em>';
+                }
+            }
+        }
+        unset($proc);
+        #### End of error checking
+        
+        
+        
+        #### Backward compatability (do not rely on it becasue it will go away)
+        // setting defaults again here, so that if people downloaded the new Code/ folder without updating their settings, we can proceed as normal
+        if (!isset($checkAllFiles)) {
+            $checkAllFiles = TRUE;
+        }
+        if (!isset($checkCurrentFiles)) {
+            $checkCurrentFiles = FALSE;
+        }
+        
+        
+        
+        #### Load all Stimuli and Info for this participant's condition then combine to create the experiment
+        if ($_SESSION['Session'] == 1) {
+            // load and block shuffle stimuli for this condition
+            $stimuli = GetFromFile($up . $expFiles . $_SESSION['Condition']['Stimuli']);
+            
+            // check the stimuli for correct image/audio file names, before the shuffle, so that we can tell people which rows the errors are on.
+            if ($checkAllFiles OR $checkCurrentFiles) {
+                $stimuliFiles = array();
+                if ($checkAllFiles) {
+                    $stimPath = $up . $expFiles . 'Stimuli/';
+                    $scanStimFiles = scandir($stimPath);
+                    foreach ($scanStimFiles as $fileName) {
+                        if (is_file($stimPath . $fileName)) {
+                            $stimuliFiles[] = $stimPath . $fileName;
+                        }
+                    }
+                } else {
+                    $stimuliFiles[] = $up . $expFiles . $_SESSION['Condition']['Stimuli'];
+                }
+                foreach ($stimuliFiles as $fileName) {
+                    if ($fileName === $up . $expFiles . $_SESSION['Condition']['Stimuli']) {
+                        $temp = $stimuli;
+                    } else {
+                        $temp = GetFromFile($fileName);
+                    }
+                    foreach ($temp as $i => $row) {
+                        if ($i < 2) { continue; }
+                        if (show($row['Cue']) !== $row['Cue']) {
+                            // show() detects a file extension like .png, and will use FileExists to check that it exists
+                            // but it will always return a string, for cases where you are showing regular text
+                            // using FileExists, we can see if a cue detected as an image by show() is a file that actually exists
+                            if (FileExists('../Experiment/' . $row['Cue']) === FALSE ) {
+                                $errors['Count']++;
+                                $errors['Details'][] = 'Image or audio file "../Experiment/' . $row['Cue'] . '" not found for 
+                                                        row ' . $i . ' in Stimuli File "' . basename($fileName) . '".';
+                            }
+                        }
+                    }
+                }
+            }
 			$stimuli = BlockShuffle($stimuli, 'Shuffle');
 			
-			// Readable($stimuli,'shuffled stimuli *fingers crossed*');							// uncomment this line to see what your shuffled stimuli file looks like
 			
 			// load and block shuffle procedure for this condition
-			$procedure = GetFromFile($up.$expFiles.$_SESSION['Condition']['Procedure']);
+			$procedure = GetFromFile($up . $expFiles . $_SESSION['Condition']['Procedure']);
 			
 			$trialTypes = array();
 			foreach( $procedure as $i => $row ) {
@@ -430,16 +483,22 @@
 		
 		#### Output errors & Stop progression
 		if ($errors['Count'] > 0 AND $_SESSION['Session'] == 1 ) {										// if there is an error (only stops for session 1 errors)
-			echo '<b>'.$errors['Count'].' error(s) found in your code!</b> <br/>';						// tell me how many
-			foreach ($errors['Details'] as $errorCode) {												// give details of each error
-				echo $errorCode;
-				echo '<br/>';
-			}
-			if ($stopForErrors == TRUE) {
-				echo '<br/><br/>The program will not run until you have addressed the above errors';
-			// show information about $_SESSION['Trials'],
-				exit;
-			}
+			?>
+    			<div id="ErrorCodes">
+    			    <b> <?php echo $errors['Count']; ?> errors found in your code </b>
+    			    <ol>
+                        <?php   foreach ($errors['Details'] as $errorCode) {
+                                    echo '<li>' . $errorCode . '</li>';
+                                }                                                   ?>
+    			    </ol>
+    			    <?php
+    			         if ($stopForErrors == TRUE) {
+    			             echo '<br/> <h2>The program will not run until you have addressed the above errors</h2>';
+    			             exit;
+                         }
+    			    ?>
+    			</div>
+            <?php
 		}
 		
 		
@@ -487,7 +546,7 @@
 			Readable($_SESSION['Condition'],	'Condition information');
 			Readable($stimuli, 					'Stimuli file in use');
 			Readable($procedure,				'Procedure file in use');
-            readable($trialTypeColumns,         'Procedure columns containing trial types');
+            Readable($trialTypeColumns,         'Levels of trial types being used');
 			Readable($_SESSION['Trials'],		'$_SESSION["Trials"] array');
 			echo '<form action ="'.$link.'" method="get">
 					<input type="submit" value="Press here to continue to experiment"/>

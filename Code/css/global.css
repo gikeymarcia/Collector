@@ -422,7 +422,7 @@ em, i {
 	padding: 1.5em;
 	border-radius: 5px;
 }
-.readcheck ol li {
+.readcheck ul li {
 	width: 80%;
 	margin:1em auto;
 	background: #fff;
@@ -430,7 +430,7 @@ em, i {
 	padding: 5px;
 	cursor:pointer;
 }
-.readcheck ol li:hover {
+.readcheck ul li:hover {
 	background: #00a5e5;
 }
 
@@ -591,9 +591,15 @@ input[type="submit"].button-trial-advance {
 /*------------------------------------*\
   	$MISC
 \*------------------------------------*/
+ol {
+    list-style:decimal;
+    margin-left: 35px;
+    padding: 10px auto 10px auto;
+}
 
-
-
+li {
+    padding-bottom: 15px
+}
 
 
 /*------------------------------------*\
@@ -605,3 +611,12 @@ input[type="submit"].button-trial-advance {
         filter:Alpha(opacity=50);
     }
 }
+
+/*------------------------------------*\
+    $TINKER
+\*------------------------------------*/
+
+
+
+
+
