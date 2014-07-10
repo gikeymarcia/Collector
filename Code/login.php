@@ -272,6 +272,10 @@
             }
         }
         unset($proc);
+        $notTrials = array('off'    => TRUE,                                            // if the 'Trial Type' value is one of these then it isn't a trial
+                           'no'     => TRUE,
+                           ''       => TRUE,
+                           'n/a'    => TRUE  );
         #### End of error checking
         
         
