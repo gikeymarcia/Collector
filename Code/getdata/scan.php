@@ -7,7 +7,8 @@
 	require $root.$code.'CustomFunctions.php';
 	require 'getdataFunctions.php';
 	require $root.$expFiles.'Settings.php';					// experiment variables
-	if( !$allowGetData ) { exit; }
+	
+	if( $getdataPassword === '' ) exit( 'GetData has not been enabled.' );
 	
 	
 	#### Column Prefixes ####
