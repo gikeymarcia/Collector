@@ -122,7 +122,7 @@
 	<title>Trial</title>
 </head>
 <?php flush();	?>
-<body data-controller=trial data-action=<?php echo $trialType; ?>>
+<body data-controller=trial data-action=<?php echo $trialType; ?> class="invisible" >
 
 <?php
 	// variables I'll need and/or set in trialTiming() function
