@@ -19,7 +19,6 @@
 	<link href="<?php echo $codeF; ?>css/global.css" rel="stylesheet" type="text/css" />
 	<title>Experiment Login Page</title>
 </head>
-<?php flush(); ?>
 <body data-controller=multiSession>
     <!-- redirect if Javascript is disabled -->
     <noscript>

@@ -51,7 +51,7 @@
         $outputArray = array();
 
         // Use this logic when second-order shuffling is present
-        if(array_key_exists($groupingFactor . '2', $input[2])) {
+        if (array_key_exists($groupingFactor . '2', $input[2])) {
             // creates a hierarchical structure of higher order blocks which contain lower order blocks which contain specific items
             $holder  = array();
             $HiCount = 0;
@@ -151,7 +151,7 @@
 
 	
 	
-	function camelCase( $str ) {
+	function camelCase($str) {
 		$str = ucwords(strtolower(trim($str)));
 		$str = str_replace(' ', '', $str);
 		$str[0] = strtolower($str[0]);
@@ -244,12 +244,17 @@
                 $line[] = '';
             }
             $tOut = array_combine($keys, $line);            // combine the line of data with the header
-            if(isBlankLine($tOut)) {                        // do not include blank lines in output
+            if (isBlankLine($tOut)) {                        // do not include blank lines in output
                 continue;
             }
             $out[] = $tOut;                                 // add this combined header<->line array to the ouput array
         }
         fclose($file);
+        foreach ($out as &$row) {                           // trim all cells and encode using utf8 character set
+            foreach ($row as &$cell) {
+                $cell = trim(utf8_encode($cell));
+            }
+        }
         return $out;
     }
 
@@ -300,12 +305,30 @@
                     return $errorArray;
                 } else {
                     $errorArray['Count']++;
-                    $errorArray['Details'][] = 'Did not find required column <b>'. $key.'</b> within '.$searched;
+                    $errorArray['Details'][] = 'Did not find required column <b>' . $key . '</b> within ' . $searched;
                     return $errorArray;
                 }
             }
         }
         return $errorArray;
+    }
+    
+    
+    #### I plan on making a function that creates the trials in login.php 
+    function makeTrial () {
+        global $procedure;
+        global $stimuli;
+        global $allKeysNeeded;
+                
+        $trial = array();
+        
+        return $trial;
+        
+        /*
+         * Ideas:
+         *     Accept a range of stimuli instead of just single stimuli (implode by pipes)
+         *     Automatically fill 0 stim items with 'n/a'
+         */
     }
 
 

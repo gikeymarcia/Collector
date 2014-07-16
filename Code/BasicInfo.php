@@ -20,23 +20,23 @@
     <title>Basic Information</title>
 </head>
 <body>
-    <div class=main-contain>
-        <h2 class=textcenter>Basic Information</h2>
+    <div class="main-contain">
+        <h2 class="textcenter">Basic Information</h2>
 
-        <form name=Demographics class=collector-form action="BasicInfoData.php" method=post autocomplete=off>
+        <form name="Demographics" class="collector-form" action="BasicInfoData.php" method="post" autocomplete="off">
 
-            <div class=field>
+            <div class="field">
                 <legend>What is your gender?</legend>
                 <input type="radio"   value="Male"     class="radio"    name="Gender"    />    Male     <br />
                 <input type="radio"   value="Female"   class="radio"    name="Gender"    />    Female   <br />
             </div>
     
-            <div class=field>
+            <div class="field">
                 <p>What is your age?</p>
                 <input type="text" value="" name="Age" autocomplete="off" />
             </div>
     
-            <div class=field>
+            <div class="field">
                 <p>Which of the following best describes your highest achieved education level?</p>
                 <select name="Education">
                     <option selected="selected">Select Level</option>
@@ -49,26 +49,26 @@
                 </select>
             </div>
     
-            <div class=field>
+            <div class="field">
                 <p>Do you speak English fluently?</p>
                 <input    type="radio"    name="English"    value="Fluent"        />    Yes, I am fluent in English     <br />
                 <input    type="radio"    name="English"    value="Non-Fluent"    />    No, I am not fluent in English  <br />
             </div>
     
-            <div class=field>
+            <div class="field">
                 <p>In what country do you live?</p>
                 <input type="text" value="" name="Country" size="30"    autocomplete="off" />
             </div>
     
             <!-- ## SET ##  Use this area to provide the equivalent of an informed consent form -->
-            <div class=consent>
-                <h3 class=consent-legend>Informed Consent:</h3>
+            <div class="consent">
+                <h3 class="consent-legend">Informed Consent:</h3>
                 <h3 class="consent-legend textcenter">Learning Words and Remembering Facts</h3>
-                <textarea rows=20 cols=45 wrap=physical>This is the informed consent form.  You can put whatever you want here.</textarea>
+                <textarea rows="20" cols="45" wrap="physical">This is the informed consent form.  You can put whatever you want here.</textarea>
             </div>
     
             <div class="consent textcenter">
-                <input class=button type=submit value="Submit Basic Info" />
+                <input class="button" type="submit" value="Submit Basic Info" />
             </div>
         </form>
     </div>

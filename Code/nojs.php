@@ -12,7 +12,6 @@
     <link href="css/global.css" rel="stylesheet" type="text/css" />
     <title>Javascript not enabled</title>
 </head>
-<?php flush(); ?>
 <body>
    <div class="cframe-outer">
         <div class="cframe-inner">

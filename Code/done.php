@@ -59,9 +59,9 @@
     }
 ?>
 
-    <div class=cframe-outer>
-        <div class=cframe-inner>
-            <div class=cframe-content>
+    <div class="cframe-outer">
+        <div class="cframe-inner">
+            <div class="cframe-content">
                 <?php echo $message; ?>
             </div>
         </div>

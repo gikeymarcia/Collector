@@ -132,7 +132,7 @@ img {
 \*------------------------------------*/
 /* general min/max */
 .main-contain, .cframe-content {
-	max-width:600px;
+	max-width:900px;
 	min-width:400px;
 }
 
@@ -142,6 +142,9 @@ img {
 }
 .textright{
 	text-align:right;
+}
+.textleft{
+    text-align:left;
 }
 
 /* Hidden objects */
@@ -222,8 +225,8 @@ em, i {
 		vertical-align:middle;
 	}
 		.cframe-content {
-			margin:0 auto;
-			width:66%;
+			margin:0 auto 70px auto;
+			width:80%;
 		}
 
 /* grids */
@@ -399,7 +402,7 @@ em, i {
   	$INDEX
 \*------------------------------------*/
 .login-pos {
-	margin:0 auto;
+	margin:0 auto 70px auto;
 	text-align:center;
 }
 .login-pos:after {
@@ -546,7 +549,8 @@ input[type="submit"].button-trial-advance {
 	margin-bottom:1em;
 }
 .collapsibleTitle {
-	margin:1em 0;
+	margin:1em auto;
+	width: 85%
 }
 .collapsibleTitle h3 {
 	color:#fff;

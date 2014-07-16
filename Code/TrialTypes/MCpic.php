@@ -34,19 +34,19 @@
 ?>
 
 	<!-- show the image -->
-    <div class='precache pic'>
+    <div class="precache pic">
 		<?php echo show($cue); ?>
     </div>
 
 	<!-- display the MC button choices -->
-    <div class='precache grid'>
+    <div class="precache grid">
         <?php echo $MCGrid; ?>
     </div>
 
     <form class="<?php echo $formClass; ?>" action="<?php echo $postTo; ?>" method="post">
-    	<input class=hidden name=Response id=Response type=text value=''          />
-    	<input class=hidden name=RTkey    id=RTkey    type=text value="no press" />
-    	<input class=hidden name=RTlast   id=RTlast   type=text value="no press" />
-    	<input class=hidden name=RT       id=RT       type=text value="RT"       />
-    	<input class=hidden  id=FormSubmitButton type=submit value="Submit"   />
+    	<input class="hidden" name="Response" id="Response" type="text" value=""         />
+    	<input class="hidden" name="RTkey"    id="RTkey"    type="text" value="no press" />
+    	<input class="hidden" name="RTlast"   id="RTlast"   type="text" value="no press" />
+    	<input class="hidden" name="RT"       id="RT"       type="text" value="RT"       />
+    	<input class="hidden" id="FormSubmitButton" type="submit" value="Submit"         />
     </form>

@@ -38,24 +38,24 @@
         <meta http-equiv="refresh" content="0;url=<?php echo $codeF; ?>nojs.php" />
     </noscript>
 
-    <div class=cframe-outer>
-        <div class=cframe-inner>
-            <div class='cframe-content textcenter login-pos'>
+    <div class="cframe-outer">
+        <div class="cframe-inner">
+            <div class="cframe-content textcenter login-pos">
                 <h1><?php echo $welcome;?></h1>
 
                 <?php echo $expDescription; ?>
 
-                <form class=collector-form name="Login" autocomplete="off"  action="<?php echo $codeF;?>login.php"  method="get">
+                <form class="collector-form" name="Login" autocomplete="off"  action="<?php echo $codeF;?>login.php"  method="get">
                     <?php echo $askForLogin;?>
                     <input name="Username" type="text" value="" autocomplete="off" />
 
                         <?php if ($showConditionSelector == TRUE): ?>
-                        <select name=Condition>
+                        <select name="Condition">
                         <?php else: ?>
-                        <select class=hidden name=Condition>
+                        <select class="hidden" name="Condition">
                         <?php endif; ?>
 
-                            <option selected value='Auto'>Auto</option>
+                            <option selected value="Auto">Auto</option>
 
                             <?php
                             #### Display conditions as choices ####
@@ -65,13 +65,13 @@
                             $tempCond   = SortByKey($Conditions, 'Number');
 
                             // output all possible condition choices
-                            for($i=2; $i<count($tempCond); $i++) {
+                            for ($i=2; $i<count($tempCond); $i++) {
                                 echo '<option value="' . $tempCond[$i]['Number'] . '">' . $tempCond[$i]['Number'] . '</option>';
                             }
                             ?>
-                    </select>
+                        </select>
 
-                    <input class=button type=submit value="Login" />
+                    <input class="button" type="submit" value="Login" />
                 </form>
             </div>
         </div>
@@ -80,13 +80,6 @@
     <div class="precache">
         <!-- put things here you want to precache -->
     </div>
-
-    <?php
-        #### Auto submit Username and Condition to login.php if $_SESSION['Debug']==TRUE
-        if($debugMode == TRUE) {
-            echo '<meta http-equiv="refresh" content="1; url='.$codeF.'login.php?Username='.urlencode($debugName.' Debug '.date('U')).'&Condition=Auto&Debug=TRUE">';
-        }
-    ?>
 
     <script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"></script>
     <script src="<?php echo $codeF; ?>javascript/collector_1.0.0.js" type="text/javascript"></script>

@@ -21,7 +21,6 @@
 	<link href='http://fonts.googleapis.com/css?family=Orbitron:700' rel='stylesheet' type='text/css'>
 	<title>Stepout</title>
 </head>
-<?php flush(); ?>
 <body>
 <!-- 	## SET ##  Delete the next three lines to remove the constant countdown on the page-->
 	<div id="Clock"><span>Seconds remaining</span>
@@ -46,7 +45,6 @@
 		#### Pre-cache next trial
 		echo '<div class="Hidden">';
 			echo show($_SESSION['Trials'][$_SESSION['Position']+1]['Stimuli']['Cue']);
-			echo show($_SESSION['Trials'][$_SESSION['Position']+1]['Stimuli']['Target']);
 			echo show($_SESSION['Trials'][$_SESSION['Position']+1]['Stimuli']['Answer']);
 		echo '</div>';
 	?>

@@ -1,57 +1,62 @@
 <?php
-/*	Collector
-	A program for running experiments on the web
-	Copyright 2012-2014 Mikey Garcia & Nate Kornell
+/*  Collector
+    A program for running experiments on the web
+    Copyright 2012-2014 Mikey Garcia & Nate Kornell
  */
 
-    require 'CustomFunctions.php';                          // Load custom PHP functions
+    require 'CustomFunctions.php';          // Load custom PHP functions
     initiateCollector();
-	require 'fileLocations.php';			// sends file to the right place
-	require $up.$expFiles.'Settings.php';	// experiment variables
+    require 'fileLocations.php';            // sends file to the right place
+    require $up . $expFiles . 'Settings.php';   // experiment variables
 
 
-	// setting up easier to use and read aliases(shortcuts) of $_SESSION data
-	$condition		=& $_SESSION['Condition'];
-	$currentPos		=& $_SESSION['Position'];
-	$currentPost 	=& $_SESSION['PostNumber'];
-	$currentTrial	=& $_SESSION['Trials'][$currentPos];
-		$cue		=& $currentTrial['Stimuli']['Cue'];
-		$target		=& $currentTrial['Stimuli']['Target'];
-		$answer		=& $currentTrial['Stimuli']['Answer'];
-	
-	// this will also create aliases of any columns that apply to the current trial (filtering out "post X" prefixes when necessary)
-	// currentProcedure becomes an array of all columns matched for this trial, using their original column names
-	$currentProcedure = ExtractTrial( $currentTrial['Procedure'], $currentPost );
-	if( !isset( $item ) ) $item = $currentTrial['Procedure']['Item'];
-	
-	// Whenever Trial.php finds $_POST data, it will try to store that data
-	// immediately, rather than simply holding it through the trial
-	//
-	// This is done by either storing the data in $currentTrial['Response'],
-	// or by redirecting to next.php, where the data is actually recorded
-	// into a file.
-	//
-	// Data from instructions.php is detected by $currentPost === -1
-	if( $_POST !== array() ) {
-		if( $currentPos === 1 AND $currentPost === -1 ) {
+    // setting up easier to use and read aliases(shortcuts) of $_SESSION data
+    $condition      =& $_SESSION['Condition'];
+    $currentPos     =& $_SESSION['Position'];
+    $currentPost    =& $_SESSION['PostNumber'];
+    $currentTrial   =& $_SESSION['Trials'][$currentPos];
+        $cue        =& $currentTrial['Stimuli']['Cue'];
+        $answer     =& $currentTrial['Stimuli']['Answer'];
+    
+    // this will also create aliases of any columns that apply to the current trial (filtering out "post X" prefixes when necessary)
+    // currentProcedure becomes an array of all columns matched for this trial, using their original column names
+    $currentProcedure = ExtractTrial( $currentTrial['Procedure'], $currentPost );
+    if (!isset($item)) {
+        $item = $currentTrial['Procedure']['Item'];
+    }
+    /*
+     * Whenever Trial.php finds $_POST data, it will try to store that data
+     * immediately, rather than simply holding it through the trial
+     * This is done by either storing the data in $currentTrial['Response'],
+     * or by redirecting to next.php, where the data is actually recorded
+     * into a file.
+     * 
+     * Data from instructions.php is detected by $currentPost === -1
+     */
+     
+     
+    if ($_POST !== array()) {
+        if (($currentPos === 1)
+            AND ($currentPost === -1)
+        ) {
 			// posting from instructions.php
 			// $currentPost was set to -1 at login.php, but it will only ever be set to 0 in the future, so this only happens at the beginning
 			$currentPost = 0;
 			$data = array(
-				 'Username' => $_SESSION['Username']
-				,'ID' 		=> $_SESSION['ID']
-				,'Date' 	=> date('c') 
+				 'Username' => $_SESSION['Username'],
+				 'ID' 		=> $_SESSION['ID'],
+				 'Date' 	=> date('c'),
 			);
 			$data += $_POST;
-			arrayToLine( $data, $instructPath );
+			arrayToLine($data, $instructPath);
 			header('Location: trial.php');
 			exit;
 		} else {
 			$trialType = strtolower(trim( $trialType ));
-			if( $currentPost === 0 ) {
+			if ($currentPost === 0) {
 				$keyMod = '';
 			} else {
-				$keyMod = 'post'.$currentPost.'_';
+				$keyMod = 'post' . $currentPost . '_';
 			}
 			require $_SESSION['Trial Types'][$trialType]['scoring'];
 			#### merging $data into $currentTrial['Response]
@@ -121,8 +126,7 @@
 	<link href="css/global.css" rel="stylesheet" type="text/css" />
 	<title>Trial</title>
 </head>
-<?php flush();	?>
-<body data-controller=trial data-action=<?php echo $trialType; ?>>
+<body data-controller="trial" data-action="<?php echo $trialType; ?>">
 
 <?php
 	// variables I'll need and/or set in trialTiming() function
@@ -141,24 +145,24 @@
 ?>
 
 <!-- User visible HTML markup in here -->
-<div class=cframe-outer>
-    <div class=cframe-inner>
-        <div class=cframe-content>
+<div class="cframe-outer">
+    <div class="cframe-inner">
+        <div class="cframe-content">
             <!-- trial content -->
             <?php
                 if ($trialFile):
                    	include $trialFile;
                 else: ?>
-            		<h2>Could not find the following trial type: <strong><?php echo $trialType; ?></strong></h2>
-            		<p>Check your procedure file to make sure everything is in order. All information about this trial is displayed below.</p>
+                    <h2>Could not find the following trial type: <strong><?php echo $trialType; ?></strong></h2>
+                    <p>Check your procedure file to make sure everything is in order. All information about this trial is displayed below.</p>
 
-            		<!-- default trial is always user timing so you can click 'Done' and progress through the experiment -->
-            		<div class=precache>
-            			<form name=UserTiming class=UserTiming action="<?php echo $postTo; ?>" method=post>
-            				<input class=hidden id=RT name=RT type=text value=""  />
-            				<input class=button id=FormSubmitButton type=submit value="Done" />
-            			</form>
-            		</div>
+                    <!-- default trial is always user timing so you can click 'Done' and progress through the experiment -->
+                    <div class="precache">
+                        <form name="UserTiming" class="UserTiming" action="<?php echo $postTo; ?>" method="post">
+                            <input class="hidden" id="RT" name="RT"     type="text"     value=""  />
+                            <input class="button" id="FormSubmitButton" type="submit"   value="Done" />
+                        </form>
+                    </div>
             <?php
                 $trialFail = TRUE;
                 $time = 'user';
@@ -166,19 +170,21 @@
             ?>
 
             <!-- hidden field that JQuery/JavaScript uses to check the timing to $postTo -->
-            <div id=Time class=hidden><?php echo $time; ?></div>
-            <div id=minTime class=hidden><?php echo $minTime; ?></div>
+            <div id="Time"      class="hidden"> <?php echo $time; ?>    </div>
+            <div id="minTime"   class="hidden"> <?php echo $minTime; ?> </div>
 
             <!-- placeholders for a debug function that shows timer values -->
-            <div id=showTimer class=hidden>
-                <div> Start (ms):   <span id=start>   </span> </div>
-                <div> Current (ms): <span id=current> </span> </div>
-                <div> Timer (ms):   <span id=dif>     </span> </div>
+            <div id="showTimer" class="hidden">
+                <div> Start (ms):   <span id="start">   </span> </div>
+                <div> Current (ms): <span id="current"> </span> </div>
+                <div> Timer (ms):   <span id="dif">     </span> </div>
             </div>
 
              <?php
                 #### Diagnostics ####
-                if ($trialDiagnostics == TRUE OR $trialFail == TRUE) {
+                if (($trialDiagnostics == TRUE)
+                    OR ($trialFail == TRUE)
+                ) {
                     // clean the arrays used so that they output strings, not code
                     $clean_session      = arrayCleaner($_SESSION);
                     $clean_currentTrial = arrayCleaner($currentTrial);
@@ -197,12 +203,11 @@
                                 <li> Trial Time (seconds):  {$time}                                                </li>
                             </ul>
                             <ul>
-                                <li> Cue: ".                show($cue)."                                        </li>
-                                <li> Target:".              show($target)."                                     </li>
-                                <li> Answer:".              show($answer)."                                     </li>
+                                <li> Cue: ".                show($cue)."                                            </li>
+                                <li> Answer:".              show($answer)."                                         </li>
                             </ul>";
-                    readable($currentTrial, "Information loaded about the current trial");
-                    readable($_SESSION['Trials'], "Information loaded about the entire experiment");
+                    readable($currentTrial,         "Information loaded about the current trial");
+                    readable($_SESSION['Trials'],   "Information loaded about the entire experiment");
                     echo "</div>";
                 }
             ?>
@@ -211,16 +216,15 @@
 </div>
 
 <!-- Pre-Cache Next trial -->
-<div class=precachenext>
+<div class="precachenext">
     <?php
-    echo show($nextTrial['Stimuli']['Cue']).'   <br />';
-    echo show($nextTrial['Stimuli']['Target']).'<br />';
-    echo show($nextTrial['Stimuli']['Answer']).'<br />';
+    echo show($nextTrial['Stimuli']['Cue'])     . '<br />';
+    echo show($nextTrial['Stimuli']['Answer'])  . '<br />';
     ?>
 </div>
 
-<script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"></script>
-<script src="javascript/collector_1.0.0.js" type="text/javascript"></script>
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"   type="text/javascript"></script>
+<script src="javascript/collector_1.0.0.js"                 type="text/javascript"></script>
 
 </body>
 </html>

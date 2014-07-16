@@ -16,6 +16,8 @@
     $eligF      = 'Eligibility/';
     $imageF     = 'Images/';
     $audioF     = 'Audio/';
+    $stimF      = 'Stimuli/';
+    $procF      = 'Procedure/';
     
     #Data
     $countF     = 'Counter/';

@@ -3,23 +3,23 @@
 	trialTiming();					// determines timing and user/computer timing mode
 ?>
     <div class="study precache">
-        <span class=study-left>  <?php echo $cue; ?>    </span>
-        <span class=study-divider>         :            </span>
-        <span class=study-right> <?php echo $target; ?> </span>
+        <span class="study-left">  <?php echo $cue; ?>    </span>
+        <span class="study-divider">         :            </span>
+        <span class="study-right"> <?php echo $answer; ?> </span>
     </div>
 
     <div class="study precache">
-        <span class=study-left>  <?php echo $cue; ?>    </span>
-        <span class=study-divider>         :            </span>
+        <span class="study-left">  <?php echo $cue; ?>    </span>
+        <span class="study-divider">         :            </span>
         <form class="<?php echo $formClass; ?> collector-form"  autocomplete="off"  action="<?php echo $postTo; ?>"  method="post">
-            <div class=study-right>
-                <input name=Response type=text value="" class=copybox autocomplete="off" />
+            <div class="study-right">
+                <input name="Response" type="text" value="" class="copybox" autocomplete="off" />
             </div>
-            <input class=hidden  id=RT     name=RT       type=text value="RT"       />
-            <input class=hidden  id=RTkey  name=RTkey    type=text value="no press" />
-            <input class=hidden  id=RTlast name=RTlast   type=text value="no press" />
-            <div class=textcenter>
-                <input class="button button-trial-advance" id=FormSubmitButton type=submit value="Submit" />
+            <input class="hidden"  id="RT"     name="RT"       type="text" value="RT"       />
+            <input class="hidden"  id="RTkey"  name="RTkey"    type="text" value="no press" />
+            <input class="hidden"  id="RTlast" name="RTlast"   type="text" value="no press" />
+            <div class="textcenter">
+                <input class="button button-trial-advance" id="FormSubmitButton" type="submit" value="Submit" />
             </div>
         </form>
     </div>

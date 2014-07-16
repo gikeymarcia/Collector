@@ -23,11 +23,11 @@ Automatic Condition Selection
 
 Trial Types
 	Study
-			shows a word pair in the format of "cue:target"
+			shows a word pair in the format of "cue:answer"
 	StudyPic
 			shows a picture with it's label below.
 			In the cue column you should include the path to and filename of the image (e.g., images/filename.jpg).  The program will automatically add HTML tags for png, jpg, and gif images
-			Whatever you put in the target column will show up below the image
+			Whatever you put in the answer column will show up below the image
 	Passage
 			Designed to display a long text passage.  Uses the cue field as the passage and accepts html markup (e.g., <p>paragraph</p>, <b>bold</b>, <br />, etc.)
 	Test
@@ -57,8 +57,8 @@ Post Trial Types
 	JOL
 			Ask the question "How likely are you to correctly remember this item on a later test? -- Type your response on a scale from 0-100 using the entire range of the scale" and gives participants a textbox where they can type a response
 	Feedback
-			If the trial was StudyPic, TestPic, or MCpic the Cue image and Target label will be shown
-			If the trial was anything else then Feedback will be shown as "The corrct answer is:   Cue:Target"
+			If the trial was StudyPic, TestPic, or MCpic the Cue image and Answer label will be shown
+			If the trial was anything else then Feedback will be shown as "The corrct answer is:   Cue:Answer"
 	No
 			If the post trial is not feedback or JOL then the experiment will skip post trial and proceed to the next trial in the experiment.
 

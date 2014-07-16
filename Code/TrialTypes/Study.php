@@ -3,15 +3,15 @@
 	trialTiming();					// determines timing and user/computer timing mode
 ?>
 	<div class='study precache'>
-		<span class=study-left>  <?php echo $cue; ?>    </span>
-		<span class=study-divider>         :            </span>
-		<span class=study-right> <?php echo $target; ?> </span>
+		<span class="study-left">  <?php echo $cue; ?>    </span>
+		<span class="study-divider">         :            </span>
+		<span class="study-right"> <?php echo $answer; ?> </span>
 	</div>
 
     <!-- include form to collect RT and advance page -->
     <div class="precache textcenter">
-        <form class="<?php echo $formClass; ?> collector-form" action="<?php echo $postTo; ?>" method=post>
-            <input class=hidden id=RT name=RT type=text value="" />
-            <input class="button button-trial-advance" id=FormSubmitButton type=submit value="Next" />
+        <form class="<?php echo $formClass; ?> collector-form" action="<?php echo $postTo; ?>" method="post">
+            <input class="hidden" id="RT" name="RT" type="text" value="" />
+            <input class="button button-trial-advance" id="FormSubmitButton" type="submit" value="Next" />
         </form>
     </div>

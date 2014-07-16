@@ -1,4 +1,4 @@
-Cue	Target	Answer	Shuffle	Stimuli Notes
-Dog	Cat	Cat	OFF	high associates
-Word	Pair	Pair	OFF	high associates
-Funny	Bone	bonez	OFF	high associates
+Cue	Answer	Shuffle	Stimuli Notes
+Dog	Cat	OFF	high associates
+Word	Pair	OFF	high associates
+Funny	Bone	OFF	high associates

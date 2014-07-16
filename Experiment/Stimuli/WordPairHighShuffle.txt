@@ -1,4 +1,4 @@
-Cue	Target	Answer	Shuffle	Stimuli Notes
-Dog	Cat	Cat	bananna	high associates
-Word	Pair	Pair	bananna	high associates
-Funny	Bone	bonez	bananna	high associates
+Cue	Answer	Shuffle	Stimuli Notes
+Dog	Cat	bananna	high associates
+Word	Pair	bananna	high associates
+Funny	Bone	bananna	high associates

@@ -17,8 +17,7 @@
 	   <link href="css/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" type="text/css" />
 	<title>Final Questions</title>
 </head>
-<?php flush(); ?>
-<body data-controller=finalQuestions>
+<body data-controller="finalQuestions">
 
 <?php
     // if this is the first time on FinalQuestions.php then load questions from file
@@ -77,25 +76,25 @@
     }
 ?>
 
-    <div class=cframe-outer>
-        <div class=cframe-inner>
-            <div class=cframe-content>
-                <h1 class=textcenter>Final Questions</h1>
+    <div class="cframe-outer">
+        <div class="cframe-inner">
+            <div class="cframe-content">
+                <h1 class="textcenter">Final Questions</h1>
                 <p><?php echo $Q ?></p>
 
-                <form class=collector-form name=FinalQuestion autocomplete=off action="FQdata.php" method=post>
+                <form class="collector-form" name="FinalQuestion" autocomplete="off" action="FQdata.php" method="post">
 
                     <?php
                     // radio button code
                     if ($type == 'radio'): ?>
                         <?php foreach ($options as $choice): ?>
                         <label>
-                            <input type=radio name=formData value='<?php echo $choice['value']; ?>' />
+                            <input type="radio" name="formData" value="'<?php echo $choice['value']; ?>'" />
                             <?php echo $choice['text']; ?>
                         </label>
                         <?php endforeach; ?>
-                        <div class=textcenter>
-                            <input class='button' id=FormSubmitButton type=submit value="Submit" />
+                        <div class="textcenter">
+                            <input class='button' id="FormSubmitButton" type="submit" value="Submit" />
                         </div>
                     <?php endif;
 
@@ -103,41 +102,41 @@
                     if($type == 'checkbox'): ?>
                         <?php foreach ($options as $choice): ?>
                         <label>
-                            <input type=checkbox name=formData[] value='<?php echo $choice['value']; ?>' />
+                            <input type="checkbox" name=formData[] value="'<?php echo $choice['value']; ?>'" />
                             <?php echo $choice['text']; ?>
                         </label>
                         <?php endforeach; ?>
-                        <div class=textcenter>
-                            <input class='button' id=FormSubmitButton type=submit value="Submit" />
+                        <div class="textcenter">
+                            <input class='button' id="FormSubmitButton" type="submit" value="Submit" />
                         </div>
                     <?php endif;
 
                     // likert code
                     if($type == 'likert'): ?>
-                        <div id=slider></div>
-                        <div class=amount>
-                            <input name=formData type=text id=amount />
-                            <input class='button' id=FormSubmitButton type=submit value="Submit" />
+                        <div id="slider"></div>
+                        <div class="amount">
+                            <input name="formData" type="text" id="amount" />
+                            <input class='button' id="FormSubmitButton" type="submit" value="Submit" />
                         </div>
                     <?php endif;
 
                     // textbox code
                     if ($type == 'text'): ?>
-                        <div class=textcenter>
-                            <input type=text name=formData autocomplete=off />
-                            <input class='button' id=FormSubmitButton type=submit value="Submit" />
+                        <div class="textcenter">
+                            <input type="text" name="formData" autocomplete="off" />
+                            <input class="button" id="FormSubmitButton" type="submit" value="Submit" />
                         </div>
                     <?php endif;
 
                     // textarea code
                     if ($type == 'textarea'): ?>
-                        <textarea rows=10 cols=50 name=formData wrap=physical value=""></textarea>
-                        <div class=textright>
-                            <input class="button button-trial-advance" id=FormSubmitButton type=submit value="Submit"   />
+                        <textarea rows="10" cols="50" name="formData" wrap="physical" value=""></textarea>
+                        <div class="textright">
+                            <input class="button button-trial-advance" id="FormSubmitButton" type="submit" value="Submit"   />
                         </div>
                     <?php endif; ?>
 
-                    <input name=RT id=RT class=hidden type=text value=""/>
+                    <input name="RT" id="RT" class="hidden" type="text" value=""/>
 
                 </form>
             </div>
