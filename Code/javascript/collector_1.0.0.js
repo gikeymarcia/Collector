@@ -36,7 +36,7 @@ var COLLECTOR = {
 	/**
 	 *	Sets starting time to a property we can access anywhere in the namespace
 	 */
-	startTime: new Date().getTime(),
+	startTime: Date.now(),
 
 	/**
 	 *	Timer function
@@ -55,58 +55,62 @@ var COLLECTOR = {
 	 *		}, $("#countdown"));
  	 */
 	timer: function (timeUp, callback, show) {
-	    // set timer speed, counter, and starting timestamp
-  		var speed = 10,
-  			counter = 0,
-  			elapsed = 0;
-  			start = new Date().getTime();
+		// waitPercent is the percentage of timeRemaining that will be used for each setTimeout
+		// waitPercent should be greater than 0, but less than 1
+		// cap is the lowest number of ms allowed per interval.
+		// for HTML5 browsers, 4ms is the setTimeout minimum, so the cap should be at least 4.
+		// for both of these values, increasing them lowers both accuracy and processing requirements
+		var waitPercent = .5,
+			cap         = 4,
+			goal        = Date.now() + timeUp*1000,
+			stopTime = Math.floor(cap*1.5),
+			lastWait = cap*2,
+			lastAim = cap*2/waitPercent;
 
-  		// self-correcting timer instance function (each instance is adjusted based on actual elapsed time)
-  		function instance() {
-  			// work out the real and ideal elapsed time
-  			var real = (counter * speed),
-  				ideal = (new Date().getTime() - start);
+		function instance() {
+			var timeRemaining = goal - Date.now(),
+				timeFormatted;
 
-			// increment the counter
-  			counter++;
-
-  			// increment elapsed
-			elapsed += speed;
-
-
-  			// stop timer at the allotted time
-  			if ( elapsed >= timeUp*1000 ) {
-				window.clearTimeout(t);
-
-  				// exit and run callback
-  				return callback();
+			// stop timer at the allotted time
+  			if ( timeRemaining <= stopTime ) {
+				while( true ) {
+					timeRemaining = goal - Date.now();
+					if( timeRemaining <= 0 ) {
+						return callback();
+					}
+				}
   			}
 
-  			// calculate the difference
-  			var diff = ideal - real;
-
-			// calculate time to show
-  			var timeRemaining = Math.round( timeUp*10 - elapsed/100 )/10;
-			if (Math.round(timeRemaining) == timeRemaining) { timeRemaining += '.0'; }
-
-  			if (show) {
+			if (show) {
+				timeFormatted = Math.round( timeRemaining/100 )/10;
+				if (Math.round(timeFormatted) == timeFormatted) { timeFormatted += '.0'; }
   				if (show.is('input')) {
-  					show.val( timeRemaining );
+  					show.val( timeFormatted );
   				} else {
-  					show.html( timeRemaining );
+  					show.html( timeFormatted );
   				}
+				timeRemaining = Math.min( 20, timeRemaining );
   			}
 
-  			// delete the difference from the speed of the next instance and run again
-  			var t = (window.setTimeout(function() { instance(); }, (speed - diff) ))/100;
-  		}
+			if( timeRemaining <= lastWait ) {
+				timeRemaining = timeRemaining - Math.floor(cap*0.5);
+			} else if( timeRemaining <= lastAim ) {
+				timeRemaining = timeRemaining - Math.floor(cap*1.5);
+			} else {
+				timeRemaining *= waitPercent;
+			}
+			timeRemaining = Math.max( cap, Math.floor(timeRemaining) );
+
+			// run the timer again, using a percentage of the time remaining
+			setTimeout(function() { instance(); }, timeRemaining );
+		}
 
   		// start the timer
 		instance();
 	},
 
 	getRT: function() {
-		var currentTime = new Date().getTime();
+		var currentTime = Date.now();
 		return (currentTime - COLLECTOR.startTime);
 	},
 
@@ -134,6 +138,9 @@ var COLLECTOR = {
                 $(".collapsibleTitle").parent().children().not(".collapsibleTitle").toggle(350);
                 window.scrollTo(0, 0);
             });
+			
+			// forceNumeric
+			$(".forceNumeric").forceNumeric();
 		}
 	},
 
@@ -169,49 +176,41 @@ var COLLECTOR = {
 
 	trial: {
 		init: function() {
-			var trialTime = parseInt( $("#Time").html() ),
-				minTime	= parseInt( $("#minTime").html() ),
-				startTime = COLLECTOR.startTime,
+			var trialTime = parseFloat( $("#Time").html() ),
+				minTime	= parseFloat( $("#minTime").html() ),
 				fsubmit = $("#FormSubmitButton");
 				keypress = false;
 
-			if ( !(isNaN(trialTime)) ) {
-				if (minTime == 0 || isNaN(minTime)) {
+			// show trial content
+			if( isNaN(trialTime) || trialTime > 0) {
+				$(".precache").addClass("DuringTrial");			// add class that does nothing (but lets us know what used to be hidden)
+				$(".precache").removeClass("precache");			// remove class that hides the content
+				$(document.body).removeClass("invisible");
+				COLLECTOR.startTime = Date.now();
+				$(':input:enabled:visible:first').focusWithoutScrolling();  // focus cursor on first input
+			} else {
+				$("form").submit();
+			}
+
+			// start timers
+			if( !(isNaN(trialTime)) ) {
+				COLLECTOR.timer( trialTime, function() {
+					$(document.body).hide();
+					fsubmit.click();							// see common:init "intercept FormSubmitButton"
+				}, false);										// run the timer (no minTime set)
+				$(":input").addClass("noEnter");				// disable enter from submitting the trial
+				if( isNaN(minTime) ) {
 					fsubmit.addClass("hidden");					// hide submit button
-					$(":input").addClass("noEnter");			// disable enter from submitting the trial
-
-					COLLECTOR.timer(trialTime, function() {		// run the timer (no minTime set)
-						fsubmit.click();						// see common:init "intercept FormSubmitButton"
-					});
-				} else {
-					$(":input").addClass("noEnter");			// disable enter from submitting the trial
-					fsubmit.prop("disabled", true);				// disable submit button when minTime is set
-
-					COLLECTOR.timer(minTime, function() {		// run the timer
-						fsubmit.prop("disabled", false);		// enable
-						$(":input").removeClass("noEnter");
-
-						var rem = trialTime - minTime;			// calculate remaining time
-						COLLECTOR.timer(rem, function() {		// run timer on remaining time
-							fsubmit.click();					// submit form
-						});
-					});
 				}
-			} else if( !(isNaN(minTime)) ) {
+			}
+
+			if( !(isNaN(minTime)) ) {
 				fsubmit.prop("disabled", true);					// disable submit button when minTime is set
 				$(":input").addClass("noEnter");				// disable enter from submitting the trial
-
 				COLLECTOR.timer(minTime, function() {			// run timer for minTime
 					fsubmit.prop("disabled", false);			// enable
 					$(":input").removeClass("noEnter");
-				});
-			}
-
-			// show trial content
-			if(trialTime != 0) {
-				$(".precache").addClass("DuringTrial");			// add class that does nothing (but lets us know what used to be hidden)
-				$(".precache").removeClass("precache");			// remove class that hides the content
-				$(':input:enabled:visible:first').focus();      // focus cursor on first input
+				}, false );
 			}
 
 			// disable 'noEnter' inputs and gather RTs for keypresses
@@ -278,7 +277,7 @@ var COLLECTOR = {
 
 		stepout: function() {
 			// get trial time from page and run timer
-			COLLECTOR.timer( $("#Time").html(), function () {
+			COLLECTOR.timer( parseFloat( $("#Time").html() ) - 5, function () {
 				// hide game and show get ready prompt for 5 secs
 				$(".stepout-clock").hide();
 				$(".tetris-wrap")
@@ -334,7 +333,7 @@ UTIL = {
 		if ( controller !== "" && ns[controller] && typeof ns[controller][action] == "function" ) {
 			ns[controller][action]();
 		}
-},
+	},
 
 	init: function() {
 		var body = document.body,
@@ -346,5 +345,54 @@ UTIL = {
 		UTIL.exec( controller, action );
 	}
 };
+
+
+
+$.fn.focusWithoutScrolling = function(){
+	// credit to Felipe Martim at
+	// http://stackoverflow.com/questions/4898203/jquery-focus-without-scroll
+	var x = window.scrollX, y = window.scrollY;
+	this.focus();
+	window.scrollTo(x, y);
+	return this; //chainability
+};
+
+if( !Date.now ) {
+	Date.now = function now() {
+		return new Date().getTime();
+	};
+}
+
+jQuery.fn.forceNumeric = function () {
+	// forceNumeric() plug-in implementation
+	// I got forceNumeric from http://weblog.west-wind.com/posts/2011/Apr/22/Restricting-Input-in-HTML-Textboxes-to-Numeric-Values
+	return this.each(function () {
+		$(this).keydown(function (e) {
+			var key = e.which || e.keyCode;
+			
+			if (!e.shiftKey && !e.altKey && !e.ctrlKey &&
+			 // numbers   
+				key >= 48 && key <= 57 ||
+			 // Numeric keypad
+				key >= 96 && key <= 105 ||
+			 // comma, period and minus, . on keypad
+			 //	key == 190 || key == 188 || key == 109 || key == 110 ||
+				key == 190 || key == 110 ||
+			 // Backspace and Tab and Enter
+				key == 8 || key == 9 || key == 13 ||
+			 // Home and End
+				key == 35 || key == 36 ||
+			 // left and right arrows
+				key == 37 || key == 39 ||
+			 // Del and Ins
+				key == 46 || key == 45)
+				return true;
+			
+			return false;
+		});
+	});
+}
+
+
 
 $( window ).load( UTIL.init );
