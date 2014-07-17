@@ -318,16 +318,23 @@
             $keys = array_flip($keys);      // if array('RT', 'RTkey') is returned it will be saved as array('RT' => 0, 'RTkey' => 1)
         }
         unset($keys);
-        
+		
+		$lev0keys = array();
+		$postKeys = array();
         foreach ($trialTypes as $thisTrialType) {                               // for all trial types in use
             foreach ($thisTrialType['levels'] as $lvl => $null) {                   // look at all levels each is used at
                 if ($lvl === 0) {                                                       // add needed keys for level 0, non-post, use
-                    $allKeysNeeded += $scoringFiles[ $thisTrialType['scoring'] ];
+                    $lev0keys += $scoringFiles[ $thisTrialType['scoring'] ];
                 } else {                                                                // add needed keys for each post level
-                    $allKeysNeeded += AddPrefixToArray('post' . $lvl . '_', $scoringFiles[ $thisTrialType['scoring'] ]);
+                    $postKeys += AddPrefixToArray('post' . $lvl . '_', $scoringFiles[ $thisTrialType['scoring'] ]);
                 }
             }
         }
+		// Group Keys together by level (Trail, Post 1, Post 2, etc.)
+		ksort($lev0keys);
+		ksort($postKeys);
+		$allKeysNeeded += $lev0keys;
+		$allKeysNeeded += $postKeys;
         // set all key values == NULL (e.g., array('RT' => NULL, 'RTkey' => NULL, etc.))
         foreach( $allKeysNeeded as &$key ) {
             $key = NULL;

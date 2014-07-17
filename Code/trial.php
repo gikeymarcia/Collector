@@ -21,6 +21,7 @@
     // this will also create aliases of any columns that apply to the current trial (filtering out "post X" prefixes when necessary)
     // currentProcedure becomes an array of all columns matched for this trial, using their original column names
     $currentProcedure = ExtractTrial( $currentTrial['Procedure'], $currentPost );
+	$trialType = strtolower($trialType);
     if (!isset($item)) {
         $item = $currentTrial['Procedure']['Item'];
     }
@@ -92,29 +93,15 @@
 		exit;
 	}
 	
-	if( $currentPost === 0 ) {
-		$trialType = trim(strtolower($currentTrial['Procedure']['Trial Type']));
-	} elseif( $currentPost === 1 AND isset( $currentTrial['Procedure']['Post Trial'] ) ) {
-		$trialType = trim(strtolower($currentTrial['Procedure']['Post Trial']));
-	} elseif( isset( $currentTrial['Procedure'][ 'Trial Type '.$currentPost ] ) ) {
-		$trialType = trim(strtolower($currentTrial['Procedure'][ 'Post Trial '.$currentPost ]));
+	// if there is another item coming up then set it as $nextTrail
+	if (array_key_exists($currentPos+1, $_SESSION['Trails'])) {
+		$nextTrail =& $_SESSION['Trials'][$currentPos+1];
+	} else {
+		$nextTrial = FALSE;
 	}
-
-
-	// if there is another item coming up then set it as $nextTrial
-	if(array_key_exists($currentPos+1, $_SESSION['Trials'])) {
-		$nextTrial =& $_SESSION['Trials'][$currentPos + 1];
-	} else { $nextTrial = FALSE;}
 	
-		$data = array( 
-			 'Username' => $_SESSION['Username']
-			,'ID' 		=> $_SESSION['ID']
-			,'Date' 	=> date('c') 
-		);
-		$data += $_POST;
-		arrayToLine( $data, $instructPath);
 	// this only happens once, so that refreshing the page doesn't do anything, and reaching next.php is the only way to update the timestamp
-	if( !isset($_SESSION['Timestamp']) ) {
+	if (!isset($_SESSION['Timestamp'])) {
 		$_SESSION['Timestamp'] = microtime(TRUE);
 	}
 ?>
@@ -124,6 +111,9 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link href="css/global.css" rel="stylesheet" type="text/css" />
+	<script src="http://code.jquery.com/jquery-1.10.2.min.js"   type="text/javascript"></script>
+	<script src="javascript/collector_1.0.0.js"                 type="text/javascript"></script>
+
 	<title>Trial</title>
 </head>
 <body data-controller="trial" data-action="<?php echo $trialType; ?>">
@@ -141,7 +131,7 @@
 	$expFiles  = $up.$expFiles;							// setting relative path to experiments folder for trials launched from this page
     $postTo    = 'trial.php';
 	$trialFail = FALSE;									// this will be used to show diagnostic information when a specific trial isn't working
-	$trialFile = FileExists($trialF.$trialType);
+	$trialFile = $_SESSION['Trial Types'][ $trialType ]['trial'];
 ?>
 
 <!-- User visible HTML markup in here -->
@@ -223,8 +213,6 @@
     ?>
 </div>
 
-<script src="http://code.jquery.com/jquery-1.10.2.min.js"   type="text/javascript"></script>
-<script src="javascript/collector_1.0.0.js"                 type="text/javascript"></script>
 
 </body>
 </html>

@@ -60,12 +60,15 @@
 .HeadLabel
 	{	display: block;	text-align: left;	padding-left: 8px;	border-bottom: solid;	border-bottom-color: #999;	border-bottom-width: 1px;	margin: 18px 0 8px;	}
 
-input[type="submit"]
+#downloadButton
 	{	width: 200px;	padding: 3px;	margin: 45px 0 10px;	font-size: .90em;	}
 input[type="text"]
 	{	width: 120px;	}
 input
 	{	vertical-align: text-bottom;	margin-bottom: 3px;	}
+
+#LogOutForm
+	{	position: absolute; top: 0px;	left: 8px;	}
 
 
 /* CSS for the browser-view of getdata */
