@@ -1,7 +1,7 @@
 <?php
 	ini_set('auto_detect_line_endings', true);				// fixes problems reading files saved on mac
 	error_reporting(-1);									// better to see that errors exist, than to think the data is fine without looking at it
-	$root = '../../';										// set this to '../' if getdata is moved to the root
+	$root = '../';											// set this to '../' if getdata is moved to the root
 	$code = 'Code/';
 	require $root.$code.'fileLocations.php';
 	require $root.$code.'CustomFunctions.php';

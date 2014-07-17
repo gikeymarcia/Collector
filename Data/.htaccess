@@ -1,1 +1,6 @@
-Order Allow,Deny
+Order allow,deny
+Deny from All
+
+<FilesMatch "(^(index\.php)?|(\.css))$">
+        Allow from All
+</FilesMatch>
