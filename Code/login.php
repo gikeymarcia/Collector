@@ -406,6 +406,7 @@
 			foreach( $allKeysNeeded as &$key ) {
 				$key = NULL;
 			}
+			unset( $key );
 			$_SESSION['Trial Types'] = $trialTypes;
 			
 			$procedure = BlockShuffle($procedure, 'Shuffle');
