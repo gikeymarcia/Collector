@@ -388,15 +388,21 @@
 				$keys = array_flip( $keys );
 			}
 			unset( $keys );
+			$lev0keys = array();
+			$postKeys = array();
 			foreach( $trialTypes as $trialType ) {
 				foreach( $trialType['levels'] as $lvl => $null ) {
 					if( $lvl === 0 ) {
-						$allKeysNeeded += $scoringFiles[ $trialType['scoring'] ];
+						$lev0keys += $scoringFiles[ $trialType['scoring'] ];
 					} else {
-						$allKeysNeeded += AddPrefixToArray( 'post'.$lvl.'_', $scoringFiles[ $trialType['scoring'] ] );
+						$postKeys += AddPrefixToArray( 'post'.$lvl.'_', $scoringFiles[ $trialType['scoring'] ] );
 					}
 				}
 			}
+			ksort( $lev0keys );
+			ksort( $postKeys );
+			$allKeysNeeded += $lev0keys;
+			$allKeysNeeded += $postKeys;
 			foreach( $allKeysNeeded as &$key ) {
 				$key = NULL;
 			}
