@@ -45,5 +45,5 @@
     $experimenterEmail = 'youremail@yourdomain.com';
     
     // getdata
-    $allowGetData = FALSE;                        // set to `TRUE` to allow access to the getdata subfolder of the Code folder
+    $getdataPassword = '';                        // to enable getdata, enter a string other than ''
 ?>

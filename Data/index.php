@@ -5,6 +5,20 @@
  */
 	require 'scan.php';
 	
+	session_start();
+	if( isset( $_POST['LogOut'] ) ) {
+		unset( $_SESSION['LoggedIn'] );
+	}
+	if( isset( $_POST['Password'] ) ) {
+		if( $_POST['Password'] === $getdataPassword ) {
+			$_SESSION['LoggedIn'] = TRUE;
+		}
+	}
+	if( !isset( $_SESSION['LoggedIn'] ) ) {
+		include 'login.php';
+		exit;
+	}
+	
 	$experimentList = array();
 	$sessionList = array();
 	$condList = array();
@@ -105,7 +119,7 @@
 	<script src="http://code.jquery.com/jquery-1.8.0.min.js" type="text/javascript"> </script>
 </head>
 <body id="GetDataMenu">
-	<div id="Title">GetData</div>
+	<div id="Title">GetData<span style="position: relative"><form id="LogOutForm" method="post"><input type="submit" name="LogOut" value="Log out"/></form></span></div>
 	
 	<form method="post" target="_blank" action="generate.php" id="form" >
 	
@@ -135,7 +149,7 @@
 					</div>
 				</div>
 				
-				<input type="submit" value="Get Data" />
+				<input type="submit" value="Get Data" id="downloadButton" />
 				
 			</div>
 			
@@ -191,9 +205,11 @@
 							<div class="InputContainer">
 								<div class="BlockOptions">
 									<div class="Head">Final_Questions</div>';
-					foreach( array_keys($extraFileMeta['Final_Questions']['Columns']) as $column ) {
-						$display = '<div><div class="FinalQuestion">'.htmlspecialchars($column).'</div></div>';
-						echo '		<label class="ChoiceLabel"> <div><input type="checkbox" name="Final_Questions_Columns[]" value="'.$column.'" 	checked	class="FQcheck" /></div> '.$display.'	</label>';
+					if( isset( $extraFileMeta['Final_Questions'] ) ) {
+						foreach( array_keys($extraFileMeta['Final_Questions']['Columns']) as $column ) {
+							$display = '<div><div class="FinalQuestion">'.htmlspecialchars($column).'</div></div>';
+							echo '		<label class="ChoiceLabel"> <div><input type="checkbox" name="Final_Questions_Columns[]" value="'.$column.'" 	checked	class="FQcheck" /></div> '.$display.'	</label>';
+						}
 					}
 					echo '</div></div></div>';
 				?>
