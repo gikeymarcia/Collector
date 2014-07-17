@@ -7,5 +7,6 @@ Item	Trial Type	Timing	Post 1 Trial Type	Post 1 Timing	Procedure Notes	Shuffle
 10	TestPic	User	No	User	inputs	OFF
 10	MCpic	User	No	User	inputs	OFF
 3	Test	User	Feedback	User	inputs	OFF
+3	TestCue	User	No	User	inputs	OFF
 0	FreeRecall	User	No	User	Write down everything you can remember that has happened so far in this experiment.	OFF
 0	Instruct	User	No	User	<h4>Get Ready to Continue</h4><p>In this next section you will be doing a variety of tasks.  Some will be confusing but please stick with them.  There will be a pay off in the end</p>	OFF
