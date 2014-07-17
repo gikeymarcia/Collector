@@ -104,6 +104,8 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link href="css/global.css" rel="stylesheet" type="text/css" />
+	<script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"></script>
+	<script src="javascript/collector_1.0.0.js" type="text/javascript"></script>
 	<title>Trial</title>
 </head>
 <?php flush();	?>
@@ -203,9 +205,6 @@
     echo show($nextTrial['Stimuli']['Answer']).'<br />';
     ?>
 </div>
-
-<script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"></script>
-<script src="javascript/collector_1.0.0.js" type="text/javascript"></script>
 
 </body>
 </html>
