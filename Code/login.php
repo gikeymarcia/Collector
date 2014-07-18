@@ -407,6 +407,7 @@
                 }
                 arrayToLine($line, $sessionFile);
             }
+
         }
         #### Loading up $Trials for multisession experiments
         else {

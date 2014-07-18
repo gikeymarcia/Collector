@@ -92,7 +92,12 @@
         arrayToLine($data, $statusEndPath);
     }
     ########
-
+    
+    ######## Save the session variable as a JSON Encode
+    
+    
+    
+    #######
     $_SESSION = array();                        // clear out all session info
     session_destroy();                          // destroy the session so it doesn't interfere with any future experiments
 

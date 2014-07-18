@@ -72,10 +72,10 @@ var COLLECTOR = {
 				timeFormatted;
 
 			// stop timer at the allotted time
-  			if ( timeRemaining <= stopTime ) {
-				while( true ) {
+  			if (timeRemaining <= stopTime) {
+				while(true) {
 					timeRemaining = goal - Date.now();
-					if( timeRemaining <= 0 ) {
+					if (timeRemaining <= 0) {
 						return callback();
 					}
 				}
@@ -92,14 +92,14 @@ var COLLECTOR = {
 				timeRemaining = Math.min( 20, timeRemaining );
   			}
 
-			if( timeRemaining <= lastWait ) {
+			if (timeRemaining <= lastWait) {
 				timeRemaining = timeRemaining - Math.floor(cap*0.5);
-			} else if( timeRemaining <= lastAim ) {
+			} else if (timeRemaining <= lastAim) {
 				timeRemaining = timeRemaining - Math.floor(cap*1.5);
 			} else {
 				timeRemaining *= waitPercent;
 			}
-			timeRemaining = Math.max( cap, Math.floor(timeRemaining) );
+			timeRemaining = Math.max (cap, Math.floor(timeRemaining));
 
 			// run the timer again, using a percentage of the time remaining
 			setTimeout(function() { instance(); }, timeRemaining );
@@ -193,18 +193,18 @@ var COLLECTOR = {
 			}
 
 			// start timers
-			if( !(isNaN(trialTime)) ) {
-				COLLECTOR.timer( trialTime, function() {
+			if (!(isNaN(trialTime))) {
+				COLLECTOR.timer(trialTime, function() {
 					$(document.body).hide();
 					fsubmit.click();							// see common:init "intercept FormSubmitButton"
 				}, false);										// run the timer (no minTime set)
 				$(":input").addClass("noEnter");				// disable enter from submitting the trial
-				if( isNaN(minTime) ) {
+				if(isNaN(minTime)) {
 					fsubmit.addClass("hidden");					// hide submit button
 				}
 			}
 
-			if( !(isNaN(minTime)) ) {
+			if (!(isNaN(minTime))) {
 				fsubmit.prop("disabled", true);					// disable submit button when minTime is set
 				$(":input").addClass("noEnter");				// disable enter from submitting the trial
 				COLLECTOR.timer(minTime, function() {			// run timer for minTime
@@ -277,7 +277,7 @@ var COLLECTOR = {
 
 		stepout: function() {
 			// get trial time from page and run timer
-			COLLECTOR.timer( parseFloat( $("#Time").html() ) - 5, function () {
+			COLLECTOR.timer(parseFloat($("#Time").html() )-5, function () {
 				// hide game and show get ready prompt for 5 secs
 				$(".stepout-clock").hide();
 				$(".tetris-wrap")
@@ -302,16 +302,16 @@ var COLLECTOR = {
 	finalQuestions: {
 		init: function() {
 			// slider for Likert questions
-			$( "#slider" ).slider({
+			$("#slider").slider({
 				value:1,
 				min: 1,
 				max: 7,
 				step: 1,
-				slide: function( event, ui ) {
-					$( "#amount" ).val( ui.value );
+				slide: function(event, ui) {
+					$("#amount").val(ui.value);
 				}
 			});
-			$( "#amount" ).val( $( "#slider" ).slider( "value" ) );
+			$("#amount").val( $("#slider").slider("value") );
 		}
 	},
 
@@ -328,21 +328,21 @@ var COLLECTOR = {
 UTIL = {
 	exec: function( controller, action ) {
 		var ns = COLLECTOR,
-		    action = ( action === undefined ) ? "init" : action;
+		    action = (action === undefined) ? "init" : action;
 
-		if ( controller !== "" && ns[controller] && typeof ns[controller][action] == "function" ) {
+		if (controller !== "" && ns[controller] && typeof ns[controller][action] == "function") {
 			ns[controller][action]();
 		}
 	},
 
 	init: function() {
 		var body = document.body,
-            controller = body.getAttribute( "data-controller" ),
-            action = body.getAttribute( "data-action" );
+            controller = body.getAttribute("data-controller"),
+            action = body.getAttribute("data-action");
 
-		UTIL.exec( "common" );
-		UTIL.exec( controller );
-		UTIL.exec( controller, action );
+		UTIL.exec("common");
+		UTIL.exec(controller);
+		UTIL.exec(controller, action);
 	}
 };
 
@@ -395,4 +395,4 @@ jQuery.fn.forceNumeric = function () {
 
 
 
-$( window ).load( UTIL.init );
+$(window).load(UTIL.init);
