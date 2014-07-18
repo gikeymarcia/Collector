@@ -165,8 +165,8 @@
 	var mouseX;
 	var mouseY;
 	$(document).mousemove( function(e) {
-	   mouseX = window.innerWidth - e.pageX - 5; 
-	   mouseY = e.pageY+5;
+		mouseX = Math.min( window.innerWidth - e.pageX - 5, window.innerWidth - $(window).scrollLeft() - $(".GenTooltip").width() - 25 ); 
+		mouseY = Math.min( e.pageY+5, window.innerHeight + $(window).scrollTop() - $(".GenTooltip").height() - 25 );
 	   $(".GenTooltip").css("top",mouseY+"px").css("right",mouseX+"px");
 	});  
 	$('th > div, td > div').filter(function() {

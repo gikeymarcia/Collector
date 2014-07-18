@@ -8,6 +8,8 @@
 	require 'getdataFunctions.php';
 	require $root.$expFiles.'Settings.php';					// experiment variables
 	
+	$dataF .= $experimentName . '/';
+	
 	if( $getdataPassword === '' ) exit( 'GetData has not been enabled.' );
 	
 	
@@ -59,7 +61,7 @@
 			,'Scope' 			=> 'ID' )
 	);
 	
-	if( count( $_POST ) > 0 ) {
+	if( !isset($_POST['Password']) AND count( $_POST ) > 0 ) {
 		foreach( $extraFileMeta as $category => $fileMeta ) {
 			if( !isset( $_POST[$category] ) OR !isset( $_POST[$category.'_Columns'] ) ) {
 				unset( $extraFileMeta[$category] );

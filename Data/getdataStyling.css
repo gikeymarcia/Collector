@@ -93,7 +93,7 @@ body
 #GetDataTable tbody tr:hover
 	{	background-color: #fafafa;	}
 .GenTooltip
-	{	position: absolute;	max-width: 200px;	min-width: 150px;	word-wrap: break-word;	background: #333;	color: #FFF;	border-style: solid;	border-width: 2px;	border-color: #111;	z-index: 1;	padding: 1px 3px;	}
+	{	position: absolute;	max-width: 300px;	min-width: 150px;	word-wrap: break-word;	background: #333;	color: #FFF;	border-style: solid;	border-width: 2px;	border-color: #111;	z-index: 1;	padding: 1px 3px;	pointer-events: none;	}
 
 .thFreeze
 	{	position: fixed;	top: 0;	background-color: #EEE;	}

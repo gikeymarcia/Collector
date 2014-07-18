@@ -3,8 +3,7 @@
 	A program for running experiments on the web
 	Copyright 2012-2014 Mikey Garcia & Nate Kornell
  */
-	require 'CustomFunctions.php';							// Load custom PHP functions
-	initiateCollector();
+	require 'initiateCollector.php';
 
 	$currentPos		=& $_SESSION['Position'];
 	$currentTrial	=& $_SESSION['Trials'][$currentPos];

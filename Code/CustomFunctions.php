@@ -11,7 +11,7 @@
 	#### Write array to a line of a tab delimited text file
 	function arrayToLine ($row, $fileName, $d = NULL) {
 		if ($d === NULL) {
-			$d = isset ($_SESSION['OutputDelimiter']) ? $_SESSION['OutputDelimiter'] : "\t";
+			$d = isset ($_SESSION['OutputDelimiter']) ? $_SESSION['OutputDelimiter'] : ",";
 		}
 		if (!is_dir(dirname($fileName))) {
 			mkdir(dirname($fileName), 0777, true);
@@ -233,7 +233,7 @@
 
 
     #### custom function to read from tab delimited data files;  pos 0 & 1 are blank,  header names are array keys
-    function GetFromFile ($fileLoc, $padding = TRUE, $delimiter = "\t") {
+    function GetFromFile ($fileLoc, $padding = TRUE, $delimiter = ",") {
         $file = fopen($fileLoc, 'r');                       // open the file passed through the function arguement
         $keys = fgetcsv($file, 0, $delimiter);              // pulling header data from top row of file
         if ($padding == TRUE) {
@@ -251,21 +251,13 @@
         }
         fclose($file);
         foreach ($out as &$row) {                           // trim all cells and encode using utf8 character set
-            foreach ($row as &$cell) {
-                $cell = trim(utf8_encode($cell));
-            }
+			if( is_array($row) ) {                          // fix error message from using foreach on padding
+				foreach ($row as &$cell) {
+					$cell = trim(utf8_encode($cell));
+				}
+			}
         }
         return $out;
-    }
-
-
-
-    function initiateCollector() {
-        ini_set('auto_detect_line_endings', true);              // fixes problems reading files saved on mac
-        session_start();                                        // start the session at the top of each page
-        if (!isset($_SESSION['Debug']) OR $_SESSION['Debug'] == FALSE) {        // disable error reporting during debug
-            error_reporting(0);
-        }
     }
 
 
@@ -358,20 +350,24 @@
     }
 	
 	
-	function RemoveLabel ($input, $label, $extendLabel = TRUE) {
-		$trimInput = trim(strtolower($input));
-		$trimLabel = trim(strtolower($label)); 
-		$labelLength = strlen($trimLabel);
-		if (substr($trimInput, 0, $labelLength) === $trimLabel) {
-			if ($extendLabel === TRUE) {		//if (my misguided efforts to make things for user-forgiving) end up breaking things, turn this off
-				if (substr($trimInput, $labelLength, 1) === 's' ) { $labelLength++;}							//so we can put "labels" in the argument rather than just "label"
-				if (substr($trimInput, $labelLength, 1) === ':' OR substr($trimInput, $labelLength, 1) === '=' ) { $labelLength++;} 	//more nice formatting is allowed in the excel file.  labels: yadayada or labels= yadayada
+	function RemoveLabel($input, $label, $extendLabel = TRUE) {
+		$trim = trim($input);
+		$lower = strtolower($trim);
+		$label = strtolower(trim($label));
+		$trimLength = strlen($label);
+		if( substr( $lower, 0, $trimLength ) !== $label ) {
+			return FALSE;
+		} else {
+			if( $extendLabel ) {
+				if( substr( $lower, $trimLength, 1 ) === 's' ) ++$trimLength;
+				if( substr( $lower, $trimLength, 1 ) === ' ' ) ++$trimLength;
+				if( substr( $lower, $trimLength, 1 ) === ':' ) ++$trimLength;
+				if( substr( $lower, $trimLength, 1 ) === '=' ) ++$trimLength;
 			}
-			$output = trim(substr(trim($input), $labelLength));
+			$trim = trim( substr( $trim, $trimLength ) );
+			if( $trim === '' OR $trim === FALSE ) return TRUE;
+			return $trim;
 		}
-		else { $output = $input; }
-		
-		return $output;
 	}
 
 

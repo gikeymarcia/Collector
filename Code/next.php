@@ -3,10 +3,7 @@
     A program for running experiments on the web
     Copyright 2012-2014 Mikey Garcia & Nate Kornell
  */
-    require 'CustomFunctions.php';                          // Load custom PHP functions
-    initiateCollector();
-    require 'fileLocations.php';                            // sends file to the right place
-    require $up . $expFiles . 'Settings.php';               // experiment variables
+    require 'initiateCollector.php';
 
     #### setting up aliases (for later use)
     $currentPos   =& $_SESSION['Position'];

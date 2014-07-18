@@ -5,37 +5,20 @@
  */
 
     ####  good place to pull in values and/or compute things that'll be inserted into the HTML below
-    require 'fileLocations.php';                    // sends file to the right place
-    require $up . $expFiles . 'Settings.php';       // experiment variables
-    require 'CustomFunctions.php';                  // Loads all of my custom PHP functions
-    // Load custom PHP functions
-    initiateCollector();
+    require 'initiateCollector.php';
+	
+    $title = 'Experiment Instructions';
+	$_dataController = 'instructions';
+    require $_codeF . 'Header.php';
 ?>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link href="css/global.css" rel="stylesheet" type="text/css" />
-    <title>Experiment Instructions</title>
-</head>
+	<?php include FileExists($up . $expFiles . $instructionsFileName); ?>
 
-<body data-controller="instructions">
-    <div class="cframe-outer">
-        <div class="cframe-inner">
-
-            <?php include FileExists($up . $expFiles . $instructionsFileName); ?>
-
-            <form class="hidden" name="Login" action="<?php echo $up . $codeF; ?>trial.php" method="post">
-                <input  name="RT"        id="RT"    type="text" value="0" />
-                <input  name="Fails"     id="Fails" type="text" value="0" />
-                <input  id="FormSubmitButton" type="submit" />
-            </form>
-
-        </div>
-    </div>
-
-    <div class="alert alert-instructions">Please carefully read the instructions again.</div>
+	<form class="hidden" name="Login" action="<?php echo $up . $codeF; ?>trial.php" method="post">
+		<input  name="RT"        id="RT"    type="text" value="0" />
+		<input  name="Fails"     id="Fails" type="text" value="0" />
+		<input  id="FormSubmitButton" type="submit" />
+	</form>
 
     <div class="precache">
     <?php
@@ -47,6 +30,7 @@
     }
     ?>
     </div>
+    <div class="alert alert-instructions">Please carefully read the instructions again.</div>
 
-<script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"></script>
-<script src="javascript/collector_1.0.0.js" type="text/javascript"></script>
+<?php
+    require $_codeF . 'Footer.php';

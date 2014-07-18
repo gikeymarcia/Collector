@@ -30,6 +30,7 @@
 	$response      = $_POST['Response'];
 	$responseClean = substr( $answerClean, 0, 2 ) . trim(strtolower($response));
 	$Acc           = NULL;
+	$Acc2          = NULL;
 	
 	// store the "complete" answer here, which is both the two-letter cue and
 	// the rest of the word that they typed in.
@@ -37,6 +38,8 @@
 	
 	#### Calculating and saving accuracy for trials with user input
 	similar_text($responseClean, $answerClean, $Acc);                   // determine text similarity and store as $Acc
+	similar_text($responseClean, trim(strtolower($response)), $Acc2);
+	$Acc = max($Acc, $Acc2);
 	$data['Accuracy'] = $Acc;
 	
 	#### Scoring and saving scores

@@ -1,0 +1,9 @@
+Item,Trial Type,Timing,Post 1 Trial Type,Post 1 Timing,Procedure Notes,Shuffle
+2,Study,User,No,-,mass,Study Phase
+2,Study,User,No,-,mass,Study Phase
+2,Study,User,No,-,mass,Study Phase
+6,Study,User,Feedback,5,mass,Study Phase
+6,Study,User,Feedback,5,mass,Study Phase
+6,Study,User,Feedback,5,mass,Study Phase
+2,Test,User,Feedback,5,Showing 3 trials in order,Test Phase
+6,Test,User,Feedback,5,Showing 3 trials in order,Test Phase

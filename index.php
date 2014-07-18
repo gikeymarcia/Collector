@@ -16,72 +16,46 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-    ini_set('auto_detect_line_endings', true);          // fixes problems reading files saved on mac
-    session_start();                                    // starts the session
+    require 'Code/initiateCollector.php';
     $_SESSION = array();                                // reset session so it doesn't contain any information from a previous login attempt
 
-    require 'Code/fileLocations.php';                   // sends file to the right place
-    require $codeF.'CustomFunctions.php';               // Loads all of my custom PHP functions
-    require	$expFiles.'Settings.php';                   // experiment variables
+	// load and sort conditions
+	$Conditions = GetFromFile($expFiles.$conditionsFileName);
+	$tempCond   = SortByKey($Conditions, 'Number');
+	
+	$title = 'Experiment Login Page';
+    require $_codeF . 'Header.php';
 ?>
+<div class="cframe-content textcenter login-pos">
+	<h1><?php echo $welcome;?></h1>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link href="<?php echo $codeF; ?>css/global.css" rel="stylesheet" type="text/css" />
-    <title>Experiment Login Page</title>
-</head>
-<body>
-	<!-- redirect if Javascript is disabled -->
-    <noscript>
-        <meta http-equiv="refresh" content="0;url=<?php echo $codeF; ?>nojs.php" />
-    </noscript>
+	<?php echo $expDescription; ?>
 
-    <div class="cframe-outer">
-        <div class="cframe-inner">
-            <div class="cframe-content textcenter login-pos">
-                <h1><?php echo $welcome;?></h1>
+	<form class="collector-form" name="Login" autocomplete="off"  action="<?php echo $codeF;?>login.php"  method="get">
+		<?php echo $askForLogin;?>
+		<input name="Username" type="text" value="" autocomplete="off" />
 
-                <?php echo $expDescription; ?>
+			<?php if ($showConditionSelector == TRUE): ?>
+			<select name="Condition">
+			<?php else: ?>
+			<select class="hidden" name="Condition">
+			<?php endif; ?>
 
-                <form class="collector-form" name="Login" autocomplete="off"  action="<?php echo $codeF;?>login.php"  method="get">
-                    <?php echo $askForLogin;?>
-                    <input name="Username" type="text" value="" autocomplete="off" />
+				<option selected value="Auto">Auto</option>
 
-                        <?php if ($showConditionSelector == TRUE): ?>
-                        <select name="Condition">
-                        <?php else: ?>
-                        <select class="hidden" name="Condition">
-                        <?php endif; ?>
+				<?php
+				#### Display conditions as choices ####
 
-                            <option selected value="Auto">Auto</option>
+				// output all possible condition choices
+				for ($i=2; $i<count($tempCond); $i++) {
+					echo '<option value="' . $tempCond[$i]['Number'] . '">' . $tempCond[$i]['Number'] . '</option>';
+				}
+				?>
+			</select>
 
-                            <?php
-                            #### Display conditions as choices ####
+		<input class="button" type="submit" value="Login" />
+	</form>
+</div>
 
-                            // load and sort conditions
-                            $Conditions = GetFromFile($expFiles.'Conditions.txt');
-                            $tempCond   = SortByKey($Conditions, 'Number');
-
-                            // output all possible condition choices
-                            for ($i=2; $i<count($tempCond); $i++) {
-                                echo '<option value="' . $tempCond[$i]['Number'] . '">' . $tempCond[$i]['Number'] . '</option>';
-                            }
-                            ?>
-                        </select>
-
-                    <input class="button" type="submit" value="Login" />
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div class="precache">
-        <!-- put things here you want to precache -->
-    </div>
-
-    <script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"></script>
-    <script src="<?php echo $codeF; ?>javascript/collector_1.0.0.js" type="text/javascript"></script>
-</body>
-</html>
+<?php
+    require $_codeF . 'Footer.php';

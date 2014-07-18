@@ -28,7 +28,7 @@
 	
 	$answerClean   = trim(strtolower($answer));
 	$response      = $_POST['Response'];
-	$responseClean = substr( $answerClean, 0, 2 ) . trim(strtolower($response));
+	$responseClean = trim(strtolower($response));
 	$Acc           = NULL;
 	
 	// store the "complete" answer here, which is both the two-letter cue and

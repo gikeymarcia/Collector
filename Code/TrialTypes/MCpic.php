@@ -4,7 +4,7 @@
 
 	#### Set up MC button grid ####
 	// shuffle button positions (first time only) and save to session
-	if($_SESSION['MCbutton'] == false) {
+	if(isset($_SESSION['MCbutton']) == false) {
 		$mc = $MultiChoiceButtons;   // set this in Settings.php
 		shuffle($mc);				 // comment out this line to prevent shuffling
 		$_SESSION['MCbutton'] = $mc;

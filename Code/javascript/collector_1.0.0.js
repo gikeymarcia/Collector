@@ -63,7 +63,6 @@ var COLLECTOR = {
 		var waitPercent = .5,
 			cap         = 4,
 			goal        = Date.now() + timeUp*1000,
-			stopTime = Math.floor(cap*1.5),
 			lastWait = cap*2,
 			lastAim = cap*2/waitPercent;
 
@@ -72,7 +71,7 @@ var COLLECTOR = {
 				timeFormatted;
 
 			// stop timer at the allotted time
-  			if (timeRemaining <= stopTime) {
+  			if (timeRemaining <= cap) {
 				while(true) {
 					timeRemaining = goal - Date.now();
 					if (timeRemaining <= 0) {
@@ -93,7 +92,7 @@ var COLLECTOR = {
   			}
 
 			if (timeRemaining <= lastWait) {
-				timeRemaining = timeRemaining - Math.floor(cap*0.5);
+				timeRemaining = cap;
 			} else if (timeRemaining <= lastAim) {
 				timeRemaining = timeRemaining - Math.floor(cap*1.5);
 			} else {

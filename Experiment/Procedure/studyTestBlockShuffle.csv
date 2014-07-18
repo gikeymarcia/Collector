@@ -1,0 +1,7 @@
+Item,Trial Type,Timing,Post 1 Trial Type,Post 1 Timing,Procedure Notes,Shuffle
+2,Study,User,No,-,Showing 3 trials in order,studygroup
+3,Study,User,No,-,Showing 3 trials in order,studygroup
+4,Study,User,No,-,Showing 3 trials in order,studygroup
+2,Test,User,No,-,Showing 3 trials in order,test group
+3,Test,User,Feedback,user,Showing 3 trials in order,test group
+4,Test,User,No,-,Showing 3 trials in order,test group

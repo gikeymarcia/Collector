@@ -3,10 +3,7 @@
     A program for running experiments on the web
     Copyright 2012-2014 Mikey Garcia & Nate Kornell
  */
-    require 'CustomFunctions.php';                      // Load custom PHP functions
-    initiateCollector();
-    require 'fileLocations.php';                        // sends file to the right place
-    require $up . $expFiles . 'Settings.php';           // experiment variables
+    require 'initiateCollector.php';
 
     // if someone skipped to done.php without doing all trials
     if (array_key_exists('finishedTrials', $_SESSION)) {
@@ -57,17 +54,7 @@
         $username = $_SESSION['Debug'] ? $debugName.' '.$_SESSION['Username'] : $_SESSION['Username'];
         echo '<meta http-equiv="refresh" content="5; url=' . $nextLink . 'Code/login.php?Username=' . urlencode($username) . '&Condition=Auto&ID=' . $_SESSION['ID'] . '">';
     }
-?>
-
-    <div class="cframe-outer">
-        <div class="cframe-inner">
-            <div class="cframe-content">
-                <?php echo $message; ?>
-            </div>
-        </div>
-    </div>
-
-<?php
+	
     if (isset($_SESSION['finishedTrials'])) {
         $duration = time() - strtotime($_SESSION['Start Time']);
         $durationFormatted = $duration;
@@ -100,9 +87,13 @@
     #######
     $_SESSION = array();                        // clear out all session info
     session_destroy();                          // destroy the session so it doesn't interfere with any future experiments
-
+	
+	
+	$title = 'Done!';
+    require $_codeF . 'Header.php';
 ?>
-    <script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript">  </script>
-    <script src="javascript/collector_1.0.0.js" type="text/javascript">  </script>
-</body>
-</html>
+	<div class="cframe-content">
+		<?php echo $message; ?>
+	</div>
+<?php
+    require $_codeF . 'Footer.php';

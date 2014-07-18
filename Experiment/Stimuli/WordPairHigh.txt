@@ -1,4 +1,0 @@
-Cue	Answer	Shuffle	Stimuli Notes
-Dog	Cat	OFF	high associates
-Word	Pair	OFF	high associates
-Funny	Bone	OFF	high associates

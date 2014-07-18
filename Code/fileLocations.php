@@ -35,8 +35,8 @@
     $scoring = 'scoring.php';
     
     #Experiment
-    $conditionsFileName     = 'Conditions.txt';
-    $finalQuestionsFileName = 'FinalQuestions.txt';
+    $conditionsFileName     = 'Conditions.csv';
+    $finalQuestionsFileName = 'FinalQuestions.csv';
     $instructionsFileName   = 'instructions.php';        // this file could store the question and possible answers, and leave the code to Code/instructions.php
     /**
      * Future files to name
@@ -46,8 +46,8 @@
      */
     
     #Output
-    $outExt     = '.txt';       // can be either .csv or .txt
-    $delimiter  = "\t";         // either "," or "\t"
+    $outExt     = '.csv';       // can be either .csv or .txt
+    $delimiter  = ",";         // either "," or "\t"
     
     $demographicsFileName       = 'Demographics';
     $statusBeginFileName        = 'Status_Begin';
@@ -75,13 +75,5 @@
     } else {
         $dataSubFolder = $nonDebugF;
     }
-    
-    $path = $up . $dataF . $dataSubFolder . $extraDataF;
-    
-    $demoPath        = $path . $demographicsFileName        . $outExt;
-    $statusBeginPath = $path . $statusBeginFileName         . $outExt;
-    $statusEndPath   = $path . $statusEndFileName           . $outExt;
-    $fqDataPath      = $path . $finalQuestionsDataFileName  . $outExt;
-    $instructPath    = $path . $instructionsDataFileName    . $outExt;
     
 ?>
