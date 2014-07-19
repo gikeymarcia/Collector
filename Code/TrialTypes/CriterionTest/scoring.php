@@ -16,4 +16,8 @@
     if ($findingKeys) {
         return array('RT', 'LoopCount', 'Performance', 'Accuracy', 'RTkey', 'RTlast', 'strictAcc', 'lenientAcc');
     }
+	
+	// Also, the next line is super-important.  This is the line that actually
+	// records data.  So, no matter what, make sure to put $_POST into $data.
+    $data = $_POST;
 ?>

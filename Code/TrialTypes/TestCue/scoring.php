@@ -17,7 +17,7 @@
         return array('RT', 'Response', 'ResponseComplete', 'Accuracy', 'RTkey', 'RTlast', 'strictAcc', 'lenientAcc');
     }
 	
-	// to make sure that everything is recorded, just throw all of POST into
+	// To make sure that everything is recorded, just throw all of POST into
 	// $data, which will eventually be recorded into the output file.
 	// To create new columns, simply assign the new data you want to record
 	// to a new key in $data.
@@ -25,6 +25,9 @@
 	// column titled "New Column" in the output, and every row for this trial
 	// type would have the value "Hello".
     $data = $_POST;
+	
+	
+	// Below here, you can do whatever custom scoring you want.
 	
 	$answerClean   = trim(strtolower($answer));
 	$response      = $_POST['Response'];

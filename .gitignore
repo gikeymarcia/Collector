@@ -12,3 +12,7 @@ desktop.ini
 .Trashes
 Icon?
 .git
+
+Data/**/*
+!Data/*
+!Data/GetData/**/*
