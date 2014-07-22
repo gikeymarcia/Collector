@@ -1,0 +1,27 @@
+Item,Trial Type,Timing,Min Time,Procedure Notes,Shuffle
+2,Study,8,-,Study Test Items,Study Phase
+3,Study,8,-,Study Test Items,Study Phase
+4,Study,8,-,Study Test Items,Study Phase
+5,Study,8,-,Study Copy Items,Study Phase
+6,Study,8,-,Study Copy Items,Study Phase
+7,Study,8,-,Study Copy Items,Study Phase
+2,Test,8,4,Study Test Items,Manipulation Phase
+3,Test,8,4,Study Test Items,Manipulation Phase
+4,Test,8,4,Study Test Items,Manipulation Phase
+5,Copy,8,4,Study Copy Items,Manipulation Phase
+6,Copy,8,4,Study Copy Items,Manipulation Phase
+7,Copy,8,4,Study Copy Items,Manipulation Phase
+*newfile*,,,,,
+2,Test,8,4,Study Test Items,Delay Test 1
+3,Test,8,4,Study Test Items,Delay Test 1
+4,Test,8,4,Study Test Items,Delay Test 1
+5,Test,8,4,Study Copy Items,Delay Test 1
+6,Test,8,4,Study Copy Items,Delay Test 1
+7,Test,8,4,Study Copy Items,Delay Test 1
+*newfile*,,,,,
+2,Test,8,4,Study Test Items,Delay Test 2
+3,Test,8,4,Study Test Items,Delay Test 2
+4,Test,8,4,Study Test Items,Delay Test 2
+5,Test,8,4,Study Copy Items,Delay Test 2
+6,Test,8,4,Study Copy Items,Delay Test 2
+7,Test,8,4,Study Copy Items,Delay Test 2

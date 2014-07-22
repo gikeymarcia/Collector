@@ -1,13 +1,13 @@
 <?php
-/*	Collector
-	A program for running experiments on the web
-	Copyright 2012-2014 Mikey Garcia & Nate Kornell
- */
-	require 'initiateCollector.php';
-	
+/*  Collector
+    A program for running experiments on the web
+    Copyright 2012-2014 Mikey Garcia & Nate Kornell
+*/
+    require 'initiateCollector.php';
+    
     // if this is the first time on FinalQuestions.php then load questions from file
     if (isset($_SESSION['FinalQs']) == FALSE) {
-			$fQ	= GetFromFile($up.$expFiles.$finalQuestionsFileName);
+        $fQ = GetFromFile($up.$expFiles.$finalQuestionsFileName);
         // loop that deletes trailing empty positions from $fQ array
         for ($i=count($fQ)-1; $i >0; $i--) {
             if ($fQ[$i] == null) {
@@ -44,90 +44,82 @@
             $temp       = array('value' => $split[0],
                                 'text'  => $split[1]);
             $options[]  = $temp;
-            // echo 'found fq #'.$i.'  and it is  '.$FQ[$i].'<br />';
         }
     }
-
-
-    // readable($allFQs, 'all FinalQuestions');                     #### DEBUG ####
-    // readable($options, 'options');                               #### DEBUG ####
-    // echo "current question type is: {$type} <br /> <br />";      #### DEBUG ####
-
 
     // if the question starts with '*' then skip it; good for skipping questions when debugging without deleting finalQuestions
     if ($Q[0] == '*') {
         echo '<meta http-equiv="refresh" content="0; url=FQdata.php">';
         exit;
     }
-	
-	$title = 'Final Questions';
-	$_dataController = 'finalQuestions';
-	
+    
+    $title = 'Final Questions';
+    $_dataController = 'finalQuestions';
+    
     require $_codeF . 'Header.php';
 ?>
+    <div class="cframe-content">
+        <h1 class="textcenter">Final Questions</h1>
+        <p><?php echo $Q ?></p>
 
-	<div class="cframe-content">
-		<h1 class="textcenter">Final Questions</h1>
-		<p><?php echo $Q ?></p>
+        <form class="collector-form" name="FinalQuestion" autocomplete="off" action="FQdata.php" method="post">
 
-		<form class="collector-form" name="FinalQuestion" autocomplete="off" action="FQdata.php" method="post">
+            <?php
+            // radio button code
+            if ($type == 'radio'): ?>
+                <?php foreach ($options as $choice): ?>
+                <label>
+                    <input type="radio" name="formData" value="'<?php echo $choice['value']; ?>'" />
+                    <?php echo $choice['text']; ?>
+                </label>
+                <?php endforeach; ?>
+                <div class="textcenter">
+                    <input class='button' id="FormSubmitButton" type="submit" value="Submit" />
+                </div>
+            <?php endif;
 
-			<?php
-			// radio button code
-			if ($type == 'radio'): ?>
-				<?php foreach ($options as $choice): ?>
-				<label>
-					<input type="radio" name="formData" value="'<?php echo $choice['value']; ?>'" />
-					<?php echo $choice['text']; ?>
-				</label>
-				<?php endforeach; ?>
-				<div class="textcenter">
-					<input class='button' id="FormSubmitButton" type="submit" value="Submit" />
-				</div>
-			<?php endif;
+            // checkbox code
+            if($type == 'checkbox'): ?>
+                <?php foreach ($options as $choice): ?>
+                <label>
+                    <input type="checkbox" name=formData[] value="'<?php echo $choice['value']; ?>'" />
+                    <?php echo $choice['text']; ?>
+                </label>
+                <?php endforeach; ?>
+                <div class="textcenter">
+                    <input class='button' id="FormSubmitButton" type="submit" value="Submit" />
+                </div>
+            <?php endif;
 
-			// checkbox code
-			if($type == 'checkbox'): ?>
-				<?php foreach ($options as $choice): ?>
-				<label>
-					<input type="checkbox" name=formData[] value="'<?php echo $choice['value']; ?>'" />
-					<?php echo $choice['text']; ?>
-				</label>
-				<?php endforeach; ?>
-				<div class="textcenter">
-					<input class='button' id="FormSubmitButton" type="submit" value="Submit" />
-				</div>
-			<?php endif;
+            // likert code
+            if($type == 'likert'): ?>
+                <div id="slider"></div>
+                <div class="amount">
+                    <input name="formData" type="text" id="amount" />
+                    <input class='button' id="FormSubmitButton" type="submit" value="Submit" />
+                </div>
+            <?php endif;
 
-			// likert code
-			if($type == 'likert'): ?>
-				<div id="slider"></div>
-				<div class="amount">
-					<input name="formData" type="text" id="amount" />
-					<input class='button' id="FormSubmitButton" type="submit" value="Submit" />
-				</div>
-			<?php endif;
+            // textbox code
+            if ($type == 'text'): ?>
+                <div class="textcenter">
+                    <input type="text" name="formData" autocomplete="off" />
+                    <input class="button" id="FormSubmitButton" type="submit" value="Submit" />
+                </div>
+            <?php endif;
 
-			// textbox code
-			if ($type == 'text'): ?>
-				<div class="textcenter">
-					<input type="text" name="formData" autocomplete="off" />
-					<input class="button" id="FormSubmitButton" type="submit" value="Submit" />
-				</div>
-			<?php endif;
+            // textarea code
+            if ($type == 'textarea'): ?>
+                <textarea rows="10" cols="50" name="formData" wrap="physical" value=""></textarea>
+                <div class="textright">
+                    <input class="button button-trial-advance" id="FormSubmitButton" type="submit" value="Submit"   />
+                </div>
+            <?php endif; ?>
 
-			// textarea code
-			if ($type == 'textarea'): ?>
-				<textarea rows="10" cols="50" name="formData" wrap="physical" value=""></textarea>
-				<div class="textright">
-					<input class="button button-trial-advance" id="FormSubmitButton" type="submit" value="Submit"   />
-				</div>
-			<?php endif; ?>
+            <input name="RT" id="RT" class="hidden" type="text" value=""/>
 
-			<input name="RT" id="RT" class="hidden" type="text" value=""/>
-
-		</form>
-	</div>
-
+        </form>
+    </div>
+    
 <?php
     require $_codeF . 'Footer.php';

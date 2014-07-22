@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Here are your data</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta  http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
 
 <body>
@@ -11,9 +11,9 @@
 /*  Collector
     A program for running experiments on the web
     Copyright 2012-2014 Mikey Garcia & Nate Kornell
- */
-     require 'fileLocations.php';                                   // sends file to the right place
-     require 'CustomFunctions.php';
+*/
+    require 'fileLocations.php';                                    // sends file to the right place
+    require 'CustomFunctions.php';
     
     $OutFiles = scandir($up . $dataF . $nonDebugF . $outputF);
     $finalQ   = array();                                            // will hold finalQuestions data
@@ -24,7 +24,7 @@
     // remove non-output files
     $outTemp = array();
     foreach ($OutFiles as $file) {
-        if(inString('.txt', $file)) {
+        if(inString('.csv', $file)) {
             $outTemp[] = $file;
         }
     }
@@ -45,7 +45,7 @@
         $loc    = $up . $dataF . $nonDebugF . $outputF . $file;
         $handle = fopen($loc, 'r');
         $row    = fgets($handle);
-        $pieces = explode("\t", $row);
+        $pieces = explode(",", $row);
         foreach ($pieces as $col) {
             if (!in_array(trim($col), $allHeaders)) {
                 // echo 'adding :'.$col.'<br>';
@@ -59,9 +59,9 @@
 
 
     #### Combine all output using common headers
-    $combineLoc = $up . $dataF . 'All Data - ' . date("Y") . "-" . date("m") . "-" . date("d") . ' - ' . date("U") . '.txt';
+    $combineLoc = $up . $dataF . 'All Data - ' . date("Y") . '-' . date("m") . '-' . date("d") . ' - ' . date("U") . '.csv';
     $handle     = fopen($combineLoc, 'a');
-    $delimiter  = "\t";
+    $delimiter  = ',';
     fwrite($handle, implode($delimiter, $allHeaders));                      // write common file headers
     fwrite($handle, PHP_EOL);
     
@@ -80,7 +80,6 @@
         }
     }
     fclose($handle);
-
 ?>
     <script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"> </script>
     <script src="javascript/collector_1.0.0.js" type="text/javascript"> </script>

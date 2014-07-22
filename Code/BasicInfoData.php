@@ -5,8 +5,8 @@
  */
     require 'initiateCollector.php';
 
-    $data = array(  'Username' => $_SESSION['Username'],
-                    'ID' => $_SESSION['ID']              )
+    $data = array( 'Username' => $_SESSION['Username'],
+                   'ID'       => $_SESSION['ID']              )
           + $_POST;
 
     // write user demographics data to demographics file

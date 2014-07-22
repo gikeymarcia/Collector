@@ -12,3 +12,4 @@ Number,Stimuli,Procedure,Condition Description,Condition Notes
 11,FullStim.csv,All Trials.csv,Examples of all presentations,user controlled so I can edit css
 12,TestStimShuffle.csv,TestOrderShuffle.csv,Look at Stimuli File for example of second-order shuffle (advanced feature),This trial is an example of how second order shuffling works.  Look at the Stimuli file and run the experiment to see the output.
 13,TestStimShuffle.csv,new.csv,designed to test new system of post trials being regular trials,hope this isn't a pain to debug
+14,FullStim.csv      ,MultiSession.csv,Example of creating an experiment with multiple sessions,*newfile* is the flag to denote where one session ends and the next begins

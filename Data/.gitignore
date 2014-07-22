@@ -4,6 +4,7 @@ desktop.ini
 *.project
 *.orig
 *.txt
+*.csv
 .settings/
 
 .DS_Store

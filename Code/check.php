@@ -7,8 +7,8 @@
         include 'CustomFunctions.php';
         require 'fileLocations.php';                // sends file to the right place
         require $up . $expFiles . 'Settings.php';   // experiment variables
-     }
-     #### variables needed for this page
+    }
+    #### variables needed for this page
     $folder  = $up . $expFiles . $eligF;            // where to look for files containing workers
     $files   = scandir($folder);                    // list all files containing workers
     $toCheck = null;                                // who to check for eligibility
@@ -142,7 +142,10 @@
          */
 
 
-    if (count($noGo) == 0 AND isset($toCheck) AND !isset($_SESSION)) {
+    if ((count($noGo) == 0)
+        AND (isset($toCheck))
+        AND (!isset($_SESSION))
+    ) {
         echo '<h2>User <b>' . $toCheck . '</b> is eligible to participate</h2>';
     }
     // show all users to people who want to login

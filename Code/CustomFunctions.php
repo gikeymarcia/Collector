@@ -5,44 +5,44 @@
  */
 
 
-	#### #### CUSTOM FUNCTIONS #### ####
+    #### #### CUSTOM FUNCTIONS #### ####
 
 
-	#### Write array to a line of a tab delimited text file
-	function arrayToLine ($row, $fileName, $d = NULL) {
-		if ($d === NULL) {
-			$d = isset ($_SESSION['OutputDelimiter']) ? $_SESSION['OutputDelimiter'] : ",";
-		}
-		if (!is_dir(dirname($fileName))) {
-			mkdir(dirname($fileName), 0777, true);
-		}
-		foreach ($row as &$datum) {
-			$datum = str_replace(array("\r\n", "\n", "\t", "\r", chr(10), chr(13)),  ' ',  $datum);
-		}
-		unset($datum);
-		$fileTrue = fileExists($fileName);
-		if (!$fileTrue) {
-			$file = fopen($fileName, "w");
-			fputcsv($file, array_keys($row), $d);
-			fputcsv($file, $row, $d);
-		} else {
-			$file = fopen($fileTrue, "r+");
-			$headers = array_flip(fgetcsv($file, 0, $d));
-			$newHeaders = array_diff_key($row, $headers);
-			if ($newHeaders !== array()) {
-				$headers = $headers+$newHeaders;
-				$oldData = stream_get_contents($file);
-				rewind($file);
-				fputcsv($file, array_keys($headers), $d);
-				fwrite($file, $oldData);
-			}
-			fseek($file, 0, SEEK_END);
-			$row = SortArrayLikeArray($row, $headers);
-			fputcsv($file, $row, $d);
-		}
-		fclose($file);
-		return $row;
-	}
+    #### Write array to a line of a CSV text file
+    function arrayToLine ($row, $fileName, $d = NULL) {
+        if ($d === NULL) {
+            $d = isset ($_SESSION['OutputDelimiter']) ? $_SESSION['OutputDelimiter'] : ",";
+        }
+        if (!is_dir(dirname($fileName))) {
+            mkdir(dirname($fileName), 0777, true);
+        }
+        foreach ($row as &$datum) {
+            $datum = str_replace(array("\r\n", "\n", "\t", "\r", chr(10), chr(13)),  ' ',  $datum);
+        }
+        unset($datum);
+        $fileTrue = fileExists($fileName);
+        if (!$fileTrue) {
+            $file = fopen($fileName, "w");
+            fputcsv($file, array_keys($row), $d);
+            fputcsv($file, $row, $d);
+        } else {
+            $file = fopen($fileTrue, "r+");
+            $headers = array_flip(fgetcsv($file, 0, $d));
+            $newHeaders = array_diff_key($row, $headers);
+            if ($newHeaders !== array()) {
+                $headers = $headers+$newHeaders;
+                $oldData = stream_get_contents($file);
+                rewind($file);
+                fputcsv($file, array_keys($headers), $d);
+                fwrite($file, $oldData);
+            }
+            fseek($file, 0, SEEK_END);
+            $row = SortArrayLikeArray($row, $headers);
+            fputcsv($file, $row, $d);
+        }
+        fclose($file);
+        return $row;
+    }
 
 
 
@@ -149,89 +149,90 @@
         }
     }
 
-	
-	
-	function camelCase($str) {
-		$str = ucwords(strtolower(trim($str)));
-		$str = str_replace(' ', '', $str);
-		$str[0] = strtolower($str[0]);
-		return $str;
-	}
-	
-	
-	#### finding column entires specific to a given $postNumber (e.g., Post 1, Post 2, Post 3)
-	function ExtractTrial($procedureRow, $postNumber) {
-		$output = array();
-		if ($postNumber < 1) {
-			foreach ($procedureRow as $column => $value) {
-				if (substr(strtolower(trim($column)), 0, 4 ) === 'post') continue;
-				$output[trim($column)] = $value;
-			}
-		} elseif ($postNumber == 1) {
-			foreach ($procedureRow as $column => $value) {
-				$col = trim($column);
-				if (strtolower(substr($col, 0, 4)) === 'post') {
-					$col = trim(substr($col, 4));
-					if (is_numeric($col[0]) AND $col[0] !== '1') continue;
-					if ($col[0] === '1' AND is_numeric($col[1])) continue; // in case of post-trial 12...
-					if ($col[0] === '1') $col = trim(substr($col, 1));
-					$output[$col] = $value;
-				}
-			}
-		} else {
-			foreach ($procedureRow as $column => $value) {
-				$col = trim($column);
-				if (strtolower(substr($col, 0, 4)) === 'post') {
-					$col = trim(substr($col, 4));
-					if (substr($col, 0, strlen($postNumber)) == $postNumber) {
-						$col = substr($col, strlen($postNumber));
-						if (is_numeric($col[0])) continue;
-						$output[trim($col)] = $value;
-					}
-				}
-			}
-		}
-		
-		foreach ($output as $column => $value) {
-			$name = $column;
-			if (is_numeric($column[0])) {
-				$name = '_' . $column;
-			}
-			$name = preg_replace('/[A-Z]/', ' \\0', $column);
-			$name = camelCase($name);
-			$name = preg_replace('/[^0-9a-zA-Z_]/', '', $name);
-			if ($name === 'trial' OR $name === 'trialtype') $name = 'trialType';
-			global $$name;
-			if (isset($$name)) continue;	// aliases won't overwrite existing variables
-			$$name = $value;
-		}
-		return $output;
-	}
-	
-	
-	
-	#### function that converts smart quotes, em dashes, and u's with umlats so they display properly on web browsers
-	function fixBadChars ($string) {
-		// Function from http://shiflett.org/blog/2005/oct/convert-smart-quotes-with-php
-		// added chr(252) 'lowercase u with umlat'
-		$search = array(chr(145),
-						chr(146),
-						chr(147),
-						chr(148),
-						chr(151),
-						chr(252)  );
+    
+    
+    function camelCase($str) {
+        $str = ucwords(strtolower(trim($str)));
+        $str = str_replace(' ', '', $str);
+        $str[0] = strtolower($str[0]);
+        return $str;
+    }
+    
+    
+    
+    #### finding column entires specific to a given $postNumber (e.g., Post 1, Post 2, Post 3)
+    function ExtractTrial($procedureRow, $postNumber) {
+        $output = array();
+        if ($postNumber < 1) {
+            foreach ($procedureRow as $column => $value) {
+                if (substr(strtolower(trim($column)), 0, 4 ) === 'post') continue;
+                $output[trim($column)] = $value;
+            }
+        } elseif ($postNumber == 1) {
+            foreach ($procedureRow as $column => $value) {
+                $col = trim($column);
+                if (strtolower(substr($col, 0, 4)) === 'post') {
+                    $col = trim(substr($col, 4));
+                    if (is_numeric($col[0]) AND $col[0] !== '1') continue;
+                    if ($col[0] === '1' AND is_numeric($col[1])) continue; // in case of post-trial 12...
+                    if ($col[0] === '1') $col = trim(substr($col, 1));
+                    $output[$col] = $value;
+                }
+            }
+        } else {
+            foreach ($procedureRow as $column => $value) {
+                $col = trim($column);
+                if (strtolower(substr($col, 0, 4)) === 'post') {
+                    $col = trim(substr($col, 4));
+                    if (substr($col, 0, strlen($postNumber)) == $postNumber) {
+                        $col = substr($col, strlen($postNumber));
+                        if (is_numeric($col[0])) continue;
+                        $output[trim($col)] = $value;
+                    }
+                }
+            }
+        }
+        
+        foreach ($output as $column => $value) {
+            $name = $column;
+            if (is_numeric($column[0])) {
+                $name = '_' . $column;
+            }
+            $name = preg_replace('/[A-Z]/', ' \\0', $column);
+            $name = camelCase($name);
+            $name = preg_replace('/[^0-9a-zA-Z_]/', '', $name);
+            if ($name === 'trial' OR $name === 'trialtype') $name = 'trialType';
+            global $$name;
+            if (isset($$name)) continue;    // aliases won't overwrite existing variables
+            $$name = $value;
+        }
+        return $output;
+    }
+    
+    
+    
+    #### function that converts smart quotes, em dashes, and u's with umlats so they display properly on web browsers
+    function fixBadChars ($string) {
+        // Function from http://shiflett.org/blog/2005/oct/convert-smart-quotes-with-php
+        // added chr(252) 'lowercase u with umlat'
+        $search = array(chr(145),
+                        chr(146),
+                        chr(147),
+                        chr(148),
+                        chr(151),
+                        chr(252)  );
 
-		$replace = array("'",
-						 "'",
-						 '"',
-						 '"',
-						 '-',
-						 '&uuml;' );
-		return str_replace($search, $replace, $string);
-	}
-
-
-
+        $replace = array("'",
+                         "'",
+                         '"',
+                         '"',
+                         '-',
+                         '&uuml;' );
+        return str_replace($search, $replace, $string);
+    }
+    
+    
+    
     #### custom function to read from tab delimited data files;  pos 0 & 1 are blank,  header names are array keys
     function GetFromFile ($fileLoc, $padding = TRUE, $delimiter = ",") {
         $file = fopen($fileLoc, 'r');                       // open the file passed through the function arguement
@@ -251,11 +252,12 @@
         }
         fclose($file);
         foreach ($out as &$row) {                           // trim all cells and encode using utf8 character set
-			if( is_array($row) ) {                          // fix error message from using foreach on padding
-				foreach ($row as &$cell) {
-					$cell = trim(utf8_encode($cell));
-				}
-			}
+            if(!is_array($row)) {
+                continue;                                        // fix error message from using foreach on padding
+            } 
+            foreach ($row as &$cell) {
+                $cell = trim(utf8_encode($cell));               // cleanup every cell in each row
+            }
         }
         return $out;
     }
@@ -327,7 +329,7 @@
     #### takes an input ($info) array and merges it into a target array ($place).  Optional, prepend all $info keys with a $keyMod string
     function placeData ($data, $place, $keyMod = '') {
         foreach ($data as $key => $val) {
-            $place[$keyMod.$key] = $val;
+            $place[$keyMod . $key] = $val;
         }
         return $place;
     }
@@ -335,40 +337,40 @@
 
     #### Debug function I use to display arrays in an easy to read fashion
     function readable ($displayArray, $name = "Untitled array") {
-        // convert to string to prevent parsing code
-        $clean_displayArray = arrayCleaner($displayArray);
-
-        echo '<div>';
-        echo     '<div class="button collapsibleTitle">
-                      <h3>'.$name.'</h3>
-                      <p>(click to open/close)</p>
-                  </div>';
-        echo     '<pre>';
-                      print_r($clean_displayArray);
-        echo     '</pre>';
-        echo '</div>';
+        $clean_displayArray = arrayCleaner($displayArray);              // convert to string to prevent parsing code
+        $clean_displayArray = print_r($clean_displayArray, TRUE);       // capture print_r output
+        
+        echo '<div>'
+              . '<div class="button collapsibleTitle">'
+              .     '<h3>' . $name . '</h3>'
+              .     '<p>(Click to Open/Close)'
+              . '</div>'
+              . '<pre>'
+              .     $clean_displayArray
+              . '</pre>'
+           . '</div>';
     }
-	
-	
-	function RemoveLabel($input, $label, $extendLabel = TRUE) {
-		$trim = trim($input);
-		$lower = strtolower($trim);
-		$label = strtolower(trim($label));
-		$trimLength = strlen($label);
-		if( substr( $lower, 0, $trimLength ) !== $label ) {
-			return FALSE;
-		} else {
-			if( $extendLabel ) {
-				if( substr( $lower, $trimLength, 1 ) === 's' ) ++$trimLength;
-				if( substr( $lower, $trimLength, 1 ) === ' ' ) ++$trimLength;
-				if( substr( $lower, $trimLength, 1 ) === ':' ) ++$trimLength;
-				if( substr( $lower, $trimLength, 1 ) === '=' ) ++$trimLength;
-			}
-			$trim = trim( substr( $trim, $trimLength ) );
-			if( $trim === '' OR $trim === FALSE ) return TRUE;
-			return $trim;
-		}
-	}
+    
+    
+    function RemoveLabel ($input, $label, $extendLabel = TRUE) {
+        $trim = trim($input);
+        $lower = strtolower($trim);
+        $label = strtolower(trim($label));
+        $trimLength = strlen($label);
+        if (substr($lower, 0, $trimLength) !== $label) {
+            return FALSE;
+        } else {
+            if ($extendLabel) {
+                if (substr($lower, $trimLength, 1) === 's') ++$trimLength;
+                if (substr($lower, $trimLength, 1) === ' ') ++$trimLength;
+                if (substr($lower, $trimLength, 1) === ':') ++$trimLength;
+                if (substr($lower, $trimLength, 1) === '=') ++$trimLength;
+            }
+            $trim = trim(substr($trim, $trimLength));
+            if (($trim === '') OR ($trim === FALSE)) return TRUE;
+            return $trim;
+        }
+    }
 
 
     #### add html tags for images and audio files but do nothing to everything else
@@ -388,9 +390,17 @@
         $findWAV     = strpos($stringLower, '.wav');
 
 
-        if ($findGIF == TRUE || $findJPG == TRUE || $findPNG == TRUE) {             // if I found an image file extension, add html image tags
+        if (($findGIF == TRUE)
+            OR ($findJPG == TRUE)
+            OR ($findPNG == TRUE)
+        ) {
+            // if I found an image file extension, add html image tags
             $string = '<img src="' . $fileName . '">';
-        } elseif ($findMP3 == TRUE || $findOGG == TRUE || $findWAV == TRUE) {       // if I found an audio file extension, add pre-cache code
+        } elseif (($findMP3 == TRUE)
+                   OR ($findOGG == TRUE)
+                   OR ($findWAV == TRUE)
+       ) {
+            // if I found an audio file extension, add pre-cache code
             $string = '<source src="' . $fileName . '"/>';
         } else {
             // leave input as-is if no audio or image extensions are found
@@ -444,151 +454,158 @@
 
 
 
-	function FileExists( $filePath, $altExtensions = TRUE, $findDirectories = TRUE ) {
-		if (is_file($filePath)) { return $filePath; }
-		if (is_dir($filePath) AND $findDirectories) {
-			if (substr($filePath, -1) === '/' ) {
-				$filePath = substr($filePath, 0, -1);
-			}
-			return $filePath;
-		}
-		if ($filePath === '') { return FALSE; }
-		$path_parts = pathinfo($filePath);
-		$fileName = $path_parts['basename'];
-		if (is_dir($path_parts['dirname'])) {
-			$dir = $path_parts['dirname'];
-			$pre = ($dir === '.' AND $filePath[0] !== '.') ? 2 : 0;
-		} else {
-			$dirs = explode('/', $path_parts['dirname']);
-			if (is_dir($dirs[0])) {
-				$dir = array_shift($dirs);
-				$pre = 0;
-			} else {
-				$dir = '.';
-				$pre = 2;
-			}
-			foreach ($dirs as $dirPart) {
-				if (is_dir($dir . '/' . $dirPart)) {
-					$dir .= '/' . $dirPart;
-					continue;
-				} else {
-					$scan = scandir($dir);
-					foreach ($scan as $entry) {
-						if (strtolower($entry) === strtolower($dirPart)) {
-							$dir .= '/' . $entry;
-							continue 2;
-						}
-					}
-					return FALSE;
-				}
-			}
-			if (is_file($dir . '/' . $fileName)) { return substr($dir . '/' . $fileName,  $pre); }
-			if (is_dir($dir . '/' . $fileName) AND $findDirectories) { return substr($dir . '/' . $fileName,  $pre); }
-		}
-		$scan = scandir($dir);
-		$lowerFile = strtolower($fileName);
-		foreach ($scan as $entry) {
-			if (strtolower($entry) === $lowerFile) {
-				if (is_dir($dir . '/' . $entry) AND !$findDirectories) { continue; }
-				return substr($dir . '/' . $entry,  $pre);
-			}
-		}
-		if ($altExtensions) {
-			$baseFileName = strtolower($path_parts['filename']);
-			foreach ($scan as $entry) {
-				if ($entry === '.' OR $entry === '..') { continue; }
-				if (is_dir($dir . '/' . $entry) AND !$findDirectories) { continue; }
-				if (strpos($entry, '.') === FALSE ) {
-					$entryName = strtolower($entry);
-				} else {
-					$entryName = strtolower(substr($entry, 0, strpos($entry, '.')));
-				}
-				if ($entryName === $baseFileName) {
-					return substr($dir . '/' . $entry, $pre);
-				}
-			}
-		}
-		return FALSE;
-	}
-	
-	function ComputeString ($template, $fileData = array()) {
-		if ($fileData === array() AND isset($_SESSION)) {
-			$fileData = $_SESSION;
-		}
-		foreach ($fileData as $key => $value) {
-			$fileData[strtolower($key)] = $value;							    // so that $username will be found in $fileData['Username']
-		}
-		$templateParts = explode('_', $template);
-		$outputParts = array();
-		foreach ($templateParts as $part) {
-			if (strpos($part, '$') === FALSE) {
-				$outputParts[] = $part;
-			} else {
-				$str = substr($part, 0, strpos($part, '$'));                    // e.g., from 'Sess$Session', get 'Sess'
-				$var = substr($part, strpos($part, '$')+1); 					// e.g., from 'Sess$Session', get 'Session'
-				if (strpos($var, '[') === FALSE) {
-					if (isset($fileData[$var]) AND is_scalar($fileData[$var])) {
-						$str .= $fileData[$var];
-					} else {
-						$str .= '$' . $var;										// return the '$' so that it is obvious that a variable was searched for and not found
-					}
-				} else {														// if they want $_SESSION['Condition']['Condition Description'], we need to search index by index
-					$key = substr($var, 0, strpos($var, '['));
-					$indices = explode(']', substr($var, strpos($var, '[')));
-					if (isset($fileData[$key])) {
-						$val = $fileData[$key];
-						foreach ($indices as $i) {
-							if (strlen($i) === 0) { continue; }
-							if ($i[0] !== '[') { continue; }
-							if (isset($val[ substr($i, strpos($i,'[')+1)  ])) {
-								$val = $val[ substr($i, strpos($i,'[')+1) ];
-							} else {
-								$val = NULL;
-								break;
-							}
-						}
-						if (is_scalar($val)) {
-							$str .= $val;
-						} else {
-							$str .= '$' . $var;
-						}
-					} else {
-						$str .= '$' . $var;										// return the '$' so that it is obvious that a variable was searched for and not found
-					}
-				}
-				$outputParts[] = $str;
-			}
-		}
-		$outputParts = implode('_', $outputParts);
-		return $outputParts;
-	}
-	
-	function rand_string ($length = 10) {
-		$chars = "abcdefghijklmnopqrstuvwxyz0123456789";	
+    function FileExists ($filePath, $altExtensions = TRUE, $findDirectories = TRUE) {
+        if (is_file($filePath)) { return $filePath; }
+        if (is_dir($filePath) AND $findDirectories) {
+            if (substr($filePath, -1) === '/') {
+                $filePath = substr($filePath, 0, -1);
+            }
+            return $filePath;
+        }
+        if ($filePath === '') { return FALSE; }
+        $path_parts = pathinfo($filePath);
+        $fileName = $path_parts['basename'];
+        if (is_dir($path_parts['dirname'])) {
+            $dir = $path_parts['dirname'];
+            $pre = ($dir === '.' AND $filePath[0] !== '.') ? 2 : 0;
+        } else {
+            $dirs = explode('/', $path_parts['dirname']);
+            if (is_dir($dirs[0])) {
+                $dir = array_shift($dirs);
+                $pre = 0;
+            } else {
+                $dir = '.';
+                $pre = 2;
+            }
+            foreach ($dirs as $dirPart) {
+                if (is_dir($dir . '/' . $dirPart)) {
+                    $dir .= '/' . $dirPart;
+                    continue;
+                } else {
+                    $scan = scandir($dir);
+                    foreach ($scan as $entry) {
+                        if (strtolower($entry) === strtolower($dirPart)) {
+                            $dir .= '/' . $entry;
+                            continue 2;
+                        }
+                    }
+                    return FALSE;
+                }
+            }
+            if (is_file($dir . '/' . $fileName)) { return substr($dir . '/' . $fileName,  $pre); }
+            if (is_dir($dir . '/' . $fileName) AND $findDirectories) { return substr($dir . '/' . $fileName,  $pre); }
+        }
+        $scan = scandir($dir);
+        $lowerFile = strtolower($fileName);
+        foreach ($scan as $entry) {
+            if (strtolower($entry) === $lowerFile) {
+                if (is_dir($dir . '/' . $entry) AND !$findDirectories) { continue; }
+                return substr($dir . '/' . $entry,  $pre);
+            }
+        }
+        if ($altExtensions) {
+            $baseFileName = strtolower($path_parts['filename']);
+            foreach ($scan as $entry) {
+                if ($entry === '.' OR $entry === '..') { continue; }
+                if (is_dir($dir . '/' . $entry) AND !$findDirectories) { continue; }
+                if (strpos($entry, '.') === FALSE ) {
+                    $entryName = strtolower($entry);
+                } else {
+                    $entryName = strtolower(substr($entry, 0, strpos($entry, '.')));
+                }
+                if ($entryName === $baseFileName) {
+                    return substr($dir . '/' . $entry, $pre);
+                }
+            }
+        }
+        return FALSE;
+    }
+    
+    function ComputeString ($template, $fileData = array()) {
+        if (($fileData === array())
+             AND (isset($_SESSION))
+        ) {
+            $fileData = $_SESSION;
+        }
+        foreach ($fileData as $key => $value) {
+            $fileData[strtolower($key)] = $value;                                // so that $username will be found in $fileData['Username']
+        }
+        $templateParts = explode('_', $template);
+        $outputParts = array();
+        foreach ($templateParts as $part) {
+            if (strpos($part, '$') === FALSE) {
+                $outputParts[] = $part;
+            } else {
+                $str = substr($part, 0, strpos($part, '$'));                    // e.g., from 'Sess$Session', get 'Sess'
+                $var = substr($part, strpos($part, '$')+1);                     // e.g., from 'Sess$Session', get 'Session'
+                if (strpos($var, '[') === FALSE) {
+                    if (isset($fileData[$var]) AND is_scalar($fileData[$var])) {
+                        $str .= $fileData[$var];
+                    } else {
+                        $str .= '$' . $var;                                        // return the '$' so that it is obvious that a variable was searched for and not found
+                    }
+                } else {                                                        // if they want $_SESSION['Condition']['Condition Description'], we need to search index by index
+                    $key = substr($var, 0, strpos($var, '['));
+                    $indices = explode(']', substr($var, strpos($var, '[')));
+                    if (isset($fileData[$key])) {
+                        $val = $fileData[$key];
+                        foreach ($indices as $i) {
+                            if (strlen($i) === 0) { continue; }
+                            if ($i[0] !== '[') { continue; }
+                            if (isset($val[ substr($i, strpos($i,'[')+1)  ])) {
+                                $val = $val[ substr($i, strpos($i,'[')+1) ];
+                            } else {
+                                $val = NULL;
+                                break;
+                            }
+                        }
+                        if (is_scalar($val)) {
+                            $str .= $val;
+                        } else {
+                            $str .= '$' . $var;
+                        }
+                    } else {
+                        $str .= '$' . $var;                                        // return the '$' so that it is obvious that a variable was searched for and not found
+                    }
+                }
+                $outputParts[] = $str;
+            }
+        }
+        $outputParts = implode('_', $outputParts);
+        return $outputParts;
+    }
+    
+    
+    
+    function rand_string ($length = 10) {
+        $chars = "abcdefghijklmnopqrstuvwxyz0123456789";    
 
-		$size = strlen($chars);
-		$str = '';
-		for ($i = 0; $i < $length; $i++) {
-			$str .= $chars[rand(0, $size-1)];
-		}
+        $size = strlen($chars);
+        $str = '';
+        for ($i = 0; $i < $length; $i++) {
+            $str .= $chars[rand(0, $size-1)];
+        }
 
-		return $str;
-	}
-	
-	function AddPrefixToArray ($pre, $arr) {
-		$out = array();
-		foreach ($arr as $key => $val) {
-			$out[$pre.$key] = $val;
-		}
-		return $out;
-	}
-	
-	function SortArrayLikeArray ($arr, $template) {
-		$out = array();
-		foreach ($template as $key => $val) {
-			$out[$key] = isset($arr[$key]) ? $arr[$key] : '';
-		}
-		return $out;
-	}
-
+        return $str;
+    }
+    
+    
+    
+    function AddPrefixToArray ($pre, $arr) {
+        $out = array();
+        foreach ($arr as $key => $val) {
+            $out[$pre.$key] = $val;
+        }
+        return $out;
+    }
+    
+    
+    
+    function SortArrayLikeArray ($arr, $template) {
+        $out = array();
+        foreach ($template as $key => $val) {
+            $out[$key] = isset($arr[$key]) ? $arr[$key] : '';
+        }
+        return $out;
+    }
 ?>
