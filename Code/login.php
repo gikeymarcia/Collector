@@ -159,18 +159,24 @@
     $trialTypeColumns = array();                                                                // Each position will have the column name of a trial type column
     $proc = GetFromFile($up . $expFiles . $procF . $_SESSION['Condition']['Procedure'], FALSE); // load procedure file without padding
     foreach ($proc[0] as $col => $val) {                                    // check all column names
-        $cleanCol = strtolower($col);                                           // lowercase it
-        if (substr($cleanCol, -10) == 'trial type') {                           // if ends with 'trial type'
-            if ($cleanCol == 'trial type') {                                        // and is trial type
+        if (substr($col, -10) == 'Trial Type') {                           // if ends with 'trial type'
+            if ($col == 'Trial Type') {                                        // and is trial type
                 $trialTypeColumns[0] = $col;                                            // save it
-            } elseif (substr($cleanCol, 0, 4) == 'post') {                          // if it starts with 'post'
-                $cleanCol = trim(substr($cleanCol, 4, -10));                            // drop the 'post' and 'trial type'
+            } elseif (substr($col, 0, 5) == 'Post ') {                          // if it starts with 'post'
+                $cleanCol = trim(substr($col, 5, -10));                            // drop the 'post' and 'trial type'
                 if (is_numeric($cleanCol)) {                                            // if what remains is a # (e.g., '15')
-                    $trialTypeColumns[$cleanCol] = $col;                                    // set $trialTypeColumns[15] to this column name
+                    $correctTitle = 'Post' . ' ' . (int)$cleanCol . ' ' . 'Trial Type';
+                    if ($col !== $correctTitle) {
+                        $errors['Count']++;
+                        $errors['Details'][] = 'Column "' . $col . '" in ' . $_SESSION['Condition']['Procedure']
+                                             . ' needs to have exactly one space before and after the number (e.g., ' . $correctTitle . ').';
+                    } else {
+                        $trialTypeColumns[$cleanCol] = $col;                                    // set $trialTypeColumns[15] to this column name
+                    }
                 } else {                                                                // if not, it should have been a #
                     $errors['Count']++;
                     $errors['Details'][] = 'Column "' . $column . '" in ' . $_SESSION['Condition']['Procedure']
-                                         . ' needs to be numbered (e.g., "Post<b>1</b> Trial Type")';
+                                         . ' needs to be numbered (e.g., "Post <b>1</b> Trial Type").';
                 }
             }
         }
