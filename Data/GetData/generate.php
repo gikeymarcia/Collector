@@ -3,6 +3,12 @@
 	A program for running experiments on the web
 	Copyright 2012-2014 Mikey Garcia & Nate Kornell
  */
+	session_start();
+	if( !isset( $_SESSION['LoggedIn'] ) ) {
+		header('Location: '.dirname('http://'.dirname( $_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'] ) ).'/' );
+		exit;
+	}
+	$root = '../../';
 	require 'scan.php';
 	
 	$getExp = isset( $_POST['Experiment'] );

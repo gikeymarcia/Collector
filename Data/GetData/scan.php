@@ -1,16 +1,15 @@
 <?php
 	ini_set('auto_detect_line_endings', true);				// fixes problems reading files saved on mac
 	error_reporting(-1);									// better to see that errors exist, than to think the data is fine without looking at it
-	$root = '../';											// set this to '../' if getdata is moved to the root
 	$code = 'Code/';
 	require $root.$code.'fileLocations.php';
 	require $root.$code.'CustomFunctions.php';
 	require 'getdataFunctions.php';
 	require $root.$expFiles.'Settings.php';					// experiment variables
 	
-	$dataF .= $experimentName . '/';
+	$dataF .= $experimentName . '-Data/';
 	
-	if( $getdataPassword === '' ) exit( 'GetData has not been enabled.' );
+	if( $getdataPassword === '' ) exit( 'GetData has not been enabled. Please enter a password in the Settings file in your experiment folder.' );
 	
 	
 	#### Column Prefixes ####
