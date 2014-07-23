@@ -23,6 +23,7 @@
     $countF     = 'Counter/';
     $extraDataF = '';                        // these are files like demographics and finalquestions
     $outputF    = 'Output/';
+    $jsonF      = 'JSON_session/';
     $expF       = 'ExperimentFiles/';
     $debugF     = 'Debug/';
     $nonDebugF  = '';

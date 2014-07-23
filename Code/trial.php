@@ -86,6 +86,7 @@
 
     // if we hit a *newfile* then the experiment is over (this means that we don't ask FinalQuestions until the last session of the experiment)
     if($item == '*newfile*') {
+        $_SESSION['finishedTrials'] = TRUE;
         header("Location: done.php");
         exit;
     }
