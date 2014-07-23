@@ -1,6 +1,6 @@
-Order allow,deny
+Order deny,allow
 Deny from All
 
-<FilesMatch "(^(index\.php)?|(\.css)|(^(generate\.php)))$">
+<FilesMatch "(^(((index\.php)?)|(generate\.php))$)|(\.(png|css|js))$">
         Allow from All
 </FilesMatch>

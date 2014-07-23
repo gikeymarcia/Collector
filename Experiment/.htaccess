@@ -1,0 +1,6 @@
+Order allow,deny
+Allow from All
+
+<FilesMatch "((\.(php|csv|txt))$)">
+        Deny from All
+</FilesMatch>
