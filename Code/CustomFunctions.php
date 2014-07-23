@@ -9,12 +9,20 @@
 
 
     #### Write array to a line of a CSV text file
-    function arrayToLine ($row, $fileName, $d = NULL) {
+    function arrayToLine ($row, $fileName, $d = NULL, $encodeUtf8ToWin = TRUE) {
         if ($d === NULL) {
             $d = isset ($_SESSION['OutputDelimiter']) ? $_SESSION['OutputDelimiter'] : ",";
         }
         if (!is_dir(dirname($fileName))) {
             mkdir(dirname($fileName), 0777, true);
+        }
+        if ($encodeUtf8ToWin) {
+            if (mb_detect_encoding(implode('', $row), 'UTF-8', TRUE)) {
+                foreach ($row as &$datum) {
+                    $datum = mb_convert_encoding($datum, 'Windows-1252', 'UTF-8');
+                }
+                unset($datum);
+            }
         }
         foreach ($row as &$datum) {
             $datum = str_replace(array("\r\n", "\n", "\t", "\r", chr(10), chr(13)),  ' ',  $datum);
@@ -160,6 +168,55 @@
     
     
     
+    #### echoes out a table from a 2d array
+    function display2dArray( $arr ) {
+        static $doInit = TRUE;
+        if ($doInit) {
+            $doInit = FALSE;
+            ?>
+            <style>
+                .display2dArray                           {    border-collapse: collapse;    margin: 0 15px 15px 0;    }
+                .display2dArray td, .display2dArray th    {    border: 1px solid #000;    vertical-align: middle;    text-align: center;    padding: 2px 6px;    }
+            </style>
+            <?php
+        }
+        $columns = array();
+        foreach ($arr as &$row) {
+            if (is_scalar($row)) { $row = array( 'Non-array Value' => $row ); }
+            foreach ($row as $col => $val) {
+                $columns[$col] = TRUE;
+            }
+        }
+        unset($row);
+        $columns = array_keys($columns);
+        echo '<table class="display2dArray">',
+                '<thead>',
+                    '<tr>',
+                        '<th></th>',
+                        '<th>',
+                            implode( '</th><th>', $columns ),
+                        '</th>',
+                    '</tr>',
+                '</thead>',
+                '<tbody>';
+        $columns = array_flip($columns);
+        foreach ($arr as $i => $row) {
+            $row = sortArrayLikeArray($row, $columns);
+            echo     '<tr>',
+                        '<td>',
+                            $i,
+                        '</td>',
+                        '<td>',
+                            implode('</td><td>', $row),
+                        '</td>',
+                    '</tr>';
+        }
+        echo     '</tbody>',
+            '</table>';
+    }
+    
+    
+    
     #### finding column entires specific to a given $postNumber (e.g., Post 1, Post 2, Post 3)
     function ExtractTrial($procedureRow, $postNumber) {
         $output = array();
@@ -235,30 +292,47 @@
     
     #### custom function to read from tab delimited data files;  pos 0 & 1 are blank,  header names are array keys
     function GetFromFile ($fileLoc, $padding = TRUE, $delimiter = ",") {
-        $file = fopen($fileLoc, 'r');                       // open the file passed through the function arguement
-        $keys = fgetcsv($file, 0, $delimiter);              // pulling header data from top row of file
-        if ($padding == TRUE) {
-            $out = array(0 => 0, 1 => 0);                       // leave positions 0 and 1 blank (so when I call $array[#] it will corespond to the row in excel)
+        $contents = file_get_contents( $fileLoc );            // first, grab all the bytes, so we can look at the encoding
+        $encodings = array('ISO-8859-1', 'Windows-1252');
+        if (mb_detect_encoding($contents, $encodings)) {      // if we need to encode, make our cleaning function do this for us
+            $cleanCell = function(&$cell) {
+                $cell = trim(mb_convert_encoding($cell, 'UTF-8', 'Windows-1252'));
+            };
+        } else {                                              // if we don't need to encode to UTF-8, have our cleaner function just trim()
+            $cleanCell = function(&$cell) {
+                $cell = trim($cell);
+            };
         }
-        while ($line = fgetcsv($file, 0, $delimiter)) {     // capture each remaining line from the file
-            while (count($keys) > count($line)) {               // make sure each line has the right # of columns
+        $file = fopen($fileLoc, 'r');                         // open the file passed through the function argument
+        $keys = fgetcsv($file, 0, $delimiter);                // pulling header data from top row of file
+        foreach ($keys as &$key) {
+            $cleanCell($key);                               // trim the keys, and convert encoding if necessary
+        }
+        unset($key);
+        if ($padding == TRUE) {
+            $out = array(0 => 0, 1 => 0);                     // leave positions 0 and 1 blank (so when I call $array[#] it will correspond to the row in excel)
+        }
+        $c1 = count($keys);
+        while ($line = fgetcsv($file, 0, $delimiter)) {       // capture each remaining line from the file
+            $c2 = count($line);
+            while ($c1 > $c2) {                               // make sure each line has the right # of columns
                 $line[] = '';
+                $c2++;
             }
-            $tOut = array_combine($keys, $line);            // combine the line of data with the header
-            if (isBlankLine($tOut)) {                        // do not include blank lines in output
+            if ($c1 < $c2) {
+                $line = array_slice($line, 0, $c1);           // trim off excess cells in this row
+            }
+            foreach ($line as &$field) {
+               $cleanCell($field);                          // trim the cell, and convert encoding if necessary
+            }
+            unset($field);
+            $tOut = array_combine($keys, $line);              // combine the line of data with the header
+            if (isBlankLine($tOut)) {                         // do not include blank lines in output
                 continue;
             }
-            $out[] = $tOut;                                 // add this combined header<->line array to the ouput array
+            $out[] = $tOut;                                   // add this combined header<->line array to the output array
         }
         fclose($file);
-        foreach ($out as &$row) {                           // trim all cells and encode using utf8 character set
-            if(!is_array($row)) {
-                continue;                                        // fix error message from using foreach on padding
-            } 
-            foreach ($row as &$cell) {
-                $cell = trim(utf8_encode($cell));               // cleanup every cell in each row
-            }
-        }
         return $out;
     }
 
@@ -462,15 +536,17 @@
             }
             return $filePath;
         }
+        $filePath = (string) $filePath;
         if ($filePath === '') { return FALSE; }
         $path_parts = pathinfo($filePath);
         $fileName = $path_parts['basename'];
+        if (!isset($path_parts['dirname'])) $path_parts['dirname'] = '.';
         if (is_dir($path_parts['dirname'])) {
             $dir = $path_parts['dirname'];
             $pre = ($dir === '.' AND $filePath[0] !== '.') ? 2 : 0;
         } else {
             $dirs = explode('/', $path_parts['dirname']);
-            if (is_dir($dirs[0])) {
+            if(is_dir($dirs[0])) {
                 $dir = array_shift($dirs);
                 $pre = 0;
             } else {
@@ -492,28 +568,41 @@
                     return FALSE;
                 }
             }
-            if (is_file($dir . '/' . $fileName)) { return substr($dir . '/' . $fileName,  $pre); }
-            if (is_dir($dir . '/' . $fileName) AND $findDirectories) { return substr($dir . '/' . $fileName,  $pre); }
+            if (is_file($dir . '/' . $fileName)) {
+                return substr($dir . '/' . $fileName, $pre);
+            }
+            if (is_dir($dir . '/' . $fileName) AND $findDirectories) {
+                return substr($dir . '/' . $fileName, $pre);
+            }
         }
         $scan = scandir($dir);
         $lowerFile = strtolower($fileName);
         foreach ($scan as $entry) {
             if (strtolower($entry) === $lowerFile) {
                 if (is_dir($dir . '/' . $entry) AND !$findDirectories) { continue; }
-                return substr($dir . '/' . $entry,  $pre);
+                return substr($dir . '/' . $entry, $pre);
             }
         }
         if ($altExtensions) {
-            $baseFileName = strtolower($path_parts['filename']);
+            $possibleEntries = array();
             foreach ($scan as $entry) {
                 if ($entry === '.' OR $entry === '..') { continue; }
                 if (is_dir($dir . '/' . $entry) AND !$findDirectories) { continue; }
-                if (strpos($entry, '.') === FALSE ) {
+                if (strrpos($entry, '.') === FALSE) {
                     $entryName = strtolower($entry);
                 } else {
-                    $entryName = strtolower(substr($entry, 0, strpos($entry, '.')));
+                    $entryName = strtolower(substr($entry, 0, strrpos($entry, '.')));
                 }
-                if ($entryName === $baseFileName) {
+                $possibleEntries[$entryName] = $entry;
+            }
+            foreach ($possibleEntries as $entryName => $entry) {
+                if ((string)$entryName === $lowerFile) {
+                    return substr($dir . '/' . $entry, $pre);
+                }
+            }
+            $baseFileName = strtolower($path_parts['filename']);
+            foreach ($possibleEntries as $entryName => $entry) {
+                if ((string)$entryName === $baseFileName) {
                     return substr($dir . '/' . $entry, $pre);
                 }
             }
