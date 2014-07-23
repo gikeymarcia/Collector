@@ -165,31 +165,15 @@
         $output = array();
         if ($postNumber < 1) {
             foreach ($procedureRow as $column => $value) {
-                if (substr(strtolower(trim($column)), 0, 4 ) === 'post') continue;
-                $output[trim($column)] = $value;
-            }
-        } elseif ($postNumber == 1) {
-            foreach ($procedureRow as $column => $value) {
-                $col = trim($column);
-                if (strtolower(substr($col, 0, 4)) === 'post') {
-                    $col = trim(substr($col, 4));
-                    if (is_numeric($col[0]) AND $col[0] !== '1') continue;
-                    if ($col[0] === '1' AND is_numeric($col[1])) continue; // in case of post-trial 12...
-                    if ($col[0] === '1') $col = trim(substr($col, 1));
-                    $output[$col] = $value;
-                }
+                if (substr($column, 0, 5 ) === 'Post ' AND is_numeric($column[5])) { continue; }
+                $output[$column] = $value;
             }
         } else {
+            $prefix = 'Post '.$postNumber;
+            $prefixLength = strlen($prefix);
             foreach ($procedureRow as $column => $value) {
-                $col = trim($column);
-                if (strtolower(substr($col, 0, 4)) === 'post') {
-                    $col = trim(substr($col, 4));
-                    if (substr($col, 0, strlen($postNumber)) == $postNumber) {
-                        $col = substr($col, strlen($postNumber));
-                        if (is_numeric($col[0])) continue;
-                        $output[trim($col)] = $value;
-                    }
-                }
+                if (substr($column, 0, $prefixLength ) !== $prefix) { continue; }
+                $output[ substr($column, $prefixLength) ] = $value;
             }
         }
         
@@ -201,9 +185,8 @@
             $name = preg_replace('/[A-Z]/', ' \\0', $column);
             $name = camelCase($name);
             $name = preg_replace('/[^0-9a-zA-Z_]/', '', $name);
-            if ($name === 'trial' OR $name === 'trialtype') $name = 'trialType';
             global $$name;
-            if (isset($$name)) continue;    // aliases won't overwrite existing variables
+            if (isset($$name)) { continue; }    // aliases won't overwrite existing variables
             $$name = $value;
         }
         return $output;
