@@ -1,1 +1,6 @@
-Order Allow,Deny
+Order deny,allow
+Deny from All
+
+<FilesMatch "StartingUp.html">
+        Allow from All
+</FilesMatch>

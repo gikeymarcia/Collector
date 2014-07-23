@@ -46,5 +46,5 @@
     $experimenterEmail = 'youremail@yourdomain.com';
     
     // getdata
-    $getdataPassword = '';                        // to enable getdata, enter a string other than ''
+    $getdataPassword = 'yes';                        // to enable getdata, enter a string other than ''
 ?>

@@ -3,7 +3,8 @@
 	A program for running experiments on the web
 	Copyright 2012-2014 Mikey Garcia & Nate Kornell
  */
-	require 'scan.php';
+	$root = '../';
+	require 'GetData/scan.php';
 	
 	session_start();
 	if( isset( $_POST['LogOut'] ) ) {
@@ -15,7 +16,7 @@
 		}
 	}
 	if( !isset( $_SESSION['LoggedIn'] ) ) {
-		include 'login.php';
+		include 'GetData/login.php';
 		exit;
 	}
 	
@@ -115,13 +116,13 @@
 	<title>GetData Menu</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link href='http://fonts.googleapis.com/css?family=Kreon' rel='stylesheet' type='text/css' />
-	<link href="getdataStyling.css" rel="stylesheet" type="text/css" />
+	<link href="GetData/getdataStyling.css" rel="stylesheet" type="text/css" />
 	<script src="http://code.jquery.com/jquery-1.8.0.min.js" type="text/javascript"> </script>
 </head>
 <body id="GetDataMenu">
 	<div id="Title">GetData<span style="position: relative"><form id="LogOutForm" method="post"><input type="submit" name="LogOut" value="Log out"/></form></span></div>
 	
-	<form method="post" target="_blank" action="generate.php" id="form" >
+	<form method="post" target="_blank" action="GetData/generate.php" id="form" >
 	
 		<div class="BlockStacker" id="FilterBlock">
 			<div class="MenuBlock">
@@ -274,7 +275,7 @@
 														if( $val === '' ) {
 															echo '<div class="OutputTableCell"></div>';
 														} else {
-															echo '<div class="OutputTableCell WarningFlag" data-tooltip="'.$images[$name].'"><img src="images/'.$images[$name].'.png"></div>';
+															echo '<div class="OutputTableCell WarningFlag" data-tooltip="'.$images[$name].'"><img src="GetData/images/'.$images[$name].'.png"></div>';
 														}
 														++$i;
 													}
