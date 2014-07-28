@@ -6,12 +6,13 @@
     require 'initiateCollector.php';
     
     // if someone skipped to done.php without doing all trials
-    if (array_key_exists('finishedTrials', $_SESSION)) {
-        if ($_SESSION['finishedTrials'] != TRUE) {
-            header("Location: http://www.youtube.com/watch?v=oHg5SJYRHA0");            // rick roll people trying to skip to done.php
-            exit;
-        }
+    if ((array_key_exists('finishedTrials', $_SESSION) == FALSE)
+        OR ($_SESSION['finishedTrials'] != TRUE)
+    ) {
+        header("Location: http://www.youtube.com/watch?v=oHg5SJYRHA0");            // rick roll people trying to skip to done.php
+        exit;
     }
+    
     
     // turn off error reporting for debug mode
     if (array_key_exists('Debug', $_SESSION)) {
@@ -19,6 +20,7 @@
             error_reporting(0);
         }
     }
+    
     
     // Set the page message
     if ($nextExperiment == FALSE) {
@@ -35,7 +37,8 @@
         $message  = '<h2>Experiment will resume in 5 seconds.</h2>';
         $nextLink = 'http://' . $nextExperiment;
         $username = $_SESSION['Debug'] ? $debugName . ' ' . $_SESSION['Username'] : $_SESSION['Username'];
-        echo '<meta http-equiv="refresh" content="5; url=' . $nextLink . 'Code/login.php?Username=' . urlencode($username) . '&Condition=Auto&ID=' . $_SESSION['ID'] . '">';
+        echo '<meta http-equiv="refresh" content="5; url=' . $nextLink . 'Code/login.php?Username='
+            . urlencode($username) . '&Condition=Auto&ID=' . $_SESSION['ID'] . '">';
     }
     
     
@@ -51,6 +54,7 @@
         if ($seconds < 10 ) { $seconds = '0' . $seconds; }
         $durationFormatted = $hours . ':' . $minutes . ':' . $seconds;
         
+        
         #### Record info about the person ending the experiment to status finish file
         $data = array(
                         'Username'              => $_SESSION['Username'],
@@ -64,25 +68,30 @@
                         'Inclusion Notes'       => $finalNotes,
                         );
         arrayToLine($data, $statusEndPath);
-        ########
+        
         
         ######## Save the $_SESSION array as a JSON string
-        $_SESSION['Position']++;                        // increment counter so next session will begin after the *newfile* (if multisession)
-        $_SESSION['Session']++;                         // increment session # so next login will be correctly labeled as the next session
-        $jsonSession = json_encode($_SESSION);          // encode the entire $_SESSION array as a json string
+        $ExpOverFlag = $_SESSION['Trials'][ ($_SESSION['Position']) ]['Procedure']['Item'];
+        // if you haven't finished all sessions yet
+        if ($ExpOverFlag != 'ExperimentFinished') {           
+            $_SESSION['Position']++;                        // increment counter so next session will begin after the *NewSession* (if multisession)
+            $_SESSION['Session']++;                         // increment session # so next login will be correctly labeled as the next session
+            $_SESSION['ID'] = rand_string();                // generate a new ID (for next login)
+            $_SESSION['finishedTrials'] = FALSE;            // will stop them from skipping to done.php during next session
+        }
+        
+        $jsonSession = json_encode($_SESSION);              // encode the entire $_SESSION array as a json string
         
         $jsonDIR  = $_rootF . $dataF . $dataSubFolder . $jsonF;
         $jsonPath = $jsonDIR . $_SESSION['Username'] . '.json';
         
-        if (!is_dir($jsonDIR)) {               // make the folder if it doesn't exist
+        if (!is_dir($jsonDIR)) {                            // make the folder if it doesn't exist
             mkdir($jsonDIR, 0777, true);
         }
-        $jsonHandle = fopen($jsonPath, 'w');            // open the file for writing, zero out any previous data
-        fwrite($jsonHandle, $jsonSession);              // write the current state of $_SESSION
+        $jsonHandle = fopen($jsonPath, 'w');                // open the file for writing, zero out any previous data
+        fwrite($jsonHandle, $jsonSession);                  // write the current state of $_SESSION
         fclose($jsonHandle);
         #######
-        
-        
     }
     
     

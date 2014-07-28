@@ -22,6 +22,12 @@
     if (!isset($item)) {
         $item = $currentTrial['Procedure']['Item'];
     }
+    
+    // skip to done.php if some has logged in who has already completed all parts of the experiment
+    if ($item == 'ExperimentFinished') {
+        header('Location: done.php');
+        exit;
+    }
     /*
      * Whenever Trial.php finds $_POST data, it will try to store that data
      * immediately, rather than simply holding it through the trial
@@ -84,8 +90,8 @@
     }
 
 
-    // if we hit a *newfile* then the experiment is over (this means that we don't ask FinalQuestions until the last session of the experiment)
-    if($item == '*newfile*') {
+    // if we hit a *NewSession* then the experiment is over (this means that we don't ask FinalQuestions until the last session of the experiment)
+    if(strtolower($item) == '*newsession*') {
         $_SESSION['finishedTrials'] = TRUE;
         header("Location: done.php");
         exit;
@@ -167,27 +173,27 @@
             // clean the arrays used so that they output strings, not code
             $clean_session      = arrayCleaner($_SESSION);
             $clean_currentTrial = arrayCleaner($currentTrial);
-            echo "<div class=diagnostics>
-                    <h2>Diagnostic information</h2>
-                    <ul>
-                        <li> Condition #:           {$clean_session['Condition']['Number']}                </li>
-                        <li> Condition Stim File:   {$clean_session['Condition']['Stimuli']}               </li>
-                        <li> Condition Order File:  {$clean_session['Condition']['Procedure']}             </li>
-                        <li> Condition description: {$clean_session['Condition']['Condition Description']} </li>
-                    </ul>
-                    <ul>
-                        <li> Trial Number:          {$currentPos}                                          </li>
-                        <li> Trial Type:            {$trialType}                                           </li>
-                        <li> Trial timing:          {$clean_currentTrial['Procedure']['Timing']}           </li>
-                        <li> Trial Time (seconds):  {$time}                                                </li>
-                    </ul>
-                    <ul>
-                        <li> Cue: ".                show($cue)."                                            </li>
-                        <li> Answer:".              show($answer)."                                         </li>
-                    </ul>";
+            echo '<div class=diagnostics>'
+                .    '<h2>Diagnostic information</h2>'
+                .    '<ul>'
+                .        '<li> Condition #: '              . $clean_session['Condition']['Number']                . '</li>'
+                .        '<li> Condition Stimuli File:'    . $clean_session['Condition']['Stimuli']               . '</li>'
+                .        '<li> Condition Procedure File: ' . $clean_session['Condition']['Procedure']             . '</li>'
+                .        '<li> Condition description: '    . $clean_session['Condition']['Condition Description'] . '</li>'
+                .    '</ul>'
+                .    '<ul>'
+                .        '<li> Trial Number: '         . $currentPos                                . '</li>'
+                .        '<li> Trial Type: '           . $trialType                                 . '</li>'
+                .        '<li> Trial timing: '         . $clean_currentTrial['Procedure']['Timing'] . '</li>'
+                .        '<li> Trial Time (seconds): ' . $time                                      . '</li>'
+                .    '</ul>'
+                .    '<ul>'
+                .        '<li> Cue: '    . show($cue)    . '</li>'
+                .        '<li> Answer: ' . show($answer) . '</li>'
+                .    '</ul>';
             readable($currentTrial,         "Information loaded about the current trial");
             readable($_SESSION['Trials'],   "Information loaded about the entire experiment");
-            echo "</div>";
+            echo '</div>';
         }
     ?>
 </div>

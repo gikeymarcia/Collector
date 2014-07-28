@@ -9,7 +9,7 @@
     if (isset($_SESSION['FinalQs']) == FALSE) {
         $fQ = GetFromFile($up.$expFiles.$finalQuestionsFileName);
         // loop that deletes trailing empty positions from $fQ array
-        for ($i=count($fQ)-1; $i >0; $i--) {
+        for ($i=(count($fQ)-1); $i>0; $i--) {
             if ($fQ[$i] == null) {
                 unset($fQ[$i]);
             } else {
@@ -18,12 +18,6 @@
         }
         $_SESSION['FinalQs'] = $fQ;
         $_SESSION['FQpos']   = 2;
-    }
-
-
-    // sends to done.php if there are no more questions
-    if (isset($_SESSION['FinalQs'][ $_SESSION['FQpos'] ]) == FALSE) {
-        echo '<meta http-equiv="refresh" content="0; url=done.php">';
     }
 
 

@@ -8,7 +8,7 @@
     $loginCounterName = '1.txt';                // Change to restart condition cycling
     $doDemographics   = FALSE;                  // Can be TRUE or FALSE
     $loginCounterName = '1.csv';                // Change to restart condition cycling
-    $nextExperiment   = FALSE;                  // to link use format "www.cogfog.com/Generic/" do not forget the www and the ending "/"
+    $nextExperiment   = FALSE;                  // to link use format 'www.cogfog.com/Generic/' do not forget the www and the ending '/'
 
     // debugging functionality
     $checkAllFiles = TRUE;                      // if `TRUE`, all cues in all stimuli files will be checked for existence before the experiment
@@ -25,7 +25,7 @@
     $verification = 'Shinebox';                 // code that shows on done.php
     $checkElig    = FALSE;                      // use files in eligibility/ folder to check past participation (mTurkMode must be on to use this)
     $blacklist    = FALSE;                      // when true, the same IP cannot participate twice
-    $whitelist    = array("::1", "other-ip");   // The IPs in this array will be allowed to participate more than once
+    $whitelist    = array('::1', 'other-ip');   // The IPs in this array will be allowed to participate more than once
                                                 // ::1 is the default IPv6 loopback -- leave it in so that the check will pass when working locally
 
     // index.php (Starting Page)
@@ -39,7 +39,7 @@
     $lenientCriteria = 75;                      // determines the % match required to count an answer as 1(correct) or 0(incorrect)
 
     // trial settings
-    $MultiChoiceButtons    = array( "Cat1", "Cat2", "Cat3", "Cat4", "Cat6", "Cat6", "Cat7", "Cat 8", "Cat9", "Cat10", "Cat11", "Cat 12");
+    $MultiChoiceButtons    = array( 'Cat1', 'Cat2', 'Cat3', 'Cat4', 'Cat6', 'Cat6', 'Cat7', 'Cat 8', 'Cat9', 'Cat10', 'Cat11', 'Cat 12');
     $MCitemsPerRow = 4;                         // sets how many items per row when using MCpic trials (use values 1-4; anything bigger causes problems which require css changes
     
     // done.php

@@ -18,7 +18,7 @@
     $found  = FALSE;                                                        // will use this later to determine when loops fail
     $errors = array('Count'   => 0,
                     'Details' => array()  );
-    if (file_exists($up . $expFiles . $conditionsFileName) == FALSE) {      // does conditions exist? (error checking)
+    if (file_exists($_rootF . $expFiles . $conditionsFileName) == FALSE) {      // does conditions exist? (error checking)
         $errors['Count']++;
         $errors['Details'][] = 'No "' . $conditionsFileName . '" found';
     }
@@ -56,8 +56,6 @@
     }
     // set Username
     $_SESSION['Username'] = $username;
-    
-    
     if ($_SESSION['Debug'] === TRUE) {
         $dataSubFolder = $debugF;
         $path = $up . $dataF . $dataSubFolder . $extraDataF;
@@ -65,26 +63,47 @@
     } else {
         error_reporting(0);
     }
-     
     
-    if ($checkElig == TRUE
-        AND $mTurkMode == TRUE
+    
+    #### Check if the current username is ineligible to do this experiment
+    if (($checkElig == TRUE)
+        AND ($mTurkMode == TRUE)
     ) {
-        include    'check.php';
+        include 'check.php';
     }
+    
     
     #### Checking username is 3 characters or longer
     if ((strlen($username) < 3)
         AND (!$_SESSION['Debug'])
     ) {
-        echo '<h1> Error: Login username must be 3 characters or longer</h1>
-                <h2>Click <a href="' . $up . 'index.php">here</a> to enter a valid username</h2>';
+        echo '<h1> Error: Login username must be 3 characters or longer</h1>'
+           . '<h2>Click <a href="' . $up . 'index.php">here</a> to enter a valid username</h2>';
         exit;
     }
     
     
+    #### Checking if this user has already completed a session (Session > 1 OR done with exp)
+    $sessionFilename = FileExists($_rootF . $dataF . $dataSubFolder . $jsonF . $_SESSION['Username'] . '.json');
+    if ($sessionFilename == TRUE) {              // this file will only exist if this username has completed a session successfully
+        $pastSession   = fopen($sessionFilename, 'r');
+        $loadedSession = fread($pastSession, filesize($sessionFilename));
+        $sessionData   = json_decode($loadedSession, TRUE);
+        // Load old session info
+        $_SESSION = NULL;                       // get rid of current session in memory
+        $_SESSION = $sessionData;               // load old session data into current $_SESSION
+        // Overwrite values that need to be updated
+        $outputFile = ComputeString($outputFileName) . $outExt;                                 // write to new file
+        $_SESSION['Output File'] = $_rootF . $dataF . $dataSubFolder . $outputF . $outputFile;
+        $_SESSION['Start Time']  = date('c');
+        echo '<meta http-equiv="refresh" content="1; url=' . $_codeF . 'trial.php">';
+        exit;               // do not run any of the other code, send to trial.php
+        
+    }
+    
+    
     #### Code to automatically choose condition assignment
-    $Conditions    = GetFromFile($up . $expFiles . $conditionsFileName,  FALSE);   // Loading conditions info
+    $Conditions = GetFromFile($up . $expFiles . $conditionsFileName,  FALSE);   // Loading conditions info
     $logFile    = $up . $dataF . $countF . $loginCounterName;
     if ($selectedCondition == 'Auto') {
         if (!is_dir($up . $dataF . $countF)) {
@@ -244,8 +263,8 @@
                         ''      => TRUE,
                         'n/a'   => TRUE  );
     foreach ($procedure as $i => $row) {                                    // go through all rows of procedure
-        if ($row === 0)                     { continue; }                   // skip padding
-        if ($row['Item'] === '*newfile*')   { continue; }                   // skip multisession markers
+        if ($row === 0)                                 { continue; }       // skip padding
+        if (strtolower($row['Item']) === '*newsession*')   { continue; }    // skip multisession markers
         foreach ($trialTypeColumns as $postNumber => $column) {             // check all trial levels
             $thisTrialType = strtolower($row[$column]);                         // which trial is being used at this level (e.g, Study, Test, etc.)
             if (isset($notTrials[$thisTrialType])) {                        // skip turned off trials (off, no, n/a, '')
@@ -291,7 +310,6 @@
     }
     unset($procedure);
     #### End of error checking #####################################
-    
     
     
     
@@ -369,14 +387,19 @@
                 $empty      =  array_fill_keys($stimKey, 'n/a');
                 $Trials[$count-1]['Stimuli'] = $empty;
             }
+            if ($count == ($procedureLength-1)) {                               // when the last trial has been loaded
+                $Trials[$count] = cleanTrial($Trials[$count-1]);                    // return a copy of the last trial without any values in it
+                $Trials[$count]['Procedure']['Item'] = 'ExperimentFinished';        // add this flag so we know when participants are done with all sessions
+            }
         }
+        
         
         ######## Go through $Trials and write session file(s)
         // session files go into subjects folder and will be formatted according to the template in fileLocations.php
         $fileNumber    = 0;
         foreach ($Trials as $Trial) {
             if((!isset($skippedFirstTrial))
-                OR (strtolower($Trial['Procedure']['Item']) === '*newfile*')
+                OR (strtolower($Trial['Procedure']['Item']) === '*newsession*')
             ) {
                 $skippedFirstTrial = TRUE;
                 $fileNumber++;
@@ -479,9 +502,9 @@
     
     
     #### Establishing $_SESSION['Trials'] as the place where all experiment trials are stored
-    // session1 $Trials also contains trials for other sessions but trial.php sends to done.php once a *newfile* shows up
-    $_SESSION['Trials']        = $Trials;
-    $_SESSION['Position']    = 1;
+    // $Trials also contains trials for other sessions but trial.php sends to done.php once a *NewSession* shows up
+    $_SESSION['Trials']     = $Trials;
+    $_SESSION['Position']   = 1;
     $_SESSION['PostNumber'] = -1;
     
     
@@ -494,7 +517,7 @@
     }
     
     
-    if ($stopAtLogin == TRUE) {                                                 // if things are going wrong this info will help you figure out when the program broke
+    if ($stopAtLogin == TRUE) {             // if things are going wrong this info will help you figure out when the program broke
         Readable($_SESSION['Condition'],    'Condition information');
         Readable($stimuli,                  'Stimuli file in use ('   . $stimF . $_SESSION['Condition']['Stimuli']   . ')');
         Readable($procedure,                'Procedure file in use (' . $procF . $_SESSION['Condition']['Procedure'] . ')');

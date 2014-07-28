@@ -41,9 +41,10 @@
     $currentPos++;
 	$_SESSION['PostNumber'] = 0;
 
-    // are we done with all presentations? if so, send to finalQuestions.php
-    if (array_key_exists($currentPos, $_SESSION['Trials']) == FALSE) {
-        $_SESSION['finishedTrials'] = TRUE;                                             // stops people from skipping to the end
+    // are we done with the experiment? if so, send to finalQuestions.php
+    $item = $_SESSION['Trials'][$currentPos]['Procedure']['Item'];
+    if ($item == 'ExperimentFinished') {
+        $_SESSION['finishedTrials'] = TRUE;             // stops people from skipping to the end
         header("Location: FinalQuestions.php");
         exit;
     }

@@ -160,6 +160,34 @@
     
     
     
+    #### Make a copy of a trial and remove all values (but not keys) from ['Stimuli'], ['Response'], and ['Procedure']
+    ##  If you'd only like to clean specific arrays then pass the names as a single string with commas separating each name
+    ##  (e.g., "Response, Procedure")
+    function cleanTrial ($trial, $selections = FALSE) {
+        // if arrays are selected
+        if ($selections != FALSE) {
+            $selected = explode(',', $selections);
+            foreach ($selected as &$name) {
+                $name = trim(strtolower($name));
+            }
+        }
+        foreach ($trial as $group => &$data) {
+            // skip value wipe for arrays that were not selected
+            if (($selections != FALSE)
+                AND (in_array(strtolower($group), $selected) == FALSE)
+            ) {
+                continue;                           // if this array was not selected then skip value wipe
+            }
+            // wipe values from array
+            foreach ($data as $key => &$value) {
+                $value = '';
+            }
+        }
+        return $trial;
+    }
+    
+    
+    
     #### finding column entires specific to a given $postNumber (e.g., Post 1, Post 2, Post 3)
     function ExtractTrial($procedureRow, $postNumber) {
         $output = array();
@@ -326,7 +354,7 @@
         echo '<div>'
               . '<div class="button collapsibleTitle">'
               .     '<h3>' . $name . '</h3>'
-              .     '<p>(Click to Open/Close)'
+              .     '<p>(Click to Open/Close)</p>'
               . '</div>'
               . '<pre>'
               .     $clean_displayArray
