@@ -62,6 +62,7 @@
             } else {
                 $keyMod = 'post' . $currentPost . '_';
             }
+			$findingKeys = FALSE;
             require $_SESSION['Trial Types'][$trialType]['scoring'];
             #### merging $data into $currentTrial['Response]
             $currentTrial['Response'] = placeData($data, $currentTrial['Response'], $keyMod);
