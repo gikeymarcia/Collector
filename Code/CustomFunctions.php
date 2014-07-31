@@ -418,6 +418,23 @@
         }
         return $place;
     }
+	
+	
+	#### turns a string into an array, converting something like '2,4::6' into array(2, 4, 5, 6)
+	function rangeToArray ($string, $seperator = ',', $connector = '::') {
+		$output = array();
+		$ranges = explode($seperator, $string);
+		foreach ($ranges as $range) {
+			$endPoints = explode($connector, $range);
+			$count = count($endPoints);
+			if ($count === 1) {
+				$output[] = $endPoints[0];
+			} else {
+				$output = array_merge($output, range($endPoints[0], $endPoints[$count-1]));
+			}
+		}
+		return $output;
+	}
 
 
     #### Debug function I use to display arrays in an easy to read fashion
