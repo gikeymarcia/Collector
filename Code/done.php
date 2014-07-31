@@ -78,6 +78,7 @@
             $_SESSION['Session']++;                         // increment session # so next login will be correctly labeled as the next session
             $_SESSION['ID'] = rand_string();                // generate a new ID (for next login)
             $_SESSION['finishedTrials'] = FALSE;            // will stop them from skipping to done.php during next session
+            $_SESSION['LastFinish'] = time();
         }
         
         $jsonSession = json_encode($_SESSION);              // encode the entire $_SESSION array as a json string

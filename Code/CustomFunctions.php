@@ -245,6 +245,46 @@
     
     
     
+    #### Takes a time in seconds and formats it as 02h:03m:20s
+    function durationFormatted ($seconds) {
+        $hours   = floor($seconds/3600);
+        $minutes = floor( ($seconds - $hours*3600)/60);
+        $seconds = $seconds - $hours*3600 - $minutes*60;
+        if ($hours   < 10 ) { $hours   = '0' . $hours;   }
+        if ($minutes < 10 ) { $minutes = '0' . $minutes; }
+        if ($seconds < 10 ) { $seconds = '0' . $seconds; }
+        
+        $formatted = $hours . 'h:' . $minutes . 'm:' . $seconds . 's';
+        return $formatted;
+    }
+    
+    
+    
+    #### Takes time formatted in 5d:2h:3m:20s and turns it into seconds
+    function durationInSeconds ($input) {
+        if ($input == '') {                                          // return 0 if no input is given
+            return 0;
+        } 
+        $input = trim(strtolower($input));                          // lowercase and trim input
+        $input = explode(':', $input);                              // break into componenet pieces
+        
+        $duration = 0;                                              // total # of seconds of input
+        foreach ($input as $bit) {
+            $value = preg_replace('/[^0-9]/', '', $bit);            // remove everything but the #
+            if(instring('d', $bit)) {
+                $duration += ($value * 24 * 60 * 60);               // add # of seconds in the given # of days
+            } else if (instring('h', $bit)){
+                $duration += ($value * 60 * 60);                    // add # of seconds in the given # of hours
+            } else if (instring('m', $bit)){
+                $duration += ($value * 60);                         // add # of seconds in the given # of minutes
+            } else if (instring('s', $bit)){
+                $duration += $value;                                // add # of seconds
+            }
+        }
+        return $duration;
+    }
+    
+    
     #### finding column entires specific to a given $postNumber (e.g., Post 1, Post 2, Post 3)
     function ExtractTrial($procedureRow, $postNumber) {
         $output = array();
