@@ -11,14 +11,14 @@ Item,Trial Type,Timing,Min Time,Procedure Notes,Shuffle
 5,Copy,user,1,Study Copy Items,Manipulation Phase
 6,Copy,user,1,Study Copy Items,Manipulation Phase
 7,Copy,user,1,Study Copy Items,Manipulation Phase
-*NewSession*,,,,,
+*NewSession*,,2m,,,
 2,Test,8,4,Study Test Items,Delay Test 1
 3,Test,8,4,Study Test Items,Delay Test 1
 4,Test,8,4,Study Test Items,Delay Test 1
 5,Test,8,4,Study Copy Items,Delay Test 1
 6,Test,8,4,Study Copy Items,Delay Test 1
 7,Test,8,4,Study Copy Items,Delay Test 1
-*NewSession*,,,,,
+*NewSession*,,25s,,,
 2,Test,8,4,Study Test Items,Delay Test 2
 3,Test,8,4,Study Test Items,Delay Test 2
 4,Test,8,4,Study Test Items,Delay Test 2

@@ -11,9 +11,6 @@
     $title = 'Preparing the Experiment';
     require $_codeF . 'Header.php';
     
-    echo '<h1> Please wait while we load the experiment... </h1>';
-    
-    
     
     #### Grabbing submitted info
     $username = $_GET['Username'];                                          // get username from URL
@@ -81,6 +78,19 @@
         // Load old session info
         $_SESSION = NULL;                       // get rid of current session in memory
         $_SESSION = $sessionData;               // load old session data into current $_SESSION
+        // check if it is time for the next session
+        $ExpOverFlag = $_SESSION['Trials'][ ($_SESSION['Position']) ]['Procedure']['Item'];
+        if ($ExpOverFlag != 'ExperimentFinished') {                                                         // if this user hasn't done all sessions
+            $wait = $_SESSION['Trials'][ ($_SESSION['Position']-1) ]['Procedure']['Timing'];                    // check 'Timing' column of *newSession* line
+            $wait = durationInSeconds($wait);                                                                   // how many seconds was I supposed to wait until the next session?
+            $sinceFinish = time() - $_SESSION['LastFinish'];
+            if ($sinceFinish < $wait) {
+                $timeRemaining = durationFormatted($wait - $sinceFinish);
+                echo '<h1> Sorry, you must wait before you can complete this part of the experiment'
+                     . '<br> Please return in ' . $timeRemaining . ' </h1>';
+                exit;
+            }
+        }
         // Overwrite values that need to be updated
         $outputFile = ComputeString($outputFileName) . $outExt;                                 // write to new file
         $_SESSION['Output File'] = $_rootF . $dataF . $dataSubFolder . $outputF . $outputFile;
@@ -174,6 +184,7 @@
         $errors['Count']++;
         $errors['Details'][] = 'Could not find the selected condition # ' . $conditionNumber . ' in ' . $conditionsFileName;
     }
+    
     // calculating path to Stimuli and Procedure file
     $stimPath = $up . $expFiles . $stimF . $_SESSION['Condition']['Stimuli'];
     $procPath = $up . $expFiles . $procF . $_SESSION['Condition']['Procedure'];
@@ -473,9 +484,7 @@
     
     
     #### Output errors & Stop progression
-    if (($errors['Count'] > 0)
-        AND ($_SESSION['Session'] == 1)
-    ) {                                     // if there is an error (only stops for session 1 errors)
+    if ($errors['Count'] > 0) {                                                     // if there is an error
         ?>
             <div id="ErrorCodes">
                 <b> <?php echo $errors['Count']; ?> errors found in your code </b>
