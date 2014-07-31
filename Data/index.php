@@ -51,11 +51,12 @@
 				$conFlags['Multiple Conditions'] = TRUE;
 			}
 			foreach( $conds as $sessS ) {
-				$i = 1;
-				while( isset( $sessS[$i] ) ) { ++$i; }
 				$sesFlags = array();
-				if( count($sessS) < ($i-1) ) {
-					$sesFlags['Missing Sessions'] = TRUE;
+				$sessMax = max(array_keys($sessS));
+				for( $i=1; $i<$sessMax; ++$i ) {
+					if( !isset( $sessS[$i] ) ) {
+						$sesFlags['Missing Sessions'] = TRUE;
+					}
 				}
 				foreach( $sessS as $ids ) {
 					$idsFlags = array();
