@@ -57,7 +57,7 @@
 		,'Instructions' 	=> array(
 			 'fileName' 		=> $instructionsDataFileName
 			,'Prefix' 			=> $instructionsPrefix
-			,'Scope' 			=> 'ID' )
+			,'Scope' 			=> 'Condition' )
 	);
 	
 	if( !isset($_POST['Password']) AND count( $_POST ) > 0 ) {
@@ -192,8 +192,16 @@
 		foreach( $scopes as $scope => $categories ) {
 			foreach( $categories as $category ) {
 				if( !isset( $id[$category] ) ) { continue; }
-				if( $scope === 'Experiment' ) {
-					foreach( $users[ $id['Name'] ][ $id['Exp'] ] as $sessions ) {
+				$distrib = array();
+				if( $scope === 'Condition' ) {
+					$distrib[] = $users[ $id['Name'] ][ $id['Exp'] ];
+				} elseif( $scope === 'Experiment' ) {
+					foreach( $users[ $id['Name'] ] as $conditions ) {
+						$distrib[] = $conditions;
+					}
+				}
+				foreach( $distrib as $dist ) {
+					foreach( $dist as $sessions ) {
 						foreach( $sessions as $targIds ) {
 							foreach( $targIds as $tid => $fileName ) {
 								if( $tid === $i ) { continue; }
