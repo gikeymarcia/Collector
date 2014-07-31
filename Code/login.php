@@ -10,54 +10,39 @@
     
     $title = 'Preparing the Experiment';
     require $_codeF . 'Header.php';
-        
+    
     echo '<h1> Please wait while we load the experiment... </h1>';
     
-
-    ##### Error Checking Code ####
-    $found  = FALSE;                                                        // will use this later to determine when loops fail
-    $errors = array('Count'   => 0,
-                    'Details' => array()  );
-    if (file_exists($_rootF . $expFiles . $conditionsFileName) == FALSE) {      // does conditions exist? (error checking)
-        $errors['Count']++;
-        $errors['Details'][] = 'No "' . $conditionsFileName . '" found';
-    }
     
     
     #### Grabbing submitted info
-    $username = preg_replace('/[^A-Za-z0-9]/', '', $_GET['Username']);      // grab Username from URL
+    $username = $_GET['Username'];                                          // get username from URL
+    $username = preg_replace('/[^A-Za-z0-9]/', '', $username);              // cleaning characters that wouldn't write to a filename
     $selectedCondition = trim($_GET['Condition']);                          // grab Condition from URL
-    if (isset($_GET['Session'])) {
-        $_SESSION['Session'] = trim($_GET['Session']);                      // grab session# from URL
-    } else {
-        $_SESSION['Session'] = 1;                                           // if session is not set then set to 1
-    }
-    if ($_SESSION['Session'] != 1) {
-        $doDemographics = FALSE;                                            // skip demographics for all but session1
-    }
     
     
-    #### Making decision about login info
-    // determine user's unique ID
+    
+    #### Setting a unique ID for this login
     if (!isset($_SESSION['ID'])) {
-        if (isset($_GET['ID'])) {
-            $_SESSION['ID'] = $_GET['ID'];
+        if (isset($_GET['ID'])) {                                           // if the ID is in the URL
+            $_SESSION['ID'] = $_GET['ID'];                                      // use it as the unique ID
         } else {
-            $_SESSION['ID'] = rand_string();
+            $_SESSION['ID'] = rand_string();                                // otherwise, make a new ID
         }
     }
-    // did we login as debug?
-    if ((strlen($debugName) > 0)
+    
+    
+    
+    #### Checking for debug mode
+    if ((strlen($debugName) > 0)                                            // did we login as debug?
         AND (substr($username, 0, strlen($debugName)) === $debugName)
     ) {
         $_SESSION['Debug'] = TRUE;
         $username = trim(substr($username, strlen($debugName)));
         if ($username === '') { $username = $_SESSION['ID']; }
     }
-    // set Username
-    $_SESSION['Username'] = $username;
-    if ($_SESSION['Debug'] === TRUE) {
-        $dataSubFolder = $debugF;
+    if ($_SESSION['Debug'] === TRUE) {                                      // if debug
+        $dataSubFolder = $debugF;                                               // write data to separate folder
         $path = $up . $dataF . $dataSubFolder . $extraDataF;
         $statusBeginCompleteFileName = $path . $statusBeginFileName . $outExt;
     } else {
@@ -65,15 +50,11 @@
     }
     
     
-    #### Check if the current username is ineligible to do this experiment
-    if (($checkElig == TRUE)
-        AND ($mTurkMode == TRUE)
-    ) {
-        include 'check.php';
-    }
     
+    #### Checking info about this username
+    $_SESSION['Username'] = $username;                                      // set Username
     
-    #### Checking username is 3 characters or longer
+    // is the username long enough (> 3 characters)
     if ((strlen($username) < 3)
         AND (!$_SESSION['Debug'])
     ) {
@@ -82,8 +63,14 @@
         exit;
     }
     
+    // is this user ineligible to participate in the experiment?
+    if (($checkElig == TRUE)
+        AND ($mTurkMode == TRUE)
+    ) {
+        include 'check.php';
+    }
     
-    #### Checking if this user has already completed a session (Session > 1 OR done with exp)
+    // Has this user already completed session 1?  If so, determine whether they have another session to complete or if they are done
     $sessionFilename = FileExists($_rootF . $dataF . $dataSubFolder . $jsonF . $_SESSION['Username'] . '.json');
     if ($sessionFilename == TRUE) {              // this file will only exist if this username has completed a session successfully
         $pastSession   = fopen($sessionFilename, 'r');
@@ -99,14 +86,32 @@
         echo '<meta http-equiv="refresh" content="1; url=' . $_codeF . 'trial.php">';
         exit;               // do not run any of the other code, send to trial.php
         
+    } else {
+        $_SESSION['Session'] = 1;               // if they have no .json file then they are in session 1
     }
+    
+    
+    
+    ##### Error Checking Code ####
+    $found  = FALSE;                                                            // will use this later to determine when loops fail
+    $errors = array('Count'   => 0,
+                    'Details' => array()  );
+    if (file_exists($_rootF . $expFiles . $conditionsFileName) == FALSE) {      // does conditions exist? (error checking)
+        $errors['Count']++;
+        $errors['Details'][] = 'No "' . $conditionsFileName . '" found';
+    }
+    // does the condition file have the required headers?
+    $errors = keyCheck($Conditions, 'Number'    , $errors, $conditionsFileName);
+    $errors = keyCheck($Conditions, 'Stimuli'   , $errors, $conditionsFileName);
+    $errors = keyCheck($Conditions, 'Procedure' , $errors, $conditionsFileName);
+    
     
     
     #### Code to automatically choose condition assignment
     $Conditions = GetFromFile($up . $expFiles . $conditionsFileName,  FALSE);   // Loading conditions info
     $logFile    = $up . $dataF . $countF . $loginCounterName;
     if ($selectedCondition == 'Auto') {
-        if (!is_dir($up . $dataF . $countF)) {
+        if (!is_dir($up . $dataF . $countF)) {                                  // create the 'Counter' folder if it doesn't exist
             mkdir($up . $dataF . $countF,  0777,  TRUE);
         }
         
@@ -127,6 +132,7 @@
     }
     
     
+    
     #### loads condition info into $_Session['Condition']
     foreach ($Conditions as $aCond) {
         if ($aCond['Number'] == $conditionNumber) {
@@ -135,36 +141,37 @@
             break;
         }
     }
-    // calculating path to Stimuli and Procedure file
-    $stimPath = $up . $expFiles . $stimF . $_SESSION['Condition']['Stimuli'];
-    $procPath = $up . $expFiles . $procF . $_SESSION['Condition']['Procedure'];
     
     
-    ##### Error Checking Code ####
+    
+    ###########################################################################
+    ##### Error Checking Code #################################################
+    ###########################################################################
     // did we fail to find the condition information?
     if ($found == FALSE) {
         $errors['Count']++;
         $errors['Details'][] = 'Could not find the selected condition # ' . $conditionNumber . ' in ' . $conditionsFileName;
     }
-    // does the condition file have the required headers?
-    $errors = keyCheck($Conditions, 'Number'    , $errors, $conditionsFileName);
-    $errors = keyCheck($Conditions, 'Stimuli'   , $errors, $conditionsFileName);
-    $errors = keyCheck($Conditions, 'Procedure' , $errors, $conditionsFileName);
+    // calculating path to Stimuli and Procedure file
+    $stimPath = $up . $expFiles . $stimF . $_SESSION['Condition']['Stimuli'];
+    $procPath = $up . $expFiles . $procF . $_SESSION['Condition']['Procedure'];
+    
     // does this condition point to a valid stimuli file?
     if (file_exists($stimPath) == FALSE) {
         $errors['Count']++;
         $errors['Details'][] = 'No stimuli file found at "' . $stimF . $_SESSION['Condition']['Stimuli'] . '"';
-    }
-    // does this condition point to a valid procedure file?
-    if (file_exists($procPath) == FALSE) {
-        $errors['Count']++;
-        $errors['Details'][] = 'No procedure file found at "' . $procF . $_SESSION['Condition']['Procedure'] . '"';
     }
     // checking required columns from Stimuli file
     $temp = GetFromFile($stimPath, FALSE);
     $errors = keyCheck($temp, 'Cue'    ,   $errors, $_SESSION['Condition']['Stimuli']);
     $errors = keyCheck($temp, 'Answer' ,   $errors, $_SESSION['Condition']['Stimuli']);
     $errors = keyCheck($temp, 'Shuffle',   $errors, $_SESSION['Condition']['Stimuli']);
+    
+    // does this condition point to a valid procedure file?
+    if (file_exists($procPath) == FALSE) {
+        $errors['Count']++;
+        $errors['Details'][] = 'No procedure file found at "' . $procF . $_SESSION['Condition']['Procedure'] . '"';
+    }
     // checking required columns from Procedure file
     $temp = GetFromFile($procPath, FALSE);
     $errors = keyCheck($temp, 'Item'       ,   $errors, $_SESSION['Condition']['Procedure']);
@@ -172,6 +179,7 @@
     $errors = keyCheck($temp, 'Timing'     ,   $errors, $_SESSION['Condition']['Procedure']);
     $errors = keyCheck($temp, 'Shuffle'    ,   $errors, $_SESSION['Condition']['Procedure']);
     unset($temp);           // clear $temp
+    
     
     
     #### Find all of the columns that hold trial types (including 'Post# Trial Type's)
@@ -201,6 +209,8 @@
         }
     }
     
+    
+    
     #### checking that all Post levels have the needed columns
     $needed = array('Timing');                                                          // if we need more cols in the future they can be added here
     foreach ($needed as $need) {
@@ -219,6 +229,8 @@
         }
     }
     unset($proc);
+    
+    
     
     #### Checking stimuli files for correct image/media path and filenames
     if (($checkAllFiles == TRUE)
@@ -254,6 +266,8 @@
             }
         }
     }
+    
+    
     
     #### Check that we can find files for all trials in use (also finds custom scoring files)
     $procedure  = GetFromFile($up . $expFiles . $procF . $_SESSION['Condition']['Procedure']);
@@ -309,11 +323,16 @@
         }
     }
     unset($procedure);
-    #### End of error checking #####################################
+    ##### END Error Checking Code #################################################
     
     
     
-    #### Setting up all the ['Response'] keys that will be needed during the experiment
+    
+    
+    ###############################################################################
+    #### Preparing The Experiment #################################################
+    ###############################################################################
+    // Setting up all the ['Response'] keys that will be needed during the experiment
     $findingKeys   = TRUE;
     $allKeysNeeded = array();
     $scoringFiles  = array();
@@ -352,107 +371,67 @@
         $key = NULL;
     }
     unset($key);
+    $_SESSION['Trial Types'] = $trialTypes;         // contains locations of display and scoring files for each trial type
     
     
     
-    #### Load all Stimuli and Procedure info for this participant's condition then combining to create the experiment
-    if ($_SESSION['Session'] == 1) {
-        $_SESSION['Trial Types'] = $trialTypes;                     // store array that contains locations of display and scoring files for each trial
+    #### Create $_SESSION['Trials'] 
+    #### Load all Stimuli and Procedure info for this participant's condition then combine to create the experiment
+    // load stimuli for this condition then block shuffle
+    $stimuli = GetFromFile($up . $expFiles . $stimF . $_SESSION['Condition']['Stimuli']);
+    $stimuli = BlockShuffle($stimuli, 'Shuffle');
+    $_SESSION['Stimuli'] = $stimuli;
+    
+    // load and block shuffle procedure for this condition
+    $procedure = GetFromFile($up . $expFiles . $procF . $_SESSION['Condition']['Procedure']);
+    $procedure = BlockShuffle($procedure, 'Shuffle');
+    $_SESSION['Procedure'] = $procedure;
+    
+    // Load entire experiment into $Trials[1-X] where X is the number of trials
+    $Trials = array(0=> 0);
+    $procedureLength = count($procedure);
+    for ($count=2; $count<$procedureLength; $count++) {
+        // $Trials[$count-1] = makeTrial($procedure[$count]['Item']);
+        $Trials[$count-1]['Stimuli']    = $stimuli[ ($procedure[$count]['Item']) ];         // adding 'Stimuli', as an array, to each position of $Trials
+        $Trials[$count-1]['Procedure']  = $procedure[$count];                               // adding 'Procedure', as an array, to each position of $Trials
+        $Trials[$count-1]['Response']   = $allKeysNeeded;
         
-        // load stimuli for this condition then block shuffle
-        $stimuli = GetFromFile($up . $expFiles . $stimF . $_SESSION['Condition']['Stimuli']);
-        $stimuli = BlockShuffle($stimuli, 'Shuffle');
-        $_SESSION['Stimuli'] = $stimuli;
-        
-        // load and block shuffle procedure for this condition
-        $procedure = GetFromFile($up . $expFiles . $procF . $_SESSION['Condition']['Procedure']);
-        $procedure = BlockShuffle($procedure, 'Shuffle');
-        $_SESSION['Procedure'] = $procedure;
-        
-        // Load entire experiment into $Trials[1-X] where X is the number of trials
-        $Trials = array(0=> 0);
-        $procedureLength = count($procedure);
-        for ($count=2; $count<$procedureLength; $count++) {
-            // $Trials[$count-1] = makeTrial($procedure[$count]['Item']);
-            $Trials[$count-1]['Stimuli']    = $stimuli[ ($procedure[$count]['Item']) ];         // adding 'Stimuli', as an array, to each position of $Trials
-            $Trials[$count-1]['Procedure']  = $procedure[$count];                               // adding 'Procedure', as an array, to each position of $Trials
-            $Trials[$count-1]['Response']   = $allKeysNeeded;
-            
-            // on trials with no Stimuli info (e.g., freerecall) keep the same Stimuli structure but fill with 'n/a' values
-            // I need a consistent Trial structure to do all of the automatic output creation I do later on
-            if ($Trials[$count-1]['Stimuli'] == NULL) {
-                $stim       =& $Trials[$count-1]['Stimuli'];
-                $stim       =  $stimuli[2];
-                $stimKey    =  array_keys($stim);
-                $empty      =  array_fill_keys($stimKey, 'n/a');
-                $Trials[$count-1]['Stimuli'] = $empty;
-            }
-            if ($count == ($procedureLength-1)) {                               // when the last trial has been loaded
-                $Trials[$count] = cleanTrial($Trials[$count-1]);                    // return a copy of the last trial without any values in it
-                $Trials[$count]['Procedure']['Item'] = 'ExperimentFinished';        // add this flag so we know when participants are done with all sessions
-            }
+        // on trials with no Stimuli info (e.g., freerecall) keep the same Stimuli structure but fill with 'n/a' values
+        // I need a consistent Trial structure to do all of the automatic output creation I do later on
+        if ($Trials[$count-1]['Stimuli'] == NULL) {
+            $stim       =& $Trials[$count-1]['Stimuli'];
+            $stim       =  $stimuli[2];
+            $stimKey    =  array_keys($stim);
+            $empty      =  array_fill_keys($stimKey, 'n/a');
+            $Trials[$count-1]['Stimuli'] = $empty;
         }
-        
-        
-        ######## Go through $Trials and write session file(s)
-        // session files go into subjects folder and will be formatted according to the template in fileLocations.php
-        $fileNumber    = 0;
-        foreach ($Trials as $Trial) {
-            if((!isset($skippedFirstTrial))
-                OR (strtolower($Trial['Procedure']['Item']) === '*newsession*')
-            ) {
-                $skippedFirstTrial = TRUE;
-                $fileNumber++;
-                $temp = array(
-                    'Username'                     => $_SESSION['Username'],
-                    'ID'                         => $_SESSION['ID'],
-                    'Session'                     => $fileNumber,
-                    'Condition' => array(
-                        'Condition Number'      => $_SESSION['Condition']['Number'],
-                        'Condition Notes'       => $_SESSION['Condition']['Condition Notes'],
-                        'Condition Description' => $_SESSION['Condition']['Condition Description'] )
-                );
-                $sessionFile = $up . $dataF . $dataSubFolder . $expF . ComputeString($experimentFileName, $temp) . $outExt;
-                continue;
-            }
-            
-            // write ['Stimuli'] ['Procedure'] and ['Response'] data to next line of the file
-            $line = array();
-            foreach ($Trial as $key => $set) {
-                $line += AddPrefixToArray($key . '*', $set);
-            }
-            arrayToLine($line, $sessionFile);
-        }
-
-    }
-    #### Loading up $Trials for multisession experiments
-    else {
-        // Load headers from correct stimuli files
-        $fileNumber  = $_SESSION['Session'];
-        $sessionFile = $up . $dataF . $dataSubFolder . $expF . ComputeString($experimentFileName) . $outExt;
-        #### ERROR Checking if the session file doesn't exist ####
-        if (file_exists($sessionFile) == FALSE) {
-            echo '<br/><br/>Could not find your session ' . $_SESSION['Session'] . 'file at ' . $sessionFile;
-            exit;
-        }
-        $openSession = fopen($sessionFile, 'r');
-        $headers     = fgetcsv($openSession, 0, "\t");
-        foreach ($headers as &$head) {
-            $head = explode('*', $head);                                // Response*RT becomes array( 0 => 'Response', 1 => 'RT' )
-        }
-        unset($head);
-        
-        // Loading up $Trials for this Username and Session
-        $Trials     = array();
-        $Trials[0]  = NULL;
-        while ($line = fgetcsv($openSession, 0, "\t")) {
-            $temp = array();
-            foreach ($line as $i => $val) {
-                $temp[ $head[$i][0] ][ $head[$i][1] ] = $val;            // for "Thing" found under Stimuli*Cue, $temp[ 'Stimuli' ][ 'Cue' ] = "Thing"
-            }
-            $Trials[] = $temp;
+        if ($count == ($procedureLength-1)) {                               // when the last trial has been loaded
+            $Trials[$count] = cleanTrial($Trials[$count-1]);                    // return a copy of the last trial without any values in it
+            $Trials[$count]['Procedure']['Item'] = 'ExperimentFinished';        // add this flag so we know when participants are done with all sessions
         }
     }
+    
+    
+    
+    #### Establishing $_SESSION['Trials'] as the place where all experiment trials are stored
+    // $Trials also contains trials for other sessions but trial.php sends to done.php once a *NewSession* shows up
+    $_SESSION['Trials']     = $Trials;
+    $_SESSION['Position']   = 1;
+    $_SESSION['PostNumber'] = -1;
+    
+    
+    
+    #### Figuring out what the output filename will be
+    $outputFile = ComputeString($outputFileName) . $outExt;
+    $_SESSION['Output File'] = $up . $dataF . $dataSubFolder . $outputF . $outputFile;
+    $_SESSION['Start Time']  = date('c');
+    
+    
+    ###############################################################################
+    #### END Preparing The Experiment #############################################
+    ###############################################################################
+    
+    
     
     #### Output errors & Stop progression
     if (($errors['Count'] > 0)
@@ -477,9 +456,6 @@
     }
     
     
-    $outputFile = ComputeString($outputFileName) . $outExt;
-    $_SESSION['Output File'] = $up . $dataF . $dataSubFolder . $outputF . $outputFile;
-    $_SESSION['Start Time']  = date('c');
     
     #### Record info about the person starting the experiment to the status start file
     // information about the user loging in
@@ -501,11 +477,7 @@
     ###########################################################################
     
     
-    #### Establishing $_SESSION['Trials'] as the place where all experiment trials are stored
-    // $Trials also contains trials for other sessions but trial.php sends to done.php once a *NewSession* shows up
-    $_SESSION['Trials']     = $Trials;
-    $_SESSION['Position']   = 1;
-    $_SESSION['PostNumber'] = -1;
+    
     
     
     #### Send participant to next phase of experiment (demographics or instructions)
