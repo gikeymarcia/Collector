@@ -41,22 +41,6 @@
 		return array_combine_safely( $headers, $data );
 	}
 	
-	function RangeToArray ($input) {
-		$output = array();
-		$commaExpl  = explode( ',', trim($input) );
-		foreach( $commaExpl as $commaDel ) {
-			$hyphExpl	= explode( '-', trim($commaDel) );
-			if( count( $hyphExpl ) === 1 ) {
-				$hyphExpl[1] = $hyphExpl[0];
-			}
-			elseif( count( $hyphExpl ) > 2 ) {
-				$hyphExpl[1] = $hyphExpl[ count($hyphExpl) - 1 ];	//if, for some silly reason, someone put 1-3-5, this is just 1-5
-			}
-			$output = array_merge( $output, range( $hyphExpl[0], $hyphExpl[1] ) );
-		}
-		return $output;
-	}
-	
 	function getHeaders( $fileName, $delim = "\t" ) {
 		$file = fopen( $fileName, "r" );
 		$headers = fgetcsv( $file, 0, $delim );
