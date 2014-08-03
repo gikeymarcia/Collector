@@ -24,14 +24,22 @@
         </form>
     </div>
 	
-<?php } else { ?>
+<?php } else { 
+		?><h2>The correct answer was:</h2><?php
+		$cues = explode('|', $cue);
+		$answers = explode('|', $answer);
+		foreach( $cues as $i => $thisCue ) {
+			$thisAnswer = $answers[$i];
+			?>
 
-	<h2>The correct answer was:</h2>
 	<div class="study precache">
-		<span class="study-left">  <?php echo $cue; ?>    </span>
+		<span class="study-left">  <?php echo $thisCue; ?>    </span>
 		<span class="study-divider">         :            </span>
-		<span class="study-right"> <?php echo $answer; ?> </span>
+		<span class="study-right"> <?php echo $thisAnswer; ?> </span>
 	</div>
+			<?php
+		}
+		?>
 
     <!-- include form to collect RT and advance page -->
     <div class="precache textcenter">
@@ -41,4 +49,5 @@
         </form>
     </div>
 
-<?php } ?>
+	<?php
+	}	?>
