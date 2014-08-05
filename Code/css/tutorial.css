@@ -1,24 +1,163 @@
-body
-	{	font-family: Kreon, sans-serif;	font-size: 110%;	width: 750px; margin: 35px auto auto auto}
-h1
-	{	font-size: 2em;	color: #333333;	}
-h2
-	{	}
-h3
-	{	}
-p
-	{	margin-left: 25px}
-input
-	{	}
-img
-	{	display: block;	margin-left: auto;	margin-right: auto;	}
-form
-	{	}
-option
-	{	}
-select
-	{	}
-li
-	{	padding-bottom: 35px}
-li span
-	{	color:#777777;	margin-left: 10px}
+/*------------------------------------*\
+    $IMPORTS
+\*------------------------------------*/
+@import url(http://fonts.googleapis.com/css?family=Open+Sans);
+@import url(http://fonts.googleapis.com/css?family=Roboto);
+
+
+
+
+
+/*------------------------------------*\
+    $COLORS
+\*------------------------------------*/
+.brand {
+    color:#0055A6;             /* dark blue; rgba(0,85,166,1) */
+}
+.secondary {
+    color:#00A5E5;             /* blue; rgba(0,165,229,1); */
+}
+.action {
+    color:#00FF87;             /* lime green; rgba(0,255,135,1) */
+}
+.alert {
+    background-color:#800000;  /* strong red; rgba(128,0,0,1) */
+}
+
+.brand-bg {
+    background-color:#0055A6;
+}
+.secondary-bg {
+    background-color:#00A5E5;
+}
+.action-bg {
+    background-color:#00FF87;
+}
+
+
+
+
+
+/*------------------------------------*\
+    $RESET
+\*------------------------------------*/
+/**
+ *  Based on Eric Meyer's reset
+ *  http://meyerweb.com/eric/tools/css/reset/
+ *  v2.0 | 20110126
+ *  License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font:inherit;
+    vertical-align: baseline;
+    -webkit-box-sizing:border-box;
+       -moz-box-sizing:border-box;
+            box-sizing:border-box;
+}
+html {
+    font:18px/1.625 "Roboto", "Open Sans", Arial, Helvetica, sans-serif;
+    color:#333;
+}
+ol, ul {
+    list-style: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*------------------------------------*\
+    $Tutorial CSS
+\*------------------------------------*/
+
+body {
+    min-width: 620px;
+    max-width: 800px;
+    width: 70%;
+    margin: 20px auto 0px auto;
+}
+
+h1 {
+    text-align: center;
+    font-size: 2em;
+    color: #333333;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+h2 {
+    font-size:150%;
+    font-weight: bold;
+    text-align: center;
+}
+
+#accordion div {
+    font-size: 92%;
+}
+
+h4 {
+    marigin-top: 20px;
+    font-weight: bold;
+}
+
+iframe {
+    margin: 20px auto 10px auto;
+    
+}
+
+p {
+    padding: 0px 0px 10px 0px;
+}
+
+p span {
+    color:#00A5E5;
+    margin-left: 10px
+}
+
+a {
+    display:block;
+    font-size: 110%;
+}
+
+ul {
+    list-style-type:circle;
+    margin-left: 55px;
+    margin-bottom: 15px;
+}
+ul li {
+    margin: 10px auto;
+}
+
+ol {
+    list-style-type: decimal-leading-zero;
+    margin-left: 55px;
+    margin-bottom: 15px;
+}
+
+ol li {
+    margin: 10px auto;
+}
+
+
+	

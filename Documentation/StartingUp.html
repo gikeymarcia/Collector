@@ -1,29 +1,132 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<link href="../css/tutorial.css" rel="stylesheet" type="text/css" />
-		<link href='http://fonts.googleapis.com/css?family=Kreon' rel='stylesheet' type='text/css' />
-		<title>Collector Tutorials</title>
-	</head>
-	
-	<body>
-		<h1>Welcome to the world of Collector!</h1>
-		
-		<ol>
-			<li>
-				This first video will show you how to install the software required to run Collector files on your computer. <span>[6:10]</span>
-				<br /><br />
-				<iframe width="560" height="315" src="http://www.youtube.com/embed/d1CVk9SzqX8" frameborder="0" allowfullscreen></iframe>
-			</li>
-			
-			<li>
-				How to download Collector files and run for the first time.<span>[4:27]</span>
-				<br /><br />
-				<iframe width="560" height="315" src="http://www.youtube.com/embed/8Uwy_W66i0k" frameborder="0" allowfullscreen></iframe>
-			</li>
-		</ol>
-		
-	</body>
+<!DOCTYPE html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link href="../Code/css/jquery-ui.css" rel="stylesheet" type="text/css" />
+        <link href="../Code/css/tutorial.css" rel="stylesheet" type="text/css" />
+        <script src="../Code/javascript/jquery-1.10.2.min.js">  </script>  
+        <script src="../Code/javascript/jquery-ui-1.11.0.js">   </script>
+        <title>Collector Tutorials</title>
+    </head>
+    
+    <script>
+    $(function() {
+        $("#accordion").accordion({ heightStyle: "content" });
+    });
+    </script>
+    
+    <body>
+        <h1 class="brand test">Welcome to the world of Collector!</h1>
+        
+        <div id="accordion">
+            <h3>Required Software</h3>
+            <div>
+                <p>
+                    This first video will show you how to install the software required to run Collector files on your computer.
+                </p>
+                <iframe width="560" height="315" src="http://www.youtube.com/embed/d1CVk9SzqX8" frameborder="0" allowfullscreen></iframe>
+                <a href="http://www.wampserver.com/en/" target="_blank">Download WAMPSERVER</a>
+            </div>
+            
+            
+            <h3>Running for the first time</h3>
+            <div>
+                <p>
+                    How to download Collector files and run for the first time.
+                </p>
+                <p>
+                    Due to updates to WAMPSERVER what is shown in this video may not work as described.
+                    To see the fix watch the next video "Run Collector from any folder"
+                </p>
+                <iframe width="560" height="315" src="http://www.youtube.com/embed/8Uwy_W66i0k" frameborder="0" allowfullscreen></iframe>
+                <a href="https://github.com/gikeymarcia/Collector" target="_blank">Collector GitHub page</a>
+            </div>
+            
+            
+            <h3>Run Collector from any Folder</h3>
+            <div>
+                <p>
+                    Learn how to run Collector when using WAMPSERVER 2.5+ and, more importantly, see how you can setup your localhost
+                    so you can run experiments located anywhere on your machine.
+                </p>
+                
+                <iframe width="560" height="315" src="http://www.youtube.com/embed/FK9NlNekDI8" frameborder="0" allowfullscreen></iframe>
+            </div>
+            
+            
+            <h3>Collector Hangout 1: The Basics</h3>
+            <div>
+                <p>
+                    In this video we go over all of the Collector basics that make creating your own experiments possible.
+                </p>
+                <h4>Topics Covered:</h4>
+                <ul>
+                    <li>Loading stimuli</li>
+                    <li>Ordering stimuli presentation</li>
+                    <li>Controlling stimuli display</li>
+                    <li>Controlling timing of stimuli presentation</li>
+                    <li>Shuffles Demystified (hopefully)</li>
+                </ul>
+                <p>
+                    This was our first time using hangouts on air to broadcast Collector training so things start off a little bumpy but
+                    stick with it and you'll learn a lot.
+                </p>
+                <iframe width="560" height="315" src="http://www.youtube.com/embed/Fyp9XQAj6ig?rel=0" frameborder="0" allowfullscreen></iframe>
+            </div>
+            
+            
+            <h3>Collector Hangout 2: Trial Types</h3>
+            <div>
+                <p>
+                    Talking about all the currently available trial types, how to use them, and basics of making your own trial type.
+                </p>
+                <p>
+                    Note: for a stretch in this video Tyson's screen was selected (instead of mine) so I'm talking about code snippets that you're not seeing.
+                    Unfortunately, we have no way to recover the video that was lost.
+                </p>
+                <iframe width="560" height="315" src="http://www.youtube.com/embed/kSt95GKnXy4?rel=0" frameborder="0" allowfullscreen></iframe>
+            </div>
+            
+            
+            <h3>Collector Hangout 3: Data + new features</h3>
+            <div>
+                <p>
+                    Most of this video is us showing off new features and then we do a bit about how to get your data back out of the program.
+                </p>
+                <iframe width="560" height="315" src="http://www.youtube.com/embed/8LAKAy56r7A?rel=0" frameborder="0" allowfullscreen></iframe>
+            </div>
+            
+            
+            <h3>Collector Hangout 4: Soup to nuts, idea to analysis</h3>
+            <div>
+                <p>
+                    Now that you're familiar with all the core functionality of Collector we bring the pieces together.
+                    Up to this point we've been crawling but now we finally stand up and start running.
+                </p>
+                <h4>The Process in this video:</h4>
+                <ol>
+                    <li>Have a good experiment idea (easier said than done)</li>
+                    <li>Download fresh copy of Collector</li>
+                    <li>Load stimuli</li>
+                    <li>Setup Conditions file</li>
+                    <li>Setup procedure files</li>
+                    <li>Create custom trial types</li>
+                    <li>Setup custom scoring</li>
+                    <li>Dot i's and cross t's (instructions, settings)</li>
+                    <li>Put your experiment on the web</li>
+                    <li>Collect data!!!</li>
+                    <li>Download your data</li>
+                    <li>Quick tips for easy analysis of Collector data</li>
+                </ol>
+                <p>
+                    In the course of this whirlwind session we also show how to create multisession experiments.
+                </p>
+                <h2>SCIENCE!!!!</h2>
+                <iframe width="560" height="315" src="http://www.youtube.com/embed/jma5pYmt1Ao?rel=0" frameborder="0" allowfullscreen></iframe>
+                <a href="http://www.cogfog.com/Demo/testStudy/">Experiment we created: /Data/ password is still "freeforall"</a>
+            </div>
+            
+            
+        </div>
+        
+    </body>
 </html>
