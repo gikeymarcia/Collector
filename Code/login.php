@@ -366,14 +366,19 @@
     #### Preparing The Experiment #################################################
     ###############################################################################
     // Setting up all the ['Response'] keys that will be needed during the experiment
+    // Also checks scoring files if that trial type lists some required columns
+    $proc = GetFromFile($up . $expFiles . $procF . $_SESSION['Condition']['Procedure'], FALSE); // load procedure file without padding
     $findingKeys   = TRUE;
     $allKeysNeeded = array();
     $scoringFiles  = array();
-    foreach ($trialTypes as $thisTrialType) {                       // compile an array of the scoring files to check for keys
-        $scoringFiles[ $thisTrialType['scoring'] ] = NULL;
+    foreach ($trialTypes as $name => $thisTrialType) {                       // compile an array of the scoring files to check for keys
+        $scoringFiles[ $thisTrialType['scoring'] ] = $name;
     }
     foreach ($scoringFiles as $fileName => &$keys) {
+        $name = $keys;                                              // $keys is originally the name of the trial type, such as "mcpic"
+        $requiredColumns = array();
         $keys = include $fileName;                                  // grab keys from scoring file when $findingKeys == TRUE
+        $trialTypes[$name]['requiredColumns'] = $requiredColumns;
         if ($keys == 1) {
             $keys = array();
         } elseif(!is_array($keys)) {
@@ -389,8 +394,14 @@
         foreach ($thisTrialType['levels'] as $lvl => $null) {                   // look at all levels each is used at
             if ($lvl === 0) {                                                       // add needed keys for level 0, non-post, use
                 $lev0keys += $scoringFiles[ $thisTrialType['scoring'] ];
-            } else {                                                                // add needed keys for each post level
+                foreach ($thisTrialType['requiredColumns'] as $requiredColumn) {
+                    $errors = keyCheck($proc, $requiredColumn, $errors, $_SESSION['Condition']['Procedure']);
+                }
+            } else {
                 $postKeys += AddPrefixToArray('post' . $lvl . '_', $scoringFiles[ $thisTrialType['scoring'] ]);
+                foreach ($thisTrialType['requiredColumns'] as $requiredColumn) {
+                    $errors = keyCheck($proc, 'Post' . ' '  . $lvl . ' ' . $requiredColumn, $errors, $_SESSION['Condition']['Procedure']);
+                }
             }
         }
     }
