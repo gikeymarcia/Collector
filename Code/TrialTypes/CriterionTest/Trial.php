@@ -1,6 +1,5 @@
 <?php
 	$compTime = 8;					// time in seconds to use for 'computer' timing
-	trialTiming();					// determines timing and user/computer timing mode
 	
 	
 	function findSetting( $settings, $setting ) {
@@ -64,47 +63,42 @@
 		
 		.SubmitContainer	{	display: none;	}
 	</style>
-	<form  class="<?php echo $formClass; ?> collector-form"  autocomplete="off"  action="<?php echo $postTo; ?>"  method="post">
-		<?php
-			foreach( $allStim as $stim ) {
-				$cue = $stim['Cue'];
-				$ans = $stim['Answer'];
-				?>
-		<div class="study CriterionItem CriterionStudy">
-			<span class="study-left">  <?= $cue; ?>  </span>
-			<span class="study-divider">     :       </span>
-			<span class="study-right"> <?= $ans; ?>  </span>
+	<?php
+		foreach( $allStim as $stim ) {
+			$cue = $stim['Cue'];
+			$ans = $stim['Answer'];
+			?>
+	<div class="study CriterionItem CriterionStudy">
+		<span class="study-left">  <?= $cue; ?>  </span>
+		<span class="study-divider">     :       </span>
+		<span class="study-right"> <?= $ans; ?>  </span>
+	</div>
+			<?php
+		}
+	?>
+	<?php
+		foreach( $allStim as $stim ) {
+			$cue = $stim['Cue'];
+			$ans = $stim['Answer'];
+			?>
+	<div class="study CriterionItem CriterionTest">
+		<span class="study-left">  <?= $cue; ?>  </span>
+		<span class="study-divider">     :       </span>
+		<div class="testCueRight">
+			<input class="CriterionTestInput" type="text" value="" autocomplete="off" data-answer="<?= strtolower($ans) ?>"/>
 		</div>
-				<?php
-			}
-		?>
-		<?php
-			foreach( $allStim as $stim ) {
-				$cue = $stim['Cue'];
-				$ans = $stim['Answer'];
-				?>
-		<div class="study CriterionItem CriterionTest">
-			<span class="study-left">  <?= $cue; ?>  </span>
-			<span class="study-divider">     :       </span>
-			<div class="testCueRight">
-				<input class="CriterionTestInput" type="text" value="" autocomplete="off" data-answer="<?= strtolower($ans) ?>"/>
-			</div>
+	</div>
+			<?php
+		}
+	?>
+	<div class="SubmitContainer">
+		<h3><?= $procedureNotes ?></h3>
+		<input class="hidden"  name="LoopCount"            type="text" value="0"        />
+		<input class="hidden"  name="Performance"          type="text" value=""         />
+		<div class="textcenter">
+			<input class="button button-trial-advance" id="FormSubmitButton" type="submit" value="Next"  />
 		</div>
-				<?php
-			}
-		?>
-		<div class="SubmitContainer">
-			<h3><?= $procedureNotes ?></h3>
-			<input class="hidden"  name="RT"       id="RT"     type="text" value="RT"       />
-			<input class="hidden"  name="RTkey"    id="RTkey"  type="text" value="no press" />
-			<input class="hidden"  name="RTlast"   id="RTlast" type="text" value="no press" />
-			<input class="hidden"  name="LoopCount"            type="text" value="0"        />
-			<input class="hidden"  name="Performance"          type="text" value=""         />
-			<div class="textcenter">
-				<input class="button button-trial-advance" id="FormSubmitButton" type="submit" value="Next"  />
-			</div>
-		</div>
-	</form>
+	</div>
 	
 	<script>
 		(function($){

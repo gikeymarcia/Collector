@@ -11,7 +11,7 @@
 <div class="main-contain">
 	<h2 class="textcenter">Basic Information</h2>
 
-	<form name="Demographics" class="collector-form" action="BasicInfoData.php" method="post" autocomplete="off">
+	<form name="Demographics" class="collector-form collector-form-extra" action="BasicInfoData.php" method="post" autocomplete="off">
 
 		<div class="field">
 			<legend>What is your gender?</legend>

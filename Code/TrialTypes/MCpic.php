@@ -1,6 +1,5 @@
 <?php
 	$compTime = 8;					// time in seconds to use for 'computer' timing
-	trialTiming();					// determines timing and user/computer timing mode
 
 	#### Set up MC button grid ####
 	// shuffle button positions (first time only) and save to session
@@ -43,10 +42,5 @@
         <?php echo $MCGrid; ?>
     </div>
 
-    <form class="<?php echo $formClass; ?>" action="<?php echo $postTo; ?>" method="post">
-    	<input class="hidden" name="Response" id="Response" type="text" value=""         />
-    	<input class="hidden" name="RTkey"    id="RTkey"    type="text" value="no press" />
-    	<input class="hidden" name="RTlast"   id="RTlast"   type="text" value="no press" />
-    	<input class="hidden" name="RT"       id="RT"       type="text" value="RT"       />
-    	<input class="hidden" id="FormSubmitButton" type="submit" value="Submit"         />
-    </form>
+    <input class="hidden" name="Response" id="Response" type="text" value=""         />
+    <input class="hidden" id="FormSubmitButton" type="submit" value="Submit"         />

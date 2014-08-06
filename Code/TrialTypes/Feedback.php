@@ -1,6 +1,5 @@
 <?php
 	$compTime = 8;					// time in seconds to use for 'computer' timing
-	trialTiming();					// determines timing and user/computer timing mode
 	
 	$firstTrialType = trim(strtolower($currentTrial['Procedure']['Trial Type']));
 	
@@ -18,10 +17,7 @@
 	
     <!-- include form to collect RT and advance page -->
     <div class="precache textcenter">
-        <form class="<?php echo $formClass; ?> collector-form" action="<?php echo $postTo; ?>" method="post">
-            <input class="hidden" id="RT" name="RT" type="text" value="" />
-            <input class="button button-trial-advance" id="FormSubmitButton" type="submit" value="Next" />
-        </form>
+        <input class="button button-trial-advance" id="FormSubmitButton" type="submit" value="Next" />
     </div>
 	
 <?php } else { 
@@ -41,12 +37,8 @@
 		}
 		?>
 
-    <!-- include form to collect RT and advance page -->
     <div class="precache textcenter">
-        <form class="<?php echo $formClass; ?> collector-form" action="<?php echo $postTo; ?>" method="post">
-            <input class="hidden" id="RT" name="RT" type="text" value="" />
-            <input class="button button-trial-advance" id="FormSubmitButton" type="submit" value="Next" />
-        </form>
+        <input class="button button-trial-advance" id="FormSubmitButton" type="submit" value="Next" />
     </div>
 
 	<?php

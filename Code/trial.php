@@ -137,7 +137,25 @@
     <!-- trial content -->
     <?php
         if ($trialFile):
-            include $trialFile;
+			ob_start();                                      // start an output buffer, so we can include the file, without outputting it quite yet
+			include $trialFile;                              // include the file early, so that it can set default values, like default timing
+			$trialContents = ob_get_clean();                 // end the buffer without outputting, but store the contents for later use
+			
+			#### if you have other default settings you want written in the trial type files, you can work with them here
+			
+			if (!isset($compTime)) {                         // if the trial type doesn't have a default timing, create a general default here
+				$compTime = 'user';                          // if the trial should be computer-timed, a user timed trial will be immediately obvious
+			}
+			trialTiming();                                   // find out what kind of class name to give the up-coming form
+			
+			#### if you want to edit the trial contents before they are outputted, you can mess with them as a string right here
+			
+		    ?><form class="<?php echo $formClass; ?> collector-form" action="<?php echo $postTo; ?>" method="post">
+                  <?= $trialContents ?>
+                  <input class="hidden"  id="RT"     name="RT"       type="text" value="RT"       />
+                  <input class="hidden"  id="RTkey"  name="RTkey"    type="text" value="no press" />
+                  <input class="hidden"  id="RTlast" name="RTlast"   type="text" value="no press" />
+			  </form><?php
         else: ?>
             <h2>Could not find the following trial type: <strong><?php echo $trialType; ?></strong></h2>
             <p>Check your procedure file to make sure everything is in order. All information about this trial is displayed below.</p>

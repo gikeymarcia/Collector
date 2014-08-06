@@ -56,7 +56,7 @@
         <h1 class="textcenter">Final Questions</h1>
         <p><?php echo $Q ?></p>
 
-        <form class="collector-form" name="FinalQuestion" autocomplete="off" action="FQdata.php" method="post">
+        <form class="collector-form collector-form-extra" name="FinalQuestion" autocomplete="off" action="FQdata.php" method="post">
 
             <?php
             // radio button code
