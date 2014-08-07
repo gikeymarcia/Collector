@@ -15,7 +15,7 @@
 		return $output;
 	}
 	
-	$texts = trimExplode( '|', $procedureNotes );
+	$texts = trimExplode( '|', $text );
 	$texts = array_pad( $texts, 5, '' );
 ?>
 <style>

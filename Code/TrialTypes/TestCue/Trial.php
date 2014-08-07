@@ -5,6 +5,7 @@
 		.testCueRight	{	white-space: nowrap;	}
 		.testCueRight input	{	width: 300px;	padding: 0px 1px;	font-family: "Roboto", "Open Sans", Arial, Helvetica, sans-serif;	}
 	</style>
+    <div><?php echo $text; ?></div>
     <div class="study precache">
         <span class=study-left>  <?php echo $cue; ?>    </span>
         <span class=study-divider>         :            </span>

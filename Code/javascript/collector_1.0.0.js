@@ -87,7 +87,7 @@ var COLLECTOR = {
   					show.val( timeFormatted );
   				} else {
   					show.html( timeFormatted );
-  				}
+                }
 				timeRemaining = Math.min( 20, timeRemaining );
   			}
 
@@ -274,14 +274,14 @@ var COLLECTOR = {
             $('body').scrollTop(0);
         },
 
-		stepout: function() {
+		tetris: function() {
 			// get trial time from page and run timer
 			COLLECTOR.timer(parseFloat($("#Time").html() )-5, function () {
 				// hide game and show get ready prompt for 5 secs
 				$(".stepout-clock").hide();
 				$(".tetris-wrap")
 					.removeClass("tetris-wrap")
-					.html("<div class=cframe-outer><div class=cframe-inner><div class='cframe-content action-bg textcenter'><h1>Get ready to continue in ... </h1><h1 id=getready></h1></div></div></div>");
+					.html("<div class='cframe-content action-bg textcenter'><h1>Get ready to continue in ... </h1><h1 id=getready></h1></div>");
 				COLLECTOR.timer( 5, function() {
 					$('form').submit();
 				}, $("#getready"));

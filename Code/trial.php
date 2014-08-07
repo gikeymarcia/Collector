@@ -22,6 +22,13 @@
     if (!isset($item)) {
         $item = $currentTrial['Procedure']['Item'];
     }
+    if ($currentPost < 1) {
+        $prefix = '';
+    } else {
+        $prefix = 'Post' . ' '  . $currentPost . ' ';
+    }
+    $text =& $currentTrial['Procedure'][$prefix . 'Text'];
+    $text =  str_ireplace(array('$cue', '$answer'), array($cue, $answer), $text);
     
     // skip to done.php if some has logged in who has already completed all parts of the experiment
     if ($item == 'ExperimentFinished') {
@@ -220,6 +227,7 @@
 <!-- Pre-Cache Next trial -->
 <div class="precachenext">
     <?php
+    $nextTrial   = $_SESSION['Trials'][$currentPos+1];
     echo show($nextTrial['Stimuli']['Cue'])     . '<br />';
     echo show($nextTrial['Stimuli']['Answer'])  . '<br />';
     ?>

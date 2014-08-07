@@ -1,6 +1,7 @@
 <?php
     $compTime = 5;                  // time in seconds to use for 'computer' timing
 ?>
+    <div><?php echo $text; ?></div>
     <!-- show the image -->
     <div class="precache pic">
         <?php echo show($cue); ?>
