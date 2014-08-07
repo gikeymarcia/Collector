@@ -152,7 +152,7 @@ img {
 	display:none!important;
 }
 .invisible {
-	visibility:hidden;
+	visibility:hidden!important;
 }
 
 /* Shared colors */

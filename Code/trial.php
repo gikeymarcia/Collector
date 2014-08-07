@@ -150,7 +150,7 @@
 			
 			#### if you want to edit the trial contents before they are outputted, you can mess with them as a string right here
 			
-		    ?><form class="<?php echo $formClass; ?> collector-form" action="<?php echo $postTo; ?>" method="post">
+		    ?><form class="<?php echo $formClass; ?> collector-form invisible" action="<?php echo $postTo; ?>" method="post">
                   <?= $trialContents ?>
                   <input class="hidden"  id="RT"     name="RT"       type="text" value="RT"       />
                   <input class="hidden"  id="RTkey"  name="RTkey"    type="text" value="no press" />

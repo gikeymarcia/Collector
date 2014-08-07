@@ -184,7 +184,7 @@ var COLLECTOR = {
 			if( isNaN(trialTime) || trialTime > 0) {
 				$(".precache").addClass("DuringTrial");			// add class that does nothing (but lets us know what used to be hidden)
 				$(".precache").removeClass("precache");			// remove class that hides the content
-				$(document.body).removeClass("invisible");
+				$("form").removeClass("invisible");
 				COLLECTOR.startTime = Date.now();
 				$(':input:enabled:visible:first').focusWithoutScrolling();  // focus cursor on first input
 			} else {
