@@ -227,6 +227,7 @@
 <!-- Pre-Cache Next trial -->
 <div class="precachenext">
     <?php
+    $nextTrial   = $_SESSION['Trials'][$currentPos+1];
     echo show($nextTrial['Stimuli']['Cue'])     . '<br />';
     echo show($nextTrial['Stimuli']['Answer'])  . '<br />';
     ?>
