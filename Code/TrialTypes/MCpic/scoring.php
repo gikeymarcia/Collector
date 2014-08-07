@@ -5,7 +5,7 @@
  */
     if ($findingKeys) {
         $requiredColumns = array('Settings');
-        return array('RT', 'Response', 'Accuracy', 'RTkey', 'RTlast', 'strictAcc', 'lenientAcc');
+        return array('RT', 'Response', 'Accuracy', 'RTkey', 'RTlast', 'strictAcc', 'lenientAcc', 'Buttons');
     }
     $data = $_POST;
     

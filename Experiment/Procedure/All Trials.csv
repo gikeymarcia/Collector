@@ -8,7 +8,7 @@ Item,Trial Type,Timing,Post 1 Trial Type,Post 1 Timing,Procedure Notes,Shuffle,S
 11,Passage,User,No,User,study trials,OFF,
 10,StudyPic,User,Feedback,User,study trials,OFF,
 10,TestPic,User,No,User,inputs,OFF,
-10,MCpic,User,No,User,inputs,OFF,
+10,MCpic,User,No,User,inputs,OFF,buttons: $answer[2::10] | shuffle | perRow: 3
 3,Test,User,Feedback,User,inputs,OFF,
 3,TestCue,User,No,User,inputs,OFF,
 2::7,vdrFreeRecall,user,feedback,user,What is the second word of each word pair? | $cue : $answer <br>,off,

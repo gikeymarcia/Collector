@@ -468,9 +468,9 @@
 			$endPoints = explode($connector, $range);
 			$count = count($endPoints);
 			if ($count === 1) {
-				$output[] = $endPoints[0];
+				$output[] = trim($endPoints[0]);
 			} else {
-				$output = array_merge($output, range($endPoints[0], $endPoints[$count-1]));
+				$output = array_merge($output, range(trim($endPoints[0]), trim($endPoints[$count-1])));
 			}
 		}
 		return $output;
