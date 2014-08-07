@@ -1,6 +1,5 @@
 <?php
 	$compTime = 10;				// time in seconds to use for 'computer' timing
-	trialTiming();					// determines timing and user/computer timing mode
 	
 	// Likert Settings
 	//
@@ -140,27 +139,22 @@
 	.LikertOptions label	{	display: block !important;	margin: 0 !important;	}
 	.LikertArea input	{	margin: 1px !important;	border: none !important;	box-shadow: none !important;	}
 </style>
- <form class="<?php echo $formClass; ?> collector-form"  autocomplete="off"  action="<?php echo $postTo; ?>"  method=post>
-	<div class="LikertArea">
-		<div class="LikertQuestion"><?= $likertQuestion ?></div>
-		<div class="LikertScale">
-			<div class="LikertDescriptions"><?php
-				?><div class="LikertLeftDesc"  ><?= $likertDescrips[0] ?></div><?php
-				?><div class="LikertCenterDesc"><?= $likertDescrips[1] ?></div><?php
-				?><div class="LikertRightDesc" ><?= $likertDescrips[2] ?></div>
-			</div>
-			<table class="LikertOptions"><tr><?php
-				foreach( $likertScale as $value ) {
-					echo '<td><label><input type="radio" name="Response" value="'.$value.'" /><br>'.$value.'</label></td>';
-				}
-			?></tr></table>
+<div class="LikertArea">
+	<div class="LikertQuestion"><?= $likertQuestion ?></div>
+	<div class="LikertScale">
+		<div class="LikertDescriptions"><?php
+			?><div class="LikertLeftDesc"  ><?= $likertDescrips[0] ?></div><?php
+			?><div class="LikertCenterDesc"><?= $likertDescrips[1] ?></div><?php
+			?><div class="LikertRightDesc" ><?= $likertDescrips[2] ?></div>
 		</div>
+		<table class="LikertOptions"><tr><?php
+			foreach( $likertScale as $value ) {
+				echo '<td><label><input type="radio" name="Response" value="'.$value.'" /><br>'.$value.'</label></td>';
+			}
+		?></tr></table>
 	</div>
-	
-	<input class=hidden  id=RT     name=RT       type=text value="RT"       />
-	<input class=hidden  id=RTkey  name=RTkey    type=text value="no press" />
-	<input class=hidden  id=RTlast name=RTlast   type=text value="no press" />
-	<div class=textcenter>
-		<input class="button button-trial-advance" id=FormSubmitButton type=submit value="Submit"   />
-	</div>
-</form>
+</div>
+
+<div class=textcenter>
+	<input class="button button-trial-advance" id=FormSubmitButton type=submit value="Submit"   />
+</div>

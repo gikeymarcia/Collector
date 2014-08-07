@@ -1,6 +1,5 @@
 <?php
 	$compTime = 8;					// time in seconds to use for 'computer' timing
-	trialTiming();					// determines timing and user/computer timing mode
 	
 	// OldNew
 	//
@@ -21,6 +20,7 @@
 ?>
 <style>
 	.OldNewCue	{	font-size: 130%;	margin: 10px auto 15px;	}
+	.OldNewArea	{	text-align: center;	}
 	.OldNewArea input	{	box-shadow: none !important;	padding: 3px !important;	margin: 2px !important;	text-align: center !important;	}
 	.OldNewArea input[type='radio']	{	display: none;	}
 	.OldNewQuestion	{	font-size: 110%;	margin: 25px auto 15px;	}
@@ -35,50 +35,41 @@
 	input:read-only	{	cursor: not-allowed;	background-color: #DDD;	border-color: #DDD !important;	color: #666;	}
 </style>
 
-<form class="<?php echo $formClass; ?> collector-form textcenter"  autocomplete=off  action='<?php echo $postTo; ?>'  method="post">
-
-	<div class="OldNewArea">
-		<div class="OldNewChoices">
-			<div class="OldNewQuestion OldNewPrompt"><?= $texts[0] ?></div>
-			<div class="OldNewCue"><?= $cue ?></div>
-			<span class="choiceHolder"><input name="OldNewChoice" type="radio" value="Old" />Old</span>
-			<span class="choiceHolder"><input name="OldNewChoice" type="radio" value="New" />New</span>
-		</div>
-		<div class="PathHolders">
-			<div class="Pathway OldPath">
-				<div class="OldTest">
-					<div class="OldNewQuestion OldQuestion"><?= $texts[1] ?></div>
-					<input name="Response" type="text" />
-					<input type="button" class="StageBtn" value="Next" />
-				</div>
-				<div class="OldConfidence">
-					<div class="OldNewQuestion OldConfidenceQuestion"><?= $texts[2] ?></div>
-					<input name="OldConfidence" type="text" class="forceNumeric" />
-					<input type="button" class="StageBtn" value="Next" />
-				</div>
-			</div>
-			<div class="Pathway NewPath">
-				<div class="NewGuess">
-					<div class="OldNewQuestion NewQuestion"><?= $texts[3] ?></div>
-					<input name="Guess" type="text" />
-					<input type="button" class="StageBtn" value="Next" />
-				</div>
-				<div class="NewConfidence">
-					<div class="OldNewQuestion NewConfidenceQuestion"><?= $texts[4] ?></div>
-					<input name="NewConfidence" type="text" class="forceNumeric"/>
-					<input type="button" class="StageBtn" value="Next" />
-				</div>
-			</div>
-		</div>
-		<input class=button  id=FormSubmitButton type=submit value="Submit"   />
+<div class="OldNewArea">
+	<div class="OldNewChoices">
+		<div class="OldNewQuestion OldNewPrompt"><?= $texts[0] ?></div>
+		<div class="OldNewCue"><?= $cue ?></div>
+		<span class="choiceHolder"><input name="OldNewChoice" type="radio" value="Old" />Old</span>
+		<span class="choiceHolder"><input name="OldNewChoice" type="radio" value="New" />New</span>
 	</div>
-
-
-
-	<input class=hidden  id=RT     name=RT       type=text value="RT"       />
-	<input class=hidden  id=RTkey  name=RTkey    type=text value="no press" />
-	<input class=hidden  id=RTlast name=RTlast   type=text value="no press" />
-</form>
+	<div class="PathHolders">
+		<div class="Pathway OldPath">
+			<div class="OldTest">
+				<div class="OldNewQuestion OldQuestion"><?= $texts[1] ?></div>
+				<input name="Response" type="text" />
+				<input type="button" class="StageBtn" value="Next" />
+			</div>
+			<div class="OldConfidence">
+				<div class="OldNewQuestion OldConfidenceQuestion"><?= $texts[2] ?></div>
+				<input name="OldConfidence" type="text" class="forceNumeric" />
+				<input type="button" class="StageBtn" value="Next" />
+			</div>
+		</div>
+		<div class="Pathway NewPath">
+			<div class="NewGuess">
+				<div class="OldNewQuestion NewQuestion"><?= $texts[3] ?></div>
+				<input name="Guess" type="text" />
+				<input type="button" class="StageBtn" value="Next" />
+			</div>
+			<div class="NewConfidence">
+				<div class="OldNewQuestion NewConfidenceQuestion"><?= $texts[4] ?></div>
+				<input name="NewConfidence" type="text" class="forceNumeric"/>
+				<input type="button" class="StageBtn" value="Next" />
+			</div>
+		</div>
+	</div>
+	<input class=button  id=FormSubmitButton type=submit value="Submit"   />
+</div>
 
 <script>
 	COLLECTOR.trial.oldnew = function() {

@@ -342,22 +342,6 @@ pre {
     outline: thin dotted #333;
     outline: 1px auto #129FEA;
 }
-.collector-form input[type=checkbox],.collector-form input[type=radio] {
-    margin: .5em 7px .5em -25px;
-    display: inline-block;
-}
-.collector-form fieldset {
-    border: 1px solid silver;
-    margin: 0 2px;
-    padding: .35em .75em .625em .75em;
-}
-.collector-form label {
-    margin: .3em 0 .3em 25px;
-    display: block;
-}
-.collector-form div.field {
-    padding: .35em .75em .625em .75em;
-}
 .collector-form input,.collector-form select,.collector-form textarea {
     font-family: "Open Sans", Arial, Helvetica, sans-serif;
     font-size: 100%;
@@ -383,7 +367,23 @@ pre {
     background-color: #eaeded;
     color: #666;
 }
-.collector-form option {
+.collector-form-extra input[type=checkbox],.collector-form input[type=radio] {
+    margin: .5em 7px .5em -25px;
+    display: inline-block;
+}
+.collector-form-extra fieldset {
+    border: 1px solid silver;
+    margin: 0 2px;
+    padding: .35em .75em .625em .75em;
+}
+.collector-form-extra label {
+    margin: .3em 0 .3em 25px;
+    display: block;
+}
+.collector-form-extra div.field {
+    padding: .35em .75em .625em .75em;
+}
+.collector-form-extra option {
 	padding-right: 10px;
 }
 .consent {

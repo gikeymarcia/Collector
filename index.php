@@ -31,7 +31,7 @@
 
 	<?php echo $expDescription; ?>
 
-	<form class="collector-form" name="Login" autocomplete="off"  action="<?php echo $codeF;?>login.php"  method="get">
+	<form class="collector-form collector-form-extra" name="Login" autocomplete="off"  action="<?php echo $codeF;?>login.php"  method="get">
 		<?php echo $askForLogin;?>
 		<input name="Username" type="text" value="" autocomplete="off" />
 
