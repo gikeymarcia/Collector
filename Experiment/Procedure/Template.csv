@@ -1,11 +1,11 @@
-Item,Trial Type,Timing,Post 1 Trial Type,Post 1 Timing,Procedure Notes,Shuffle
-2,Study,User,No,-,study trials,OFF
-2,Test,User,Feedback,3,study trials,OFF
-2,Copy,User,JOL,5,study trials,OFF
-3,StudyPic,User,No,-,inputs,OFF
-3,TestPic,User,Feedback,3,inputs,OFF
-3,MCpic,User,JOL,5,inputs,OFF
-4,Passage,User,No,-,new trials,OFF
-5,Audio,User,No,-,Write down everything you can remember that has happened so far in this experiment.,OFF
-0,Instruct,User,No,-,<em>Listen</em> to me <b>or else</b>,OFF
-0,FreeRecall,User,No,-,Tell me everything you remember from this experiment,OFF
+Item,Trial Type,Timing,Post 1 Trial Type,Post 1 Timing,Text,Procedure Notes,Shuffle
+2,Study,User,No,-,,study trials,OFF
+2,Test,User,Feedback,3,,study trials,OFF
+2,Copy,User,JOL,5,,study trials,OFF
+3,StudyPic,User,No,-,,inputs,OFF
+3,TestPic,User,Feedback,3,,inputs,OFF
+3,MCpic,User,JOL,5,,inputs,OFF
+4,Passage,User,No,-,,new trials,OFF
+5,Audio,User,No,-,I'm an audio message!,,OFF
+0,Instruct,User,No,-,<em>Listen</em> to me <b>or else</b>,,OFF
+0,FreeRecall,User,No,-,Tell me everything you remember from this experiment,,OFF

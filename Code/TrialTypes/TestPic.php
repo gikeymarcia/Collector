@@ -5,6 +5,8 @@
 		<?php echo show($cue); ?>
 	</div>
 
+    <div><?php echo $text; ?></div>
+    
     <div class="precache textcenter">
         <input class="testPic" name="Response" id="Response" type="text" value=""         />
         <input class="button"  id="FormSubmitButton" type="submit" value="Submit"         />

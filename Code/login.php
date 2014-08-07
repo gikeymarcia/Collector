@@ -429,6 +429,20 @@
     // load and block shuffle procedure for this condition
     $procedure = GetFromFile($up . $expFiles . $procF . $_SESSION['Condition']['Procedure']);
     $procedure = BlockShuffle($procedure, 'Shuffle');
+    
+    $addColumns = array( 'Text' );
+    foreach ($addColumns as $add) {
+        foreach ($trialTypeColumns as $number => $colName) {                                // check all trial type levels we found
+            if ($number == 0) {
+                $prefix = '';
+            } else {
+                $prefix = 'Post' . ' '  . $number . ' ';
+            }
+            $column = $prefix . $add;
+            addColumn($procedure, $column);                // this will only add columns if they don't already exist; nothing is overwritten
+        }
+    }
+    
     $_SESSION['Procedure'] = $procedure;
     
     // Load entire experiment into $Trials[1-X] where X is the number of trials

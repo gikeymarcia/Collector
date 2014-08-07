@@ -170,24 +170,26 @@
     
     $tdWidth    = 78 / count($buttonGrid[0]);
 ?>
-<style>
-    .mcPicTable         {   margin: auto;   }
-    .mcPicTable td      {   width: <?= $tdWidth ?>%;  vertical-align: middle; text-align: center;   min-width: 170px;   }
-    .mcPicTable .button {   margin: 7% 11%;    }
-</style>
+    <style>
+        .mcPicTable         {   margin: auto;   }
+        .mcPicTable td      {   width: <?= $tdWidth ?>%;  vertical-align: middle; text-align: center;   min-width: 170px;   }
+        .mcPicTable .button {   margin: 7% 11%;    }
+    </style>
 
-<!-- show the image -->
-<div class="pic">
-    <?php echo show($cues[0]); ?>
-</div>
+    <!-- show the image -->
+    <div class="pic">
+        <?php echo show($cues[0]); ?>
+    </div>
 
-<table class="mcPicTable">
-    <?php
-        foreach ($buttonGrid as $row) {
-            echo '<tr><td><div class="button TestMC">' . implode('</div></td><td><div class="button TestMC">', $row) . '</td></tr>';
-        }
-    ?>
-</table>
+    <div><?php echo $text; ?></div>
 
-<input class="hidden" name="Response" id="Response" type="text" value=""         />
-<input class="hidden" id="FormSubmitButton" type="submit" value="Submit"         />
+    <table class="mcPicTable">
+        <?php
+            foreach ($buttonGrid as $row) {
+                echo '<tr><td><div class="button TestMC">' . implode('</div></td><td><div class="button TestMC">', $row) . '</td></tr>';
+            }
+        ?>
+    </table>
+
+    <input class="hidden" name="Response" id="Response" type="text" value=""         />
+    <input class="hidden" id="FormSubmitButton" type="submit" value="Submit"         />

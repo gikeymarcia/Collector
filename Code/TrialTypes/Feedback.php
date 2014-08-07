@@ -4,6 +4,8 @@
 	$firstTrialType = trim(strtolower($currentTrial['Procedure']['Trial Type']));
 	
 	// picture trial version of feedback
+    if ($text === '') { $text = 'The correct answer was:'; }
+    
 	if($firstTrialType == 'studypic' OR $firstTrialType == 'testpic' OR $firstTrialType == 'mcpic') {
 ?>
 
@@ -12,7 +14,7 @@
         <?php echo show($cue); ?>
     </div>
     <!-- show the answer -->
-	<h2>The correct answer was:</h2>
+	<div class="textcenter"><h2><?php echo $text; ?></h2></div>
 	<h1 class="precache textcenter"> <?php echo show($answer); ?></h1>
 	
     <!-- include form to collect RT and advance page -->
@@ -21,7 +23,7 @@
     </div>
 	
 <?php } else { 
-		?><h2>The correct answer was:</h2><?php
+		?><h2><?php echo $text; ?></h2><?php
 		$cues = explode('|', $cue);
 		$answers = explode('|', $answer);
 		foreach( $cues as $i => $thisCue ) {

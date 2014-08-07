@@ -6,6 +6,20 @@
 
 
     #### #### CUSTOM FUNCTIONS #### ####
+    
+    
+    #### add a column (sub-array key) to a 2D-array (like getFromFile() creates)
+    function addColumn(&$array, $column, $value = '', $overwrite = FALSE) {
+        foreach ($array as $i => &$row) {
+            if (!is_array($row)) { continue; } // skip padding
+            if (isset($row[$column]) AND !$overwrite) { continue; }
+            if ($val === '$i') {
+                $row[$column] = (string)$i;     // using a string, to keep the contents similar to what getFromFile() creates
+            } else {
+                $row[$column] = $value;
+            }
+        }
+    }
 
 
     #### Write array to a line of a CSV text file

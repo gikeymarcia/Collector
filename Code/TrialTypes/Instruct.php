@@ -1,7 +1,7 @@
 <?php
 	$compTime = 5;        // time in seconds to use for 'computer' timing
 ?>
-	<div> <?php echo $currentTrial['Procedure']['Procedure Notes']; ?> </div>
+    <div><?php echo $text; ?></div>
 
 	<!-- include form to collect RT and advance page -->
 	<div class="precache textright">

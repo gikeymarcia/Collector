@@ -1,16 +1,16 @@
 <?php
 	$compTime = 60;					// time in seconds to use for 'computer' timing
 
-	$prompt = explode('|', $currentTrial['Procedure']['Procedure Notes']);
+	$prompt = str_replace(array($cue, $answer), array('$cue', '$answer'), $text);      // undo this change, since we are doing something a little non-standard here
+    $prompts = explode('|', $prompt);
 ?>
-    <div class="prompt"><?= trim($prompt[0]) ?></div>
+    <div class="prompt"><?= trim($prompts[0]) ?></div>
 	<?php
-		if (isset($prompt[1])) {
-			$stimPrompt = trim($prompt[1]);
+		if (isset($prompts[1])) {
 			$cues = explode('|', $cue);
 			$answers = explode('|', $answer);
 			foreach ($cues as $i => $thisCue) {
-				echo str_replace(array('$cue', '$answer'), array($thisCue, $answers[$i]), $stimPrompt);
+				echo str_replace(array('$cue', '$answer'), array($thisCue, $answers[$i]), $prompts[1]);
 			}
 		}
 	?>

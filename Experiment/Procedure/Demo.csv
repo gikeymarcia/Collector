@@ -1,14 +1,14 @@
-Item,Trial Type,Timing,Min Time,Post 1 Trial Type,Post 1 Timing,Procedure Notes,Shuffle
-2,Study,User,3,No,User,study trials,OFF
-3,Study,Computer,-,JOL,User,study trials,OFF
-4,Study,7,3,No,User,study trials,OFF
-5,Test,Computer,-,Feedback,User,inputs,OFF
-6,Copy,8,-,No,User,inputs,OFF
-5,JOL,User,4,No,User,inputs,OFF
-11,Passage,User,-,No,User,new trials,OFF
-0,StepOut,20,-,N/A,User,soTetris.php,OFF
-0,FreeRecall,15,3,N/A,User,Write down everything you can remember that has happened so far in this experiment.,OFF
-8,StudyPic,User,-,JOL,User,whatever I want,OFF
-9,TestPic,Computer,-,Feedback,User,whatever I want,OFF
-10,Mcpic,Computer,-,JOL,User,whatever I want,OFF
-14,Audio,User,2,No,User,whatever I want,OFF
+Item,Trial Type,Timing,Min Time,Post 1 Trial Type,Post 1 Timing,Text,Procedure Notes,Shuffle
+2,Study,User,3,No,User,,study trials,OFF
+3,Study,Computer,-,JOL,User,,study trials,OFF
+4,Study,7,3,No,User,,study trials,OFF
+5,Test,Computer,-,Feedback,User,,inputs,OFF
+6,Copy,8,-,No,User,,inputs,OFF
+5,JOL,User,4,No,User,,inputs,OFF
+11,Passage,User,-,No,User,,new trials,OFF
+0,StepOut,20,-,N/A,User,,soTetris.php,OFF
+0,FreeRecall,15,3,N/A,User,Write down everything you can remember that has happened so far in this experiment.,,OFF
+8,StudyPic,User,-,JOL,User,,whatever I want,OFF
+9,TestPic,Computer,-,Feedback,User,,whatever I want,OFF
+10,Mcpic,Computer,-,JOL,User,,whatever I want,OFF
+14,Audio,User,2,No,User,,whatever I want,OFF

@@ -1,7 +1,7 @@
 <?php
 	$compTime = 8;					// time in seconds to use for 'computer' timing
 ?>
-
+    <div><?php echo $text; ?></div>
     <div class="study precache">
         <span class="study-left">  <?php echo $cue; ?>    </span>
         <span class="study-divider">         :            </span>

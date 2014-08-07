@@ -83,7 +83,7 @@
 	}
 	
 	if( !isset( $procedureNotes ) ) $procedureNotes = '';
-	$allTextsAsString = str_ireplace( array('$cue','$answer'), array($cue,$answer), $procedureNotes );
+	$allTextsAsString = $text;
 	$likertTexts = trimExplode( '|', $allTextsAsString );
 	
 	$likertQuestion = array_shift( $likertTexts );
@@ -97,6 +97,8 @@
 	} else {
 		$likertDescrips = $likertTexts;
 	}
+    
+    $text = $likertQuestion . ' | ' . implode(' | ', $likertDescrips);
 	
 	if( !isset( $settings ) ) $settings = '';
 	

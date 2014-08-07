@@ -92,7 +92,7 @@
 		}
 	?>
 	<div class="SubmitContainer">
-		<h3><?= $procedureNotes ?></h3>
+		<h3><?= $text ?></h3>
 		<input class="hidden"  name="LoopCount"            type="text" value="0"        />
 		<input class="hidden"  name="Performance"          type="text" value=""         />
 		<div class="textcenter">

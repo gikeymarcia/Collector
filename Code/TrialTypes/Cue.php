@@ -4,6 +4,7 @@
 	<style>
 		.cueContainer	{	text-align: center;	font-size: 300%;	}
 	</style>
+    <div><?php echo $text; ?></div>
     <div class="cueContainer">
         <div><?= $cue ?></div>
         <input class="button button-trial-advance" id="FormSubmitButton" type="submit" value="Next" />
