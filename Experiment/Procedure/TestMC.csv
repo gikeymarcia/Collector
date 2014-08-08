@@ -3,7 +3,7 @@ Item,Trial Type,Timing,Procedure Notes,Shuffle,Settings
 9,Mcpic,User,ala kornell and bjork 2008,OFF,buttons: $answer
 10,Mcpic,User,ala kornell and bjork 2008,OFF,buttons: $answer
 "8,9,10",Mcpic,User,,OFF,buttons: $answer | shuffle | share A | perRow: 3
-"9,9,10",Mcpic,User,,OFF,buttons: $answer | shuffle | share A | perColumn: 3
+"9,8,10",Mcpic,User,,OFF,buttons: $answer | shuffle | share A | perColumn: 3
 "10,8,9",Mcpic,User,,OFF,buttons: $answer | shuffle | share A | perRow: 2
 8,Mcpic,User,,OFF,shuffle buttons: $answer[8::10] | shuffle buttons: $answer[2::7] | perRow: 3 | share B
 9,Mcpic,User,,OFF,shuffle buttons: $answer[8::10] | shuffle buttons: $answer[2::7] | perRow: 3 | share B | vertical

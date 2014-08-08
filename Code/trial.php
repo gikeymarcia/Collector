@@ -107,7 +107,7 @@
     
     // if there is another item coming up then set it as $nextTrail
     if (array_key_exists($currentPos+1, $_SESSION['Trials'])) {
-        $nextTrail =& $_SESSION['Trials'][$currentPos+1];
+        $nextTrial =& $_SESSION['Trials'][$currentPos+1];
     } else {
         $nextTrial = FALSE;
     }
@@ -227,9 +227,14 @@
 <!-- Pre-Cache Next trial -->
 <div class="precachenext">
     <?php
-    $nextTrial   = $_SESSION['Trials'][$currentPos+1];
-    echo show($nextTrial['Stimuli']['Cue'])     . '<br />';
-    echo show($nextTrial['Stimuli']['Answer'])  . '<br />';
+    if ($nextTrial) {
+        $nextCues    = explode('|', $nextTrial['Stimuli']['Cue']);
+        $nextAnswers = explode('|', $nextTrial['Stimuli']['Answer']);
+        $allNext = array_merge($nextCues, $nextAnswers);
+        foreach ($allNext as $next) {
+            echo show($next);
+        }
+    }
     ?>
 </div>
     
