@@ -470,11 +470,13 @@ input[type="submit"].button-trial-advance {
 /* study trial type */
 .study {
 	font-size:3em;
+    overflow:auto;
 }
 .study-left {
 	float:left;
 	width:48%;
 	text-align:right;
+    min-height:1px;
 }
 .study-divider {
 	float:left;
@@ -485,6 +487,7 @@ input[type="submit"].button-trial-advance {
 	float:left;
 	width:48%;
 	text-align:left;
+    min-height:1px;
 }
 
 /* copy trials */
