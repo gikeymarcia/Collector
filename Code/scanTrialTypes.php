@@ -21,6 +21,7 @@
             
             foreach ($scanDirs as $dir) {
             
+                if (!is_dir($dir)) { continue; }
                 $scan = scandir($dir);
                 
                 foreach ($scan as $entry) {
