@@ -15,9 +15,19 @@
             $category = array_shift($name);
             $name = implode('_', $name);
             
+            if($name === 'new') { var_dump($val); }
+            
             if ($category === 'Stimuli' OR $category === 'Procedure') {
-                if(is_array($val)) { $val = implode('|', $val); }
-                $posts[$category][$name] = htmlspecialchars_decode($val);
+                if (is_array($val)) {
+                    foreach ($val as &$v) {
+                        $v = trim(htmlspecialchars_decode($v));
+                    }
+                    unset($v);
+                    $val = implode('|', $val);
+                } else {
+                    $val = trim(htmlspecialchars_decode($val));
+                }
+                $posts[$category][$name] = $val;
             }
         }
         
@@ -146,26 +156,37 @@
         $trialTypeOptions .= '<option>' . implode('</option><option>', array_keys($trialTypes)) . '</option>';
     }
     
+    $th = '<th contenteditable="true">';
+    $td = '<td contenteditable="true">';
+    
     $stimTable = '<table class="expSettings" id="Stimuli">';
     if (isset($_SESSION['Stimuli'])) {
         $headers = $_SESSION['Stimuli'][2];
         unset($headers['Shuffle']);
-        $stimTable .= '<thead>' . '<tr>' . '<th>' . implode('</th><th>', array_keys($headers)) . '</th>' . '</tr>' . '</thead>';
+        $headers = array_keys($headers);
+        foreach ($headers as &$cell) {
+            $cell = htmlspecialchars($cell);
+        }
+        $stimTable .= '<thead>' . '<tr>' . $th . implode('</th>' . $th, $headers) . '</th>' . '</tr>' . '</thead>';
         $stimTable .= '<tbody>';
         $stimCount = count($_SESSION['Stimuli']);
         for ($i=2; $i<$stimCount; ++$i) {
             $stimRow = $_SESSION['Stimuli'][$i];
             unset($stimRow['Shuffle']);
-            $stimTable .=         '<tr>' . '<td>' . implode('</td><td>', $stimRow)             . '</td>' . '</tr>';
+            foreach ($stimRow as &$cell) {
+                $cell = htmlspecialchars($cell);
+            }
+            $stimTable .=         '<tr>' . $td . implode('</td>' . $td, $stimRow) . '</td>' . '</tr>';
         }
+        unset($cell);
         $stimTable .= '</tbody>';
     } else {
         $stimTable .= '
                     <thead>
-                        <tr><th>Cue</th><th>Answer</th></tr>
+                        <tr>' . $th . 'Cue</th>' . $th . 'Answer</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td></td><td></td></tr>
+                        <tr>' . $td .    '</td>' . $td .       '</td></tr>
                     </tbody>';
     }
     $stimTable .= '</table>';
@@ -175,23 +196,31 @@
         $loaderURL = 'trialLoader.php?ready=1';
         $proc = $_SESSION['Procedure'][2];
         unset($proc['Trial Type'], $proc['Shuffle']);
-        $procTable .= '<thead>' . '<tr>' . '<th>' . implode('</th><th>', array_keys($proc)) . '</th>' . '</tr>' . '</thead>';
-        $procTable .= '<tbody>' . '<tr>' . '<td>' . implode('</td><td>',            $proc)  . '</td>' . '</tr>' . '</tbody>';
+        $head = array_keys($proc);
+        foreach ($proc as &$cell) {
+            $cell = htmlspecialchars($cell);
+        }
+        foreach ($head as &$cell) {
+            $cell = htmlspecialchars($cell);
+        }
+        unset($cell);
+        $procTable .= '<thead>' . '<tr>' . $th . implode('</th>' . $th, $head) . '</th>' . '</tr>' . '</thead>';
+        $procTable .= '<tbody>' . '<tr>' . $td . implode('</td>' . $td, $proc) . '</td>' . '</tr>' . '</tbody>';
     } else {
         $loaderURL = 'trialLoader.php';
         $procTable .= '
                     <thead>
-                        <tr><th>Text</th><th>Settings</th></tr>
+                        <tr>' . $th . 'Text</th>' . $th . 'Settings</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td></td><td></td></tr>
+                        <tr>' . $td .     '</td>' . $td .         '</td></tr>
                     </tbody>';
     }
     $procTable .= '</table>';
     
 ?>
 <style>
-    .cframe-inner   {   vertical-align: top;    }
+    .cframe-inner   {   vertical-align: top;    height: 100%;    }
 
     iframe          {   border: 0px solid #000; width: 100%; border-top-width: 1px; min-height: 100%;  }
     .trialOption    {   text-align: center; margin: 15px;   display: inline-block;   }
@@ -203,25 +232,25 @@
     .blockContainer {   display: inline-block;  text-align: left;   max-width: 100%;    white-space: nowrap;  }
     .newColumnBtn   {   vertical-align: top;    }
     .expSettings    {   text-align: center; }
-    .expSettings td, .expSettings th    {   min-width: 100px;   border: 1px solid #ccc; vertical-align: middle;   }
+    .expSettings td,
+    .expSettings th {   min-width: 100px;   border: 1px solid #ccc; vertical-align: middle; padding: 1px 5px;   }
     .expSettings th {   font-weight: bold;  }
     
     #settingsForm   {   text-align: center; }
 </style>
 <script>
     $(window).load(function(){
-        $(".expSettings").find("td, th").prop("contenteditable", true);
         $(".newColumnBtn").on("click", function(){
             var targetTable = $(this).closest(".blockContainer").find(".expSettings");
-            $(targetTable).find("thead tr").append('<th contenteditable="true"></th>');
-            $(targetTable).find("tbody tr").append('<td contenteditable="true"></td>');
+            $(targetTable).find("thead tr").append('<th contenteditable="true"><br></th>');
+            $(targetTable).find("tbody tr").append('<td contenteditable="true"><br></td>');
         });
         $(".newRowBtn").on("click", function(){
             var targetTable = $(this).closest(".blockContainer").find(".expSettings");
             var columns = $(targetTable).find("th").length;
             var newContent = "<tr>";
             for( var i=0; i<columns; ++i ) {
-                newContent += '<td contenteditable="true"></td>';
+                newContent += '<td contenteditable="true"><br></td>';
             }
             newContent += "</tr>";
             $(targetTable).find("tbody").append(newContent);
@@ -235,9 +264,9 @@
                 category = $(this).attr("id");
                 content = "";
                 for (i=1; i<=cols; ++i) {
-                    name = $(this).find("thead th:nth-child("+i+")").html();
+                    name = $(this).find("thead th:nth-child("+i+")").html().replace(/<br>/g, "").replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
                     for (j=1; j<=rows; ++j) {
-                        content += '<input type="text" name="' + category + '_' + name + '[]" value="' + $(this).find("tbody tr:nth-child("+j+") td:nth-child("+i+")").html() + '" />';
+                        content += '<input type="text" name="' + category + '_' + name + '[]" value="' + $(this).find("tbody tr:nth-child("+j+") td:nth-child("+i+")").html().replace(/<br>/g, "").replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;") + '" />';
                     }
                 }
                 $("#fileData").append(content);
