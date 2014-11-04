@@ -18,6 +18,7 @@
     $audioF     = 'Audio/';
     $stimF      = 'Stimuli/';
     $procF      = 'Procedure/';
+    $custTTF    = 'TrialTypes/';
     
     #Data
     $countF     = 'Counter/';
