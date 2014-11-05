@@ -7,6 +7,7 @@
     $experimentName   = 'Collector';            // Recorded in datafile and can be useful
     $loginCounterName = '1.txt';                // Change to restart condition cycling
     $doDemographics   = FALSE;                  // Can be TRUE or FALSE
+    $doInstructions   = TRUE;
     $loginCounterName = '1.csv';                // Change to restart condition cycling
     $nextExperiment   = FALSE;                  // to link use format 'www.cogfog.com/Generic/' do not forget the www and the ending '/'
 

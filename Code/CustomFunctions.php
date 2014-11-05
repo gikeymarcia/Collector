@@ -13,7 +13,7 @@
         foreach ($array as $i => &$row) {
             if (!is_array($row)) { continue; } // skip padding
             if (isset($row[$column]) AND !$overwrite) { continue; }
-            if ($val === '$i') {
+            if ($value === '$i') {
                 $row[$column] = (string)$i;     // using a string, to keep the contents similar to what getFromFile() creates
             } else {
                 $row[$column] = $value;
@@ -182,6 +182,27 @@
     
     
     
+    function createAliases($array, $overwrite = FALSE) {
+        foreach ($array as $name => $tempVal) {
+            $name = preg_replace('/[A-Z]/', ' \\0', $name);
+            $name = camelCase($name);
+            $name = preg_replace('/[^0-9a-zA-Z_]/', '', $name);
+            if ($name === '') {
+                continue;
+            }
+            if (is_numeric($name[0])) {
+                $name = '_' . $name;
+            }
+            global $$name;
+            if (!isset($$name) OR $overwrite)
+            {
+                $$name = $tempVal;
+            }
+        }
+    }
+    
+    
+    
     #### Make a copy of a trial and remove all values (but not keys) from ['Stimuli'], ['Response'], and ['Procedure']
     ##  If you'd only like to clean specific arrays then pass the names as a single string with commas separating each name
     ##  (e.g., "Response, Procedure")
@@ -218,7 +239,10 @@
             ?>
             <style>
                 .display2dArray                         { border-collapse: collapse; margin: 0 15px 15px 0; }
-                .display2dArray td, .display2dArray th  { border: 1px solid #000; vertical-align: middle; text-align: center; padding: 2px 6px; }
+                .display2dArray td, .display2dArray th  { border: 1px solid #000; vertical-align: middle; text-align: center; padding: 2px 6px; overflow: hidden; }
+                .display2dArray td                      { max-width: 300px; }
+                .display2dArray th                      { max-width: 100px; white-space: normal; }
+                .display2dArray td > div                { max-height: 1.5em; overflow: hidden; }
             </style>
             <?php
         }
@@ -235,22 +259,26 @@
                 '<thead>',
                     '<tr>',
                         '<th></th>',
-                        '<th>',
-                            implode('</th><th>', $columns),
-                        '</th>',
+                        '<th><div>',
+                            implode('</div></th><th><div>', $columns),
+                        '</div></th>',
                     '</tr>',
                 '</thead>',
                 '<tbody>';
         $columns = array_flip($columns);
         foreach ($arr as $i => $row) {
             $row = sortArrayLikeArray($row, $columns);
+            foreach ($row as &$field) {
+                $field = htmlspecialchars($field);
+            }
+            unset($field);
             echo '<tr>',
                         '<td>',
                             $i,
                         '</td>',
-                        '<td>',
-                            implode('</td><td>', $row),
-                        '</td>',
+                        '<td><div>',
+                            implode('</div></td><td><div>', $row),
+                        '</div></td>',
                     '</tr>';
         }
         echo '</tbody>',
@@ -316,18 +344,7 @@
             }
         }
         
-        foreach ($output as $column => $value) {
-            $name = $column;
-            if (is_numeric($column[0])) {
-                $name = '_' . $column;
-            }
-            $name = preg_replace('/[A-Z]/', ' \\0', $column);
-            $name = camelCase($name);
-            $name = preg_replace('/[^0-9a-zA-Z_]/', '', $name);
-            global $$name;
-            if (isset($$name)) { continue; }    // aliases won't overwrite existing variables
-            $$name = $value;
-        }
+        createAliases($output);
         return $output;
     }
     
