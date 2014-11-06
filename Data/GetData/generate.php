@@ -10,6 +10,16 @@
 	}
 	$root = '../../';
 	require 'scan.php';
+    
+    $templateDirectory = 'SearchTemplates/';
+    
+    if (isset($_POST['searchTemplate']))
+    {
+        if (!is_dir($templateDirectory)) {
+            mkdir($templateDirectory);
+        }
+        file_put_contents($templateDirectory . $_POST['searchTemplate'].'.JSON', json_encode($_POST, JSON_PRETTY_PRINT));
+    }
 	
 	$getExp = isset( $_POST['Experiment'] );
 	
