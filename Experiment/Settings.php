@@ -31,6 +31,8 @@
 
     // index.php (Starting Page)
     $showConditionSelector = TRUE;              // Show (TRUE) or hide (FALSE) the condition selector at login?
+    $useConditionNames     = TRUE;              // Use the entry under "Column Description" rather than "Number" in the condition selector
+    $showConditionInfo     = TRUE;              // Show the stimuli and procedure file for each condition when hovering over the options
     $welcome        = 'Welcome to the experiment!';
     $expDescription = '<p> This experiment will run for approximately 25 minutes.  Your goal is to learn some information</p>';
     $askForLogin    = '<p> Please enter your ucla email address</p>';
@@ -47,5 +49,5 @@
     $experimenterEmail = 'youremail@yourdomain.com';
     
     // getdata
-    $getdataPassword = '';                        // to enable getdata, enter a string other than ''
+    $getdataPassword = 'dyltd';                        // to enable getdata, enter a string other than ''
 ?>

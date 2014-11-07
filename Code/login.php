@@ -44,8 +44,6 @@
         $dataSubFolder = $debugF;                                               // write data to separate folder
         $path = $up . $dataF . $dataSubFolder . $extraDataF;
         $statusBeginCompleteFileName = $path . $statusBeginFileName . $outExt;
-    } else {
-        error_reporting(0);
     }
     
     
@@ -199,7 +197,7 @@
     $temp = GetFromFile($stimPath, FALSE);
     $errors = keyCheck($temp, 'Cue'    ,   $errors, $_SESSION['Condition']['Stimuli']);
     $errors = keyCheck($temp, 'Answer' ,   $errors, $_SESSION['Condition']['Stimuli']);
-    $errors = keyCheck($temp, 'Shuffle',   $errors, $_SESSION['Condition']['Stimuli']);
+    // $errors = keyCheck($temp, 'Shuffle',   $errors, $_SESSION['Condition']['Stimuli']);
     
     // does this condition point to a valid procedure file?
     if (file_exists($procPath) == FALSE) {
@@ -211,7 +209,7 @@
     $errors = keyCheck($temp, 'Item'       ,   $errors, $_SESSION['Condition']['Procedure']);
     $errors = keyCheck($temp, 'Trial Type' ,   $errors, $_SESSION['Condition']['Procedure']);
     $errors = keyCheck($temp, 'Timing'     ,   $errors, $_SESSION['Condition']['Procedure']);
-    $errors = keyCheck($temp, 'Shuffle'    ,   $errors, $_SESSION['Condition']['Procedure']);
+    // $errors = keyCheck($temp, 'Shuffle'    ,   $errors, $_SESSION['Condition']['Procedure']);
     unset($temp);           // clear $temp
     
     
@@ -404,8 +402,6 @@
     
     // load and block shuffle procedure for this condition
     $procedure = GetFromFile($up . $expFiles . $procF . $_SESSION['Condition']['Procedure']);
-    $procedure = BlockShuffle($procedure, 'Shuffle');
-    $procedure = shuffle2dArray($procedure, $stopAtLogin);
     
     $addColumns = array( 'Text' );
     foreach ($addColumns as $add) {
@@ -413,12 +409,15 @@
             if ($number == 0) {
                 $prefix = '';
             } else {
-                $prefix = 'Post' . ' '  . $number . ' ';
+                $prefix = 'Post' . ' ' . $number . ' ';
             }
             $column = $prefix . $add;
             addColumn($procedure, $column);                // this will only add columns if they don't already exist; nothing is overwritten
         }
     }
+    
+    $procedure = BlockShuffle($procedure, 'Shuffle');
+    $procedure = shuffle2dArray($procedure, $stopAtLogin);
     
     $_SESSION['Procedure'] = $procedure;
     

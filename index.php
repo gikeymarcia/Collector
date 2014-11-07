@@ -48,7 +48,9 @@
 
 				// output all possible condition choices
 				for ($i=2; $i<count($tempCond); $i++) {
-					echo '<option value="' . $tempCond[$i]['Number'] . '">' . $tempCond[$i]['Number'] . '</option>';
+                    $name  = $useConditionNames ? $tempCond[$i]['Condition Description'] : $tempCond[$i]['Number'];
+                    $title = $showConditionInfo ? $tempCond[$i]['Stimuli'] . ' - ' . $tempCond[$i]['Procedure'] : '';
+					echo '<option value="' . $tempCond[$i]['Number'] . '" title="' . $title . '">' . $name . '</option>';
 				}
 				?>
 			</select>

@@ -40,7 +40,7 @@
                             }
                         }
                         if (isset($temp['trial'])) {
-                            if (!isset($temp['scoring'])) { $temp['scoring'] = $_rootF . $codeF . 'scoring.php'; }
+                            if (!isset($temp['scoring'])) { $temp['scoring'] = $_rootF . $codeF . $scoring; }
                             $trialTypes[$type] = $temp;
                         }
                         
@@ -48,7 +48,7 @@
                         $type = strtolower(substr($entry, 0, -4));
                         if (isset($trialTypes[$type])) { continue; }
                         $trialTypes[$type]['trial']   = $dir . $entry;
-                        $trialTypes[$type]['scoring'] = $_rootF . $codeF . 'scoring.php';
+                        $trialTypes[$type]['scoring'] = $_rootF . $codeF . $scoring;
                     }
                 }
             

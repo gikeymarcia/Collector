@@ -9,10 +9,17 @@
     
     
     #### add a column (sub-array key) to a 2D-array (like getFromFile() creates)
-    function addColumn(&$array, $column, $value = '', $overwrite = FALSE) {
+    function addColumn(&$array, $column, $value = '', $overwrite = FALSE, $caseInsensitive = TRUE) {
+        $lowerCol = strtolower($column);
         foreach ($array as $i => &$row) {
             if (!is_array($row)) { continue; } // skip padding
-            if (isset($row[$column]) AND !$overwrite) { continue; }
+            if (!$overwrite) {
+                if (isset($row[$column])) { continue; }
+                if ($caseInsensitive) {
+                    $tempRow = array_change_key_case($row, CASE_LOWER);
+                    if (isset($tempRow[$lowerCol])) { continue; }         // some issues were being caused by 'text' as a lowercase column.  This should avoid creating an empty 'Text' column along side it
+                }
+            }
             if ($value === '$i') {
                 $row[$column] = (string)$i;     // using a string, to keep the contents similar to what getFromFile() creates
             } else {
@@ -123,7 +130,7 @@
             return $outputArray;
         }
         // Use this logic when second order shuffling is NOT present
-        else {
+        elseif (array_key_exists($groupingFactor, $input[2])) {                     // if they don't have a shuffle column, we shouldn't try to shuffle things
             /*  load items into array that groups as blocks
                 then as items within blocks. e.g., $temp[$blockNum][#]
              */ 
@@ -558,20 +565,22 @@
         $findJPG     = strpos($stringLower, '.jpg');                // look for file extensions in the input
         $findGIF     = strpos($stringLower, '.gif');
         $findPNG     = strpos($stringLower, '.png');
+        $findBMP     = strpos($stringLower, '.bmp');
         $findMP3     = strpos($stringLower, '.mp3');
         $findOGG     = strpos($stringLower, '.ogg');
         $findWAV     = strpos($stringLower, '.wav');
 
 
-        if (($findGIF == TRUE)
+        if (   ($findGIF == TRUE)
             OR ($findJPG == TRUE)
             OR ($findPNG == TRUE)
+            OR ($findBMP == TRUE)
         ) {
             // if I found an image file extension, add html image tags
             $string = '<img src="' . $fileName . '">';
-        } elseif (($findMP3 == TRUE)
-                   OR ($findOGG == TRUE)
-                   OR ($findWAV == TRUE)
+        } elseif (   ($findMP3 == TRUE)
+                  OR ($findOGG == TRUE)
+                  OR ($findWAV == TRUE)
        ) {
             // if I found an audio file extension, add pre-cache code
             $string = '<source src="' . $fileName . '"/>';

@@ -130,6 +130,10 @@
                 $_SESSION['Trials'][$i]['Response']  = array();
             }
             
+            $_SESSION['Trials'][$i+1] = cleanTrial($_SESSION['Trials'][$i]);
+            $_SESSION['Trials'][$i+1]['Procedure']['Item'] = 'ExperimentFinished';
+            
+            
             
             #### Finished pseudo-login
             
