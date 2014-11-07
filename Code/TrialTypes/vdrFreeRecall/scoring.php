@@ -216,13 +216,20 @@
 			$unmatchedResp[] = $resp;
 		}
 	}
-	$siChance = $data['possibleVal']/count($answers)*$data['lenientAcc'];
-	$siBest = 0;
-	sort($value);
-	for( $i=0; $i<$data['lenientAcc']; ++$i ) {
-		$siBest += array_pop($value);
-	}
-	$data['Selectivity_Index'] = ($data['lenientVal']-$siChance)/($siBest-$siChance);
+    $siChance = $data['possibleVal']/count($answers)*$data['lenientAcc'];
+    $siBest = 0;
+    sort($value);
+    for( $i=0; $i<$data['lenientAcc']; ++$i ) {
+        $siBest += array_pop($value);
+    }
+    if ($siBest !== $siChance)
+    {
+        $data['Selectivity_Index'] = ($data['lenientVal']-$siChance)/($siBest-$siChance);
+    }
+    else
+    {
+        $data['Selectivity_Index'] = '';
+    }
 	$data['Accuracy'] = $data['lenientAcc']/count($answers);
 	$data['unmatchedResp'] 	= implode( '|', $unmatchedResp 	);
 	$data['Errors'] 		= implode( '|', $differences 	);	//and we can see how far off they were (so if we set leniency = 2, we can still which were 0, 1, or 2 off)

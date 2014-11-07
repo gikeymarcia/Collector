@@ -108,11 +108,44 @@
         $item = $currentTrial['Procedure']['Item'];
     }
     
-    // skip to done.php if some has logged in who has already completed all parts of the experiment
-    if ($item == 'ExperimentFinished') {
-        header('Location: done.php');
-        exit;
+    if ($currentPost < 1) {
+        $prefix = '';
+    } else {
+        $prefix = 'Post' . ' '  . $currentPost . ' ';
     }
+    
+    if (isset($currentTrial['Procedure'][$prefix . 'Text'])) {
+        $text =& $currentTrial['Procedure'][$prefix . 'Text'];
+        $text =  str_ireplace(array('$cue', '$answer'), array($cue, $answer), $text);
+    }
+    
+    // if there is another item coming up then set it as $nextTrail
+    if (array_key_exists($currentPos+1, $_SESSION['Trials'])) {
+        $nextTrial =& $_SESSION['Trials'][$currentPos+1];
+    } else {
+        $nextTrial = FALSE;
+    }
+    
+    // variables I'll need and/or set in trialTiming() function
+    $timingReported = strtolower(trim( $timing ));
+    $formClass    = '';
+    $time        = '';
+    if( !isset( $minTime ) ) {
+        $minTime    = 'not set';
+    }
+
+    #### Presenting different trial types ####
+    $expFiles  = $up.$expFiles;                            // setting relative path to experiments folder for trials launched from this page
+    $postTo    = 'trial.php';
+    $trialFail = FALSE;                                    // this will be used to show diagnostic information when a specific trial isn't working
+    $trialFile = $_SESSION['Trial Types'][ $trialType ]['trial'];
+    
+    
+    $title = 'Trial';
+    $_dataController = 'trial';
+    $_dataAction = $trialType;
+    
+    ob_start();
     
     
     /*
@@ -163,44 +196,11 @@
         exit;
     }
     
-    if ($currentPost < 1) {
-        $prefix = '';
-    } else {
-        $prefix = 'Post' . ' '  . $currentPost . ' ';
+    // skip to done.php if some has logged in who has already completed all parts of the experiment
+    if ($item == 'ExperimentFinished') {
+        header('Location: done.php');
+        exit;
     }
-    
-    if (isset($currentTrial['Procedure'][$prefix . 'Text'])) {
-        $text =& $currentTrial['Procedure'][$prefix . 'Text'];
-        $text =  str_ireplace(array('$cue', '$answer'), array($cue, $answer), $text);
-    }
-    
-    // if there is another item coming up then set it as $nextTrail
-    if (array_key_exists($currentPos+1, $_SESSION['Trials'])) {
-        $nextTrial =& $_SESSION['Trials'][$currentPos+1];
-    } else {
-        $nextTrial = FALSE;
-    }
-    
-    // variables I'll need and/or set in trialTiming() function
-    $timingReported = strtolower(trim( $timing ));
-    $formClass    = '';
-    $time        = '';
-    if( !isset( $minTime ) ) {
-        $minTime    = 'not set';
-    }
-
-    #### Presenting different trial types ####
-    $expFiles  = $up.$expFiles;                            // setting relative path to experiments folder for trials launched from this page
-    $postTo    = 'trial.php';
-    $trialFail = FALSE;                                    // this will be used to show diagnostic information when a specific trial isn't working
-    $trialFile = $_SESSION['Trial Types'][ $trialType ]['trial'];
-    
-    
-    $title = 'Trial';
-    $_dataController = 'trial';
-    $_dataAction = $trialType;
-    
-    ob_start();
     
     require $_codeF . 'Header.php';
     

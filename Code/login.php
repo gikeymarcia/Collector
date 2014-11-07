@@ -326,6 +326,7 @@
             }
         }
     }
+    
     unset($procedure);
     ##### END Error Checking Code #################################################
     
@@ -363,6 +364,7 @@
     $lev0keys = array();
     $postKeys = array();
     foreach ($trialTypes as $thisTrialType) {                               // for all trial types in use
+        if (!isset($thisTrialType['levels'])) { continue; }                 // if levels aren't set, it appears that this trial type isn't used in this experiment
         foreach ($thisTrialType['levels'] as $lvl => $null) {                   // look at all levels each is used at
             if ($lvl === 0) {                                                       // add needed keys for level 0, non-post, use
                 $lev0keys += $scoringFiles[ $thisTrialType['scoring'] ];
@@ -373,8 +375,10 @@
                 }
             } else {
                 $postKeys += AddPrefixToArray('post' . $lvl . '_', $scoringFiles[ $thisTrialType['scoring'] ]);
-                foreach ($thisTrialType['requiredColumns'] as $requiredColumn) {
-                    $errors = keyCheck($proc, 'Post' . ' '  . $lvl . ' ' . $requiredColumn, $errors, $_SESSION['Condition']['Procedure']);
+                if (isset($thisTrialType['requiredColumns'])) {
+                    foreach ($thisTrialType['requiredColumns'] as $requiredColumn) {
+                        $errors = keyCheck($proc, 'Post' . ' '  . $lvl . ' ' . $requiredColumn, $errors, $_SESSION['Condition']['Procedure']);
+                    }
                 }
             }
         }
