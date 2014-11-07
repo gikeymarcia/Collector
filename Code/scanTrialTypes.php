@@ -50,6 +50,7 @@
                         $trialTypes[$type]['trial']   = $dir . $entry;
                         $trialTypes[$type]['scoring'] = $_rootF . $codeF . $scoring;
                     }
+            
                 }
             
             }
