@@ -69,6 +69,8 @@ var COLLECTOR = {
 		function instance() {
 			var timeRemaining = goal - Date.now(),
 				timeFormatted;
+            
+            timeRemaining = Math.min(timeRemaining, 10000);
 
 			// stop timer at the allotted time
   			if (timeRemaining <= cap) {
@@ -124,6 +126,12 @@ var COLLECTOR = {
 			// intercept FormSubmitButton click
 			$("#FormSubmitButton").click(function(){			// when 'Done' / 'Submit' is pressed
 				$("#RT").val( COLLECTOR.getRT() );				// record RT
+                
+                if (typeof COLLECTOR.submitFunction === 'function')
+                {
+                    COLLECTOR.submitFunction();
+                }
+                
 				$(".DuringTrial").addClass("precache");			// hide content
 				$("form").submit();								// submit form
 			});
