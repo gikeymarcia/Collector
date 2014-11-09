@@ -426,6 +426,13 @@
                         $templateInfo   = json_decode(file_get_contents($templateDirectory . $template), TRUE);
                         $dataCategories = array('Conditions', 'Session', 'Trial_Types', 'Timing', 'Columns', 'Demographics_Columns', 'Status_Begin_Columns', 'Status_End_Columns', 'Final_Questions_Columns');
                         $dataFiles      = array('Demographics', 'Experiment', 'Final_Questions', 'Status_Begin', 'Status_End', 'Instructions');
+						
+						if (!is_array($templateInfo)) { continue; }
+						
+						if (!isset($templateInfo['IDs']))
+						{
+							$templateInfo['IDs'] = array();
+						}
                         
                         ?>
             

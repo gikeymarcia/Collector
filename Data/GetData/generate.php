@@ -18,7 +18,7 @@
         if (!is_dir($templateDirectory)) {
             mkdir($templateDirectory);
         }
-        file_put_contents($templateDirectory . $_POST['searchTemplate'].'.JSON', json_encode($_POST, JSON_PRETTY_PRINT));
+        file_put_contents($templateDirectory . $_POST['searchTemplate'].'.JSON', json_encode($_POST));
     }
 	
 	$getExp = isset( $_POST['Experiment'] );
