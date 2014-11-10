@@ -1,13 +1,16 @@
 <?php
     /**
-     * I'm a custom modification of the normal instruct trial type!
-     *
-     * As long as I exist, the "instruct" trial type in the code folder will be overwritten with this trial type
-     * I am going to make the instructions appear 10% bigger, so that they are easier to read.
+     * This is an example of a trial type in the Experiment/ folder overwriting
+     * the trial type found in the Code/ folder.  Any changes to this Instruct
+     * will be used throughout the program, so if you make any modifications,
+     * such as increasing font-size, you can still download the latest Code/
+     * folder of the Collector without worrying about accidentally losing
+     * your changes.
      */
+     
 	$compTime = 5;        // time in seconds to use for 'computer' timing
 ?>
-    <div style="font-size: 110%;"><?php echo $text; ?></div>
+    <div><?php echo $text; ?></div>
 
 	<!-- include form to collect RT and advance page -->
 	<div class="precache textright">

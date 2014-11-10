@@ -2,10 +2,14 @@
     require 'initiateCollector.php';
     
     $trialTypes = require 'scanTrialTypes.php';
+    $stimFileLoc = $_rootF . $expFiles . $stimF;
     
     if (!isset($_SESSION['Trial Tester']) OR isset($_POST['resetSession'])) {
         $_SESSION = array();
         $_SESSION['Trial Tester'] = TRUE;
+    } elseif (isset($_POST['LoadStimFile'])) {
+        $_SESSION['Stimuli'] = GetFromFile($stimFileLoc . $_POST['StimuliFile']);
+        $redirect = TRUE;
     } elseif (isset($_POST['Procedure_Trial_Type'])) {
     
         $redirect = TRUE;
@@ -15,15 +19,13 @@
             $category = array_shift($name);
             $name = implode('_', $name);
             
-            if($name === 'new') { var_dump($val); }
-            
             if ($category === 'Stimuli' OR $category === 'Procedure') {
                 if (is_array($val)) {
                     foreach ($val as &$v) {
                         $v = trim(htmlspecialchars_decode($v));
                     }
                     unset($v);
-                    $val = implode('|', $val);
+                    $val = implode('|~|', $val);
                 } else {
                     $val = trim(htmlspecialchars_decode($val));
                 }
@@ -58,7 +60,7 @@
                 $_SESSION[$category] = array(0 => 0, 1 => 0);
                 foreach ($var as $column => $val) {
                     $column = strtr($column, '_', ' ');
-                    $values = explode('|', $val);
+                    $values = explode('|~|', $val);
                     foreach ($values as $i => $v) {
                         $_SESSION[$category][$i+2][$column] = $v;
                     }
@@ -128,6 +130,10 @@
                 $_SESSION['Trials'][$i]['Response']  = array();
             }
             
+            $_SESSION['Trials'][$i+1] = cleanTrial($_SESSION['Trials'][$i]);
+            $_SESSION['Trials'][$i+1]['Procedure']['Item'] = 'ExperimentFinished';
+            
+            
             
             #### Finished pseudo-login
             
@@ -141,6 +147,26 @@
     }
     
     include 'Header.php';
+    
+    $stimuliFiles = scandir($stimFileLoc);
+    
+    foreach ($stimuliFiles as $i => $fileName)
+    {
+        if (!is_file($stimFileLoc . $fileName))
+        {
+            unset($stimuliFiles[$i]);
+            continue;
+        }
+        
+        $suffix = strtolower(substr($fileName, -4));
+        
+        if ($suffix !== '.csv' AND $suffix !== '.txt')
+        {
+            unset($stimuliFiles[$i]);
+        }
+    }
+    
+    $stimuliFiles = '<select name="StimuliFile"><option hidden disabled selected></option><option>' . implode('</option><option>', $stimuliFiles) . '</option></select>';
     
     $trialTypeOptions = '';
     if (isset($_SESSION['Procedure'])) {
@@ -156,8 +182,8 @@
         $trialTypeOptions .= '<option>' . implode('</option><option>', array_keys($trialTypes)) . '</option>';
     }
     
-    $th = '<th contenteditable="true">';
-    $td = '<td contenteditable="true">';
+    $th = '<th contenteditable="true" class="fixPaste">';
+    $td = '<td contenteditable="true" class="fixPaste">';
     
     $stimTable = '<table class="expSettings" id="Stimuli">';
     if (isset($_SESSION['Stimuli'])) {
@@ -227,33 +253,47 @@
     #allContain     {   height: 100%;   }
     
     .expFile        {   width: 49%; display: inline-block;   padding: 0px 100px 0 0; vertical-align: top;  }
+    .fileTitle      {   text-align: center; }
+    .fileTitle > h3 {   display: inline;    }
     
-    .tableContainer {   display: inline-block;   max-width: 100%;    overflow: auto;  }
+    .tableContainer {   display: inline-block;   max-width: 100%;    overflow: auto;    max-height: 600px;  }
     .blockContainer {   display: inline-block;  text-align: left;   max-width: 100%;    white-space: nowrap;  }
     .newColumnBtn   {   vertical-align: top;    }
     .expSettings    {   text-align: center; }
     .expSettings td,
-    .expSettings th {   min-width: 100px;   border: 1px solid #ccc; vertical-align: middle; padding: 1px 5px;   }
+    .expSettings th {   min-width: 100px;   border: 1px solid #ccc; vertical-align: middle; padding: 1px 5px; white-space: pre; max-width: 500px;   }
     .expSettings th {   font-weight: bold;  }
     
     #settingsForm   {   text-align: center; }
 </style>
 <script>
+    function fixPaste()
+    {
+        $('.fixPaste').on('paste',function(e) {
+            e.preventDefault();
+            var text = (e.originalEvent || e).clipboardData.getData('text/plain') || prompt('Paste something..');
+            document.execCommand('insertText', false, text);
+        }).removeClass("fixPaste");;
+    }
+    
     $(window).load(function(){
+        fixPaste();
         $(".newColumnBtn").on("click", function(){
             var targetTable = $(this).closest(".blockContainer").find(".expSettings");
-            $(targetTable).find("thead tr").append('<th contenteditable="true"><br></th>');
-            $(targetTable).find("tbody tr").append('<td contenteditable="true"><br></td>');
+            $(targetTable).find("thead tr").append('<th contenteditable="true" class="fixPaste"><br></th>');
+            $(targetTable).find("tbody tr").append('<td contenteditable="true" class="fixPaste"><br></td>');
+            fixPaste();
         });
         $(".newRowBtn").on("click", function(){
             var targetTable = $(this).closest(".blockContainer").find(".expSettings");
             var columns = $(targetTable).find("th").length;
             var newContent = "<tr>";
             for( var i=0; i<columns; ++i ) {
-                newContent += '<td contenteditable="true"><br></td>';
+                newContent += '<td contenteditable="true" class="fixPaste"><br></td>';
             }
             newContent += "</tr>";
             $(targetTable).find("tbody").append(newContent);
+            fixPaste();
         });
         $("input[name='submitSettings']").on("click", function(){
             if ($("select[name='Procedure_Trial_Type']").val() === null) { return false; }
@@ -266,7 +306,7 @@
                 for (i=1; i<=cols; ++i) {
                     name = $(this).find("thead th:nth-child("+i+")").html().replace(/<br>/g, "").replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
                     for (j=1; j<=rows; ++j) {
-                        content += '<input type="text" name="' + category + '_' + name + '[]" value="' + $(this).find("tbody tr:nth-child("+j+") td:nth-child("+i+")").html().replace(/<br>/g, "").replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;") + '" />';
+                        content += '<input type="text" name="' + category + '_' + name + '[]" value="' + $(this).find("tbody tr:nth-child("+j+") td:nth-child("+i+")").html().replace(/&nbsp;/g, " ").replace(/<br>/g, "").replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;") + '" />';
                     }
                 }
                 $("#fileData").append(content);
@@ -276,6 +316,15 @@
         
         $("input[name='reset']").on("click", function(){
             $("#fileData").append('<input type="text" name="resetSession" />');
+            $("#settingsForm").submit();
+        });
+        
+        $("select[name='StimuliFile']").on("change", function(){
+            $("input[name='LoadStimuli']").prop("disabled", false);
+        });
+        
+        $("input[name='LoadStimuli']").on("click", function(){
+            $("#fileData").append('<input type="text" name="LoadStimFile" />');
             $("#settingsForm").submit();
         });
     });
@@ -290,7 +339,7 @@
             </select>
         </div>
         <div class="expFile">
-            <h3>Stimuli File</h3>
+            <div class="fileTitle"><h3>Stimuli File</h3> <?= $stimuliFiles ?> <input type="button" name="LoadStimuli" value="Load Stimuli" disabled="disabled"/></div>
             <div class="blockContainer">
                 <div class="tableContainer">
                     <?= $stimTable ?>

@@ -12,6 +12,12 @@
     // write user demographics data to demographics file
     arrayToLine($data, $demoPath);
     
-    header("Location: instructions.php");
+    if ($doInstructions) {
+        $next = 'instructions.php';
+    } else {
+        $next = 'trial.php';
+    }
+    
+    header("Location: $next");
     exit;
 ?>

@@ -44,8 +44,6 @@
         $dataSubFolder = $debugF;                                               // write data to separate folder
         $path = $up . $dataF . $dataSubFolder . $extraDataF;
         $statusBeginCompleteFileName = $path . $statusBeginFileName . $outExt;
-    } else {
-        error_reporting(0);
     }
     
     
@@ -133,6 +131,7 @@
         $errors['Details'][] = 'No "' . $conditionsFileName . '" found';
     }
     // does the condition file have the required headers?
+    $Conditions = GetFromFile($up . $expFiles . $conditionsFileName,  FALSE);   // Loading conditions info
     $errors = keyCheck($Conditions, 'Number'    , $errors, $conditionsFileName);
     $errors = keyCheck($Conditions, 'Stimuli'   , $errors, $conditionsFileName);
     $errors = keyCheck($Conditions, 'Procedure' , $errors, $conditionsFileName);
@@ -198,7 +197,7 @@
     $temp = GetFromFile($stimPath, FALSE);
     $errors = keyCheck($temp, 'Cue'    ,   $errors, $_SESSION['Condition']['Stimuli']);
     $errors = keyCheck($temp, 'Answer' ,   $errors, $_SESSION['Condition']['Stimuli']);
-    $errors = keyCheck($temp, 'Shuffle',   $errors, $_SESSION['Condition']['Stimuli']);
+    // $errors = keyCheck($temp, 'Shuffle',   $errors, $_SESSION['Condition']['Stimuli']);
     
     // does this condition point to a valid procedure file?
     if (file_exists($procPath) == FALSE) {
@@ -210,7 +209,7 @@
     $errors = keyCheck($temp, 'Item'       ,   $errors, $_SESSION['Condition']['Procedure']);
     $errors = keyCheck($temp, 'Trial Type' ,   $errors, $_SESSION['Condition']['Procedure']);
     $errors = keyCheck($temp, 'Timing'     ,   $errors, $_SESSION['Condition']['Procedure']);
-    $errors = keyCheck($temp, 'Shuffle'    ,   $errors, $_SESSION['Condition']['Procedure']);
+    // $errors = keyCheck($temp, 'Shuffle'    ,   $errors, $_SESSION['Condition']['Procedure']);
     unset($temp);           // clear $temp
     
     
@@ -304,7 +303,7 @@
     
     #### Check that we can find files for all trials in use (also finds custom scoring files)
     $procedure  = GetFromFile($up . $expFiles . $procF . $_SESSION['Condition']['Procedure']);
-    $trialTypes = array();
+    $trialTypes = include 'scanTrialTypes.php';                             // look through the trial type folders in the Experiment/ and the Code/ folder, return an array
     $notTrials  = array('off'   => TRUE,                                    // if the 'Trial Type' value is one of these then it isn't a trial
                         'no'    => TRUE,
                         ''      => TRUE,
@@ -318,43 +317,16 @@
                 continue;
             }
             $trialTypes[$thisTrialType]['levels'][$postNumber] = NULL;      // make note what levels each trial type are used at (e.g., Study is a regular AND a Post 1 trial)
-            if (isset($trialTypes[$thisTrialType]['trial'])) {              // no need to find the trial type file twice
-                continue;
-            }
-            $fileName = fileExists($trialF . $thisTrialType . '.php' );     // Find the folder OR .php file for this trial type
-            // give an error if we couldn't find the trial file (or a folder for the trial)
-            if ($fileName === FALSE ) {                                     
+            if (!isset($trialTypes[$thisTrialType])) {
                 $procName = pathinfo($up . $expFiles . $procF . $_SESSION['Condition']['Procedure'], PATHINFO_FILENAME);
                 $errors['Count']++;
                 $errors['Details'][] = 'The trial type ' . $row[$column] . ' for row ' . $i . ' in the procedure file '
-                                     . $procName . ' has no file or folder in the "' . $codeF . $trialF . '" folder.';
-            }
-            // if this trial is a folder
-            if (is_dir($fileName)) {
-                $display = fileExists($fileName . '/trial.php', TRUE, FALSE);       // trial file for directory trials
-                // give an error if no trial.php file is in the folder
-                if ($display === FALSE) {
-                    $procName = pathinfo($up . $expFiles . $procF . $_SESSION['Condition']['Procedure'], PATHINFO_FILENAME);
-                    $errors['Count']++;
-                    $errors['Details'][] = 'The trial type ' . $row[$column] . ' for row ' . $i . ' in the procedure file '
-                                         . $procName . ' has a folder in the "' . $codeF . $trialF . '" folder, '
-                                         . 'but there is no "trial.php" file within that folder.';
-                } else {
-                    // find custom scoring file in the folder
-                    $scoringFile = fileExists($fileName . '/scoring.php', FALSE, FALSE);
-                    if ($scoringFile === FALSE) {
-                        $scoringFile = $scoring;                                            // use default scoring if we can't find custom scoring
-                    }
-                    $trialTypes[$thisTrialType]['trial']   = $display;
-                    $trialTypes[$thisTrialType]['scoring'] = $scoringFile;
-                }
-            } else {
-                // if this trial is not a folder then use the .php file for display and default scoring scheme
-                $trialTypes[$thisTrialType]['trial']   = $fileName;
-                $trialTypes[$thisTrialType]['scoring'] = $scoring;
+                                     . $procName . ' has no file or folder in either the "' . $expFiles . $custTTF . '" folder '
+                                     . 'or the "' . $codeF . $trialF . '" folder.';
             }
         }
     }
+    
     unset($procedure);
     ##### END Error Checking Code #################################################
     
@@ -388,19 +360,25 @@
     }
     unset($keys);
     
+    
     $lev0keys = array();
     $postKeys = array();
     foreach ($trialTypes as $thisTrialType) {                               // for all trial types in use
+        if (!isset($thisTrialType['levels'])) { continue; }                 // if levels aren't set, it appears that this trial type isn't used in this experiment
         foreach ($thisTrialType['levels'] as $lvl => $null) {                   // look at all levels each is used at
             if ($lvl === 0) {                                                       // add needed keys for level 0, non-post, use
                 $lev0keys += $scoringFiles[ $thisTrialType['scoring'] ];
-                foreach ($thisTrialType['requiredColumns'] as $requiredColumn) {
-                    $errors = keyCheck($proc, $requiredColumn, $errors, $_SESSION['Condition']['Procedure']);
+                if (isset($thisTrialType['requiredColumns'])) {
+                    foreach ($thisTrialType['requiredColumns'] as $requiredColumn) {
+                        $errors = keyCheck($proc, $requiredColumn, $errors, $_SESSION['Condition']['Procedure']);
+                    }
                 }
             } else {
                 $postKeys += AddPrefixToArray('post' . $lvl . '_', $scoringFiles[ $thisTrialType['scoring'] ]);
-                foreach ($thisTrialType['requiredColumns'] as $requiredColumn) {
-                    $errors = keyCheck($proc, 'Post' . ' '  . $lvl . ' ' . $requiredColumn, $errors, $_SESSION['Condition']['Procedure']);
+                if (isset($thisTrialType['requiredColumns'])) {
+                    foreach ($thisTrialType['requiredColumns'] as $requiredColumn) {
+                        $errors = keyCheck($proc, 'Post' . ' '  . $lvl . ' ' . $requiredColumn, $errors, $_SESSION['Condition']['Procedure']);
+                    }
                 }
             }
         }
@@ -417,18 +395,17 @@
     unset($key);
     $_SESSION['Trial Types'] = $trialTypes;         // contains locations of display and scoring files for each trial type
     
-    
-    
+    include 'advancedShuffles.php';
     #### Create $_SESSION['Trials'] 
     #### Load all Stimuli and Procedure info for this participant's condition then combine to create the experiment
     // load stimuli for this condition then block shuffle
     $stimuli = GetFromFile($up . $expFiles . $stimF . $_SESSION['Condition']['Stimuli']);
     $stimuli = BlockShuffle($stimuli, 'Shuffle');
+    $stimuli = shuffle2dArray($stimuli, $stopAtLogin);
     $_SESSION['Stimuli'] = $stimuli;
     
     // load and block shuffle procedure for this condition
     $procedure = GetFromFile($up . $expFiles . $procF . $_SESSION['Condition']['Procedure']);
-    $procedure = BlockShuffle($procedure, 'Shuffle');
     
     $addColumns = array( 'Text' );
     foreach ($addColumns as $add) {
@@ -436,12 +413,15 @@
             if ($number == 0) {
                 $prefix = '';
             } else {
-                $prefix = 'Post' . ' '  . $number . ' ';
+                $prefix = 'Post' . ' ' . $number . ' ';
             }
             $column = $prefix . $add;
             addColumn($procedure, $column);                // this will only add columns if they don't already exist; nothing is overwritten
         }
     }
+    
+    $procedure = BlockShuffle($procedure, 'Shuffle');
+    $procedure = shuffle2dArray($procedure, $stopAtLogin);
     
     $_SESSION['Procedure'] = $procedure;
     
@@ -453,7 +433,7 @@
 		$items = rangeToArray($procedure[$count]['Item']);
 		$stim = array();
 		foreach ($items as $item) {
-			if (isset($stimuli[$item])) {
+			if (isset($stimuli[$item]) and is_array($stimuli[$item])) {
 				foreach ($stimuli[$item] as $column => $value) {
 					$stim[$column][] = $value;
 				}
@@ -492,7 +472,7 @@
     // $Trials also contains trials for other sessions but trial.php sends to done.php once a *NewSession* shows up
     $_SESSION['Trials']     = $Trials;
     $_SESSION['Position']   = 1;
-    $_SESSION['PostNumber'] = -1;
+    $_SESSION['PostNumber'] = 0;
     
     
     
@@ -556,9 +536,10 @@
     #### Send participant to next phase of experiment (demographics or instructions)
     if ($doDemographics == TRUE) {
         $link = 'BasicInfo.php';
-    }
-    else {
+    } elseif ($doInstructions) {
         $link = 'instructions.php';
+    } else {
+        $link = 'trial.php';
     }
     
     

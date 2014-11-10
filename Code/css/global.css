@@ -416,6 +416,9 @@ pre {
 	content:' ';
 	margin: 1em;
 }
+.login-pos select[name=Condition] {
+    max-width: 200px;
+}
 
 
 

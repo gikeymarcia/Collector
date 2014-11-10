@@ -5,105 +5,118 @@
  */
 
     require 'initiateCollector.php';
+    
+    // this only happens once, so that refreshing the page doesn't do anything, and recording a new line of data is the only way to update the timestamp
+    if (!isset($_SESSION['Timestamp'])) {
+        $_SESSION['Timestamp'] = microtime(TRUE);
+    }
+    
+    
+    
+    function recordTrial($extraData = array(), $exitIfDone = TRUE, $advancePosition = TRUE) {
+
+        #### setting up aliases (for later use)
+        $currentPos   =& $_SESSION['Position'];
+        $currentTrial =& $_SESSION['Trials'][$currentPos];
+        
+        global $experimentName;
+
+
+        #### Calculating time difference from current to last trial
+        $oldTime = $_SESSION['Timestamp'];
+        $_SESSION['Timestamp'] = microtime(TRUE);
+        $timeDif = $_SESSION['Timestamp'] - $oldTime;
+        
+        
+        #### Writing to data file
+        $data = array(  'Username'              =>  $_SESSION['Username'],
+                        'ID'                    =>  $_SESSION['ID'],
+                        'ExperimentName'        =>  $experimentName,
+                        'Session'               =>  $_SESSION['Session'],
+                        'Trial'                 =>  $_SESSION['Position'],
+                        'Date'                  =>  date("c"),
+                        'TimeDif'               =>  $timeDif,
+                        'Condition Number'      =>  $_SESSION['Condition']['Number'],
+                        'Stimuli File'          =>  $_SESSION['Condition']['Stimuli'],
+                        'Order File'            =>  $_SESSION['Condition']['Procedure'],
+                        'Condition Description' =>  $_SESSION['Condition']['Condition Description'],
+                        'Condition Notes'       =>  $_SESSION['Condition']['Condition Notes']
+                      );
+        foreach ($currentTrial as $category => $array) {
+            $data += AddPrefixToArray($category . '*', $array);
+        }
+        
+        if (!is_array($extraData)) {
+            $extraData = array($extraData);
+        }
+        foreach ($extraData as $header => $datum) {
+            $data[$header] = $datum;
+        }
+        
+        $writtenArray = arrayToLine($data, $_SESSION['Output File']);                                       // write data line to the file
+        ###########################################
+
+
+        // progresses the trial counter
+        if ($advancePosition) {
+            $currentPos++;
+            $_SESSION['PostNumber'] = 0;
+        }
+
+        // are we done with the experiment? if so, send to finalQuestions.php
+        if ($exitIfDone) {
+            $item = $_SESSION['Trials'][$currentPos]['Procedure']['Item'];
+            if ($item == 'ExperimentFinished') {
+                $_SESSION['finishedTrials'] = TRUE;             // stops people from skipping to the end
+                header("Location: FinalQuestions.php");
+                exit;
+            }
+        }
+        
+        return $writtenArray;
+        
+    }
 
 
     // setting up easier to use and read aliases(shortcuts) of $_SESSION data
     $condition      =& $_SESSION['Condition'];
+    
     $currentPos     =& $_SESSION['Position'];
     $currentPost    =& $_SESSION['PostNumber'];
     $currentTrial   =& $_SESSION['Trials'][$currentPos];
-        $cue        =& $currentTrial['Stimuli']['Cue'];
-        $answer     =& $currentTrial['Stimuli']['Answer'];
+    
+    $currentStimuli =  $currentTrial['Stimuli'];
+    createAliases($currentStimuli);
     
     // this will also create aliases of any columns that apply to the current trial (filtering out "post X" prefixes when necessary)
     // currentProcedure becomes an array of all columns matched for this trial, using their original column names
-    $currentProcedure = ExtractTrial( $currentTrial['Procedure'], $currentPost );
+    $currentProcedure = ExtractTrial($currentTrial['Procedure'], $currentPost);
+    
+    if (!isset($trialType))
+    {
+        $error = array(
+            'Error*Missing_Trial_Type' => 'Post ' . $_SESSION['PostNumber']
+        );
+        recordTrial();
+        header('Location: trial.php');
+        exit;
+    }
+    
     $trialType = strtolower($trialType);
+    
     if (!isset($item)) {
         $item = $currentTrial['Procedure']['Item'];
     }
+    
     if ($currentPost < 1) {
         $prefix = '';
     } else {
         $prefix = 'Post' . ' '  . $currentPost . ' ';
     }
-    $text =& $currentTrial['Procedure'][$prefix . 'Text'];
-    $text =  str_ireplace(array('$cue', '$answer'), array($cue, $answer), $text);
     
-    // skip to done.php if some has logged in who has already completed all parts of the experiment
-    if ($item == 'ExperimentFinished') {
-        header('Location: done.php');
-        exit;
-    }
-    /*
-     * Whenever Trial.php finds $_POST data, it will try to store that data
-     * immediately, rather than simply holding it through the trial
-     * This is done by either storing the data in $currentTrial['Response'],
-     * or by redirecting to next.php, where the data is actually recorded
-     * into a file.
-     * 
-     * Data from instructions.php is detected by $currentPost === -1
-     */
-     
-     
-    if ($_POST !== array()) {
-        if (($currentPos === 1)
-            AND ($currentPost === -1)
-        ) {
-            // posting from instructions.php
-            // $currentPost was set to -1 at login.php, but it will only ever be set to 0 in the future, so this only happens at the beginning
-            $currentPost = 0;
-            $data = array(
-                 'Username' => $_SESSION['Username'],
-                 'ID'         => $_SESSION['ID'],
-                 'Date'     => date('c'),
-            );
-            $data += $_POST;
-            arrayToLine($data, $instructPath);
-            header('Location: trial.php');
-            exit;
-        } else {
-            $trialType = strtolower(trim( $trialType ));
-            if ($currentPost === 0) {
-                $keyMod = '';
-            } else {
-                $keyMod = 'post' . $currentPost . '_';
-            }
-			$findingKeys = FALSE;
-            require $_SESSION['Trial Types'][$trialType]['scoring'];
-            if (!isset($data)) { $data = $_POST; }
-            #### merging $data into $currentTrial['Response]
-            $currentTrial['Response'] = placeData($data, $currentTrial['Response'], $keyMod);
-            
-            $next = 'trial.php';
-            $notTrials = array_flip( array( 'off', 'no', '', 'n/a' ) );
-            // Now we need to find the current trial type.
-            while( TRUE ) {
-                ++$currentPost;
-                unset( $trialType );    // so we can extract a new one
-                $currentProcedure = ExtractTrial( $currentTrial['Procedure'], $currentPost );
-                if( count($currentProcedure) === 0 ) {
-                    $next = 'next.php';
-                    break;
-                }
-                $trialType = strtolower(trim( $trialType ));
-                if( isset( $_SESSION['Trial Types'][$trialType] ) ) {
-                    $next = 'trial.php';
-                    break;
-                }
-            }
-            
-            header('Location: '.$next);
-            exit;
-        }
-    }
-
-
-    // if we hit a *NewSession* then the experiment is over (this means that we don't ask FinalQuestions until the last session of the experiment)
-    if(strtolower($item) == '*newsession*') {
-        $_SESSION['finishedTrials'] = TRUE;
-        header("Location: done.php");
-        exit;
+    if (isset($currentTrial['Procedure'][$prefix . 'Text'])) {
+        $text =& $currentTrial['Procedure'][$prefix . 'Text'];
+        $text =  str_ireplace(array('$cue', '$answer'), array($cue, $answer), $text);
     }
     
     // if there is another item coming up then set it as $nextTrail
@@ -111,11 +124,6 @@
         $nextTrial =& $_SESSION['Trials'][$currentPos+1];
     } else {
         $nextTrial = FALSE;
-    }
-    
-    // this only happens once, so that refreshing the page doesn't do anything, and reaching next.php is the only way to update the timestamp
-    if (!isset($_SESSION['Timestamp'])) {
-        $_SESSION['Timestamp'] = microtime(TRUE);
     }
     
     // variables I'll need and/or set in trialTiming() function
@@ -136,6 +144,63 @@
     $title = 'Trial';
     $_dataController = 'trial';
     $_dataAction = $trialType;
+    
+    ob_start();
+    
+    
+    /*
+     * Whenever Trial.php finds $_POST data, it will try to store that data
+     * immediately, rather than simply holding it through the trial.
+     * This is done by either storing the data in $currentTrial['Response'].
+     * If the main trial and all post trials are completed, the data will
+     * be written using the recordTrial() function.
+     */
+    if ($_POST !== array()) {
+        if ($currentPost === 0) {
+            $keyMod = '';
+        } else {
+            $keyMod = 'post' . $currentPost . '_';
+        }
+        $findingKeys = FALSE;
+        require $_SESSION['Trial Types'][$trialType]['scoring'];
+        if (!isset($data)) { $data = $_POST; }
+        #### merging $data into $currentTrial['Response]
+        $currentTrial['Response'] = placeData($data, $currentTrial['Response'], $keyMod);
+        
+        $notTrials   = array('off', 'no', '', 'n/a');
+        $finishedRow = TRUE;
+        ++$currentPost;
+        
+        while (isset($currentTrial['Procedure']['Post ' . $currentPost . ' Trial Type'])) {
+            $nextTrialType = strtolower($currentTrial['Procedure']['Post ' . $currentPost . ' Trial Type']);
+            if (!in_array($nextTrialType, $notTrials)) {
+                $finishedRow = FALSE;
+                break;
+            }
+            ++$currentPost;
+        }
+        
+        if ($finishedRow) {
+            recordTrial();
+        }
+        
+        header('Location: trial.php');
+        exit;
+    }
+
+
+    // if we hit a *NewSession* then the experiment is over (this means that we don't ask FinalQuestions until the last session of the experiment)
+    if(strtolower($item) == '*newsession*') {
+        $_SESSION['finishedTrials'] = TRUE;
+        header("Location: done.php");
+        exit;
+    }
+    
+    // skip to done.php if some has logged in who has already completed all parts of the experiment
+    if ($item == 'ExperimentFinished') {
+        header('Location: done.php');
+        exit;
+    }
     
     require $_codeF . 'Header.php';
     
@@ -241,3 +306,5 @@
     
 <?php
     require $_codeF . 'Footer.php';
+    
+    ob_end_flush();

@@ -42,6 +42,11 @@
 			<input    type="radio"    name="English"    value="Fluent"        />    Yes, I am fluent in English     <br />
 			<input    type="radio"    name="English"    value="Non-Fluent"    />    No, I am not fluent in English  <br />
 		</div>
+        
+		<div class="field">
+			<p>What age did you start learning English? If English is your first language, please put 0.</p>
+			<input type="text" value="" name="AgeEnglish" autocomplete="off"/>
+		</div>
 
 		<div class="field">
 			<p>In what country do you live?</p>

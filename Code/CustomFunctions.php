@@ -9,11 +9,18 @@
     
     
     #### add a column (sub-array key) to a 2D-array (like getFromFile() creates)
-    function addColumn(&$array, $column, $value = '', $overwrite = FALSE) {
+    function addColumn(&$array, $column, $value = '', $overwrite = FALSE, $caseInsensitive = TRUE) {
+        $lowerCol = strtolower($column);
         foreach ($array as $i => &$row) {
             if (!is_array($row)) { continue; } // skip padding
-            if (isset($row[$column]) AND !$overwrite) { continue; }
-            if ($val === '$i') {
+            if (!$overwrite) {
+                if (isset($row[$column])) { continue; }
+                if ($caseInsensitive) {
+                    $tempRow = array_change_key_case($row, CASE_LOWER);
+                    if (isset($tempRow[$lowerCol])) { continue; }         // some issues were being caused by 'text' as a lowercase column.  This should avoid creating an empty 'Text' column along side it
+                }
+            }
+            if ($value === '$i') {
                 $row[$column] = (string)$i;     // using a string, to keep the contents similar to what getFromFile() creates
             } else {
                 $row[$column] = $value;
@@ -123,7 +130,7 @@
             return $outputArray;
         }
         // Use this logic when second order shuffling is NOT present
-        else {
+        elseif (array_key_exists($groupingFactor, $input[2])) {                     // if they don't have a shuffle column, we shouldn't try to shuffle things
             /*  load items into array that groups as blocks
                 then as items within blocks. e.g., $temp[$blockNum][#]
              */ 
@@ -182,6 +189,27 @@
     
     
     
+    function createAliases($array, $overwrite = FALSE) {
+        foreach ($array as $name => $tempVal) {
+            $name = preg_replace('/[A-Z]/', ' \\0', $name);
+            $name = camelCase($name);
+            $name = preg_replace('/[^0-9a-zA-Z_]/', '', $name);
+            if ($name === '') {
+                continue;
+            }
+            if (is_numeric($name[0])) {
+                $name = '_' . $name;
+            }
+            global $$name;
+            if (!isset($$name) OR $overwrite)
+            {
+                $$name = $tempVal;
+            }
+        }
+    }
+    
+    
+    
     #### Make a copy of a trial and remove all values (but not keys) from ['Stimuli'], ['Response'], and ['Procedure']
     ##  If you'd only like to clean specific arrays then pass the names as a single string with commas separating each name
     ##  (e.g., "Response, Procedure")
@@ -218,7 +246,10 @@
             ?>
             <style>
                 .display2dArray                         { border-collapse: collapse; margin: 0 15px 15px 0; }
-                .display2dArray td, .display2dArray th  { border: 1px solid #000; vertical-align: middle; text-align: center; padding: 2px 6px; }
+                .display2dArray td, .display2dArray th  { border: 1px solid #000; vertical-align: middle; text-align: center; padding: 2px 6px; overflow: hidden; }
+                .display2dArray td                      { max-width: 300px; }
+                .display2dArray th                      { max-width: 100px; white-space: normal; }
+                .display2dArray td > div                { max-height: 1.5em; overflow: hidden; }
             </style>
             <?php
         }
@@ -235,22 +266,26 @@
                 '<thead>',
                     '<tr>',
                         '<th></th>',
-                        '<th>',
-                            implode('</th><th>', $columns),
-                        '</th>',
+                        '<th><div>',
+                            implode('</div></th><th><div>', $columns),
+                        '</div></th>',
                     '</tr>',
                 '</thead>',
                 '<tbody>';
         $columns = array_flip($columns);
         foreach ($arr as $i => $row) {
             $row = sortArrayLikeArray($row, $columns);
+            foreach ($row as &$field) {
+                $field = htmlspecialchars($field);
+            }
+            unset($field);
             echo '<tr>',
                         '<td>',
                             $i,
                         '</td>',
-                        '<td>',
-                            implode('</td><td>', $row),
-                        '</td>',
+                        '<td><div>',
+                            implode('</div></td><td><div>', $row),
+                        '</div></td>',
                     '</tr>';
         }
         echo '</tbody>',
@@ -316,18 +351,7 @@
             }
         }
         
-        foreach ($output as $column => $value) {
-            $name = $column;
-            if (is_numeric($column[0])) {
-                $name = '_' . $column;
-            }
-            $name = preg_replace('/[A-Z]/', ' \\0', $column);
-            $name = camelCase($name);
-            $name = preg_replace('/[^0-9a-zA-Z_]/', '', $name);
-            global $$name;
-            if (isset($$name)) { continue; }    // aliases won't overwrite existing variables
-            $$name = $value;
-        }
+        createAliases($output);
         return $output;
     }
     
@@ -541,20 +565,22 @@
         $findJPG     = strpos($stringLower, '.jpg');                // look for file extensions in the input
         $findGIF     = strpos($stringLower, '.gif');
         $findPNG     = strpos($stringLower, '.png');
+        $findBMP     = strpos($stringLower, '.bmp');
         $findMP3     = strpos($stringLower, '.mp3');
         $findOGG     = strpos($stringLower, '.ogg');
         $findWAV     = strpos($stringLower, '.wav');
 
 
-        if (($findGIF == TRUE)
+        if (   ($findGIF == TRUE)
             OR ($findJPG == TRUE)
             OR ($findPNG == TRUE)
+            OR ($findBMP == TRUE)
         ) {
             // if I found an image file extension, add html image tags
             $string = '<img src="' . $fileName . '">';
-        } elseif (($findMP3 == TRUE)
-                   OR ($findOGG == TRUE)
-                   OR ($findWAV == TRUE)
+        } elseif (   ($findMP3 == TRUE)
+                  OR ($findOGG == TRUE)
+                  OR ($findWAV == TRUE)
        ) {
             // if I found an audio file extension, add pre-cache code
             $string = '<source src="' . $fileName . '"/>';

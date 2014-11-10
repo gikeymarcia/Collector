@@ -151,7 +151,8 @@
 					</div>
 				</div>
 				
-				<input type="submit" value="Get Data" id="downloadButton" />
+				<input type="submit" value="Get Data" id="downloadButton" /> <br>
+                Select Data Template: <select name="searchTemplate"><option selected disabled hidden></option><option>New Search Template</option></select>
 				
 			</div>
 			
@@ -361,8 +362,10 @@
 			return this.each(function () {
 				$(this).keydown(function (e) {
 					var key = e.which || e.keyCode;
-					
-					if (!e.shiftKey && !e.altKey && !e.ctrlKey &&
+                    
+                    if (key === 186) {
+                        $(this).val($(this).val() + ":");
+                    } else if (!e.shiftKey && !e.altKey && !e.ctrlKey &&
 					 // numbers   
 						key >= 48 && key <= 57 ||
 					 // Numeric keypad
@@ -378,7 +381,9 @@
 						key == 37 || key == 39 ||
 					 // Del and Ins
 						key == 46 || key == 45)
+                    {
 						return true;
+                    }
 					
 					return false;
 				});
@@ -392,6 +397,132 @@
 				return false;
 			}
 		});
+        
+        $(document).ready(function()
+        {
+            var option;
+            var optionFunctions = {};
+            
+            <?php
+            
+                $templateDirectory = 'GetData/SearchTemplates/';
+                
+                if (is_dir($templateDirectory))
+                {
+                    $searchTemplates = scandir($templateDirectory);
+                    
+                    foreach ($searchTemplates as $i => $template)
+                    {
+                        if (    (!is_file($templateDirectory . $template))
+                             OR (substr($template, -5) !== '.JSON'     )    )
+                        {
+                            unset($searchTemplates[$i]);
+                        }
+                    }
+                    
+                    foreach ($searchTemplates as $template)
+                    {
+                        $templateName   = substr($template, 0, -5);
+                        $templateInfo   = json_decode(file_get_contents($templateDirectory . $template), TRUE);
+                        $dataCategories = array('Conditions', 'Session', 'Trial_Types', 'Timing', 'Columns', 'Demographics_Columns', 'Status_Begin_Columns', 'Status_End_Columns', 'Final_Questions_Columns');
+                        $dataFiles      = array('Demographics', 'Experiment', 'Final_Questions', 'Status_Begin', 'Status_End', 'Instructions');
+						
+						if (!is_array($templateInfo)) { continue; }
+						
+						if (!isset($templateInfo['IDs']))
+						{
+							$templateInfo['IDs'] = array();
+						}
+                        
+                        ?>
+            
+            option = $("<option>");
+            option.html("<?= $templateName ?>");
+            $("select[name='searchTemplate'] option:last").before(option);
+            
+            optionFunctions["<?= $templateName ?>"] = function()
+            {
+                $(".downloadedAlready").removeClass("downloadedAlready");
+                $("input[name='Trials']").val("<?= $templateInfo['Trials'] ?>");
+            
+                        <?php
+                        
+                        foreach ($dataFiles as $dataName)
+                        {
+                            $value = (isset($templateInfo[$dataName])) ? 'true' : 'false';
+                            
+                            ?>
+                
+                $("input[name='<?= $dataName ?>']").prop("checked", <?= $value ?>).change();
+                
+                            <?php
+                            
+                        }
+                        
+                        foreach ($dataCategories as $dataCategory)
+                        {
+                            if (isset($templateInfo[$dataCategory]))
+                            {
+                                
+                                ?>
+                
+                $("input[name='<?= $dataCategory ?>[]']").prop("checked", false).change();
+                
+                                <?php
+                                
+                                foreach ($templateInfo[$dataCategory] as $dataColumn)
+                                {
+                                    
+                                    ?>
+                
+                $("input[name='<?= $dataCategory ?>[]'][value='<?= htmlspecialchars($dataColumn) ?>']").prop("checked", true).change();
+                
+                                    <?php
+                                    
+                                }
+                            }
+                        }
+                                
+                        foreach ($templateInfo['IDs'] as $downloadedIDs)
+                        {
+                            
+                            ?>
+        
+                $("input[name='IDs[]'][value='<?= htmlspecialchars($downloadedIDs) ?>']").prop("checked", false).change().closest("label").addClass("downloadedAlready");
+        
+                            <?php
+                            
+                        }
+                        
+                        ?>
+                
+                $("#OutputBlock .BlockOptions:first label").not(".downloadedAlready").find("input[name='IDs[]']").prop("checked", true).change();
+            }
+            
+                        <?php
+                        
+                    }
+                }
+                
+            ?>
+            
+            $("select[name='searchTemplate']").on("change", function() {
+                var name = $(this).val();
+                if (typeof optionFunctions[name] === "function") {
+                    optionFunctions[name]();
+                } else if (name === "New Search Template") {
+                    var newTemplate = prompt("Would you like to make a new search template?\nPlease enter the name of this search below.");
+                    if (newTemplate !== null || newTemplate === "") {
+                        var newOption = $("<option>");
+                        newOption.html(newTemplate);
+                        $("select[name='searchTemplate'] option:last").before(newOption).prev().prop("selected", true);
+                    } else {
+                        $("select[name='searchTemplate'] option:first").prop("selected", true);
+                    }
+                }
+            });
+            
+        });
 	</script>
 	
 </body>

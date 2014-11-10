@@ -13,8 +13,8 @@
             include $_rootF . $fileLoc;
             
             $scanDirs = array(
-                $_rootF . $codeF    . $trialF, 
-                $_rootF . $expFiles . $custTTF
+                $_rootF . $expFiles . $custTTF,
+                $_rootF . $codeF    . $trialF
             );
             
             $trialTypes = array();
@@ -27,6 +27,8 @@
                 foreach ($scan as $entry) {
                     if ($entry[0] === '.') { continue; }
                     if (is_dir($dir . $entry)) {
+                        $type = strtolower($entry);
+                        if (isset($trialTypes[$type])) { continue; }
                         $temp = array();
                         $subScan = scandir($dir . $entry);
                         foreach ($subScan as $subEntry) {
@@ -38,14 +40,17 @@
                             }
                         }
                         if (isset($temp['trial'])) {
-                            if (!isset($temp['scoring'])) { $temp['scoring'] = $_rootF . $codeF . 'scoring.php'; }
-                            $trialTypes[ strtolower($entry) ] = $temp;
+                            if (!isset($temp['scoring'])) { $temp['scoring'] = $_rootF . $codeF . $scoring; }
+                            $trialTypes[$type] = $temp;
                         }
+                        
                     } elseif (strtolower(substr($entry, -4)) === '.php') {
                         $type = strtolower(substr($entry, 0, -4));
+                        if (isset($trialTypes[$type])) { continue; }
                         $trialTypes[$type]['trial']   = $dir . $entry;
-                        $trialTypes[$type]['scoring'] = $_rootF . $codeF . 'scoring.php';
+                        $trialTypes[$type]['scoring'] = $_rootF . $codeF . $scoring;
                     }
+            
                 }
             
             }

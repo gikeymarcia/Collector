@@ -66,6 +66,8 @@ input[type="text"]
 	{	width: 120px;	}
 input
 	{	vertical-align: text-bottom;	margin-bottom: 3px;	}
+.downloadedAlready
+        {   color: #AAA;    }
 
 #LogOutForm
 	{	position: absolute; top: 0px;	left: 8px;	}

@@ -6,7 +6,8 @@
     #### setting experiment variables ####
     $experimentName   = 'Collector';            // Recorded in datafile and can be useful
     $loginCounterName = '1.txt';                // Change to restart condition cycling
-    $doDemographics   = FALSE;                  // Can be TRUE or FALSE
+    $doDemographics   = TRUE;                  // Can be TRUE or FALSE
+    $doInstructions   = TRUE;
     $loginCounterName = '1.csv';                // Change to restart condition cycling
     $nextExperiment   = FALSE;                  // to link use format 'www.cogfog.com/Generic/' do not forget the www and the ending '/'
 
@@ -30,6 +31,8 @@
 
     // index.php (Starting Page)
     $showConditionSelector = TRUE;              // Show (TRUE) or hide (FALSE) the condition selector at login?
+    $useConditionNames     = TRUE;              // Use the entry under "Column Description" rather than "Number" in the condition selector
+    $showConditionInfo     = TRUE;              // Show the stimuli and procedure file for each condition when hovering over the options
     $welcome        = 'Welcome to the experiment!';
     $expDescription = '<p> This experiment will run for approximately 25 minutes.  Your goal is to learn some information</p>';
     $askForLogin    = '<p> Please enter your ucla email address</p>';

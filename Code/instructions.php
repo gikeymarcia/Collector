@@ -14,7 +14,7 @@
 
 	<?php include FileExists($up . $expFiles . $instructionsFileName); ?>
 
-	<form class="hidden" name="Login" action="<?php echo $up . $codeF; ?>trial.php" method="post">
+	<form class="hidden" name="Login" action="InstructionsRecord.php" method="post">
 		<input  name="RT"        id="RT"    type="text" value="0" />
 		<input  name="Fails"     id="Fails" type="text" value="0" />
 		<input  id="FormSubmitButton" type="submit" />
