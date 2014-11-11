@@ -6,12 +6,13 @@ Copyright 2012-2014 Mikey Garcia & Nate Kornell
 #### How do I get started?
 The best way to get acquainted with Collector is to follow along on the [`StartingUp.html`](http://cogfog.com/Collector/Documentation/StartingUp.html) page.
 #### Can I use Collector if I am not a programmer?
-YES!  This program was designed to allow researchers to work with a foramt they're very familiar with (spreadsheets) to create interactive experiments.  As you will see in the tutorial videos, Collector is almost a completely programming free solution.  Of course there are times when being able to code will make your life easier but we have tried to minimize user coding wherever possible.
+YES!  This program was designed to allow researchers to work with a format they're very familiar with (spreadsheets) to create interactive experiments.  As you will see in the tutorial videos, Collector is almost a completely programming free solution.  Of course there are times when being able to code will make your life easier but we have tried to minimize user coding wherever possible.
 #### What language is Collector written in?
 Collector is written mostly in PHP although some of the functionality is achieved through javascript/Jquery.  Formatting of the presentations is controlled mostly by HTML5 and CSS2.
 The breakdown is roughtly ~75% PHP, 10% HTML, 10% CSS, 5% javascript/JQuery
 #### Do I need to ask anyone if I want to use Collector?
 No.  Collector is distributed under the GNU GPLv3 license (full text can be found in the `/Documentation/` folder).  You are free to use, modify, and distribute this program as you wish.  If you distribute a modified version of this program you are required to make your modified version available to the public under the same GNU GPLv3 license of the original program.
+If you are publishing papers that have used Collector experiments we ask that you acknowledge its use somewhere.  This isn't a requirement of using this software but we'd like to get the word out to as many people as possible about it's availability.  Hopefully soon there will be a method's journal writeup that you can cite when using Collector.  If you build trial types that you think others would find useful we encourage you fork the repository, add your new trial type into the `/TrialTypes/` folder, then send us a pull request.
 #### How does block shuffling work?
 Shuffling is explained in detail during the Hangout 1 video on the `StartingUp` page.
 
