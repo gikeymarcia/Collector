@@ -133,6 +133,10 @@
     if( !isset( $minTime ) ) {
         $minTime    = 'not set';
     }
+    
+    
+    ob_start();
+    
 
     #### Presenting different trial types ####
     $expFiles  = $up.$expFiles;                            // setting relative path to experiments folder for trials launched from this page
@@ -144,8 +148,6 @@
     $title = 'Trial';
     $_dataController = 'trial';
     $_dataAction = $trialType;
-    
-    ob_start();
     
     
     /*
