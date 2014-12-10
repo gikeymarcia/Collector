@@ -568,6 +568,26 @@ input[type="submit"].button-trial-advance {
 .collapsibleTitle h3 {
 	color:#fff;
 }
+.before, .after {
+    width:   49%;
+    display: block-inline;
+    margin:  0.5%;
+    padding: 3px;
+    float:   left;
+    overflow:scroll;
+    font-size: .65em;
+}
+.before {
+    background: #CCCCCC;
+}
+.after {
+    background: #00FF87;
+}
+.sectionBreak {
+    float: left;
+    display:block;
+    width:100%;
+}
 
 
 
