@@ -398,7 +398,7 @@ jQuery.fn.forceNumeric = function () {
 			return false;
 		});
 	});
-}
+};
 
 
 
