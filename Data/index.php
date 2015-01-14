@@ -11,7 +11,7 @@
 		unset( $_SESSION['LoggedIn'] );
 	}
 	if( isset( $_POST['Password'] ) ) {
-		if( $_POST['Password'] === $getdataPassword ) {
+		if( $_POST['Password'] === $Password ) {
 			$_SESSION['LoggedIn'] = TRUE;
 		}
 	}

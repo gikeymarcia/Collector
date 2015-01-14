@@ -408,9 +408,9 @@
         ## OR include a tilda in the shuffle column (e.g., '~Group1')
     function multiLevelShuffle ($input, $levels = 0) {
         $root   = 'Shuffle';
-        $offChar = '~';
+        $offChar = '#';
         $output = array();
-        $subset = array();
+        $subset = array(); 
         
         #### initialize shuffling
         if ($levels == 0) {

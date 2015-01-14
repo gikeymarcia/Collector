@@ -48,6 +48,6 @@
     // done.php
     $experimenterEmail = 'youremail@yourdomain.com';
     
-    // getdata
-    $getdataPassword = '';                        // to enable getdata, enter a string other than ''
+    // Access control
+    $Password = '';                        // to enable getdata OR Tools enter a string other than ''
 ?>
