@@ -16,3 +16,4 @@ Icon?
 Data/**/*
 !Data/*
 !Data/GetData/**/*
+/nbproject/
