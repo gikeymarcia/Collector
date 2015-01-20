@@ -1,242 +1,409 @@
-/*------------------------------------*\
- *
- *  Collector Styles
- * 	Adam Blake
- *  written for www.CogFog.com
- *
-\*------------------------------------*/
+/* ----------------------------------------------------------------------------
 
-/*------------------------------------*\
-    CONTENTS
-    (protip: search $[item] to jump)
-\*------------------------------------*/
-/**
- *  IMPORTS
- *  COLORS
- *	RESET
- *
- *  MAIN
- *  TYPE
- *  SHARED
- *  STRUCTURES
- *
- *  INDEX
- *  INSTRUCTIONS
- *  TRIAL
- *  SOTETRIS
- *  FQS
- *  NO-JS
- *
- *  MISC
- *  MEDIA
- */
+
+ * Description:     Collector styles
+ * Version:       2.0.0 (2015-01-19)
+ * Website:       http://www.cogfog.com/
+ * Author:        Adam Blake
+
+ 
+ == CONTENTS: =================================================================
+
+ $IMPORTS          Imported styles
+ $RESET            HTML5 reset
+ $COLORS           App-wide color palette
+ $TYPOGRAPHY       Text styling
+ $BUTTONS          Buttons
+ $FORMS            Forms
+ $GRIDS            Grid framework
+ $CONTENT          General styles for main content
+ $NO-JS            Javascript disabled redirect 
+ $PAGE-SPECIFIC    Styles for specific pages:
+                       Basic Info
+                       Instructions
+                       Trial
+ $MEDIA            Responsive styles
+ 
+
+ ---------------------------------------------------------------------------- */
 
 
 
 
-/*------------------------------------*\
-    $IMPORTS
-\*------------------------------------*/
+
+/*  $IMPORTS
+ ---------------------------------------------------------------------------- */
+@import url(http://fonts.googleapis.com/css?family=Oswald);
 @import url(http://fonts.googleapis.com/css?family=Open+Sans);
-@import url(http://fonts.googleapis.com/css?family=Roboto);
 
 
 
 
 
-/*------------------------------------*\
-  	$COLORS
-\*------------------------------------*/
-.brand {
-    color:#0055A6;             /* dark blue; rgba(0,85,166,1) */
-}
-.secondary {
-	color:#00A5E5;             /* blue; rgba(0,165,229,1); */
-}
-.action {
-	color:#00FF87;             /* lime green; rgba(0,255,135,1) */
-}
-.alert {
-	background-color:#800000;  /* strong red; rgba(128,0,0,1) */
-}
 
-.brand-bg {
-	background-color:#0055A6;
-}
-.secondary-bg {
-	background-color:#00A5E5;
-}
-.action-bg {
-	background-color:#00FF87;
-}
-
-
-
-
-
-/*------------------------------------*\
-    $RESET
-\*------------------------------------*/
-/**
- * 	Based on Eric Meyer's reset
- *  http://meyerweb.com/eric/tools/css/reset/
- *  v2.0 | 20110126
- *  License: none (public domain)
-*/
-
-html, body, div, span, applet, object, iframe,
+/*  $RESET
+ ---------------------------------------------------------------------------- */
+html, body, div, span, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
+abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var,
+b, i,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
+article, aside, canvas, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section, summary,
 time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font:inherit;
-	vertical-align: baseline;
-	-webkit-box-sizing:border-box;
-	   -moz-box-sizing:border-box;
-	        box-sizing:border-box;
+  margin:0;
+  padding:0;
+  border:0;
+  outline:0;
+  font-size:100%;
+  vertical-align:baseline;
+  background:transparent;
 }
-html {
-	font:18px/1.625 "Roboto", "Open Sans", Arial, Helvetica, sans-serif;
-	color:#333;
+
+body {
+  line-height:1;
 }
-ol, ul {
-	list-style: none;
+
+article,aside,details,figcaption,figure,
+footer,header,hgroup,menu,nav,section { 
+  display:block;
 }
+
+nav ul {
+  list-style:none;
+}
+
+blockquote, q {
+  quotes:none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content:'';
+  content:none;
+}
+
+a {
+  margin:0;
+  padding:0;
+  font-size:100%;
+  vertical-align:baseline;
+  background:transparent;
+}
+
+ins {
+  background-color:#ff9;
+  color:#000;
+  text-decoration:none;
+}
+
+mark {
+  background-color:#ff9;
+  color:#000; 
+  font-style:italic;
+  font-weight:bold;
+}
+
+del {
+  text-decoration: line-through;
+}
+
+abbr[title], dfn[title] {
+  border-bottom:1px dotted;
+  cursor:help;
+}
+
 table {
-	border-collapse: collapse;
-	border-spacing: 0;
+  border-collapse:collapse;
+  border-spacing:0;
 }
+
+hr {
+  display:block;
+  height:1px;
+  border:0;   
+  border-top:1px solid #cccccc;
+  margin:1em 0;
+  padding:0;
+}
+
+input, select {
+  vertical-align:middle;
+}
+
 img {
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 
 
 
 
-/*------------------------------------*\
-  	$SHARED
-\*------------------------------------*/
-/* general min/max */
-.main-contain, .cframe-content {
-	max-width:900px;
-	min-width:400px;
+/*  $COLORS
+      note: text is #111, specified in $TYPOGRAPHY
+ ---------------------------------------------------------------------------- */
+.brand {
+  color:#069;     /* dark blue; rgba(0,85,166,1) */
+}
+.secondary {
+  color:#09c;     /* blue; rgba(0,165,229,1); */
+}
+.action {
+  color:#0f9;     /* lime green; rgba(0,255,135,1) */
+}
+.alert {
+  background-color:#900;  /* strong red; rgba(128,0,0,1) */
 }
 
-/* text alignment */
-.textcenter {
-	text-align:center;
+.brand-bg {
+  background-color:#069;
 }
-.textright{
-	text-align:right;
+.secondary-bg {
+  background-color:#09c;
 }
-.textleft{
-    text-align:left;
-}
-
-/* Hidden objects */
-.precache,.precachenext,.hidden,#waiting,#loadingForm {
-	display:none!important;
-}
-.invisible {
-	visibility:hidden!important;
+.action-bg {
+  background-color:#0f9;
 }
 
-/* Shared colors */
+
+
+
+
+/*  $TYPOGRAPHY
+      note: for consent form styles, see $FORMS
+ ----------------------------------------------------------------------------- */
+body, html, textbox, select {
+  color:#111;
+  font-family:"Open Sans", Helvetica, Arial, sans-serif;
+}
+
 h1,h2,h3,h4,h5,h6,a {
-    color:#0055A6;	/* brand color */
-}
-a:hover,a:focus {
-	color:#00A5E5;	/* secondary color */
-}
-a:active {
-	color:#00FF87;	/* action color */
+  color:#069;  /* brand color */
+  font-family:"Oswald", Helvetica, Arial, sans-serif;
 }
 
-
-
-
-
-/*------------------------------------*\
-  	$TYPE
-\*------------------------------------*/
 h1 {
-	font-size: 2em;
-	padding: 0 0 .2em 0;
-	margin-bottom: 0;
+  font-size: 2em;
+  padding: 0 0 .2em 0;
+  margin-bottom: 0;
 }
 
 h2 {
-	font-size: 1.5em;
-	padding: .2em 0;
+  font-size: 1.5em;
+  padding: .2em 0;
 }
 
 h3 {
-	font-size: 1.2em;
-	padding: .2em 0;
+  font-size: 1.2em;
+  padding: .2em 0;
 }
 
 p {
-	margin: 1em 0;
+  margin: 1em 0;
 }
 
-a:hover, a:active {
-    outline: none;
+a:active {
+  color:#0f9;  /* action color */
+}
+
+a:active, a:hover {
+  outline: none;
+}
+
+a:focus, a:hover {
+  color:#09c;  /* secondary color */
 }
 
 strong, b {
-	font-weight: 700;
+  font-weight: 700;
 }
 
 em, i {
-	font-style: italic;
+  font-style: italic;
 }
 
 pre {
-    max-width: 800px;
-    margin-left: 9%;
-    
+  max-width: 800px;
+  margin-left: 9%;
+  
 }
 
 
-/*------------------------------------*\
-  	$STRUCTURES
-\*------------------------------------*/
-.main-contain {
-	width: 550px;
-	margin: 0 auto;
+
+
+
+/*  $BUTTONS 
+ ---------------------------------------------------------------------------- */
+.collector-button {
+  font-family: inherit;
+  font-size:100%;
+  text-align:center;
+  padding:.45em 1em;
+  color:#fff;
+  background-color:#069;
+  border-radius:4px;
+  border:0;
+  cursor:pointer;
+}
+.collector-button-hover,.collector-button:hover,.collector-button:focus {
+	background-color: #09c;
+}
+.collector-button:focus {
+  outline: 0;
+}
+.collector-button-active,.collector-button-active:hover,.collector-button:active {
+	background-color:#0f9;
 }
 
-/* 	dynamic vertical centering */
-.cframe-outer {
-	display:table;
-	position:absolute;
-	height:100%;
-	width:100%;
-}
-	.cframe-inner {
-		display:table-cell;
-		vertical-align:middle;
-	}
-		.cframe-content {
-			margin:0 auto 70px auto;
-			width:80%;
-		}
 
-/* grids */
+
+
+
+/*  $FORMS
+ ----------------------------------------------------------------------------- */
+.collector-form {
+  display:block;
+  font-family:"Oswald", Helvetica, Arial, sans-serif;
+  margin:.5em 0;
+  border-radius:5px;
+  padding:0 10%;
+}
+
+.collector-form fieldset {
+  border:none;
+  margin:0 0 2em 0;
+}
+.collector-form fieldset:last-of-type {
+  margin-bottom:0;
+}
+.collector-form legend {
+  color:#069;
+  font-size:2em;
+  font-weight:bold;
+  padding-bottom:2em;
+}
+
+/* Form Controls */
+.collector-form-element {
+  margin:0 0 2.5em 0;
+}
+.stacked .collector-form-element {
+  margin-bottom:0;
+}
+
+.collector-form-element > label {
+  display:inline-block;
+  vertical-align:top;
+  width:40%;
+}
+
+.collector-form label:hover {
+  cursor:pointer;
+}
+
+.collector-form .labelsub {
+  color:#333;
+  font-style:italic;
+  text-align:right;
+}
+
+.collector-form-element > input,
+.collector-form-element .radio,
+.collector-form-element select,
+.collector-form-element textarea {
+  box-sizing:border-box;
+  font-size:1em;
+  margin:0 0 0 20px;
+  padding:5px;
+  vertical-align:middle;
+  width:55%;
+}
+
+.collector-form-element .radio {
+  display:inline-block;
+}
+.collector-form-element .radio input,
+.collector-form-element .radio label {
+  vertical-align:middle;
+}
+
+.collector-form input:focus,.collector-form select:focus,.collector-form textarea:focus,
+.collector-form input:hover,.collector-form select:hover,.collector-form textarea:hover {
+  outline: 0;
+  border-color: #0f9;
+}
+.collector-form input[disabled],.collector-form select[disabled],.collector-form textarea[disabled],
+.collector-form input[disabled]:focus,.collector-form select[disabled]:focus,.collector-form textarea[disabled]:focus {
+	outline:0;
+	border:0;
+  cursor: not-allowed;
+  background-color: #eaeded;
+  color: #666;
+} 
+
+/* Consent form */
+.consent {
+  background:none repeat scroll 0% 0% #F2F2F2;
+  border:1px solid #CCC;
+  font-family:serif;
+  height:200px;
+  overflow: auto;
+  padding: 6px;  
+}
+.consent h1, .consent h2, .consent h3, .consent h4 {
+  color:#000;
+  font-family:serif;
+  margin-bottom:.5em;
+}
+.consent h1 {
+  font-size:16pt;
+  font-weight:bold;
+}
+.consent h2 {
+  font-size:14pt;
+  font-weight:bold;
+}
+.consent h3 {
+  font-size:12pt;
+  font-weight:bold;
+}
+.consent h4 {
+  font-size:10pt;
+  font-style:italic;
+}
+.consent-check label {
+  width:80%;
+}
+.consent-check input {
+  display:inline-block;
+  width:10%;
+}
+
+/* jQuery slider */
+#slider {
+	margin-top:30px;
+}
+.amount {
+	margin-top: 10px;
+	text-align: center;
+}
+.amount input {
+	width: 80px;
+	text-align: center;
+}
+
+
+
+
+
+/* $GRIDS
+ ---------------------------------------------------------------------------- */
 .grid {
 	margin: 0 0 0 -18px;
 }
@@ -309,124 +476,93 @@ pre {
 .grid-1-1 {
 	margin-left:0px;
 }
+  
+  
 
-/* buttons */
-.button {
-    font-family: inherit;
-    font-size: 100%;
-    text-align:center;
-    padding: .45em 1em;
-    color: #fff;
-    background-color: #0055A6;
-    text-decoration: none;
-    border-radius: 4px;
-    border:0;
-    cursor:pointer;
-}
-.button-hover,.button:hover,.button:focus {
-	background-color: #00A5E5;
-}
-.button:focus {
-    outline: 0;
-}
-.button-active,.button-active:hover,.button:active {
-	background-color:#00FF87;
-}
 
-/* forms */
-.collector-form {
-    margin: .5em 0;
+
+/*  $CONTENT
+ ---------------------------------------------------------------------------- */
+/* general layout (single column) */
+.wrapper {
+  position:relative;
+  min-height:100%;
+}
+.content, article, main, section {
+  margin: 0 auto 2em auto;
+  max-width:640px;
+  min-width:400px;
+}
+.clearfix:after {
+    visibility: hidden;
     display: block;
-}
-.collector-form input[type=radio]:focus,.collector-form input[type=checkbox]:focus {
-    outline: thin dotted #333;
-    outline: 1px auto #129FEA;
-}
-.collector-form input,.collector-form select,.collector-form textarea {
-    font-family: "Open Sans", Arial, Helvetica, sans-serif;
-    font-size: 100%;
-    padding: .4em .6em;
-    display: inline-block;
-    border: 1px solid #ccc;
-    box-shadow: inset 0 1px 3px #ddd;
-    border-radius: 4px;
-    -webkit-box-sizing: border-box;
-       -moz-box-sizing: border-box;
-            box-sizing: border-box;
-}
-.collector-form input:focus,.collector-form select:focus,.collector-form textarea:focus,
-.collector-form input:hover,.collector-form select:hover,.collector-form textarea:hover {
-    outline: 0;
-    border-color: #00A5E5;
-}
-.collector-form input[disabled],.collector-form select[disabled],.collector-form textarea[disabled],
-.collector-form input[disabled]:focus,.collector-form select[disabled]:focus,.collector-form textarea[disabled]:focus {
-	outline:0;
-	border:0;
-    cursor: not-allowed;
-    background-color: #eaeded;
-    color: #666;
-}
-.collector-form-extra input[type=checkbox],.collector-form input[type=radio] {
-    margin: .5em 7px .5em -25px;
-    display: inline-block;
-}
-.collector-form-extra fieldset {
-    border: 1px solid silver;
-    margin: 0 2px;
-    padding: .35em .75em .625em .75em;
-}
-.collector-form-extra label {
-    margin: .3em 0 .3em 25px;
-    display: block;
-}
-.collector-form-extra div.field {
-    padding: .35em .75em .625em .75em;
-}
-.collector-form-extra option {
-	padding-right: 10px;
-}
-.consent {
-	margin-top: 1em;
-}
-.consent-legend {
-	color:#000;
-}
-#slider {
-	margin-top:30px;
-}
-.amount {
-	margin-top: 10px;
-	text-align: center;
-}
-.amount input {
-	width: 80px;
-	text-align: center;
+    font-size: 0px;
+    content: ".";
+    clear: both;
+    height: 0px;
 }
 
-
-/*------------------------------------*\
-  	$INDEX
-\*------------------------------------*/
-.login-pos {
-	margin:0 auto 70px auto;
+/* Vertical centering (vcenter'ed element must be a child)*/
+.vcenter {
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+}
+    
+/* text alignment */
+.textcenter {
 	text-align:center;
 }
-.login-pos:after {
-	content:' ';
-	margin: 1em;
+.textright{
+	text-align:right;
 }
-.login-pos select[name=Condition] {
-    max-width: 200px;
+.textleft{
+    text-align:left;
+}
+
+/* Hidden objects */
+.precache,.precachenext,.hidden,#waiting,#loadingForm {
+  display:none!important;
+}
+.invisible {
+  visibility:hidden!important;
 }
 
 
 
 
 
-/*------------------------------------*\
-  	$INSTRUCTIONS
-\*------------------------------------*/
+/*  $NO-JS
+ ---------------------------------------------------------------------------- */
+.nojs {
+  background:#fbe7a8;
+  max-width: 900px;
+  min-width: 500px;
+  margin-top: -100px;
+}
+.nojs img {
+  position:absolute;
+  float:left;
+  top:50%;
+  margin: -95px 0 0 15px;
+}
+.nojs .nojs-text {
+  margin-left: 90px;
+  padding: 30px;
+}
+
+
+
+
+/* $PAGE-SPECIFIC
+ ---------------------------------------------------------------------------- */
+/* ==  Basic Info  == */
+.basicinfo {
+  padding:20px;
+}
+
+/* ==  Instructions  == */
 .readcheck {
 	display:none;
 	width: 60%;
@@ -456,13 +592,7 @@ pre {
 	text-align:center;
 }
 
-
-
-
-
-/*------------------------------------*\
-  	$TRIAL
-\*------------------------------------*/
+/* ==  Trial  == */
 /* less obtrusive button for when you just want to advance */
 input[type="submit"].button-trial-advance {
 	font-size:20px;
@@ -591,69 +721,11 @@ input[type="submit"].button-trial-advance {
 
 
 
-
-/*------------------------------------*\
-  	$FQS
-\*------------------------------------*/
-
-
-
-
-
-
-/*------------------------------------*\
-  	$NO-JS
-\*------------------------------------*/
-.nojs {
-  background:#fbe7a8;
-  max-width: 900px;
-  min-width: 500px;
-  margin-top: -100px;
-}
-.nojs img {
-    position:absolute;
-    float:left;
-    top:50%;
-    margin: -95px 0 0 15px;
-}
-.nojs .nojs-text {
-    margin-left: 90px;
-    padding: 30px;
-}
-
-
-
-
-
-/*------------------------------------*\
-  	$MISC
-\*------------------------------------*/
-ol {
-    list-style:decimal;
-    margin-left: 35px;
-    padding: 10px auto 10px auto;
-}
-
-li {
-    padding-bottom: 15px
-}
-
-
-/*------------------------------------*\
-    $MEDIA
-\*------------------------------------*/
+/* $MEDIA
+ ---------------------------------------------------------------------------- */
 @media all and (max-width: 980px) {
     .stepout-clock {
         opacity: .5;
         filter:Alpha(opacity=50);
     }
 }
-
-/*------------------------------------*\
-    $TINKER
-\*------------------------------------*/
-
-
-
-
-
