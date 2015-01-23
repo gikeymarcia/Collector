@@ -294,6 +294,18 @@
     
     #### custom function to read from tab delimited data files;  pos 0 & 1 are blank,  header names are array keys
     function GetFromFile ($fileLoc, $padding = TRUE, $delimiter = ",") {
+        
+        #### if an array is empty, all positions == "", return TRUE
+        function isBlankLine ($array) {
+            foreach ($array as $item) {
+                if ($item != "") {
+                    return FALSE;
+                }
+            }
+            return TRUE;
+        }
+        #### END inner-function declaration ####
+        
         $contents  = file_get_contents($fileLoc);              // first, grab all the bytes, so we can look at the encoding
         $encodings = array('ISO-8859-1', 'Windows-1252');
         if (mb_detect_encoding($contents, $encodings)) {        // if we need to encode, make our cleaning function do this for us
@@ -352,17 +364,6 @@
         } else { return FALSE; }
     }
 
-
-
-    #### if an array is empty, all positions == "", return TRUE
-    function isBlankLine ($array) {
-        foreach ($array as $item) {
-            if ($item != "") {
-                return FALSE;
-            }
-        }
-        return TRUE;
-    }
 
 
     #### checking if a key exists within a GetFromFile array;  returns TRUE/FALSE
