@@ -198,12 +198,6 @@
         exit;
     }
     
-    // skip to done.php if some has logged in who has already completed all parts of the experiment
-    if ($item == 'ExperimentFinished') {
-        header('Location: done.php');
-        exit;
-    }
-    
     require $_codeF . 'Header.php';
     
 ?>

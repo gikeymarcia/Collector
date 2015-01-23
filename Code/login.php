@@ -88,30 +88,34 @@
                      . '<br> Please return in ' . $timeRemaining . ' </h1>';
                 exit;
             }
+        } else {                                                                                            // if the user is done with all sessions then send back to done.php
+            $_SESSION['alreadyDone'] = TRUE;
+            echo '<meta http-equiv="refresh" content="1; url=' . $_codeF . 'done.php">';
+            exit;
         }
         // Overwrite values that need to be updated
         $outputFile = ComputeString($outputFileName) . $outExt;                                 // write to new file
         $_SESSION['Output File'] = $_rootF . $dataF . $dataSubFolder . $outputF . $outputFile;
         $_SESSION['Start Time']  = date('c');
-		
-		#### Record info about the person starting the experiment to the status start file
-		// information about the user logging in
-		$UserData = array(
-			'Username'              => $_SESSION['Username'],
-			'ID'                    => $_SESSION['ID'],
-			'Date'                  => $_SESSION['Start Time'],
-			'Session'               => $_SESSION['Session'] ,
-			'Condition_Number'      => $_SESSION['Condition']['Number'],
-			'Condition_Description' => $_SESSION['Condition']['Condition Description'],
-			'Output_File'           => $outputFile,
-			'Stimuli_File'          => $_SESSION['Condition']['Stimuli'],
-			'Procedure_File'        => $_SESSION['Condition']['Procedure'],
-			'User_Agent_Info'       => $_SERVER['HTTP_USER_AGENT'],
-			'IP'                    => $_SERVER["REMOTE_ADDR"],
-		);
-		arrayToLine($UserData, $statusBeginPath);
-		###########################################################################
-	
+        
+        #### Record info about the person starting the experiment to the status start file
+        // information about the user logging in
+        $UserData = array(
+            'Username'              => $_SESSION['Username'],
+            'ID'                    => $_SESSION['ID'],
+            'Date'                  => $_SESSION['Start Time'],
+            'Session'               => $_SESSION['Session'] ,
+            'Condition_Number'      => $_SESSION['Condition']['Number'],
+            'Condition_Description' => $_SESSION['Condition']['Condition Description'],
+            'Output_File'           => $outputFile,
+            'Stimuli_File'          => $_SESSION['Condition']['Stimuli'],
+            'Procedure_File'        => $_SESSION['Condition']['Procedure'],
+            'User_Agent_Info'       => $_SERVER['HTTP_USER_AGENT'],
+            'IP'                    => $_SERVER["REMOTE_ADDR"],
+        );
+        arrayToLine($UserData, $statusBeginPath);
+        ###########################################################################
+        
         echo '<meta http-equiv="refresh" content="1; url=' . $_codeF . 'trial.php">';
         exit;               // do not run any of the other code, send to trial.php
         
