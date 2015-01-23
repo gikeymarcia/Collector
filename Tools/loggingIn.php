@@ -27,12 +27,15 @@
         }
         
         // set NONCE if not set, or if too old
-        if ((!isset($_SESSION['challenge']))
-            OR ($age > (60*60)) ) {
+        if (   (!isset($_SESSION['challenge']))
+            OR ($age > $LoginExpiration))  {
             $_SESSION['challenge'] = array(
                 'birth' => time(),
                 'NONCE' => makeNonce()
             );
+            if ($age > $LoginExpiration) {
+                return 'sessionExpired';
+            }
             return 'newVisitor';
         }
         

@@ -11,8 +11,8 @@
 <head>
     <link href="../Code/css/global.css"  rel="stylesheet"   type="text/css"/>
     <script src="../Code/javascript/jquery-1.10.2.min.js"   type="text/javascript"></script>
-    <script src="../Code/javascript/loggingIn.js"           type="text/javascript"></script>
     <script src="../Code/javascript/sha256.js"              type="text/javascript"></script>
+    <script src="../Code/javascript/loggingIn.js"           type="text/javascript"></script>
     
     <title>Collector Tools</title>
 </head>
@@ -21,11 +21,14 @@
     
 <?php
     $state = loginState($Password);
-    // $state = 'challengeFail';
     $pagetext = '';
+    if ($state == 'sessionExpired') {
+        $pagetext .=
+            '<h3>Your session has expired and you must login again to continue.<h3>';
+    }
+    echo $state . '<br>';
     switch ($state) {
         case 'setPassword':
-            echo 'set pass';
             $pagetext .=
                 '<div id="Error">' . 
                     '<h2>You are not allowed to use <em>Tools</em> until you have set a password</h2>' . 
@@ -33,10 +36,8 @@
                  '</div>';
             break;
         case 'challengeFail':
-            echo 'wrong password';
             $pagetext .= '<p class="error">Not so fast. That isn\'t the right password</p>';
         case 'returning':
-            echo 'returning visitor' . '<br>';
         case 'newVisitor':
             // echo 'new visitor';
             echo '<div id="login">
