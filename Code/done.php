@@ -42,7 +42,9 @@
     }
     
     
-    if (isset($_SESSION['finishedTrials'])) {
+    if (isset($_SESSION['finishedTrials'])
+        AND (!isset($_SESSION['alreadyDone']))
+        ) {
         // calculate total duration of experiment session
         $duration = time() - strtotime($_SESSION['Start Time']);
         $durationFormatted = $duration;
