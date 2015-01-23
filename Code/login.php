@@ -108,7 +108,6 @@
 			'Procedure_File'        => $_SESSION['Condition']['Procedure'],
 			'User_Agent_Info'       => $_SERVER['HTTP_USER_AGENT'],
 			'IP'                    => $_SERVER["REMOTE_ADDR"],
-			'Inclusion Notes'       => 'N/A',
 		);
 		arrayToLine($UserData, $statusBeginPath);
 		###########################################################################
@@ -522,7 +521,6 @@
         'Procedure_File'        => $_SESSION['Condition']['Procedure'],
         'User_Agent_Info'       => $_SERVER['HTTP_USER_AGENT'],
         'IP'                    => $_SERVER["REMOTE_ADDR"],
-        'Inclusion Notes'       => 'N/A',
     );
     arrayToLine($UserData, $statusBeginPath);
     ###########################################################################
