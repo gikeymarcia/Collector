@@ -1,7 +1,7 @@
 <?php
 /*  Collector
     A program for running experiments on the web
-    Copyright 2012-2014 Mikey Garcia & Nate Kornell
+    Copyright 2012-2015 Mikey Garcia & Nate Kornell
  */
     require 'initiateCollector.php';
     
@@ -42,7 +42,9 @@
     }
     
     
-    if (isset($_SESSION['finishedTrials'])) {
+    if (isset($_SESSION['finishedTrials'])
+        AND (!isset($_SESSION['alreadyDone']))
+        ) {
         // calculate total duration of experiment session
         $duration = time() - strtotime($_SESSION['Start Time']);
         $durationFormatted = $duration;
@@ -65,7 +67,6 @@
                         'Duration_Formatted'    => $durationFormatted,
                         'Session'               => $_SESSION['Session'],
                         'Condition_Number'      => $_SESSION['Condition']['Number'],
-                        'Inclusion Notes'       => $finalNotes,
                         );
         arrayToLine($data, $statusEndPath);
         
@@ -98,18 +99,6 @@
     
     $_SESSION = array();                        // clear out all session info
     session_destroy();                          // destroy the session so it doesn't interfere with any future experiments
-    
-    
-    #### TO-DO ####
-    $finalNotes = '';
-    /*
-     * Write code that looks at previous logging in activity and gives recommendations as to whether or not to include someone
-     * ideas:
-     *        if someone has logged in more than once, flag them
-     *        if someone has 1 login and no ends then say they're likely good
-     *        if someone already has 1 finish then say so
-     */
-    
     
     require $_codeF . 'Header.php';
 ?>

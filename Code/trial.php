@@ -1,7 +1,7 @@
 <?php
 /*  Collector
     A program for running experiments on the web
-    Copyright 2012-2014 Mikey Garcia & Nate Kornell
+    Copyright 2012-2015 Mikey Garcia & Nate Kornell
  */
 
     require 'initiateCollector.php';
@@ -195,12 +195,6 @@
     if(strtolower($item) == '*newsession*') {
         $_SESSION['finishedTrials'] = TRUE;
         header("Location: done.php");
-        exit;
-    }
-    
-    // skip to done.php if some has logged in who has already completed all parts of the experiment
-    if ($item == 'ExperimentFinished') {
-        header('Location: done.php');
         exit;
     }
     
