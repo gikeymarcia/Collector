@@ -208,7 +208,6 @@
     
 ?>
 
-<div class="cframe-content">
     <!-- trial content -->
     <?php
         if ($trialFile):
@@ -290,7 +289,6 @@
             echo '</div>';
         }
     ?>
-</div>
 
 <!-- Pre-Cache Next trial -->
 <div class="precachenext">

@@ -19,7 +19,8 @@
     require 'Code/initiateCollector.php';
 
     // reset session so it doesn't contain any information from a previous login attempt
-    $_SESSION = array();                                
+    session_destroy();
+    $_SESSION = array();                             
     
     // load and sort conditions
     $Conditions = GetFromFile($expFiles.$conditionsFileName);
@@ -33,8 +34,14 @@
 <section class="vcenter">
   <h1 class="textcenter"><?php echo $welcome;?></h1>
   <?php echo $expDescription; ?>
-
-  <form action="<?php echo $codeF . 'login.php' ?>" autocomplete="off" class="collector-form stacked textcenter" method="get" name="Login">
+  
+  <br>
+  
+  <form action="<?php echo $codeF . 'login.php' ?>" 
+        autocomplete="off" 
+        class="collector-form inline textcenter" 
+        method="get" 
+        name="Login">
     <?php echo $askForLogin;?>
     
     <div class="collector-form-element">
@@ -53,12 +60,13 @@
         for ($i=2; $i<count($tempCond); $i++) {
           $name  = $useConditionNames ? $tempCond[$i]['Condition Description'] : $tempCond[$i]['Number'];
           $title = $showConditionInfo ? $tempCond[$i]['Stimuli'] . ' - ' . $tempCond[$i]['Procedure'] : '';
-          echo '<option value="' . $tempCond[$i]['Number'] . '" title="' . $title . '">' . $name . '</option>';
+          echo '<option value="' . $tempCond[$i]['Number'] . '"  title="' . $title . '">' . $name . '</option>';
         }
       ?>
       </select>
-
-    <input class="collector-button" type="submit" value="Login">
+    <div class="collector-form-element">
+      <input class="collector-button" type="submit" value="Login">
+    </div>
 
   </form>
 </section>

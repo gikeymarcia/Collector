@@ -1,10 +1,10 @@
 /* ----------------------------------------------------------------------------
 
 
- * Description:     Collector styles
- * Version:       2.0.0 (2015-01-19)
- * Website:       http://www.cogfog.com/
- * Author:        Adam Blake
+ * Description:    Collector styles
+ * Version:        2.0.0 (2015-01-19)
+ * Website:        http://www.cogfog.com/
+ * Author:         Adam Blake
 
  
  == CONTENTS: =================================================================
@@ -65,7 +65,7 @@ time, mark, audio, video {
 }
 
 body {
-  line-height:1;
+  line-height:1.2;
 }
 
 article,aside,details,figcaption,figure,
@@ -190,13 +190,13 @@ h1,h2,h3,h4,h5,h6,a {
 
 h1 {
   font-size: 2em;
-  padding: 0 0 .2em 0;
+  padding: 0 0 .5em 0;
   margin-bottom: 0;
 }
 
 h2 {
   font-size: 1.5em;
-  padding: .2em 0;
+  padding: .5em 0;
 }
 
 h3 {
@@ -241,153 +241,326 @@ pre {
 /*  $BUTTONS 
  ---------------------------------------------------------------------------- */
 .collector-button {
-  font-family: inherit;
-  font-size:100%;
+  font-family:"Oswald", Helvetica, Arial, sans-serif;
+  font-size:90%;
   text-align:center;
-  padding:.45em 1em;
+  padding:.3em .5em;
   color:#fff;
   background-color:#069;
   border-radius:4px;
   border:0;
   cursor:pointer;
 }
-.collector-button-hover,.collector-button:hover,.collector-button:focus {
+.collector-button-hover,.collector-button:hover,
+.collector-button-focus, .collector-button:focus {
 	background-color: #09c;
 }
-.collector-button:focus {
+.collector-button-focus, .collector-button:focus {
   outline: 0;
 }
 .collector-button-active,.collector-button-active:hover,.collector-button:active {
 	background-color:#0f9;
 }
-
+.collector-button-advance {
+  margin-top:3em;
+}
 
 
 
 
 /*  $FORMS
  ----------------------------------------------------------------------------- */
+/* General form styling */
 .collector-form {
-  display:block;
-  font-family:"Oswald", Helvetica, Arial, sans-serif;
-  margin:.5em 0;
-  border-radius:5px;
-  padding:0 10%;
+  font:1.1em Helvetica, Arial, sans-serif;
+  margin:0 auto;
+  max-width:800px;
 }
-
-.collector-form fieldset {
-  border:none;
-  margin:0 0 2em 0;
-}
-.collector-form fieldset:last-of-type {
-  margin-bottom:0;
-}
-.collector-form legend {
-  color:#069;
-  font-size:2em;
-  font-weight:bold;
-  padding-bottom:2em;
-}
-
-/* Form Controls */
-.collector-form-element {
-  margin:0 0 2.5em 0;
-}
-.stacked .collector-form-element {
-  margin-bottom:0;
-}
-
-.collector-form-element > label {
-  display:inline-block;
-  vertical-align:top;
-  width:40%;
-}
-
-.collector-form label:hover {
+label,
+input[type=radio],
+input[type=checkbox],
+.choiceHolder {
   cursor:pointer;
 }
 
-.collector-form .labelsub {
-  color:#333;
-  font-style:italic;
-  text-align:right;
+/* labels and legends */
+.collector-form > fieldset legend,
+.collector-form-element label,
+.radio-label {
+  font-family:"Oswald", Helvetica, Arial, sans-serif;
+}
+.collector-form > fieldset legend {
+  font-size:2em;
+  padding:.5em 0;
+  margin:0;
+}
+.collector-form-element label,
+.textarea-label,
+.radio-label,
+.likert-label {
+  display:block;
+  margin:.8em 0;
 }
 
-.collector-form-element > input,
-.collector-form-element .radio,
+/* Form controls */
+.collector-form-element {
+  margin:1em 0;
+}
+.collector-form-element input[type=text],
+.collector-form-element .number input[type=text],
+.collector-form-element select,
+.collector-form-element input[type=radio],
+.collector-form .inline-radio div {
+  margin-left:1em;
+}
+
+.collector-form-element input[type=text],
+.collector-form-element input[type=radio] + label,
 .collector-form-element select,
 .collector-form-element textarea {
-  box-sizing:border-box;
-  font-size:1em;
-  margin:0 0 0 20px;
-  padding:5px;
-  vertical-align:middle;
-  width:55%;
+  font:1em Helvetica, Arial, sans-serif;
 }
+  
+  /* text */
+  .collector-form-element input[type=text],
+  .collector-form-element select,
+  .collector-form-element textarea {
+    width:10em;
+  }
+  
+  /* textbox */
+  .collector-form-element input[type=text] {
+    padding:.3em .5em;
+  }
+  
+  /* number */
+  .collector-form-element.number input[type=text] {
+    font-size:1.3em;
+    text-align:center;
+    width:3em;
+  }
+  
+  /* select */
+  .collector-form-element select {
+    padding:.3em .5em;
+  }
+  
+  /* textarea */
+  .collector-form-element textarea {
 
-.collector-form-element .radio {
+  }
+  
+  /* radio buttons */
+    /* normal radio buttons */
+    .collector-form-element input[type=radio] {
+      display:inline-block;
+      float:left;
+      margin-top:1.3em;
+      vertical-align:bottom;
+      width:10%;
+    }
+    .collector-form-element input[type=radio] + label {
+      display:inline-block;
+      float:left;
+    }
+    .collector-form-element:not(.inline-radio) input[type=radio] + label {
+      width:85%;
+    }
+    
+    /* likert and inline radio buttons */
+    .likert,
+    .likert-legend,
+    .likert-options {
+      text-align: center;
+      width:100%;
+    } 
+
+    .likert input,
+    .collector-form-element.inline-radio input[type=radio] {
+      margin:10px;
+      opacity:0;
+      filter:alpha(opacity=0);
+      position:absolute;
+    }
+    .likert label,
+    .collector-form-element.inline-radio input[type=radio] + label,
+    .collector-form-element.likert input[type=radio] + label {
+      box-sizing:border-box; /* might have to move out */
+      display:inline-block;
+      margin:-2px;
+      position:relative;
+      padding: 4px 12px;
+      font-size:.9em;
+      color: #333;
+      text-align: center;
+      vertical-align: middle;
+      background-color: #f5f5f5;
+      background-image: -moz-linear-gradient(top,#fff,#e6e6e6);
+      background-image: -webkit-gradient(linear,0 0,0 100%,from(#fff),to(#e6e6e6));
+      background-image: -webkit-linear-gradient(top,#fff,#e6e6e6);
+      background-image: -o-linear-gradient(top,#fff,#e6e6e6);
+      background-image: linear-gradient(to bottom,#fff,#e6e6e6);
+      background-repeat: repeat-x;
+      border: 1px solid #ccc;
+      border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+      border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
+      border-bottom-color: #b3b3b3;
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff',endColorstr='#ffe6e6e6',GradientType=0);
+      filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+      -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);
+      -moz-box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);
+    }
+    .likert input[type=radio]:checked + label,
+    .collector-form-element.inline-radio input[type=radio]:checked + label {
+      background-image: none;
+      outline: 0;
+      -webkit-box-shadow: inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05);
+      -moz-box-shadow: inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05);
+       background-color:#e0e0e0;
+    }
+    .likert input:focus + label,
+    .collector-form-element.inline-radio input:focus + label {
+      outline:1px dotted #111;
+      z-index:3000;
+    }
+    .likert label {
+      margin:0 -1px 0 0;
+    }
+    
+    .likert-legend { 
+      color:#777;
+      display:block;
+      float:left;
+      margin:.5em auto;
+      width:95%;
+    }
+    .likert-legend > div {
+      width:33.3%;
+      display:inline-block;
+    }
+    .likert-legend-left {
+      text-align: left;
+    }
+    .likert-legend-right {
+      text-align: right;
+    }
+    
+    .likert + .collector-form-element .collector-button {
+      margin-top:0;
+    }
+    
+  /* checkboxes */
+  .collector-form-element input[type=checkbox] {
+    display:inline-block;
+    margin:1.4em 1.5em 0 0;
+    vertical-align:top;
+  } 
+  .collector-form-element input[type=checkbox] + label {
+    display:inline-block;
+    font-family:Helvetica, Arial, sans-serif;
+    margin-bottom:0;
+    width:80%;
+  }
+  
+/* disabled */
+input[type=text]:disabled,
+input[type=radio]:disabled,
+input[type=checkbox]:disabled,
+input[type=range]:disabled,
+input[type=submit]:disabled,
+button:disabled,
+select:disabled,
+textarea:disabled {
+  cursor:not-allowed;
+  background-color:#e1e1e1;
+  border:1px solid #888;
+  color:#777;
+  outline:0;
+}
+  
+/* labels on left (instead of stacked) */
+.aligned .collector-form-element:not(.inline-radio) label {
   display:inline-block;
+  width:30%;
 }
-.collector-form-element .radio input,
-.collector-form-element .radio label {
-  vertical-align:middle;
+  /* radio buttons */
+  .aligned .radio-label {
+    float:left;
+    margin-right:1em;
+    width:30%;
+  }
+  .aligned .radio-label ~ div {
+    float:left;
+  }
+  .aligned input[type=text] {
+    margin-top:.8em;
+    vertical-align:top;
+  }
+  .aligned .collector-form-element:not(.inline-radio) input[type=radio] {
+    display:inline-block;
+    float:none;
+    vertical-align:baseline;
+  }
+  .aligned .collector-form-element:not(.inline-radio) input[type=radio] + label {
+    width:80%;
+  }
+  .aligned .inline-radio div {
+    margin-top:.9em;
+    margin-left:.5em;
+  }
+  .aligned .inline-radio:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0px;
+    content: ".";
+    clear: both;
+    height: 0px;
+  }
+  /* checkboxes */
+  .aligned .collector-form-element input[type=checkbox] + label {
+    width:80%;
+  }  
+
+/* inline forms */
+.inline .collector-form-element {
+  display:inline;
+  margin:0;
+}
+.inline .collector-form-element input,
+.inline .collector-form-element select {
+  margin:0 0 1em 0;
 }
 
-.collector-form input:focus,.collector-form select:focus,.collector-form textarea:focus,
-.collector-form input:hover,.collector-form select:hover,.collector-form textarea:hover {
-  outline: 0;
-  border-color: #0f9;
-}
-.collector-form input[disabled],.collector-form select[disabled],.collector-form textarea[disabled],
-.collector-form input[disabled]:focus,.collector-form select[disabled]:focus,.collector-form textarea[disabled]:focus {
-	outline:0;
-	border:0;
-  cursor: not-allowed;
-  background-color: #eaeded;
-  color: #666;
-} 
-
-/* Consent form */
-.consent {
-  background:none repeat scroll 0% 0% #F2F2F2;
-  border:1px solid #CCC;
-  font-family:serif;
-  height:200px;
-  overflow: auto;
-  padding: 6px;  
-}
-.consent h1, .consent h2, .consent h3, .consent h4 {
-  color:#000;
-  font-family:serif;
-  margin-bottom:.5em;
-}
-.consent h1 {
-  font-size:16pt;
-  font-weight:bold;
-}
-.consent h2 {
-  font-size:14pt;
-  font-weight:bold;
-}
-.consent h3 {
-  font-size:12pt;
-  font-weight:bold;
-}
-.consent h4 {
-  font-size:10pt;
-  font-style:italic;
-}
-.consent-check label {
-  width:80%;
-}
-.consent-check input {
+/* popout helper textbox */
+.collector-form-element .helptext {
   display:inline-block;
-  width:10%;
+  font-size:.9em;
+  height:0;
+  width:0;
+  overflow:hidden;
+  position:absolute;
+  margin:0 0 0 4em;
+  background: none repeat scroll 0 0 #EEEEEE;
+  -webkit-transition: width .3s ease;
+  -moz-transition: width .3s ease;
+  -ms-transition: width .3s ease;
+  -o-transition: width .3s ease;
+  transition: width .3s ease;
+}
+.collector-form-element input:focus + .helptext {
+  width:200px;
+  height:3em;
+  line-height:1.5;
+  border: 1px solid #09c;
+  padding: .2em 0 .2em 1em;
 }
 
+    
 /* jQuery slider */
 #slider {
-	margin-top:30px;
+	margin:2em auto .5em auto;
 }
 .amount {
 	margin-top: 10px;
@@ -490,7 +663,7 @@ pre {
 }
 .content, article, main, section {
   margin: 0 auto 2em auto;
-  max-width:640px;
+  max-width:720px;
   min-width:400px;
 }
 .clearfix:after {
@@ -558,18 +731,54 @@ pre {
 /* $PAGE-SPECIFIC
  ---------------------------------------------------------------------------- */
 /* ==  Basic Info  == */
-.basicinfo {
-  padding:20px;
-}
+.basicinfo {}
+  /* Consent form */
+  .consent {
+    background:none repeat scroll 0% 0% #F2F2F2;
+    border:1px solid #CCC;
+    font-family:serif;
+    height:200px;
+    overflow:auto;
+    padding:6px;  
+  }
+  .consent h1, .consent h2, .consent h3, .consent h4 {
+    color:#000;
+    font-family:serif;
+    margin-bottom:.5em;
+  }
+  .consent h1 {
+    font-size:16pt;
+    font-weight:bold;
+  }
+  .consent h2 {
+    font-size:14pt;
+    font-weight:bold;
+  }
+  .consent h3 {
+    font-size:12pt;
+    font-weight:bold;
+  }
+  .consent h4 {
+    font-size:10pt;
+    font-style:italic;
+  }
 
 /* ==  Instructions  == */
+.instructions {
+  margin-top: 3em;
+}
+
 .readcheck {
-	display:none;
-	width: 60%;
-	margin: 3em auto 1em auto;
 	background: #00FF87;
+  border-radius: 5px;
+  display:none;
+	margin: 3em auto 1em auto;
 	padding: 1.5em;
-	border-radius: 5px;
+  width: 60%;
+}
+
+.readcheck ul {
+  list-style:none;
 }
 .readcheck ul li {
 	width: 80%;
@@ -602,8 +811,9 @@ input[type="submit"].button-trial-advance {
 
 /* study trial type */
 .study {
-	font-size:3em;
-    overflow:auto;
+	font-size:2em;
+  max-height:80%;
+  overflow:auto;
 }
 .study-left {
 	float:left;
@@ -623,21 +833,48 @@ input[type="submit"].button-trial-advance {
     min-height:1px;
 }
 
-/* copy trials */
+/* copy and word-stem (testcue) and free recall trials*/
 .collector-form .copybox {
-	font-family: "Roboto", "Open Sans", Arial, Helvetica, sans-serif;
+	font-family: Arial, sans-serif;
 	font-size:100%;
 	color:#333;
-	padding:.15em 0;
-	margin:0 0 0 -3px;
+	padding:0 0 0 1px;
+	margin:-4px 0 0 -2px;
+  max-width: 200px;
+  overflow:visible;
 	width: 90%;
-	vertical-align:top;
 }
+.collector-form .test-cue input  { 
+  border-style:solid solid solid none; 
+  margin:-.15em 0 0 0; width: 300px;
+  padding: 0px 1px;
+  max-width: 4em;
+}
+.collector-form .fr-textarea {
+  height:10em;
+  width:100%;
+}
+
 
 /* MCpic, StudyPic, TestPic trials */
 .pic {
 	margin-bottom: 24px;
 }
+.mcPicTable td {
+  min-width: 170px;
+  text-align: center;
+  vertical-align: middle; 
+}
+
+.mcPicTable .collector-button { 
+  margin: 3% 7%; 
+}
+
+/** TODO change to the active green when checked **/
+/** TODO fix disabled buttons not gray **/
+/** TODO vertical centering tweaks, and moving the Likert down also **/
+/** TODO multiple of same items in Likert answers **/
+/** TODO old/new **/
 
 /* stepout pages */
 .stepout-clock {
@@ -718,6 +955,7 @@ input[type="submit"].button-trial-advance {
     display:block;
     width:100%;
 }
+
 
 
 
