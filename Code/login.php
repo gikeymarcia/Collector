@@ -397,15 +397,15 @@
     #### Create $_SESSION['Trials'] 
     #### Load all Stimuli and Procedure info for this participant's condition then combine to create the experiment
     // load stimuli for this condition then block shuffle
-    $stimuli = GetFromFile($up . $expFiles . $stimF . $_SESSION['Condition']['Stimuli']);
-    $stimuli = BlockShuffle($stimuli, 'Shuffle');
+    $cleanStimuli = GetFromFile($up . $expFiles . $stimF . $_SESSION['Condition']['Stimuli']);
+    $stimuli = multiLevelShuffle($cleanStimuli);
     $stimuli = shuffle2dArray($stimuli, $stopAtLogin);
     $_SESSION['Stimuli'] = $stimuli;
     
     // load and block shuffle procedure for this condition
-    $procedure = GetFromFile($up . $expFiles . $procF . $_SESSION['Condition']['Procedure']);
+    $cleanProcedure = GetFromFile($up . $expFiles . $procF . $_SESSION['Condition']['Procedure']);
     
-    $addColumns = array( 'Text' );
+    $addColumns = array('Text');
     foreach ($addColumns as $add) {
         foreach ($trialTypeColumns as $number => $colName) {                                // check all trial type levels we found
             if ($number == 0) {
@@ -418,7 +418,7 @@
         }
     }
     
-    $procedure = BlockShuffle($procedure, 'Shuffle');
+    $procedure = multiLevelShuffle($cleanProcedure);
     $procedure = shuffle2dArray($procedure, $stopAtLogin);
     
     $_SESSION['Procedure'] = $procedure;
@@ -548,6 +548,25 @@
         Readable($trialTypeColumns,         'Levels of trial types being used');
         Readable($_SESSION['Trial Types'],  'All info about trial types used in experiment');
         Readable($_SESSION['Trials'],       '$_SESSION["Trials"] array');
+        // for checking that shuffling is working as planned
+        echo '<h1> Stimuli before/after</h1>';
+        echo '<div class="before">';
+                  display2darray($cleanStimuli);
+        echo '</div>';
+        echo '<div class="after">';
+                  display2darray($stimuli);
+        echo '</div>';
+        
+        echo '<div class="sectionBreak">';
+        echo '<h1>Procedure before/after</h1>';
+        echo '</div>';
+        echo '<div class="before">';
+                  display2darray($cleanProcedure);
+        echo '</div>';
+        echo '<div class="after">';
+                  display2darray($procedure);
+        echo '</div>';
+
         echo '<form action ="' . $link . '" method="get">'
                . '<input type="submit" value="Press here to continue to experiment"/>'
            . '</form>';

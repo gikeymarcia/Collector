@@ -9,7 +9,7 @@
 	
 	$dataF .= $experimentName . '-Data/';
 	
-	if( $getdataPassword === '' ) exit( 'GetData has not been enabled. Please enter a password in the Settings file in your experiment folder.' );
+	if( $Password === '' ) exit( 'GetData has not been enabled. Please enter a password in the Settings file in your experiment folder.' );
 	
 	
 	#### Column Prefixes ####
