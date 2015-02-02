@@ -6,4 +6,3 @@
     <div class="textleft">
         <input class="button button-trial-advance" id="FormSubmitButton" type="submit" value="Submit"   />
     </div>
-    </form>
