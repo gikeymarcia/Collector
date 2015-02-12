@@ -294,18 +294,6 @@
     
     #### custom function to read from tab delimited data files;  pos 0 & 1 are blank,  header names are array keys
     function GetFromFile ($fileLoc, $padding = TRUE, $delimiter = ",") {
-        
-        #### if an array is empty, all positions == "", return TRUE
-        function isBlankLine ($array) {
-            foreach ($array as $item) {
-                if ($item != "") {
-                    return FALSE;
-                }
-            }
-            return TRUE;
-        }
-        #### END inner-function declaration ####
-        
         $contents  = file_get_contents($fileLoc);              // first, grab all the bytes, so we can look at the encoding
         $encodings = array('ISO-8859-1', 'Windows-1252');
         if (mb_detect_encoding($contents, $encodings)) {        // if we need to encode, make our cleaning function do this for us
@@ -341,10 +329,16 @@
             }
             unset($field);
             $tOut = array_combine($keys, $line);                // combine the line of data with the header
-            if (isBlankLine($tOut)) {                           // do not include blank lines in output
-                continue;
+            $isBlank = TRUE;                                    // assume line is blank (no data)
+            foreach ($tOut as $cell) {                          // check every cell of line
+                if ($cell !== '') {                             // if we find data
+                    $isBlank = FALSE;                               // line is not blank
+                    break;
+                }
             }
-            $out[] = $tOut;                                     // add this combined header<->line array to the output array
+            if ($isBlank === FALSE) {                           // if line is not blank
+                $out[] = $tOut;                                     // add this combined header<->line array to the output array
+            }
         }
         fclose($file);
         return $out;
