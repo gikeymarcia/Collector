@@ -13,7 +13,7 @@
     
     #Experiment
     $expFiles   = 'Experiment/';            // hard coded into show()
-    $eligF      = 'Eligibility/';
+    $eligF      = 'eligibility/';
     $imageF     = 'Images/';
     $audioF     = 'Audio/';
     $stimF      = 'Stimuli/';

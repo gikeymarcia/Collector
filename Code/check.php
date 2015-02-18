@@ -13,31 +13,30 @@
     $files   = scandir($folder);                    // list all files containing workers
     $toCheck = null;                                // who to check for eligibility
     $checked = array();                             // list of all the files that were checked
+    $skipped = array();                             // list of all files skipped becasue there was no 'WorkerID' column
     $current = array();                             // each file will be loaded into this array
     $uniques = array();                             // all the unique workers (no duplicates)
     $noGo    = array();                             // reasons to exclude someone from participation
     $ip = $_SERVER["REMOTE_ADDR"];                  // user's ip address
-    $ipFilename = 'rejected-IPs.txt';               // name of bad IP file
+    $ipFilename = 'rejected-IPs.csv';               // name of bad IP file
     $ipPath = $folder . $ipFilename;                // path to bad IP file
-
+    $priorExp = FALSE;                              // temporary hack to block people by username who are on whitelisted IPs
+    
     #### functions needed to make this page work
+    
+    // Prints errors and stops users from logging in if errors are found
     function rejectCheck ($errors) {
         if (count($errors) > 0) {
             foreach ($errors as $stopper) {
-                echo "<h2>{$stopper}</h2>";
+                echo '<h2>' . $stopper . '</h2>';
             }
             if (isset($_SESSION)) {
                 exit;
             }
         }
     }
-
-    /**
-     * logIP function
-     *
-     * Checks if there is an IP reject list then creates the file (if it does
-     * not exist) and adds the current user's IP
-     */
+    
+    // Adds user's IP to log file, if the file doesn't exist it will be created
     function logIP() {
         global $ipPath, $ip;
 
@@ -53,27 +52,31 @@
             fputs($ipFile, PHP_EOL);                // write newline character
         }
     }
-
-
+    
+    
     #### make a master list of unique user IDs (lowercase and trimmed)
     foreach ($files as $file) {                                     // check all files
-
-        // set correct delimiter and skip incorrect filetypes
+        
+        // set correct delimiter and skip IP log file
         if (inString('.txt', $file)) {
             $delimiter = "\t";
         } elseif (inString('.csv', $file)) {
             $delimiter = ',';
         } else { continue; }
-
         if ($file == $ipFilename) {                                 // skip reading IP file
             continue;
         }
+        
         $current = array();                                         // clear data from current file before loading next one
-        $current = GetFromFile($folder . $file, FALSE, $delimiter); // read a file containing workers
-        $checked[] = $folder . $file;                               // keep track of which files we've checked
-        foreach ($current as $worker) {
-            if (!in_array($worker['WorkerId'], $uniques)) {
-                $uniques[] = trim(strtolower($worker['WorkerId']));
+        $current = GetFromFile($folder . $file, FALSE, $delimiter); // read a file presumably containing workers
+        if (!isset($current[0]['WorkerId'])) {                      // skip files without a 'WorkerID' column
+            $skipped[] = $file;                                     // keep track of which files we've skipped
+        } else {
+            $checked[] = $folder . $file;                           // keep track of which files we've checked
+            foreach ($current as $worker) {
+                if (!in_array($worker['WorkerId'], $uniques)) {
+                    $uniques[] = trim(strtolower($worker['WorkerId']));
+                }
             }
         }
     }
@@ -101,31 +104,45 @@
         $noCaseCheck = trim(strtolower($toCheck));                  // all lowercase version of ID to check
 
         ####  check if we've already told this person not to come back (BOOM, headshot)
-        if (isset($_SESSION) AND file_exists($ipPath)) {            // check IPs if logged in and there is a badIP file
-            $badIPs = GetFromFile($ipPath, FALSE);
-            foreach ($badIPs as $rejected) {
-                if ($ip == $rejected['ip address']) {
-                    $noGo[] = 'Sorry, you are not allowed to login to this experiment more than once.';
-                }
-            }
-        }
+        // if (isset($_SESSION)
+            // AND file_exists($ipPath)
+        // ) {
+            // $badIPs = GetFromFile($ipPath, FALSE);
+            // foreach ($badIPs as $rejected) {
+                // if ($ip == $rejected['ip address']) {
+                    // $noGo[] = 'Sorry, you are not allowed to login to this experiment more than once.';
+                    // break;     // only log IP rejection once
+                // }
+            // }
+        // }
 
         #### if blacklist is enabled, add IP to reject list
-        if (isset($_SESSION) AND $blacklist) {                       // only blacklist logged in users
-            logIP();
-        }
+        // if (isset($_SESSION)
+            // AND ($blacklist == TRUE)
+        // ) {
+            // logIP();
+        // }
 
         #### check if this user has previously participated
         if (in_array($noCaseCheck, $uniques)) {
             $noGo[] = 'Sorry, you are not eligible to participate in this study
                        because you have participated in a previous version of
                        this experiment.';
-            logIP();
-
+            $priorExp = TRUE;
+            // if ($blacklist == TRUE) {
+                // logIP();
+            // }
         }
 
-        if ( !(in_array($ip, $whitelist, false)) ) {                // skip the autocheck if IP is allowed
-            rejectCheck($noGo);                                     // print errors
+        if (!(in_array($ip, $whitelist, false))) {          // skip the autocheck if IP is allowed
+            rejectCheck($noGo);                             // print errors
+        } elseif ($priorExp == TRUE) {
+            echo '<h2>Sorry, you are not eligible to participate in this study
+                      because you have participated in a previous version of
+                      this experiment.</h2>';
+            if (isset($_SESSION)) {
+                exit;
+            }
         }
     }
 
@@ -152,6 +169,7 @@
     if (!isset($_SESSION)) {
         Readable($files, 'Files in directory');
         Readable($uniques, 'Previous iteration workers');
+        Readable($skipped, 'Files skipped becasue there is no "WorkerID" column');
     }
 
     if (!isset($_SESSION)) {
