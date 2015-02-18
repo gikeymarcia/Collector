@@ -8,11 +8,17 @@
      * your changes.
      */
      
-	$compTime = 5;        // time in seconds to use for 'computer' timing
+    $compTime = 5;        // time in seconds to use for 'computer' timing
+    
+    // use the `Cue` if a valid one is called and there is no `Text` set in the procedure
+    if (($cue != '')
+        AND (trim($text) == '')
+    ){
+        $text = $cue;
+    }
 ?>
     <div><?php echo $text; ?></div>
 
-	<!-- include form to collect RT and advance page -->
-	<div class="precache textright">
-		<input class="button button-trial-advance" id="FormSubmitButton" type="submit" value="Next" />
-	</div>
+    <div class="precache textright">
+        <input class="button button-trial-advance" id="FormSubmitButton" type="submit" value="Next" />
+    </div>
