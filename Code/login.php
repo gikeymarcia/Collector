@@ -417,7 +417,7 @@
                 $prefix = 'Post' . ' ' . $number . ' ';
             }
             $column = $prefix . $add;
-            addColumn($procedure, $column);                // this will only add columns if they don't already exist; nothing is overwritten
+            addColumn($cleanProcedure, $column);                // this will only add columns if they don't already exist; nothing is overwritten
         }
     }
     
