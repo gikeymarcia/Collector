@@ -13,7 +13,7 @@
     
     #Experiment
     $expFiles   = 'Experiment/';            // hard coded into show()
-    $eligF      = 'eligibility/';
+    $eligF      = 'Eligibility/';
     $imageF     = 'Images/';
     $audioF     = 'Audio/';
     $stimF      = 'Stimuli/';
@@ -39,7 +39,7 @@
     #Experiment
     $conditionsFileName     = 'Conditions.csv';
     $finalQuestionsFileName = 'FinalQuestions.csv';
-    $instructionsFileName   = 'instructions.php';        // this file could store the question and possible answers, and leave the code to Code/instructions.php
+    $instructionsFileName   = 'Instructions.php';        // this file could store the question and possible answers, and leave the code to Code/instructions.php
     /**
      * Future files to name
      *

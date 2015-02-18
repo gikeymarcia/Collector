@@ -1,4 +1,4 @@
 WorkerId
-Batman
-Robin
 Joker
+Bane
+Twoface
