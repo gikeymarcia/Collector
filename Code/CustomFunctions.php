@@ -381,6 +381,7 @@
     
     #### custom function to read from tab delimited data files;  pos 0 & 1 are blank,  header names are array keys
     function GetFromFile ($fileLoc, $padding = TRUE, $delimiter = ",") {
+        ini_set('auto_detect_line_endings', true);             // make sure PHP auto-detects line endings
         $contents  = file_get_contents($fileLoc);              // first, grab all the bytes, so we can look at the encoding
         $encodings = array('ISO-8859-1', 'Windows-1252');
         if (mb_detect_encoding($contents, $encodings)) {        // if we need to encode, make our cleaning function do this for us
