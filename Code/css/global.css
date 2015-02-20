@@ -29,6 +29,7 @@
  *
  *  MISC
  *  MEDIA
+ *  TOOLS
  */
 
 
@@ -209,6 +210,15 @@ pre {
     max-width: 800px;
     margin-left: 9%;
     
+}
+
+code {
+    background:#f7f7f7;
+    font-family: "Courier New", Courier, monospace;
+    padding: 3px 5px;
+    font-size: 90%;
+    line-height: 1.45;
+    border-radius: 3px;
 }
 
 
@@ -650,10 +660,51 @@ li {
 }
 
 /*------------------------------------*\
-    $TINKER
+    $TOOLS
 \*------------------------------------*/
-
-
-
-
-
+#hashSubmit {
+    display:none;
+}
+#login {
+    width: 450px;
+    margin: 50px auto;
+    text-align: center;
+}
+    .wrong {
+        font-weight:bold;
+        line-height:.9em;
+        color:red;
+    }
+    #login p {
+        width: 300px;
+        display:inline-block;
+        margin-bottom:5px;
+    }
+    #login input[type=password] {
+        margin-left:10px;
+        margin-right:5px;
+        width: 220px;
+    }
+    #salt {
+        font-family:"Courier New", Courier, monospace;
+        color:#f7f7f7;          font-weight:lighter;
+        width:300px;;           line-height: 95%;
+        word-wrap:break-word;   display:block;
+        margin: 50px auto 20px auto;
+    }
+#nav {
+    width: 90%;
+    height: 100px;
+    display:block;
+    margin:10px auto;
+    background:#EAEDED;
+}
+    #nav h1 {
+        margin: 22px;
+        display:inline-block;
+    }
+    #nav #logout {
+        float:right;
+        font-size:1.1em;
+        margin: 35px;
+    }

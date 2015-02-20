@@ -1,0 +1,30 @@
+Order Allow,Deny
+Allow from all
+#Allow from 127.0.0.1
+
+DirectoryIndex tools.php
+
+<FilesMatch '.*(php)'>
+	Order Deny,Allow
+	Deny from all
+</FilesMatch>
+
+<Files tools.php>
+	Order Allow,Deny
+	Allow from all
+</Files>
+
+<Files index.php>
+	Order Allow,Deny
+	Allow from all
+</Files>
+
+<Files login.php>
+	Order Allow,Deny
+	Allow from all
+</Files>
+
+<Files logOut.php>
+	Order Allow,Deny
+	Allow from all
+</Files>
