@@ -45,6 +45,8 @@
     
     #### show the appropriate response page
     function LoginPrompt ($state) {
+        $salt = ($state != 'noPass') ? $_SESSION['challenge'] : makeNonce();
+        
         $expired = '<h3>Your session has expired and you must login again to continue</h3>';
         $wrong   = '<p class="wrong">Thank you Mario! But our princess is in another castle... I mean, wrong password</p>';
         $noPass  =
@@ -57,25 +59,13 @@
                'Post this as an issue on the <a href="http://www.github.com/gikeymarcia/collector">project Github Page</a>.' .
             '</p>';
         $loginPrompt = 
-                '<p>Login to access tools</p>' .
-                '<input type="password" id="pass"></input>' .
-                '<input id="fauxSubmit" type="submit" value="Submit"></input>' .
-                '<form id="hashSubmit" action="login.php" method="post">' .
-                    '<span id="nonce">' . $_SESSION['challenge'] . '</span>' .
-                    '<input id="realInput" name="response" type="text"></input>' .
-                '</form>';
-        if ($state != 'noPass') {
-            $salt = $_SESSION['challenge'];
-                '<p>Login to access tools</p>' .
-                '<input type="password" id="pass"></input>' .
-                '<input id="fauxSubmit" type="submit" value="Submit"></input>' .
-                '<form id="hashSubmit" action="login.php" method="post">' .
-                    '<span id="nonce">' . $salt . '</span>' .
-                    '<input id="realInput" name="response" type="text"></input>' .
-                '</form>';
-        } else {
-            $salt = makeNonce();
-        }
+            '<p>Login to access tools</p>' .
+            '<input type="password" id="pass"></input>' .
+            '<input id="fauxSubmit" type="submit" value="Submit"></input>' .
+            '<form id="hashSubmit" action="login.php" method="post">' .
+                '<span id="nonce">' . $salt . '</span>' .
+                '<input id="realInput" name="response" type="text"></input>' .
+            '</form>';
             
         echo '<div id="login">';
         switch ($state) {
