@@ -152,7 +152,14 @@
     
     
     #### echoes out a table from a 2d array
-    function display2dArray($arr) {
+    function display2dArray($arr, $nonArrayCol = FALSE) {
+        if ($nonArrayCol === FALSE) {
+            $i = 0;
+            while (is_scalar($arr[$i])) {
+                unset($arr[$i]);
+                $i++;
+            }
+        }
         static $doInit = TRUE;
         if ($doInit) {
             $doInit = FALSE;
