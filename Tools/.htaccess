@@ -4,10 +4,6 @@ Allow from all
 
 DirectoryIndex tools.php
 
-<FilesMatch '.*(php)'>
-	Order Deny,Allow
-	Deny from all
-</FilesMatch>
 
 <Files tools.php>
 	Order Allow,Deny

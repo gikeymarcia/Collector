@@ -4,21 +4,17 @@
     require 'loginFunctions.php';
     session_start();
     $hash_algo = 'sha256';
-    $nonce = $_SESSION['challenge'];
+    $nonce = $_SESSION['admin']['challenge'];
     
     if(isset($_POST['response'])) {
         $response = $_POST['response'];
         if (checkPass($response, $Password, $nonce, $hash_algo) === TRUE) {
-            $_SESSION['challenge'] = makeNonce();
-            $_SESSION['admin'] = array(
-                'status' => 'loggedIn',
-                'birth'  => time()
-            );
+            $_SESSION['admin']['challenge'] = makeNonce();
+            $_SESSION['admin']['status'] = 'loggedIn';
+            $_SESSION['admin']['birth'] = time();
         } else {
-            $_SESSION['admin'] = array(
-                'status' => 'failed',
-                'birth'  => time()
-            );
+            $_SESSION['admin']['status'] = 'failed';
+            $_SESSION['admin']['birth'] = time();
         }
     }
     

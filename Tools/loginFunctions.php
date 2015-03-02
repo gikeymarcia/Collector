@@ -18,22 +18,23 @@
             return 'noPass';
         }
         
-        if (!isset($_SESSION['admin'])) {
-            $_SESSION['challenge'] = makeNonce();
+        if (!isset($_SESSION['admin']['status'])) {
+            $_SESSION['admin']['challenge'] = makeNonce();
             return 'newChallenger';
         }
         
         if ($_SESSION['admin']['status'] === 'failed') {
-            $_SESSION['challenge'] = makeNonce();
+            $_SESSION['admin']['challenge'] = makeNonce();
             return 'wrongPass';
         }
         
         if ($_SESSION['admin']['status'] !== 'loggedIn') {
-            $_SESSION['challenge'] = makeNonce();
+            $_SESSION['admin']['challenge'] = makeNonce();
             return 'newChallenger';
         } else {
             $age = time() - $_SESSION['admin']['birth'];
             if ($age > $LoginExpiration) {
+                $_SESSION['admin']['challenge'] = makeNonce();
                 return 'expired';
             } else {
                 return 'loggedIn';
@@ -45,14 +46,15 @@
     
     #### show the appropriate response page
     function LoginPrompt ($state) {
-        $salt = ($state != 'noPass') ? $_SESSION['challenge'] : makeNonce();
+        global $_SESSION;
+        $salt = ($state != 'noPass') ? $_SESSION['admin']['challenge'] : makeNonce();
         
         $expired = '<h3>Your session has expired and you must login again to continue</h3>';
         $wrong   = '<p class="wrong">Thank you Mario! But our princess is in another castle... I mean, wrong password</p>';
         $noPass  =
             '<div class="error">' . 
                 '<h2>You are not allowed to use <code>Tools</code> until you have set a password</h2>' . 
-                '<p> The password can be set within <code>Experiment/settings.php</code></p>' . 
+                '<p> The password can be set within <code>Experiment/Settings.php</code></p>' . 
             '</div>';
         $unknown =
             '<p>We have no idea how you got here.' .
@@ -60,9 +62,9 @@
             '</p>';
         $loginPrompt = 
             '<p>Login to access tools</p>' .
-            '<input type="password" id="pass"></input>' .
+            '<input type="password" id="pass" autofocus></input>' .
             '<input id="fauxSubmit" type="submit" value="Submit"></input>' .
-            '<form id="hashSubmit" action="login.php" method="post">' .
+            '<form id="hashSubmit" action="login.php" method="post" hidden>' .
                 '<span id="nonce">' . $salt . '</span>' .
                 '<input id="realInput" name="response" type="text"></input>' .
             '</form>';
@@ -100,5 +102,19 @@
         }
         $NONCE = hash('sha512', $seed, FALSE);
         return $NONCE;
+    }
+    
+    function adminOnly() {
+        if(!isset($_SESSION)) {
+            session_start();
+        }
+        
+        if ( (isset($_SESSION['admin']['status']))
+            AND ($_SESSION['admin']['status'] === 'loggedIn')
+        ) {
+            // do nothing (i.e., allow script to run)
+        } else {
+            exit;   // kill for anyone not properly logged in
+        }
     }
 ?>

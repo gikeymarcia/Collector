@@ -581,26 +581,23 @@ input[type="submit"].button-trial-advance {
 .before, .after {
     width:   49%;
     display: block-inline;
-    margin:  0.5%;
+    margin:  0.25%;
     padding: 3px;
     float:   left;
     overflow:scroll;
-    font-size: .65em;
+    font-size: .9em;
 }
-.before {
-    background: #CCCCCC;
+.before table{
+    background: #E2E2E2;
 }
-.after {
-    background: #00FF87;
+.after table{
+    background: #53F522;
 }
 .sectionBreak {
     float: left;
     display:block;
     width:100%;
 }
-
-
-
 
 /*------------------------------------*\
   	$FQS
@@ -639,13 +636,19 @@ input[type="submit"].button-trial-advance {
   	$MISC
 \*------------------------------------*/
 ol {
-    list-style:decimal;
-    margin-left: 35px;
+    list-style-type: decimal;
     padding: 10px auto 10px auto;
 }
 
+ul {
+    list-style-type: disc;
+}
+ul li, ol li {
+    margin: 5px 0px 5px 45px;
+}
+
 li {
-    padding-bottom: 15px
+    /*padding-bottom: 15px*/
 }
 
 
@@ -662,15 +665,15 @@ li {
 /*------------------------------------*\
     $TOOLS
 \*------------------------------------*/
-#hashSubmit {
+/*#hashSubmit {
     display:none;
-}
+}*/
 #login {
     width: 450px;
     margin: 50px auto;
     text-align: center;
 }
-    .wrong {
+    #login .wrong {
         font-weight:bold;
         line-height:.9em;
         color:red;
@@ -694,17 +697,44 @@ li {
     }
 #nav {
     width: 90%;
-    height: 100px;
-    display:block;
-    margin:10px auto;
-    background:#EAEDED;
+    min-height: 65px;
+    overflow:auto;
+    margin:5px auto;
+    background-color: #DEE7EC;
+    border-radius: 8px;
+    padding: 20px 15px;
 }
     #nav h1 {
-        margin: 22px;
-        display:inline-block;
+        float:left;
+        line-height: .8em;
+        padding:0px;
     }
-    #nav #logout {
+    #nav div {
+        float:right;
+        margin-right: 25px;
+    }
+    #nav a {
         float:right;
         font-size:1.1em;
-        margin: 35px;
     }
+    #nav select {
+    width: 300px;;
+    }
+    #nav button {
+        margin-left:2px;
+}
+.collector-select {
+    background-color:#F2F2F2;
+    border:1px solid #ccc;
+    box-shadow: inset 0 1px 3px #ddd;
+    border-radius: 4px;
+    font-size: 90%;
+    /*width: auto;*/
+}
+.toolWidth {
+    width: 90%;
+    display: block;
+    margin: 0px auto;
+    overflow: auto;
+}
+
