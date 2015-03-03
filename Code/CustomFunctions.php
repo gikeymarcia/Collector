@@ -597,7 +597,7 @@
 
 
     #### add html tags for images and audio files but do nothing to everything else
-    function show ($string) {
+    function show ($string, $endOnly = TRUE) {
         if (!inString('www.', $string)) {                           // navigate path to Experiment folder (unless linking to external image)
             $fileName = '../Experiment/' . $string;
             if (FileExists($fileName)) {
@@ -605,6 +605,9 @@
             }
         }
         $stringLower = strtolower($fileName);                       // make lowercase version of input
+        if ($endOnly == TRUE) {
+            $stringLower = substr($stringLower, strlen($stringLower) - 6); // only check last 5 characters for file extensions
+        }
         $findJPG     = strpos($stringLower, '.jpg');                // look for file extensions in the input
         $findGIF     = strpos($stringLower, '.gif');
         $findPNG     = strpos($stringLower, '.png');
