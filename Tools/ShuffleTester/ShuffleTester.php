@@ -61,6 +61,13 @@
         #shuffleDisplay {
             clear:left;
         }
+        #zoom {
+            float: right;
+            margin-right: 20px;
+        }
+        #reset {
+            margin-left:10px;
+        }
         dl {
             margin-left:5%;
             margin-top: 25px;
@@ -69,6 +76,7 @@
             font-weight: bold;
         }
     </style>
+
     
     <div class="toolWidth">
         <div id="shuffleSelectBar">
@@ -98,9 +106,16 @@
                 </optgroup>
             </select>
             <button form="shuffleFile">Shuffle!</button>
+            <div id="zoom">
+                <button id="in"   >Zoom In</button>
+                <button id="out"  >Zoom Out</button>
+                <button id="reset">Reset </button>
+            </div>
         </div>
         <form id="shuffleFile" action="" method="get"></form>
     </div>
+
+    
 <?php
     if($store['loc'] !== '') {
         $before = GetFromFile($store['loc']);
@@ -122,3 +137,22 @@
         <dt>File location</dt>
         <dd><code><?= $store['loc']  ?></code></dd>
     </dl>
+    
+<script type="text/javascript">
+    var iniitalSize = parseInt( $(".display2dArray").css("font-size") );
+    var size = iniitalSize;
+    $(window).ready(function () {
+        $('#in').click(function (){
+           size = size + 2;
+           $(".display2dArray").css("font-size", size);
+        });
+        $('#out').click(function (){
+           size = size - 2;
+           $(".display2dArray").css("font-size", size);
+        });
+        $('#reset').click(function (){
+           size = iniitalSize;
+           $(".display2dArray").css("font-size", size);
+        });
+    });
+</script>

@@ -11,8 +11,6 @@
     }
     .namingIsYourBusiness {
         font-size: 100%;
-        width: 600px;
-        margin: 20px auto;
     }
 </style>
 
@@ -81,8 +79,12 @@ a new paragraph.<br> Follow the steps below to edit your first CSS code.</p>
 
 <?php
     #### Use this area to test out your php code ideas.
+    
+    // this is the most basic way you can tell PHP to output some HTML to the page
     echo '<h1> This is from PHP</h1>';
-    $name = 'Mikey';        // this is a variable and I'm giving it the value of my name
+    
+    // this is a variable and I'm giving it the value of my name
+    $name = 'Mikey';
     
     // we can insert variables into the HTML we output
     echo '<h2> Hi ' . $name . '! Welcome to PHP</h2>';
@@ -98,8 +100,4 @@ a new paragraph.<br> Follow the steps below to edit your first CSS code.</p>
     
     // Change the $name to Tyson then save/refresh. Try giving a different name.
     
-?>        
-        
-        <!-- DO NOT MESS WITH THE STUFF BELOW THIS LINE -->
-    </body>
-</html>
+?>
