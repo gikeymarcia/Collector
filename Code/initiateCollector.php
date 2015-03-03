@@ -5,10 +5,11 @@
     error_reporting(-1);
     
     $testFile = 'Code/fileLocations.php';
-    if (is_file($testFile)) {
-        $_rootF = '';                                   // $_rootF helps find PHP files
-    } else {
-        $_rootF = '../';
+    $_rootF = '';                                       // $_rootF helps find PHP files
+    $i = 0;
+    while (!is_file($_rootF . $testFile) AND $i<99) {
+        $_rootF .= '../';
+        ++$i;
     }
     
     require $_rootF . 'Code/fileLocations.php';         // sends file to the right place
