@@ -11,5 +11,5 @@
 
     <!-- response and RT form -->
     <div class="precache textcenter">
-        <input class="button button-trial-advance" id="FormSubmitButton" type="submit" value="Next" />
+        <input class="button button-trial-advance" id="FormSubmitButton" type="submit" value="Next" autofocus/>
     </div>
