@@ -49,6 +49,7 @@
 		);
 		
 		if( $debug ) $startCopy = $array;
+        $showShuffles = FALSE;
         
         $padding  = array();
 		$firstRow = current($array);
@@ -66,6 +67,7 @@
 			// then we will just use the previous columns as the target
 			$prevColumns[ $header ] = TRUE;
 			if( stripos( $header, 'advshuffle' ) !== FALSE ) {
+                $showShuffles = TRUE;
 				$shuffleInfo = explode( ';', $header );
 				// the type of shuffle (simple, block, or list), should be before the first semicolon
 				$type = array_shift( $shuffleInfo );
@@ -168,14 +170,14 @@
             array_unshift($array, $row);
         }
         
-		if( $debug ) {
+		if( $debug AND $showShuffles ) {
 			echo '<div style="white-space: nowrap">';
 			echo '<div style="display: inline-block">';
-			echo 'Before all shuffles:<br>';
+			echo 'Before all advanced shuffles:<br>';
 			display2dArray( $startCopy );
 			echo '</div>';
 			echo '<div style="display: inline-block">';
-			echo 'After shuffles:<br>';
+			echo 'After advanced shuffles:<br>';
 			display2dArray( $array );
 			echo '</div>';
 			echo '</div>';
