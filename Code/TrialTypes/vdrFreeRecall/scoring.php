@@ -138,10 +138,46 @@
 			$value[] = 1;
 		}
 	}
+    
+    $answerCount = count($answers);
+    
+    
+    
+    $input = 'one';
+    $expandOutput = true;
+    
+    $settings = explode('|', $settings);
+    foreach ($settings as $setting) {
+        if ($test = removeLabel($setting, 'input')) {
+            $test = strtolower($test);
+            if (($test === 'one') OR ($test === 'many') OR (is_numeric($test))) {
+                $input = $test;
+            } else {
+                exit('Error: invalid "input" setting for trial type "'.$trialType.'", on trial '.$currentPos);
+            }
+        } elseif ($test = removeLabel($setting, 'expandOutput')) {
+            $test = strtolower($test);
+            if (($test === 'no') OR ($test === 'false')) {
+                $expandOutput = false;
+            }
+        }
+    }
+    
+    
+    $respExp = array();
+    
+    if ($input === 'one') {
+        $responseFormatted = strtolower(preg_replace("/[^a-zA-Z0-9'\- ]+/", " ", $_POST['Response'] ));	//replace most symbols with spaces, so that if they entered like word,word,word, we get separate words
+        $responseFormatted = trim(preg_replace( "/\s+/", " ", $responseFormatted ));			//then, set all spaces and newlines to a single space.  this assumes that the answers dont have non-alphanumerical characters in them
+        $respExp = explode( ' ', $responseFormatted );
+    } else {
+        $i = 1;
+        while (isset($_POST['Response'.$i])) {
+            $respExp[] = $_POST['Response'.$i];
+            ++$i;
+        }
+    }
 	
-	$responseFormatted = strtolower(preg_replace("/[^a-zA-Z0-9'\- ]+/", " ", $_POST['Response'] ));	//replace most symbols with spaces, so that if they entered like word,word,word, we get separate words
-	$responseFormatted = trim(preg_replace( "/\s+/", " ", $responseFormatted ));			//then, set all spaces and newlines to a single space.  this assumes that the answers dont have non-alphanumerical characters in them
-	$respExp = explode( ' ', $responseFormatted );
 	$damLevByAns = array();
 	$damLevByRes = array();
 	foreach( $answers as $i => $ans ) {
@@ -159,8 +195,9 @@
 		foreach( $damLevByAns as $i => $resArray ) {
 			foreach( $resArray as $j => $diff ) {
 				if( $diff === min($resArray) AND $diff === min($damLevByRes[$j]) ) {
-					$match[$i]['word'] = $respExp[$j];
-					$match[$i]['diff'] = $diff;
+					$match[$i]['word']         = $respExp[$j];
+					$match[$i]['diff']         = $diff;
+                    $match[$i]['output_order'] = $j+1;
 					foreach( $damLevByRes[$j] as $i2 => $diff2 ) {			//remove all references to this match in both arrays, along their columns and rows
 						unset( $damLevByAns[$i2][$j] );
 					}
@@ -178,6 +215,7 @@
 	$matchedAnswers = array();
 	$differences = array();
 	$data['possibleVal'] = array_sum($value);
+	$data['possibleAcc'] = $answerCount;
 	$data['lenientVal']  = 0;
 	$data['strictVal']   = 0;
 	$data['lenientAcc']  = 0;
@@ -187,6 +225,7 @@
 			$matchedAnswers[$i] 	= $match[$i]['word'];
 			$unmatchedAnswers[$i] 	= '_';
 			$differences[$i]		= $match[$i]['diff'];
+            $outputOrders[$i]       = $match[$i]['output_order'];
 			$data['lenientAcc']++;
 			$data['lenientVal'] += $value[$i];
 			if( $match[$i]['diff'] === 0 ) {
@@ -198,9 +237,11 @@
 			$matchedAnswers[$i] 	= '_';
 			$unmatchedAnswers[$i] 	= $ans;
 			$differences[$i]		= '_';
+            $outputOrders[$i]       = '_';
 		}
 	}
 	$data['matchedAns'] 	= implode( '|', $matchedAnswers 	);	//we can see which words were identified
+	$data['output_order'] 	= implode( '|', $outputOrders 	);	//we can see when words were identified
 	$data['unmatchedAns'] 	= implode( '|', $unmatchedAnswers 	);	//we can see which words were not identified
 	$unmatchedResp = array();
 	foreach( $respExp as $resp ) {
@@ -216,20 +257,74 @@
 			$unmatchedResp[] = $resp;
 		}
 	}
-    $siChance = $data['possibleVal']/count($answers)*$data['lenientAcc'];
-    $siBest = 0;
-    sort($value);
-    for( $i=0; $i<$data['lenientAcc']; ++$i ) {
-        $siBest += array_pop($value);
+    
+    $data['Selectivity_Index'] = '';
+    $data['SI_Best']           = 0;
+    $data['SI_Chance']         = 0;
+    
+    $valueCopy = $value;
+    if ($data['lenientAcc'] > 0) {
+        $siChance = $data['possibleVal']/$answerCount*$data['lenientAcc'];
+        $siBest = 0;
+        sort($valueCopy);
+        for( $i=0; $i<$data['lenientAcc']; ++$i ) {
+            $siBest += array_pop($valueCopy);
+        }
+        $data['SI_Best'] = $siBest;
+        $data['SI_Chance'] = $siChance;
+        if ($siBest !== $siChance)
+        {
+            $data['Selectivity_Index'] = ($data['lenientVal']-$siChance)/($siBest-$siChance);
+        }
     }
-    if ($siBest !== $siChance)
-    {
-        $data['Selectivity_Index'] = ($data['lenientVal']-$siChance)/($siBest-$siChance);
-    }
-    else
-    {
-        $data['Selectivity_Index'] = '';
-    }
-	$data['Accuracy'] = $data['lenientAcc']/count($answers);
+    
+	$data['Accuracy']       = $data['lenientAcc']/$answerCount;
 	$data['unmatchedResp'] 	= implode( '|', $unmatchedResp 	);
 	$data['Errors'] 		= implode( '|', $differences 	);	//and we can see how far off they were (so if we set leniency = 2, we can still which were 0, 1, or 2 off)
+    
+    $currentTrial['Response'] = placeData($data, $currentTrial['Response'], $keyMod);
+    
+    
+    
+    if ($expandOutput) {
+    
+        $stimInfo = array();
+        foreach ($currentStimuli as $header => $contents) {
+            $stimInfo[$header] = explode('|', $contents);
+        }
+        
+        foreach ($answers as $i => $ans) {
+            $extraData = array();
+            $extraData['Serial_Position'] = $i+1;
+            
+            foreach ($stimInfo as $header => $contents) {
+                $extraData['Serial_' . $header] = $contents[$i];
+            }
+            
+            if( isset( $match[$i] ) ) {
+                $extraData['Serial_Matched_Word'] = $match[$i]['word'];
+                $extraData['Serial_Matched_Diff'] = $match[$i]['diff'];
+                $extraData['Serial_Output_Order'] = $match[$i]['output_order'];
+                $extraData['Serial_lenientAcc']   = 1;
+                $extraData['Serial_lenientVal']   = $value[$i];
+                if( $match[$i]['diff'] === 0 ) {
+                    $extraData['Serial_strictAcc'] = 1;
+                    $extraData['Serial_strictVal'] = $value[$i];
+                } else {
+                    $extraData['Serial_strictAcc'] = 0;
+                    $extraData['Serial_strictVal'] = 0;
+                }
+            }
+            else {
+                $extraData['Serial_Matched_Word'] = '_';
+                $extraData['Serial_Matched_Diff'] = '_';
+                $extraData['Serial_Output_Order'] = '_';
+                $extraData['Serial_lenientAcc']   = 0;
+                $extraData['Serial_lenientVal']   = 0;
+                $extraData['Serial_strictAcc']    = 0;
+                $extraData['Serial_strictVal']    = 0;
+            }
+            
+            recordTrial($extraData, FALSE, FALSE);
+        }
+    }
