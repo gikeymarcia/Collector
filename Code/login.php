@@ -142,6 +142,7 @@
     
     
     #### Code to automatically choose condition assignment
+    $_SESSION['Condition'] = array();
     $Conditions = GetFromFile($up . $expFiles . $conditionsFileName,  FALSE);   // Loading conditions info
     $logFile    = $up . $dataF . $countF . $loginCounterName;
     if ($selectedCondition == 'Auto') {
@@ -153,26 +154,29 @@
             $fileHandle    = fopen($logFile, "r");
             $loginCount    = fgets($fileHandle);
             fclose($fileHandle);
-        } else { $loginCount = 1; }
+        } else { $loginCount = 0; }
+        
+        $condCount = count($Conditions);
+        while ($_SESSION['Condition'] === array()) {
+            $conditionIndex = $loginCount % $condCount;
+            if ($Conditions[$conditionIndex]['Condition Description'][0] === '#') {
+                ++$loginCount;
+            } else {
+                $_SESSION['Condition'] = $Conditions[$conditionIndex];
+            }
+        }
+        
         // write old value + 1 to login counter
         $fileHandle    = fopen($logFile, "w");
         fputs($fileHandle, $loginCount+1);
         fclose($fileHandle);
         
-        $conditionNumber = ($loginCount % count($Conditions))+1;                // cycles through current condition assignment based on login counter
+        $conditionIndex = ($loginCount % count($Conditions))+1;                // cycles through current condition assignment based on login counter
     }
-    else{
-        $conditionNumber = $selectedCondition;                                  // if condition is manually choosen then honor choice
-    }
-    
-    
-    
-    #### loads condition info into $_Session['Condition']
-    foreach ($Conditions as $aCond) {
-        if ($aCond['Number'] == $conditionNumber) {
-            $_SESSION['Condition'] = $aCond;
-            $found = TRUE;
-            break;
+    else {
+        $conditionIndex = $selectedCondition;
+        if (isset($Conditions[$conditionIndex])) {
+            $_SESSION['Condition'] = $Conditions[$conditionIndex];
         }
     }
     
@@ -182,9 +186,9 @@
     ##### Error Checking Code #################################################
     ###########################################################################
     // did we fail to find the condition information?
-    if ($found == FALSE) {
+    if ($_SESSION['Condition'] === array()) {
         $errors['Count']++;
-        $errors['Details'][] = 'Could not find the selected condition # ' . $conditionNumber . ' in ' . $conditionsFileName;
+        $errors['Details'][] = 'Could not find the selected condition index ' . ($conditionIndex+1) . ' in ' . $conditionsFileName;
     }
     
     // calculating path to Stimuli and Procedure file

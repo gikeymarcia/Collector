@@ -23,6 +23,7 @@
 	$Conditions = GetFromFile($expFiles.$conditionsFileName, FALSE);
     $conditionNumbers = array();
     foreach ($Conditions as $cond) {
+        if ($cond['Condition Description'][0] === '#') { continue; }
         if (isset($conditionNumbers[$cond['Number']])) {
             exit('Error: Multiple Conditions use the same number. Please check your "'.$conditionsFileName.'" file and make sure each number in the "Number" column is unique.');
         } else {
@@ -61,11 +62,15 @@
 				#### Display conditions as choices ####
 
 				// output all possible condition choices
-                foreach ($Conditions as $cond) {
-                    $name  = $useConditionNames ? $cond['Number']   . '. ' . $cond['Condition Description']         : $cond['Number'];
-                    $title = $showConditionInfo ? $stimF . $cond['Stimuli'] . ' - ' . $procF . $cond['Procedure']   : '';
+                foreach ($Conditions as $i => $cond) {
+                    if ($hideFlaggedConditions AND $cond['Condition Description'][0] === '#') { continue; }
                     
-					echo '<option value="' . $cond['Number'] . '" title="' . $title . '">' . $name . '</option>';
+                    $name  = $useConditionNames ? $cond['Number'] . '. ' . $cond['Condition Description']                            : $cond['Number'];
+                    $title = $showConditionInfo ? ' title="' . $stimF . $cond['Stimuli'] . ' - ' . $procF . $cond['Procedure'] . '"' : '';
+                    
+                    $style = ($cond['Condition Description'][0] === '#') ? ' style="color: grey;"' : '';
+                    
+					echo '<option value="' . $i . '"'. $title . $style . '>' . $name . '</option>';
                 }
 				?>
 			</select>
