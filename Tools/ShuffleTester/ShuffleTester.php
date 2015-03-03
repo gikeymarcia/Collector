@@ -75,8 +75,10 @@
         dt{
             font-weight: bold;
         }
+        #oldZoom {
+            display:none;
+        }
     </style>
-
     
     <div class="toolWidth">
         <div id="shuffleSelectBar">
@@ -114,13 +116,23 @@
         </div>
         <form id="shuffleFile" action="" method="get"></form>
     </div>
-
     
 <?php
-    if($store['loc'] !== '') {
+    if (isset($_GET['zoom'])) {
+        $val = $_GET['zoom'];
+    } else { $val = 'default'; }
+    
+    echo '<input type="text" form="shuffleFile" name="zoom" value="' . $val . '" class="zoomInput" hidden/>';   // save modified zoom value
+    echo '<span id="zoomVal" class="hidden">' . $val . '</span>';                                               // hold any submitted zoom value
+    
+    if ($store['loc'] !== '') {
+        
         $before = GetFromFile($store['loc']);
+        $start  = microtime(TRUE);
         $after  = multiLevelShuffle($before);
         $after  = shuffle2dArray($after);
+        $end    = microtime(TRUE);
+        $duration = ($end - $start)*1000000;
         echo '<div class="before"><h3>Before</h3>';
                   display2dArray($before);
         echo '</div>';
@@ -128,31 +140,38 @@
                   display2dArray($after);
         echo '</div>';
     }
-?>
-    
+?>  
     <!-- Debug to make sure I'm getting the right stuff back -->
     <dl class="brand">
         <dt>Filename</dt>
         <dd><code><?= $store['name'] ?></code></dd>
         <dt>File location</dt>
         <dd><code><?= $store['loc']  ?></code></dd>
+        <dt>Time to shuffle</dt>
+        <dd><?=  $duration //round($duration, 5) ?> microseconds</dd>
     </dl>
     
 <script type="text/javascript">
     var iniitalSize = parseInt( $(".display2dArray").css("font-size") );
     var size = iniitalSize;
+    var zoom = parseInt($("#zoomVal").html());
+    $(".display2dArray").css("font-size", zoom);
+
     $(window).ready(function () {
         $('#in').click(function (){
            size = size + 2;
            $(".display2dArray").css("font-size", size);
+           $(".zoomInput").val(size);
         });
         $('#out').click(function (){
            size = size - 2;
            $(".display2dArray").css("font-size", size);
+           $(".zoomInput").val(size);
         });
         $('#reset').click(function (){
            size = iniitalSize;
            $(".display2dArray").css("font-size", size);
+           $(".zoomInput").val(size);
         });
     });
 </script>

@@ -1,7 +1,7 @@
 Cue,Answer,Shuffle,Stimuli Notes
-Dog,Cat,off,high associates
-Word,Pair,off,high associates
-Funny,Bone,off,high associates
+Dog,Cat,#hastag no shuffle,high associates
+Word,Pair,#hastag no shuffle,high associates
+Funny,Bone,#hastag no shuffle,high associates
 Mountain,Door,zoinks,low associate
 Whale,Rocket,zoinks,low associate
 Laptop,Swing,zoinks,low associate
