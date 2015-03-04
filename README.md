@@ -1,6 +1,6 @@
 # Collector
 A program for running experiments on the web
-Copyright 2012-2014 Mikey Garcia & Nate Kornell
+Copyright 2012-2015 Mikey Garcia & Nate Kornell
 
 ## FAQ
 #### How do I get started?
