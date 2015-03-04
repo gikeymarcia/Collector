@@ -146,12 +146,13 @@
 <?php    
     if ($store['loc'] !== '') {                     // if a shuffle file has been choosen
         $before = GetFromFile($store['loc']);           // grab file to shuffle
-        $start  = microtime(TRUE);                      // start a timer
+        $timer  = microtime(TRUE);                      // start a timer
         $after  = multiLevelShuffle($before);           // run basic shuffles
         $after  = shuffle2dArray($after);               // run advanced shuffles
-        $end    = microtime(TRUE);                      // stop timer
-        $duration = ($end - $start)*1000000;            // calculate timer duration
+        $timer  = (microtime(TRUE) - $timer);           // calculate difference since start
+        $timer  = round($timer * 1000000, 0);           // multiply by 1,000,000 and round
         
+        $tableTimer = microtime(TRUE);
         // show the before shuffling version
         echo '<div class="before"><div id="RF"><h2>Before</h2>';
                   display2dArray($before);
@@ -160,6 +161,7 @@
         echo '<div class="after"><h2>After</h2>';
                   display2dArray($after);
         echo '</div>';
+        $tableTimer = round((microtime(TRUE) - $tableTimer) * 1000000, 0);  // calculate timer to rounded to nearest microsecond
     }
 ?>  
     <!-- Debug to make sure I'm getting the right stuff back -->
@@ -169,9 +171,11 @@
         <dt>File location</dt>
         <dd><code><?= $store['loc']  ?></code></dd>
 <?php
-        if (isset($duration)) {                         // only show duration when a file was actually shuffled
+        if (isset($timer)) {                         // only show duration when a file was actually shuffled
             echo  '<dt>Time to shuffle</dt>'
-                . '<dd>' . $duration . ' microseconds</dd>';
+                . '<dd>' . number_format($timer) . ' microseconds</dd>'
+                . '<dt>Time to build display tables</dt>'
+                . '<dd>' . number_format($tableTimer) . ' microseconds</dd>';
         }
 ?>
     </dl>
@@ -182,15 +186,18 @@
     var zoom = parseFloat($("#zoomVal").html());                                // save custom zoom value
     var clicked = 0;                                                            // reset click binary (0 = not locked, 1 = locked contents)
     $(".display2dArray").css("font-size", zoom);                                // change table zoom to custom zoom
-
+    if(!isNaN(zoom)) {                                                          // if a custom zoom is set us it as starting point for zoom in/out calls
+        size = zoom;
+    }
+    
     $(window).ready(function () {
         $('#in').click(function (){                         // when zoom in button is clicked
-           size = size + 1;                                     // increment the size
+           size = size * 1.1;                                    // scale up the size
            $(".display2dArray").css("font-size", size);         // change font to new size value
            $(".zoomInput").val(size);                           // put new zoom value into hidden input
         });
         $('#out').click(function (){                        // when zoom out button is clicked
-           size = size - 1;                                     // decrement the size
+           size = size * 0.9;                                   // scale down the size
            $(".display2dArray").css("font-size", size);         // change font to the new size value
            $(".zoomInput").val(size);                           // put new zoom value into hidden input
         });
