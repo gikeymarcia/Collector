@@ -42,8 +42,9 @@ INCOMPLETE INFO
 INCOMPLETE INFO
 #### Instruct
 Allows you to give participants instructions during the experiment.
-Instruct trials are special because they do not correspond to a line in the stimuli file.
+Instruct trials are special because they do not have to correspond to a line in the stimuli file.
 To call an instruct trial you insert `Item` (0), `Trial Type` (Instruct), and `Procedure Notes` (instructions and/or HTML code).
+If you are using instructions that are in your stimuli file you insert the stimuli row as `Item` and in the stimuli file you place your instructions in the `Cue` column.
 See the Order file used in Condition 1 for an example.
 #### Audio
 Allows you to use audio clips as stimuli.  When you use this trial type you need to put the path from the `/Experiment/` folder to your audio file in the `Cue` column (e.g., if your audio file is in a folder called sounds you would use  `sounds/random.mp3` ).  Audio uses the HTML5 <audio> tag so it will only work on a modern web browser.  To be safe I would recommend using Chrome or Firefox v10+
@@ -65,4 +66,4 @@ Completely reorganized the collector.js code to be object oriented.  Is responsi
 #### Victor Sungkhasettee
 Figured out how to implement the Audio trial type
 #### Nate Kornell
-Without Nate there would be no Collector.  Many years ago Nate taught me how to use the tool he had created for himself, Generic, and that code inspired me to write Collector.  Most of the core ideas and desin decision at the heart of this project are either directly lifted from Nate's program or were based on adaptations of what he had created.
+Without Nate there would be no Collector.  Many years ago Nate taught me how to use the tool he had created for himself, Generic, and that code inspired me to write Collector.  Most of the core ideas and design decision at the heart of this project are either directly lifted from Nate's program or were based on adaptations of what he had created.

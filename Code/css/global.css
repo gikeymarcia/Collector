@@ -688,6 +688,9 @@ li {
         margin-right:5px;
         width: 220px;
     }
+    #login h3 {
+        line-height: 1.2;
+    }
     #salt {
         font-family:"Courier New", Courier, monospace;
         color:#f7f7f7;          font-weight:lighter;
