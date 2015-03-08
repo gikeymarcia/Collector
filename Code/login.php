@@ -276,11 +276,8 @@
         $stimuliFiles = array();
         if ($checkAllFiles == TRUE) {
             $stimPath = $up . $expFiles . $stimF;
-            $scanStimFiles = scandir($stimPath);
-            foreach ($scanStimFiles as $fileName) {
-                if (is_file($stimPath . $fileName)) {
-                    $stimuliFiles[] = $stimPath . $fileName;
-                }
+            foreach ($Conditions as $row => $cells) {
+                $stimuliFiles[] = $stimPath . $Conditions[$row]['Stimuli'];
             }
         } else {
             $stimuliFiles[] = $up . $expFiles . $stimF . $_SESSION['Condition']['Stimuli'];
