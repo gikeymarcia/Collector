@@ -210,6 +210,19 @@ var COLLECTOR = {
 					fsubmit.addClass("hidden");					// hide submit button
 				}
 			}
+			
+			// check for window focus every .2 seconds
+			var focusChecks = 0, focusCount  = 0, focusProp;
+			function focusCheck() {
+			    focusChecks++;
+			    if (document.hasFocus()) {
+			        focusCount++;
+			    }
+			    focusProp = focusCount / focusChecks;
+			    $("#focus").val(focusProp);
+			    COLLECTOR.timer(.2, focusCheck);
+			}
+			focusCheck();
 
 			if (!(isNaN(minTime))) {
 				fsubmit.prop("disabled", true);					// disable submit button when minTime is set

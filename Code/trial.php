@@ -224,6 +224,7 @@
                   <input class="hidden"  id="RT"     name="RT"       type="text" value="RT"       />
                   <input class="hidden"  id="RTkey"  name="RTkey"    type="text" value="no press" />
                   <input class="hidden"  id="RTlast" name="RTlast"   type="text" value="no press" />
+                  <input class="hidden"  id="focus"  name="focus"    type="text" value="notSet"   />
 			  </form><?php
         else: ?>
             <h2>Could not find the following trial type: <strong><?php echo $trialType; ?></strong></h2>
