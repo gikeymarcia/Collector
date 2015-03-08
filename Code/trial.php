@@ -12,7 +12,6 @@
     }
     
     
-    
     function recordTrial($extraData = array(), $exitIfDone = TRUE, $advancePosition = TRUE) {
 
         #### setting up aliases (for later use)
@@ -21,12 +20,10 @@
         
         global $experimentName;
 
-
         #### Calculating time difference from current to last trial
         $oldTime = $_SESSION['Timestamp'];
         $_SESSION['Timestamp'] = microtime(TRUE);
         $timeDif = $_SESSION['Timestamp'] - $oldTime;
-        
         
         #### Writing to data file
         $data = array(  'Username'              =>  $_SESSION['Username'],
@@ -56,7 +53,6 @@
         $writtenArray = arrayToLine($data, $_SESSION['Output File']);                                       // write data line to the file
         ###########################################
 
-
         // progresses the trial counter
         if ($advancePosition) {
             $currentPos++;
@@ -68,13 +64,11 @@
             $item = $_SESSION['Trials'][$currentPos]['Procedure']['Item'];
             if ($item == 'ExperimentFinished') {
                 $_SESSION['finishedTrials'] = TRUE;             // stops people from skipping to the end
-                header("Location: FinalQuestions.php");
+                header('Location: FinalQuestions.php');
                 exit;
             }
         }
-        
         return $writtenArray;
-        
     }
 
 
@@ -92,8 +86,7 @@
     // currentProcedure becomes an array of all columns matched for this trial, using their original column names
     $currentProcedure = ExtractTrial($currentTrial['Procedure'], $currentPost);
     
-    if (!isset($trialType))
-    {
+    if (!isset($trialType)) {
         $error = array(
             'Error*Missing_Trial_Type' => 'Post ' . $_SESSION['PostNumber']
         );
@@ -127,28 +120,25 @@
     }
     
     // variables I'll need and/or set in trialTiming() function
-    $timingReported = strtolower(trim( $timing ));
-    $formClass    = '';
-    $time        = '';
-    if( !isset( $minTime ) ) {
-        $minTime    = 'not set';
+    $timingReported = strtolower(trim($timing));
+    $formClass = '';
+    $time      = '';
+    if (!isset($minTime)) {
+        $minTime = 'not set';
     }
     
     
     ob_start();
-    
 
     #### Presenting different trial types ####
-    $expFiles  = $up.$expFiles;                            // setting relative path to experiments folder for trials launched from this page
+    $expFiles  = $up . $expFiles;                          // setting relative path to experiments folder for trials launched from this page
     $postTo    = 'trial.php';
     $trialFail = FALSE;                                    // this will be used to show diagnostic information when a specific trial isn't working
     $trialFile = $_SESSION['Trial Types'][ $trialType ]['trial'];
     
-    
     $title = 'Trial';
     $_dataController = 'trial';
     $_dataAction = $trialType;
-    
     
     /*
      * Whenever Trial.php finds $_POST data, it will try to store that data
@@ -194,7 +184,7 @@
     // if we hit a *NewSession* then the experiment is over (this means that we don't ask FinalQuestions until the last session of the experiment)
     if(strtolower($item) == '*newsession*') {
         $_SESSION['finishedTrials'] = TRUE;
-        header("Location: done.php");
+        header('Location: done.php');
         exit;
     }
     
@@ -221,10 +211,10 @@
 			
 		    ?><form class="<?php echo $formClass; ?> collector-form invisible" action="<?php echo $postTo; ?>" method="post">
                   <?= $trialContents ?>
-                  <input class="hidden"  id="RT"     name="RT"       type="text" value="RT"       />
-                  <input class="hidden"  id="RTkey"  name="RTkey"    type="text" value="no press" />
-                  <input class="hidden"  id="RTlast" name="RTlast"   type="text" value="no press" />
-                  <input class="hidden"  id="focus"  name="focus"    type="text" value="notSet"   />
+                  <input id="RT"     name="RT"      type="hidden" value="RT"       />
+                  <input id="RTkey"  name="RTkey"   type="hidden" value="no press" />
+                  <input id="RTlast" name="RTlast"  type="hidden" value="no press" />
+                  <input id="focus"  name="focus"   type="hidden" value="notSet"   />
 			  </form><?php
         else: ?>
             <h2>Could not find the following trial type: <strong><?php echo $trialType; ?></strong></h2>
@@ -233,7 +223,8 @@
             <!-- default trial is always user timing so you can click 'Done' and progress through the experiment -->
             <div class="precache">
                 <form name="UserTiming" class="UserTiming" action="<?php echo $postTo; ?>" method="post">
-                    <input class="hidden" id="RT" name="RT"     type="text"     value=""  />
+                    <input id="RT"     name="RT"      type="hidden" value="RT"       />
+                    <input id="focus"  name="focus"   type="hidden" value="notSet"   />
                     <input class="button" id="FormSubmitButton" type="submit"   value="Done" />
                 </form>
             </div>
@@ -247,12 +238,6 @@
     <div id="Time"      class="hidden"> <?php echo $time; ?>    </div>
     <div id="minTime"   class="hidden"> <?php echo $minTime; ?> </div>
 
-    <!-- placeholders for a debug function that shows timer values -->
-    <div id="showTimer" class="hidden">
-        <div> Start (ms):   <span id="start">   </span> </div>
-        <div> Current (ms): <span id="current"> </span> </div>
-        <div> Timer (ms):   <span id="dif">     </span> </div>
-    </div>
 
      <?php
         #### Diagnostics ####
