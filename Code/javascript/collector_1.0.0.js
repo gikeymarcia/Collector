@@ -333,15 +333,6 @@ var COLLECTOR = {
 			});
 			$("#amount").val( $("#slider").slider("value") );
 		}
-	},
-
-	multiSession: {
-		init: function() {
-			// Disable enter key for textboxes
-			$(":input").bind("keypress",function(e){
-				if(e.keyCode == 13) return false;
-			});
-		}
 	}
 };
 
