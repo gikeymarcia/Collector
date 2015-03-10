@@ -1,215 +1,238 @@
-/*------------------------------------*\
- *
- *  Collector Styles
- * 	Adam Blake
- *  written for www.CogFog.com
- *
-\*------------------------------------*/
+/* ----------------------------------------------------------------------------
 
-/*------------------------------------*\
-    CONTENTS
-    (protip: search $[item] to jump)
-\*------------------------------------*/
-/**
- *  IMPORTS
- *  COLORS
- *	RESET
- *
- *  MAIN
- *  TYPE
- *  SHARED
- *  STRUCTURES
- *
- *  INDEX
- *  INSTRUCTIONS
- *  TRIAL
- *  SOTETRIS
- *  FQS
- *  NO-JS
- *
- *  MISC
- *  MEDIA
  *  TOOLS
- */
+
+ * Description:    Collector styles
+ * Version:        2.0.0 (2015-01-19)
+ * Website:        http://www.cogfog.com/
+ * Author:         Adam Blake
+
+ 
+ == CONTENTS: =================================================================
+
+ $IMPORTS          Imported styles
+ $RESET            HTML5 reset
+ $COLORS           App-wide color palette
+ $TYPOGRAPHY       Text styling
+ $BUTTONS          Buttons
+ $FORMS            Forms
+ $GRIDS            Grid framework
+ $CONTENT          General styles for main content
+ $NO-JS            Javascript disabled redirect 
+ $PAGE-SPECIFIC    Styles for specific pages:
+                       Basic Info
+                       Instructions
+                       Trial
+ $MEDIA            Responsive styles
+ 
+
+ ---------------------------------------------------------------------------- */
 
 
 
 
-/*------------------------------------*\
-    $IMPORTS
-\*------------------------------------*/
+
+/*  $IMPORTS
+ ---------------------------------------------------------------------------- */
+@import url(http://fonts.googleapis.com/css?family=Oswald);
 @import url(http://fonts.googleapis.com/css?family=Open+Sans);
-@import url(http://fonts.googleapis.com/css?family=Roboto);
 
 
 
 
 
-/*------------------------------------*\
-  	$COLORS
-\*------------------------------------*/
-.brand {
-    color:#0055A6;             /* dark blue; rgba(0,85,166,1) */
-}
-.secondary {
-	color:#00A5E5;             /* blue; rgba(0,165,229,1); */
-}
-.action {
-	color:#00FF87;             /* lime green; rgba(0,255,135,1) */
-}
-.alert {
-	background-color:#800000;  /* strong red; rgba(128,0,0,1) */
-}
 
-.brand-bg {
-	background-color:#0055A6;
-}
-.secondary-bg {
-	background-color:#00A5E5;
-}
-.action-bg {
-	background-color:#00FF87;
-}
-
-
-
-
-
-/*------------------------------------*\
-    $RESET
-\*------------------------------------*/
-/**
- * 	Based on Eric Meyer's reset
- *  http://meyerweb.com/eric/tools/css/reset/
- *  v2.0 | 20110126
- *  License: none (public domain)
-*/
-
-html, body, div, span, applet, object, iframe,
+/*  $RESET
+ ---------------------------------------------------------------------------- */
+html, body, div, span, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
+abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var,
+b, i,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
+article, aside, canvas, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section, summary,
 time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font:inherit;
-	vertical-align: baseline;
-	-webkit-box-sizing:border-box;
-	   -moz-box-sizing:border-box;
-	        box-sizing:border-box;
+  margin:0;
+  padding:0;
+  border:0;
+  outline:0;
+  font-size:100%;
+  vertical-align:baseline;
+  background:transparent;
 }
-html {
-	font:18px/1.625 "Roboto", "Open Sans", Arial, Helvetica, sans-serif;
-	color:#333;
+
+body {
+  line-height:1.2;
 }
-ol, ul {
-	list-style: none;
+
+article,aside,details,figcaption,figure,
+footer,header,hgroup,menu,nav,section { 
+  display:block;
 }
+
+nav ul {
+  list-style:none;
+}
+
+blockquote, q {
+  quotes:none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content:'';
+  content:none;
+}
+
+a {
+  margin:0;
+  padding:0;
+  font-size:100%;
+  vertical-align:baseline;
+  background:transparent;
+}
+
+ins {
+  background-color:#ff9;
+  color:#000;
+  text-decoration:none;
+}
+
+mark {
+  background-color:#ff9;
+  color:#000; 
+  font-style:italic;
+  font-weight:bold;
+}
+
+del {
+  text-decoration: line-through;
+}
+
+abbr[title], dfn[title] {
+  border-bottom:1px dotted;
+  cursor:help;
+}
+
 table {
-	border-collapse: collapse;
-	border-spacing: 0;
+  border-collapse:collapse;
+  border-spacing:0;
 }
+
+hr {
+  display:block;
+  height:1px;
+  border:0;   
+  border-top:1px solid #cccccc;
+  margin:1em 0;
+  padding:0;
+}
+
+input, select {
+  vertical-align:middle;
+}
+
 img {
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 
 
 
 
-/*------------------------------------*\
-  	$SHARED
-\*------------------------------------*/
-/* general min/max */
-.main-contain, .cframe-content {
-	max-width:900px;
-	min-width:400px;
+/*  $COLORS
+      note: text is #111, specified in $TYPOGRAPHY
+ ---------------------------------------------------------------------------- */
+.brand {
+  color:#069;     /* dark blue; rgba(0,85,166,1) */
+}
+.secondary {
+  color:#09c;     /* blue; rgba(0,165,229,1); */
+}
+.action {
+  color:#0f9;     /* lime green; rgba(0,255,135,1) */
+}
+.alert {
+  background-color:#900;  /* strong red; rgba(128,0,0,1) */
 }
 
-/* text alignment */
-.textcenter {
-	text-align:center;
+.brand-bg {
+  background-color:#069;
 }
-.textright{
-	text-align:right;
+.secondary-bg {
+  background-color:#09c;
 }
-.textleft{
-    text-align:left;
-}
-
-/* Hidden objects */
-.precache,.precachenext,.hidden,#waiting,#loadingForm {
-	display:none!important;
-}
-.invisible {
-	visibility:hidden!important;
+.action-bg {
+  background-color:#0f9;
 }
 
-/* Shared colors */
+
+
+
+
+/*  $TYPOGRAPHY
+      note: for consent form styles, see $FORMS
+ ----------------------------------------------------------------------------- */
+body, html, textbox, select {
+  color:#111;
+  font-family:"Open Sans", Helvetica, Arial, sans-serif;
+}
+
 h1,h2,h3,h4,h5,h6,a {
-    color:#0055A6;	/* brand color */
-}
-a:hover,a:focus {
-	color:#00A5E5;	/* secondary color */
-}
-a:active {
-	color:#00FF87;	/* action color */
+  color:#069;  /* brand color */
+  font-family:"Oswald", Helvetica, Arial, sans-serif;
 }
 
-
-
-
-
-/*------------------------------------*\
-  	$TYPE
-\*------------------------------------*/
 h1 {
-	font-size: 2em;
-	padding: 0 0 .2em 0;
-	margin-bottom: 0;
+  font-size: 2em;
+  padding: 0 0 .5em 0;
+  margin-bottom: 0;
 }
 
 h2 {
-	font-size: 1.5em;
-	padding: .2em 0;
+  font-size: 1.5em;
+  padding: .5em 0;
 }
 
 h3 {
-	font-size: 1.2em;
-	padding: .2em 0;
+  font-size: 1.2em;
+  padding: .2em 0;
 }
 
 p {
-	margin: 1em 0;
+  margin: 1em 0;
 }
 
-a:hover, a:active {
-    outline: none;
+a:active {
+  color:#0f9;  /* action color */
+}
+
+a:active, a:hover {
+  outline: none;
+}
+
+a:focus, a:hover {
+  color:#09c;  /* secondary color */
 }
 
 strong, b {
-	font-weight: 700;
+  font-weight: 700;
 }
 
 em, i {
-	font-style: italic;
+  font-style: italic;
 }
 
 pre {
-    max-width: 800px;
-    margin-left: 9%;
-    
+  max-width: 800px;
+  margin-left: 9%;
+  
 }
 
 code {
@@ -222,31 +245,348 @@ code {
 }
 
 
-/*------------------------------------*\
-  	$STRUCTURES
-\*------------------------------------*/
-.main-contain {
-	width: 550px;
-	margin: 0 auto;
+
+
+
+/*  $BUTTONS 
+ ---------------------------------------------------------------------------- */
+.collector-button {
+  font-family:"Oswald", Helvetica, Arial, sans-serif;
+  font-size:90%;
+  text-align:center;
+  padding:.3em .5em;
+  color:#fff;
+  background-color:#069;
+  border-radius:4px;
+  border:0;
+  cursor:pointer;
+}
+.collector-button-hover,.collector-button:hover,
+.collector-button-focus, .collector-button:focus {
+	background-color: #09c;
+}
+.collector-button-focus, .collector-button:focus {
+  outline: 0;
+}
+.collector-button-active,.collector-button-active:hover,.collector-button:active {
+	background-color:#0f9;
+}
+.collector-button-advance {
+  margin-top:3em;
 }
 
-/* 	dynamic vertical centering */
-.cframe-outer {
-	display:table;
-	position:absolute;
-	height:100%;
-	width:100%;
-}
-	.cframe-inner {
-		display:table-cell;
-		vertical-align:middle;
-	}
-		.cframe-content {
-			margin:0 auto 70px auto;
-			width:80%;
-		}
 
-/* grids */
+
+
+/*  $FORMS
+ ----------------------------------------------------------------------------- */
+/* General form styling */
+.collector-form {
+  font:1.1em Helvetica, Arial, sans-serif;
+  margin:0 auto;
+  max-width:800px;
+}
+label,
+input[type=radio],
+input[type=checkbox],
+.choiceHolder {
+  cursor:pointer;
+}
+
+/* labels and legends */
+.collector-form > fieldset legend,
+.collector-form-element label,
+.radio-label {
+  font-family:"Oswald", Helvetica, Arial, sans-serif;
+}
+.collector-form > fieldset legend {
+  font-size:2em;
+  padding:.5em 0;
+  margin:0;
+}
+.collector-form-element label,
+.textarea-label,
+.radio-label,
+.likert-label {
+  display:block;
+  margin:.8em 0;
+}
+
+/* Form controls */
+.collector-form-element {
+  margin:1em 0;
+}
+.collector-form-element input[type=text],
+.collector-form-element .number input[type=text],
+.collector-form-element select,
+.collector-form-element input[type=radio],
+.collector-form .inline-radio div {
+  margin-left:1em;
+}
+
+.collector-form-element input[type=text],
+.collector-form-element input[type=radio] + label,
+.collector-form-element select,
+.collector-form-element textarea {
+  font:1em Helvetica, Arial, sans-serif;
+}
+  
+  /* text */
+  .collector-form-element input[type=text],
+  .collector-form-element select,
+  .collector-form-element textarea {
+    width:10em;
+  }
+  
+  /* textbox */
+  .collector-form-element input[type=text] {
+    padding:.3em .5em;
+  }
+  
+  /* number */
+  .collector-form-element.number input[type=text] {
+    font-size:1.3em;
+    text-align:center;
+    width:3em;
+  }
+  
+  /* select */
+  .collector-form-element select {
+    padding:.3em .5em;
+  }
+  
+  /* textarea */
+  .collector-form-element textarea {
+
+  }
+  
+  /* radio buttons */
+    /* normal radio buttons */
+    .collector-form-element input[type=radio] {
+      display:inline-block;
+      float:left;
+      margin-top:1.3em;
+      vertical-align:bottom;
+      width:10%;
+    }
+    .collector-form-element input[type=radio] + label {
+      display:inline-block;
+      float:left;
+    }
+    .collector-form-element:not(.inline-radio) input[type=radio] + label {
+      width:85%;
+    }
+    
+    /* likert and inline radio buttons */
+    .likert,
+    .likert-legend,
+    .likert-options {
+      text-align: center;
+      width:100%;
+    } 
+
+    .likert input,
+    .collector-form-element.inline-radio input[type=radio] {
+      margin:10px;
+      opacity:0;
+      filter:alpha(opacity=0);
+      position:absolute;
+    }
+    .likert label,
+    .collector-form-element.inline-radio input[type=radio] + label,
+    .collector-form-element.likert input[type=radio] + label {
+      box-sizing:border-box; /* might have to move out */
+      display:inline-block;
+      margin:-2px;
+      position:relative;
+      padding: 4px 12px;
+      font-size:.9em;
+      color: #333;
+      text-align: center;
+      vertical-align: middle;
+      background-color: #f5f5f5;
+      background-image: -moz-linear-gradient(top,#fff,#e6e6e6);
+      background-image: -webkit-gradient(linear,0 0,0 100%,from(#fff),to(#e6e6e6));
+      background-image: -webkit-linear-gradient(top,#fff,#e6e6e6);
+      background-image: -o-linear-gradient(top,#fff,#e6e6e6);
+      background-image: linear-gradient(to bottom,#fff,#e6e6e6);
+      background-repeat: repeat-x;
+      border: 1px solid #ccc;
+      border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+      border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
+      border-bottom-color: #b3b3b3;
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff',endColorstr='#ffe6e6e6',GradientType=0);
+      filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+      -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);
+      -moz-box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);
+    }
+    .likert input[type=radio]:checked + label,
+    .collector-form-element.inline-radio input[type=radio]:checked + label {
+      background-image: none;
+      outline: 0;
+      -webkit-box-shadow: inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05);
+      -moz-box-shadow: inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05);
+       background-color:#e0e0e0;
+    }
+    .likert input:focus + label,
+    .collector-form-element.inline-radio input:focus + label {
+      outline:1px dotted #111;
+      z-index:3000;
+    }
+    .likert label {
+      margin:0 -1px 0 0;
+    }
+    
+    .likert-legend { 
+      color:#777;
+      display:block;
+      float:left;
+      margin:.5em auto;
+      width:95%;
+    }
+    .likert-legend > div {
+      width:33.3%;
+      display:inline-block;
+    }
+    .likert-legend-left {
+      text-align: left;
+    }
+    .likert-legend-right {
+      text-align: right;
+    }
+    
+    .likert + .collector-form-element .collector-button {
+      margin-top:0;
+    }
+    
+  /* checkboxes */
+  .collector-form-element input[type=checkbox] {
+    display:inline-block;
+    margin:1.4em 1.5em 0 0;
+    vertical-align:top;
+  } 
+  .collector-form-element input[type=checkbox] + label {
+    display:inline-block;
+    font-family:Helvetica, Arial, sans-serif;
+    margin-bottom:0;
+    width:80%;
+  }
+  
+/* disabled */
+input[type=text]:disabled,
+input[type=radio]:disabled,
+input[type=checkbox]:disabled,
+input[type=range]:disabled,
+input[type=submit]:disabled,
+button:disabled,
+select:disabled,
+textarea:disabled {
+  cursor:not-allowed;
+  background-color:#e1e1e1;
+  border:1px solid #888;
+  color:#777;
+  outline:0;
+}
+  
+/* labels on left (instead of stacked) */
+.aligned .collector-form-element:not(.inline-radio) label {
+  display:inline-block;
+  width:30%;
+}
+  /* radio buttons */
+  .aligned .radio-label {
+    float:left;
+    margin-right:1em;
+    width:30%;
+  }
+  .aligned .radio-label ~ div {
+    float:left;
+  }
+  .aligned input[type=text] {
+    margin-top:.8em;
+    vertical-align:top;
+  }
+  .aligned .collector-form-element:not(.inline-radio) input[type=radio] {
+    display:inline-block;
+    float:none;
+    vertical-align:baseline;
+  }
+  .aligned .collector-form-element:not(.inline-radio) input[type=radio] + label {
+    width:80%;
+  }
+  .aligned .inline-radio div {
+    margin-top:.9em;
+    margin-left:.5em;
+  }
+  .aligned .inline-radio:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0px;
+    content: ".";
+    clear: both;
+    height: 0px;
+  }
+  /* checkboxes */
+  .aligned .collector-form-element input[type=checkbox] + label {
+    width:80%;
+  }  
+
+/* inline forms */
+.inline .collector-form-element {
+  display:inline;
+  margin:0;
+}
+.inline .collector-form-element input,
+.inline .collector-form-element select {
+  margin:0 0 1em 0;
+}
+
+/* popout helper textbox */
+.collector-form-element .helptext {
+  display:inline-block;
+  font-size:.9em;
+  height:0;
+  width:0;
+  overflow:hidden;
+  position:absolute;
+  margin:0 0 0 4em;
+  background: none repeat scroll 0 0 #EEEEEE;
+  -webkit-transition: width .3s ease;
+  -moz-transition: width .3s ease;
+  -ms-transition: width .3s ease;
+  -o-transition: width .3s ease;
+  transition: width .3s ease;
+}
+.collector-form-element input:focus + .helptext {
+  width:200px;
+  height:3em;
+  line-height:1.5;
+  border: 1px solid #09c;
+  padding: .2em 0 .2em 1em;
+}
+
+    
+/* jQuery slider */
+#slider {
+	margin:2em auto .5em auto;
+}
+.amount {
+	margin-top: 10px;
+	text-align: center;
+}
+.amount input {
+	width: 80px;
+	text-align: center;
+}
+
+
+
+
+
+/* $GRIDS
+ ---------------------------------------------------------------------------- */
 .grid {
 	margin: 0 0 0 -18px;
 }
@@ -319,131 +659,136 @@ code {
 .grid-1-1 {
 	margin-left:0px;
 }
+  
+  
 
-/* buttons */
-.button {
-    font-family: inherit;
-    font-size: 100%;
-    text-align:center;
-    padding: .45em 1em;
-    color: #fff;
-    background-color: #0055A6;
-    text-decoration: none;
-    border-radius: 4px;
-    border:0;
-    cursor:pointer;
-}
-.button-hover,.button:hover,.button:focus {
-	background-color: #00A5E5;
-}
-.button:focus {
-    outline: 0;
-}
-.button-active,.button-active:hover,.button:active {
-	background-color:#00FF87;
-}
 
-/* forms */
-.collector-form {
-    margin: .5em 0;
+
+/*  $CONTENT
+ ---------------------------------------------------------------------------- */
+/* general layout (single column) */
+.wrapper {
+  position:relative;
+  min-height:100%;
+}
+.content, article, main, section {
+  margin: 0 auto 2em auto;
+  max-width:720px;
+  min-width:400px;
+}
+.clearfix:after {
+    visibility: hidden;
     display: block;
-}
-.collector-form input[type=radio]:focus,.collector-form input[type=checkbox]:focus {
-    outline: thin dotted #333;
-    outline: 1px auto #129FEA;
-}
-.collector-form input,.collector-form select,.collector-form textarea {
-    font-family: "Open Sans", Arial, Helvetica, sans-serif;
-    font-size: 100%;
-    padding: .4em .6em;
-    display: inline-block;
-    border: 1px solid #ccc;
-    box-shadow: inset 0 1px 3px #ddd;
-    border-radius: 4px;
-    -webkit-box-sizing: border-box;
-       -moz-box-sizing: border-box;
-            box-sizing: border-box;
-}
-.collector-form input:focus,.collector-form select:focus,.collector-form textarea:focus,
-.collector-form input:hover,.collector-form select:hover,.collector-form textarea:hover {
-    outline: 0;
-    border-color: #00A5E5;
-}
-.collector-form input[disabled],.collector-form select[disabled],.collector-form textarea[disabled],
-.collector-form input[disabled]:focus,.collector-form select[disabled]:focus,.collector-form textarea[disabled]:focus {
-	outline:0;
-	border:0;
-    cursor: not-allowed;
-    background-color: #eaeded;
-    color: #666;
-}
-.collector-form-extra input[type=checkbox],.collector-form input[type=radio] {
-    margin: .5em 7px .5em -25px;
-    display: inline-block;
-}
-.collector-form-extra fieldset {
-    border: 1px solid silver;
-    margin: 0 2px;
-    padding: .35em .75em .625em .75em;
-}
-.collector-form-extra label {
-    margin: .3em 0 .3em 25px;
-    display: block;
-}
-.collector-form-extra div.field {
-    padding: .35em .75em .625em .75em;
-}
-.collector-form-extra option {
-	padding-right: 10px;
-}
-.consent {
-	margin-top: 1em;
-}
-.consent-legend {
-	color:#000;
-}
-#slider {
-	margin-top:30px;
-}
-.amount {
-	margin-top: 10px;
-	text-align: center;
-}
-.amount input {
-	width: 80px;
-	text-align: center;
+    font-size: 0px;
+    content: ".";
+    clear: both;
+    height: 0px;
 }
 
-
-/*------------------------------------*\
-  	$INDEX
-\*------------------------------------*/
-.login-pos {
-	margin:0 auto 70px auto;
+/* Vertical centering (vcenter'ed element must be a child)*/
+.vcenter {
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+}
+    
+/* text alignment */
+.textcenter {
 	text-align:center;
 }
-.login-pos:after {
-	content:' ';
-	margin: 1em;
+.textright{
+	text-align:right;
 }
-.login-pos select[name=Condition] {
-    max-width: 200px;
+.textleft{
+    text-align:left;
+}
+
+/* Hidden objects */
+.precache,.precachenext,.hidden,#waiting,#loadingForm {
+  display:none!important;
+}
+.invisible {
+  visibility:hidden!important;
 }
 
 
 
 
 
-/*------------------------------------*\
-  	$INSTRUCTIONS
-\*------------------------------------*/
+/*  $NO-JS
+ ---------------------------------------------------------------------------- */
+.nojs {
+  background:#fbe7a8;
+  max-width: 900px;
+  min-width: 500px;
+  margin-top: -100px;
+}
+.nojs img {
+  position:absolute;
+  float:left;
+  top:50%;
+  margin: -95px 0 0 15px;
+}
+.nojs .nojs-text {
+  margin-left: 90px;
+  padding: 30px;
+}
+
+
+
+
+/* $PAGE-SPECIFIC
+ ---------------------------------------------------------------------------- */
+/* ==  Basic Info  == */
+.basicinfo {}
+  /* Consent form */
+  .consent {
+    background:none repeat scroll 0% 0% #F2F2F2;
+    border:1px solid #CCC;
+    font-family:serif;
+    height:200px;
+    overflow:auto;
+    padding:6px;  
+  }
+  .consent h1, .consent h2, .consent h3, .consent h4 {
+    color:#000;
+    font-family:serif;
+    margin-bottom:.5em;
+  }
+  .consent h1 {
+    font-size:16pt;
+    font-weight:bold;
+  }
+  .consent h2 {
+    font-size:14pt;
+    font-weight:bold;
+  }
+  .consent h3 {
+    font-size:12pt;
+    font-weight:bold;
+  }
+  .consent h4 {
+    font-size:10pt;
+    font-style:italic;
+  }
+
+/* ==  Instructions  == */
+.instructions {
+  margin-top: 3em;
+}
+
 .readcheck {
-	display:none;
-	width: 60%;
-	margin: 3em auto 1em auto;
 	background: #00FF87;
+  border-radius: 5px;
+  display:none;
+	margin: 3em auto 1em auto;
 	padding: 1.5em;
-	border-radius: 5px;
+  width: 60%;
+}
+
+.readcheck ul {
+  list-style:none;
 }
 .readcheck ul li {
 	width: 80%;
@@ -466,13 +811,7 @@ code {
 	text-align:center;
 }
 
-
-
-
-
-/*------------------------------------*\
-  	$TRIAL
-\*------------------------------------*/
+/* ==  Trial  == */
 /* less obtrusive button for when you just want to advance */
 input[type="submit"].button-trial-advance {
 	font-size:20px;
@@ -482,8 +821,9 @@ input[type="submit"].button-trial-advance {
 
 /* study trial type */
 .study {
-	font-size:3em;
-    overflow:auto;
+	font-size:2em;
+  max-height:80%;
+  overflow:auto;
 }
 .study-left {
 	float:left;
@@ -503,21 +843,48 @@ input[type="submit"].button-trial-advance {
     min-height:1px;
 }
 
-/* copy trials */
+/* copy and word-stem (testcue) and free recall trials*/
 .collector-form .copybox {
-	font-family: "Roboto", "Open Sans", Arial, Helvetica, sans-serif;
+	font-family: Arial, sans-serif;
 	font-size:100%;
 	color:#333;
-	padding:.15em 0;
-	margin:0 0 0 -3px;
+	padding:0 0 0 1px;
+	margin:-4px 0 0 -2px;
+  max-width: 200px;
+  overflow:visible;
 	width: 90%;
-	vertical-align:top;
 }
+.collector-form .test-cue input  { 
+  border-style:solid solid solid none; 
+  margin:-.15em 0 0 0; width: 300px;
+  padding: 0px 1px;
+  max-width: 4em;
+}
+.collector-form .fr-textarea {
+  height:10em;
+  width:100%;
+}
+
 
 /* MCpic, StudyPic, TestPic trials */
 .pic {
 	margin-bottom: 24px;
 }
+.mcPicTable td {
+  min-width: 170px;
+  text-align: center;
+  vertical-align: middle; 
+}
+
+.mcPicTable .collector-button { 
+  margin: 3% 7%; 
+}
+
+/** TODO change to the active green when checked **/
+/** TODO fix disabled buttons not gray **/
+/** TODO vertical centering tweaks, and moving the Likert down also **/
+/** TODO multiple of same items in Likert answers **/
+/** TODO old/new **/
 
 /* stepout pages */
 .stepout-clock {
@@ -599,47 +966,8 @@ input[type="submit"].button-trial-advance {
     width:100%;
 }
 
-/*------------------------------------*\
-  	$FQS
-\*------------------------------------*/
-
-
-
-
-
-
-/*------------------------------------*\
-  	$NO-JS
-\*------------------------------------*/
-.nojs {
-  background:#fbe7a8;
-  max-width: 900px;
-  min-width: 500px;
-  margin-top: -100px;
-}
-.nojs img {
-    position:absolute;
-    float:left;
-    top:50%;
-    margin: -95px 0 0 15px;
-}
-.nojs .nojs-text {
-    margin-left: 90px;
-    padding: 30px;
-}
-
-
-
-
-
-/*------------------------------------*\
-  	$MISC
-\*------------------------------------*/
-ol {
-    list-style-type: decimal;
-    padding: 10px auto 10px auto;
-}
-
+/* $MEDIA
+ ---------------------------------------------------------------------------- */
 ul {
     list-style-type: disc;
 }
@@ -647,28 +975,12 @@ ul li, ol li {
     margin: 5px 0px 5px 45px;
 }
 
-li {
-    /*padding-bottom: 15px*/
-}
-
-
-/*------------------------------------*\
-    $MEDIA
-\*------------------------------------*/
 @media all and (max-width: 980px) {
     .stepout-clock {
         opacity: .5;
         filter:Alpha(opacity=50);
     }
 }
-
-/*------------------------------------*\
-    $TOOLS
-\*------------------------------------*/
-/*#hashSubmit {
-    display:none;
-}*/
-#login {
     width: 450px;
     margin: 50px auto;
     text-align: center;
@@ -740,4 +1052,3 @@ li {
     margin: 0px auto;
     overflow: auto;
 }
-

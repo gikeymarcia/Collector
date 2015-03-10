@@ -1,18 +1,19 @@
 <?php
-	$compTime = 8;					// time in seconds to use for 'computer' timing
+    $compTime = 8;    // time in seconds to use for 'computer' timing
 ?>
-	<style>
-		.testCueRight	{	white-space: nowrap;	}
-		.testCueRight input	{	width: 300px;	padding: 0px 1px;	font-family: "Roboto", "Open Sans", Arial, Helvetica, sans-serif;	}
-	</style>
-    <div><?php echo $text; ?></div>
-    <div class="study precache">
-        <span class=study-left>  <?php echo $cue; ?>    </span>
-        <span class=study-divider>         :            </span>
-		<div class="testCueRight">
-			<?= substr($answer,0,2) ?><input name=Response type=text value="" autocomplete="off" />
-		</div>
-		<div class=textcenter>
-			<input class="button button-trial-advance" id=FormSubmitButton type=submit value="Submit"  />
-		</div>
-    </div>
+<section class="vcenter">
+  <!-- optional text -->
+  <div><?php echo $text; ?></div>
+
+  <!-- stimulus -->
+  <div class="collector-form-element study test-cue precache">
+    <span class=study-left><?php echo $cue; ?></span>
+    <span class=study-divider>         :            </span>
+    <span><?php echo substr($answer,0,2); ?></span
+      ><input name=Response type=text value="" autocomplete="off">
+  </div>
+  
+  <div class="collector-form-element textcenter">
+    <input class="collector-button collector-button-advance" id=FormSubmitButton type=submit value="Submit">
+  </div>
+</section>

@@ -102,7 +102,7 @@
     
     require $_codeF . 'Header.php';
 ?>
-	<div class="cframe-content">
+	<div class="vcenter">
 		<?php echo $message; ?>
 	</div>
 <?php

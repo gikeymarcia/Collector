@@ -260,14 +260,14 @@ var COLLECTOR = {
 				if ($("form").hasClass("UserTiming")) {
 					fsubmit.click();							// see common:init "intercept FormSubmitButton"
 				} else {
-					if(keypress == false) {
+					if(keypress === false) {
 						$("#RTkey").val( COLLECTOR.getRT() );	// set first keypress times
-						keypress == true;
+						keypress === true;
 					}
 					$("#RTlast").val( COLLECTOR.getRT() );		// update 'RTlast' time
 
-					$(".TestMC").removeClass("button-active");	// remove highlighting from all buttons
-					$(this).addClass("button-active");			// add highlighting to clicked button
+					$(".TestMC").removeClass("collector-button-active");	// remove highlighting from all buttons
+					$(this).addClass("collector-button-active");			// add highlighting to clicked button
 				}
 			});
 

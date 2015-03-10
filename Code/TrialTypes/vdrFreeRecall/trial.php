@@ -1,18 +1,21 @@
 <?php
-	$compTime = 60;					// time in seconds to use for 'computer' timing
+$compTime = 60;   // time in seconds to use for 'computer' timing
 
-	$prompt = str_ireplace(array($cue, $answer), array('$cue', '$answer'), $text);      // undo this change, since we are doing something a little non-standard here
-    $prompts = explode('|', $prompt);
+$prompt = str_ireplace(array($cue, $answer), array('$cue', '$answer'), $text);      // undo this change, since we are doing something a little non-standard here
+$prompts = explode('|', $prompt);
 ?>
-    <div class="prompt"><?= trim($prompts[0]) ?></div>
-<?php
-    if (isset($prompts[1])) {
-        $cues = explode('|', $cue);
-        $answers = explode('|', $answer);
-        foreach ($cues as $i => $thisCue) {
-            echo str_replace(array('$cue', '$answer'), array($thisCue, $answers[$i]), $prompts[1]);
-        }
-    }
+
+<section>    
+  <div class="prompt"><?php echo trim($prompts[0]) ?></div>
+  <?php
+      if (isset($prompts[1])) {
+          $cues = explode('|', $cue);
+          $answers = explode('|', $answer);
+          
+          foreach ($cues as $i => $thisCue) {
+              echo str_replace(array('$cue', '$answer'), array($thisCue, $answers[$i]), $prompts[1]);
+          }
+      }
     
     
     
@@ -31,11 +34,11 @@
     }
     
     if ($input === 'one') {
-        ?>
+  ?>
             <div class="textcenter">
-                <textarea rows="20" cols="55" name="Response" class="precache" wrap="physical" value=""></textarea>
-                <br><input class="button button-trial-advance" id="FormSubmitButton" type="submit" value="Submit"   />
-            </div>
+  <textarea rows="20" cols="55" name="Response" class="precache" wrap="physical" value=""></textarea>
+  <div class="collector-form-element textleft">
+    <input class="collector-button collector-button-advance" id="FormSubmitButton" type="submit" value="Submit">
         <?php
     } elseif ($input === 'many') {
         ?>
@@ -53,8 +56,8 @@
                         }
                     ?><!--
              --></div><br><input class="button button-trial-advance" id="FormSubmitButton" type="submit" value="Submit"   />
-            </div>
-        <?php
+  </div>
+</section>
     } else {
         ?>
             <style>

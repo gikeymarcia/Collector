@@ -35,8 +35,8 @@
     $showConditionInfo     = TRUE;              // Show the stimuli and procedure file for each condition when hovering over the options
     $hideFlaggedConditions = TRUE;              // flag conditions by putting a # character at the beginning of the "Condition Description". When the condition is auto-selected, this condition will be skipped
     $welcome        = 'Welcome to the experiment!';
-    $expDescription = '<p> This experiment will run for approximately 25 minutes.  Your goal is to learn some information</p>';
-    $askForLogin    = '<p> Please enter your ucla email address</p>';
+    $expDescription = '<p> This experiment will run for about 25 minutes.  Your goal will be to learn some information.</p>';
+    $askForLogin    = '<p> Please enter the Participant ID</p>';
 
     
     // scoring settings

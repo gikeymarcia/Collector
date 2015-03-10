@@ -33,8 +33,10 @@
                 <p><strong>Spacebar</strong></p>
             </div>
         </div>
-        <div class=button id=reveal>Start</div>
-        <div class=tetris>
+        
+        <div class="collector-button" id="reveal">Start</div>
+        
+        <div class="tetris">
             <embed src="http://www.cogfog.com/nblox.swf" menu="false" width="550" height="650"
             quality="high" type="application/x-shockwave-flash"
             pluginspage="http://www.macromedia.com/go/getflashplayer/" />
@@ -55,7 +57,7 @@
     } else {
         ?>
         <div class="textcenter">
-            <input class="button button-trial-advance" id="FormSubmitButton" type="submit" value="Next" />
+            <input class="collector-button collector-button-advance" id="FormSubmitButton" type="submit" value="Next" />
         </div>
         <?php
     }

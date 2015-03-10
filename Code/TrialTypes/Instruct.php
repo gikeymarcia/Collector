@@ -12,7 +12,7 @@
      * your /Experiment/ folder into the new version so you can take advantage of new features without having
      * to completely port your experiment to the new version.
      */
-	$compTime = 5;        // time in seconds to use for 'computer' timing
+    $compTime = 5;    // time in seconds to use for 'computer' timing
 	
 	// use the `Cue` if a valid one is called and there is no `Text` set in the procedure
 	if (($cue != '')
@@ -21,8 +21,10 @@
         $text = $cue;
     }
 ?>
-    <div><?php echo $text; ?></div>
+<section class="vcenter">
+  <div><?php echo $text; ?></div>
 
-	<div class="precache textright">
-		<input class="button button-trial-advance" id="FormSubmitButton" type="submit" value="Next" />
-	</div>
+  <div class="collector-form-element precache textright">
+    <input class="collector-button collector-button-advance" id="FormSubmitButton" type="submit" value="Next">
+  </div>
+</section>
