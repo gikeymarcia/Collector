@@ -133,6 +133,7 @@ $width = 100/count($likertScale);
 
 <section class="">
   <div class="collector-form-element likert">
+  <div class="collector-form-element likert inline-radio">
     <div class="likert-label"><?php echo $likertQuestion; ?></div>
     
     <?php foreach( $likertScale as $value ): 
