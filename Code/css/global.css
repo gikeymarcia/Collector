@@ -34,7 +34,7 @@
 
 /*  $IMPORTS
  ---------------------------------------------------------------------------- */
-@import url(http://fonts.googleapis.com/css?family=Oswald);
+@import url(http://fonts.googleapis.com/css?family=Oswald:300,400,700);
 @import url(http://fonts.googleapis.com/css?family=Open+Sans);
 
 
@@ -956,10 +956,9 @@ input[type="submit"].button-trial-advance {
 .before, .after {
     width:   49%;
     display: block-inline;
-    margin:  0.25%;
     padding: 3px;
     float:   left;
-    overflow:auto;
+    overflow: hidden;
     font-size: .9em;
 }
 .before table{
@@ -1020,7 +1019,8 @@ ul li, ol li {
     }
 #nav {
     width: 90%;
-    min-height: 65px;
+    /*min-width: 700px;*/
+    /*min-height: 65px;*/
     overflow:auto;
     margin:5px auto;
     background-color: #DEE7EC;
@@ -1056,6 +1056,7 @@ ul li, ol li {
 }
 .toolWidth {
     width: 90%;
+    /*min-width: 700px;*/
     display: block;
     margin: 0px auto;
     overflow: auto;
