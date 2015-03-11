@@ -24,6 +24,7 @@
                        Instructions
                        Trial
  $MEDIA            Responsive styles
+ $TOOLS            Tools styling
  
 
  ---------------------------------------------------------------------------- */
@@ -34,9 +35,8 @@
 
 /*  $IMPORTS
  ---------------------------------------------------------------------------- */
-@import url(http://fonts.googleapis.com/css?family=Oswald:300,400,700);
+@import url(http://fonts.googleapis.com/css?family=Oswald:400,700);
 @import url(http://fonts.googleapis.com/css?family=Open+Sans);
-
 
 
 
@@ -115,7 +115,7 @@ del {
 
 abbr[title], dfn[title] {
   border-bottom:1px dotted;
-  cursor:help;
+  cursor: help;
 }
 
 table {
@@ -186,7 +186,8 @@ body, html, textbox, select {
 
 h1,h2,h3,h4,h5,h6,a {
   color:#069;  /* brand color */
-  font-family:"Oswald", Helvetica, Arial, sans-serif;
+  font-family: "Oswald", Helvetica, Arial, sans-serif;
+  font-weight:400;
 }
 
 h1 {
@@ -259,7 +260,7 @@ code {
   background-color:#069;
   border-radius:4px;
   border:0;
-  cursor:pointer;
+  cursor: pointer;
 }
 .collector-button-hover,.collector-button:hover,
 .collector-button-focus, .collector-button:focus {
@@ -278,6 +279,7 @@ code {
 
 
 
+
 /*  $FORMS
  ----------------------------------------------------------------------------- */
 /* General form styling */
@@ -290,7 +292,7 @@ label,
 input[type=radio],
 input[type=checkbox],
 .choiceHolder {
-  cursor:pointer;
+  cursor: pointer;
 }
 
 /* labels and legends */
@@ -484,7 +486,7 @@ input[type=submit]:disabled,
 button:disabled,
 select:disabled,
 textarea:disabled {
-  cursor:not-allowed;
+  cursor: not-allowed;
   background-color:#e1e1e1;
   border:1px solid #888;
   color:#777;
@@ -660,8 +662,8 @@ textarea:disabled {
 .grid-1-1 {
 	margin-left:0px;
 }
-  
-  
+
+
 
 
 
@@ -744,6 +746,7 @@ textarea:disabled {
 
 
 
+
 /* $PAGE-SPECIFIC
  ---------------------------------------------------------------------------- */
 /* ==  Basic Info  == */
@@ -802,7 +805,7 @@ textarea:disabled {
 	background: #fff;
 	outline: solid 2px #00a5e5;
 	padding: 5px;
-	cursor:pointer;
+	cursor: pointer;
 }
 .readcheck ul li:hover {
 	background: #00a5e5;
@@ -934,9 +937,6 @@ input[type="submit"].button-trial-advance {
 }
 
 /* format diagnostics */
-#showTimer {
-	margin-top:2em;
-}
 .diagnostics {
 	margin-top:2em;
 	font-family: Consolas, monaco, monospace;
@@ -973,6 +973,10 @@ input[type="submit"].button-trial-advance {
     width:100%;
 }
 
+
+
+
+
 /* $MEDIA
  ---------------------------------------------------------------------------- */
 ul {
@@ -988,13 +992,21 @@ ul li, ol li {
         filter:Alpha(opacity=50);
     }
 }
+
+
+
+
+
+/* $TOOLS
+ ---------------------------------------------------------------------------- */
+#login {
     width: 450px;
     margin: 50px auto;
     text-align: center;
 }
     #login .wrong {
-        font-weight:bold;
-        line-height:.9em;
+        font-weight:400;
+        line-height:.95em;
         color:red;
     }
     #login p {
@@ -1010,17 +1022,15 @@ ul li, ol li {
     #login h3 {
         line-height: 1.2;
     }
-    #salt {
-        font-family:"Courier New", Courier, monospace;
-        color:#f7f7f7;          font-weight:lighter;
-        width:300px;;           line-height: 95%;
-        word-wrap:break-word;   display:block;
-        margin: 50px auto 20px auto;
-    }
+#salt {
+    font-family:"Courier New", Courier, monospace;
+    color:#f7f7f7;          font-weight:lighter;
+    width:300px;;           line-height: 95%;
+    word-wrap:break-word;   display:block;
+    margin: 50px auto 20px auto;
+}
 #nav {
     width: 90%;
-    /*min-width: 700px;*/
-    /*min-height: 65px;*/
     overflow:auto;
     margin:5px auto;
     background-color: #DEE7EC;
@@ -1052,11 +1062,9 @@ ul li, ol li {
     box-shadow: inset 0 1px 3px #ddd;
     border-radius: 4px;
     font-size: 90%;
-    /*width: auto;*/
 }
 .toolWidth {
     width: 90%;
-    /*min-width: 700px;*/
     display: block;
     margin: 0px auto;
     overflow: auto;
