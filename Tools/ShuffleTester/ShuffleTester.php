@@ -51,13 +51,12 @@
             float: left;
         }
         #shuffleSelectBar h3{
-            display:inline-block;
-            margin-right: 15px;
+            margin-right: 10px;
             clear: left;
-            font-weight:400;
         }
         #shuffleSelectBar select, #shuffleSelectBar button {
             margin-top:3px;
+            padding: 2px;
         }
         #shuffleDisplay {
             clear:left;
@@ -73,17 +72,18 @@
             margin-top: 25px;
         }
         dt{
-            font-weight: bold;
+            font-weight: 700;
         }
         #oldZoom {
             display:none;
         }
         #cellContents {
             width:99%;
-            font-size: 1.4em;
+            font-size: 1.2em;
             max-width: 99%;
-            margin: 0px auto;
-            height:20px;
+            margin: 3px auto 0px auto;
+            height:18px;
+            padding: 3px;
         }
             .locked {                     /*Added to <textarea> when contents are locked*/
                 border-color: #F0CA31;
@@ -96,6 +96,10 @@
         }
         td:first-child {
             font-weight:700;
+        }
+        dl {
+            clear: left;
+            padding-top:20px;
         }
     </style>
     

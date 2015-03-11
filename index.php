@@ -50,8 +50,6 @@
   <h1 class="textcenter"><?php echo $welcome;?></h1>
   <?php echo $expDescription; ?>
   
-  <br>
-  
   <form action="<?php echo $codeF . 'login.php' ?>" 
         autocomplete="off" 
         class="collector-form inline textcenter" 

@@ -22,7 +22,7 @@
     }
 ?>
 <section class="vcenter">
-  <div><?php echo $text; ?></div>
+  <div class="precache"><?php echo $text; ?></div>
 
   <div class="collector-form-element precache textright">
     <input class="collector-button collector-button-advance" id="FormSubmitButton" type="submit" value="Next">

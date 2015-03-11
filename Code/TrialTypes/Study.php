@@ -11,6 +11,6 @@
 
   <!-- include form to collect RT and advance page -->
   <div class="textcenter">
-    <input class="collector-button collector-button-advance" id="FormSubmitButton" type="submit" value="Next">
+    <input class="collector-button collector-button-advance" id="FormSubmitButton" type="submit" value="Next" autofocus="">
   </div>
 </section>
