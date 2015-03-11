@@ -246,14 +246,15 @@
     
 ?>
 <style>
+    html, body, .wrapper      {   height: 100%;   }
     .cframe-inner   {   vertical-align: top;    height: 100%;    }
 
     iframe          {   border: 0px solid #000; width: 100%; border-top-width: 1px; min-height: 100%;  }
     .trialOption    {   text-align: center; margin: 15px;   display: inline-block;   }
-    #allContain     {   height: 100%;   }
+    #allContain     {   height: 100%;   white-space: nowrap;   }
     
-    .expFile        {   width: 49%; display: inline-block;   padding: 0px 100px 0 0; vertical-align: top;  }
-    .fileTitle      {   text-align: center; }
+    .expFile        {   width: 49%; display: inline-block;   margin: 0px 0px 0 0; vertical-align: top;  }
+    .fileTitle      {   text-align: center; margin-bottom: 3px; }
     .fileTitle > h3 {   display: inline;    }
     
     .tableContainer {   display: inline-block;   max-width: 100%;    overflow: auto;    max-height: 600px;  }
@@ -350,7 +351,7 @@
             </div>
         </div>
         <div class="expFile">
-            <h3>Procedure File</h3>
+            <div class="fileTitle"><h3>Procedure File</h3></div>
             <div class="blockContainer">
                 <div class="tableContainer">
                     <?= $procTable ?>

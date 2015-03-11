@@ -1,5 +1,5 @@
 <?php
-    /* WARNING!  Any changes you make to this Instruct trial type will not change the experiment becasuse
+    /* WARNING!  Any changes you make to this Instruct trial type will not change the experiment because
      * there is another version of 'Instruct' within the '/Experiment/TrialTypes/` folder.
      * 
      * This was done as an example of how you can copy trial types from '/Code/TrialTypes/'

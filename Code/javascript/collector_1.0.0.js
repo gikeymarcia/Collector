@@ -120,7 +120,7 @@ var COLLECTOR = {
 			var startTime = COLLECTOR.startTime;
 
 			// these happen immediately on load
-			$(':input:enabled:visible:first').focus();			// focus cursor on first input
+			$(':input:enabled:visible:first').focusWithoutScrolling();			// focus cursor on first input
 			$("#loadingForm").submit();							// submit form to advance page
 
 			// intercept FormSubmitButton click
@@ -360,11 +360,23 @@ UTIL = {
 
 
 $.fn.focusWithoutScrolling = function(){
-	// credit to Felipe Martim at
-	// http://stackoverflow.com/questions/4898203/jquery-focus-without-scroll
-	var x = window.scrollX, y = window.scrollY;
+    if ($(this).length === 0) return this;
+    
+    var parents = [], parentScrolls = [];
+    var currentElement = $(this);
+    
+    while (currentElement[0] !== document) {
+        currentElement = currentElement.scrollParent();
+        parents.push(currentElement);
+        parentScrolls.push(currentElement.scrollTop());
+    }
+    
 	this.focus();
-	window.scrollTo(x, y);
+    
+    while (parents.length > 0) {
+        currentElement = parents.pop();
+        currentElement.scrollTop(parentScrolls.pop());
+    }
 	return this; //chainability
 };
 

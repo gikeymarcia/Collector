@@ -97,15 +97,13 @@
             $data = array(  'Username'              =>  $_SESSION['Username'],
                             'ID'                    =>  $_SESSION['ID'],
                             'ExperimentName'        =>  $experimentName,
-                            'Session'               =>  $_SESSION['Session'],
                             'Trial'                 =>  $_SESSION['Position'],
                             'Date'                  =>  date("c"),
                             'TimeDif'               =>  $timeDif,
                             'Condition Number'      =>  $_SESSION['Condition']['Number'],
                             'Stimuli File'          =>  $_SESSION['Condition']['Stimuli'],
                             'Order File'            =>  $_SESSION['Condition']['Procedure'],
-                            'Condition Description' =>  $_SESSION['Condition']['Condition Description'],
-                            'Condition Notes'       =>  $_SESSION['Condition']['Condition Notes']
+                            'Condition Description' =>  $_SESSION['Condition']['Condition Description']
                           );
             foreach ($currentTrial as $category => $array) {
                 $data += AddPrefixToArray($category . '*', $array);
@@ -119,7 +117,7 @@
             }
             
          // $writtenArray = arrayToLine($data, $_SESSION['Output File']);                                       // write data line to the file
-            $writtenArray = arrayToLineBroken($data, $_SESSION['Output File']);                                       // write data line to the file
+            $writtenArray = arrayToLineBroken($data, '');                                       // write data line to the file
             ###########################################
 
 

@@ -1,21 +1,23 @@
 <?php
-$compTime = 60;   // time in seconds to use for 'computer' timing
+	$compTime = 60;					// time in seconds to use for 'computer' timing
 
-$prompt = str_ireplace(array($cue, $answer), array('$cue', '$answer'), $text);      // undo this change, since we are doing something a little non-standard here
-$prompts = explode('|', $prompt);
+	$prompt = str_ireplace(array($cue, $answer), array('$cue', '$answer'), $text);      // undo this change, since we are doing something a little non-standard here
+    $prompts = explode('|', $prompt);
 ?>
-
-<section>    
-  <div class="prompt"><?php echo trim($prompts[0]) ?></div>
-  <?php
-      if (isset($prompts[1])) {
-          $cues = explode('|', $cue);
-          $answers = explode('|', $answer);
-          
-          foreach ($cues as $i => $thisCue) {
-              echo str_replace(array('$cue', '$answer'), array($thisCue, $answers[$i]), $prompts[1]);
-          }
-      }
+  <style>
+    .vdr-vcenter    {   position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+  </style>
+  
+  <div class="vcenter">
+    <div class="prompt"><?= trim($prompts[0]) ?></div>
+<?php
+    if (isset($prompts[1])) {
+        $cues = explode('|', $cue);
+        $answers = explode('|', $answer);
+        foreach ($cues as $i => $thisCue) {
+            echo str_replace(array('$cue', '$answer'), array($thisCue, $answers[$i]), $prompts[1]);
+        }
+    }
     
     
     
@@ -34,16 +36,16 @@ $prompts = explode('|', $prompt);
     }
     
     if ($input === 'one') {
-  ?>
+        ?>
             <div class="textcenter">
-  <textarea rows="20" cols="55" name="Response" class="precache" wrap="physical" value=""></textarea>
-  <div class="collector-form-element textleft">
-    <input class="collector-button collector-button-advance" id="FormSubmitButton" type="submit" value="Submit">
+                <textarea rows="20" cols="55" name="Response" class="precache" wrap="physical" value=""></textarea>
+                <br><input class="button button-trial-advance" id="FormSubmitButton" type="submit" value="Submit"   />
+            </div>
         <?php
     } elseif ($input === 'many') {
         ?>
             <style>
-                .freeRecallArea {   display: inline-block;  max-width: 800px;   text-align: left;   }
+                .freeRecallArea {   display: inline-block;  width: 850px;   text-align: left;   }
                 .freeRecallArea input { width: 192px;   margin: 4px;    padding: 4px;}
             </style>
             
@@ -52,16 +54,16 @@ $prompts = explode('|', $prompt);
                  --><?php
                         $answerCount = substr_count($answer, '|')+1;
                         for ($i=1; $i<=$answerCount; ++$i) {
-                            echo '<input type="text" name="Response' . $i . '" autocomplete="off" />';
+                            echo '<input type="text" name="Response' . $i . '" autocomplete="off" class="noEnter"/>';
                         }
                     ?><!--
              --></div><br><input class="button button-trial-advance" id="FormSubmitButton" type="submit" value="Submit"   />
-  </div>
-</section>
+            </div>
+        <?php
     } else {
         ?>
             <style>
-                .freeRecallArea {   display: inline-block;  max-width: 800px;   text-align: left;   }
+                .freeRecallArea {   display: inline-block;  width: 850px;   text-align: left;   }
                 .freeRecallArea input { width: 192px;   margin: 4px;    padding: 4px;}
             </style>
             
@@ -69,7 +71,7 @@ $prompts = explode('|', $prompt);
              --><div class="freeRecallArea"><!--
                  --><?php
                         for ($i=1; $i<=$input; ++$i) {
-                            echo '<input type="text" name="Response' . $i . '" autocomplete="off" />';
+                            echo '<input type="text" name="Response' . $i . '" autocomplete="off" class="noEnter"/>';
                         }
                     ?><!--
              --></div><br><input class="button button-trial-advance" id="FormSubmitButton" type="submit" value="Submit"   />
@@ -77,3 +79,4 @@ $prompts = explode('|', $prompt);
         <?php
     }
 ?>
+  </section>

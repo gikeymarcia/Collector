@@ -9,8 +9,8 @@
   <div class="collector-form-element study test-cue precache">
     <span class=study-left><?php echo $cue; ?></span>
     <span class=study-divider>         :            </span>
-    <span><?php echo substr($answer,0,2); ?></span
-      ><input name=Response type=text value="" autocomplete="off">
+    <span class=study-right
+      ><?php echo substr($answer,0,2); ?><input name=Response type=text value="" autocomplete="off"></span>
   </div>
   
   <div class="collector-form-element textcenter">
