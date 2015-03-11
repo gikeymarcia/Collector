@@ -948,10 +948,9 @@ input[type="submit"].button-trial-advance {
 .before, .after {
     width:   49%;
     display: block-inline;
-    /*margin:  0.25%;*/
     padding: 3px;
     float:   left;
-    overflow:auto;
+    overflow: hidden;
     font-size: .9em;
 }
 .before table{
