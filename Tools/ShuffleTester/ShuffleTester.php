@@ -54,19 +54,19 @@
             display:inline-block;
             margin-right: 15px;
             clear: left;
+            font-weight:400;
         }
         #shuffleSelectBar select, #shuffleSelectBar button {
-            margin-top:10px;
+            margin-top:3px;
         }
         #shuffleDisplay {
             clear:left;
         }
         #zoom {
             float: right;
-            margin-right: 20px;
         }
         #reset {
-            margin-left:10px;
+            margin-left:15px;
         }
         dl {
             margin-left:5%;
@@ -80,7 +80,7 @@
         }
         #cellContents {
             width:99%;
-            font-size: .95em;
+            font-size: 1.4em;
             max-width: 99%;
             margin: 0px auto;
             height:20px;
@@ -94,36 +94,40 @@
         .before #RF {
             float:right;
         }
+        td:first-child {
+            font-weight:700;
+        }
     </style>
     
     <!-- Show bar with dropdown file selector + zoom in/out reset buttons -->
     <div class="toolWidth">
         <div id="shuffleSelectBar">
             <h3>Which file would you like to shuffle?</h3>
-            <!-- Create the select dropdown and populate it with all procedure and stimuli files -->
-            <select form="shuffleFile" class="collector-select" name="shuffleFile">
-            <?php
-                foreach ($ShuffleFolders as $type => $files) {
-                    echo '<optgroup label="' . $type . ' Files">';                  // group options by type: Stimuli OR Procedure
-                    foreach ($files as $file) {
-                        if ($store['get'] == $type . '/' . $file) {                 // marks choosen file as selected
-                            $selected = ' selected';
-                        } else {
-                            $selected = '';
+            <div>
+                <!-- Create the select dropdown and populate it with all procedure and stimuli files -->
+                <select form="shuffleFile" class="collector-select" name="shuffleFile">
+                <?php
+                    foreach ($ShuffleFolders as $type => $files) {
+                        echo '<optgroup label="' . $type . ' Files">';                  // group options by type: Stimuli OR Procedure
+                        foreach ($files as $file) {
+                            if ($store['get'] == $type . '/' . $file) {                 // marks choosen file as selected
+                                $selected = ' selected';
+                            } else {
+                                $selected = '';
+                            }
+                            // show option for each file readable format--- <option label="$file" value="$type/$file" $selected>  $file  </option>
+                           echo '<option label="' . $file . '" value="' .  $type . '/' . $file . '"' .  $selected . '>' . $file . '</option>';
                         }
-                        // show option for each file readable format--- <option label="$file" value="$type/$file" $selected>  $file  </option>
-                       echo '<option label="' . $file . '" value="' .  $type . '/' . $file . '"' .  $selected . '>' . $file . '</option>';
                     }
-                }
-            ?>
-            </select>
-            <button form="shuffleFile">Shuffle!</button>
-            
+                ?>
+                </select>
+                <button form="shuffleFile">Shuffle!</button>
+            </div>
             <!-- Show zoom and reset buttons.  Functionality is handled by Jquery at the bottom of the page -->
             <div id="zoom">
-                <button id="in"   >Zoom In</button>
-                <button id="out"  >Zoom Out</button>
-                <button id="reset">Reset </button>
+                <button id="in"   ><b>Zoom +</b></button>
+                <button id="out"  ><b>Zoom -</b></button>
+                <button id="reset">Reset</button>
             </div>
         </div>
     </div>
@@ -208,21 +212,21 @@
            clicked = 0;                                         // set clicked to FALSE / unclicked / unlocked
            $("textarea").removeClass("locked");                 // remove textarea locked styling
         });
-        $("td div").click(function() {                      // if a table cell is clicked
+        $("td").click(function() {                          // if a table cell is clicked
             if (clicked == 0) {                                 // if not locked
                 clicked = 1;                                        // lock
                 $("textarea").addClass("locked");                   // add lock style to textarea
-                $("#reset").html("Reset/Unlock");                   // change reset button to reset/unlock button
+                $("#reset").html("Reset/Unlock");                   // change reset button to Reset/Unlock button
             } else {                                            // if locked
                 clicked = 0;                                        // unlock
                 $("textarea").removeClass("locked");                // remove locked styling from textarea
-                $("#reset").html("Reset");                          // change reset button back to "reset"
+                $("#reset").html("Reset");                          // change reset button back to "Reset"
             }
         });
-        $("td div").hover(function() {                      // if you hover over a table cell
+        $("td").hover(function() {                          // if you hover over a table cell
             if (clicked == 0) {                                 // if contents are not locked
-                var contents = $(this).html();                  // save contents of cell being hovered over
-                $("#cellContents").html(contents).val();        // insert contents into textarea in a way that preserves HTML markup
+                var contents = $(this).children().html();           // save contents of cell being hovered over
+                $("#cellContents").html(contents).val();            // insert contents into textarea in a way that preserves HTML markup
             }
         });
         

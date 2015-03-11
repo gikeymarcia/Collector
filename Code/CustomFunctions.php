@@ -165,7 +165,7 @@
             $doInit = FALSE;
             ?>
             <style>
-                .display2dArray                         { border-collapse: collapse; margin: 0 15px 15px 0; }
+                .display2dArray                         { border-collapse: collapse; /*margin: 0 15px 15px 0;*/ }
                 .display2dArray td, .display2dArray th  { border: 1px solid #000; vertical-align: middle; text-align: center; padding: 2px 6px; overflow: hidden; }
                 .display2dArray td                      { max-width: 300px; }
                 .display2dArray th                      { max-width: 100px; white-space: normal; }
