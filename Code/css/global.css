@@ -688,6 +688,17 @@ textarea:disabled {
     clear: both;
     height: 0px;
 }
+.flexParent {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+.flexChild {
+    flex: 0 0 auto;
+    width: 500px;
+}
 
 /* Vertical centering (vcenter'ed element must be a child)*/
 .vcenter {

@@ -15,4 +15,4 @@
     <meta http-equiv="refresh" content="0;url=<?= $_codeF ?>nojs.php" />
   </noscript>
   
-  <div class="wrapper clearfix">
+  <div class="flexParent">

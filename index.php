@@ -46,7 +46,7 @@
     require $_codeF . 'Header.php';
 ?>
 
-<section class="vcenter">
+<section class="flexChild">
   <h1 class="textcenter"><?php echo $welcome;?></h1>
   <?php echo $expDescription; ?>
   
