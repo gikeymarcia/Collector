@@ -17,10 +17,10 @@
   <div class="readcheck">
     Should you pay close attention?  (hint: Answer is in the instructions)
     <ul>
-      <li class="MCbutton wrong"       > I don't think so
-      <li class="MCbutton wrong"       > Nope
-      <li class="MCbutton" id="correct"> Yes
-      <li class="MCbutton wrong"       > I can't read.
+      <li class="MCbutton wrong"       > I don't think so </li>
+      <li class="MCbutton wrong"       > Nope             </li>
+      <li class="MCbutton" id="correct"> Yes              </li>
+      <li class="MCbutton wrong"       > I can't read.    </li>
     </ul>
   </div>
 </section>
