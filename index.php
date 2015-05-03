@@ -44,49 +44,67 @@
     // load page header
     $title = 'Experiment Login Page';  
     require $_codeF . 'Header.php';
+    $action = $codeF . 'login.php';
 ?>
+<!-- Page specific styling tweaks -->
+<style>
+    #indexLogin div:first-of-type{
+        margin-bottom: .5em;
+    }
+    #indexLogin  select {
+        width: 300px;
+    }
+</style>
 
-<section class="flexChild">
-  <h1 class="textcenter"><?php echo $welcome;?></h1>
-  <?php echo $expDescription; ?>
-  
-  <form action="<?php echo $codeF . 'login.php' ?>" 
-        autocomplete="off" 
-        class="collector-form inline textcenter" 
-        method="get" 
-        name="Login">
-    <?php echo $askForLogin;?>
+<form   id="content"            name="Login"
+        action="<?=$action?>"   method="get"
+        autocomplete="off"      class="index"   >
+    <h1 class="textcenter"><?= $welcome ?></h1>
+    <?= $expDescription ?>
     
-    <div class="collector-form-element">
-      <input name="Username" type="text" value="" autocomplete="off">
-    </div>
-  
-    <div class="collector-form-element">
-    <!-- Condition selector -->
-    <?php if ($showConditionSelector == TRUE): ?>
-      <select name="Condition">
-    <?php else: ?>
-      <select class="hidden" name="Condition">
-    <?php endif; ?>
-        <option default selected value="Auto">Auto</option>
-      <?php  // Display conditions as options
+    <section id="indexLogin" class="flexVert">
+        <div class="textcenter flexChild">
+            <?= $askForLogin ?>
+        </div>
+        <div class="flexChild">
+            <input name="Username" type="text" value="" autocomplete="off" class="btnHeight">
+            
+            <!-- Condition selector -->
+        <?php if ($showConditionSelector == TRUE): ?>
+            <select name="Condition" class="btnHeight">
+        <?php else: ?>
+            <select class="hidden" name="Condition">
+        <?php endif; ?>
+                <option default selected value="Auto">Auto</option>
+        <?php  // Display conditions as options
                 foreach ($Conditions as $i => $cond) {
                     if ($hideFlaggedConditions AND $cond['Condition Description'][0] === '#') { continue; }
-                    
-                    $name  = $useConditionNames ? $cond['Number'] . '. ' . $cond['Condition Description']                            : $cond['Number'];
-                    $title = $showConditionInfo ? ' title="' . $stimF . $cond['Stimuli'] . ' - ' . $procF . $cond['Procedure'] . '"' : '';
-                    
-                    $style = ($cond['Condition Description'][0] === '#') ? ' style="color: grey;"' : '';
-                    
-					echo '<option value="' . $i . '"'. $title . $style . '>' . $name . '</option>';
-        }
-      ?>
-      </select>
-    <div class="collector-form-element">
-      <input class="collector-button" type="submit" value="Login">
-    </div>
-
-  </form>
-</section>
+                    // showing condition description on hover
+                    if ($useConditionNames) {
+                        $name = $cond['Number'] . '. ' . $cond['Condition Description'];
+                    } else {
+                        $name = $cond['Number'];
+                    }
+                    // showing Stimuli + Procedure files for each condition
+                    if ($showConditionInfo) {
+                        $title = ' title="' . $stimF . $cond['Stimuli'] . ' - ' . $procF . $cond['Procedure'] . '"';
+                    } else {
+                        $title = '';
+                    }
+                    // make flagged conditions grey
+                    if ($cond['Condition Description'][0] === '#') {
+                        $style = ' style="color: grey;"';
+                    } else {
+                        $style = '';
+                    }
+                    // put this condition in the dropdown selector
+                	echo '<option value="' . $i . '"'. $title . $style . '>' . $name . '</option>';
+                }
+        ?>
+            </select>
+            <button class="collector-button" type="submit">Login</button>
+        </div>
+    </section>
+</form>
 <?php 
     require $_codeF . 'Footer.php';

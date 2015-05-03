@@ -36,7 +36,7 @@
     $hideFlaggedConditions = TRUE;              // flag conditions by putting a # character at the beginning of the "Condition Description". When the condition is auto-selected, this condition will be skipped
     $welcome        = 'Welcome to the experiment!';
     $expDescription = '<p> This experiment will run for about 25 minutes.  Your goal will be to learn some information.</p>';
-    $askForLogin    = '<p> Please enter the Participant ID</p>';
+    $askForLogin    = 'Please enter the Participant ID';
 
     
     // scoring settings
