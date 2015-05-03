@@ -204,6 +204,7 @@ h4 {
 
 p {
   margin: 1.1em 0;
+  line-height: 1.5em;
 }
 
 a:active {
@@ -241,6 +242,10 @@ code {
     border-radius: 3px;
 }
 
+/*stop button outine in mozilla*/
+button::-moz-focus-inner {
+  border: 0;
+}
 
 
 
@@ -462,11 +467,13 @@ body > form {       /*Has the ID of 'content'*/
 
 .alert-instructions {
 	display:none;
-	position:absolute;
 	width:100%;
-	top:0;
 	color:#fff;
 	text-align:center;
+}
+
+.redOutline {
+    outline: 2px dashed #900;
 }
 
 /* ==  Trial  == */

@@ -157,27 +157,29 @@ var COLLECTOR = {
 
 			// reveal readcheck questions
 			$("#revealRC").click(function() {
-			    $("#revealRC").hide();
-				$(".readcheck").slideDown(400, function() {
-					var off = $(".readcheck").offset();
-					$("html, body").animate({scrollTop: off.top}, 500);
-				});
+			    $(".instructions").slideToggle(400);            // hide instructions
+				$(".readcheck").slideToggle(400);               // show questions
+				if (fails > 0) {                                // if you've missed the question before
+				    $(".alert").slideToggle();                      // hide the alert
+				    $("#content").removeClass("redOutline");        // remove the red outline
+				}
 			});
-
-			// submit the form when they click the item with id="correct"
-			// emulates clicking the FormSubmitButton which runs the intercept code in common
-			$("#correct").click(function(){
-				$("#FormSubmitButton").click();
-			});
-
-			// when they click an item with class="wrong" add to fail count and alert them to re-read instructions
-			$(".wrong").click(function(){
-				fails++;
-				$(".cframe-outer").animate({"top":"30px"});
-				window.scrollTo(0,0);
-				$(".alert").fadeIn(100).fadeOut(100).fadeIn(100);
-				$("#Fails").prop("value",fails);
-			});
+			
+			// When a button is clicked it checks if the user is right/wrong then either advances page or gives notice to read closely
+			$(".MCbutton").click( function() {
+                if( this.id == "correct") {
+                    $("#RT").val( COLLECTOR.getRT() );
+                    $("form").submit();
+                }
+                else {
+                    $(".instructions").slideToggle(400);            // show instructions text
+                    $(".readcheck").slideToggle(400);               // hide multiple choice questions
+                    fails++;                                        // add to fails counter
+                    $("#Fails").val(fails);                         // set value of fails
+                    $(".alert").slideDown();                        // show alert that the user is wrong
+                    $("#content").addClass("redOutline");           // add a red outline to the form
+                }
+            });
 		}
 	},
 

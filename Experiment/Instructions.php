@@ -7,7 +7,7 @@
   <p> As many paragraphs as you would like can go here.  Instructions are done.  Time for you to move onto the experiment
 
   <div class="textcenter" id="revealRC">
-    <button class="collector-button">Advance</button>
+    <button class="collector-button" type="button">Advance</button>
   </div>
 </section>
 
@@ -17,10 +17,10 @@
   <div class="readcheck">
     Should you pay close attention?  (hint: Answer is in the instructions)
     <ul>
-      <li class="MCbutton wrong"       > I don't think so </li>
-      <li class="MCbutton wrong"       > Nope             </li>
+      <li class="MCbutton"             > I don't think so </li>
+      <li class="MCbutton"             > Nope             </li>
       <li class="MCbutton" id="correct"> Yes              </li>
-      <li class="MCbutton wrong"       > I can't read.    </li>
+      <li class="MCbutton"             > I can't read.    </li>
     </ul>
   </div>
 </section>
