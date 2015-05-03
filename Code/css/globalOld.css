@@ -226,15 +226,15 @@ em, i {
   font-style: italic;
 }
 
-/*pre {
+pre {
   max-width: 800px;
   margin-left: 9%;
   
-}*/
+}
 
 code {
     background: #f7f7f7;
-    font-family: "Inconsolata", "Courier New", Courier, monospace;
+    font-family: "Courier New", Courier, monospace;
     padding: 3px 5px;
     font-size: 92%;
     line-height: 1.45;
@@ -278,6 +278,318 @@ code {
 
 /*  $FORMS
  ----------------------------------------------------------------------------- */
+/* General form styling */
+/*.collector-form {
+  font:1em Helvetica, Arial, sans-serif;
+  margin:0 auto;
+  max-width:800px;
+}*/
+
+/*label,
+input[type=radio],
+input[type=checkbox],
+.choiceHolder {
+  cursor: pointer;
+}*/
+
+/* labels and legends */
+/*.collector-form > fieldset legend,
+.collector-form-element label,
+.radio-label {
+    font-family:"Oswald", Helvetica, Arial, sans-serif;
+}*/
+
+/*.collector-form > fieldset legend {
+    font-size:2em;
+    padding:.5em 0;
+    margin:0;
+}*/
+
+/*.collector-form-element label,
+.textarea-label,
+.radio-label,
+.likert-label {
+    display:block;
+    margin:.8em 0;
+}*/
+
+
+/* Form controls */
+/*.collector-form-element {
+    margin:1em 0;
+}*/
+
+/*.collector-form-element input[type=text],
+.collector-form-element .number input[type=text],
+.collector-form-element select,
+.collector-form-element input[type=radio],
+.collector-form .inline-radio:not(.likert) div {
+    margin-left:1em;
+}*/
+
+/*.collector-form-element input[type=text],
+.collector-form-element input[type=radio] + label,
+.collector-form-element select,
+.collector-form-element textarea {
+    font:1em Helvetica, Arial, sans-serif;
+}*/
+
+/* text */
+/*.collector-form-element input[type=text],
+.collector-form-element select,
+.collector-form-element textarea {
+    width:10em;
+}*/
+
+/* textbox */
+/*.collector-form-element input[type=text] {
+    padding:.3em .5em;
+}*/
+
+/* number */
+/*.collector-form-element.number input[type=text] {
+    font-size:1.3em;
+    text-align:center;
+    width:3em;
+}*/
+
+/* select */
+/*.collector-form-element select {
+    padding:.3em .5em;
+}*/
+
+/* textarea */
+/*.collector-form-element textarea {
+
+}*/
+
+/* radio buttons */
+    /* normal radio buttons */
+/*.collector-form-element input[type=radio] {
+    display:inline-block;
+    float:left;
+    margin-top:1.3em;
+    vertical-align:bottom;
+    width:10%;
+}*/
+
+/*.collector-form-element input[type=radio] + label {
+    display:inline-block;
+    float:left;
+}*/
+
+/*.collector-form-element:not(.inline-radio) input[type=radio] + label {
+    width:85%;
+}*/
+
+/* likert and inline radio buttons */
+/*.likert,
+.likert-legend,
+.likert-options {
+    text-align: center;
+    width:100%;
+}*/
+
+/*.likert input,
+.collector-form-element.inline-radio input[type=radio] {
+    height: 1px;
+    width: 1px;
+    margin:30px;
+    opacity:0;
+    filter:alpha(opacity=0);
+    position:absolute;
+}*/
+
+/*.likert label,
+.collector-form-element.inline-radio input[type=radio] + label,
+.collector-form-element.likert input[type=radio] + label {
+    box-sizing:border-box; 
+    display:inline-block;
+    position:relative;
+    padding: 4px 12px;
+    font-size:.9em;
+    color: #333;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #f5f5f5;
+    background-image: -moz-linear-gradient(top,#fff,#e6e6e6);
+    background-image: -webkit-gradient(linear,0 0,0 100%,from(#fff),to(#e6e6e6));
+    background-image: -webkit-linear-gradient(top,#fff,#e6e6e6);
+    background-image: -o-linear-gradient(top,#fff,#e6e6e6);
+    background-image: linear-gradient(to bottom,#fff,#e6e6e6);
+    background-repeat: repeat-x;
+    border: 1px solid #ccc;
+    border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+    border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
+    border-bottom-color: #b3b3b3;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff',endColorstr='#ffe6e6e6',GradientType=0);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);
+    -moz-box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);
+}*/
+
+/*.likert input[type=radio]:checked + label,
+.collector-form-element.inline-radio input[type=radio]:checked + label {
+    background-image: none;
+    outline: 0;
+    -webkit-box-shadow: inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05);
+    -moz-box-shadow: inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05);
+    background-color:#e0e0e0;
+}*/
+
+/*.likert input:focus + label,
+.collector-form-element.inline-radio input:focus + label {
+    outline:1px dotted #111;
+    z-index:3000;
+}*/
+
+/*.likert label {
+    margin:0 0 0 0;
+}*/
+    
+/*.likert-legend { 
+    color:#777;
+    display:block;
+    float:left;
+    margin:.5em auto;
+}*/
+
+/*.likert-legend > div {
+    width:33.3%;
+    display:inline-block;
+}*/
+
+/*.likert-legend-left {
+    text-align: left;
+}*/
+
+/*.likert-legend-right {
+    text-align: right;
+}*/
+
+/*.likert + .collector-form-element .collector-button {
+    margin-top:0;
+}*/
+
+
+/* checkboxes */
+/*.collector-form-element input[type=checkbox] {
+    display:inline-block;
+    margin:1.4em 1.5em 0 0;
+    vertical-align:top;
+} */
+
+/*.collector-form-element input[type=checkbox] + label {
+    display:inline-block;
+    font-family:Helvetica, Arial, sans-serif;
+    margin-bottom:0;
+    width:80%;
+}*/
+  
+/* disabled */
+/*input[type=text]:disabled,
+input[type=radio]:disabled,
+input[type=checkbox]:disabled,
+input[type=range]:disabled,
+input[type=submit]:disabled,
+button:disabled,
+select:disabled,
+textarea:disabled {
+    cursor: not-allowed;
+    background-color:#e1e1e1;
+    border:1px solid #888;
+    color:#777;
+    outline:0;*/
+}
+  
+/* labels on left (instead of stacked) */
+/*.aligned .collector-form-element:not(.inline-radio) label {
+    display:inline-block;
+    width:30%;
+}*/
+
+/* radio buttons */
+/*.aligned .radio-label {
+    float:left;
+    margin-right:1em;
+    width:30%;
+}*/
+
+/*.aligned .radio-label ~ div {
+    float:left;
+}*/
+
+/*.aligned input[type=text] {
+    margin-top:.8em;
+    vertical-align:top;
+}*/
+
+/*.aligned .collector-form-element:not(.inline-radio) input[type=radio] {
+    display:inline-block;
+    float:none;
+    vertical-align:baseline;
+}*/
+
+/*.aligned .collector-form-element:not(.inline-radio) input[type=radio] + label {
+    width:80%;
+}*/
+
+/*.aligned .inline-radio div {
+    margin-top:.9em;
+    margin-left:.5em;
+}*/
+
+/*.aligned .inline-radio:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0px;
+    content: ".";
+    clear: both;
+    height: 0px;
+}*/
+
+/* checkboxes */
+/*.aligned .collector-form-element input[type=checkbox] + label {
+    width:80%;
+}  */
+
+/* inline forms */
+/*.inline .collector-form-element {
+    display:inline;
+    margin:0;
+}*/
+
+/*.inline .collector-form-element input,
+.inline .collector-form-element select {
+    margin:0 0 1em 0;
+}*/
+
+/* popout helper textbox */
+/*.collector-form-element .helptext {
+    display:inline-block;
+    font-size:.9em;
+    height:0;
+    width:0;
+    overflow:hidden;
+    position:absolute;
+    margin:0 0 0 4em;
+    background: none repeat scroll 0 0 #EEEEEE;
+    -webkit-transition: width .3s ease; 
+    -moz-transition: width .3s ease;
+    -ms-transition: width .3s ease;
+    -o-transition: width .3s ease;
+    transition: width .3s ease;
+}*/
+
+/*.collector-form-element input:focus + .helptext {
+    width:200px;
+    height:3em;
+    line-height:1.5;
+    border: 1px solid #09c;
+    padding: .2em 0 .2em 1em;
+}*/
 
     
 /* jQuery slider */
@@ -300,13 +612,103 @@ code {
 
 /* $GRIDS
  ---------------------------------------------------------------------------- */
-
+/*.grid {
+	margin: 0 0 0 -18px;
+}
+.grid-gutterless {
+	margin-left: 0;
+}
+.grid-gutterless > .grid-item {
+	padding-left: 0;
+}
+.grid-item {
+	display: inline-block;
+	padding-left: 18px;
+	vertical-align: top;
+	width:100%;
+}
+.grid-item > div {
+	margin: 0 0 18px;
+}
+.grid-1-10 {
+	width: 10%;
+}
+.grid-1-8 {
+	width: 12.5%;
+}
+.grid-1-5, .grid-2-10 {
+	width: 20%;
+}
+.grid-1-4, .grid-2-8 {
+    width: 25%;
+}
+.grid-3-10 {
+	width: 30%;
+}
+.grid-1-3, .grid-2-6 {
+	width: 33.333%
+}
+.grid-3-8 {
+	width: 37.5%;
+}
+.grid-2-5, .grid-4-10 {
+	width: 40%;
+}
+.grid-1-2, .grid-2-4, .grid-3-6, .grid-4-8, .grid-5-10 {
+    width: 50%;
+}
+.grid-3-5, .grid-6-10 {
+	width: 60%;
+}
+.grid-5-8 {
+	width: 62.5%;
+}
+.grid-2-3, .grid-4-6 {
+	width: 66.666%;
+}
+.grid-7-10 {
+	width: 70%;
+}
+.grid-3-4, .grid-6-8 {
+    width: 75%;
+}
+.grid-4-5, .grid-8-10 {
+	width: 80%;
+}
+.grid-7-8 {
+	width: 87.5%;
+}
+.grid-9-10 {
+	width: 90%;
+}
+.grid-1-1 {
+	margin-left:0px;
+}*/
 
 
 
 
 /*  $CONTENT
  ---------------------------------------------------------------------------- */
+/* general layout (single column) */
+/*.wrapper {
+  position:relative;
+  min-height:100%;
+}*/
+/*.content, article, main, section {
+  margin: 0 auto 2em auto;
+  max-width:720px;
+  min-width:440px;
+}*/
+/*.clearfix:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0px;
+    content: ".";
+    clear: both;
+    height: 0px;
+}*/
+
 body {              /*Has the ID of 'flexBody'*/
     display: flex;
     flex-flow: column nowrap;
@@ -344,6 +746,18 @@ body > form {       /*Has the ID of 'content'*/
 .flexChild {
     flex: 0 0 auto;
 }
+/* Vertical centering (vcenter'ed element must be a child)*/
+/*.vcenter {
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+  max-height: 100%;
+  overflow-y: auto;
+  padding: 0 20px;
+  max-width: 100%;
+  box-sizing: border-box;
+}*/
     
 /* text alignment */
 .textcenter {
@@ -360,11 +774,11 @@ body > form {       /*Has the ID of 'content'*/
 }
 
 /* Hidden objects */
-.precache, .precachenext, .hidden, #waiting, #loadingForm {
-  display: none!important;
+.precache,.precachenext,.hidden,#waiting,#loadingForm {
+  display:none!important;
 }
 .invisible {
-  visibility: hidden!important;
+  visibility:hidden!important;
 }
 
 
