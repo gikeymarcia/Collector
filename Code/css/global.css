@@ -28,7 +28,8 @@
 
  ---------------------------------------------------------------------------- */
 
-
+/*TODO bring back disabled color from old CSS
+border color, background color, color   -- check from old CSS*/
 
 
 /*  $RESET
@@ -170,17 +171,18 @@ img {
  ----------------------------------------------------------------------------- */
 body, html, textbox, select {
   color: #111;
-  font-family: "Open Sans", Helvetica, Arial, sans-serif;
-  font-size: 1.05em;
+  font-family: "Open Sans", Arial, sans-serif;
+  font-size: 1em;
 }
 
 input, select, textarea, button {
     font-family:inherit;
+    font-size:inherit;
 }
 
 h1,h2,h3,h4,h5,h6,a {
   color: #069;  /* brand color */
-  font-family: "Roboto", Helvetica, Arial, sans-serif;
+  font-family: "Roboto", Arial, sans-serif;
   font-weight: 400;
 }
 
@@ -247,6 +249,10 @@ button::-moz-focus-inner {
   border: 0;
 }
 
+input::-moz-focus-inner {
+  border: 0 !important;
+}
+
 
 
 
@@ -277,6 +283,28 @@ button::-moz-focus-inner {
   margin-top:3em;
 }
 
+/*input[type=text]:disabled,
+input[type=radio]:disabled,
+input[type=checkbox]:disabled,
+input[type=range]:disabled,
+input[type=submit]:disabled,
+button:disabled,
+select:disabled,
+textarea:disabled {
+    cursor: not-allowed;
+    background-color:#e1e1e1;
+    border:1px solid #888;
+    color:#777;
+    outline:0;
+}*/
+
+*:disabled, *:disabled:hover  {
+    cursor: not-allowed;
+    background-color:#e1e1e1;
+    border-color:#888;
+    color:#777;
+    /*outline:0;*/
+}
 
 
 
@@ -312,13 +340,15 @@ button::-moz-focus-inner {
 
 /*  $CONTENT
  ---------------------------------------------------------------------------- */
+html {
+    height: 100%;
+}
 body {              /*Has the ID of 'flexBody'*/
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
-    height: 100vh;
+    min-height: 100%;
     width: 100%;
     box-sizing: content-box;
 }
@@ -332,6 +362,7 @@ body > form {       /*Has the ID of 'content'*/
     width: 700px;
     padding: 25px;
     height: auto;
+    margin: auto;
 }
 
 .flexVert {
@@ -488,7 +519,7 @@ input[type="submit"].button-trial-advance {
 .study {
     font-size: 2em;
     max-height: 80%;
-    overflow: auto;
+    /*overflow: auto;*/
 }
 .study-left {
 	float:left;
