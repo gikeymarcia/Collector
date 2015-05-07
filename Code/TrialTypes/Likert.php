@@ -136,7 +136,7 @@ $width = 100/count($likertScale);
     <div class="likert-label"><?php echo $likertQuestion; ?></div>
     
     <?php foreach( $likertScale as $value ): 
-    ?><input id="r_<?php echo $value; ?>" type="radio" name="Response" value="'.$value.'"
+    ?><input id="r_<?php echo $value; ?>" type="radio" name="Response" value="<?= $value; ?>"
      ><label for="r_<?php echo $value; ?>"><?php echo $value; ?></label><?php endforeach; ?>
     
     <div class="likert-legend">
