@@ -102,9 +102,13 @@
     
     require $_codeF . 'Header.php';
 ?>
-	<div class="vcenter">
-		<?php echo $message; ?>
-	</div>
+    <form id="content">
+        <?php echo $message; ?>
+    </form>
+    
+    <style>
+        #content { width: 500px; }
+    </style>
 <?php
     require $_codeF . 'Footer.php';
 ?>
