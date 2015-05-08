@@ -6,9 +6,10 @@
 ?>
   <style>
     .vdr-vcenter    {   position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+    #content { width: auto; }
   </style>
   
-  <div class="vcenter">
+
     <div class="prompt"><?= trim($prompts[0]) ?></div>
 <?php
     if (isset($prompts[1])) {
@@ -37,9 +38,9 @@
     
     if ($input === 'one') {
         ?>
-            <div class="textcenter">
+            <div>
                 <textarea rows="20" cols="55" name="Response" class="precache" wrap="physical" value=""></textarea>
-                <br><input class="button button-trial-advance" id="FormSubmitButton" type="submit" value="Submit"   />
+                <br><button class="collector-button collector-button-advance" id="FormSubmitButton" autofocus>Submit</button>
             </div>
         <?php
     } elseif ($input === 'many') {
@@ -57,8 +58,7 @@
                             echo '<input type="text" name="Response' . $i . '" autocomplete="off" class="noEnter"/>';
                         }
                     ?><!--
-             --></div><br><input class="button button-trial-advance" id="FormSubmitButton" type="submit" value="Submit"   />
-            </div>
+             --></div><br><button class="collector-button collector-button-advance" id="FormSubmitButton" autofocus>Submit</button>
         <?php
     } else {
         ?>
@@ -74,9 +74,8 @@
                             echo '<input type="text" name="Response' . $i . '" autocomplete="off" class="noEnter"/>';
                         }
                     ?><!--
-             --></div><br><input class="button button-trial-advance" id="FormSubmitButton" type="submit" value="Submit"   />
+             --></div><br><button class="collector-button collector-button-advance" id="FormSubmitButton" autofocus>Submit</button>
             </div>
         <?php
     }
 ?>
-  </section>

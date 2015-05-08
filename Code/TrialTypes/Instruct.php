@@ -8,7 +8,7 @@
      * 
      * You can also make your own new trial types inside of the '/Experiment/TrialTypes/' folder and will have
      * access to them in your experiment. The real benefit of developing experiments this way is that when new
-     * version of Collector come out with features you want you will be able to download the new version and copy
+     * versions of Collector come out with features you want you will be able to download the new version and copy
      * your /Experiment/ folder into the new version so you can take advantage of new features without having
      * to completely port your experiment to the new version.
      */
@@ -21,10 +21,8 @@
         $text = $cue;
     }
 ?>
-<section class="vcenter">
-  <div class="precache"><?php echo $text; ?></div>
+<div class="precache"><?php echo $text; ?></div>
 
-  <div class="collector-form-element precache textright">
-    <input class="collector-button collector-button-advance" id="FormSubmitButton" type="submit" value="Next">
-  </div>
-</section>
+<div class="precache textright">
+    <button class="collector-button collector-button-advance" id="FormSubmitButton">Next</button>
+</div>

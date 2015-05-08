@@ -349,7 +349,6 @@ body {              /*Has the ID of 'flexBody'*/
 body > form {       /*Has the ID of 'content'*/
     flex: 0 0 auto;
     align-self: center;
-    width: 700px;
     padding: 25px;
     margin: 0 auto;
 }
@@ -385,6 +384,12 @@ body > form {       /*Has the ID of 'content'*/
 }
 .shim {
     padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.pad {
+    padding-top: 1em;
+    padding-bottom: 1em;
 }
 
 
@@ -517,31 +522,29 @@ input[type="submit"].button-trial-advance {
 }
 .study-left {
 	float:left;
-	width:48%;
+	width:48.5%;
 	text-align:right;
     min-height:1px;
 }
 .study-divider {
 	float:left;
-	width:4%;
+	width:3%;
 	text-align:center;
 }
 .study-right {
 	float:left;
-	width:48%;
+	width:48.5%;
 	text-align:left;
     min-height:1px;
 }
 
 /* copy and word-stem (testcue) and free recall trials*/
 .collector-form .copybox {
-	font-family: Arial, sans-serif;
-	font-size:100%;
 	color:#333;
 	padding:0 0 0 1px;
 	margin:0px 0 0 -2px;
-  max-width: 200px;
-  overflow:visible;
+    max-width: 200px;
+    overflow:visible;
 	width: 90%;
 }
 .collector-form .test-cue input  { 
@@ -560,7 +563,7 @@ input[type="submit"].button-trial-advance {
 
 /* MCpic, StudyPic, TestPic trials */
 .pic {
-	margin-bottom: 24px;
+	/*padding-bottom: 1em;*/
 }
 .mcPicTable td {
   min-width: 170px;
@@ -620,7 +623,7 @@ input[type="submit"].button-trial-advance {
 /* format diagnostics */
 .diagnostics {
 	margin-top:2em;
-	font-family: Consolas, monaco, monospace;
+	font-family: "Inconsolata", monaco, monospace;
 	clear: both;
 	font-size: .9em;
 }

@@ -48,6 +48,9 @@
 ?>
 <!-- Page specific styling tweaks -->
 <style>
+    #content {
+        width: 700px;
+    }
     #indexLogin div:first-of-type{
         margin-bottom: .5em;
     }

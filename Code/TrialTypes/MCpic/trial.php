@@ -171,9 +171,9 @@ $tdWidth    = 78 / count($buttonGrid[0]);
 ?>
 <style> .mcPicTable td { width: <?php echo $tdWidth; ?>%; ?> </style>
 
-<section class="vcenter">
+
   <!-- show the image -->
-  <div class="pic">
+  <div class="pic pad">
     <?php echo show($cues[0]); ?>
   </div>
   
@@ -197,4 +197,3 @@ $tdWidth    = 78 / count($buttonGrid[0]);
 
   <input class="hidden" name="Response" id="Response" type="text" value="">
   <input class="hidden" id="FormSubmitButton" type="submit" value="Submit">
-</section>

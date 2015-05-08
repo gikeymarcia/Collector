@@ -11,7 +11,9 @@
 	$_dataController = 'instructions';
     require $_codeF . 'Header.php';
 ?>
-
+<style>
+    #content { width: 700px; }
+</style>
 <form name="Login" id="content" action="InstructionsRecord.php" method="post">
     <div class="alert alert-instructions">Please carefully read the instructions again.</div>
     <?php include FileExists($up . $expFiles . $instructionsFileName); ?>

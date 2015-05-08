@@ -7,14 +7,12 @@
     $texts = explode('|', $text);
     $mainText = array_shift($texts);
 ?>
-<section class="vcenter">
-  <div class="textcenter">
+<div class="textcenter">
     <h3><?php echo $mainText; ?></h3>
     <?php foreach ($texts as $t) { echo '<p>' . $t; } ?>
-  </div>
+</div>
   
-  <div class="collector-form-element textcenter">
+<div class="textcenter">
     <input name="JOL" type="text" value="" autocomplete="off" class="forceNumeric textcenter">
-    <input class="collector-button"  id="FormSubmitButton" type="submit" value="Submit">
-  </div>
-</section>
+    <button class="collector-button" id="FormSubmitButton">Submit</button>
+</div>

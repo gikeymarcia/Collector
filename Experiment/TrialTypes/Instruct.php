@@ -17,10 +17,14 @@
         $text = $cue;
     }
 ?>
-<section class="vcenter">
-  <div class="precache"><?php echo $text; ?></div>
+<div class="precache"><?php echo $text; ?></div>
 
-  <div class="collector-form-element precache textright">
-    <input class="collector-button collector-button-advance" id="FormSubmitButton" type="submit" value="Next">
-  </div>
-</section>
+<div class="precache textright">
+    <button class="collector-button collector-button-advance" id="FormSubmitButton">Next</button>
+</div>
+
+<style>
+    #content {
+        width: 700px;
+    }
+</style>
