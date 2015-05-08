@@ -92,7 +92,7 @@
         <section>
             <label>
                 <h3>At what age did you start learning English?</h3>
-                <input name="AgeEnglish" type="text" <!-- pattern="[0-9][0-9]" --> value="" autocomplete="off" class="wide"/>
+                <input name="AgeEnglish" type="text" value="" autocomplete="off" class="wide"/>
                 <div class="small shim">If English is your first language please enter 0.</div>
             </label>
         </section>
