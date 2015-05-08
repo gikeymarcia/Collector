@@ -229,12 +229,6 @@ em, i {
   font-style: italic;
 }
 
-/*pre {
-  max-width: 800px;
-  margin-left: 9%;
-  
-}*/
-
 code {
     background: #f7f7f7;
     font-family: "Inconsolata", "Courier New", Courier, monospace;
@@ -244,15 +238,16 @@ code {
     border-radius: 3px;
 }
 
+/*pre {
+  max-width: 800px;
+  margin-left: 9%;
+  
+}*/
+
 /*stop button outine in mozilla*/
-button::-moz-focus-inner {
+button::-moz-focus-inner, input::-moz-focus-inner  {
   border: 0;
 }
-
-input::-moz-focus-inner {
-  border: 0 !important;
-}
-
 
 
 
@@ -283,27 +278,11 @@ input::-moz-focus-inner {
   margin-top:3em;
 }
 
-/*input[type=text]:disabled,
-input[type=radio]:disabled,
-input[type=checkbox]:disabled,
-input[type=range]:disabled,
-input[type=submit]:disabled,
-button:disabled,
-select:disabled,
-textarea:disabled {
-    cursor: not-allowed;
-    background-color:#e1e1e1;
-    border:1px solid #888;
-    color:#777;
-    outline:0;
-}*/
-
 *:disabled, *:disabled:hover  {
     cursor: not-allowed;
     background-color:#e1e1e1;
     border-color:#888;
     color:#777;
-    /*outline:0;*/
 }
 
 
@@ -311,8 +290,21 @@ textarea:disabled {
 
 /*  $FORMS
  ----------------------------------------------------------------------------- */
+/* see BasicInfo.php for useage */
+.radioButtons > label {
+    margin: 0em 1em 0em 1em;
+    padding: .4em;
+    display: block;
+}
+    .radioButtons > label:hover {
+        background-color: #a1ffd9;
+        border-radius: 3px;
+    }
+.radioButtons input {
+    margin: 0em .5em .3em .5em;
+}
 
-    
+
 /* jQuery slider */
 #slider {
 	margin:2em auto .5em auto;
@@ -343,6 +335,7 @@ textarea:disabled {
 html {
     height: 100%;
 }
+
 body {              /*Has the ID of 'flexBody'*/
     display: flex;
     flex-flow: column nowrap;
@@ -353,16 +346,12 @@ body {              /*Has the ID of 'flexBody'*/
     box-sizing: content-box;
 }
 
-section {
-    margin: 1.3em auto;
-}
 body > form {       /*Has the ID of 'content'*/
     flex: 0 0 auto;
     align-self: center;
     width: 700px;
     padding: 25px;
-    height: auto;
-    margin: auto;
+    margin: 0 auto;
 }
 
 .flexVert {
@@ -394,6 +383,21 @@ body > form {       /*Has the ID of 'content'*/
 .btnHeight {
     font-size: 1.2em;
 }
+.shim {
+    padding-top: 4px;
+}
+
+
+/* sizing classes */
+.wide {
+    width: 350px;
+}
+
+.small {
+    font-size: .95em;
+}
+
+
 
 /* Hidden objects */
 .precache, .precachenext, .hidden, #waiting, #loadingForm {
@@ -435,54 +439,44 @@ body > form {       /*Has the ID of 'content'*/
 /* $PAGE-SPECIFIC
  ---------------------------------------------------------------------------- */
 /* ==  Basic Info  == */
-.basicinfo {}
+.basicInfo section {
+    padding-left: 1.5em;
+    margin: 2em 0em 1.3em 1.5em;
+}
   /* Consent form */
-  .consent {
+ .consent {
+     width: 500px;
+ }
+ .consent label {
+     width: 425px;
+     display: inline-block;
+ }
+  .consent textarea {
     background:none repeat scroll 0% 0% #F2F2F2;
     border:1px solid #CCC;
     font-family:serif;
-    height:200px;
+    height:300px;
+    width:400px;
     overflow:auto;
-    padding:6px;  
-  }
-  .consent h1, .consent h2, .consent h3, .consent h4 {
-    color:#000;
-    font-family:serif;
-    margin-bottom:.5em;
-  }
-  .consent h1 {
-    font-size:16pt;
-    font-weight:bold;
-  }
-  .consent h2 {
-    font-size:14pt;
-    font-weight:bold;
-  }
-  .consent h3 {
-    font-size:12pt;
-    font-weight:bold;
-  }
-  .consent h4 {
-    font-size:10pt;
-    font-style:italic;
+    padding:6px;
+    border-radius: 3px;
+    display: block;
   }
 
 /* ==  Instructions  == */
-.instructions {
-  margin-top: 3em;
-}
+
 
 .readcheck {
-	background: #00FF87;
-  border-radius: 5px;
-  display:none;
+    background: #00FF87;
+    border-radius: 5px;
+    display:none;
 	margin: 3em auto 1em auto;
 	padding: 1.5em;
-  width: 60%;
+    width: 60%;
 }
 
 .readcheck ul {
-  list-style:none;
+    list-style:none;
 }
 .readcheck ul li {
 	width: 80%;
