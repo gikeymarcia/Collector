@@ -4,7 +4,7 @@
 <style>
     #content {
         width: 90%;
-        max-width: 850px;
+        max-width: 800px;
     }
 </style>
 

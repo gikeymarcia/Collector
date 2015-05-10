@@ -539,7 +539,7 @@ input[type="submit"].button-trial-advance {
 }
 
 /* copy and word-stem (testcue) and free recall trials*/
-.collector-form .copybox {
+.copybox {
 	color:#333;
 	padding:0 0 0 1px;
 	margin:0px 0 0 -2px;
@@ -547,14 +547,14 @@ input[type="submit"].button-trial-advance {
     overflow:visible;
 	width: 90%;
 }
-.collector-form .test-cue input  { 
+.test-cue input  { 
   border-style:solid solid solid none; 
   margin:0em 0 0 1px; width: 200px;
   padding: 0px 0px;
   max-width: 4em;
   vertical-align: baseline;
 }
-.collector-form .fr-textarea {
+.fr-textarea {
   height:10em;
   width:100%;
   box-sizing: border-box;

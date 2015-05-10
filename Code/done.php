@@ -108,6 +108,7 @@
     
     <style>
         #content { width: 500px; }
+        #content { text-rendering: optimizeLegibility; }
     </style>
 <?php
     require $_codeF . 'Footer.php';

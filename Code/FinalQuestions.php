@@ -52,82 +52,80 @@
     
     require $_codeF . 'Header.php';
 ?>
-    <section class="finalquestions vcenter">
-        <h1 class="textcenter">Final Questions</h1>
-        <p><?php echo $Q ?>
+<style>
+    #content { width: 750px;}
+</style>
 
-        <form class="collector-form" name="FinalQuestion" autocomplete="off" action="FQdata.php" method="post">
+<form id="content" name="FinalQuestion" autocomplete="off" action="FQdata.php" method="post" class="finalquestions">
+    <h1 class="textcenter">Final Questions</h1>
+    <p><?php echo $Q ?>
+    <?php
 
-            <?php
-            // radio button code
-            if ($type == 'radio'): ?>
-                <div class="collector-form-element">
-                  <div>
-                  <?php foreach ($options as $choice): ?>
-                    <input id="<?php echo $choice['value']; ?>" 
-                           name="formData" 
-                           type="radio" 
-                           value="<?php echo $choice['value']; ?>" 
-                           required>
-                    <label for="<?php echo $choice['value']; ?>">
-                        <?php echo $choice['text']; ?>
-                    </label>
-                  <?php endforeach; ?>
-                  </div>
-                </div>
-                
-                <div class="collector-form-element textcenter">
-                  <input class="collector-button" id="FormSubmitButton" type="submit" value="Submit">
-                </div>
-            <?php endif;
 
-            // checkbox code
-            if($type == 'checkbox'): ?>
-                <?php foreach ($options as $choice): ?>
-                  <div class="collector-form-element">
-                    <input type="checkbox"
-                           name="formData[]"
-                           id="<?php echo $choice['value']; ?>"
-                           value="<?php echo $choice['value']; ?>">
-                    <label for="<?php echo $choice['value']; ?>">
-                        <?php echo $choice['text']; ?>
-                    </label>
-                  </div>
-                <?php endforeach; ?>
-                  <div class="collector-form-element textcenter">
-                    <input class="collector-button" id="FormSubmitButton" type="submit" value="Submit">
-                  </div>
-            <?php endif;
+    // radio button code
+    if ($type == 'radio'): ?>
+        <section class="radioButtons">
+        <?php foreach ($options as $choice): ?>
+                <label><input
+                        type="radio"
+                        name="formData"
+                        value="<?php echo $choice['value']; ?>"
+                        required><?php echo $choice['text']; ?>
+                </label>
+        <?php endforeach; ?>
+        </section>
+        <div class="collector-form-element textcenter">
+          <button class="collector-button" id="FormSubmitButton">Submit</button>
+        </div>
+    <?php endif;
 
-            // likert code
-            if($type == 'likert'): ?>
-                <div id="slider"></div>
-                <div class="collector-form-element amount">
-                  <input name="formData" type="text" id="amount">
-                  <input class="collector-button" id="FormSubmitButton" type="submit" value="Submit">
-                </div>
-            <?php endif;
 
-            // textbox code
-            if ($type == 'text'): ?>
-                <div class="collector-form-element textcenter">
-                  <input type="text" name="formData" autocomplete="off" />
-                  <input class="collector-button" id="FormSubmitButton" type="submit" value="Submit">
-                </div>
-            <?php endif;
+    // checkbox code
+    if ($type == 'checkbox'): ?>
+        <?php foreach ($options as $choice): ?>
+            <section class="radioButtons">
+                <label><input
+                        type="checkbox"
+                        name="formData[]"
+                        value="<?php echo $choice['value']; ?>"
+                        ><?php echo $choice['text']; ?>
+                </label>
+            </section>
+        <?php endforeach; ?>
+        <div class="collector-form-element textcenter">
+          <button class="collector-button" id="FormSubmitButton">Submit</button>
+        </div>
+    <?php endif;
 
-            // textarea code
-            if ($type == 'textarea'): ?>
-                <textarea rows="10" cols="50" name="formData" wrap="physical" value=""></textarea>
-                <div class="textright">
-                  <input class="collector-button collector-button-advance" id="FormSubmitButton" type="submit" value="Submit">
-                </div>
-            <?php endif; ?>
 
-            <input name="RT" id="RT" class="hidden" type="text" value="">
+    // likert code
+    if ($type == 'likert'): ?>
+        <div id="slider"></div>
+        <div class="amount">
+          <input name="formData" type="text" id="amount">
+          <button class="collector-button" id="FormSubmitButton">Submit</button>
+        </div>
+    <?php endif;
 
-        </form>
-    </section>
+
+    // textbox code
+    if ($type == 'text'): ?>
+        <div class="textcenter">
+          <input type="text" name="formData" class="wide" autocomplete="off" />
+          <button class="collector-button" id="FormSubmitButton">Submit</button>
+        </div>
+    <?php endif;
+
+    // textarea code
+    if ($type == 'textarea'): ?>
+        <textarea rows="10" cols="50" name="formData" wrap="physical" value=""></textarea>
+        <div class="textright">
+            <button class="collector-button collector-button-advance" id="FormSubmitButton">Submit</button>
+        </div>
+    <?php endif; ?>
+
+    <input name="RT" id="RT" class="hidden" type="text" value="">
+</form>
     
 <?php
     require $_codeF . 'Footer.php';
