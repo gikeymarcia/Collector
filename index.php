@@ -55,7 +55,7 @@
         margin-bottom: .5em;
     }
     #indexLogin  select {
-        width: 300px;
+        width: 150px;
     }
 </style>
 
