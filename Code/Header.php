@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
+  <link rel="icon" href="<?= $_rootF . $codeF ?>favicon.png" type="image/png">
+  <link rel="shortcut icon" href="<?= $_rootF . $codeF ?>favicon.png" type="image/png">
   <link rel="stylesheet" href="<?php echo $_codeF . 'css/global.css' ?>">
   <link rel="stylesheet" href="<?php echo $_codeF . 'css/jquery-ui-1.10.4.custom.min.css' ?>">
   <script src="<?php echo $_codeF . 'javascript/jquery-1.10.2.min.js' ?>"></script>
