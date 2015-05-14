@@ -51,6 +51,9 @@
     #content {
         width: 700px;
     }
+    #indexLogin {
+        margin-top: 2em;
+    }
     #indexLogin div:first-of-type{
         margin-bottom: .5em;
     }
@@ -70,11 +73,11 @@
             <?= $askForLogin ?>
         </div>
         <div class="flexChild">
-            <input name="Username" type="text" value="" autocomplete="off" class="btnHeight">
+            <input name="Username" type="text" value="" autocomplete="off" class="cInput">
             
             <!-- Condition selector -->
         <?php if ($showConditionSelector == TRUE): ?>
-            <select name="Condition" class="btnHeight">
+            <select name="Condition" class="cInput">
         <?php else: ?>
             <select class="hidden" name="Condition">
         <?php endif; ?>
