@@ -62,8 +62,8 @@
             '</p>';
         $loginPrompt = 
             '<p>Login to access tools</p>' .
-            '<input type="password" id="pass" autofocus></input>' .
-            '<input id="fauxSubmit" type="submit" value="Submit"></input>' .
+            '<input type="password" id="pass" class= "cInput" autofocus></input>' .
+            '<input id="fauxSubmit" type="submit" value="Submit" class="collector-button"></input>' .
             '<form id="hashSubmit" action="login.php" method="post" hidden>' .
                 '<span id="nonce">' . $salt . '</span>' .
                 '<input id="realInput" name="response" type="text"></input>' .

@@ -37,7 +37,13 @@
     <title>Collector Tools -- <?= $admin['heading'] ?></title>
 </head>
 <html>
-	<body>
+    <style type="text/css">
+        /*Do not use flexbox settings from the rest of the experiment*/
+        #flexParent {
+            display: block;
+        }
+    </style>
+	<body id="flexParent">
 <?php
     // handling login state and display of login prompt
     $state = loginState($Password);
@@ -55,13 +61,13 @@
             <a id="logout" href="logOut.php">Logout</a>
             <div>
                 <!-- showing tool selector dropdown -->
-                <select name="tool" form="toolSelector" class="collector-select">
+                <select name="tool" form="toolSelector" class="toolSelect cInput">
                     <option value="" selected="true">Choose a tool</option>
 <?php      foreach ($tools as $tool => $location) {
               echo '<option value="' . $tool . '"><b>' . $tool . '</b></option>';
             }
 ?>              </select>
-                <button type="submit" form="toolSelector">Go!</button>
+                <button type="submit" form="toolSelector" class="collector-button">Go!</button>
             </div>
         </div>
 

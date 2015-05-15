@@ -55,8 +55,10 @@
             clear: left;
         }
         #shuffleSelectBar select, #shuffleSelectBar button {
-            margin-top:3px;
-            padding: 2px;
+            margin: 3px;
+        }
+        #shuffleSelectBar button {
+            padding: 3px;
         }
         #shuffleDisplay {
             clear:left;
@@ -82,7 +84,7 @@
             font-size: 1.2em;
             max-width: 99%;
             margin: 3px auto 0px auto;
-            height:18px;
+            height:1.2em;
             padding: 3px;
         }
             .locked {                     /*Added to <textarea> when contents are locked*/
@@ -109,7 +111,7 @@
             <h3>Which file would you like to shuffle?</h3>
             <div>
                 <!-- Create the select dropdown and populate it with all procedure and stimuli files -->
-                <select form="shuffleFile" class="collector-select" name="shuffleFile">
+                <select form="shuffleFile" class="toolSelect cInput" name="shuffleFile">
                 <?php
                     foreach ($ShuffleFolders as $type => $files) {
                         echo '<optgroup label="' . $type . ' Files">';                  // group options by type: Stimuli OR Procedure
@@ -138,7 +140,7 @@
     
     <!-- Show a text area that will be filled with the contents of the cell being hovered over. Functionality is in the JQuery script below -->
     <div class="toolWidth">
-        <textarea id="cellContents"></textarea>
+        <textarea id="cellContents" readonly></textarea>
     </div>
     
 <?php
