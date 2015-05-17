@@ -111,7 +111,7 @@
             <h3>Which file would you like to shuffle?</h3>
             <div>
                 <!-- Create the select dropdown and populate it with all procedure and stimuli files -->
-                <select form="shuffleFile" class="toolSelect cInput" name="shuffleFile">
+                <select form="shuffleFile" class="toolSelect collectorInput" name="shuffleFile">
                 <?php
                     foreach ($ShuffleFolders as $type => $files) {
                         echo '<optgroup label="' . $type . ' Files">';                  // group options by type: Stimuli OR Procedure

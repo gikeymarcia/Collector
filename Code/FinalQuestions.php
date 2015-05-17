@@ -111,14 +111,14 @@
     // textbox code
     if ($type == 'text'): ?>
         <div class="textcenter">
-          <input type="text" name="formData" class="wide cInput" autocomplete="off" />
+          <input type="text" name="formData" class="wide collectorInput" autocomplete="off" />
           <button class="collector-button" id="FormSubmitButton">Submit</button>
         </div>
     <?php endif;
 
     // textarea code
     if ($type == 'textarea'): ?>
-        <textarea rows="10" cols="50" name="formData" wrap="physical" value="" class="cInput"></textarea>
+        <textarea rows="10" cols="50" name="formData" wrap="physical" value="" class="collectorInput"></textarea>
         <div class="textright">
             <button class="collector-button collector-button-advance" id="FormSubmitButton">Submit</button>
         </div>

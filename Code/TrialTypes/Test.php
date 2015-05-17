@@ -14,7 +14,7 @@
     <span class="study-left">  <?php echo $cue; ?>    </span>
     <span class="study-divider">         :            </span>
     <div class="study-right">
-        <input name="Response" type="text" value="" class="copybox cInput" autocomplete="off">
+        <input name="Response" type="text" value="" class="copybox collectorInput" autocomplete="off">
     </div>
 </div>
   

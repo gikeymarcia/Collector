@@ -39,7 +39,7 @@
     if ($input === 'one') {
         ?>
             <div>
-                <textarea rows="20" cols="55" name="Response" class="precache cInput" wrap="physical" value=""></textarea>
+                <textarea rows="20" cols="55" name="Response" class="precache collectorInput" wrap="physical" value=""></textarea>
                 <br><button class="collector-button collector-button-advance" id="FormSubmitButton" autofocus>Submit</button>
             </div>
         <?php

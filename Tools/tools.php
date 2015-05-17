@@ -61,7 +61,7 @@
             <a id="logout" href="logOut.php">Logout</a>
             <div>
                 <!-- showing tool selector dropdown -->
-                <select name="tool" form="toolSelector" class="toolSelect cInput">
+                <select name="tool" form="toolSelector" class="toolSelect collectorInput">
                     <option value="" selected="true">Choose a tool</option>
 <?php      foreach ($tools as $tool => $location) {
               echo '<option value="' . $tool . '"><b>' . $tool . '</b></option>';

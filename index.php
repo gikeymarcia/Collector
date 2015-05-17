@@ -73,11 +73,11 @@
             <?= $askForLogin ?>
         </div>
         <div class="flexChild">
-            <input name="Username" type="text" value="" autocomplete="off" class="cInput">
+            <input name="Username" type="text" value="" autocomplete="off" class="collectorInput">
             
             <!-- Condition selector -->
         <?php if ($showConditionSelector == TRUE): ?>
-            <select name="Condition" class="cInput">
+            <select name="Condition" class="collectorInput">
         <?php else: ?>
             <select class="hidden" name="Condition">
         <?php endif; ?>

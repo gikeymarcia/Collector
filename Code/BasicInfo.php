@@ -38,7 +38,7 @@
         <section>
             <label>
                 <h3>Age</h3>
-                <input name="Age" class="wide cInput" type="text"
+                <input name="Age" class="wide collectorInput" type="text"
                 pattern="[0-9][0-9]" value="" autocomplete="off" required/>
             </label>
         </section>
@@ -47,7 +47,7 @@
         <section>
             <label>
                 <h3>Education</h3>
-                <select name="Education" class="wide cInput" required>
+                <select name="Education" class="wide collectorInput" required>
                     <option value="" default selected>Select Level</option>
                     <option>Some High School</option>
                     <option>High School Graduate</option>
@@ -70,7 +70,7 @@
         <section>
             <label>
                 <h3>Ethnicity</h3>
-                <select name="Race" required class="wide cInput">
+                <select name="Race" required class="wide collectorInput">
                     <option value="" default selected>Select one</option>
                     <option>American Indian/Alaskan Native</option>
                     <option>Asian/Pacific Islander</option>
@@ -92,7 +92,7 @@
         <section>
             <label>
                 <h3>At what age did you start learning English?</h3>
-                <input name="AgeEnglish" type="text" value="" autocomplete="off" class="wide cInput"/>
+                <input name="AgeEnglish" type="text" value="" autocomplete="off" class="wide collectorInput"/>
                 <div class="small shim">If English is your first language please enter 0.</div>
             </label>
         </section>
@@ -101,7 +101,7 @@
         <section>
             <label>
                 <h3>What is your country of residence?</h3>
-                <input name="Country" type="text" value="" autocomplete="off" class="wide cInput"/>
+                <input name="Country" type="text" value="" autocomplete="off" class="wide collectorInput"/>
             </label>
         </section>
         

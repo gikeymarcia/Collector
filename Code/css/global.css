@@ -309,12 +309,12 @@ button::-moz-focus-inner, input::-moz-focus-inner  {
 } 
 
 /* default collector input style */
-.cInput {
+.collectorInput {
     padding: .3em .4em;
     border-radius: 4px;
     border: 1px solid #bfbfbf;
 }
-  .cInput:active, .cInput:hover, .cInput:focus {
+  .collectorInput:active, .collectorInput:hover, .collectorInput:focus {
     border-color: #09c;
     outline: none;
     box-shadow: inset 1px 1px 4px 0px #C9C9C9;
