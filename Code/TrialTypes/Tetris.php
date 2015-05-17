@@ -4,7 +4,7 @@
 
 	<div class="tetris-wrap textcenter">
         <h3>Play a quick game of Tetris while we load the next part</h3>
-        <div class="grid tetris-controls">
+        <div class="tetris-controls">
             <div class="grid-item">
                 <h2>Controls</h2>
             </div><!--
