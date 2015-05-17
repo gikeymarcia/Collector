@@ -40,7 +40,7 @@
         ?>
             <div>
                 <textarea rows="20" cols="55" name="Response" class="precache collectorInput" wrap="physical" value=""></textarea>
-                <br><button class="collector-button collector-button-advance" id="FormSubmitButton" autofocus>Submit</button>
+                <br><button class="collectorButton collectorAdvance" id="FormSubmitButton" autofocus>Submit</button>
             </div>
         <?php
     } elseif ($input === 'many') {
@@ -58,7 +58,7 @@
                             echo '<input type="text" name="Response' . $i . '" autocomplete="off" class="noEnter"/>';
                         }
                     ?><!--
-             --></div><br><button class="collector-button collector-button-advance" id="FormSubmitButton" autofocus>Submit</button>
+             --></div><br><button class="collectorButton collectorAdvance" id="FormSubmitButton" autofocus>Submit</button>
         <?php
     } else {
         ?>
@@ -74,7 +74,7 @@
                             echo '<input type="text" name="Response' . $i . '" autocomplete="off" class="noEnter"/>';
                         }
                     ?><!--
-             --></div><br><button class="collector-button collector-button-advance" id="FormSubmitButton" autofocus>Submit</button>
+             --></div><br><button class="collectorButton collectorAdvance" id="FormSubmitButton" autofocus>Submit</button>
             </div>
         <?php
     }

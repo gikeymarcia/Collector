@@ -253,7 +253,7 @@ button::-moz-focus-inner, input::-moz-focus-inner  {
 
 /*  $BUTTONS 
  ---------------------------------------------------------------------------- */
-.collector-button {
+.collectorButton {
   font-family:"Open Sans", Helvetica, Arial, sans-serif;
   text-align:center;
   padding:.25em .4em .45em .4em;
@@ -263,22 +263,25 @@ button::-moz-focus-inner, input::-moz-focus-inner  {
   border:0;
   cursor: pointer;
 }
-.collector-button-hover,.collector-button:hover,
-.collector-button-focus, .collector-button:focus {
+
+.collectorButton:hover, 
+.collectorButton:focus {
 	background-color: #09c;
 }
-.collector-button-focus, .collector-button:focus {
+.collectorButton:focus {
   outline: 0;
 }
-.collector-button-active,.collector-button-active:hover,.collector-button:active {
+
+.collectorButtonActive
+.collectorButton:active {
 	background-color:#0f9;
 }
-.collector-button-advance {
+.collectorAdvance {
   margin-top:3em;
 }
 
 /* styling for when a button is disabled (`Min Time` not reached) */
-.collector-button:disabled,
+.collectorButton:disabled,
 *:disabled, *:disabled:hover  {
     cursor: not-allowed;
     background-color:#e1e1e1;
@@ -577,7 +580,7 @@ input[type="submit"].button-trial-advance {
 
 /* MCpic, StudyPic, TestPic trials */
 .pic {
-	/*padding-bottom: 1em;*/
+	padding: 1em;
 }
 .mcPicTable td {
   min-width: 170px;
@@ -585,7 +588,7 @@ input[type="submit"].button-trial-advance {
   vertical-align: middle; 
 }
 
-.mcPicTable .collector-button { 
+.mcPicTable .collectorButton { 
   margin: 3% 7%; 
 }
 

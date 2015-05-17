@@ -33,7 +33,7 @@
     
     <!-- include form to collect RT and advance page -->
     <div class="precache textcenter">
-        <button class="collector-button collector-button-advance" id="FormSubmitButton" autofocus >Next</button>
+        <button class="collectorButton collectorAdvance" id="FormSubmitButton" autofocus >Next</button>
     </div>
     
     <style>

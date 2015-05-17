@@ -75,7 +75,7 @@
         <?php endforeach; ?>
         </section>
         <div class="collector-form-element textcenter">
-          <button class="collector-button" id="FormSubmitButton">Submit</button>
+          <button class="collectorButton" id="FormSubmitButton">Submit</button>
         </div>
     <?php endif;
 
@@ -93,7 +93,7 @@
             </section>
         <?php endforeach; ?>
         <div class="collector-form-element textcenter">
-          <button class="collector-button" id="FormSubmitButton">Submit</button>
+          <button class="collectorButton" id="FormSubmitButton">Submit</button>
         </div>
     <?php endif;
 
@@ -103,7 +103,7 @@
         <div id="slider"></div>
         <div class="amount">
           <input name="formData" type="text" id="amount">
-          <button class="collector-button" id="FormSubmitButton">Submit</button>
+          <button class="collectorButton" id="FormSubmitButton">Submit</button>
         </div>
     <?php endif;
 
@@ -112,7 +112,7 @@
     if ($type == 'text'): ?>
         <div class="textcenter">
           <input type="text" name="formData" class="wide collectorInput" autocomplete="off" />
-          <button class="collector-button" id="FormSubmitButton">Submit</button>
+          <button class="collectorButton" id="FormSubmitButton">Submit</button>
         </div>
     <?php endif;
 
@@ -120,7 +120,7 @@
     if ($type == 'textarea'): ?>
         <textarea rows="10" cols="50" name="formData" wrap="physical" value="" class="collectorInput"></textarea>
         <div class="textright">
-            <button class="collector-button collector-button-advance" id="FormSubmitButton">Submit</button>
+            <button class="collectorButton collectorAdvance" id="FormSubmitButton">Submit</button>
         </div>
     <?php endif; ?>
 

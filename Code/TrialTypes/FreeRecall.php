@@ -7,5 +7,5 @@ $compTime = 60;  // time in seconds to use for 'computer' timing
 </div>
   
 <div class="textright">
-    <button class="collector-button collector-button-advance" id="FormSubmitButton">Submit</button>
+    <button class="collectorButton collectorAdvance" id="FormSubmitButton">Submit</button>
 </div>

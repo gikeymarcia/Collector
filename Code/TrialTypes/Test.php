@@ -19,5 +19,5 @@
 </div>
   
 <div class="textcenter">
-    <button class="collector-button collector-button-advance" id="FormSubmitButton">Submit</button>
+    <button class="collectorButton collectorAdvance" id="FormSubmitButton">Submit</button>
 </div>

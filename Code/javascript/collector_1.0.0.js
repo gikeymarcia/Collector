@@ -268,8 +268,8 @@ var COLLECTOR = {
 					}
 					$("#RTlast").val( COLLECTOR.getRT() );		// update 'RTlast' time
 
-					$(".TestMC").removeClass("collector-button-active");	// remove highlighting from all buttons
-					$(this).addClass("collector-button-active");			// add highlighting to clicked button
+					$(".TestMC").removeClass("collectorButtonActive");	// remove highlighting from all buttons
+					$(this).addClass("collectorButtonActive");			// add highlighting to clicked button
 				}
 			});
 

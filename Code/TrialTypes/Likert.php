@@ -147,6 +147,6 @@ $width = 100/count($likertScale);
   </div>
   
   <div class="collector-form-element textcenter">
-    <input class="collector-button collector-button-advance" id=FormSubmitButton type=submit value="Submit">
+    <input class="collectorButton collectorAdvance" id=FormSubmitButton type=submit value="Submit">
   </div>
 </section>

@@ -87,7 +87,7 @@ foreach( $itemList as $thisItem ) {
     <input class="hidden" name="Performance" type="text" value="">
   </div>
   <div class="collector-form-element textcenter">
-    <input class="collector-button collector-button-advance" 
+    <input class="collectorButton collectorAdvance" 
            id="FormSubmitButton" type="submit" value="Next">
   </div>
 </section>

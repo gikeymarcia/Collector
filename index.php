@@ -108,7 +108,7 @@
                 }
         ?>
             </select>
-            <button class="collector-button" type="submit">Login</button>
+            <button class="collectorButton" type="submit">Login</button>
         </div>
     </section>
 </form>

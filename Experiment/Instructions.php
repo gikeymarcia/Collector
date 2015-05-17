@@ -7,7 +7,7 @@
     <p> As many paragraphs as you would like can go here.  Instructions are done.  Time for you to move onto the experiment </p>
 
     <div class="textcenter" id="revealRC">
-        <button class="collector-button" type="button">Advance</button>
+        <button class="collectorButton" type="button">Advance</button>
     </div>
 </section>
 

@@ -67,7 +67,7 @@
               echo '<option value="' . $tool . '"><b>' . $tool . '</b></option>';
             }
 ?>              </select>
-                <button type="submit" form="toolSelector" class="collector-button">Go!</button>
+                <button type="submit" form="toolSelector" class="collectorButton">Go!</button>
             </div>
         </div>
 

@@ -4,7 +4,7 @@
 
 <div class="precache pic"><?php echo show($cue); ?></div>
 <div><?php echo $text; ?></div>
-<div class="precache textcenter pad">
+<div class="precache textcenter">
     <input class="testPic collectorInput" name="Response" id="Response" type="text" value="">
-    <button class="collector-button"  id="FormSubmitButton">Submit</button>
+    <button class="collectorButton"  id="FormSubmitButton">Submit</button>
 </div>

@@ -20,7 +20,7 @@
 <div class="precache"><?php echo $text; ?></div>
 
 <div class="precache textright">
-    <button class="collector-button collector-button-advance" id="FormSubmitButton">Next</button>
+    <button class="collectorButton collectorAdvance" id="FormSubmitButton">Next</button>
 </div>
 
 <style>

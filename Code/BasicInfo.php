@@ -118,7 +118,7 @@
         
         
         <section>
-            <button class="collector-button">Submit Basic Info</button>
+            <button class="collectorButton">Submit Basic Info</button>
         </section>
         
     </fieldset>

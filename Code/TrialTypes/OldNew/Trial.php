@@ -48,28 +48,28 @@
         <div class="OldTest">
           <div class="OldNewQuestion OldQuestion"><?php echo $texts[1] ?></div>
           <input name="Response" type="text">
-          <input type="button" class="StageBtn collector-button" value="Next">
+          <input type="button" class="StageBtn collectorButton" value="Next">
         </div>
         <div class="OldConfidence">
           <div class="OldNewQuestion OldConfidenceQuestion"><?php echo $texts[2] ?></div>
           <input name="OldConfidence" type="text" class="forceNumeric">
-          <input type="button" class="StageBtn collector-button" value="Next">
+          <input type="button" class="StageBtn collectorButton" value="Next">
         </div>
       </div>
       <div class="Pathway NewPath">
         <div class="NewGuess">
           <div class="OldNewQuestion NewQuestion"><?php echo $texts[3] ?></div>
           <input name="Guess" type="text">
-          <input type="button" class="StageBtn collector-button" value="Next">
+          <input type="button" class="StageBtn collectorButton" value="Next">
         </div>
           <div class="NewConfidence">
             <div class="OldNewQuestion NewConfidenceQuestion"><?php echo $texts[4] ?></div>
             <input name="NewConfidence" type="text" class="forceNumeric">
-            <input type="button" class="StageBtn collector-button" value="Next">
+            <input type="button" class="StageBtn collectorButton" value="Next">
         </div>
       </div>
     </div>
-    <input class=collector-button  id=FormSubmitButton type=submit value="Submit">
+    <input class=collectorButton  id=FormSubmitButton type=submit value="Submit">
   </div>
 </section>
 <script>

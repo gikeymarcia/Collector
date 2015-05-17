@@ -34,7 +34,7 @@
             </div>
         </div>
         
-        <div class="collector-button" id="reveal">Start</div>
+        <div class="collectorButton" id="reveal">Start</div>
         
         <div class="tetris">
             <embed src="http://www.cogfog.com/nblox.swf" menu="false" width="550" height="650"
@@ -57,7 +57,7 @@
     } else {
         ?>
         <div class="textcenter">
-            <input class="collector-button collector-button-advance" id="FormSubmitButton" type="submit" value="Next" />
+            <input class="collectorButton collectorAdvance" id="FormSubmitButton" type="submit" value="Next" />
         </div>
         <?php
     }
