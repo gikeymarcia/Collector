@@ -15,7 +15,6 @@
  $TYPOGRAPHY       Text styling
  $BUTTONS          Buttons
  $FORMS            Forms
- $GRIDS            Grid framework
  $CONTENT          General styles for main content
  $NO-JS            Javascript disabled redirect 
  $PAGE-SPECIFIC    Styles for specific pages:
@@ -176,8 +175,8 @@ body, html, textbox, select {
 }
 
 input, select, textarea, button {
-    font-family:inherit;
-    font-size:inherit;
+  font-family:inherit;
+  font-size:inherit;
 }
 
 h1,h2,h3,h4,h5,h6,a {
@@ -201,7 +200,7 @@ h3 {
 }
 
 h4 {
-    font-size: 1.2em;
+  font-size: 1.2em;
 }
 
 p {
@@ -230,12 +229,12 @@ em, i {
 }
 
 code {
-    background: #f7f7f7;
-    font-family: "Inconsolata", "Courier New", Courier, monospace;
-    padding: 3px 5px;
-    font-size: 92%;
-    line-height: 1.45;
-    border-radius: 3px;
+  background: #f7f7f7;
+  font-family: "Inconsolata", "Courier New", Courier, monospace;
+  padding: 3px 5px;
+  font-size: 92%;
+  line-height: 1.45;
+  border-radius: 3px;
 }
 
 /*pre {
@@ -266,7 +265,7 @@ button::-moz-focus-inner, input::-moz-focus-inner  {
 
 .collectorButton:hover, 
 .collectorButton:focus {
-	background-color: #09c;
+  background-color: #09c;
 }
 .collectorButton:focus {
   outline: 0;
@@ -274,7 +273,7 @@ button::-moz-focus-inner, input::-moz-focus-inner  {
 
 .collectorButtonActive
 .collectorButton:active {
-	background-color:#0f9;
+  background-color:#0f9;
 }
 .collectorAdvance {
   margin-top:3em;
@@ -283,10 +282,10 @@ button::-moz-focus-inner, input::-moz-focus-inner  {
 /* styling for when a button is disabled (`Min Time` not reached) */
 .collectorButton:disabled,
 *:disabled, *:disabled:hover  {
-    cursor: not-allowed;
-    background-color:#e1e1e1;
-    border-color:#888;
-    color:#777;
+  cursor: not-allowed;
+  background-color:#e1e1e1;
+  border-color:#888;
+  color:#777;
 }
 
 
@@ -296,16 +295,16 @@ button::-moz-focus-inner, input::-moz-focus-inner  {
  ----------------------------------------------------------------------------- */
 /* see BasicInfo.php for useage, also used in FinalQuestions*/
 .radioButtons > label {
-    margin: 0em 1em 0em 1em;
-    padding: .4em;
-    display: block;
+  margin: 0em 1em 0em 1em;
+  padding: .4em;
+  display: block;
 }
-    .radioButtons > label:hover {
-        background-color: #a1ffd9;
-        border-radius: 3px;
-    }
+  .radioButtons > label:hover {
+    background-color: #a1ffd9;
+    border-radius: 3px;
+  }
 .radioButtons input {
-    margin: 0em .5em .3em .5em;
+  margin: 0em .5em .3em .5em;
 }
 .radioButtons input:focus {
   outline: none;
@@ -313,9 +312,9 @@ button::-moz-focus-inner, input::-moz-focus-inner  {
 
 /* default collector input style */
 .collectorInput {
-    padding: .3em .4em;
-    border-radius: 4px;
-    border: 1px solid #bfbfbf;
+  padding: .3em .4em;
+  border-radius: 4px;
+  border: 1px solid #bfbfbf;
 }
   .collectorInput:active, .collectorInput:hover, .collectorInput:focus {
     border-color: #09c;
@@ -325,26 +324,18 @@ button::-moz-focus-inner, input::-moz-focus-inner  {
 
 /* jQuery slider */
 #slider {
-	margin:2em auto .5em auto;
+  margin: 2em auto .5em auto;
 }
 
 .amount {
-	margin-top: 10px;
-	text-align: center;
+  margin-top: 10px;
+  text-align: center;
 }
 
 .amount input {
-	width: 80px;
-	text-align: center;
+  width: 80px;
+  text-align: center;
 }
-
-
-
-
-
-
-/* $GRIDS
- ---------------------------------------------------------------------------- */
 
 
 
@@ -353,70 +344,70 @@ button::-moz-focus-inner, input::-moz-focus-inner  {
 /*  $CONTENT
  ---------------------------------------------------------------------------- */
 html {
-    height: 100%;
+  height: 100%;
 }
 
 body {              /*Has the ID of 'flexBody'*/
-    display: flex;
-    flex-flow: column nowrap;
-    align-items: center;
-    justify-content: center;
-    min-height: 100%;
-    width: 100%;
-    box-sizing: content-box;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  width: 100%;
+  box-sizing: content-box;
 }
 
 body > form {       /*Has the ID of 'content'*/
-    flex: 0 0 auto;
-    align-self: center;
-    padding: 25px;
-    margin: 0 auto;
+  flex: 0 0 auto;
+  align-self: center;
+  padding: 25px;
+  margin: 0 auto;
 }
 
 .flexVert {
-    display: flex;          flex-flow: column nowrap;
-    align-items: center;    justify-content: center;
-    align-content: center;
+  display: flex;          flex-flow: column nowrap;
+  align-items: center;    justify-content: center;
+  align-content: center;
 }
 
 .flexHoriz {
-    display: flex;          flex-flow: row nowrap;
-    align-items: center;    justify-content: center;
-    align-content: center;
+  display: flex;          flex-flow: row nowrap;
+  align-items: center;    justify-content: center;
+  align-content: center;
 }
 
 .flexChild {
-    flex: 0 0 auto;
+  flex: 0 0 auto;
 }
     
 /* text alignment */
 .textcenter {
-	text-align:center;
+  text-align:center;
 }
 .textright{
-	text-align:right;
+  text-align:right;
 }
 .textleft{
-    text-align:left;
+  text-align:left;
 }
 .shim {
-    padding-top: 4px;
-    padding-bottom: 4px;
+  padding-top: 4px;
+  padding-bottom: 4px;
 }
 
 .pad {
-    padding-top: 1em;
-    padding-bottom: 1em;
+  padding-top: 1em;
+  padding-bottom: 1em;
 }
 
 
 /* sizing classes */
 .wide {
-    width: 350px;
+  width: 350px;
 }
 
 .small {
-    font-size: .95em;
+  font-size: .95em;
 }
 
 
@@ -462,110 +453,108 @@ body > form {       /*Has the ID of 'content'*/
  ---------------------------------------------------------------------------- */
 /* ==  Basic Info  == */
 .basicInfo section {
-    padding-left: 1.5em;
-    margin: 2em 0em 1.3em 1.5em;
+  padding-left: 1.5em;
+  margin: 2em 0em 1.3em 1.5em;
 }
   /* Consent form */
- .consent {
-     width: 500px;
+  .consent {
+    width: 500px;
  }
  .consent label {
-     width: 425px;
-     display: inline-block;
+   width: 425px;
+   display: inline-block;
  }
-  .consent textarea {
-    background:none repeat scroll 0% 0% #F2F2F2;
-    border:1px solid #CCC;
-    font-family:serif;
-    height:300px;
-    width:400px;
-    overflow:auto;
-    padding:6px;
-    border-radius: 3px;
-    display: block;
-  }
+ .consent textarea {
+   background:none repeat scroll 0% 0% #F2F2F2;
+   border:1px solid #CCC;
+   font-family:serif;
+   height:300px;
+   width:400px;
+   overflow:auto;
+   padding:6px;
+   border-radius: 3px;
+   display: block;
+ }
 
 /* ==  Instructions  == */
 
 
 .readcheck {
-    background: #00FF87;
-    border-radius: 5px;
-    display:none;
-	margin: 3em auto 1em auto;
-	padding: 1.5em;
-    width: 60%;
+  background: #00FF87;
+  border-radius: 5px;
+  display:none;
+  margin: 3em auto 1em auto;
+  padding: 1.5em;
+  width: 60%;
 }
 
 .readcheck ul {
-    list-style:none;
+  list-style:none;
 }
 .readcheck ul li {
-	width: 80%;
-	margin:1em auto;
-	background: #fff;
-	outline: solid 2px #00a5e5;
-	padding: 5px;
-	cursor: pointer;
+  width: 80%;
+  margin:1em auto;
+  background: #fff;
+  outline: solid 2px #00a5e5;
+  padding: 5px;
+  cursor: pointer;
 }
 .readcheck ul li:hover {
-	background: #00a5e5;
+  background: #00a5e5;
 }
 
 .alert-instructions {
-	display:none;
-	width:100%;
-	color:#fff;
-	text-align:center;
+  display:none;
+  width:100%;
+  color:#fff;
+  text-align:center;
 }
 
 .redOutline {
-    outline: 2px dashed #900;
+  outline: 2px dashed #900;
 }
 
 /* ==  Trial  == */
 /* less obtrusive button for when you just want to advance */
 input[type="submit"].button-trial-advance {
-	font-size:20px;
-	margin:1.2em 0;
-	padding:.2em .5em;
+  font-size:20px;
+  margin:1.2em 0;
+  padding:.2em .5em;
 }
 
 /* study trial type */
 .study {
-    font-size: 2em;
-    max-height: 80%;
-    /*overflow: auto;*/
+  font-size: 2em;
+  max-height: 80%;
 }
 .study-left {
-	float:left;
-	width:48.5%;
-	text-align:right;
-    min-height:1px;
+  float:left;
+  width:48.5%;
+  text-align:right;
+  min-height:1px;
 }
 .study-divider {
-	float:left;
-	width:3%;
-	text-align:center;
+  float:left;
+  width:3%;
+  text-align:center;
 }
 .study-right {
-	float:left;
-	width:48.5%;
-	text-align:left;
-    min-height:1px;
+  float:left;
+  width:48.5%;
+  text-align:left;
+  min-height:1px;
 }
 
 /* copy and word-stem (testcue) and free recall trials*/
 .copybox {
-	color:#333;
-	padding:0 0 0 1px;
-	margin:0px 0 0 -2px;
-    max-width: 200px;
-    overflow:visible;
-	width: 90%;
+  color:#333;
+  padding:0 0 0 1px;
+  margin:0px 0 0 -2px;
+  max-width: 200px;
+  overflow:visible;
+  width: 90%;
 }
 .test-cue input  { 
-  /*border-style:solid solid solid none; */
   margin:0em 0 0 1px; width: 200px;
   padding: 0px 0px;
   max-width: 4em;
@@ -580,7 +569,7 @@ input[type="submit"].button-trial-advance {
 
 /* MCpic, StudyPic, TestPic trials */
 .pic {
-	padding: 1em;
+  padding: 1em;
 }
 .mcPicTable td {
   min-width: 170px;
@@ -600,59 +589,59 @@ input[type="submit"].button-trial-advance {
 
 /* stepout pages */
 .stepout-clock {
-	position:fixed;
-	top: 20px;
-	right: 20px;
-	padding: 8px;
-	font-size: 1.1em;
-	color: #fff;
-	background-color: #0055A6;
-	text-align:center;
+  position:fixed;
+  top: 20px;
+  right: 20px;
+  padding: 8px;
+  font-size: 1.1em;
+  color: #fff;
+  background-color: #0055A6;
+  text-align:center;
 }
-	.stepout-clock span {
-		margin-bottom: 20px;
-	}
-	.stepout-clock h3 {
-		color:#fff;
-	}
+  .stepout-clock span {
+    margin-bottom: 20px;
+  }
+  .stepout-clock h3 {
+    color:#fff;
+  }
 
 .tetris-wrap {
-	width:550px;
-	margin:0 auto;
+  width:550px;
+  margin:0 auto;
 }
 .tetris-controls {
-	margin: 0 auto 2em auto;
-	width: 400px;
-	border: 3px solid #00A5E5;
+  margin: 0 auto 2em auto;
+  width: 400px;
+  border: 3px solid #00A5E5;
 }
 .tetris-wrap h3 {
-	padding:1em 0;
+  padding:1em 0;
 }
 .tetris-controls p {
-	margin: 0 0 .2em 0;
-	text-align: left;
+  margin: 0 0 .2em 0;
+  text-align: left;
 }
 .tetris {
-	display:none;
-	margin: 50px 0;
+  display:none;
+  margin: 50px 0;
 }
 
 /* format diagnostics */
 .diagnostics {
-	margin-top:2em;
-	font-family: "Inconsolata", monaco, monospace;
-	clear: both;
-	font-size: .9em;
+  margin-top:2em;
+  font-family: "Inconsolata", monaco, monospace;
+  clear: both;
+  font-size: .9em;
 }
 .diagnostics ul {
-	margin-bottom:1em;
+  margin-bottom:1em;
 }
 .collapsibleTitle {
-	margin:1em auto;
-	width: 85%
+  margin:1em auto;
+  width: 85%
 }
 .collapsibleTitle h3 {
-	color:#fff;
+  color:#fff;
 }
 .before, .after {
     width:   49%;
@@ -706,61 +695,61 @@ ul li, ol li {
     text-align: center;
 }
     #login .wrong {
-        font-weight:400;
-        line-height:.95em;
-        color:red;
+        font-weight: 400;
+        line-height: .95em;
+        color: red;
     }
     #login p {
         width: 300px;
-        display:inline-block;
-        margin-bottom:5px;
+        display: inline-block;
+        margin-bottom: 5px;
     }
     #login input[type=password] {
-        margin-left:10px;
-        margin-right:5px;
+        margin-left: 10px;
+        margin-right: 5px;
         width: 220px;
     }
     #login h3 {
-        line-height: 1.2;
+        line-height: 1.2em;
     }
 #salt {
-    font-family:"Courier New", Courier, monospace;
-    color:#f7f7f7;          font-weight:lighter;
-    width:300px;;           line-height: 95%;
-    word-wrap:break-word;   display:block;
+    font-family: "Inconsolata", "Courier New", Courier, monospace;
+    color: #f7f7f7;         font-weight: lighter;
+    width: 300px;           line-height: 95%;
+    word-wrap: break-word;  display: block;
     margin: 50px auto 20px auto;
 }
 #nav {
     width: 90%;
-    overflow:auto;
+    overflow: auto;
     margin:5px auto;
     background-color: #DEE7EC;
     border-radius: 8px;
     padding: 20px 15px;
 }
     #nav h1 {
-        float:left;
+        float: left;
         line-height: .8em;
-        padding:0px;
+        padding: 0px;
         font-size: 2em;
     }
     #nav div {
-        float:right;
+        float: right;
         margin-right: 25px;
     }
     #nav a {
-        float:right;
-        font-size:1.1em;
+        float: right;
+        font-size: 1.1em;
         padding-top: 5px;
     }
     #nav select {
     width: 300px;;
     }
     #nav button {
-        margin-left:2px;
+        margin-left: 2px;
 }
 .toolSelect {
-    background-color:#F2F2F2;
+    background-color: #F2F2F2;
     font-size: 90%;
 }
 .toolWidth {
