@@ -119,7 +119,7 @@ foreach( $itemList as $thisItem ) {
 
     })(jQuery);
 
-    COLLECTOR.trial.criteriontest = function() {
+    COLLECTOR.experiment.criteriontest = function() {
         var studyTime = 2;
         var testTime  = 5;
         var delayTime = .25;
