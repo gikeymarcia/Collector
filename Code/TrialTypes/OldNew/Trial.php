@@ -73,7 +73,7 @@
   </div>
 </section>
 <script>
-    COLLECTOR.trial.oldnew = function() {
+    COLLECTOR.experiment.oldnew = function() {
         $(".StageBtn").prop("disabled", true);
         $("input[type='text']").on( "keyup", function() {
             if( this.value !== "" ) {

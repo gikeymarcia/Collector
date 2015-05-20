@@ -116,8 +116,8 @@
         arrayToLine($UserData, $statusBeginPath);
         ###########################################################################
         
-        echo '<meta http-equiv="refresh" content="1; url=' . $_codeF . 'trial.php">';
-        exit;               // do not run any of the other code, send to trial.php
+        echo '<meta http-equiv="refresh" content="1; url=' . $_codeF . 'experiment.php">';
+        exit;               // do not run any of the other code, send to experiment.php
         
     } else {
         $_SESSION['Session'] = 1;               // if they have no .json file then they are in session 1
@@ -471,7 +471,7 @@
     
     
     #### Establishing $_SESSION['Trials'] as the place where all experiment trials are stored
-    // $Trials also contains trials for other sessions but trial.php sends to done.php once a *NewSession* shows up
+    // $Trials also contains trials for other sessions but experiment.php sends to done.php once a *NewSession* shows up
     $_SESSION['Trials']     = $Trials;
     $_SESSION['Position']   = 1;
     $_SESSION['PostNumber'] = 0;
@@ -540,7 +540,7 @@
     } elseif ($doInstructions) {
         $link = 'instructions.php';
     } else {
-        $link = 'trial.php';
+        $link = 'experiment.php';
     }
     
     

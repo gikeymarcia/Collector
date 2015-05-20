@@ -6,7 +6,7 @@
     
     if (isset($_GET['ready'])) {
         
-        include 'trial.php';
+        include 'experiment.php';
         
         ?>
         <script>
@@ -70,7 +70,7 @@
         
         
         
-        #### Copied from trial.php, update as needed ####
+        #### Copied from experiment.php, update as needed ####
         
         if (!isset($_SESSION['Timestamp'])) {
             $_SESSION['Timestamp'] = microtime(TRUE);
@@ -162,7 +162,7 @@
                 'Error*Missing_Trial_Type' => 'Post ' . $_SESSION['PostNumber']
             );
             recordTrial();
-            header('Location: trial.php');
+            header('Location: experiment.php');
             exit;
         }
         */
@@ -201,13 +201,13 @@
 
         #### Presenting different trial types ####
         $expFiles  = $up.$expFiles;                            // setting relative path to experiments folder for trials launched from this page
-        $postTo    = 'trial.php';
+        $postTo    = 'experiment.php';
         $trialFail = FALSE;                                    // this will be used to show diagnostic information when a specific trial isn't working
         $trialFile = $_SESSION['Trial Types'][ $trialType ]['trial'];
         
         
-        $title = 'Trial';
-        $_dataController = 'trial';
+        $title = 'Experiment';
+        $_dataController = 'experiment';
         $_dataAction = $trialType;
         
         $keyMod = '';

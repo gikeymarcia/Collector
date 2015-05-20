@@ -91,7 +91,7 @@
             'Error*Missing_Trial_Type' => 'Post ' . $_SESSION['PostNumber']
         );
         recordTrial();
-        header('Location: trial.php');
+        header('Location: experiment.php');
         exit;
     }
     
@@ -132,16 +132,16 @@
 
     #### Presenting different trial types ####
     $expFiles  = $up . $expFiles;                          // setting relative path to experiments folder for trials launched from this page
-    $postTo    = 'trial.php';
+    $postTo    = 'experiment.php';
     $trialFail = FALSE;                                    // this will be used to show diagnostic information when a specific trial isn't working
     $trialFile = $_SESSION['Trial Types'][ $trialType ]['trial'];
     
-    $title = 'Trial';
-    $_dataController = 'trial';
+    $title = 'Experiment';
+    $_dataController = 'experiment';
     $_dataAction = $trialType;
     
     /*
-     * Whenever Trial.php finds $_POST data, it will try to store that data
+     * Whenever experiment.php finds $_POST data, it will try to store that data
      * immediately, rather than simply holding it through the trial.
      * This is done by either storing the data in $currentTrial['Response'].
      * If the main trial and all post trials are completed, the data will
@@ -176,7 +176,7 @@
             recordTrial();
         }
         
-        header('Location: trial.php');
+        header('Location: experiment.php');
         exit;
     }
 

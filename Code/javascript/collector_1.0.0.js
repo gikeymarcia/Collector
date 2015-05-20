@@ -183,7 +183,7 @@ var COLLECTOR = {
 		}
 	},
 
-	trial: {
+	experiment: {
 		init: function() {
 			var trialTime = parseFloat( $("#Time").html() ),
 				minTime	= parseFloat( $("#minTime").html() ),

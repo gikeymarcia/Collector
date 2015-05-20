@@ -15,7 +15,7 @@
     if ($doInstructions) {
         $next = 'instructions.php';
     } else {
-        $next = 'trial.php';
+        $next = 'experiment.php';
     }
     
     header("Location: $next");

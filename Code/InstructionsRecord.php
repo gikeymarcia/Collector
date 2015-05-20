@@ -11,5 +11,5 @@
     );
     $data += $_POST;
     arrayToLine($data, $instructPath);
-    header('Location: trial.php');
+    header('Location: experiment.php');
     exit;

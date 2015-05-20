@@ -36,7 +36,7 @@
             
         }
         
-        header('Location: trial.php');
+        header('Location: experiment.php');
         exit;
         
     }
