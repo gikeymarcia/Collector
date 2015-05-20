@@ -79,7 +79,7 @@
         // check if it is time for the next session
         $ExpOverFlag = $_SESSION['Trials'][ ($_SESSION['Position']) ]['Procedure']['Item'];
         if ($ExpOverFlag != 'ExperimentFinished') {                                                         // if this user hasn't done all sessions
-            $wait = $_SESSION['Trials'][ ($_SESSION['Position']-1) ]['Procedure']['Timing'];                    // check 'Timing' column of *newSession* line
+            $wait = $_SESSION['Trials'][ ($_SESSION['Position']-1) ]['Procedure']['Max Time'];                  // check 'Max Time' column of *newSession* line
             $wait = durationInSeconds($wait);                                                                   // how many seconds was I supposed to wait until the next session?
             $sinceFinish = time() - $_SESSION['LastFinish'];
             if ($sinceFinish < $wait) {
@@ -214,7 +214,7 @@
     $temp = GetFromFile($procPath, FALSE);
     $errors = keyCheck($temp, 'Item'       ,   $errors, $_SESSION['Condition']['Procedure']);
     $errors = keyCheck($temp, 'Trial Type' ,   $errors, $_SESSION['Condition']['Procedure']);
-    $errors = keyCheck($temp, 'Timing'     ,   $errors, $_SESSION['Condition']['Procedure']);
+    $errors = keyCheck($temp, 'Max Time'     ,   $errors, $_SESSION['Condition']['Procedure']);
     unset($temp);           // clear $temp
     
     
@@ -249,13 +249,13 @@
     
     
     #### checking that all Post levels have the needed columns
-    $needed = array('Timing');                                                          // if we need more cols in the future they can be added here
+    $needed = array('Max Time');                                                          // if we need more cols in the future they can be added here
     foreach ($needed as $need) {
         foreach ($trialTypeColumns as $number => $colName) {                                // check all trial type levels we found
             if ($number == 0) {
                 continue;                                                                   // we already checked the non-post level elsewhere in the code
             }
-            if (!isset($proc[0]['Post' . ' '  . $number . ' ' . $need])) {                  // if the associated needed row doesn't exist (e.g., 'Post 1 Timing')
+            if (!isset($proc[0]['Post' . ' '  . $number . ' ' . $need])) {                  // if the associated needed row doesn't exist (e.g., 'Post 1 Max Time')
                 $errors['Count']++;
                 $errors['Details'][] = 'Post level ' . $number . ' is missing a "' . $need . '" column (i.e., add a column called 
                                             "Post ' . $number . ' ' . $need . '" to the file "' . $_SESSION['Condition']['Procedure'] . '" to fix this error).

@@ -28,7 +28,7 @@
 	$getSessions 	= isset( $_POST['Sessions'] ) 		? $_POST['Sessions'] 	: array();
 	$getConditions 	= isset( $_POST['Conditions'] ) 	? $_POST['Conditions'] 	: array();
 	$getTrialTypes 	= isset( $_POST['TrialTypes'] ) 	? $_POST['TrialTypes'] 	: array();
-	$getTimings 	= isset( $_POST['Timing'] ) 		? $_POST['Timing'] 		: array('numeric', 'nonnumeric');
+	$getTimings 	= isset( $_POST['Max Time'] ) 		? $_POST['Max Time'] 	: array('numeric', 'nonnumeric');
 	
 	$getTrials = $_POST['Trials'] !== '' ? array_flip( RangeToArray( $_POST['Trials'] ) ) : FALSE;
 	

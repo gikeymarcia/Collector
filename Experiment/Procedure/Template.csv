@@ -1,4 +1,4 @@
-Item,Trial Type,Timing,Post 1 Trial Type,Post 1 Timing,Text,Procedure Notes,Shuffle
+Item,Trial Type,Max Time,Post 1 Trial Type,Post 1 Max Time,Text,Procedure Notes,Shuffle
 2,Study,User,No,-,,study trials,#off
 2,Test,User,Feedback,3,,study trials,#off
 2,Copy,User,JOL,5,,study trials,#off

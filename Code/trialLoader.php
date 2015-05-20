@@ -192,9 +192,9 @@
         }
         
         // variables I'll need and/or set in trialTiming() function
-        $timingReported = strtolower(trim( $timing ));
+        $timingReported = strtolower(trim( $maxTime ));
         $formClass    = '';
-        $time        = '';
+        $maxTime      = '';
         if( !isset( $minTime ) ) {
             $minTime    = 'not set';
         }

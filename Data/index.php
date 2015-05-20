@@ -170,7 +170,7 @@
 				<div class="Column Half">
 					<div class="InputContainer">
 						<?php
-							createBlock( 'Timing', array( 'Numeric', 'Not Numeric' ), TRUE, FALSE, TRUE );
+							createBlock( 'Max Time', array( 'Numeric', 'Not Numeric' ), TRUE, FALSE, TRUE );
 						?>
 						<div class="Head">Trials</div>
 						<input type="text" name="Trials" />
@@ -424,7 +424,7 @@
                     {
                         $templateName   = substr($template, 0, -5);
                         $templateInfo   = json_decode(file_get_contents($templateDirectory . $template), TRUE);
-                        $dataCategories = array('Conditions', 'Session', 'Trial_Types', 'Timing', 'Columns', 'Demographics_Columns', 'Status_Begin_Columns', 'Status_End_Columns', 'Final_Questions_Columns');
+                        $dataCategories = array('Conditions', 'Session', 'Trial_Types', 'Max Time', 'Columns', 'Demographics_Columns', 'Status_Begin_Columns', 'Status_End_Columns', 'Final_Questions_Columns');
                         $dataFiles      = array('Demographics', 'Experiment', 'Final_Questions', 'Status_Begin', 'Status_End', 'Instructions');
 						
 						if (!is_array($templateInfo)) { continue; }

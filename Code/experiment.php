@@ -120,9 +120,9 @@
     }
     
     // variables I'll need and/or set in trialTiming() function
-    $timingReported = strtolower(trim($timing));
+    $timingReported = strtolower($maxTime);         // get value from 'Max Time' column
     $formClass = '';
-    $time      = '';
+    $maxTime   = '';
     if (!isset($minTime)) {
         $minTime = 'not set';
     }
@@ -229,12 +229,12 @@
             </div>
     <?php
         $trialFail = TRUE;
-        $time = 'user';
+        $maxTime = 'user';
         endif;
     ?>
 
     <!-- hidden field that JQuery/JavaScript uses to check the timing to $postTo -->
-    <div id="Time"      class="hidden"> <?php echo $time; ?>    </div>
+    <div id="maxTime"   class="hidden"> <?php echo $maxTime; ?> </div>
     <div id="minTime"   class="hidden"> <?php echo $minTime; ?> </div>
 
 
@@ -255,10 +255,10 @@
                 .        '<li> Condition description: '    . $clean_session['Condition']['Condition Description'] . '</li>'
                 .    '</ul>'
                 .    '<ul>'
-                .        '<li> Trial Number: '         . $currentPos                                . '</li>'
-                .        '<li> Trial Type: '           . $trialType                                 . '</li>'
-                .        '<li> Trial timing: '         . $clean_currentTrial['Procedure']['Timing'] . '</li>'
-                .        '<li> Trial Time (seconds): ' . $time                                      . '</li>'
+                .        '<li> Trial Number: '         . $currentPos                                  . '</li>'
+                .        '<li> Trial Type: '           . $trialType                                   . '</li>'
+                .        '<li> Trial max time: '       . $clean_currentTrial['Procedure']['Max Time'] . '</li>'
+                .        '<li> Trial Time (seconds): ' . $maxTime                                     . '</li>'
                 .    '</ul>'
                 .    '<ul>'
                 .        '<li> Cue: '    . show($cue)    . '</li>'

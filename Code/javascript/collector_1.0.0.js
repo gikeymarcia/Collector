@@ -185,7 +185,7 @@ var COLLECTOR = {
 
 	experiment: {
 		init: function() {
-			var trialTime = parseFloat( $("#Time").html() ),
+			var trialTime = parseFloat( $("#maxTime").html() ),
 				minTime	= parseFloat( $("#minTime").html() ),
 				fsubmit = $("#FormSubmitButton");
 				keypress = false;
@@ -299,12 +299,12 @@ var COLLECTOR = {
 
 		tetris: function() {
 			// get trial time from page and run timer
-			COLLECTOR.timer(parseFloat($("#Time").html() )-5, function () {
+			COLLECTOR.timer(parseFloat($("#maxTime").html() )-5, function () {
 				// hide game and show get ready prompt for 5 secs
 				$(".stepout-clock").hide();
 				$(".tetris-wrap")
 					.removeClass("tetris-wrap")
-					.html("<div class='cframe-content action-bg textcenter'><h1>Get ready to continue in ... </h1><h1 id=getready></h1></div>");
+					.html("<div class='cframe-content action-bg textcenter'><h1 class='pad'>Get ready to continue in ... </h1><h1 id=getready></h1></div>");
 				COLLECTOR.timer( 5, function() {
 					$('form').submit();
 				}, $("#getready"));

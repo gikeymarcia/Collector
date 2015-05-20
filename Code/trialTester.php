@@ -83,7 +83,7 @@
                 'Procedure' => array(
                     'Item'       => $defaultItems, 
                     'Trial Type' => '', 
-                    'Timing'     => 'user', 
+                    'Max Time'   => 'user', 
                     'Text'       => '', 
                     'Shuffle'    => 'off'
                 )

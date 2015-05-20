@@ -38,7 +38,7 @@
     
     if ($input === 'one') {
         ?>
-            <div>
+            <div class="pad">
                 <textarea rows="20" cols="55" name="Response" class="precache collectorInput" wrap="physical" value=""></textarea>
                 <br><button class="collectorButton collectorAdvance" id="FormSubmitButton" autofocus>Submit</button>
             </div>
@@ -50,7 +50,7 @@
                 .freeRecallArea input { width: 192px;   margin: 4px;    padding: 4px;}
             </style>
             
-            <div class="textcenter"><!--
+            <div class="textcenter pad"><!--
              --><div class="freeRecallArea"><!--
                  --><?php
                         $answerCount = substr_count($answer, '|')+1;
@@ -67,7 +67,7 @@
                 .freeRecallArea input { width: 192px;   margin: 4px;    padding: 4px;}
             </style>
             
-            <div class="textcenter"><!--
+            <div class="textcenter pad"><!--
              --><div class="freeRecallArea"><!--
                  --><?php
                         for ($i=1; $i<=$input; ++$i) {

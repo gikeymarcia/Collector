@@ -658,7 +658,7 @@
     #### function to determine which timing to apply to the current trial
     function trialTiming() {
         global $formClass;
-        global $time;
+        global $maxTime;
         global $minTime;
         global $compTime;
         global $timingReported;
@@ -667,20 +667,20 @@
 
         // determine which timing value to use
         if (is_numeric($timingReported)) {              // use manually set time if possible
-            $time = $timingReported;
+            $maxTime = $timingReported;
         } elseif ($timingReported != 'computer') {      // if not manual or computer then timing is user
-            $time = 'user';
+            $maxTime = 'user';
         } elseif (isset($compTime)) {                   // if a $compTime is set then use that
-            $time = $compTime;
-        } else { $time = 5; }                           // default compTime if none is set
+            $maxTime = $compTime;
+        } else { $maxTime = 5; }                           // default compTime if none is set
         
         // override time in debug mode, use standard timing if no debug time is set
         if ($_SESSION['Debug'] == TRUE && $debugTime != '') {
-            $time = $debugTime;
+            $maxTime = $debugTime;
         }
         
         // set class for input form (shows or hides 'submit' button)
-        if ($time == 'user') {
+        if ($maxTime == 'user') {
             $formClass = 'UserTiming';
         } else {
             $formClass = 'ComputerTiming';

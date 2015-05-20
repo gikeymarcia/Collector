@@ -54,9 +54,17 @@ foreach( $itemList as $thisItem ) {
 }
 ?>
 
-<style> .CriterionItem, .SubmitContainer  { display: none; } </style>
+<style>
+  .CriterionItem, .SubmitContainer {
+    display: none;
+  }
+  #content {
+    width: 85%;
+    min-width: 600px;
+    max-width: 850px;
+  }
+</style>
 
-<section class="vcenter">
 
 <?php foreach($allStim as $stim):
     $cue = $stim['Cue'];
@@ -75,7 +83,7 @@ foreach( $itemList as $thisItem ) {
     <span class="study-left">  <?php echo $cue; ?>  </span>
     <span class="study-divider">         :          </span>
     <div class="study-right">
-      <input class="copybox CriterionTestInput" type="text" value="" 
+      <input class="copybox CriterionTestInput collectorInput" type="text" value="" 
              autocomplete="off" data-answer="<?php echo strtolower($ans); ?>">
     </div>
   </div>
@@ -89,7 +97,6 @@ foreach( $itemList as $thisItem ) {
   <div class="collector-form-element textcenter">
     <button class="collectorButton collectorAdvance" id="FormSubmitButton">Next</button>
   </div>
-</section>
     
 <script>
     (function($){
