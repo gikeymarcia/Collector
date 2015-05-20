@@ -17,14 +17,8 @@
         $text = $cue;
     }
 ?>
-<div class="precache"><?php echo $text; ?></div>
+<div><?php echo $text; ?></div>
 
-<div class="precache textright">
+<div class="textright">
     <button class="collectorButton collectorAdvance" id="FormSubmitButton">Next</button>
 </div>
-
-<style>
-    #content {
-        width: 700px;
-    }
-</style>

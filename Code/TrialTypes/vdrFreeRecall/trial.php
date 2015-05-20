@@ -5,7 +5,6 @@
     $prompts = explode('|', $prompt);
 ?>
   <style>
-    .vdr-vcenter    {   position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); }
     #content { width: auto; }
   </style>
   
@@ -39,7 +38,7 @@
     if ($input === 'one') {
         ?>
             <div class="pad">
-                <textarea rows="20" cols="55" name="Response" class="precache collectorInput" wrap="physical" value=""></textarea>
+                <textarea rows="20" cols="55" name="Response" class="collectorInput" wrap="physical" value=""></textarea>
                 <br><button class="collectorButton collectorAdvance" id="FormSubmitButton" autofocus>Submit</button>
             </div>
         <?php

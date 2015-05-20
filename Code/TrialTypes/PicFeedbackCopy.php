@@ -15,12 +15,12 @@
 ?>
 
     <!-- show the image -->
-    <div class="precache pic">
+    <div class="pic">
         <?php echo show($cue); ?>
     </div>
     <!-- show the answer -->
 	<div class="textcenter"><h2><?php echo $text; ?></h2></div>
-	<h1 class="precache textcenter"> <?php echo show($answer); ?></h1>
+	<h1 class="textcenter"> <?php echo show($answer); ?></h1>
 	
 	<!-- copy the answer -->
 	<div class="textcenter pad">
@@ -28,7 +28,7 @@
 	</div>
 	
     <!-- include form to collect RT and advance page -->
-    <div class=""precache textcenter"">
+    <div class="textcenter">
         <button class="collectorButton collectorAdvance" id="FormSubmitButton">Next</button>
     </div>
     

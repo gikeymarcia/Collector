@@ -10,7 +10,7 @@
 
 <div><?php echo $text; ?></div>
 
-<div class="study precache">
+<div class="study">
     <span class="study-left">  <?php echo $cue; ?>    </span>
     <span class="study-divider">         :            </span>
     <span class="study-right">         &nbsp;         </span>

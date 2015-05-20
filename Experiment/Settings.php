@@ -47,7 +47,7 @@
     $MCitemsPerRow = 4;                         // sets how many items per row when using MCpic trials (use values 1-4; anything bigger causes problems which require css changes
     
     // done.php
-    $experimenterEmail = 'youremail@yourdomain.com';
+    $experimenterEmail = 'yourEmail@yourDomain.com';
     
     // Access control
     $Password = '';                        // to enable getdata OR Tools enter a string other than ''

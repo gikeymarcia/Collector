@@ -132,7 +132,7 @@ var COLLECTOR = {
                     COLLECTOR.submitFunction();
                 }
                 
-				$(".DuringTrial").addClass("precache");			// hide content
+				$("#content").addClass("invisible");			// hide content
 				$("form").submit();								// submit form
 			});
 
@@ -192,9 +192,7 @@ var COLLECTOR = {
 
 			// show trial content
 			if( isNaN(trialTime) || trialTime > 0) {
-				$(".precache").addClass("DuringTrial");			// add class that does nothing (but lets us know what used to be hidden)
-				$(".precache").removeClass("precache");			// remove class that hides the content
-				$("form").removeClass("invisible");
+				$("#content").removeClass("invisible");						// unhide trial contents
 				COLLECTOR.startTime = Date.now();
 				$(':input:enabled:visible:first').focusWithoutScrolling();  // focus cursor on first input
 			} else {
@@ -209,7 +207,7 @@ var COLLECTOR = {
 				}, false);										// run the timer (no minTime set)
 				$(":input").addClass("noEnter");				// disable enter from submitting the trial
 				if(isNaN(minTime)) {
-					fsubmit.addClass("hidden");					// hide submit button
+					fsubmit.addClass("invisible");					// hide submit button
 				}
 			}
 			

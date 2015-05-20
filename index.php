@@ -48,9 +48,6 @@
 ?>
 <!-- Page specific styling tweaks -->
 <style>
-    #content {
-        width: 700px;
-    }
     #indexLogin {
         margin-top: 2em;
     }

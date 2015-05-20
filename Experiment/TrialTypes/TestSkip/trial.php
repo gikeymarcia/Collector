@@ -4,7 +4,7 @@
     include $expFiles . $custTTF . 'skipCode.php';
 ?>
     <div><?php echo $text; ?></div>
-    <div class="study alignToInput precache">
+    <div class="study alignToInput">
         <span class="study-left">  <?php echo $cue; ?>    </span>
         <span class="study-divider">         :            </span>
 		<div class="study-right">

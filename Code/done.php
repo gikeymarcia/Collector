@@ -107,8 +107,10 @@
     </form>
     
     <style>
-        #content { width: 500px; }
-        #content { text-rendering: optimizeLegibility; }
+        #content {
+            width: 500px;
+            text-rendering: optimizeLegibility;
+        }
     </style>
 <?php
     require $_codeF . 'Footer.php';

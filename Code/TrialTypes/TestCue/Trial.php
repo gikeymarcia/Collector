@@ -19,7 +19,7 @@
 <div><?php echo $text; ?></div>
 
 <!-- stimulus -->
-<div class="study test-cue precache">
+<div class="study test-cue">
     <span class="study-left"><?php echo $cue; ?></span>
     <span class="study-divider">         :      </span>
     <span class="study-right"
