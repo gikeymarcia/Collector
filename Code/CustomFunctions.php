@@ -405,10 +405,17 @@
     }
     
     
-    #### Recursively shuffles an array from top (highest level) to bottom
-    #### Disabling shuffle for an item at a given level
-        ## Use 'off' in whichever case you'd like (e.g., 'Off', 'OFF', etc.)
-        ## OR include a tilda in the shuffle column (e.g., '~Group1')
+    /**
+     * Recursively shuffles an array from top (highest level) to bottom
+     * Disabling shuffle for an item at a given level
+     *   - Use 'off' in whichever case you'd like (e.g., 'Off', 'OFF', etc.)
+     *   - OR include a hashtag/pound sign in the shuffle column (e.g., '#Group1')
+     * @param array $input 2-dimensional data read from a .csv table using GetFromFile().
+     * @param int $levels tells the program which level it is currently shuffling.
+     *   - 0 is the default value and initializes the code that counts how many levels exist
+     * @return array
+     * @see GetFromFile()
+     */
     function multiLevelShuffle ($input, $levels = 0) {
         $root   = 'Shuffle';
         $offChar = '#';
@@ -453,7 +460,7 @@
                      OR (strtolower($begin) == 'off')
                  ) {
                     if ($begin == $current) {
-                        $subset[] = $input[$i];                             // add it to the subset if the code hasn't changeds
+                        $subset[] = $input[$i];                             // add it to the subset if the code hasn't changed
                         continue;
                     } else {                                                // if the shuffle code has changed
                         $output = array_merge($output, multiLevelShuffle($subset, (int)$levels-1));
