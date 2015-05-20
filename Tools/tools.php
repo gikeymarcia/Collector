@@ -39,11 +39,11 @@
 <html>
     <style type="text/css">
         /*Do not use flexbox settings from the rest of the experiment*/
-        #flexParent {
+        #flexBody {
             display: block;
         }
     </style>
-	<body id="flexParent">
+	<body id="flexBody">
 <?php
     // handling login state and display of login prompt
     $state = loginState($Password);

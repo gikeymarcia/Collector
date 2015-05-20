@@ -34,6 +34,6 @@
                     ?><label><div><input type="radio" name="Response" value="<?= $txt ?>" /></div><div><?= $txt ?></div></label><?php
                 }
             ?>
-            <div><input class="collectorButton collectorAdvance" id="FormSubmitButton" type="submit" value="Submit" /></div>
+            <div><button class="collectorButton collectorAdvance" id="FormSubmitButton">Submit</button></div>
         </div>
     </div>

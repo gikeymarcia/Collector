@@ -11,6 +11,6 @@
 			<input name="Response" type="text" value="" class="copybox" autocomplete="off" />
 		</div>
 		<div class="textcenter">
-			<input class="collectorButton collectorAdvance" id="FormSubmitButton" type="submit" value="Submit"   />
+			<button class="collectorButton collectorAdvance" id="FormSubmitButton">Submit</button>
 		</div>
     </div>

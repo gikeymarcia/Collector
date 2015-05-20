@@ -571,7 +571,7 @@
         echo '</div>';
 
         echo '<form action ="' . $link . '" method="get">'
-               . '<input type="submit" value="Press here to continue to experiment"/>'
+               . '<button class="collectorButton">Press here to continue to experiment</button>'
            . '</form>';
     }
     else {

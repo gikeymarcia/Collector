@@ -199,4 +199,4 @@
   </table>
 
   <input class="hidden" name="Response" id="Response" type="text" value="">
-  <input class="hidden" id="FormSubmitButton" type="submit" value="Submit">
+  <button class="hidden" id="FormSubmitButton">Submit</button>

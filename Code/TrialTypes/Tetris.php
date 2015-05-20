@@ -57,7 +57,7 @@
     } else {
         ?>
         <div class="textcenter">
-            <input class="collectorButton collectorAdvance" id="FormSubmitButton" type="submit" value="Next" />
+            <button class="collectorButton collectorAdvance" id="FormSubmitButton">Next</button>
         </div>
         <?php
     }

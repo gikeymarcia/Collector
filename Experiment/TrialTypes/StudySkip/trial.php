@@ -12,5 +12,5 @@
 
     <!-- include form to collect RT and advance page -->
     <div class="precache textcenter">
-        <input class="collectorButton collectorAdvance" id="FormSubmitButton" type="submit" value="Next" />
+    	<button class="collectorButton collectorAdvance" id="FormSubmitButton">Next</button>
     </div>
