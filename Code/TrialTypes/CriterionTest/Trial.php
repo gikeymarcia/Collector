@@ -79,7 +79,7 @@ foreach( $itemList as $thisItem ) {
 <?php foreach($allStim as $stim):
     $cue = $stim['Cue'];
     $ans = $stim['Answer']; ?>
-  <div class="study CriterionItem CriterionTest">
+  <div class="study CriterionItem CriterionTest alignToInput">
     <span class="study-left">  <?php echo $cue; ?>  </span>
     <span class="study-divider">         :          </span>
     <div class="study-right">

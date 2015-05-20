@@ -363,6 +363,7 @@ body > form {       /*Has the ID of 'content'*/
   align-self: center;
   padding: 25px;
   margin: 0 auto;
+  width: 700px;
 }
 
 .flexVert {
@@ -554,6 +555,10 @@ input[type="submit"].button-trial-advance {
   max-width: 200px;
   overflow:visible;
   width: 90%;
+}
+/* Aligns the Cue + divider with the input field when inside an alignToInput div*/
+.alignToInput .study-left, .alignToInput .study-divider {
+  padding-top: .08em;
 }
 .test-cue input  { 
   margin:0em 0 0 1px; width: 200px;

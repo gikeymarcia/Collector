@@ -16,7 +16,7 @@
     <span class="study-right">         &nbsp;         </span>
 </div>
 
-<div class="study precache">
+<div class="study alignToInput">
     <span class="study-left">  <?php echo $cue; ?>    </span>
     <span class="study-divider">         :            </span>
     <div class="study-right">
@@ -29,7 +29,7 @@
 </div>
 
 <script>
-    COLLECTOR.trial.delaycopy = function() {
+    COLLECTOR.experiment.delaycopy = function() {
         COLLECTOR.timer( 3, function() {
             $(".study-right").first().html( "<?= $answer; ?>" );
         });

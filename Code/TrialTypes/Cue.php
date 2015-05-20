@@ -3,7 +3,7 @@
 ?>
 <div><?php echo $text; ?></div>
 
-<div class="study">
+<div class="study textcenter">
     <?php echo $cue ?>
 </div>
 

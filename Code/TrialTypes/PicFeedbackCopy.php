@@ -23,7 +23,7 @@
 	<h1 class="precache textcenter"> <?php echo show($answer); ?></h1>
 	
 	<!-- copy the answer -->
-	<div>
+	<div class="textcenter pad">
 	   <input name="Response" type="text" value="" class="copybox collectorInput" autocomplete="off" id="Response"/>
 	</div>
 	

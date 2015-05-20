@@ -6,6 +6,7 @@
         width: 90%;
         max-width: 800px;
     }
+
 </style>
 
 <div><?php echo $text; ?></div>
@@ -15,7 +16,7 @@
     <span class="study-right"> <?php echo $answer; ?> </span>
 </div>
 
-<div class="study">
+<div class="study alignToInput">
     <span class="study-left">  <?php echo $cue; ?>    </span>
     <span class="study-divider">         :            </span>
     <div class="study-right">
