@@ -301,8 +301,11 @@ var COLLECTOR = {
 				$(".stepout-clock").hide();
 				$(".tetris-wrap")
 					.removeClass("tetris-wrap")
-					.html("<div class='cframe-content action-bg textcenter'><h1 class='pad'>Get ready to continue in ... </h1><h1 id=getready></h1></div>");
-				COLLECTOR.timer( 5, function() {
+                    .html("<div class='action-bg textcenter fullPad'>" +
+                              "<h1 class='pad'>Get ready to continue in ... </h1>" +
+                              "<h1 id=getready></h1>" + 
+                          "</div>");
+                    COLLECTOR.timer( 5, function() {
 					$('form').submit();
 				}, $("#getready"));
 			}, $(".countdown"));

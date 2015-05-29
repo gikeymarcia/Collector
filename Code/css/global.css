@@ -407,6 +407,10 @@ body > form {       /*Has the ID of 'content'*/
   padding-bottom: 1em;
 }
 
+.fullPad {
+  padding: 2em;
+}
+
 
 /* sizing classes */
 .wide {
