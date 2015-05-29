@@ -63,8 +63,8 @@ var COLLECTOR = {
         var waitPercent = .5,
             cap         = 4,
             goal        = Date.now() + timeUp*1000,
-            lastWait = cap*2,
-            lastAim = cap*2/waitPercent;
+            lastWait    = cap*2,
+            lastAim     = (cap*2)/waitPercent;
 
         function instance() {
             var timeRemaining = goal - Date.now(),
@@ -81,16 +81,16 @@ var COLLECTOR = {
             }
 
             if (show) {
-                timeFormatted = Math.round( timeRemaining/100 )/10;
+                timeFormatted = Math.round(timeRemaining/100) / 10;
                 if (Math.round(timeFormatted) == timeFormatted) { timeFormatted += '.0'; }
                 if (show.is('input')) {
-                    show.val( timeFormatted );
+                    show.val(timeFormatted);
                 } else {
-                    show.html( timeFormatted );
+                    show.html(timeFormatted);
                 }
-                timeRemaining = Math.min( 20, timeRemaining );
+                timeRemaining = Math.min(20,timeRemaining);
             } else {
-                timeRemaining = Math.min(timeRemaining, 10000);
+                timeRemaining = Math.min(timeRemaining,10000);
             }
 
             if (timeRemaining <= lastWait) {
@@ -100,10 +100,10 @@ var COLLECTOR = {
             } else {
                 timeRemaining *= waitPercent;
             }
-            timeRemaining = Math.max (cap, Math.floor(timeRemaining));
+            timeRemaining = Math.max(cap, Math.floor(timeRemaining));
 
             // run the timer again, using a percentage of the time remaining
-            setTimeout(function() { instance(); }, timeRemaining );
+            setTimeout(function() { instance(); }, timeRemaining);
         }
 
         // start the timer
@@ -124,8 +124,8 @@ var COLLECTOR = {
             $("#loadingForm").submit();                         // submit form to advance page
 
             $("form").submit( function(event){
-                $("#content").addClass("invisible");        // hide content
-                $("#RT").val( COLLECTOR.getRT() );          // record RT
+                $("#content").addClass("invisible");            // hide content
+                $("#RT").val( COLLECTOR.getRT() );              // record RT
                 // run any custom defined submit functions
                 if (typeof COLLECTOR.submitFunction === 'function') {
                     COLLECTOR.submitFunction();
@@ -133,11 +133,11 @@ var COLLECTOR = {
             });
 
             // allows for the collapsing of readable() outputs
-            $(".collapsibleTitle").click(function() {
+            $(".collapsibleTitle").click( function() {
                 $(this).parent().children().not(".collapsibleTitle").toggle(350);
             });
             // starts them collapsed
-            $(document).ready(function() {
+            $(document).ready( function() {
                 $(".collapsibleTitle").parent().children().not(".collapsibleTitle").toggle(350);
                 window.scrollTo(0, 0);
             });
@@ -152,7 +152,7 @@ var COLLECTOR = {
             var fails = 0;
 
             // reveal readcheck questions
-            $("#revealRC").click(function() {
+            $("#revealRC").click( function() {
                 $(".instructions").slideToggle(400);            // hide instructions
                 $(".readcheck").slideToggle(400);               // show questions
                 if (fails > 0) {                                // if you've missed the question before
@@ -164,17 +164,17 @@ var COLLECTOR = {
             // When a button is clicked it checks if the user is right/wrong
             // either advance page or gives notice to read closely
             $(".MCbutton").click( function() {
-                if( this.id == "correct") {
+                if (this.id == "correct") {
                     $("#RT").val( COLLECTOR.getRT() );
                     $("form").submit();
                 }
                 else {
-                    $(".instructions").slideToggle(400);            // show instructions text
-                    $(".readcheck").slideToggle(400);               // hide multiple choice questions
-                    fails++;                                        // add to fails counter
-                    $("#Fails").val(fails);                         // set value of fails
-                    $(".alert").slideDown();                        // show alert that the user is wrong
-                    $("#content").addClass("redOutline");           // add a red outline to the form
+                    $(".instructions").slideToggle(400);        // show instructions text
+                    $(".readcheck").slideToggle(400);           // hide multiple choice questions
+                    fails++;                                    // add to fails counter
+                    $("#Fails").val(fails);                     // set value of fails
+                    $(".alert").slideDown();                    // show alert that the user is wrong
+                    $("#content").addClass("redOutline");       // add a red outline to the form
                 }
             });
         }
@@ -183,12 +183,12 @@ var COLLECTOR = {
     experiment: {
         init: function() {
             var trialTime = parseFloat( $("#maxTime").html() ),
-                minTime = parseFloat( $("#minTime").html() ),
-                fsubmit = $("#FormSubmitButton");
-                keypress = false;
+                minTime   = parseFloat( $("#minTime").html() ),
+                fsubmit   = $("#FormSubmitButton");
+                keypress  = false;
 
             // show trial content
-            if( isNaN(trialTime) || trialTime > 0) {
+            if (isNaN(trialTime) || trialTime > 0) {
                 $("#content").removeClass("invisible");                     // unhide trial contents
                 COLLECTOR.startTime = Date.now();
                 $(':input:enabled:visible:first').focusWithoutScrolling();  // focus cursor on first input
@@ -216,7 +216,7 @@ var COLLECTOR = {
                 if (document.hasFocus()) {
                     focusCount++;
                 }
-                focusProp = Math.round( (focusCount/focusChecks)*1000) / 1000;
+                focusProp = Math.round((focusCount/focusChecks)*1000) / 1000;
                 $("#focus").val(focusProp);
                 COLLECTOR.timer(.2, focusCheck);
             }
@@ -233,15 +233,15 @@ var COLLECTOR = {
             }
 
             // disable 'noEnter' inputs and gather RTs for keypresses
-            $(":input").bind("keypress",function(e){
-                if(e.keyCode == 13) {                           // if enter is pressed
-                    if($(this).hasClass("noEnter")) {           // disable for all 'noEnter' inputs
+            $(":input").bind("keypress",function(e) {
+                if (e.keyCode == 13) {                          // if enter is pressed
+                    if ($(this).hasClass("noEnter")) {          // disable for all 'noEnter' inputs
                         return false;
                     }
                 }
                 else {
                     // monitor and log first/last keypress
-                    if(keypress == false) {                     // on first keypress
+                    if (keypress == false) {                    // on first keypress
                         $("#RTkey").val( COLLECTOR.getRT() );   // set first keypress times
                         keypress = true;
                     }
@@ -250,7 +250,7 @@ var COLLECTOR = {
             });
 
             // updates the response value when a MC button is pressed
-            $(".TestMC").click(function(){
+            $(".TestMC").click(function() {
                 var clicked = $(this).html();
                     $("#Response").prop("value",clicked);       // record which button was clicked
                     $("#RT").val( COLLECTOR.getRT() );          // set RT
@@ -259,7 +259,7 @@ var COLLECTOR = {
                 if ($("form").hasClass("UserTiming")) {
                     $("form").submit();                         // see common:init "intercept FormSubmitButton"
                 } else {
-                    if(keypress === false) {
+                    if (keypress === false) {
                         $("#RTkey").val( COLLECTOR.getRT() );   // set first keypress times
                         keypress === true;
                     }
@@ -277,7 +277,7 @@ var COLLECTOR = {
                 if (event.keyCode === 8) {
                     var d = event.srcElement || event.target;
                     if ((d.tagName.toUpperCase() === "INPUT" && d.type.toUpperCase() === "TEXT")
-                         || d.tagName.toUpperCase() === "TEXTAREA") {
+                        || (d.tagName.toUpperCase() === "TEXTAREA")) {
                         doPrevent = d.readOnly || d.disabled;
                     } else {
                         doPrevent = true;
@@ -291,7 +291,7 @@ var COLLECTOR = {
 
         passage: function() {
             // make sure trial is starting at the top of the page
-            $('body').scrollTop(0);
+            $("body").scrollTop(0);
         },
 
         tetris: function() {
@@ -305,7 +305,7 @@ var COLLECTOR = {
                               "<h1 class='pad'>Get ready to continue in ... </h1>" +
                               "<h1 id=getready></h1>" + 
                           "</div>");
-                    COLLECTOR.timer( 5, function() {
+                COLLECTOR.timer(5, function() {
                     $('form').submit();
                 }, $("#getready"));
             }, $(".countdown"));
@@ -326,8 +326,8 @@ var COLLECTOR = {
             // slider for Likert questions
             $("#slider").slider({
                 value:1,
-                min: 1,
-                max: 7,
+                min:  1,
+                max:  7,
                 step: 1,
                 slide: function(event, ui) {
                     $("#amount").val(ui.value);
@@ -361,7 +361,7 @@ UTIL = {
 
 
 
-$.fn.focusWithoutScrolling = function(){
+$.fn.focusWithoutScrolling = function() {
     if ($(this).length === 0) return this;
     
     var parents = [], parentScrolls = [];
@@ -382,7 +382,7 @@ $.fn.focusWithoutScrolling = function(){
     return this; //chainability
 };
 
-if( !Date.now ) {
+if (!Date.now) {
     Date.now = function now() {
         return new Date().getTime();
     };
