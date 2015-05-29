@@ -74,7 +74,7 @@
                 </label>
         <?php endforeach; ?>
         </section>
-        <div class="collector-form-element textcenter">
+        <div class="pad textcenter">
           <button class="collectorButton" id="FormSubmitButton">Submit</button>
         </div>
     <?php endif;
@@ -92,7 +92,7 @@
                 </label>
             </section>
         <?php endforeach; ?>
-        <div class="collector-form-element textcenter">
+        <div class="pad textcenter">
           <button class="collectorButton" id="FormSubmitButton">Submit</button>
         </div>
     <?php endif;
@@ -119,7 +119,7 @@
     // textarea code
     if ($type == 'textarea'): ?>
         <textarea rows="10" cols="50" name="formData" wrap="physical" value="" class="collectorInput"></textarea>
-        <div class="textright">
+        <div class="pad textright">
             <button class="collectorButton collectorAdvance" id="FormSubmitButton">Submit</button>
         </div>
     <?php endif; ?>

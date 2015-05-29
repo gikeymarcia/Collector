@@ -6,7 +6,7 @@
   <link rel="shortcut icon" href="<?= $_rootF . $codeF ?>icon.png" type="image/png">
   <link rel="stylesheet" href="<?php echo $_codeF . 'css/global.css' ?>">
   <link rel="stylesheet" href="<?php echo $_codeF . 'css/jquery-ui-1.10.4.custom.min.css' ?>">
-  <script src="<?php echo $_codeF . 'javascript/jquery-1.10.2.min.js' ?>"></script>
+  <script src="<?php echo $_codeF . 'javascript/jquery-1.11.3.min.js' ?>"></script>
   <script src="<?php echo $_codeF . 'javascript/jquery-ui-1.10.4.custom.min.js' ?>"></script>
   <script src="<?php echo $_codeF . 'javascript/collector_1.0.0.js' ?>"></script>
   <link href='http://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>          <!-- Load Roboto font (used for headers) -->

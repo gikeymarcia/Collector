@@ -29,8 +29,9 @@
 
 <!DOCTYPE HTML>
 <head>
+    <link rel="icon" href="../Code/icon.png" type="image/png">
     <link href="../Code/css/global.css"  rel="stylesheet"   type="text/css"/>
-    <script src="../Code/javascript/jquery-1.10.2.min.js"   type="text/javascript"></script>
+    <script src="../Code/javascript/jquery-1.11.3.min.js"   type="text/javascript"></script>
     <script src="../Code/javascript/sha256.js"              type="text/javascript"></script>
     <script src="../Code/javascript/loggingIn.js"           type="text/javascript"></script>
     
@@ -39,8 +40,9 @@
 <html>
     <style type="text/css">
         /*Do not use flexbox settings from the rest of the experiment*/
-        #flexBody {
+        #flexBody, html {
             display: block;
+            height: auto;
         }
     </style>
 	<body id="flexBody">

@@ -1,14 +1,4 @@
 /*------------------------------------*\
-    $IMPORTS
-\*------------------------------------*/
-@import url(http://fonts.googleapis.com/css?family=Open+Sans);
-@import url(http://fonts.googleapis.com/css?family=Roboto);
-
-
-
-
-
-/*------------------------------------*\
     $COLORS
 \*------------------------------------*/
 .brand {
@@ -96,14 +86,16 @@ body {
     max-width: 800px;
     width: 70%;
     margin: 20px auto 0px auto;
+    font-family: "Open Sans", Arial, sans-serif;
 }
 
 h1 {
     text-align: center;
     font-size: 2em;
+    font-family: "Roboto", Helvetica, Times, serif;
     color: #333333;
     margin-bottom: 15px;
-    font-weight: bold;
+    font-weight: 400;
 }
 
 h2 {
@@ -118,7 +110,7 @@ h2 {
 
 h4 {
     marigin-top: 20px;
-    font-weight: bold;
+    font-weight: 400;
 }
 
 iframe {
