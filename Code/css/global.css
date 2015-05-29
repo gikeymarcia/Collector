@@ -272,8 +272,10 @@ button::-moz-focus-inner, input::-moz-focus-inner  {
   outline: 0;
 }
 
-.collectorButtonActive
-.collectorButton:active {
+.collectorButtonActive,
+.collectorButtonActive:hover,
+.collectorButton:active
+ {
   background-color:#0f9;
 }
 .collectorAdvance {
