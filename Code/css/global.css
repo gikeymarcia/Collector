@@ -344,8 +344,9 @@ button::-moz-focus-inner, input::-moz-focus-inner  {
 
 /*  $CONTENT
  ---------------------------------------------------------------------------- */
-html {
+html, body {
   height: 100%;
+  min-height: 100vh;
 }
 
 body {              /*Has the ID of 'flexBody'*/
@@ -364,6 +365,8 @@ body > form {       /*Has the ID of 'content'*/
   padding: 25px;
   margin: 0 auto;
   width: 700px;
+  height: auto;
+  overflow: visible;
 }
 
 .flexVert {
