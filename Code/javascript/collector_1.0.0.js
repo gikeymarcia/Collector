@@ -123,17 +123,13 @@ var COLLECTOR = {
 			$(':input:enabled:visible:first').focusWithoutScrolling();			// focus cursor on first input
 			$("#loadingForm").submit();							// submit form to advance page
 
-			// intercept FormSubmitButton click
-			$("#FormSubmitButton").click(function(){			// when 'Done' / 'Submit' is pressed
-				$("#RT").val( COLLECTOR.getRT() );				// record RT
-                
-                if (typeof COLLECTOR.submitFunction === 'function')
-                {
+			$("form").submit( function(event){
+				$("#content").addClass("invisible");		// hide content
+				$("#RT").val( COLLECTOR.getRT() );			// record RT
+				// run any custom defined submit functions
+				if (typeof COLLECTOR.submitFunction === 'function') {
                     COLLECTOR.submitFunction();
                 }
-                
-				$("#content").addClass("invisible");			// hide content
-				$("form").submit();								// submit form
 			});
 
 			// allows for the collapsing of readable() outputs
@@ -165,7 +161,8 @@ var COLLECTOR = {
 				}
 			});
 			
-			// When a button is clicked it checks if the user is right/wrong then either advances page or gives notice to read closely
+			// When a button is clicked it checks if the user is right/wrong
+			// either advance page or gives notice to read closely
 			$(".MCbutton").click( function() {
                 if( this.id == "correct") {
                     $("#RT").val( COLLECTOR.getRT() );
@@ -200,12 +197,13 @@ var COLLECTOR = {
 			}
 
 			// start timers
-			if (!(isNaN(trialTime))) {
-				COLLECTOR.timer(trialTime, function() {
-					$(document.body).hide();
-					fsubmit.click();							// see common:init "intercept FormSubmitButton"
+			if (!(isNaN(trialTime))) {							// if time has a numeric value
+				COLLECTOR.timer(trialTime, function() {				// start the timer
+					// submit the form when time is up
+					$("form").submit();							// see common:init "intercept form submit"
 				}, false);										// run the timer (no minTime set)
 				$(":input").addClass("noEnter");				// disable enter from submitting the trial
+				$("textarea").removeClass("noEnter");			// allow textarea line returns
 				if(isNaN(minTime)) {
 					fsubmit.addClass("invisible");					// hide submit button
 				}
@@ -227,6 +225,7 @@ var COLLECTOR = {
 			if (!(isNaN(minTime))) {
 				fsubmit.prop("disabled", true);					// disable submit button when minTime is set
 				$(":input").addClass("noEnter");				// disable enter from submitting the trial
+				$("textarea").removeClass("noEnter");				// allow line return in <textarea>
 				COLLECTOR.timer(minTime, function() {			// run timer for minTime
 					fsubmit.prop("disabled", false);			// enable
 					$(":input").removeClass("noEnter");
@@ -258,7 +257,7 @@ var COLLECTOR = {
 
 				// if UserTiming, submit, but only highlight choice otherwise
 				if ($("form").hasClass("UserTiming")) {
-					fsubmit.click();							// see common:init "intercept FormSubmitButton"
+					$("form").submit();							// see common:init "intercept FormSubmitButton"
 				} else {
 					if(keypress === false) {
 						$("#RTkey").val( COLLECTOR.getRT() );	// set first keypress times
