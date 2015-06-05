@@ -144,6 +144,8 @@ var COLLECTOR = {
             
             // forceNumeric
             $(".forceNumeric").forceNumeric();
+            // stop forms from submitting more than once
+            $("form").preventDoubleSubmission();
         }
     },
 
@@ -361,7 +363,7 @@ UTIL = {
 
 
 
-$.fn.focusWithoutScrolling = function() {
+jQuery.fn.focusWithoutScrolling = function() {
     if ($(this).length === 0) return this;
     
     var parents = [], parentScrolls = [];
@@ -416,6 +418,24 @@ jQuery.fn.forceNumeric = function () {
             return false;
         });
     });
+};
+
+// jQuery plugin to prevent double submission of forms
+// http://stackoverflow.com/questions/2830542/prevent-double-submission-of-forms-in-jquery
+jQuery.fn.preventDoubleSubmission = function() {
+  $(this).on('submit',function(e){
+    var $form = $(this);
+
+    if ($form.data('submitted') === true) {
+      // Previously submitted - don't submit again
+      e.preventDefault();
+    } else {
+      // Mark it so that the next submit can be ignored
+      $form.data('submitted', true);
+    }
+  });
+  // Keep chainability
+  return this;
 };
 
 
