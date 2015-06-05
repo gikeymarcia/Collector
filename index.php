@@ -67,10 +67,10 @@
     
     <section id="indexLogin" class="flexVert">
         <div class="textcenter flexChild">
-            <?= $askForLogin ?>
+            <?= 'Please enter your ' . $askForLogin;  ?>
         </div>
         <div class="flexChild">
-            <input name="Username" type="text" value="" autocomplete="off" class="collectorInput">
+            <input name="Username" type="text" value="" autocomplete="off" class="collectorInput" placeholder="<?= $askForLogin ?>">
             
             <!-- Condition selector -->
         <?php if ($showConditionSelector == TRUE): ?>

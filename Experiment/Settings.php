@@ -36,7 +36,7 @@
     $hideFlaggedConditions = TRUE;              // flag conditions by putting a # character at the beginning of the "Condition Description". When the condition is auto-selected, this condition will be skipped
     $welcome        = 'Welcome to the experiment!';
     $expDescription = '<p> This experiment will run for about 25 minutes.  Your goal will be to learn some information.</p>';
-    $askForLogin    = 'Please enter the Participant ID';
+    $askForLogin    = 'Participant ID';         // Will complete the phrase: "Please enter your ". For example, "Please enter your Participant ID"
 
     
     // scoring settings
@@ -47,7 +47,7 @@
     $MCitemsPerRow = 4;                         // sets how many items per row when using MCpic trials (use values 1-4; anything bigger causes problems which require css changes
     
     // done.php
-    $experimenterEmail = 'yourEmail@yourDomain.com';
+    $experimenterEmail = 'youremail@yourdomain.com';
     
     // Access control
     $Password = '';                        // to enable getdata OR Tools enter a string other than ''
