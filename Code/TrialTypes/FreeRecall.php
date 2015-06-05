@@ -1,5 +1,5 @@
-<?php  
-$compTime = 60;  // time in seconds to use for 'computer' timing
+<?php
+    $compTime = 60;  // time in seconds to use for 'computer' timing
 ?>
 <div>
     <div class="textarea-label shim"><?php echo $text; ?></div>

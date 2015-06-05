@@ -1,8 +1,8 @@
 <?php
-	$compTime = 60;        // time in seconds to use for 'computer' timing
+    $compTime = 60;        // time in seconds to use for 'computer' timing
 ?>
 
-	<div class="tetris-wrap textcenter">
+    <div class="tetris-wrap textcenter">
         <h3>Play a quick game of Tetris while we load the next part</h3>
         <div class="tetris-controls">
             <div class="grid-item">
@@ -41,7 +41,7 @@
             quality="high" type="application/x-shockwave-flash"
             pluginspage="http://www.macromedia.com/go/getflashplayer/" />
         </div>
-	</div>
+    </div>
 
 <?php
     if (is_numeric($maxTime)) {

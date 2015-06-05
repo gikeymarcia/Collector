@@ -51,4 +51,3 @@
     
     // Access control
     $Password = '';                        // to enable getdata OR Tools enter a string other than ''
-?>

@@ -45,4 +45,3 @@
     
     header("Location: FinalQuestions.php");                             // send back to FinalQuestions.php before any HTML is sent
     exit;
-?>

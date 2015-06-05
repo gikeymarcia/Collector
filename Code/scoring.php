@@ -43,4 +43,3 @@
             $data['lenientAcc'] = 0;
         }
     }
-?>

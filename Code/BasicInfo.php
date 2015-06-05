@@ -4,7 +4,7 @@
     Copyright 2012-2015 Mikey Garcia & Nate Kornell
  */
     require 'initiateCollector.php';
-	
+    
     $title = 'Basic Information';
     require $_codeF . 'Header.php';
 ?>

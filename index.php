@@ -4,7 +4,7 @@
     Copyright 2012-2015 Mikey Garcia & Nate Kornell
 
 
-	This program is free software: you can redistribute it and/or modify
+    This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 3 as published by
     the Free Software Foundation.
 
@@ -23,7 +23,7 @@
     $_SESSION = array();                             
     
     // load and sort conditions
-	$Conditions = GetFromFile($expFiles.$conditionsFileName, FALSE);
+    $Conditions = GetFromFile($expFiles.$conditionsFileName, FALSE);
     $conditionNumbers = array();
     foreach ($Conditions as $cond) {
         if ($cond['Condition Description'][0] === '#') { continue; }
@@ -40,7 +40,7 @@
         }
     }
     $tempCond   = SortByKey($Conditions, 'Number');
-	
+    
     // load page header
     $title = 'Experiment Login Page';  
     require $_codeF . 'Header.php';
@@ -101,7 +101,7 @@
                         $style = '';
                     }
                     // put this condition in the dropdown selector
-                	echo '<option value="' . $i . '"'. $title . $style . '>' . $name . '</option>';
+                    echo '<option value="' . $i . '"'. $title . $style . '>' . $name . '</option>';
                 }
         ?>
             </select>

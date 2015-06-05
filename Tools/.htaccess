@@ -6,21 +6,21 @@ DirectoryIndex tools.php
 
 
 <Files tools.php>
-	Order Allow,Deny
-	Allow from all
+    Order Allow,Deny
+    Allow from all
 </Files>
 
 <Files index.php>
-	Order Allow,Deny
-	Allow from all
+    Order Allow,Deny
+    Allow from all
 </Files>
 
 <Files login.php>
-	Order Allow,Deny
-	Allow from all
+    Order Allow,Deny
+    Allow from all
 </Files>
 
 <Files logOut.php>
-	Order Allow,Deny
-	Allow from all
+    Order Allow,Deny
+    Allow from all
 </Files>

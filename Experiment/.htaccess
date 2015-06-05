@@ -4,6 +4,6 @@ Allow from all
 
 #Block access to Settings.php
 <Files Settings.php>
-	Order Deny,Allow
-	Deny from all
+    Order Deny,Allow
+    Deny from all
 </Files>

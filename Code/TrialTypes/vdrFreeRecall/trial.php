@@ -1,7 +1,7 @@
 <?php
-	$compTime = 60;					// time in seconds to use for 'computer' timing
+    $compTime = 60;                 // time in seconds to use for 'computer' timing
 
-	$prompt = str_ireplace(array($cue, $answer), array('$cue', '$answer'), $text);      // undo this change, since we are doing something a little non-standard here
+    $prompt = str_ireplace(array($cue, $answer), array('$cue', '$answer'), $text);      // undo this change, since we are doing something a little non-standard here
     $prompts = explode('|', $prompt);
 ?>
   <style>

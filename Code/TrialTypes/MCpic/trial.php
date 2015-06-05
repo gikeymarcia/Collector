@@ -14,7 +14,7 @@
     // shuffle button positions (first time only) and save to session
     if(isset($_SESSION['MCbutton']) == false) {
         $mc = $MultiChoiceButtons;   // set this in Settings.php
-        shuffle($mc);		 // comment out this line to prevent shuffling
+        shuffle($mc);        // comment out this line to prevent shuffling
         $_SESSION['MCbutton'] = $mc;
     } else {
         $mc = $_SESSION['MCbutton'];

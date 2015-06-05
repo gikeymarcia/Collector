@@ -20,4 +20,3 @@
     
     header("Location: $next");
     exit;
-?>
