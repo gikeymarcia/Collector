@@ -54,6 +54,9 @@
     #indexLogin div:first-of-type{
         margin-bottom: .5em;
     }
+    #indexLogin input[type="text"] {
+        width: 250px;
+    }
     #indexLogin  select {
         width: 150px;
     }
