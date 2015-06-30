@@ -1,6 +1,3 @@
-<?php
-    $compTime = 60;        // time in seconds to use for 'computer' timing
-?>
 
     <div class="tetris-wrap textcenter">
         <h3>Play a quick game of Tetris while we load the next part</h3>

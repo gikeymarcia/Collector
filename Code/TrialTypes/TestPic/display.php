@@ -1,7 +1,3 @@
-<?php
-    $compTime = 8;                  // time in seconds to use for 'computer' timing
-?>
-
 <div class="pic"><?php echo show($cue); ?></div>
 <div><?php echo $text; ?></div>
 <div class="textcenter">

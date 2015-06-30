@@ -1,6 +1,4 @@
 <?php
-    $compTime = 8;    // time in seconds to use for 'computer' timing
-        
     function trimExplode($delim, $string) {
         $explode = explode($delim, $string);
         foreach ($explode as &$str) {

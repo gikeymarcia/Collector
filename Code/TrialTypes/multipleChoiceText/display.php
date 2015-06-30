@@ -12,7 +12,6 @@
      * character |, which you can use by holding Shift and pressing the
      * backslash character \.  
      */
-    $compTime = 5;                  // time in seconds to use for 'computer' timing
     
     $texts = explode('|', $text);
     foreach ($texts as &$t) {

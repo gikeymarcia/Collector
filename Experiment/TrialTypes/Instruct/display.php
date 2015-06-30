@@ -7,8 +7,6 @@
      * folder of the Collector without worrying about accidentally losing
      * your changes.
      */
-     
-    $compTime = 5;        // time in seconds to use for 'computer' timing
     
     // use the `Cue` if a valid one is called and there is no `Text` set in the procedure
     if (($cue != '')

@@ -1,7 +1,3 @@
-<?php
-    $compTime = 8;    // time in seconds to use for 'computer' timing
-?>
-
 <style>
     /*sets size of the trial content window*/
     #content {

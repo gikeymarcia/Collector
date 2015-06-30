@@ -12,7 +12,6 @@
      * your /Experiment/ folder into the new version so you can take advantage of new features without having
      * to completely port your experiment to the new version.
      */
-    $compTime = 5;    // time in seconds to use for 'computer' timing
     
     // use the `Cue` if a valid one is called and there is no `Text` set in the procedure
     if (($cue != '')

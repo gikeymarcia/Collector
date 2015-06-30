@@ -1,6 +1,4 @@
 <?php
-$compTime = 10;// time in seconds to use for 'computer' timing
-
 // Likert Settings
 //
 // Creates a row of radio buttons for the user to select. Only 1 button
@@ -10,7 +8,7 @@ $compTime = 10;// time in seconds to use for 'computer' timing
 //
 //
 //
-// "Procedure Notes" column
+// "Text" column
 //
 //     In this column, you can multiple entries separated by the pipe ( | )
 //         character. The first entry contains the question, which appears

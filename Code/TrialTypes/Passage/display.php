@@ -1,7 +1,3 @@
-<?php
-    $compTime = 60;    // time in seconds to use for 'computer' timing
-?>
-
 <div><?php echo $text; ?></div>                   <!-- Show contents of "Text" column above passage -->
 <div class="passage"><?php echo $cue; ?></div>    <!-- Show the "Cue" contents and use the "Passage" style defined below -->
 <h3 class="textcenter">End of Passage</h3>

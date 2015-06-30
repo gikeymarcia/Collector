@@ -1,6 +1,3 @@
-<?php
-    $compTime = 5;    // time in seconds to use for 'computer' timing
-?>
 <style>
     #content {	width: 90%;  max-width: 800px;  }
 </style>

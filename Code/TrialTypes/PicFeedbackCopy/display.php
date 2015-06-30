@@ -3,8 +3,6 @@
         Show the correct answer with picture above and force participants to copy the answer before continuing
         Trial type created by Paulo Carvalho
     */
-
-    $compTime = 8;                  // time in seconds to use for 'computer' timing
     
     
     // $firstTrialType = trim(strtolower($currentTrial['Procedure']['Trial Type']));
