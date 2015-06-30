@@ -33,8 +33,13 @@
     
     #### file names ####
     
-    #Code
-    $scoring = 'scoring.php';
+    #Trial Type Files
+    $trialTypeDisplay = 'display.php';
+    $customScoring    = 'scoring.php';
+    $customStyle      = 'style.css';
+    $customScript     = 'script.js';
+    
+    $defaultScoring   = 'defaultTrialScoring.php';
     
     #Experiment
     $conditionsFileName     = 'Conditions.csv';

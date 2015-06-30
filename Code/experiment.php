@@ -5,7 +5,7 @@
  */
 
     require 'initiateCollector.php';
-    
+
     // this only happens once, so that refreshing the page doesn't do anything, and recording a new line of data is the only way to update the timestamp
     if (!isset($_SESSION['Timestamp'])) {
         $_SESSION['Timestamp'] = microtime(TRUE);
@@ -134,7 +134,7 @@
     $expFiles  = $up . $expFiles;                          // setting relative path to experiments folder for trials launched from this page
     $postTo    = 'experiment.php';
     $trialFail = FALSE;                                    // this will be used to show diagnostic information when a specific trial isn't working
-    $trialFile = $_SESSION['Trial Types'][ $trialType ]['trial'];
+    $trialFile = $_SESSION['Trial Types'][ $trialType ]['display'];
     
     $title = 'Experiment';
     $_dataController = 'experiment';

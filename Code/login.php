@@ -305,7 +305,7 @@
     
     #### Check that we can find files for all trials in use (also finds custom scoring files)
     $procedure  = GetFromFile($up . $expFiles . $procF . $_SESSION['Condition']['Procedure']);
-    $trialTypes = include 'scanTrialTypes.php';                             // look through the trial type folders in the Experiment/ and the Code/ folder, return an array
+    $trialTypes = include 'scanTrialTypes.inc';                             // look through the trial type folders in the Experiment/ and the Code/ folder, return an array
     $notTrials  = array('off'   => TRUE,                                    // if the 'Trial Type' value is one of these then it isn't a trial
                         'no'    => TRUE,
                         ''      => TRUE,
