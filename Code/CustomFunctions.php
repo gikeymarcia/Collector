@@ -216,112 +216,135 @@ function trimArrayRecursive($input)
     }
 }
 /**
- * Block shuffles an input array based on the grouping factor. A second-order
- * shuffle will be executed if the array contains key with the same name as the
- * grouping factor with a "2" appended (e.g. "shuffle" and "shuffle2").
- *
- * @TODO Optimize and/or break-up this function.
- * This function can be broken into multiple useful functions, and would
- * probably benefit from some type of recursion or reference pattern.
- *
- * @param array $input The array of items to shuffle.
- * @param string $groupingFactor The name of the key that indicates which blocks
- *                               are to be shuffled.
+ * Recursively shuffles an array from top (highest level) to bottom
+ * Disabling shuffle for an item at a given level
+ *   - Use 'off' in whichever case you'd like (e.g., 'Off', 'OFF', etc.)
+ *   - OR include a hashtag/pound sign in the shuffle column (e.g., '#Group1')
+ * @param array $input 2-dimensional data read from a .csv table using GetFromFile().
+ * @param int $levels tells the program which level it is currently shuffling.
+ *   - 0 is the default value and initializes the code that counts how many levels exist
  * @return array
+ * @see GetFromFile()
  */
-function BlockShuffle(array $input, $groupingFactor)
-{
-    $outputArray = array();
-    // Use this logic when second-order shuffling is present: create a
-    // hierarchical structure of higher order blocks which contain lower order
-    // blocks which contain specific items
-    if (array_key_exists($groupingFactor . '2', $input[2])) {
-        $holder  = array();
-        $HiCount = 0;
-        $LoCount = 0;
-        // load initial item into first pos
-        $holder[$HiCount][$LoCount][] = $input[0];
-        for ($arrayPos = 0; $arrayPos < count($input); $arrayPos++) {
-            $CurrentLine = $input[$arrayPos];
-            if (!isset($input[$arrayPos + 1])) {
-                // the next line does not exist
-                continue;
-            } else {
-                // save next line for later inserting
-                $NextLine = $input[$arrayPos+1];
-            }
-            if ($CurrentLine[$groupingFactor . '2'] == $NextLine[$groupingFactor . '2']) {
-                if ($CurrentLine[$groupingFactor] == $NextLine[$groupingFactor]) {
-                    $holder[$HiCount][$LoCount][] = $NextLine;
-                    continue;
-                } else {
-                    $LoCount++;
-                    $holder[$HiCount][$LoCount][] = $NextLine;
-                    continue;
-                }
-            } elseif ($CurrentLine[$groupingFactor . '2'] != $NextLine[$groupingFactor . '2']) {
-                $HiCount++;
-                $LoCount = 0;
-                $holder[$HiCount][$LoCount][] = $NextLine;
-                continue;
-            }
+function multiLevelShuffle ($input, $levels = 0) {
+    $root   = 'Shuffle';
+    $offChar = '#';
+    $output = array();
+    $subset = array(); 
+    
+    #### initialize shuffling
+    if ($levels == 0) {
+        $padding = array();                                         // save padding, if it exists
+        while ($input[0] === 0) {
+            $padding[] = array_shift($input);
         }
-        // runs through the hierarchical structure and shuffles where applicable
-        for ($hi=0; $hi < count($holder); $hi++) {
-            if (trim(strtolower($holder[$hi][0][0][$groupingFactor . '2'])) != 'off') {
-                shuffle($holder[$hi]);
+        if (!isset($input[0][$root])) {                             // skip shuffling if no 'Shuffle' column is present
+            for ($i=0; $i < count($padding); $i++) {                // prepend the removed padding
+                array_unshift($input, 0);
             }
-            for ($lo=0; $lo < count($holder[$hi]) ; $lo++) {
-                if (trim(strtolower($holder[$hi][$lo][0][$groupingFactor])) != 'off') {
-                    shuffle($holder[$hi][$lo]);
-                }
-            }
+            return $input;
         }
-        // output the shuffled item set
-        foreach ($holder as $outer) {
-            foreach ($outer as $inner) {
-                foreach ($inner as $item) {
-                    // put the item into the next available output position
-                    $outputArray[] = $item;
-                }
-            }
+        $checkLevel = 2;                                            // Find maximum Shuffle level used
+        while (isset($input[0][$root.$checkLevel])) {                   // while 'Shuffle#' exists
+            $checkLevel++;                                                  // check next level of shuffling
         }
-        return $outputArray;
+        $maxLevel = $checkLevel - 1;
+        $output   = multiLevelShuffle($input, (int)$maxLevel);      // run this function at the highest shuffle level
+        for ($i=0; $i < count($padding); $i++) {                    // prepend the removed padding
+            array_unshift($output, 0);
+        }
+        return $output;
     }
-    // Use this logic when second order shuffling is NOT present but the items
-    // should still be shuffled: load items into array that groups as blocks
-    // then as items within blocks. E.g., $temp[$blockNum][#]
-    else if (array_key_exists($groupingFactor, $input[2])) {
-        $temp = array();
-        $blockNum = 0;
-        // load initial item into temp
-        $temp[$blockNum][] = $input[0];
-        for ($pos = 0; $pos < count($input); $pos++) {
-            $currentLine = $input[$pos];
-            if (isset($input[$pos+1])) {
-                // the next line exists, store it
-                $nextLine = $input[$pos+1];
+    
+    #### do higher order block shuffling from max down to 2
+    if ($levels > 1) {
+        $subLevel = '';                                             // What is below the current level
+        if ($levels > 2) {
+            $subLevel = $levels - 1;
+        }
+        $begin = $input[0][$root.$levels];                          // save starting shuffle code
+        for ($i=0; $i < count($input); $i++) {
+            $current   = $input[$i][$root.$levels];                     // save current shuffle code
+            $currentLo = $input[$i][$root.$subLevel];                   // save lower shuffle code
+            if ((strpos($begin, $offChar) !== FALSE)                     // if the current shuffle code is turned off
+                 OR (strtolower($begin) == 'off')
+             ) {
+                if ($begin == $current) {
+                    $subset[] = $input[$i];                             // add it to the subset if the code hasn't changed
+                    continue;
+                } else {                                                // if the shuffle code has changed
+                    $output = array_merge($output, multiLevelShuffle($subset, (int)$levels-1));
+                    $subset = array();                                  // empty the subset
+                    $begin = $current;
+                    // $beginLo = $currentLo;
+                    if ((strpos($begin, $offChar) !== FALSE)                 // if the next code is turned off
+                         OR (strtolower($begin) == 'off')
+                     ) {
+                        $subset[] = $input[$i];                             // add it to the current subset
+                        continue;
+                    }
+                }
+            }
+            if ($begin == $current) {                               // if the shuffle code hasn't changed (and isn't off)
+                $holder[$currentLo][] = $input[$i];                     // add it to a $holder array (grouped by lower shuffle column)
+            } else {                                                // when the shuffle code changes (and isn't off)
+                shuffle($holder);                                       // shuffle the lower groups
+                $subset = array();
+                foreach ($holder as $group) {
+                    foreach ($group as $item) {
+                        $subset[] = $item;
+                        // add all items from the $holder to the $subset
+                    }
+                }
+                $output = array_merge($output, multiLevelShuffle($subset, (int)$levels-1));
+                $subset = array();
+                $begin  = $current;
+                $holder = array();
+                if ((strpos($begin, $offChar) !== FALSE)
+                    OR (strtolower($begin) == 'off')
+                ) {
+                    $subset[] = $input[$i];                         // add current item to the subset if shuffle code is off
+                } else {
+                    $holder[$currentLo][] = $input[$i];             // add current item to the $holder if shuffle code is not off
+                }
+            }
+        }
+        if ($subset != array()) {                                   // send the final subset to be shuffled (if the file ends with an off code)
+            $output = array_merge($output, multiLevelShuffle($subset, (int)$levels-1));
+            $subset = array();
+        } else {                                                    // send the final holder to be shuffled (if the file does not end with an off code)
+            shuffle($holder);
+            foreach ($holder as $group) {
+                foreach ($group as $item) {
+                    $subset[] = $item;
+                }
+            }
+            $output = array_merge($output, multiLevelShuffle($subset, (int)$levels-1));
+        }
+        return $output;
+    }
+    
+    #### Level 1 shuffle (aware of names)
+    if ($levels == 1) {
+        $groupedItems = array();
+        foreach ($input as $subArray) {
+            $group = $subArray[$root];
+            $groupedItems[$group][] = $subArray;                    // group each item by shuffle code
+        }
+        foreach ($groupedItems as $shuffleType => &$items) {
+            if ((strtolower($shuffleType) == 'off')                 // if the group code is set to off
+                OR (strpos($shuffleType, $offChar) !== FALSE)
+            ) {
+                continue;                                               // skip shuffling of items (within the group)
             } else {
-                // the next line does not exist
-                continue;
-            }
-            if($currentLine[$groupingFactor ] !== $nextLine[$groupingFactor]) {
-                // the next line uses a different shuffle: change blockNum
-                $blockNum++;
-            }
-            // load nextLine into the correct $temp block of items
-            $temp[$blockNum][] = $nextLine;
-        }
-        // shuffle appropriate blocks and load into output array
-        foreach ($temp as $group) {
-            if(trim(strtolower($group[0][$groupingFactor])) != 'off') {
-                shuffle($group);
-            }
-            foreach ($group as $line) {
-                $outputArray[] = $line;
+                shuffle($items);                                    // otherwise, shuffle items within a group
             }
         }
-        return $outputArray;
+        foreach ($input as $pos => $item) {                             // go through unshuffled input
+            $shuffleCode  = $item[$root];
+            $output[$pos] = array_shift($groupedItems[$shuffleCode]);   // pull items from the shuffled groups and put them into the output
+        }
+        return $output;
     }
 }
 /**
