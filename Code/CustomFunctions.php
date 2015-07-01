@@ -148,7 +148,7 @@ function readCsv($filename, $delim = ',', $length = 1000)
     while (($line = fgetcsv($file, $length, $delim)) !== false) {
         $data[] = $line;
     }
-    fclose($filename);
+    fclose($file);
     return $data;
 }
 /**
