@@ -144,7 +144,7 @@ function writeLineToFile(array $array, $filename, $delim = ',')
  * @param int $length The max length of each line.
  * @return array
  */
-function readCsv($filename, $delim = ',', $length = 1000)
+function readCsv($filename, $delim = ',', $length = 0)
 {
     $file = fopen($filename, "rb");
     $data = array();
