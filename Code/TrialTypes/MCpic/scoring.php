@@ -3,10 +3,6 @@
     A program for running experiments on the web
     Copyright 2012-2015 Mikey Garcia & Nate Kornell
  */
-    if ($findingKeys) {
-        $requiredColumns = array('Settings');
-        return array('RT', 'Response', 'Accuracy', 'RTkey', 'RTlast', 'strictAcc', 'lenientAcc', 'Buttons');
-    }
     $data = $_POST;
     
     
@@ -38,4 +34,3 @@
             $data['lenientAcc'] = 0;
         }
     }
-?>

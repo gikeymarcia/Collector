@@ -3,9 +3,6 @@
     A program for running experiments on the web
     Copyright 2012-2015 Mikey Garcia & Nate Kornell
  */
-    if ($findingKeys) {
-        return array('RT', 'Response', 'Accuracy', 'RTkey', 'RTlast', 'strictAcc', 'lenientAcc');
-    }
     $data = $_POST;
     /*
      * Q: Why are we using $data instead of setting values directly into $_SESSION['Trials']?

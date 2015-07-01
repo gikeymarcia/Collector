@@ -1,5 +1,4 @@
 <?php
-    $compTime = 8;    // time in seconds to use for 'computer' timing
     $firstTrialType = trim(strtolower($currentTrial['Procedure']['Trial Type']));
     if (!isset($text) || $text === '') {
         $text = 'The correct answer was:';
