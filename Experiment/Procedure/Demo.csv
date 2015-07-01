@@ -15,5 +15,3 @@ Item,Trial Type,Max Time,Min Time,Post 1 Trial Type,Post 1 Max Time,Text,Procedu
 2::7,vdrFreeRecall,user,-,feedback,User,What is the second word of each word pair? | $cue : $answer <br>,,,# nope
 2,likert,user,-,no,user,How good is this word pair? <br> $cue : $answer|Very bad|Very good,,"1,1,1,1,4::7,a::c",# nope
 0,likert,user,-,no,user,How good is your memory?|Horrible|Decent|Fantastic,," -2::2(.5), 6::10(2), 3::1",# nope
-2,OldNew,User,User,No,User,Have you seen this cue before? | What was the answer? | Are you suuuuuure (on a scale from 0-100)? | Please guess what the answer will be for this cue. | That guess was awful.  How ashamed do you feel right now (on a scale from 0-100)?,,,# nope
-0,CriterionTest,user,user,no,User,"You have completed the study phase.  Click ""Next"" to continue.",,criterion: 1 | stimuli: 2::7,# nope
