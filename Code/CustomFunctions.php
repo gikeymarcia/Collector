@@ -885,35 +885,42 @@ function SortByKey(array $input, $key)
 }
 /**
  * Determines which timing to apply to the current trial.
- * @global int|string $time Either specifies the amount of time for the trial in
- * seconds, or is a string indicating manual ('user') or computer timing.
- * @global int|string $timingReported The timing value indicated by the creator.
- * @global int $compTime The trial's specified computer timing, if set.
- * @global int|string $debugTime Amount of time to use when debuging, if set.
  * @global string $formClass The CSS timing class to apply to form elements.
+ * @global int|string $maxTime Either specifies the amount of time for the trial in
+ * seconds, or is a string indicating manual ('user') or computer timing.
+ * @global int|string $minTime min time of trial
+ * @global int $compTime The trial's specified computer timing, if set.
+ * @global int|string $timingReported The timing value indicated by the creator.
+ * @global int|string $debugTime Amount of time to use when debuging, if set.
  */
 function trialTiming()
 {
-    global $time, $timingReported, $compTime, $debugTime, $formClass;
+    global $formClass;
+    global $maxTime;
+    global $minTime;
+    global $compTime;
+    global $timingReported;
+    global $_SESSION;
+    global $debugTime;
+    // determine which timing value to use
     if (is_numeric($timingReported)) {
-        // user has given a valid time to use
-        $time = $timingReported;
-    } elseif ('computer' !== $timingReported) {
-        // no valid time has been set, nor has computer time been specified
-        $time = 'user';
+        // use manually set time if possible
+        $maxTime = $timingReported;
+    } elseif ($timingReported != 'computer') {
+        // if not manual or computer then timing is user
+        $maxTime = 'user';
     } elseif (isset($compTime)) {
-        // computer timing has been specified, use given compTime
-        $time = $compTime;
-    } else {
-        // default compTime
-        $time = 5;
-    }
+        // if a $compTime is set then use that
+        $maxTime = $compTime;
+    } else { $maxTime = 5; } // default compTime if none is set
+    
     // override time in debug mode, use standard timing if no debug time is set
-    if ($_SESSION['Debug'] == true && $debugTime != '') {
-        $time = $debugTime;
+    if ($_SESSION['Debug'] == TRUE && $debugTime != '') {
+        $maxTime = $debugTime;
     }
+    
     // set class for input form (shows or hides 'submit' button)
-    if ('user' === $time) {
+    if ($maxTime == 'user') {
         $formClass = 'UserTiming';
     } else {
         $formClass = 'ComputerTiming';
