@@ -449,8 +449,7 @@ function print2dArrayCss()
 {
     echo '
       <style>
-        .display2dArray          { border-collapse:collapse;
-                                   margin:0 15px 15px 0; }
+        .display2dArray          { border-collapse:collapse; }
         .display2dArray td,
         .display2dArray th       { border:1px solid #000;
                                    vertical-align:middle; text-align:center;
