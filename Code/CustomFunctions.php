@@ -836,7 +836,7 @@ function RemoveLabel($input, $label, $extendLabel = true)
  * @param string $string
  * @return string
  */
-function show($string)
+function show($string, $endOnly = TRUE)
 {
     // navigate path to Experiment folder (unless linking to external file)
     if (!inString('www.', $string)) {
@@ -844,18 +844,25 @@ function show($string)
         if (FileExists($fileName)) {
             $fileName = FileExists($fileName);
         }
+    } else {
+        $fileName = $string;
+    }
+    if ($endOnly) {
+        $searchString = substr($fileName, -5);  // only check last 5 characters for file extensions
+    } else {
+        $searchString = $fileName;
     }
     // check extension to determine which tags to add
-    if (strripos($fileName, '.jpg') !== false
-        || strripos($fileName, '.png') !== false
-        || strripos($fileName, '.gif') !== false
-        || strripos($fileName, '.bmp') !== false
+    if (strripos($searchString, '.jpg') !== false
+        || strripos($searchString, '.png') !== false
+        || strripos($searchString, '.gif') !== false
+        || strripos($searchString, '.bmp') !== false
     ) {
         // add image tags
         $string = '<img src="' . $fileName . '">';
-    } elseif (strripos($fileName, '.mp3')
-        || strripos($fileName, '.wav')
-        || strripos($fileName, '.ogg')
+    } elseif (strripos($searchString, '.mp3')
+        || strripos($searchString, '.wav')
+        || strripos($searchString, '.ogg')
     ) {
         // audio tags
         $string = '<source src="' . $fileName . '"/>';
