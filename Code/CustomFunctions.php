@@ -454,7 +454,7 @@ function print2dArrayCss()
         .display2dArray th       { border:1px solid #000;
                                    vertical-align:middle; text-align:center;
                                    padding:2px 6px; overflow:hidden; }
-        .display2dArray td       { max-width:300px; }
+        .display2dArray td       { max-width:200px; }
         .display2dArray th       { max-width:100px; white-space: normal; }
         .display2dArray td > div { max-height:1.5em; overflow:hidden; }
       </style>
