@@ -13,6 +13,18 @@
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>       <!-- Load Open Sans font (used for headers) -->
   <link href='http://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>             <!-- Load Inconsolata font (used for monospace) -->
   <title><?php echo isset($title) ? $title : pathinfo( $_SERVER['PHP_SELF'], PATHINFO_FILENAME ) ?></title>
+  <?php
+    if (isset($addedStyles)) {
+        foreach ($addedStyles as $additionalStyle) {
+            echo '<link rel="stylesheet" href="' . $additionalStyle . '">';
+        }
+    }
+    if (isset($addedScripts)) {
+        foreach ($addedScripts as $additionalScript) {
+            echo '<script src="' . $additionalScript . '"></script>';
+        }
+    }
+  ?>
 </head>
 <?php
     if (!isset($_dataController)) {             // if $_dataController is not set

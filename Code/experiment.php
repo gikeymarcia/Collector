@@ -98,6 +98,12 @@
     $trialType = strtolower($trialType);
     
     $trialFiles = getTrialTypeFiles($trialType);
+    if (isset($trialFiles['script'])) {
+        $addedScripts = array($trialFiles['script']);
+    }
+    if (isset($trialFiles['style'])) {
+        $addedStyles  = array($trialFiles['style']);
+    }
     
     if (!isset($item)) {
         $item = $currentTrial['Procedure']['Item'];
