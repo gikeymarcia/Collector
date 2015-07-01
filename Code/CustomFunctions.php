@@ -439,7 +439,7 @@ function eraseArrayValues(array &$array)
  * @see scalarsToArray()
  * @see getColumnsFrom2d()
  */
-function display2dArray(array $array)
+function display2dArray(array $array, $nonArrayCol = FALSE)
 {
     static $doInit = true;
     if ($doInit) {
@@ -448,7 +448,15 @@ function display2dArray(array $array)
         print2dArrayCss();
     }
     // format array and extract columns
-    $arrayNoScalars = scalarsToArray($array);
+    if ($nonArrayCol) {
+        $arrayNoScalars = scalarsToArray($array);
+    } else {
+        $i = 0;
+        while (is_scalar($array[$i])) {
+            unset($array[$i]);
+            $i++;
+        }
+    }
     $columns = getColumnsFrom2d($arrayNoScalars);
     // write table header
     echo '<table class="display2dArray"><thead><tr><th></th><th><div>',
