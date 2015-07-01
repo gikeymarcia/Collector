@@ -128,9 +128,12 @@ function writeLineToFile(array $array, $filename, $delim = ',')
         $newHeaders = array_diff_key($array, $headers);
         if (count($newHeaders) > 0) {
             $headers = $headers + $newHeaders;
-            $data[0] = $headers;
+            $data[0] = array_keys($headers);
+            $data[]  = SortArrayLikeArray($array, $headers);
+            writeCsv($filename, $data, $delim);
+        } else {
+            writeCsv($filename, array(SortArrayLikeArray($array, $headers)), $delim, true);
         }
-        writeCsv($filename, SortArrayLikeArray($array, $headers), $delim);
     }
     return $array;
 }
@@ -184,7 +187,7 @@ function fForceOpen($filename, $mode)
 {
     $dirname = dirname($filename);
     if (!is_dir($dirname)) {
-        mkdir(dirname($dirname), 0777, true);
+        mkdir($dirname, 0777, true);
     }
     touch($filename);
     return fopen($filename, $mode);
@@ -210,7 +213,7 @@ function arrayCleaner($input)
 function trimArrayRecursive($input)
 {
     if (is_array($input)) {
-        return(array_map('arrayCleaner', $input));
+        return(array_map('trimArrayRecursive', $input));
     } else {
       return trim($input);
     }
@@ -448,15 +451,14 @@ function display2dArray(array $array, $nonArrayCol = FALSE)
         print2dArrayCss();
     }
     // format array and extract columns
-    if ($nonArrayCol) {
-        $arrayNoScalars = scalarsToArray($array);
-    } else {
+    if ($nonArrayCol == FALSE) {
         $i = 0;
         while (is_scalar($array[$i])) {
             unset($array[$i]);
             $i++;
         }
     }
+    $arrayNoScalars = scalarsToArray($array);
     $columns = getColumnsFrom2d($arrayNoScalars);
     // write table header
     echo '<table class="display2dArray"><thead><tr><th></th><th><div>',
