@@ -1099,7 +1099,7 @@ function rand_string($length = 10)
     $size = strlen($chars);
     $randString = '';
     for ($i = 0; $i < $length; $i++) {
-        $randString .= $chars[rand(0, $size-1)];
+        $randString .= $chars[mt_rand(0, $size-1)];
     }
     return $randString;
 }
