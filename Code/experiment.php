@@ -97,6 +97,8 @@
     
     $trialType = strtolower($trialType);
     
+    $trialFiles = getTrialTypeFiles($trialType);
+    
     if (!isset($item)) {
         $item = $currentTrial['Procedure']['Item'];
     }
@@ -129,16 +131,17 @@
     
     
     ob_start();
-
+    
     #### Presenting different trial types ####
     $expFiles  = $up . $expFiles;                          // setting relative path to experiments folder for trials launched from this page
     $postTo    = 'experiment.php';
     $trialFail = FALSE;                                    // this will be used to show diagnostic information when a specific trial isn't working
-    $trialFile = $_SESSION['Trial Types'][ $trialType ]['display'];
     
     $title = 'Experiment';
     $_dataController = 'experiment';
     $_dataAction = $trialType;
+    
+    if (isset($trialFiles['helper'])) include $trialFiles['helper'];
     
     /*
      * Whenever experiment.php finds $_POST data, it will try to store that data
@@ -154,7 +157,7 @@
             $keyMod = 'post' . $currentPost . '_';
         }
         $findingKeys = FALSE;
-        require $_SESSION['Trial Types'][$trialType]['scoring'];
+        require $trialFiles['scoring'];
         if (!isset($data)) { $data = $_POST; }
         #### merging $data into $currentTrial['Response]
         $currentTrial['Response'] = placeData($data, $currentTrial['Response'], $keyMod);
@@ -194,22 +197,10 @@
 
     <!-- trial content -->
     <?php
-        if ($trialFile):
-            ob_start();                                      // start an output buffer, so we can include the file, without outputting it quite yet
-            include $trialFile;                              // include the file early, so that it can set default values, like default timing
-            $trialContents = ob_get_clean();                 // end the buffer without outputting, but store the contents for later use
-            
-            #### if you have other default settings you want written in the trial type files, you can work with them here
-            
-            if (!isset($compTime)) {                         // if the trial type doesn't have a default timing, create a general default here
-                $compTime = 'user';                          // if the trial should be computer-timed, a user timed trial will be immediately obvious
-            }
+        if ($trialFiles['display']):
             trialTiming();                                   // find out what kind of class name to give the up-coming form
-            
-            #### if you want to edit the trial contents before they are outputted, you can mess with them as a string right here
-            
             ?><form class="<?php echo $formClass; ?> invisible" action="<?php echo $postTo; ?>" method="post" id="content">
-                  <?= $trialContents ?>
+                  <?php include $trialFiles['display'] ?>
                   <input id="RT"     name="RT"      type="hidden" value="RT"       />
                   <input id="RTkey"  name="RTkey"   type="hidden" value="no press" />
                   <input id="RTlast" name="RTlast"  type="hidden" value="no press" />
@@ -228,8 +219,8 @@
                 </form>
             </div>
     <?php
-        $trialFail = TRUE;
-        $maxTime = 'user';
+            $trialFail = TRUE;
+            $maxTime = 'user';
         endif;
     ?>
 

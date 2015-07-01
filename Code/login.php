@@ -305,7 +305,7 @@
     
     #### Check that we can find files for all trials in use (also finds custom scoring files)
     $procedure  = GetFromFile($up . $expFiles . $procF . $_SESSION['Condition']['Procedure']);
-    $trialTypes = include 'scanTrialTypes.inc';                             // look through the trial type folders in the Experiment/ and the Code/ folder, return an array
+    $trialTypes = array();                                                  // we will make a list of all found trial types, and what level they will be used at
     $notTrials  = array('off'   => TRUE,                                    // if the 'Trial Type' value is one of these then it isn't a trial
                         'no'    => TRUE,
                         ''      => TRUE,
@@ -314,16 +314,18 @@
         if ($row === 0)                                 { continue; }       // skip padding
         if (strtolower($row['Item']) === '*newsession*')   { continue; }    // skip multisession markers
         foreach ($trialTypeColumns as $postNumber => $column) {             // check all trial levels
-            $thisTrialType = strtolower($row[$column]);                         // which trial is being used at this level (e.g, Study, Test, etc.)
+            $thisTrialType = strtolower($row[$column]);                     // which trial is being used at this level (e.g, Study, Test, etc.)
             if (isset($notTrials[$thisTrialType])) {                        // skip turned off trials (off, no, n/a, '')
                 continue;
             }
-            $trialTypes[$thisTrialType]['levels'][$postNumber] = NULL;      // make note what levels each trial type are used at (e.g., Study is a regular AND a Post 1 trial)
-            if (!isset($trialTypes[$thisTrialType])) {
+            $trialFiles = getTrialTypeFiles($thisTrialType);
+            $trialTypes[$thisTrialType]['files'] = $trialFiles;
+            $trialTypes[$thisTrialType]['levels'][$postNumber] = TRUE;      // make note what levels each trial type are used at (e.g., Study is a regular AND a Post 1 trial)
+            if ($trialFiles === FALSE) {
                 $procName = pathinfo($up . $expFiles . $procF . $_SESSION['Condition']['Procedure'], PATHINFO_FILENAME);
                 $errors['Count']++;
                 $errors['Details'][] = 'The trial type ' . $row[$column] . ' for row ' . $i . ' in the procedure file '
-                                     . $procName . ' has no file or folder in either the "' . $expFiles . $custTTF . '" folder '
+                                     . $procName . ' has no folder in either the "' . $expFiles . $custTTF . '" folder '
                                      . 'or the "' . $codeF . $trialF . '" folder.';
             }
         }
@@ -342,60 +344,43 @@
     // Setting up all the ['Response'] keys that will be needed during the experiment
     // Also checks scoring files if that trial type lists some required columns
     $proc = GetFromFile($up . $expFiles . $procF . $_SESSION['Condition']['Procedure'], FALSE); // load procedure file without padding
-    $findingKeys   = TRUE;
-    $allKeysNeeded = array();
-    $scoringFiles  = array();
-    foreach ($trialTypes as $name => $thisTrialType) {                       // compile an array of the scoring files to check for keys
-        $scoringFiles[ $thisTrialType['scoring'] ] = $name;
-    }
-    foreach ($scoringFiles as $fileName => &$keys) {
-        $name = $keys;                                              // $keys is originally the name of the trial type, such as "mcpic"
-        $requiredColumns = array();
-        $keys = include $fileName;                                  // grab keys from scoring file when $findingKeys == TRUE
-        $trialTypes[$name]['requiredColumns'] = $requiredColumns;
-        if ($keys == 1) {
-            $keys = array();
-        } elseif(!is_array($keys)) {
-            $keys = array($keys);
-        }
-        $keys = array_flip($keys);      // if array('RT', 'RTkey') is returned it will be saved as array('RT' => 0, 'RTkey' => 1)
-    }
-    unset($keys);
-    
-    
-    $lev0keys = array();
-    $postKeys = array();
-    foreach ($trialTypes as $thisTrialType) {                               // for all trial types in use
-        if (!isset($thisTrialType['levels'])) { continue; }                 // if levels aren't set, it appears that this trial type isn't used in this experiment
-        foreach ($thisTrialType['levels'] as $lvl => $null) {                   // look at all levels each is used at
-            if ($lvl === 0) {                                                       // add needed keys for level 0, non-post, use
-                $lev0keys += $scoringFiles[ $thisTrialType['scoring'] ];
-                if (isset($thisTrialType['requiredColumns'])) {
-                    foreach ($thisTrialType['requiredColumns'] as $requiredColumn) {
-                        $errors = keyCheck($proc, $requiredColumn, $errors, $_SESSION['Condition']['Procedure']);
-                    }
-                }
-            } else {
-                $postKeys += AddPrefixToArray('post' . $lvl . '_', $scoringFiles[ $thisTrialType['scoring'] ]);
-                if (isset($thisTrialType['requiredColumns'])) {
-                    foreach ($thisTrialType['requiredColumns'] as $requiredColumn) {
-                        $errors = keyCheck($proc, 'Post' . ' '  . $lvl . ' ' . $requiredColumn, $errors, $_SESSION['Condition']['Procedure']);
-                    }
-                }
+    $allColumnsNeeded = array();
+    $allColumnsOutput = array();
+    foreach ($trialTypes as $type => $info) {
+        if (isset($info['files']['helper'])) {
+            $neededColumns = array();
+            $outputColumns = array();
+            include $info['files']['helper'];
+            $trialTypes[$type]['neededColumns'] = $neededColumns;
+            $trialTypes[$type]['outputColumns'] = $outputColumns;
+            if (isset($info['levels'][0])) {
+                $allColumnsNeeded += array_flip($neededColumns);
+                $allColumnsOutput += array_flip($outputColumns);
             }
         }
     }
-    // Group Keys together by level (Trail, Post 1, Post 2, etc.)
-    ksort($lev0keys);
-    ksort($postKeys);
-    $allKeysNeeded += $lev0keys;
-    $allKeysNeeded += $postKeys;
-    // set all key values == NULL (e.g., array('RT' => NULL, 'RTkey' => NULL, etc.))
-    foreach( $allKeysNeeded as &$key ) {
-        $key = NULL;
+    foreach ($trialTypes as $type => $info) {
+        foreach ($info['levels'] as $postNumber => $null) {
+            if ($postNumber === 0) continue;
+            foreach ($info['neededColumns'] as $column) {
+                $column = 'Post ' . $postNumber . ' ' . $column;
+                $allColumnsNeeded[$column] = TRUE;
+            }
+            foreach ($info['outputColumns'] as $column) {
+                $column = 'post'  . $postNumber . '_' . $column;
+                $allColumnsOutput[$column] = TRUE;
+            }
+        }
     }
-    unset($key);
-    $_SESSION['Trial Types'] = $trialTypes;         // contains locations of display and scoring files for each trial type
+    foreach ($allColumnsOutput as &$column) {
+        $column = null;
+    }
+    unset($column);
+    
+    
+    foreach (array_keys($allColumnsNeeded) as $column) {
+        $errors = keyCheck($proc, $column, $errors, $_SESSION['Condition']['Procedure']);
+    }
     
     include 'advancedShuffles.php';
     #### Create $_SESSION['Trials'] 
@@ -451,7 +436,7 @@
 		}
         // $Trials[$count-1]['Stimuli']    = $stimuli[ ($procedure[$count]['Item']) ];         // adding 'Stimuli', as an array, to each position of $Trials
         $Trials[$count-1]['Procedure']  = $procedure[$count];                               // adding 'Procedure', as an array, to each position of $Trials
-        $Trials[$count-1]['Response']   = $allKeysNeeded;
+        $Trials[$count-1]['Response']   = $allColumnsOutput;
         
         // on trials with no Stimuli info (e.g., freerecall) keep the same Stimuli structure but fill with 'n/a' values
         // I need a consistent Trial structure to do all of the automatic output creation I do later on
@@ -549,7 +534,7 @@
         Readable($stimuli,                  'Stimuli file in use ('   . $stimF . $_SESSION['Condition']['Stimuli']   . ')');
         Readable($procedure,                'Procedure file in use (' . $procF . $_SESSION['Condition']['Procedure'] . ')');
         Readable($trialTypeColumns,         'Levels of trial types being used');
-        Readable($_SESSION['Trial Types'],  'All info about trial types used in experiment');
+        Readable($trialTypes,  'All info about trial types used in experiment');
         Readable($_SESSION['Trials'],       '$_SESSION["Trials"] array');
         // for checking that shuffling is working as planned
         echo '<h1> Stimuli before/after</h1>';

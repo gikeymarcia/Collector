@@ -36,10 +36,12 @@
     #Trial Type Files
     $trialTypeDisplay = 'display.php';
     $customScoring    = 'scoring.php';
-    $customStyle      = 'style.css';
     $customScript     = 'script.js';
+    $customStyle      = 'style.css';
+    $helperFile       = 'helper.inc';
     
     $defaultScoring   = 'defaultTrialScoring.php';
+    $defaultHelper    = 'defaultTrialHelper.inc';
     
     #Experiment
     $conditionsFileName     = 'Conditions.csv';

@@ -689,6 +689,86 @@ function GetFromFile($filename, $padding = true, $delimiter = ",")
     return $out;
 }
 /**
+ * finds the location of a trial type's files. Returns either an array of file
+ * paths or the boolean false if the type cannot be found.
+ * @param string $trialType the name of the trial type
+ * @return mixed
+ */
+function getTrialTypeFiles($trialType) {
+    $trialType = strtolower(trim($trialType));  // just in case. . .
+    
+    // initialize a static variable to cache the results, so that we can run
+    // the function multiple times and efficiently get our data back
+    static $trialTypes = array();
+    if (isset($trialTypes[$trialType])) return $trialTypes[$trialType];
+    
+    // list all the variables from fileLocations.php that we will need
+    // it seemed wasteful to include the file again, so I just use global
+    // to grab what I need
+    global
+        $_rootF,
+        $codeF,
+        $trialF,
+        $expFiles,
+        $custTTF,
+        $trialTypeDisplay,
+        $customScoring,
+        $customStyle,
+        $customScript,
+        $helperFile,
+        $defaultScoring,
+        $defaultHelper;
+    
+    // as it stands, we have two places where trial types can be found
+    // we will search the Experiment/ folder first, so that if we find
+    // the trial type, we won't have to look in the Code/ folder
+    // this way, the Experiment/ trial types will overwrite the Code/ types
+    $possibleDirs = array(
+        $_rootF . $expFiles . $custTTF,
+        $_rootF . $codeF    . $trialF
+    );
+    
+    // list the types of files we will be able to use
+    $possibleFiles = array(
+        'display' => $trialTypeDisplay,
+        'scoring' => $customScoring,
+        'script'  => $customScript,
+        'style'   => $customStyle,
+        'helper'  => $helperFile
+    );
+    
+    $trialFiles = array();
+    
+    foreach ($possibleDirs as $dir) {
+        if (is_dir($dir . $trialType)) {
+            $trialPath = $dir . $trialType . '/';
+            foreach ($possibleFiles as $type => $filename) {
+                $possibleFile = fileExists($trialPath . $filename);
+                if ($possibleFile !== false) $trialFiles[$type] = $possibleFile;
+            }
+            break; // only use the first matching trial type folder
+        }
+    }
+    
+    if ($trialFiles === array()) {
+        // when you need to see if the trial type exists, check the return for false
+        $trialFiles = false;
+    } else {
+        if (!isset($trialFiles['scoring'])) {
+            // fill in the default scoring if this trial doesn't have custom scoring
+            $trialFiles['scoring'] = $_rootF . $codeF . $defaultScoring;
+        }
+        if (!isset($trialFiles['helper'])) {
+            // also find a default helper, for things like $compTime and output columns
+            $trialFiles['helper']  = $_rootF . $codeF . $defaultHelper;
+        }
+    }
+    
+    // store the results in the static cache
+    $trialTypes[$trialType] = $trialFiles;
+    return $trialFiles;
+}
+/**
  * Checks if a given string can be found within another.
  * (Wrapper function for strpos and stripos.)
  * @param string $needle The string to search for.
@@ -934,7 +1014,7 @@ function trialTiming()
     } elseif (isset($compTime)) {
         // if a $compTime is set then use that
         $maxTime = $compTime;
-    } else { $maxTime = 5; } // default compTime if none is set
+    } else { $maxTime = 'user'; } // default compTime if none is set
     
     // override time in debug mode, use standard timing if no debug time is set
     if ($_SESSION['Debug'] == TRUE && $debugTime != '') {
