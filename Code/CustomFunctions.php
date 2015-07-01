@@ -219,6 +219,27 @@ function trimArrayRecursive($input)
     }
 }
 /**
+ * convert input to encoding if necessary
+ * @param mixed $input
+ * @param string $encoding
+ * @return mixed
+ */
+function convertArrayEncodingRecursive($input, $encoding) {
+    if (is_array($input)) {
+        foreach ($input as $key => $value) {
+            $input[$key] = convertArrayEncodingRecursive($value, $encoding);
+        }
+    } else {
+        $thisEncoding = mb_detect_encoding($input, 'UTF-8,ISO-8859-1', true);
+        // Windows-1252 is always detected as iso-8891-1, even though win is a superset
+        if ($thisEncoding === 'ISO-8859-1') { $thisEncoding = 'Windows-1252'; }
+        if ($thisEncoding !== $encoding) {
+            $input = mb_convert_encoding($input, $encoding, $thisEncoding);
+        }
+    }
+    return $input;
+}
+/**
  * Recursively shuffles an array from top (highest level) to bottom
  * Disabling shuffle for an item at a given level
  *   - Use 'off' in whichever case you'd like (e.g., 'Off', 'OFF', etc.)
@@ -642,11 +663,10 @@ function GetFromFile($filename, $padding = true, $delimiter = ",")
 {
     // make sure PHP auto-detects line endings
     ini_set('auto_detect_line_endings', true);
-    // convert contents to UTF-8 if needed
-    convertFileEncoding($filename);
     // read the file in and get the header
     $dataDirty = readCsv($filename, $delimiter);
     $data = trimArrayRecursive($dataDirty);
+    $data = convertArrayEncodingRecursive($data, 'UTF-8');
     $columns = array_shift($data);
     $columnsCount = count($columns);
     // make first two indices blank so that others correspond to Excel rows
