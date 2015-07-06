@@ -14,9 +14,9 @@
     
     #### Grabbing submitted info
     $username = $_GET['Username'];                                          // get username from URL
-    $username = filter_var($username, FILTER_SANITIZE_EMAIL);              // cleaning characters that wouldn't write to a filename
-	$badFileCharacters = array( '/', '\\', '?', '%', '*', ':', '|', '"', '<', '>' );
-	$username = str_replace( $badFileCharacters, '', $username );
+    $username = filter_var($username, FILTER_SANITIZE_EMAIL);               // cleaning characters that wouldn't write to a filename
+    $badFileCharacters = array( '/', '\\', '?', '%', '*', ':', '|', '"', '<', '>' );
+    $username = str_replace( $badFileCharacters, '', $username );
     $selectedCondition = trim($_GET['Condition']);                          // grab Condition from URL
     
     
@@ -417,23 +417,23 @@
     $procedureLength = count($procedure);
     for ($count=2; $count<$procedureLength; $count++) {
         // $Trials[$count-1] = makeTrial($procedure[$count]['Item']);
-		$items = rangeToArray($procedure[$count]['Item']);
-		$stim = array();
-		foreach ($items as $item) {
-			if (isset($stimuli[$item]) and is_array($stimuli[$item])) {
-				foreach ($stimuli[$item] as $column => $value) {
-					$stim[$column][] = $value;
-				}
-			}
-		}
-		if ($stim === array()) {
-			foreach ($stimuli[2] as $column => $value) {
-				$stim[$column][] = '';
-			}
-		}
-		foreach ($stim as $column => $valueArray) {
-			$Trials[$count-1]['Stimuli'][$column] = implode('|', $valueArray);
-		}
+        $items = rangeToArray($procedure[$count]['Item']);
+        $stim = array();
+        foreach ($items as $item) {
+            if (isset($stimuli[$item]) and is_array($stimuli[$item])) {
+                foreach ($stimuli[$item] as $column => $value) {
+                    $stim[$column][] = $value;
+                }
+            }
+        }
+        if ($stim === array()) {
+            foreach ($stimuli[2] as $column => $value) {
+                $stim[$column][] = '';
+            }
+        }
+        foreach ($stim as $column => $valueArray) {
+            $Trials[$count-1]['Stimuli'][$column] = implode('|', $valueArray);
+        }
         // $Trials[$count-1]['Stimuli']    = $stimuli[ ($procedure[$count]['Item']) ];         // adding 'Stimuli', as an array, to each position of $Trials
         $Trials[$count-1]['Procedure']  = $procedure[$count];                               // adding 'Procedure', as an array, to each position of $Trials
         $Trials[$count-1]['Response']   = $allColumnsOutput;
