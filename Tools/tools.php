@@ -31,7 +31,7 @@
 <head>
     <link rel="icon" href="../Code/icon.png" type="image/png">
     <link href="../Code/css/global.css"  rel="stylesheet"   type="text/css"/>
-    <script src="../Code/javascript/jquery-1.11.3.min.js"   type="text/javascript"></script>
+    <script src="../Code/javascript/jquery.js"   type="text/javascript"></script>
     <script src="../Code/javascript/sha256.js"              type="text/javascript"></script>
     <script src="../Code/javascript/loggingIn.js"           type="text/javascript"></script>
     
