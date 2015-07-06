@@ -1029,97 +1029,93 @@ function trialTiming()
     }
 }
 /**
- * Checks if a file exists in a case-insensitive search. Optionally looks for
- * alternate files with the search name but with different extensions (defaults
- * to true). Optionally checks that each directory on the search path exists
- * (defaults to true).
- *
- * @TODO Optimize and/or break-up this function.
- * This function can be broken into multiple useful functions, and would
- * probably benefit from some type of recursion or reference pattern.
- *
- * @param string $filePath The file to search for.
- * @param bool $altExtensions Set FALSE for strict extension checking.
- * @param bool $findDirectories Set FALSE to disable checking directories
- *                              on the search path.
- * @return bool
+ * case-insensitive version of is_dir(), returns directory path with existing case if found,
+ * returns boolean FALSE if not found
+ * @param string $dirname The directory to search for
+ * @return string|bool
  */
-function FileExists ($filePath, $altExtensions = true, $findDirectories = true) {
-    if (is_file($filePath)) { return $filePath; }
-    if (is_dir($filePath) AND $findDirectories) {
-        if (substr($filePath, -1) === '/') {
-            $filePath = substr($filePath, 0, -1);
+function is_iDir ($dirname) {
+    if (is_dir($dirname)) { return $dirname; }
+    $dirs = explode('/', $dirname);
+    $foundDir = '.';
+    foreach ($dirs as $dir) {
+        if (is_dir($foundDir . '/' . $dir)) {
+            $foundDir .= '/' . $dir;
+            continue;
         }
-        return $filePath;
-    }
-    $filePath = (string) $filePath;
-    if ($filePath === '') { return false; }
-    $path_parts = pathinfo($filePath);
-    $fileName = $path_parts['basename'];
-    if (!isset($path_parts['dirname'])) $path_parts['dirname'] = '.';
-    if (is_dir($path_parts['dirname'])) {
-        $dir = $path_parts['dirname'];
-        $pre = ($dir === '.' AND $filePath[0] !== '.') ? 2 : 0;
-    } else {
-        $dirs = explode('/', $path_parts['dirname']);
-        if(is_dir($dirs[0])) {
-            $dir = array_shift($dirs);
-            $pre = 0;
-        } else {
-            $dir = '.';
-            $pre = 2;
-        }
-        foreach ($dirs as $dirPart) {
-            if (is_dir($dir . '/' . $dirPart)) {
-                $dir .= '/' . $dirPart;
-                continue;
-            } else {
-                $scan = scandir($dir);
-                foreach ($scan as $entry) {
-                    if (strtolower($entry) === strtolower($dirPart)) {
-                        $dir .= '/' . $entry;
-                        continue 2;
-                    }
-                }
-                return false;
+        $lowerDir = strtolower($dir);
+        $currentDir = scandir($foundDir);
+        foreach ($currentDir as $dirEntry) {
+            if (!is_dir($foundDir . '/' . $dirEntry)) { continue; }
+            if (strtolower($dirEntry) === $lowerDir) {
+                $foundDir .= '/' . $dirEntry;
+                continue 2;
             }
         }
-        if (is_file($dir . '/' . $fileName)) {
-            return substr($dir . '/' . $fileName, $pre);
-        }
-        if (is_dir($dir . '/' . $fileName) AND $findDirectories) {
-            return substr($dir . '/' . $fileName, $pre);
+        return false;
+    }
+    return substr($foundDir, 2);
+}
+/**
+ * Finds a path to a target file, checking the filename and each directory
+ * name in the path case-insensitively. If a target file is found, returns
+ * the path with the correct, existing casing. Otherwise, returns FALSE.
+ * Optionally searches for files with the same name but alternative
+ * extensions (defaults to true). Optionally searches for both files
+ * and directories (defaults to TRUE, and if set to FALSE, will return
+ * FALSE if a directory is found)
+ *
+ * @param string $path The file to search for.
+ * @param bool $findAltExtensions Set FALSE for strict extension checking.
+ * @param bool $findDir Set FALSE to only return paths to actual files,
+ *                      rather than directories
+ * @return string|bool
+ */
+function fileExists ($path, $findAltExtensions = true, $findDir = true) {
+    if (is_file($path)) { return $path; }
+    if (is_dir($path)) {
+        return $findDir ? $path : false;
+    }
+    $path = (string) $path;
+    if ($path === '') { return false; }
+    $pathinfo = pathinfo($path);
+    // find the directory
+    if (!isset($pathinfo['dirname'])) { $pathinfo['dirname'] = '.'; }
+    if (!is_dir($pathinfo['dirname'])) {
+        $pathinfo['dirname'] = is_iDir($pathinfo['dirname']);
+        if ($pathinfo['dirname'] === false) { return false; }
+        $test = $pathinfo['dirname'] . '/' . $pathinfo['basename'];
+        if (is_file($test)) { return $test; }
+        if (is_dir($test)) {
+            return $findDir ? $test : false;
         }
     }
-    $scan = scandir($dir);
-    $lowerFile = strtolower($fileName);
-    foreach ($scan as $entry) {
-        if (strtolower($entry) === $lowerFile) {
-            if (is_dir($dir . '/' . $entry) AND !$findDirectories) { continue; }
-            return substr($dir . '/' . $entry, $pre);
+    // find the target file or final directory
+    $currentDir = scandir($pathinfo['dirname']);
+    $lowerBase = strtolower($pathinfo['basename']);
+    foreach ($currentDir as $entry) {
+        if (strtolower($entry) === $lowerBase) {
+            $test = $pathinfo['dirname'] . '/' . $entry;
+            if (is_file($test)) { return $test; }
+            if (is_dir($test) AND $findDir) {
+                return $test;
+            }
         }
     }
-    if ($altExtensions) {
-        $possibleEntries = array();
-        foreach ($scan as $entry) {
-            if ($entry === '.' OR $entry === '..') { continue; }
-            if (is_dir($dir . '/' . $entry) AND !$findDirectories) { continue; }
-            if (strrpos($entry, '.') === false) {
-                $entryName = strtolower($entry);
-            } else {
-                $entryName = strtolower(substr($entry, 0, strrpos($entry, '.')));
-            }
-            $possibleEntries[$entryName] = $entry;
+    // check alt extensions
+    if (!$findAltExtensions) { return false; }
+    $lowerFile = strtolower($pathinfo['filename']);
+    foreach ($currentDir as $entry) {
+        $baseEntry = strtolower($entry);
+        $findDot = strRpos($baseEntry, '.');
+        if ($findDot !== false) {
+            $baseEntry = substr($baseEntry, 0, -$findDot-1);
         }
-        foreach ($possibleEntries as $entryName => $entry) {
-            if ((string)$entryName === $lowerFile) {
-                return substr($dir . '/' . $entry, $pre);
-            }
-        }
-        $baseFileName = strtolower($path_parts['filename']);
-        foreach ($possibleEntries as $entryName => $entry) {
-            if ((string)$entryName === $baseFileName) {
-                return substr($dir . '/' . $entry, $pre);
+        if ($baseEntry === $lowerFile) {
+            $test = $pathinfo['dirname'] . '/' . $entry;
+            if (is_file($test)) { return $test; }
+            if (is_dir($test) AND $findDir) {
+                return $test;
             }
         }
     }
