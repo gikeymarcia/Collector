@@ -1,5 +1,4 @@
 <?php
-    ini_set('auto_detect_line_endings', true);          // fixes problems reading files saved on mac
     session_start();                                    // start the session at the top of each page
     
     error_reporting(-1);
