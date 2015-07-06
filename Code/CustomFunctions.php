@@ -740,10 +740,10 @@ function getTrialTypeFiles($trialType) {
     $trialFiles = array();
     
     foreach ($possibleDirs as $dir) {
-        if (is_dir($dir . $trialType)) {
-            $trialPath = $dir . $trialType . '/';
+        $ttFolder = is_iDir($dir . $trialType);
+        if ($ttFolder !== false) {
             foreach ($possibleFiles as $type => $filename) {
-                $possibleFile = fileExists($trialPath . $filename);
+                $possibleFile = fileExists($ttFolder . '/' . $filename, true, false);
                 if ($possibleFile !== false) $trialFiles[$type] = $possibleFile;
             }
             break; // only use the first matching trial type folder
