@@ -1074,7 +1074,11 @@ function is_iDir ($dirname) {
 function fileExists ($path, $findAltExtensions = true, $findDir = true) {
     if (is_file($path)) { return $path; }
     if (is_dir($path)) {
-        return $findDir ? $path : false;
+        if ($findDir) {
+            return $path;
+        } elseif (!$findAltExtensions) {
+            return false;
+        }
     }
     $path = (string) $path;
     if ($path === '') { return false; }
@@ -1087,7 +1091,11 @@ function fileExists ($path, $findAltExtensions = true, $findDir = true) {
         $test = $pathinfo['dirname'] . '/' . $pathinfo['basename'];
         if (is_file($test)) { return $test; }
         if (is_dir($test)) {
-            return $findDir ? $test : false;
+            if ($findDir) {
+                return $test;
+            } elseif (!$findAltExtensions) {
+                return false;
+            }
         }
     }
     // find the target file or final directory
@@ -1097,8 +1105,12 @@ function fileExists ($path, $findAltExtensions = true, $findDir = true) {
         if (strtolower($entry) === $lowerBase) {
             $test = $pathinfo['dirname'] . '/' . $entry;
             if (is_file($test)) { return $test; }
-            if (is_dir($test) AND $findDir) {
-                return $test;
+            if (is_dir($test)) {
+                if ($findDir) {
+                    return $test;
+                } elseif (!$findAltExtensions) {
+                    return false;
+                }
             }
         }
     }
