@@ -910,22 +910,22 @@ function readable(array $displayArray, $name = "Untitled array")
  * characters removes them as well. Set FALSE for strict matching to $label.
  * @return mixed
  */
-function RemoveLabel($input, $label, $extendLabel = true)
+function removeLabel($input, $label, $extendLabel = true)
 {
     $inputString = trim($input);
     $inputLower = strtolower($inputString);
     $labelClean = strtolower(trim($label));
     $trimLength = strlen($labelClean);
-    if ($extendLabel) {
-        foreach(['s', ' ', ':', '='] as $char) {
-            if (substr($inputLower, $trimLength, 1) === $char) {
-                ++$trimLength;
-            }
-        }
-    }
     if (substr($inputLower, 0, $trimLength) !== $labelClean) {
         return false;
     } else {
+        if ($extendLabel) {
+            foreach(['s', ' ', ':', '='] as $char) {
+                if (substr($inputLower, $trimLength, 1) === $char) {
+                    ++$trimLength;
+                }
+            }
+        }
         $output = trim(substr($inputString, $trimLength));
         if (($output === '') || ($output === false)) {
             return true;
