@@ -145,6 +145,8 @@
                     superBlockShuffle(  $shuffled, $header, $within, $notShuffle );
                 } elseif( stripos( $type, 'list'  ) !== FALSE ) {
                     listShuffle(   $shuffled, $header, $within, $notShuffle );
+                } elseif( stripos( $type, 'side'  ) !== FALSE ) {
+                    sideShuffle(   $shuffled, $header, $within, $notShuffle );
                 } else {
                     simpleShuffle( $shuffled, $header, $within, $notShuffle );
                 }
@@ -370,5 +372,21 @@
         // replace each shuffled row with its new row
         foreach( $newArray as $i => $row ) {
             $array[$i] = $row;
+        }
+    }
+    
+    /** SideShuffle
+     *
+     *  shuffles within a row, rather than between rows, excluding the shuffle column
+     */
+    
+    function sideShuffle(&$array, $shuffle, $within, $notShuffle) {
+        foreach ($array as &$row) {
+            $contents = $row;
+            unset($contents[$shuffle]);
+            shuffleAssoc($contents);
+            foreach ($contents as $key => $value) {
+                $row[$key] = $value;
+            }
         }
     }
