@@ -1,7 +1,20 @@
 <?php
     require 'initiateCollector.php';
     
-    $trialTypes = require 'scanTrialTypes.php';
+    $trialTypes = array();
+    $trialTypeDirs = array(
+        $_rootF . $expFiles . $custTTF,
+        $_rootF . $codeF    . $trialF
+        
+    );
+    foreach ($trialTypeDirs as $dir) {
+        $dirScan = scandir($dir);
+        foreach ($dirScan as $entry) {
+            if ($display = fileExists($dir . $entry . '/' . $trialTypeDisplay)) {
+                $trialTypes[strtolower($entry)] = $display;
+            }
+        }
+    }
     $stimFileLoc = $_rootF . $expFiles . $stimF;
     
     if (!isset($_SESSION['Trial Tester']) OR isset($_POST['resetSession'])) {
@@ -43,7 +56,6 @@
             $_SESSION = array();
             $_SESSION['Trial Tester'] = TRUE;
             $_SESSION['Debug'] = FALSE;     // this just messes with timing
-            $_SESSION['Trial Types'] = require 'scanTrialTypes.php';
             
             $_SESSION['Username']   = 'TrialTester';
             $_SESSION['ID']         = 'TrialTester';
@@ -251,7 +263,7 @@
 
     iframe          {   border: 0px solid #000; width: 100%; border-top-width: 1px; min-height: 100%;  }
     .trialOption    {   text-align: center; margin: 15px;   display: inline-block;   }
-    #allContain     {   height: 100%;   white-space: nowrap;   }
+    #allContain     {   height: 100%;   white-space: nowrap; width: 100%;   }
     
     .expFile        {   width: 49%; display: inline-block;   margin: 0px 0px 0 0; vertical-align: top;  }
     .fileTitle      {   text-align: center; margin-bottom: 3px; }
