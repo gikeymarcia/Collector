@@ -146,6 +146,11 @@ var COLLECTOR = {
             $(".forceNumeric").forceNumeric();
             // stop forms from submitting more than once
             $("form").preventDoubleSubmission();
+            
+            // ensures that all forms have autocomplete disabled
+            $(document).ready(function () {
+                $("form").attr('autocomplete', 'off');
+            }) 
         }
     },
 
