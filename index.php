@@ -44,7 +44,7 @@
     // load page header
     $title = 'Experiment Login Page';  
     require $_codeF . 'Header.php';
-    $action = $codeF . 'errorCheck.php';
+    $action = $codeF . 'login.php';
 ?>
 <!-- Page specific styling tweaks -->
 <style>
