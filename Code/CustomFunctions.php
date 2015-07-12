@@ -1246,3 +1246,17 @@ function SortArrayLikeArray(array $array, array $template)
     }
     return $out;
 }
+
+function getUserAgentInfo()
+{
+    require_once 'phpbrowscap/Browscap.php';
+    
+    // phpbrowscap requires a cache; create cache dir if it doesn't exist
+    if (!file_exists('phpbrowscap/cache')) {
+        mkdir('phpbrowscap/cache', 0777, true);
+    }
+    
+    // get and return the user agent info
+    $bc = new phpbrowscap\Browscap('phpbrowscap/cache');
+    return $bc->getBrowser();
+}

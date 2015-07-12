@@ -110,7 +110,7 @@
             'Output_File'           => $outputFile,
             'Stimuli_File'          => $_SESSION['Condition']['Stimuli'],
             'Procedure_File'        => $_SESSION['Condition']['Procedure'],
-            'User_Agent_Info'       => $_SERVER['HTTP_USER_AGENT'],
+            'User_Agent_Info'       => getUserAgentInfo(),
             'IP'                    => $_SERVER["REMOTE_ADDR"],
         );
         arrayToLine($UserData, $statusBeginPath);
@@ -498,7 +498,7 @@
     
     
     #### Record info about the person starting the experiment to the status start file
-    // information about the user loging in
+    // information about the user logging in
     $UserData = array(
         'Username'              => $_SESSION['Username'],
         'ID'                    => $_SESSION['ID'],
@@ -509,7 +509,7 @@
         'Output_File'           => $outputFile,
         'Stimuli_File'          => $_SESSION['Condition']['Stimuli'],
         'Procedure_File'        => $_SESSION['Condition']['Procedure'],
-        'User_Agent_Info'       => $_SERVER['HTTP_USER_AGENT'],
+        'User_Agent_Info'       => getUserAgentInfo(),
         'IP'                    => $_SERVER["REMOTE_ADDR"],
     );
     arrayToLine($UserData, $statusBeginPath);

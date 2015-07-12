@@ -127,7 +127,7 @@
             'Output_File'           => $outputFile,
             'Stimuli_File'          => $_SESSION['Condition']['Stimuli'],
             'Procedure_File'        => $_SESSION['Condition']['Procedure'],
-            'User_Agent_Info'       => $_SERVER['HTTP_USER_AGENT'],
+            'User_Agent_Info'       => getUserAgentInfo(),
             'IP'                    => $_SERVER["REMOTE_ADDR"],
         );
         arrayToLine($UserData, $statusBeginPath);
@@ -524,7 +524,7 @@
         'Output_File'           => $outputFile,
         'Stimuli_File'          => $_SESSION['Condition']['Stimuli'],
         'Procedure_File'        => $_SESSION['Condition']['Procedure'],
-        'User_Agent_Info'       => $_SERVER['HTTP_USER_AGENT'],
+        'User_Agent_Info'       => getUserAgentInfo(),
         'IP'                    => $_SERVER["REMOTE_ADDR"],
     );
     arrayToLine($UserData, $statusBeginPath);
