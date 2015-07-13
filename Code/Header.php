@@ -9,9 +9,11 @@
   <script src="<?php echo $_codeF . 'javascript/jquery.js' ?>"></script>
   <script src="<?php echo $_codeF . 'javascript/jquery-ui-1.10.4.custom.min.js' ?>"></script>
   <script src="<?php echo $_codeF . 'javascript/collector_1.0.0.js' ?>"></script>
-  <link href='http://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>          <!-- Load Roboto font (used for headers) -->
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>       <!-- Load Open Sans font (used for headers) -->
-  <link href='http://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>             <!-- Load Inconsolata font (used for monospace) -->
+  
+  <!-- Custom fonts: Roboto (headers), Open Sans (body), Inconsolata (monospace) -->
+  <link href='http://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>          
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
   <title><?php echo isset($title) ? $title : pathinfo( $_SERVER['PHP_SELF'], PATHINFO_FILENAME ) ?></title>
   <?php
     if (isset($addedStyles)) {
