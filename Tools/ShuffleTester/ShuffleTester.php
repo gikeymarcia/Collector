@@ -154,7 +154,9 @@
     <form id="shuffleFile" action="" method="get"></form>                   <!-- the form that submits the selctions made on this page -->
 
 <?php    
-    if ($store['loc'] !== '') {                     // if a shuffle file has been choosen
+    if (($store['loc'] !== '')                              // if a shuffle file has been choosen
+        && (inString('.csv', $store['loc']) == TRUE)        // and it is a csv file
+    ){                     
         $before = GetFromFile($store['loc']);           // grab file to shuffle
         $timer  = microtime(TRUE);                      // start a timer
         $after  = multiLevelShuffle($before);           // run basic shuffles
