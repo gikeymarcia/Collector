@@ -102,7 +102,8 @@ class Browscap
      * is MINIMAL, so there is no reason to use the standard file whatsoever. Either go for light,
      * which is blazing fast, or get the full one. (note: light version doesn't work, a fix is on its way)
      */
-    public $remoteIniUrl = 'http://browscap.org/stream?q=Full_PHP_BrowsCapINI';
+//    public $remoteIniUrl = 'http://browscap.org/stream?q=Full_PHP_BrowsCapINI';
+    public $remoteIniUrl = 'http://browscap.org/stream?q=Lite_PHP_BrowsCapINI';
     public $remoteVerUrl = 'http://browscap.org/version';
     public $timeout = 5;
     public $updateInterval = 432000;  // 5 days
@@ -775,7 +776,7 @@ class Browscap
      */
     protected function _getStreamContext($recreate = false)
     {
-        if (!isset($this->_streamContext) || true === $recreate) {
+				if (!isset($this->_streamContext) || true === $recreate) {
             $this->_streamContext = stream_context_create($this->_streamContextOptions);
         }
 
@@ -956,10 +957,11 @@ class Browscap
                     throw new Exception('Cannot open the local file');
                 }
             case self::UPDATE_FOPEN:
-                // include proxy settings in the file_get_contents() call
+								// include proxy settings in the file_get_contents() call
                 $context = $this->_getStreamContext();
+								
                 $file = file_get_contents($url, false, $context);
-
+						
                 if ($file !== false) {
                     return $file;
                 } // else try with the next possibility (break omitted)
