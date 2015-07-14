@@ -45,7 +45,7 @@
         if ($settingSubmit === 'false') {
             $submitOnDone = false;
         }
-        if ($preventEarlySubmit === 'false') {
+        if ($settingPrevent === 'false') {
             $preventEarlySubmit = false;
         }
     }
