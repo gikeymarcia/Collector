@@ -1267,7 +1267,7 @@ function stripUrlScheme($url)
  * @param string $url The YouTube URL to clean-up
  * @return string
  */
-function youtubeUrlCleaner($url)
+function youtubeUrlCleaner($url, $justReturnId = false)
 {
     $urlParts = parse_url(stripUrlScheme($url));
     
@@ -1285,7 +1285,11 @@ function youtubeUrlCleaner($url)
         $id = end($pathParts);
     }
     
-    return '//www.youtube.com/embed/'.$id;
+    if ($justReturnId) {
+        return $id;
+    } else {
+        return '//www.youtube.com/embed/'.$id;
+    }
 }
 /**
  * Returns a normalized Vimeo link. All links are converted to Vimeo's
