@@ -25,10 +25,10 @@
     $answers = trimExplode('|', $answer);
 
     $buttons     = array();
-    $limitPerRow = TRUE;
-    $horizontal  = TRUE;
+    $limitPerRow = true;
+    $horizontal  = true;
 
-    $share = FALSE; 
+    $share = false; 
 
     $settings = trimExplode('|', $settings);
     $stimCols = array();
@@ -37,45 +37,45 @@
     }
 
     foreach ($settings as $setting) {
-        $theseAreButtons = FALSE;
-        $shuffleThese    = FALSE;
+        $theseAreButtons = false;
+        $shuffleThese    = false;
 
-        if (removeLabel($setting, 'button') !== FALSE) {
-            $theseAreButtons = TRUE;
-        } elseif (removeLabel($setting, 'perRow') !== FALSE) {
+        if (removeLabel($setting, 'button') !== false) {
+            $theseAreButtons = true;
+        } elseif (removeLabel($setting, 'perRow') !== false) {
 
             $test = removeLabel($setting, 'perRow');
             if (is_numeric($test)) {
                 $perRow = (int)$test;
-                $limitPerRow = TRUE;
+                $limitPerRow = true;
             }
 
-        } elseif (removeLabel($setting, 'perColumn') !== FALSE) {
+        } elseif (removeLabel($setting, 'perColumn') !== false) {
 
             $test = removeLabel($setting, 'perColumn');
             if (is_numeric($test)) {
                 $perCol = (int)$test;
-                $limitPerRow = FALSE;
+                $limitPerRow = false;
             }
 
-        } elseif (removeLabel($setting, 'horizontal') !== FALSE) {
-            $horizontal = TRUE;
-        } elseif (removeLabel($setting, 'vertical') !== FALSE) {
-            $horizontal = FALSE;
-        } elseif (removeLabel($setting, 'shuffle') !== FALSE) {
+        } elseif (removeLabel($setting, 'horizontal') !== false) {
+            $horizontal = true;
+        } elseif (removeLabel($setting, 'vertical') !== false) {
+            $horizontal = false;
+        } elseif (removeLabel($setting, 'shuffle') !== false) {
 
             $unlabeled = removeLabel($setting, 'shuffle');
-            if (removeLabel($unlabeled, 'button') !== FALSE) {
+            if (removeLabel($unlabeled, 'button') !== false) {
                 $setting         = $unlabeled;
-                $theseAreButtons = TRUE;
+                $theseAreButtons = true;
             } else {
                 shuffle($buttons);
             }
 
-        } elseif (removeLabel($setting, 'share') !== FALSE) {
+        } elseif (removeLabel($setting, 'share') !== false) {
             $share = removeLabel($setting, 'share');
         } else {
-            $theseAreButtons = TRUE;
+            $theseAreButtons = true;
         }
 
         if ($theseAreButtons) {
@@ -86,7 +86,7 @@
                 if ($thisButton === '') { continue; }
                 if ($thisButton[0] === '$') {
                     $sep = strrpos($thisButton, '[');
-                    if ($sep === FALSE) {
+                    if ($sep === false) {
                         $col = substr($thisButton, 1);
                         $index = $item;
                     } else {
@@ -101,7 +101,7 @@
                         }
                     } else {
                         $newButtons[] = $thisButton;                    // so we can see which button is being outputted as $bad button [2o3nri...
-                        $trialFail = TRUE;
+                        $trialFail = true;
                         echo '<h3>Buttons incorrectly defined. For dynamic buttons, please use a dollar sign, followed by the column name, followed by a space, followed by a number or range, like <strong>$cue[2::8]</strong></h3>';
                     }
                 } else {
@@ -120,7 +120,7 @@
     $buttons = array_unique($buttons);
 
     if (!isset($currentTrial['Response']['Buttons'])) {
-        if ($share !== FALSE) {
+        if ($share !== false) {
             if (!isset($_SESSION['Share'][$share]['Buttons'])) {
                 $_SESSION['Share'][$share]['Buttons'] = $buttons;
             } else {

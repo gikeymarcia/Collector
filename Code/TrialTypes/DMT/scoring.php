@@ -21,5 +21,5 @@
             $extraData['DMT_'  .$col] = $trialData[$col][$i];
         }
         
-        recordTrial($extraData, FALSE, FALSE);
+        recordTrial($extraData, false, false);
     }

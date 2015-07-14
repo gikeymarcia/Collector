@@ -6,34 +6,34 @@
     #### setting experiment variables ####
     $experimentName   = 'Collector';            // Recorded in datafile and can be useful
     $loginCounterName = '1.txt';                // Change to restart condition cycling
-    $doDemographics   = FALSE;                  // Can be TRUE or FALSE
-    $doInstructions   = TRUE;
+    $doDemographics   = false;                  // Can be true or false
+    $doInstructions   = true;
     $loginCounterName = '1.csv';                // Change to restart condition cycling
-    $nextExperiment   = FALSE;                  // to link use format 'www.cogfog.com/Generic/' do not forget the www and the ending '/'
+    $nextExperiment   = false;                  // to link use format 'www.cogfog.com/Generic/' do not forget the www and the ending '/'
 
     // debugging functionality
-    $checkAllFiles = TRUE;                      // if `TRUE`, all cues in all stimuli files will be checked for existence before the experiment
-    $checkCurrentFiles = FALSE;                 // if `TRUE`, with each login, the cues for just that session will be checked for file existence
+    $checkAllFiles = true;                      // if `true`, all cues in all stimuli files will be checked for existence before the experiment
+    $checkCurrentFiles = false;                 // if `true`, with each login, the cues for just that session will be checked for file existence
     $debugName = '';                            // create a password here to enable the use of the debug name when logging in
-    $debugMode = FALSE;                         // Can be `TRUE` or `FALSE` (without ticks)
+    $debugMode = false;                         // Can be `true` or `false` (without ticks)
     $debugTime = 1;                             // trial length (in seconds) when in debug mode, if set to '' then timing will be normal in debug mode
-    $trialDiagnostics = FALSE;                  // show trial diagnostics? `TRUE` or `FALSE`
-    $stopAtLogin = FALSE;                       // show diagnostic information once login process is complete
-    $stopForErrors = TRUE;                      // stop experiment progression if errors are found at login? `TRUE` or `FALSE`
+    $trialDiagnostics = false;                  // show trial diagnostics? `true` or `false`
+    $stopAtLogin = false;                       // show diagnostic information once login process is complete
+    $stopForErrors = true;                      // stop experiment progression if errors are found at login? `true` or `false`
 
     //mTurk Mode
-    $mTurkMode    = FALSE;                      // turn on mTurkMode? `TRUE` or `FALSE` (without ticks)
+    $mTurkMode    = false;                      // turn on mTurkMode? `true` or `false` (without ticks)
     $verification = 'Shinebox';                 // code that shows on done.php
-    $checkElig    = FALSE;                      // use files in eligibility/ folder to check past participation (mTurkMode must be on to use this)
-    $blacklist    = FALSE;                      // when true, the same IP cannot participate twice
+    $checkElig    = false;                      // use files in eligibility/ folder to check past participation (mTurkMode must be on to use this)
+    $blacklist    = false;                      // when true, the same IP cannot participate twice
     $whitelist    = array('::1', 'other-ip');   // The IPs in this array will be allowed to participate more than once
                                                 // ::1 is the default IPv6 loopback -- leave it in so that the check will pass when working locally
 
     // index.php (Starting Page)
-    $showConditionSelector = TRUE;              // Show (TRUE) or hide (FALSE) the condition selector at login?
-    $useConditionNames     = TRUE;              // Use the entry under "Column Description" rather than "Number" in the condition selector
-    $showConditionInfo     = TRUE;              // Show the stimuli and procedure file for each condition when hovering over the options
-    $hideFlaggedConditions = TRUE;              // flag conditions by putting a # character at the beginning of the "Condition Description". When the condition is auto-selected, this condition will be skipped
+    $showConditionSelector = true;              // Show (true) or hide (false) the condition selector at login?
+    $useConditionNames     = true;              // Use the entry under "Column Description" rather than "Number" in the condition selector
+    $showConditionInfo     = true;              // Show the stimuli and procedure file for each condition when hovering over the options
+    $hideFlaggedConditions = true;              // flag conditions by putting a # character at the beginning of the "Condition Description". When the condition is auto-selected, this condition will be skipped
     $welcome        = 'Welcome to the experiment!';
     $expDescription = '<p> This experiment will run for about 25 minutes.  Your goal will be to learn some information.</p>';
     $askForLogin    = 'Participant ID';         // Will complete the phrase: "Please enter your ". For example, "Please enter your Participant ID"

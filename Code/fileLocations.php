@@ -80,7 +80,7 @@
     $experimentFileName = '$Username_Session$Session_Experiment';
     
     if ((isset($_SESSION['Debug']))
-        AND ($_SESSION['Debug'] === TRUE)
+        AND ($_SESSION['Debug'] === true)
     ) {
         $dataSubFolder = $debugF;
     } else {

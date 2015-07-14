@@ -30,7 +30,7 @@
     $getTrialTypes  = isset( $_POST['TrialTypes'] )     ? $_POST['TrialTypes']  : array();
     $getTimings     = isset( $_POST['Max Time'] )       ? $_POST['Max Time']    : array('numeric', 'nonnumeric');
     
-    $getTrials = $_POST['Trials'] !== '' ? array_flip( RangeToArray( $_POST['Trials'] ) ) : FALSE;
+    $getTrials = $_POST['Trials'] !== '' ? array_flip( RangeToArray( $_POST['Trials'] ) ) : false;
     
     // $completion = $_POST['Completion'];
     
@@ -140,10 +140,10 @@
                             foreach( $fileFilters as $column => $allowed ) {
                                 if( !isset( $allowed[ $first[$column] ] ) ) { continue 2; }
                             }
-                            $d = getFirstLine( $path.$fileName, $testHeader, TRUE );
+                            $d = getFirstLine( $path.$fileName, $testHeader, true );
                             $file = fopen( $path.$fileName, "r" );
                             $keys = fgetcsv($file, 0, $d);
-                            while( ($line = fgetcsv($file, 0, $d)) !== FALSE ) {
+                            while( ($line = fgetcsv($file, 0, $d)) !== false ) {
                                 $row = array_combine_safely( $keys, $line );
                                 foreach( $rowFilters as $column => $allowed ) {
                                     if( !isset( $allowed[ $row[$column] ] ) ) { continue; }

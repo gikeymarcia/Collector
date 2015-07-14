@@ -33,7 +33,7 @@
     foreach ($ShuffleFolders as $type => $empty) {
         $searching = scandir($root . 'Experiment/' . $type . '/');
         foreach ($searching as $item => $path) {
-            if(!instring('.csv', $path, TRUE)) {
+            if(!instring('.csv', $path, true)) {
                 unset($searching[$item]);                       // remove files that aren't .csv
             }
             $ShuffleFolders[$type] = $searching;
@@ -155,16 +155,16 @@
 
 <?php    
     if (($store['loc'] !== '')                              // if a shuffle file has been choosen
-        && (inString('.csv', $store['loc']) == TRUE)        // and it is a csv file
+        && (inString('.csv', $store['loc']) == true)        // and it is a csv file
     ){                     
         $before = GetFromFile($store['loc']);           // grab file to shuffle
-        $timer  = microtime(TRUE);                      // start a timer
+        $timer  = microtime(true);                      // start a timer
         $after  = multiLevelShuffle($before);           // run basic shuffles
         $after  = shuffle2dArray($after);               // run advanced shuffles
-        $timer  = (microtime(TRUE) - $timer);           // calculate difference since start
+        $timer  = (microtime(true) - $timer);           // calculate difference since start
         $timer  = round($timer * 1000000, 0);           // multiply by 1,000,000 and round
         
-        $tableTimer = microtime(TRUE);
+        $tableTimer = microtime(true);
         // show the before shuffling version
         echo '<div class="before"><div id="RF"><h2>Before</h2>';
                   display2dArray($before);
@@ -173,7 +173,7 @@
         echo '<div class="after"><h2>After</h2>';
                   display2dArray($after);
         echo '</div>';
-        $tableTimer = round((microtime(TRUE) - $tableTimer) * 1000000, 0);  // calculate timer to rounded to nearest microsecond
+        $tableTimer = round((microtime(true) - $tableTimer) * 1000000, 0);  // calculate timer to rounded to nearest microsecond
     }
 ?>  
     <!-- Debug to make sure I'm getting the right stuff back -->
@@ -217,7 +217,7 @@
            size = iniitalSize;                                  // change size to inititial size
            $(".display2dArray").css("font-size", size);         // change table font-size back to original
            $(".zoomInput").val(size);                           // put the original size back into the hidden zoom input field
-           clicked = 0;                                         // set clicked to FALSE / unclicked / unlocked
+           clicked = 0;                                         // set clicked to false / unclicked / unlocked
            $("textarea").removeClass("locked");                 // remove textarea locked styling
         });
         $("td").click(function() {                          // if a table cell is clicked

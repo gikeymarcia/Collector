@@ -22,11 +22,11 @@
         
         
         
-        function arrayToLineBroken ($row, $fileName, $d = NULL, $encodeUtf8ToWin = TRUE) {
+        function arrayToLineBroken ($row, $fileName, $d = NULL, $encodeUtf8ToWin = true) {
             return $row;
         }
         
-        function recordTrial($extraData = array(), $exitIfDone = TRUE, $advancePosition = TRUE) {
+        function recordTrial($extraData = array(), $exitIfDone = true, $advancePosition = true) {
             return null;
         }
         
@@ -35,7 +35,7 @@
         #### Copied from experiment.php, update as needed ####
         
         if (!isset($_SESSION['Timestamp'])) {
-            $_SESSION['Timestamp'] = microtime(TRUE);
+            $_SESSION['Timestamp'] = microtime(true);
         }
     
     
@@ -93,7 +93,7 @@
         if (array_key_exists($currentPos+1, $_SESSION['Trials'])) {
             $nextTrial =& $_SESSION['Trials'][$currentPos+1];
         } else {
-            $nextTrial = FALSE;
+            $nextTrial = false;
         }
         
         // variables I'll need and/or set in trialTiming() function
@@ -110,7 +110,7 @@
         #### Presenting different trial types ####
         $expFiles  = $up . $expFiles;                          // setting relative path to experiments folder for trials launched from this page
         $postTo    = 'experiment.php';
-        $trialFail = FALSE;                                    // this will be used to show diagnostic information when a specific trial isn't working
+        $trialFail = false;                                    // this will be used to show diagnostic information when a specific trial isn't working
         
         $title = 'Experiment';
         $_dataController = 'experiment';

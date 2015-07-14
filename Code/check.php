@@ -20,7 +20,7 @@
     $ip = $_SERVER["REMOTE_ADDR"];                  // user's ip address
     $ipFilename = 'rejected-IPs.csv';               // name of bad IP file
     $ipPath = $folder . $ipFilename;                // path to bad IP file
-    $priorExp = FALSE;                              // temporary hack to block people by username who are on whitelisted IPs
+    $priorExp = false;                              // temporary hack to block people by username who are on whitelisted IPs
     
     #### functions needed to make this page work
     
@@ -68,7 +68,7 @@
         }
         
         $current = array();                                         // clear data from current file before loading next one
-        $current = GetFromFile($folder . $file, FALSE, $delimiter); // read a file presumably containing workers
+        $current = GetFromFile($folder . $file, false, $delimiter); // read a file presumably containing workers
         if (!isset($current[0]['WorkerId'])) {                      // skip files without a 'WorkerID' column
             $skipped[] = $file;                                     // keep track of which files we've skipped
         } else {
@@ -107,7 +107,7 @@
         // if (isset($_SESSION)
             // AND file_exists($ipPath)
         // ) {
-            // $badIPs = GetFromFile($ipPath, FALSE);
+            // $badIPs = GetFromFile($ipPath, false);
             // foreach ($badIPs as $rejected) {
                 // if ($ip == $rejected['ip address']) {
                     // $noGo[] = 'Sorry, you are not allowed to login to this experiment more than once.';
@@ -118,7 +118,7 @@
 
         #### if blacklist is enabled, add IP to reject list
         // if (isset($_SESSION)
-            // AND ($blacklist == TRUE)
+            // AND ($blacklist == true)
         // ) {
             // logIP();
         // }
@@ -128,15 +128,15 @@
             $noGo[] = 'Sorry, you are not eligible to participate in this study
                        because you have participated in a previous version of
                        this experiment.';
-            $priorExp = TRUE;
-            // if ($blacklist == TRUE) {
+            $priorExp = true;
+            // if ($blacklist == true) {
                 // logIP();
             // }
         }
 
         if (!(in_array($ip, $whitelist, false))) {          // skip the autocheck if IP is allowed
             rejectCheck($noGo);                             // print errors
-        } elseif ($priorExp == TRUE) {
+        } elseif ($priorExp == true) {
             echo '<h2>Sorry, you are not eligible to participate in this study
                       because you have participated in a previous version of
                       this experiment.</h2>';

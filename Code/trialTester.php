@@ -19,13 +19,13 @@
     
     if (!isset($_SESSION['Trial Tester']) OR isset($_POST['resetSession'])) {
         $_SESSION = array();
-        $_SESSION['Trial Tester'] = TRUE;
+        $_SESSION['Trial Tester'] = true;
     } elseif (isset($_POST['LoadStimFile'])) {
         $_SESSION['Stimuli'] = GetFromFile($stimFileLoc . $_POST['StimuliFile']);
-        $redirect = TRUE;
+        $redirect = true;
     } elseif (isset($_POST['Procedure_Trial_Type'])) {
     
-        $redirect = TRUE;
+        $redirect = true;
         $posts = array();
         foreach ($_POST as $name => $val) {
             $name = explode('_', htmlspecialchars_decode($name));
@@ -54,8 +54,8 @@
             #### Simulating login.php
         
             $_SESSION = array();
-            $_SESSION['Trial Tester'] = TRUE;
-            $_SESSION['Debug'] = FALSE;     // this just messes with timing
+            $_SESSION['Trial Tester'] = true;
+            $_SESSION['Debug'] = false;     // this just messes with timing
             
             $_SESSION['Username']   = 'TrialTester';
             $_SESSION['ID']         = 'TrialTester';

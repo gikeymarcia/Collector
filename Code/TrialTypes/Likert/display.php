@@ -70,7 +70,7 @@ function createRange($endValue) {
 }
 
 function findRangeStep(&$string) {
-    if (strpos($string, '(') !== FALSE) {
+    if (strpos($string, '(') !== false) {
         $step = substr($string, strpos($string, '('));
         $step = filter_var($step, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
         $string = substr($string, 0, strpos($string, '('));
@@ -104,14 +104,14 @@ if ($settings === '') {
     $likertScale = range(1,7);
 } else {
     $likertScale = array();
-    if (strpos($settings, ',' ) === FALSE 
-        && strpos($settings, '::') === FALSE
+    if (strpos($settings, ',' ) === false 
+        && strpos($settings, '::') === false
     ) {
         $likertScale = createRange($settings);
     } else {
         $ranges = trimExplode(',', $settings);
         foreach( $ranges as $range ) {
-            if( strpos($range, '::') === FALSE ) {
+            if( strpos($range, '::') === false ) {
                 $likertScale[] = $range;
             } else {
                 $endPoints = trimExplode('::', $range);

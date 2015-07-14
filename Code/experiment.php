@@ -8,11 +8,11 @@
 
     // this only happens once, so that refreshing the page doesn't do anything, and recording a new line of data is the only way to update the timestamp
     if (!isset($_SESSION['Timestamp'])) {
-        $_SESSION['Timestamp'] = microtime(TRUE);
+        $_SESSION['Timestamp'] = microtime(true);
     }
     
     
-    function recordTrial($extraData = array(), $exitIfDone = TRUE, $advancePosition = TRUE) {
+    function recordTrial($extraData = array(), $exitIfDone = true, $advancePosition = true) {
 
         #### setting up aliases (for later use)
         $currentPos   =& $_SESSION['Position'];
@@ -22,7 +22,7 @@
 
         #### Calculating time difference from current to last trial
         $oldTime = $_SESSION['Timestamp'];
-        $_SESSION['Timestamp'] = microtime(TRUE);
+        $_SESSION['Timestamp'] = microtime(true);
         $timeDif = $_SESSION['Timestamp'] - $oldTime;
         
         #### Writing to data file
@@ -63,7 +63,7 @@
         if ($exitIfDone) {
             $item = $_SESSION['Trials'][$currentPos]['Procedure']['Item'];
             if ($item == 'ExperimentFinished') {
-                $_SESSION['finishedTrials'] = TRUE;             // stops people from skipping to the end
+                $_SESSION['finishedTrials'] = true;             // stops people from skipping to the end
                 header('Location: FinalQuestions.php');
                 exit;
             }
@@ -124,7 +124,7 @@
     if (array_key_exists($currentPos+1, $_SESSION['Trials'])) {
         $nextTrial =& $_SESSION['Trials'][$currentPos+1];
     } else {
-        $nextTrial = FALSE;
+        $nextTrial = false;
     }
     
     // variables I'll need and/or set in trialTiming() function
@@ -141,7 +141,7 @@
     #### Presenting different trial types ####
     $expFiles  = $up . $expFiles;                          // setting relative path to experiments folder for trials launched from this page
     $postTo    = 'experiment.php';
-    $trialFail = FALSE;                                    // this will be used to show diagnostic information when a specific trial isn't working
+    $trialFail = false;                                    // this will be used to show diagnostic information when a specific trial isn't working
     
     $title = 'Experiment';
     $_dataController = 'experiment';
@@ -162,20 +162,20 @@
         } else {
             $keyMod = 'post' . $currentPost . '_';
         }
-        $findingKeys = FALSE;
+        $findingKeys = false;
         require $trialFiles['scoring'];
         if (!isset($data)) { $data = $_POST; }
         #### merging $data into $currentTrial['Response]
         $currentTrial['Response'] = placeData($data, $currentTrial['Response'], $keyMod);
         
         $notTrials   = array('off', 'no', '', 'n/a');
-        $finishedRow = TRUE;
+        $finishedRow = true;
         ++$currentPost;
         
         while (isset($currentTrial['Procedure']['Post ' . $currentPost . ' Trial Type'])) {
             $nextTrialType = strtolower($currentTrial['Procedure']['Post ' . $currentPost . ' Trial Type']);
             if (!in_array($nextTrialType, $notTrials)) {
-                $finishedRow = FALSE;
+                $finishedRow = false;
                 break;
             }
             ++$currentPost;
@@ -192,7 +192,7 @@
 
     // if we hit a *NewSession* then the experiment is over (this means that we don't ask FinalQuestions until the last session of the experiment)
     if(strtolower($item) == '*newsession*') {
-        $_SESSION['finishedTrials'] = TRUE;
+        $_SESSION['finishedTrials'] = true;
         header('Location: done.php');
         exit;
     }
@@ -225,7 +225,7 @@
                 </form>
             </div>
     <?php
-            $trialFail = TRUE;
+            $trialFail = true;
             $maxTime = 'user';
         endif;
     ?>
@@ -237,8 +237,8 @@
 
      <?php
         #### Diagnostics ####
-        if (($trialDiagnostics == TRUE)
-            OR ($trialFail == TRUE)
+        if (($trialDiagnostics == true)
+            OR ($trialFail == true)
         ) {
             // clean the arrays used so that they output strings, not code
             $clean_session      = arrayCleaner($_SESSION);
