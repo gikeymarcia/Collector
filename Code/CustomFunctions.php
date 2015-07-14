@@ -1312,13 +1312,5 @@ function vimeoUrlCleaner($url)
  */
 function isLocal($path)
 {
-    if (strpos($path, '//') >= max(strpos($path, '.'), strpos($path, '/'))
-        || (false === strpos($path, '/') && false === strpos($path, '.'))
-    ) {
-        // 1st condition: '//' is only valid in a relative path after a '.' or 
-        //                another path, which would include '/'
-        // 2nd condition: 1st fails for something like 'myfile' where 0 >= max(0,0)
-        return true;
-    }
-    return false;
+    return !filter_var($path, FILTER_VALIDATE_URL);
 }

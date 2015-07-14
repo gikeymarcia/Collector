@@ -1,6 +1,13 @@
 <?php 
     /* @TODO JS functions for seek/start/stop to set start and stop times. */
     /* @TODO JS not needed for YouTube vids, use ?start=10&end=14 */
+    
+    /**
+     * Warning! This is a very primitive version of the Video trial type.
+     * We expect to make improvements in the future, but in the mean time,
+     * try using the YouTube trial type instead, and load your videos to
+     * YouTube rather than your server.
+     **/
 
     if (!isLocal($cue)) {
         // video is not a local file
