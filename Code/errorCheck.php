@@ -400,7 +400,7 @@
         $errors = keyCheck($proc, $column, $errors, $_SESSION['Condition']['Procedure']);
     }
     
-    include 'advancedShuffles.php';
+    include 'shuffleFunctions.php';
     #### Create $_SESSION['Trials'] 
     #### Load all Stimuli and Procedure info for this participant's condition then combine to create the experiment
     // load stimuli for this condition then block shuffle
