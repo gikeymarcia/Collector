@@ -29,8 +29,6 @@
 
  ---------------------------------------------------------------------------- */
 
-/*TODO bring back disabled color from old CSS
-border color, background color, color   -- check from old CSS*/
 
 
 /*  $RESET
@@ -704,11 +702,6 @@ input[type="submit"].button-trial-advance {
   margin: 3% 7%; 
 }
 
-/** TODO change to the active green when checked **/
-/** TODO fix disabled buttons not gray **/
-/** TODO vertical centering tweaks, and moving the Likert down also **/
-/** TODO multiple of same items in Likert answers **/
-/** TODO old/new **/
 
 /* stepout pages */
 .stepout-clock {
