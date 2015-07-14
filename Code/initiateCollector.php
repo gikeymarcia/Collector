@@ -13,7 +13,7 @@
     
     require $_rootF . 'Code/fileLocations.php';         // sends file to the right place
     require $_rootF . $codeF . 'customFunctions.php';
-    require $_rootF . $expFiles . 'Settings.php';       // experiment variables
+    require $_rootF . $expFiles . 'Settings.php';
     
     if ($_rootF === '') {
         $_codeF = $codeF;                               // $_codeF can help link JS/CSS
@@ -22,7 +22,7 @@
     }
     
     $up     = $_rootF;                                  // update $up to match current location
-    $dataF .= $experimentName . '-Data/';                // So data will appear in Data/Collector-Data/
+    $dataF .= Settings::$experimentName . '-Data/';                // So data will appear in Data/Collector-Data/
     
     $path = $up . $dataF . $dataSubFolder . $extraDataF;
     

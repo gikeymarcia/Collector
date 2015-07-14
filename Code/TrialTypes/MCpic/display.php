@@ -1,4 +1,17 @@
 <?php
+    /************
+     * Settings *
+     ************/
+    // Sets the names displayed on the multiple choice buttons
+    $MultiChoiceButtons = array(
+        'Cat1', 'Cat2', 'Cat3', 'Cat4', 'Cat6', 'Cat6', 
+        'Cat7', 'Cat 8', 'Cat9', 'Cat10', 'Cat11', 'Cat 12'
+    );
+    // Sets how many items are displayed per row
+    // use values 1-4; anything bigger causes problems which require css changes
+    $MCitemsPerRow = 4;
+
+
     function trimExplode($delim, $string) {
         $explode = explode($delim, $string);
         foreach ($explode as &$str) {
@@ -11,14 +24,14 @@
     #### Set up MC button grid ####
     // shuffle button positions (first time only) and save to session
     if(isset($_SESSION['MCbutton']) == false) {
-        $mc = $MultiChoiceButtons;   // set this in Settings.php
+        $mc = $MultiChoiceButtons;   // set this above in Settings
         shuffle($mc);        // comment out this line to prevent shuffling
         $_SESSION['MCbutton'] = $mc;
     } else {
         $mc = $_SESSION['MCbutton'];
     }
 
-    // load setting for items per row (in Settings.php)
+    // load setting for items per row (above in Settings)
     $perRow = $perCol = $MCitemsPerRow;
 
     $cues    = trimExplode('|', $cue);

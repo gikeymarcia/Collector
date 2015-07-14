@@ -36,7 +36,7 @@
         $data['strictAcc'] = 0;
     }
     
-    if ($Acc >= $lenientCriteria) {             // lenient scoring
+    if ($Acc >= Settings::$lenientCriteria) {             // lenient scoring
         $data['lenientAcc'] = 1;
     } else {
         $data['lenientAcc'] = 0;

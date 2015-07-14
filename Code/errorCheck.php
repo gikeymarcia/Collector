@@ -26,7 +26,7 @@
 
     $_SESSION = array();                                    // reset session so it doesn't contain any information from a previous login attempt
     $_SESSION['OutputDelimiter'] = $delimiter;
-    $_SESSION['Debug'] = $debugMode;
+    $_SESSION['Debug'] = Settings::$debugMode;
     
     $title = 'Preparing the Experiment';
     require $_codeF . 'Header.php';
@@ -50,11 +50,11 @@
     
     
     #### Checking for debug mode
-    if ((strlen($debugName) > 0)                                            // did we login as debug?
-        AND (substr($username, 0, strlen($debugName)) === $debugName)
+    if ((strlen(Settings::$debugName) > 0)                                            // did we login as debug?
+        AND (substr($username, 0, strlen(Settings::$debugName)) === Settings::$debugName)
     ) {
         $_SESSION['Debug'] = true;
-        $username = trim(substr($username, strlen($debugName)));
+        $username = trim(substr($username, strlen(Settings::$debugName)));
         if ($username === '') { $username = $_SESSION['ID']; }
     }
     if ($_SESSION['Debug'] === true) {                                      // if debug
@@ -78,8 +78,8 @@
     }
     
     // is this user ineligible to participate in the experiment?
-    if (($checkElig == true)
-        AND ($mTurkMode == true)
+    if ((Settings::$checkElig == true)
+        AND (Settings::$mTurkMode == true)
     ) {
         include 'check.php';
     }
@@ -162,7 +162,7 @@
     #### Code to automatically choose condition assignment
     $_SESSION['Condition'] = array();
     $Conditions = GetFromFile($up . $expFiles . $conditionsFileName,  false);   // Loading conditions info
-    $logFile    = $up . $dataF . $countF . $loginCounterName;
+    $logFile    = $up . $dataF . $countF . Settings::$loginCounterName;
     if ($selectedCondition == 'Auto') {
         if (!is_dir($up . $dataF . $countF)) {                                  // create the 'Counter' folder if it doesn't exist
             mkdir($up . $dataF . $countF,  0777,  true);
@@ -288,11 +288,11 @@
     
     
     #### Checking stimuli files for correct image/media path and filenames
-    if (($checkAllFiles == true)
-        OR ($checkCurrentFiles == true)
+    if ((Settings::$checkAllFiles == true)
+        OR (Settings::$checkCurrentFiles == true)
     ) {
         $stimuliFiles = array();
-        if ($checkAllFiles == true) {
+        if (Settings::$checkAllFiles == true) {
             $stimPath = $up . $expFiles . $stimF;
             foreach ($Conditions as $row => $cells) {
                 $stimuliFiles[] = $stimPath . $Conditions[$row]['Stimuli'];
@@ -406,7 +406,7 @@
     // load stimuli for this condition then block shuffle
     $cleanStimuli = GetFromFile($up . $expFiles . $stimF . $_SESSION['Condition']['Stimuli']);
     $stimuli = multiLevelShuffle($cleanStimuli);
-    $stimuli = shuffle2dArray($stimuli, $stopAtLogin);
+    $stimuli = shuffle2dArray($stimuli, Settings::$stopAtLogin);
     $_SESSION['Stimuli'] = $stimuli;
     
     // load and block shuffle procedure for this condition
@@ -426,7 +426,7 @@
     }
     
     $procedure = multiLevelShuffle($cleanProcedure);
-    $procedure = shuffle2dArray($procedure, $stopAtLogin);
+    $procedure = shuffle2dArray($procedure, Settings::$stopAtLogin);
     
     $_SESSION['Procedure'] = $procedure;
     
@@ -504,7 +504,7 @@
                             }                                                   ?>
                 </ol>
                 <?php
-                     if ($stopForErrors == true) {
+                     if (Settings::$stopForErrors == true) {
                          echo '<br/> <h2>The program will not run until you have addressed the above errors</h2>';
                          exit;
                      }
@@ -541,16 +541,16 @@
     
     
     #### Send participant to next phase of experiment (demographics or instructions)
-    if ($doDemographics == true) {
+    if (Settings::$doDemographics == true) {
         $link = 'BasicInfo.php';
-    } elseif ($doInstructions) {
+    } elseif (Settings::$doInstructions) {
         $link = 'instructions.php';
     } else {
         $link = 'experiment.php';
     }
     
     
-    if ($stopAtLogin == true) {             // if things are going wrong this info will help you figure out when the program broke
+    if (Settings::$stopAtLogin == true) {             // if things are going wrong this info will help you figure out when the program broke
         Readable($_SESSION['Condition'],    'Condition information');
         Readable($stimuli,                  'Stimuli file in use ('   . $stimF . $_SESSION['Condition']['Stimuli']   . ')');
         Readable($procedure,                'Procedure file in use (' . $procF . $_SESSION['Condition']['Procedure'] . ')');

@@ -118,7 +118,7 @@
 
         #### if blacklist is enabled, add IP to reject list
         // if (isset($_SESSION)
-            // AND ($blacklist == true)
+            // AND (Settings::$blacklist == true)
         // ) {
             // logIP();
         // }
@@ -129,12 +129,12 @@
                        because you have participated in a previous version of
                        this experiment.';
             $priorExp = true;
-            // if ($blacklist == true) {
+            // if (Settings::$blacklist == true) {
                 // logIP();
             // }
         }
 
-        if (!(in_array($ip, $whitelist, false))) {          // skip the autocheck if IP is allowed
+        if (!(in_array($ip, Settings::$whitelist, false))) {          // skip the autocheck if IP is allowed
             rejectCheck($noGo);                             // print errors
         } elseif ($priorExp == true) {
             echo '<h2>Sorry, you are not eligible to participate in this study

@@ -17,8 +17,6 @@
         #### setting up aliases (for later use)
         $currentPos   =& $_SESSION['Position'];
         $currentTrial =& $_SESSION['Trials'][$currentPos];
-        
-        global $experimentName;
 
         #### Calculating time difference from current to last trial
         $oldTime = $_SESSION['Timestamp'];
@@ -28,7 +26,7 @@
         #### Writing to data file
         $data = array(  'Username'              =>  $_SESSION['Username'],
                         'ID'                    =>  $_SESSION['ID'],
-                        'ExperimentName'        =>  $experimentName,
+                        'ExperimentName'        =>  Settings::$experimentName,
                         'Session'               =>  $_SESSION['Session'],
                         'Trial'                 =>  $_SESSION['Position'],
                         'Date'                  =>  date("c"),
@@ -237,7 +235,7 @@
 
      <?php
         #### Diagnostics ####
-        if (($trialDiagnostics == true)
+        if ((Settings::$trialDiagnostics == true)
             OR ($trialFail == true)
         ) {
             // clean the arrays used so that they output strings, not code

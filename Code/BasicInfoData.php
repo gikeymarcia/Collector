@@ -12,7 +12,7 @@
     // write user demographics data to demographics file
     arrayToLine($data, $demoPath);
     
-    if ($doInstructions) {
+    if (Settings::$doInstructions) {
         $next = 'instructions.php';
     } else {
         $next = 'experiment.php';

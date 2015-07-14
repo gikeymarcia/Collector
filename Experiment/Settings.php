@@ -1,53 +1,110 @@
 <?php
-/*  Collector
-    A program for running experiments on the web
-    Copyright 2012-2015 Mikey Garcia & Nate Kornell
+/**
+ * Experiment Settings Class
  */
-    #### setting experiment variables ####
-    $experimentName   = 'Collector';            // Recorded in datafile and can be useful
-    $loginCounterName = '1.txt';                // Change to restart condition cycling
-    $doDemographics   = false;                  // Can be true or false
-    $doInstructions   = true;
-    $loginCounterName = '1.csv';                // Change to restart condition cycling
-    $nextExperiment   = false;                  // to link use format 'www.cogfog.com/Generic/' do not forget the www and the ending '/'
-
-    // debugging functionality
-    $checkAllFiles = true;                      // if `true`, all cues in all stimuli files will be checked for existence before the experiment
-    $checkCurrentFiles = false;                 // if `true`, with each login, the cues for just that session will be checked for file existence
-    $debugName = '';                            // create a password here to enable the use of the debug name when logging in
-    $debugMode = false;                         // Can be `true` or `false` (without ticks)
-    $debugTime = 1;                             // trial length (in seconds) when in debug mode, if set to '' then timing will be normal in debug mode
-    $trialDiagnostics = false;                  // show trial diagnostics? `true` or `false`
-    $stopAtLogin = false;                       // show diagnostic information once login process is complete
-    $stopForErrors = true;                      // stop experiment progression if errors are found at login? `true` or `false`
-
-    //mTurk Mode
-    $mTurkMode    = false;                      // turn on mTurkMode? `true` or `false` (without ticks)
-    $verification = 'Shinebox';                 // code that shows on done.php
-    $checkElig    = false;                      // use files in eligibility/ folder to check past participation (mTurkMode must be on to use this)
-    $blacklist    = false;                      // when true, the same IP cannot participate twice
-    $whitelist    = array('::1', 'other-ip');   // The IPs in this array will be allowed to participate more than once
-                                                // ::1 is the default IPv6 loopback -- leave it in so that the check will pass when working locally
-
-    // index.php (Starting Page)
-    $showConditionSelector = true;              // Show (true) or hide (false) the condition selector at login?
-    $useConditionNames     = true;              // Use the entry under "Column Description" rather than "Number" in the condition selector
-    $showConditionInfo     = true;              // Show the stimuli and procedure file for each condition when hovering over the options
-    $hideFlaggedConditions = true;              // flag conditions by putting a # character at the beginning of the "Condition Description". When the condition is auto-selected, this condition will be skipped
-    $welcome        = 'Welcome to the experiment!';
-    $expDescription = '<p> This experiment will run for about 25 minutes.  Your goal will be to learn some information.</p>';
-    $askForLogin    = 'Participant ID';         // Will complete the phrase: "Please enter your ". For example, "Please enter your Participant ID"
-
+class Settings
+{
+    /* General Settings */
+    
+    // The name of the experiment
+    public static $experimentName = 'Collector';
+    
+    // Change to restart condition cycling
+    public static $loginCounterName = '1.txt';
+    
+    // Toggle Demographics and Instructions pages on and off
+    public static $doDemographics = false;
+    public static $doInstructions = true;
+    
+    // Link to another experiment; use format 'www.cogfog.com/Generic/' 
+    // note: the www and the trailing '/' must be present
+    public static $nextExperiment = false;
+    
+    // Contact Email
+    public static $experimenterEmail = 'youremail@yourdomain.com';
+    
+    // Access control: to enable getdata OR Tools enter a string other than ''
+    public static $password = '';
     
     // scoring settings
-    $lenientCriteria = 75;                      // determines the % match required to count an answer as 1(correct) or 0(incorrect)
-
-    // trial settings
-    $MultiChoiceButtons    = array( 'Cat1', 'Cat2', 'Cat3', 'Cat4', 'Cat6', 'Cat6', 'Cat7', 'Cat 8', 'Cat9', 'Cat10', 'Cat11', 'Cat 12');
-    $MCitemsPerRow = 4;                         // sets how many items per row when using MCpic trials (use values 1-4; anything bigger causes problems which require css changes
+    // determines the % match required to count an answer as 1(correct) or 0(incorrect)
+    public static $lenientCriteria = 75;
     
-    // done.php
-    $experimenterEmail = 'youremail@yourdomain.com';
     
-    // Access control
-    $Password = '';                        // to enable getdata OR Tools enter a string other than ''
+    
+    
+    
+    /* Debugging Settings */
+    
+    // Toggle checking that all cues in the stimuli files exist 
+    // (all files or only current session's file)
+    public static $checkAllFiles = true;
+    public static $checkCurrentFiles = false;
+    
+    // Create a password here to enable the use of the debug name at login
+    public static $debugName = '';
+    
+    // Toggle debugMode (experiment will run in debug for all users)
+    public static $debugMode = false;
+    
+    // Trial length (in seconds) when in debug mode
+    // (set to '' to use procedure timings)
+    public static $debugTime = 1;                  
+    
+    // Toggle display of trial diagnostics
+    public static $trialDiagnostics = false;
+    
+    // Toggle disply of diagnostic information immediately after login
+    public static $stopAtLogin = false;
+    
+    // Toggle stopping experiment progression if errors are found at login
+    public static $stopForErrors = true;
+    
+    
+    
+    
+    
+    /* mTurk Settings */
+    
+    // Toggle mTurk mode on/off (displays verification, checks eligibility)
+    public static $mTurkMode = false;
+    
+    // Verification code displayed on done.php
+    public static $verification = 'Shinebox';
+    
+    // Toggle using files in eligibility/ folder to check past participation
+    public static $checkElig = false;
+    
+    // Toggle prevention of the same IP from participating more than once
+    public static $blacklist = false;
+    
+    // The IPs in this array will be allowed to participate more than once
+    // ::1 is the default IPv6 loopback -- leave it in so that the check will pass when working locally
+    public static $whitelist = array('::1', 'other-ip');
+    
+    
+    
+    
+    
+    /* index.php (Starting Page) Settings */
+    
+    public static $welcome = 'Welcome to the experiment!';
+    public static $expDescription = '<p> This experiment will run for about 25 minutes.  Your goal will be to learn some information.</p>';
+    
+    // Change to edit this phrase: "Please enter your [Participant ID]"
+    public static $askForLogin = 'Participant ID';
+    
+    // Toggle display of the condition selector
+    public static $showConditionSelector = true;
+    
+    // Toggle which Conditions column is used for condition selector text
+    // true: "Column Description", false: "Number"
+    public static $useConditionNames = true;
+    
+    // Show the stimuli and procedure when hovering over the condition options
+    public static $showConditionInfo = true;
+    
+    // Flag conditions by putting a # character at the beginning of the "Condition Description"
+    // When the conditions are auto-selected, flagged conditions will be skipped
+    public static $hideFlaggedConditions = true;
+}
