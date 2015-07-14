@@ -224,7 +224,7 @@ var COLLECTOR = {
                     focusCount++;
                 }
                 focusProp = Math.round((focusCount/focusChecks)*1000) / 1000;
-                $("#focus").val(focusProp);
+                $("#Focus").val(focusProp);
                 COLLECTOR.timer(.2, focusCheck);
             }
             focusCheck();

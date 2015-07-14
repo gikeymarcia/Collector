@@ -210,7 +210,7 @@
                   <input id="RT"       name="RT"      type="hidden"  value="."/>
                   <input id="RTfirst"  name="RTfirst" type="hidden"  value="."/>
                   <input id="RTlast"   name="RTlast"  type="hidden"  value="."/>
-                  <input id="focus"    name="Focus"   type="hidden"  value="."/>
+                  <input id="Focus"    name="Focus"   type="hidden"  value="."/>
               </form><?php
         else: ?>
             <h2>Could not find the following trial type: <strong><?php echo $trialType; ?></strong></h2>
