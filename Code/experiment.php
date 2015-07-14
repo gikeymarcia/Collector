@@ -220,7 +220,7 @@
             <div class="precache">
                 <form name="UserTiming" class="UserTiming" action="<?php echo $postTo; ?>" method="post">
                     <input id="RT"     name="RT"      type="hidden" value="RT"       />
-                    <input id="focus"  name="focus"   type="hidden" value="notSet"   />
+                    <input id="Focus"  name="Focus"   type="hidden" value="notSet"   />
                     <input class="button" id="FormSubmitButton" type="submit"   value="Done" />
                 </form>
             </div>
