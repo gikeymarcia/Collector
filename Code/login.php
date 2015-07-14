@@ -113,7 +113,7 @@
             'Procedure_File'        => $_SESSION['Condition']['Procedure'],
             'Browser'               => $userAgent->Parent,
             'DeviceType'            => $userAgent->Device_Type,
-            'OS'                    => $ua->Platform,
+            'OS'                    => $userAgent->Platform,
             'IP'                    => $_SERVER["REMOTE_ADDR"],
         );
         arrayToLine($UserData, $statusBeginPath);
@@ -515,7 +515,7 @@
         'Procedure_File'        => $_SESSION['Condition']['Procedure'],
         'Browser'               => $userAgent->Parent,
         'DeviceType'            => $userAgent->Device_Type,
-        'OS'                    => $ua->Platform,
+        'OS'                    => $userAgent->Platform,
         'IP'                    => $_SERVER["REMOTE_ADDR"],
     );
     arrayToLine($UserData, $statusBeginPath);
