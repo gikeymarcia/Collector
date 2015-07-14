@@ -11,7 +11,7 @@
         unset( $_SESSION['LoggedIn'] );
     }
     if( isset( $_POST['Password'] ) ) {
-        if( $_POST['Password'] === Settings::$password ) {
+        if( $_POST['Password'] === $config->password ) {
             $_SESSION['LoggedIn'] = true;
         }
     }

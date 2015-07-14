@@ -861,6 +861,8 @@ function SortByKey(array $input, $key)
  * @global int|string $minTime min time of trial
  * @global int $compTime The trial's specified computer timing, if set.
  * @global int|string $timingReported The timing value indicated by the creator.
+ * @global int|string $debugTime Amount of time to use when debuging, if set.
+ * @global Config config The experiment configuration file.
  */
 function trialTiming()
 {
@@ -870,6 +872,7 @@ function trialTiming()
     global $compTime;
     global $timingReported;
     global $_SESSION;
+    global $config;
     // determine which timing value to use
     if (is_numeric($timingReported)) {
         // use manually set time if possible
@@ -883,8 +886,8 @@ function trialTiming()
     } else { $maxTime = 'user'; } // default compTime if none is set
     
     // override time in debug mode, use standard timing if no debug time is set
-    if ($_SESSION['Debug'] == true && Settings::$debugTime != '') {
-        $maxTime = Settings::$debugTime;
+    if ($_SESSION['Debug'] == true && $config->debugTime != '') {
+        $maxTime = $config->debugTime;
     }
     
     // set class for input form (shows or hides 'submit' button)

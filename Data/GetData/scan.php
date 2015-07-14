@@ -7,9 +7,9 @@
     require 'getdataFunctions.php';
     require $root.$expFiles.'Settings.php';                 // experiment variables
     
-    $dataF .= Settings::$experimentName . '-Data/';
+    $dataF .= $config->experimentName . '-Data/';
     
-    if( Settings::$password === '' ) exit( 'GetData has not been enabled. Please enter a password in the Settings file in your experiment folder.' );
+    if( $config->password === '' ) exit( 'GetData has not been enabled. Please enter a password in the Settings file in your experiment folder.' );
     
     
     #### Column Prefixes ####

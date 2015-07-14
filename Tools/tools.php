@@ -48,7 +48,7 @@
 	<body id="flexBody">
 <?php
     // handling login state and display of login prompt
-    $state = loginState(Settings::$password);
+    $state = loginState($config->password);
     if ($state != 'loggedIn') {
         LoginPrompt($state);
         $admin['status'] = 'attempting';

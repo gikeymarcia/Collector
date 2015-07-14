@@ -26,7 +26,7 @@
         #### Writing to data file
         $data = array(  'Username'              =>  $_SESSION['Username'],
                         'ID'                    =>  $_SESSION['ID'],
-                        'ExperimentName'        =>  Settings::$experimentName,
+                        'ExperimentName'        =>  $config->experimentName,
                         'Session'               =>  $_SESSION['Session'],
                         'Trial'                 =>  $_SESSION['Position'],
                         'Date'                  =>  date("c"),
@@ -232,10 +232,9 @@
     <div id="maxTime"   class="hidden"> <?php echo $maxTime; ?> </div>
     <div id="minTime"   class="hidden"> <?php echo $minTime; ?> </div>
 
-
      <?php
         #### Diagnostics ####
-        if ((Settings::$trialDiagnostics == true)
+        if (($config->trialDiagnostics == true)
             OR ($trialFail == true)
         ) {
             // clean the arrays used so that they output strings, not code
