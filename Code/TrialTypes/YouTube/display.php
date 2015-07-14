@@ -1,8 +1,7 @@
 <?php 
-    /* @TODO JS functions for seek/start/stop to set start and stop times. */
-    /* @TODO JS not needed for YouTube vids, use ?start=10&end=14 */
-    
-    /**
+    /***************************************************************************
+     * README
+     * 
      * How to use:
      * In the Settings column, separate parameters by pipe |
      * Parameters;
@@ -10,12 +9,24 @@
      *         set to false to prevent auto-submission upon video completion
      *     preventEarlySubmit
      *         set to false to disable the submit button until video completion
-     */
+     **************************************************************************/
     
+    
+    /**
+     * Determines if the video is a valid YouTube link.
+     * @param string $string The path to check.
+     * @return boolean
+     */
     function isValidYouTube($string) {
-        if (isLocal($string)) return false;
-        if (false !== stripos($string, 'youtube')) return true;
-        if (false !== stripos($string, 'youtu.be')) return true;
+        if (isLocal($string)) {
+            return false;
+        }
+        if (false !== stripos($string, 'youtube')) {
+            return true;
+        }
+        if (false !== stripos($string, 'youtu.be')) {
+            return true;
+        }
         return false;
     }
     
@@ -24,36 +35,42 @@
             . 'supported. The cue should be a YouTube URL.');
     }
     
+    // extract submitOnDone and preventEarlySubmit settings from $settings
     $submitOnDone       = true;
     $preventEarlySubmit = true;
     $settings = explode('|', $settings);
     foreach ($settings as $setting) {
-        if ($test = removeLabel($setting, 'submitOnDone')) {
-            if ($test === 'false') {
-                $submitOnDone = false;
-            }
-        } elseif ($test = removeLabel($setting, 'preventEarlySubmit')) {
-            if ($test === 'false') {
-                $preventEarlySubmit = false;
-            }
+        $settingSubmit  = removeLabel($setting, 'submitOnDone');
+        $settingPrevent = removeLabel($setting, 'preventEarlySubmit');
+        if ($settingSubmit === 'false') {
+            $submitOnDone = false;
+        }
+        if ($preventEarlySubmit === 'false') {
+            $preventEarlySubmit = false;
         }
     }
     
-    // YouTube URL
+    // get video ID
     $videoId = youtubeUrlCleaner($cue, true);
     
-    if (!isset($startTime) OR !is_numeric($startTime)) { $startTime = 0; }
-    if (!isset($endTime)   OR !is_numeric($endTime))   { $endTime   = 'na'; }
+    // get start and end time from stim file columns
+    if (!isset($startTime) OR !is_numeric($startTime)) { 
+        $startTime = 0; 
+    }
+    if (!isset($endTime)   OR !is_numeric($endTime)) { 
+        $endTime   = 'na'; 
+    }
     
+    // set parameters to append to the URL (https://developers.google.com/youtube/player_parameters)
     $parameters = array(
-        'autoplay'       => 1,
-        'modestbranding' => 1,
-        'controls'       => 0,
-        'rel'            => 0,
-        'showinfo'       => 0,
-        'iv_load_policy' => 3,
-        'start'          => $startTime,
-        'end'            => $endTime
+        'autoplay'       => 1,           // 1: starts the video immediately
+        'modestbranding' => 1,           // 1: removes logo from controls
+        'controls'       => 0,           // 0: hides the controls entirely
+        'rel'            => 0,           // 0: does not show related videos
+        'showinfo'       => 0,           // 0: does not show info like title
+        'iv_load_policy' => 3,           // 3: removes annotations
+        'start'          => $startTime,  // start time in seconds
+        'end'            => $endTime     // end time in seconds
     );
     
 ?>
