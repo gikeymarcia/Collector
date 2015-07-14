@@ -4,7 +4,7 @@
     Copyright 2012-2015 Mikey Garcia & Nate Kornell
  */
     if (!isset($_SESSION)) {
-        include 'CustomFunctions.php';
+        include 'customFunctions.php';
         require 'fileLocations.php';                // sends file to the right place
         require $up . $expFiles . 'Settings.php';   // experiment variables
     }

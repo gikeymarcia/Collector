@@ -12,7 +12,7 @@
     }
     
     require $_rootF . 'Code/fileLocations.php';         // sends file to the right place
-    require $_rootF . $codeF . 'CustomFunctions.php';
+    require $_rootF . $codeF . 'customFunctions.php';
     require $_rootF . $expFiles . 'Settings.php';       // experiment variables
     
     if ($_rootF === '') {
