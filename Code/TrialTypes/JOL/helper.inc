@@ -1,2 +1,2 @@
 <?php
-    $outputColumns = array('JOL', 'RT', 'RTkey', 'RTlast');
+    $outputColumns = array('JOL', 'RT', 'RTfirst', 'RTlast');

@@ -207,10 +207,10 @@
             trialTiming();                                   // find out what kind of class name to give the up-coming form
             ?><form class="<?php echo $formClass; ?> invisible" action="<?php echo $postTo; ?>" method="post" id="content">
                   <?php include $trialFiles['display'] ?>
-                  <input id="RT"     name="RT"      type="hidden" value="RT"       />
-                  <input id="RTkey"  name="RTkey"   type="hidden" value="no press" />
-                  <input id="RTlast" name="RTlast"  type="hidden" value="no press" />
-                  <input id="focus"  name="focus"   type="hidden" value="notSet"   />
+                  <input id="RT"       name="RT"      type="hidden"  value="."/>
+                  <input id="RTfirst"  name="RTfirst" type="hidden"  value="."/>
+                  <input id="RTlast"   name="RTlast"  type="hidden"  value="."/>
+                  <input id="focus"    name="Focus"   type="hidden"  value="."/>
               </form><?php
         else: ?>
             <h2>Could not find the following trial type: <strong><?php echo $trialType; ?></strong></h2>

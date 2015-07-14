@@ -1,2 +1,2 @@
 <?php
-    $outputColumns = array('RT', 'Response', 'ResponseComplete', 'Accuracy', 'RTkey', 'RTlast', 'strictAcc', 'lenientAcc');
+    $outputColumns = array('RT', 'Response', 'ResponseComplete', 'Accuracy', 'RTfirst', 'RTlast', 'strictAcc', 'lenientAcc');
