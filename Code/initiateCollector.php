@@ -14,8 +14,7 @@
     require $_rootF . 'Code/fileLocations.php';         // sends file to the right place
     require $_rootF . $codeF . 'customFunctions.php';
     require $_rootF . $codeF . 'Parse.php';
-    require $_rootF . $expFiles . 'Config.php';
-    $config = new Config();
+    $config = Parse::fromConfig($_rootF . $expFiles . 'BasicConfig.ini', true);
     
     
     if ($_rootF === '') {
@@ -25,7 +24,7 @@
     }
     
     $up     = $_rootF;                                  // update $up to match current location
-    $dataF .= $config->experimentName . '-Data/';                // So data will appear in Data/Collector-Data/
+    $dataF .= $config->experiment_name . '-Data/';                // So data will appear in Data/Collector-Data/
     
     $path = $up . $dataF . $dataSubFolder . $extraDataF;
     

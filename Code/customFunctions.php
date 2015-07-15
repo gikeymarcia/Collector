@@ -886,8 +886,8 @@ function trialTiming()
     } else { $maxTime = 'user'; } // default compTime if none is set
     
     // override time in debug mode, use standard timing if no debug time is set
-    if ($_SESSION['Debug'] == true && $config->debugTime != '') {
-        $maxTime = $config->debugTime;
+    if ($_SESSION['Debug'] == true && $config->debug_time != '') {
+        $maxTime = $config->debug_time;
     }
     
     // set class for input form (shows or hides 'submit' button)

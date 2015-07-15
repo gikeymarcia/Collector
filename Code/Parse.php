@@ -12,7 +12,7 @@ class Parse {
     /**
      * Parses a configuration file and returns an associative array.
      * @param string $filename configuration file to parse
-     * @return array associative array of the configurations
+     * @return array|stdClass associative array or class of the configurations
      * @throws Exception
      */
     public static function fromConfig($filename, $returnObject = false)

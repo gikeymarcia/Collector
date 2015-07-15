@@ -26,7 +26,7 @@
         #### Writing to data file
         $data = array(  'Username'              =>  $_SESSION['Username'],
                         'ID'                    =>  $_SESSION['ID'],
-                        'ExperimentName'        =>  $config->experimentName,
+                        'ExperimentName'        =>  $config->experiment_name,
                         'Session'               =>  $_SESSION['Session'],
                         'Trial'                 =>  $_SESSION['Position'],
                         'Date'                  =>  date("c"),
@@ -234,7 +234,7 @@
 
      <?php
         #### Diagnostics ####
-        if (($config->trialDiagnostics == true)
+        if (($config->trial_diagnostics == true)
             OR ($trialFail == true)
         ) {
             // clean the arrays used so that they output strings, not code

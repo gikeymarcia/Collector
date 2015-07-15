@@ -25,20 +25,20 @@
     
     
     // Set the page message
-    if ($config->nextExperiment == false) {
+    if ($config->next_experiment == false) {
         $title   = 'Done!';
         $message = '<h2>Thank you for your participation!</h2>'
                  .  '<p>If you have any questions about the experiment please email '
-                 .      '<a href="mailto:' . $config->experimenterEmail . '?Subject=Comments%20on%20' . $config->experimentName . '" target="_top">' . $config->experimenterEmail . '</a>'
+                 .      '<a href="mailto:' . $config->experimenter_email . '?Subject=Comments%20on%20' . $config->experiment_name . '" target="_top">' . $config->experimenter_email . '</a>'
                  .  '</p>';
-        if ($config->mTurkMode == true) {
+        if ($config->mTurk_mode == true) {
             $message .= '<h3>Your verification code is: ' . $config->verification . '-' . $_SESSION['ID'] .'</h3>';
         }
     } else {
         $title    = 'Quick Break';
         $message  = '<h2>Experiment will resume in 5 seconds.</h2>';
-        $nextLink = 'http://' . $config->nextExperiment;
-        $username = $_SESSION['Debug'] ? $config->debugName . ' ' . $_SESSION['Username'] : $_SESSION['Username'];
+        $nextLink = 'http://' . $config->next_experiment;
+        $username = $_SESSION['Debug'] ? $config->debug_name . ' ' . $_SESSION['Username'] : $_SESSION['Username'];
         echo '<meta http-equiv="refresh" content="5; url=' . $nextLink . 'Code/login.php?Username='
             . urlencode($username) . '&Condition=Auto&ID=' . $_SESSION['ID'] . '">';
     }
