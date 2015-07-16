@@ -1,6 +1,6 @@
 <?php
     require '../Code/fileLocations.php';
-    require $up . $codeF . 'CustomFunctions.php';
+    require $up . $codeF . 'customFunctions.php';
     require $up . $expFiles . 'Settings.php';
     require 'loginFunctions.php';
     session_start();

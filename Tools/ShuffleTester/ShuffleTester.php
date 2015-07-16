@@ -5,7 +5,7 @@
     
     // needed for this tool
     $root = '../';                                      // gets us to the root
-    require_once $root . 'Code/advancedShuffles.php';   // advanced (Tyson) shuffles
+    require_once $root . 'Code/shuffleFunctions.php';  // load shuffle functions
     
     // making a place to store all variables (storing inside admin is best because it will be wiped on logout)
     $_SESSION['admin']['shuffleTester'] = array();

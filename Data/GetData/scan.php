@@ -3,7 +3,7 @@
     error_reporting(-1);                                    // better to see that errors exist, than to think the data is fine without looking at it
     $code = 'Code/';
     require $root.$code.'fileLocations.php';
-    require $root.$code.'CustomFunctions.php';
+    require $root.$code.'customFunctions.php';
     require 'getdataFunctions.php';
     require $root.$expFiles.'Settings.php';                 // experiment variables
     
