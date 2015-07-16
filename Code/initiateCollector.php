@@ -19,17 +19,17 @@
     $_FILES = new FileLocations($_root, $fileConfig);
     
     // load configs
-    $config = Parse::fromConfig($_FILES->expt.'/BasicConfig.ini', true);
+    $_CONFIG = Parse::fromConfig($_FILES->expt.'/Config.ini', true);
     
     // load custom functions
     require $_FILES->code.'/customFunctions.php';
     
     // update data path so that data will appear in Data/Collector-Data/
-    $_FILES->updateParentPath('data', $_FILES->data->path. '/' . $config->experiment_name.'-Data/');
+    $_FILES->updateParentPath('data', $_FILES->data->path. '/' . $_CONFIG->experiment_name.'-Data/');
             
     // update data paths with the file extensions
-    $_FILES->demographics->path .= $config->output_file_ext;
-    $_FILES->status_begin->path .= $config->output_file_ext;
-    $_FILES->status_end->path .= $config->output_file_ext;
-    $_FILES->final_questions_data->path .= $config->output_file_ext;
-    $_FILES->instructions_data->path .= $config->output_file_ext;
+    $_FILES->demographics->path .= $_CONFIG->output_file_ext;
+    $_FILES->status_begin->path .= $_CONFIG->output_file_ext;
+    $_FILES->status_end->path .= $_CONFIG->output_file_ext;
+    $_FILES->final_questions_data->path .= $_CONFIG->output_file_ext;
+    $_FILES->instructions_data->path .= $_CONFIG->output_file_ext;

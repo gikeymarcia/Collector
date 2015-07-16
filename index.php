@@ -65,18 +65,18 @@
 <form   id="content"            name="Login"
         action="<?=$action?>"   method="get"
         autocomplete="off"      class="index"   >
-    <h1 class="textcenter"><?= $config->welcome ?></h1>
-    <?= $config->exp_description ?>
+    <h1 class="textcenter"><?= $_CONFIG->welcome ?></h1>
+    <?= $_CONFIG->exp_description ?>
     
     <section id="indexLogin" class="flexVert">
         <div class="textcenter flexChild">
-            <?= 'Please enter your ' . $config->ask_for_login;  ?>
+            <?= 'Please enter your ' . $_CONFIG->ask_for_login;  ?>
         </div>
         <div class="flexChild">
-            <input name="Username" type="text" value="" autocomplete="off" class="collectorInput" placeholder="<?= $config->ask_for_login ?>">
+            <input name="Username" type="text" value="" autocomplete="off" class="collectorInput" placeholder="<?= $_CONFIG->ask_for_login ?>">
             
             <!-- Condition selector -->
-        <?php if ($config->show_condition_selector == true): ?>
+        <?php if ($_CONFIG->show_condition_selector == true): ?>
             <select name="Condition" class="collectorInput">
         <?php else: ?>
             <select class="hidden" name="Condition">
@@ -84,15 +84,15 @@
                 <option default selected value="Auto">Auto</option>
         <?php  // Display conditions as options
                 foreach ($Conditions as $i => $cond) {
-                    if ($config->hide_flagged_conditions AND $cond['Condition Description'][0] === '#') { continue; }
+                    if ($_CONFIG->hide_flagged_conditions AND $cond['Condition Description'][0] === '#') { continue; }
                     // showing condition description on hover
-                    if ($config->use_condition_names) {
+                    if ($_CONFIG->use_condition_names) {
                         $name = $cond['Number'] . '. ' . $cond['Condition Description'];
                     } else {
                         $name = $cond['Number'];
                     }
                     // showing Stimuli + Procedure files for each condition
-                    if ($config->show_condition_info) {
+                    if ($_CONFIG->show_condition_info) {
                         $title = ' title="' . $_FILES->stim_files.'/' . $cond['Stimuli'] . ' - ' . $_FILES->proc_files.'/' . $cond['Procedure'] . '"';
                     } else {
                         $title = '';

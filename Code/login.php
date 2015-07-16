@@ -5,8 +5,8 @@
     require 'initiateCollector.php';
     
     $_SESSION = array();                                    // reset session so it doesn't contain any information from a previous login attempt
-    $_SESSION['OutputDelimiter'] = $config->delimiter;
-    $_SESSION['Debug'] = $config->debug_mode;
+    $_SESSION['OutputDelimiter'] = $_CONFIG->delimiter;
+    $_SESSION['Debug'] = $_CONFIG->debug_mode;
     
     $title = 'Preparing the Experiment';
     require $_FILES->code . '/Header.php';
@@ -32,12 +32,12 @@
     
     
     #### Check for debug mode
-    if ((strlen($config->debug_name) > 0)
-        AND (substr($username, 0, strlen($config->debug_name)) === $config->debug_name)
+    if ((strlen($_CONFIG->debug_name) > 0)
+        AND (substr($username, 0, strlen($_CONFIG->debug_name)) === $_CONFIG->debug_name)
     ) {
         // logged in as debug
         $_SESSION['Debug'] = true;
-        $username = trim(substr($username, strlen($config->debug_name)));
+        $username = trim(substr($username, strlen($_CONFIG->debug_name)));
         if ($username === '') { $username = $_SESSION['ID']; }
     }
     if ($_SESSION['Debug'] === true) {
@@ -60,8 +60,8 @@
     }
     
     // is this user ineligible to participate in the experiment?
-    if (($config->check_elig == true)
-        AND ($config->mTurk_mode == true)
+    if (($_CONFIG->check_elig == true)
+        AND ($_CONFIG->mTurk_mode == true)
     ) {
         include 'check.php';
     }
@@ -94,7 +94,7 @@
             exit;
         }
         // Overwrite values that need to be updated
-        $outputFile = ComputeString($config->output_file_name) . $config->output_file_ext;                                 // write to new file
+        $outputFile = ComputeString($_CONFIG->output_file_name) . $_CONFIG->output_file_ext;                                 // write to new file
         $_SESSION['Output File'] = "{$_FILES->raw_output}/{$outputFile}";
         $_SESSION['Start Time']  = date('c');
         
@@ -145,7 +145,7 @@
     #### Code to automatically choose condition assignment
     $_SESSION['Condition'] = array();
     $Conditions = GetFromFile($_FILES->conditions,  false);   // Loading conditions info
-    $logFile    = "{$_FILES->counter}/{$config->login_counter_file}";
+    $logFile    = "{$_FILES->counter}/{$_CONFIG->login_counter_file}";
     if ($selectedCondition == 'Auto') {
         if (!is_dir($_FILES->counter)) {                                  // create the 'Counter' folder if it doesn't exist
             mkdir($_FILES->counter,  0777,  true);
@@ -271,11 +271,11 @@
     
     
     #### Checking stimuli files for correct image/media path and filenames
-    if (($config->check_all_files == true)
-        OR ($config->check_current_files == true)
+    if (($_CONFIG->check_all_files == true)
+        OR ($_CONFIG->check_current_files == true)
     ) {
         $stimuliFiles = array();
-        if ($config->check_all_files == true) {
+        if ($_CONFIG->check_all_files == true) {
             $stimPath = $_FILES->stim_files.'/';
             foreach ($Conditions as $row => $cells) {
                 $stimuliFiles[] = $stimPath . $Conditions[$row]['Stimuli'];
@@ -391,7 +391,7 @@
     // load stimuli for this condition then block shuffle
     $cleanStimuli = GetFromFile($_FILES->stim_files.'/' . $_SESSION['Condition']['Stimuli']);
     $stimuli = multiLevelShuffle($cleanStimuli);
-    $stimuli = shuffle2dArray($stimuli, $config->stop_at_login);
+    $stimuli = shuffle2dArray($stimuli, $_CONFIG->stop_at_login);
     $_SESSION['Stimuli'] = $stimuli;
     
     // load and block shuffle procedure for this condition
@@ -411,7 +411,7 @@
     }
     
     $procedure = multiLevelShuffle($cleanProcedure);
-    $procedure = shuffle2dArray($procedure, $config->stop_at_login);
+    $procedure = shuffle2dArray($procedure, $_CONFIG->stop_at_login);
     
     $_SESSION['Procedure'] = $procedure;
     
@@ -467,7 +467,7 @@
     
     
     #### Figuring out what the output filename will be
-    $outputFile = ComputeString($config->output_file_name) . $config->output_file_ext;
+    $outputFile = ComputeString($_CONFIG->output_file_name) . $_CONFIG->output_file_ext;
     $_SESSION['Output File'] = "{$_FILES->raw_output}/{$outputFile}";
     $_SESSION['Start Time']  = date('c');
     
@@ -489,7 +489,7 @@
                             }                                                   ?>
                 </ol>
                 <?php
-                     if ($config->stop_for_errors == true) {
+                     if ($_CONFIG->stop_for_errors == true) {
                          echo '<br/> <h2>The program will not run until you have addressed the above errors</h2>';
                          exit;
                      }
@@ -526,16 +526,16 @@
     
     
     #### Send participant to next phase of experiment (demographics or instructions)
-    if ($config->run_demographics == true) {
+    if ($_CONFIG->run_demographics == true) {
         $link = 'BasicInfo.php';
-    } elseif ($config->run_instructions) {
+    } elseif ($_CONFIG->run_instructions) {
         $link = 'instructions.php';
     } else {
         $link = 'experiment.php';
     }
     
     
-    if ($config->stop_at_login == true) {             // if things are going wrong this info will help you figure out when the program broke
+    if ($_CONFIG->stop_at_login == true) {             // if things are going wrong this info will help you figure out when the program broke
         Readable($_SESSION['Condition'],    'Condition information');
         Readable($stimuli,                  'Stimuli file in use ('   . $_FILES->stim_files.'/' . $_SESSION['Condition']['Stimuli']   . ')');
         Readable($procedure,                'Procedure file in use (' . $_FILES->proc_files.'/' . $_SESSION['Condition']['Procedure'] . ')');

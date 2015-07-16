@@ -855,7 +855,7 @@ function trialTiming()
     global $compTime;
     global $timingReported;
     global $_SESSION;
-    global $config;
+    global $_CONFIG;
     // determine which timing value to use
     if (is_numeric($timingReported)) {
         // use manually set time if possible
@@ -869,8 +869,8 @@ function trialTiming()
     } else { $maxTime = 'user'; } // default compTime if none is set
     
     // override time in debug mode, use standard timing if no debug time is set
-    if ($_SESSION['Debug'] == true && $config->debug_time != '') {
-        $maxTime = $config->debug_time;
+    if ($_SESSION['Debug'] == true && $_CONFIG->debug_time != '') {
+        $maxTime = $_CONFIG->debug_time;
     }
     
     // set class for input form (shows or hides 'submit' button)

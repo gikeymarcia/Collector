@@ -233,7 +233,7 @@
 
      <?php
         #### Diagnostics ####
-        if (($config->trial_diagnostics == true)
+        if (($_CONFIG->trial_diagnostics == true)
             OR ($trialFail == true)
         ) {
             // clean the arrays used so that they output strings, not code

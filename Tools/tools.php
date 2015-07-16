@@ -11,7 +11,7 @@
     $_FILES = new FileLocations($_root, $fileConfig);
     
     // load configs
-    $config = Parse::fromConfig($_FILES->expt.'/BasicConfig.ini', true);
+    $_CONFIG = Parse::fromConfig($_FILES->expt.'/Config.ini', true);
     
     // load custom functions
     require $_FILES->code.'/customFunctions.php';
@@ -60,7 +60,7 @@
 	<body id="flexBody">
 <?php
     // handling login state and display of login prompt
-    $state = loginState($config->password);
+    $state = loginState($_CONFIG->password);
     if ($state != 'loggedIn') {
         LoginPrompt($state);
         $admin['status'] = 'attempting';

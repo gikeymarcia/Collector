@@ -13,7 +13,7 @@
         $_FILES = new FileLocations($_root, $fileConfig);
         
         // load configs
-        $config = Parse::fromConfig($_FILES->expt.'/BasicConfig.ini', true);
+        $_CONFIG = Parse::fromConfig($_FILES->expt.'/Config.ini', true);
 
         // load custom functions
         require $_FILES->code.'/customFunctions.php';
@@ -145,7 +145,7 @@
             // }
         }
 
-        if (!(in_array($ip, $config->whitelist, false))) {          // skip the autocheck if IP is allowed
+        if (!(in_array($ip, $_CONFIG->whitelist, false))) {          // skip the autocheck if IP is allowed
             rejectCheck($noGo);                             // print errors
         } elseif ($priorExp == true) {
             echo '<h2>Sorry, you are not eligible to participate in this study
