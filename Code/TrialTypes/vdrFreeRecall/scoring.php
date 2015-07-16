@@ -19,15 +19,15 @@
         if( $str1 === $str2 ) {
             return 0;
         }
-        if( abs( strlen($str1) - strlen($str2) ) > $limit ) { return FALSE; }
+        if( abs( strlen($str1) - strlen($str2) ) > $limit ) { return false; }
         if( $str1 === '' ) {
-            if( strlen($str2) > $limit ) { return FALSE; }
+            if( strlen($str2) > $limit ) { return false; }
             else {
                 return strlen( $str2 );     //if first is empty, length of second
             }
         }
         elseif( $str2 === '' ) {
-            if( strlen($str1) > $limit ) { return FALSE; }
+            if( strlen($str1) > $limit ) { return false; }
             else {
                 return strlen( $str1 );         //and if only the second is empty, length of the first
             }
@@ -70,11 +70,11 @@
             }
             $sd[$str1[$i-1]] = $i;
             if( $score[$i][max(1,$j+$i-strlen($str1)-1)] > $limit ) {
-                return FALSE; 
+                return false; 
             }
         }
         if( $score[strlen($str1)+1][strlen($str2)+1] > $limit ) {
-            return FALSE;
+            return false;
         }
         return $score[strlen($str1)+1][strlen($str2)+1];
     }
@@ -172,13 +172,13 @@
             if( in_array( $res, $unacceptable[$i] ) ) { continue; }
             if( (substr($res,-1)==='y' AND substr($ans,-3)==='ies') OR (substr($ans,-1)==='y' AND substr($res,-3)==='ies') ) { $plural = 2; } else { $plural = 0; }     //no penalties for knowing how to spell
             $dist = DamLevLimit( $ans, $res, $leniency[$i]+$plural );
-            if( $dist === FALSE ) { continue; }
+            if( $dist === false ) { continue; }
             $damLevByRes[ $j ][ $i ] = $dist;
             $damLevByAns[ $i ][ $j ] = $dist;
         }
     }
     $match = array();
-    while( count($damLevByAns, TRUE) !== count($damLevByAns) ) {            //keep going until all of our Answer rows are empty, meaning they have had all possible matches removed
+    while( count($damLevByAns, true) !== count($damLevByAns) ) {            //keep going until all of our Answer rows are empty, meaning they have had all possible matches removed
         foreach( $damLevByAns as $i => $resArray ) {
             foreach( $resArray as $j => $diff ) {
                 if( $diff === min($resArray) AND $diff === min($damLevByRes[$j]) ) {
@@ -232,10 +232,10 @@
     $data['unmatchedAns']   = implode( '|', $unmatchedAnswers   );  //we can see which words were not identified
     $unmatchedResp = array();
     foreach( $respExp as $resp ) {
-        $found = FALSE;
+        $found = false;
         foreach( $matchedAnswers as $i => $ans ) {
             if( $resp === trim(strtolower( $ans )) ) {
-                $found = TRUE;
+                $found = true;
                 unset( $matchedAnswers[$i] );
                 break;
             }
@@ -312,6 +312,6 @@
                 $extraData['Serial_strictVal']    = 0;
             }
             
-            recordTrial($extraData, FALSE, FALSE);
+            recordTrial($extraData, false, false);
         }
     }

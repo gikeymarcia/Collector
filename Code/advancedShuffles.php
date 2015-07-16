@@ -1,15 +1,15 @@
 <?php
-    function findSetting( &$settings, $target, $removeFound = TRUE ) {
+    function findSetting( &$settings, $target, $removeFound = true ) {
         foreach( $settings as $key => $setting ) {
             $test = removeLabel( $setting, $target );
-            if( $test !== FALSE ) {
+            if( $test !== false ) {
                 if( $removeFound ) {
                     unset( $settings[$key] );
                 }
                 return $test;
             }
         }
-        return FALSE;
+        return false;
     }
     
     function shuffleAssoc( &$array ) {
@@ -40,16 +40,16 @@
         }
     }
     
-    function shuffle2dArray( $array, $debug = FALSE ) {
+    function shuffle2dArray( $array, $debug = false ) {
         $notShuffle = array(
-             ''     => TRUE
-            ,'0'    => TRUE
-            ,'off'  => TRUE
-            ,'no'   => TRUE
+             ''     => true
+            ,'0'    => true
+            ,'off'  => true
+            ,'no'   => true
         );
         
         if( $debug ) $startCopy = $array;
-        $showShuffles = FALSE;
+        $showShuffles = false;
         
         $padding  = array();
         $firstRow = current($array);
@@ -65,17 +65,17 @@
         foreach( $headers as $header ) {
             // if the column doesn't explicitly say which columns to target,
             // then we will just use the previous columns as the target
-            $prevColumns[ $header ] = TRUE;
-            if( stripos( $header, 'advshuffle' ) !== FALSE ) {
-                $showShuffles = TRUE;
+            $prevColumns[ $header ] = true;
+            if( stripos( $header, 'advshuffle' ) !== false ) {
+                $showShuffles = true;
                 $shuffleInfo = explode( ';', $header );
                 // the type of shuffle (simple, block, or list), should be before the first semicolon
                 $type = array_shift( $shuffleInfo );
                 
                 $target = findSetting( $shuffleInfo, 'target' );
                 if( is_bool($target) ) {
-                    // if FALSE, "target" wasn't found.  
-                    // if TRUE, they had the "target" keyword, but no columns
+                    // if false, "target" wasn't found.  
+                    // if true, they had the "target" keyword, but no columns
                     // either way, just shuffle the columns up to this point
                     $targets = $prevColumns;
                 } else {
@@ -93,15 +93,15 @@
                             $last = findIndex( $headers, $last, $header );
                             $targRange = range( $first, $last );
                             foreach( $targRange as $t ) {
-                                $targets[ $headers[$t] ] = TRUE;
+                                $targets[ $headers[$t] ] = true;
                             }
                         } else {
-                            $targets[ $headers[ $first ] ] = TRUE;
+                            $targets[ $headers[ $first ] ] = true;
                         }
                     }
                 }
                 // targets should include itself, so that the shuffle column will reflect its own changes
-                $targets[ $header ] = TRUE;
+                $targets[ $header ] = true;
                 
                 $within = findSetting( $shuffleInfo, 'within' );
                 if( is_bool($within) ) {
@@ -117,7 +117,7 @@
                     // add the within to the targets, so that if block shuffle
                     // affects the order of the non-shuffled rows, we can still see that
                     // also, we can display the within during debugging
-                    $targets[ $withinCol ] = TRUE;
+                    $targets[ $withinCol ] = true;
                     $within = array();
                     foreach( $array as $i => $row ) {
                         $within[$i] = $row[ $withinCol ];
@@ -141,11 +141,11 @@
                     echo '</div>';
                 }
                 
-                if(       stripos( $type, 'block' ) !== FALSE ) {
+                if(       stripos( $type, 'block' ) !== false ) {
                     superBlockShuffle(  $shuffled, $header, $within, $notShuffle );
-                } elseif( stripos( $type, 'list'  ) !== FALSE ) {
+                } elseif( stripos( $type, 'list'  ) !== false ) {
                     listShuffle(   $shuffled, $header, $within, $notShuffle );
-                } elseif( stripos( $type, 'side'  ) !== FALSE ) {
+                } elseif( stripos( $type, 'side'  ) !== false ) {
                     sideShuffle(   $shuffled, $header, $within, $notShuffle );
                 } else {
                     simpleShuffle( $shuffled, $header, $within, $notShuffle );
@@ -260,8 +260,8 @@
         $blocks = array();
         $blocksToShuffle = array();
         $currentBlock = -1;
-        $prevWith = FALSE;
-        $prevCode = FALSE;
+        $prevWith = false;
+        $prevCode = false;
         $shufflePatterns = array();
         foreach( $array as $i => $row ) {
             // first, if this is a non-shuffled row, standardize this value
@@ -361,7 +361,7 @@
                 // if each() has reached the end of an array, use the first row in that list instead
                 // also, we need to increment the array's internal pointer, since using reset() will
                 // return the first value without moving the pointer to the next row
-                if( $index === FALSE ) {
+                if( $index === false ) {
                     $newArray[$i] = $array[ reset( $lists[ $within[$i] ][ $row[ $shuffle ] ] ) ];
                     next( $lists[ $within[$i] ][ $row[ $shuffle ] ] );
                 } else {

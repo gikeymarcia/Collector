@@ -40,7 +40,7 @@ function addColumn(array &$array, $column, $value = '')
  * @param array $data The associative array of data to write.
  * @param string $filename The path to the file to write to.
  * @param string $delim A single character noting the delimiter in the file.
- * @param bool $encodeToWin Set FALSE if you want to retain current encoding.
+ * @param bool $encodeToWin Set false if you want to retain current encoding.
  * @return array
  * @see writeLineToFile()
  */
@@ -160,7 +160,7 @@ function readCsv($filename, $delim = ',', $length = 0)
  * @param string $filename File to output the file to.
  * @param array $data 2D array of data.
  * @param string $delim A single character noting the delimiter in the file.
- * @param bool $append Change to TRUE to append instead of overwrite the file.
+ * @param bool $append Change to true to append instead of overwrite the file.
  * @see fForceOpen()
  */
 function writeCsv($filename, array $data, $delim = ',', $append = false)
@@ -180,7 +180,7 @@ function writeCsv($filename, array $data, $delim = ',', $append = false)
  * Opens a file, and creates file's directory if it does not exist.
  * @param string $filename The file to open.
  * @param string $mode The way the file should be opened.
- * @return mixed Returns a file pointer resource on success, or FALSE on error.
+ * @return mixed Returns a file pointer resource on success, or false on error.
  * @see \fopen()
  */
 function fForceOpen($filename, $mode)
@@ -290,7 +290,7 @@ function multiLevelShuffle ($input, $levels = 0) {
         for ($i=0; $i < count($input); $i++) {
             $current   = $input[$i][$root.$levels];                     // save current shuffle code
             $currentLo = $input[$i][$root.$subLevel];                   // save lower shuffle code
-            if ((strpos($begin, $offChar) !== FALSE)                     // if the current shuffle code is turned off
+            if ((strpos($begin, $offChar) !== false)                     // if the current shuffle code is turned off
                  OR (strtolower($begin) == 'off')
              ) {
                 if ($begin == $current) {
@@ -301,7 +301,7 @@ function multiLevelShuffle ($input, $levels = 0) {
                     $subset = array();                                  // empty the subset
                     $begin = $current;
                     // $beginLo = $currentLo;
-                    if ((strpos($begin, $offChar) !== FALSE)                 // if the next code is turned off
+                    if ((strpos($begin, $offChar) !== false)                 // if the next code is turned off
                          OR (strtolower($begin) == 'off')
                      ) {
                         $subset[] = $input[$i];                             // add it to the current subset
@@ -324,7 +324,7 @@ function multiLevelShuffle ($input, $levels = 0) {
                 $subset = array();
                 $begin  = $current;
                 $holder = array();
-                if ((strpos($begin, $offChar) !== FALSE)
+                if ((strpos($begin, $offChar) !== false)
                     OR (strtolower($begin) == 'off')
                 ) {
                     $subset[] = $input[$i];                         // add current item to the subset if shuffle code is off
@@ -357,7 +357,7 @@ function multiLevelShuffle ($input, $levels = 0) {
         }
         foreach ($groupedItems as $shuffleType => &$items) {
             if ((strtolower($shuffleType) == 'off')                 // if the group code is set to off
-                OR (strpos($shuffleType, $offChar) !== FALSE)
+                OR (strpos($shuffleType, $offChar) !== false)
             ) {
                 continue;                                               // skip shuffling of items (within the group)
             } else {
@@ -463,7 +463,7 @@ function eraseArrayValues(array &$array)
  * @see scalarsToArray()
  * @see getColumnsFrom2d()
  */
-function display2dArray(array $array, $nonArrayCol = FALSE)
+function display2dArray(array $array, $nonArrayCol = false)
 {
     static $doInit = true;
     if ($doInit) {
@@ -472,7 +472,7 @@ function display2dArray(array $array, $nonArrayCol = FALSE)
         print2dArrayCss();
     }
     // format array and extract columns
-    if ($nonArrayCol == FALSE) {
+    if ($nonArrayCol == false) {
         $i = 0;
         while (is_scalar($array[$i])) {
             unset($array[$i]);
@@ -655,7 +655,7 @@ function fixBadChars($string, $outputEncoding = 'UTF-8')
  * two padding rows are used at the top to ensure that row indices correspond
  * to matching Excel rows.
  * @param string $filename The file to read.
- * @param bool $padding Set FALSE if no padding rows are desired.
+ * @param bool $padding Set false if no padding rows are desired.
  * @param string $delimiter A single character noting the delimiter in the file.
  * @return array
  */
@@ -907,7 +907,7 @@ function readable(array $displayArray, $name = "Untitled array")
  * @param string $input The string to strip the label from.
  * @param string $label The label to strip.
  * @param bool $extendLabel Checks if the label is followed by certain.
- * characters removes them as well. Set FALSE for strict matching to $label.
+ * characters removes them as well. Set false for strict matching to $label.
  * @return mixed
  */
 function removeLabel($input, $label, $extendLabel = true)
@@ -938,7 +938,7 @@ function removeLabel($input, $label, $extendLabel = true)
  * @param string $string
  * @return string
  */
-function show($string, $endOnly = TRUE)
+function show($string, $endOnly = true)
 {
     // navigate path to Experiment folder (unless linking to external file)
     if (!inString('www.', $string)) {
@@ -1017,7 +1017,7 @@ function trialTiming()
     } else { $maxTime = 'user'; } // default compTime if none is set
     
     // override time in debug mode, use standard timing if no debug time is set
-    if ($_SESSION['Debug'] == TRUE && $debugTime != '') {
+    if ($_SESSION['Debug'] == true && $debugTime != '') {
         $maxTime = $debugTime;
     }
     
@@ -1030,7 +1030,7 @@ function trialTiming()
 }
 /**
  * case-insensitive version of is_dir(), returns directory path with existing case if found,
- * returns boolean FALSE if not found
+ * returns boolean false if not found
  * @param string $dirname The directory to search for
  * @return string|bool
  */
@@ -1059,15 +1059,15 @@ function is_iDir ($dirname) {
 /**
  * Finds a path to a target file, checking the filename and each directory
  * name in the path case-insensitively. If a target file is found, returns
- * the path with the correct, existing casing. Otherwise, returns FALSE.
+ * the path with the correct, existing casing. Otherwise, returns false.
  * Optionally searches for files with the same name but alternative
  * extensions (defaults to true). Optionally searches for both files
- * and directories (defaults to TRUE, and if set to FALSE, will return
- * FALSE if a directory is found)
+ * and directories (defaults to true, and if set to false, will return
+ * false if a directory is found)
  *
  * @param string $path The file to search for.
- * @param bool $findAltExtensions Set FALSE for strict extension checking.
- * @param bool $findDir Set FALSE to only return paths to actual files,
+ * @param bool $findAltExtensions Set false for strict extension checking.
+ * @param bool $findDir Set false to only return paths to actual files,
  *                      rather than directories
  * @return string|bool
  */
@@ -1245,6 +1245,20 @@ function SortArrayLikeArray(array $array, array $template)
         }
     }
     return $out;
+}
+
+function getUserAgentInfo()
+{
+    require_once 'phpbrowscap/Browscap.php';
+    
+    // phpbrowscap requires a cache; create cache dir if it doesn't exist
+    if (!file_exists('phpbrowscap/cache')) {
+        mkdir('phpbrowscap/cache', 0777, true);
+    }
+    
+    // get and return the user agent info
+    $bc = new phpbrowscap\Browscap('phpbrowscap/cache');
+    return $bc->getBrowser();
 }
 /**
  * Strips the URL scheme (HTTP, HTTPS) from a URL and ensures that the URL

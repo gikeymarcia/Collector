@@ -12,7 +12,7 @@
     }
     if( isset( $_POST['Password'] ) ) {
         if( $_POST['Password'] === $Password ) {
-            $_SESSION['LoggedIn'] = TRUE;
+            $_SESSION['LoggedIn'] = true;
         }
     }
     if( !isset( $_SESSION['LoggedIn'] ) ) {
@@ -24,8 +24,8 @@
     $sessionList = array();
     $condList = array();
     foreach( $IDs as $id ) {
-        $experimentList[ $id['Exp'] ] = TRUE;
-        $sessionList[ $id['Sess'] ] = TRUE;
+        $experimentList[ $id['Exp'] ] = true;
+        $sessionList[ $id['Sess'] ] = true;
         $condList[ $id['Cond'] ] = $id['CndN'];
     }
     $experimentList = array_keys( $experimentList );
@@ -43,25 +43,25 @@
     foreach( $users as $user => $exps ) {
         $expFlags = array();
         if( count($exps) > 1 ) {
-            $expFlags['Multiple Experiments'] = TRUE;
+            $expFlags['Multiple Experiments'] = true;
         }
         foreach( $exps as $conds ) {
             $conFlags = array();
             if( count($conds) > 1 ) {
-                $conFlags['Multiple Conditions'] = TRUE;
+                $conFlags['Multiple Conditions'] = true;
             }
             foreach( $conds as $sessS ) {
                 $sesFlags = array();
                 $sessMax = max(array_keys($sessS));
                 for( $i=1; $i<$sessMax; ++$i ) {
                     if( !isset( $sessS[$i] ) ) {
-                        $sesFlags['Missing Sessions'] = TRUE;
+                        $sesFlags['Missing Sessions'] = true;
                     }
                 }
                 foreach( $sessS as $ids ) {
                     $idsFlags = array();
                     if( count($ids) > 1 ) {
-                        $idsFlags['Multiple IDs'] = TRUE;
+                        $idsFlags['Multiple IDs'] = true;
                     }
                     foreach( $ids as $id => $fileName ) {
                         $IDs[$id]['Error Flags'] = $expFlags + $conFlags + $sesFlags + $idsFlags;
@@ -75,9 +75,9 @@
         foreach( $categories as $category ) {
             if( !isset( $extraFileMeta[$category]['files'] ) ) { continue; }        // if this file doesn't exist, no need to flag IDs that don't have this data
             if( !isset( $id[ $category ] ) ) {
-                $IDs[$i]['Error Flags']['Missing '.$category] = TRUE;
+                $IDs[$i]['Error Flags']['Missing '.$category] = true;
             } elseif( getArrayDims( $id[$category] ) > 1 ) {
-                $IDs[$i]['Error Flags']['Overlapping '.$category] = TRUE;
+                $IDs[$i]['Error Flags']['Overlapping '.$category] = true;
             }
         }
     }
@@ -85,8 +85,8 @@
     $flagTypes = array();
     foreach( $IDs as $i => $id ) {
         foreach( $id['Error Flags'] as $flag => $true ) {
-            $userFlags[ $id['Name'] ][$flag] = TRUE;
-            $flagTypes[$flag] = TRUE;
+            $userFlags[ $id['Name'] ][$flag] = true;
+            $flagTypes[$flag] = true;
         }
     }
     $images = array(
@@ -133,9 +133,9 @@
                     <div class="InputContainer">                        
                         <?php
                             createBlock( 'Main Data' , array('Demographics', 'Experiment', 'Final Questions') );
-                            createBlock( 'Extra Data', array('Status Begin', 'Status End', 'Instructions'), FALSE );
-                            createBlock( 'File Type', array( 'txt', 'csv', 'browser' ), TRUE, TRUE );
-                            // createBlock( 'Completion', array( 'Any', 'Session' ), TRUE, TRUE );      // this can be put back after multi-session is upgraded
+                            createBlock( 'Extra Data', array('Status Begin', 'Status End', 'Instructions'), false );
+                            createBlock( 'File Type', array( 'txt', 'csv', 'browser' ), true, true );
+                            // createBlock( 'Completion', array( 'Any', 'Session' ), true, true );      // this can be put back after multi-session is upgraded
                         ?>
                     </div>
                 </div>
@@ -143,9 +143,9 @@
                 <div class="Column Half">
                     <div class="InputContainer">
                         <?php
-                            createBlock( 'Experiments', $experimentList, TRUE, FALSE, TRUE );
-                            createBlock( 'Conditions', array_keys($condList), TRUE, FALSE, TRUE, array_values($condList), '.' );
-                            createBlock( 'Session', $sessionList, TRUE, FALSE, TRUE );
+                            createBlock( 'Experiments', $experimentList, true, false, true );
+                            createBlock( 'Conditions', array_keys($condList), true, false, true, array_values($condList), '.' );
+                            createBlock( 'Session', $sessionList, true, false, true );
                         ?>
                         
                     </div>
@@ -162,7 +162,7 @@
                 <div class="Column Half">
                     <div class="InputContainer">
                         <?php
-                            createBlock( 'Trial Types', $trialTypes, TRUE, FALSE, TRUE );
+                            createBlock( 'Trial Types', $trialTypes, true, false, true );
                         ?>
                     </div>
                 </div>
@@ -170,7 +170,7 @@
                 <div class="Column Half">
                     <div class="InputContainer">
                         <?php
-                            createBlock( 'Max Time', array( 'Numeric', 'Not Numeric' ), TRUE, FALSE, TRUE );
+                            createBlock( 'Max Time', array( 'Numeric', 'Not Numeric' ), true, false, true );
                         ?>
                         <div class="Head">Trials</div>
                         <input type="text" name="Trials" />
@@ -186,7 +186,7 @@
                     foreach( $outputHeaders as $category => $columns ) {
                         echo '<div class="Column Half">
                                 <div class="InputContainer">';
-                        createBlock( $category, $columns, TRUE, FALSE, TRUE, array(), '', 'Columns' );
+                        createBlock( $category, $columns, true, false, true, array(), '', 'Columns' );
                         echo '  </div>
                             </div>';
                     }
@@ -200,7 +200,7 @@
                         if( $category === 'Final_Questions' ) { continue; }
                         echo '<div class="Column Half">
                                 <div class="InputContainer">';
-                        createBlock( $category, array_keys($fileMeta['Columns']), TRUE, FALSE, TRUE, array(), '', $category.'_Columns' );
+                        createBlock( $category, array_keys($fileMeta['Columns']), true, false, true, array(), '', $category.'_Columns' );
                         echo '  </div>
                             </div>';
                     }
@@ -423,7 +423,7 @@
                     foreach ($searchTemplates as $template)
                     {
                         $templateName   = substr($template, 0, -5);
-                        $templateInfo   = json_decode(file_get_contents($templateDirectory . $template), TRUE);
+                        $templateInfo   = json_decode(file_get_contents($templateDirectory . $template), true);
                         $dataCategories = array('Conditions', 'Session', 'Trial_Types', 'Max Time', 'Columns', 'Demographics_Columns', 'Status_Begin_Columns', 'Status_End_Columns', 'Final_Questions_Columns');
                         $dataFiles      = array('Demographics', 'Experiment', 'Final_Questions', 'Status_Begin', 'Status_End', 'Instructions');
                         

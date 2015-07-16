@@ -12,6 +12,7 @@
 
  $RESET            HTML5 reset
  $COLORS           App-wide color palette
+ $FONTS            Custom Fonts
  $TYPOGRAPHY       Text styling
  $BUTTONS          Buttons
  $FORMS            Forms
@@ -28,8 +29,6 @@
 
  ---------------------------------------------------------------------------- */
 
-/*TODO bring back disabled color from old CSS
-border color, background color, color   -- check from old CSS*/
 
 
 /*  $RESET
@@ -166,12 +165,120 @@ img {
 
 
 
+/*  $FONTS
+ ---------------------------------------------------------------------------- */
+@font-face {
+    font-family: 'inconsolata_local';
+    src: url('fonts/inconsolata-webfont.eot');
+    src: url('fonts/inconsolata-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/inconsolata-webfont.woff2') format('woff2'),
+         url('fonts/inconsolata-webfont.woff') format('woff'),
+         url('fonts/inconsolata-webfont.ttf') format('truetype'),
+         url('fonts/inconsolata-webfont.svg#inconsolatamedium') format('svg');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'open_sans_local';
+    src: url('fonts/opensans-bold-webfont.eot');
+    src: url('fonts/opensans-bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/opensans-bold-webfont.woff2') format('woff2'),
+         url('fonts/opensans-bold-webfont.woff') format('woff'),
+         url('fonts/opensans-bold-webfont.ttf') format('truetype'),
+         url('fonts/opensans-bold-webfont.svg#open_sansbold') format('svg');
+    font-weight: 700;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'open_sans_local';
+    src: url('fonts/opensans-bolditalic-webfont.eot');
+    src: url('fonts/opensans-bolditalic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/opensans-bolditalic-webfont.woff2') format('woff2'),
+         url('fonts/opensans-bolditalic-webfont.woff') format('woff'),
+         url('fonts/opensans-bolditalic-webfont.ttf') format('truetype'),
+         url('fonts/opensans-bolditalic-webfont.svg#open_sansbold_italic') format('svg');
+    font-weight: 700;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'open_sans_local';
+    src: url('fonts/opensans-italic-webfont.eot');
+    src: url('fonts/opensans-italic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/opensans-italic-webfont.woff2') format('woff2'),
+         url('fonts/opensans-italic-webfont.woff') format('woff'),
+         url('fonts/opensans-italic-webfont.ttf') format('truetype'),
+         url('fonts/opensans-italic-webfont.svg#open_sansitalic') format('svg');
+    font-weight: 400;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'open_sans_local';
+    src: url('fonts/opensans-regular-webfont.eot');
+    src: url('fonts/opensans-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/opensans-regular-webfont.woff2') format('woff2'),
+         url('fonts/opensans-regular-webfont.woff') format('woff'),
+         url('fonts/opensans-regular-webfont.ttf') format('truetype'),
+         url('fonts/opensans-regular-webfont.svg#open_sansregular') format('svg');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'roboto_local';
+    src: url('fonts/roboto-bold-webfont.eot');
+    src: url('fonts/roboto-bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/roboto-bold-webfont.woff2') format('woff2'),
+         url('fonts/roboto-bold-webfont.woff') format('woff'),
+         url('fonts/roboto-bold-webfont.ttf') format('truetype'),
+         url('fonts/roboto-bold-webfont.svg#robotobold') format('svg');
+    font-weight: 700;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'roboto_local';
+    src: url('fonts/roboto-bolditalic-webfont.eot');
+    src: url('fonts/roboto-bolditalic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/roboto-bolditalic-webfont.woff2') format('woff2'),
+         url('fonts/roboto-bolditalic-webfont.woff') format('woff'),
+         url('fonts/roboto-bolditalic-webfont.ttf') format('truetype'),
+         url('fonts/roboto-bolditalic-webfont.svg#robotobold_italic') format('svg');
+    font-weight: 700;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'roboto_local';
+    src: url('fonts/roboto-italic-webfont.eot');
+    src: url('fonts/roboto-italic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/roboto-italic-webfont.woff2') format('woff2'),
+         url('fonts/roboto-italic-webfont.woff') format('woff'),
+         url('fonts/roboto-italic-webfont.ttf') format('truetype'),
+         url('fonts/roboto-italic-webfont.svg#robotoitalic') format('svg');
+    font-weight: 400;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'roboto_local';
+    src: url('fonts/roboto-regular-webfont.eot');
+    src: url('fonts/roboto-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/roboto-regular-webfont.woff2') format('woff2'),
+         url('fonts/roboto-regular-webfont.woff') format('woff'),
+         url('fonts/roboto-regular-webfont.ttf') format('truetype'),
+         url('fonts/roboto-regular-webfont.svg#robotoregular') format('svg');
+    font-weight: 400;
+    font-style: normal;
+}
+
+
+
+
 /*  $TYPOGRAPHY
       note: for consent form styles, see $FORMS
  ----------------------------------------------------------------------------- */
 body, html, textbox, select {
   color: #111;
-  font-family: "Open Sans", Arial, sans-serif;
+  font-family: "Open Sans", "open_sans_local", Arial, sans-serif;
   font-size: 1em;
 }
 
@@ -182,7 +289,7 @@ input, select, textarea, button {
 
 h1,h2,h3,h4,h5,h6,a {
   color: #069;  /* brand color */
-  font-family: "Roboto", Arial, sans-serif;
+  font-family: "Roboto", "roboto_local", Arial, sans-serif;
   font-weight: 400;
 }
 
@@ -231,7 +338,7 @@ em, i {
 
 code {
   background: #f7f7f7;
-  font-family: "Inconsolata", "Courier New", Courier, monospace;
+  font-family: "Inconsolata", "inconsolata_local", "Courier New", Courier, monospace;
   padding: 3px 5px;
   font-size: 92%;
   line-height: 1.45;
@@ -254,7 +361,7 @@ button::-moz-focus-inner, input::-moz-focus-inner  {
 /*  $BUTTONS 
  ---------------------------------------------------------------------------- */
 .collectorButton {
-  font-family:"Open Sans", Helvetica, Arial, sans-serif;
+  font-family:"Open Sans", "open_sans_local", Helvetica, Arial, sans-serif;
   text-align:center;
   padding:.25em .4em .45em .4em;
   color:#fff;
@@ -595,11 +702,6 @@ input[type="submit"].button-trial-advance {
   margin: 3% 7%; 
 }
 
-/** TODO change to the active green when checked **/
-/** TODO fix disabled buttons not gray **/
-/** TODO vertical centering tweaks, and moving the Likert down also **/
-/** TODO multiple of same items in Likert answers **/
-/** TODO old/new **/
 
 /* stepout pages */
 .stepout-clock {
@@ -643,7 +745,7 @@ input[type="submit"].button-trial-advance {
 /* format diagnostics */
 .diagnostics {
   margin-top:2em;
-  font-family: "Inconsolata", monaco, monospace;
+  font-family: "Inconsolata", "inconsolata_local", "Courier New", Courier, monospace;
   clear: both;
   font-size: .9em;
 }
@@ -804,10 +906,13 @@ ul li, ol li {
         line-height: 1.2em;
     }
 #salt {
-    font-family: "Inconsolata", "Courier New", Courier, monospace;
-    color: #f7f7f7;         font-weight: lighter;
-    width: 300px;           line-height: 95%;
-    word-wrap: break-word;  display: block;
+    font-family: "Inconsolata", "inconsolata_local", "Courier New", Courier, monospace;
+    color: #f7f7f7;         
+    font-weight: 400; /* we only have the 400s for inconsolata */
+    width: 300px;           
+    line-height: 95%;
+    word-wrap: break-word;  
+    display: block;
     margin: 50px auto 20px auto;
 }
 #nav {

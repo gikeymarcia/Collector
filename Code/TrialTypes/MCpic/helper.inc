@@ -1,3 +1,3 @@
 <?php
     $neededColumns = array('Settings');
-    $outputColumns = array('RT', 'Response', 'Accuracy', 'RTkey', 'RTlast', 'strictAcc', 'lenientAcc', 'Buttons');
+    $outputColumns = array('RT', 'Response', 'Accuracy', 'RTfirst', 'RTlast', 'strictAcc', 'lenientAcc', 'Buttons');

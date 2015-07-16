@@ -8,8 +8,8 @@
     #### this code was causing more problems than it is solving
     # Need to think of a better anti-cheat mode but for now we are skipping any done.php check
     // if someone skipped to done.php without doing all trials
-    // if ((array_key_exists('finishedTrials', $_SESSION) == FALSE)
-    //     OR ($_SESSION['finishedTrials'] != TRUE)
+    // if ((array_key_exists('finishedTrials', $_SESSION) == false)
+    //     OR ($_SESSION['finishedTrials'] != true)
     // ) {
     //     header("Location: http://www.youtube.com/watch?v=oHg5SJYRHA0");            // rick roll people trying to skip to done.php
     //     exit;
@@ -18,20 +18,20 @@
     
     // turn off error reporting for debug mode
     if (array_key_exists('Debug', $_SESSION)) {
-        if ($_SESSION['Debug'] == FALSE) {
+        if ($_SESSION['Debug'] == false) {
             error_reporting(0);
         }
     }
     
     
     // Set the page message
-    if ($nextExperiment == FALSE) {
+    if ($nextExperiment == false) {
         $title   = 'Done!';
         $message = '<h2>Thank you for your participation!</h2>'
                  .  '<p>If you have any questions about the experiment please email '
                  .      '<a href="mailto:' . $experimenterEmail . '?Subject=Comments%20on%20' . $experimentName . '" target="_top">' . $experimenterEmail . '</a>'
                  .  '</p>';
-        if ($mTurkMode == TRUE) {
+        if ($mTurkMode == true) {
             $message .= '<h3>Your verification code is: ' . $verification . '-' . $_SESSION['ID'] .'</h3>';
         }
     } else {
@@ -80,7 +80,7 @@
             $_SESSION['Position']++;                        // increment counter so next session will begin after the *NewSession* (if multisession)
             $_SESSION['Session']++;                         // increment session # so next login will be correctly labeled as the next session
             $_SESSION['ID'] = rand_string();                // generate a new ID (for next login)
-            $_SESSION['finishedTrials'] = FALSE;            // will stop them from skipping to done.php during next session
+            $_SESSION['finishedTrials'] = false;            // will stop them from skipping to done.php during next session
             $_SESSION['LastFinish'] = time();
         }
         

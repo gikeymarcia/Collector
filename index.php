@@ -23,14 +23,14 @@
     $_SESSION = array();                             
     
     // load and sort conditions
-    $Conditions = GetFromFile($expFiles.$conditionsFileName, FALSE);
+    $Conditions = GetFromFile($expFiles.$conditionsFileName, false);
     $conditionNumbers = array();
     foreach ($Conditions as $cond) {
         if ($cond['Condition Description'][0] === '#') { continue; }
         if (isset($conditionNumbers[$cond['Number']])) {
             exit('Error: Multiple Conditions use the same number. Please check your "'.$conditionsFileName.'" file and make sure each number in the "Number" column is unique.');
         } else {
-            $conditionNumbers[$cond['Number']] = TRUE;
+            $conditionNumbers[$cond['Number']] = true;
             if (!file_exists($expFiles . $stimF . $cond['Stimuli'])) {
                 exit('Error: The stimuli file "'   . $cond['Stimuli']   . '" could not be found in the ' . $stimF . ' subfolder of the ' . $expFiles . ' folder, for Condition ' . $cond['Number'] . ': ' . $cond['Condition Description'] . '. Either rename a file to "' . $cond['Stimuli']   . '" or change this entry in the "'.$conditionsFileName.'" file to match an existing file.');
             }
@@ -76,7 +76,7 @@
             <input name="Username" type="text" value="" autocomplete="off" class="collectorInput" placeholder="<?= $askForLogin ?>">
             
             <!-- Condition selector -->
-        <?php if ($showConditionSelector == TRUE): ?>
+        <?php if ($showConditionSelector == true): ?>
             <select name="Condition" class="collectorInput">
         <?php else: ?>
             <select class="hidden" name="Condition">

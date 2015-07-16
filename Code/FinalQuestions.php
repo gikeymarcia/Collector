@@ -6,7 +6,7 @@
     require 'initiateCollector.php';
     
     // if this is the first time on FinalQuestions.php then load questions from file
-    if (isset($_SESSION['FinalQs']) == FALSE) {
+    if (isset($_SESSION['FinalQs']) == false) {
         $fQ = GetFromFile($up.$expFiles.$finalQuestionsFileName);
         // loop that deletes trailing empty positions from $fQ array
         for ($i=(count($fQ)-1); $i>0; $i--) {

@@ -224,7 +224,7 @@ var COLLECTOR = {
                     focusCount++;
                 }
                 focusProp = Math.round((focusCount/focusChecks)*1000) / 1000;
-                $("#focus").val(focusProp);
+                $("#Focus").val(focusProp);
                 COLLECTOR.timer(.2, focusCheck);
             }
             focusCheck();
@@ -249,7 +249,7 @@ var COLLECTOR = {
                 else {
                     // monitor and log first/last keypress
                     if (keypress == false) {                    // on first keypress
-                        $("#RTkey").val( COLLECTOR.getRT() );   // set first keypress times
+                        $("#RTfirst").val( COLLECTOR.getRT() );   // set first keypress times
                         keypress = true;
                     }
                     $("#RTlast").val( COLLECTOR.getRT() );      // update 'RTlast' time
@@ -267,7 +267,7 @@ var COLLECTOR = {
                     $("form").submit();                         // see common:init "intercept FormSubmitButton"
                 } else {
                     if (keypress === false) {
-                        $("#RTkey").val( COLLECTOR.getRT() );   // set first keypress times
+                        $("#RTfirst").val( COLLECTOR.getRT() );   // set first keypress times
                         keypress === true;
                     }
                     $("#RTlast").val( COLLECTOR.getRT() );      // update 'RTlast' time

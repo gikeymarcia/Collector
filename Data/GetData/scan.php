@@ -100,7 +100,7 @@
     $allOutputFiles = is_dir( $path ) ? scandir( $path ) : array();
     foreach( $allOutputFiles as $fileName ) {
         $firstRow = getFirstLine( $path.$fileName, $testHeader );
-        if( $firstRow === FALSE ) { continue; }
+        if( $firstRow === false ) { continue; }
         if( isset( $_POST['IDs'] ) AND !isset($IDs[$firstRow['ID']]) ) { continue; }
         $outputColumns += $firstRow;                                                    // we only care about the keys, so the contents don't matter
         $name       = $firstRow['Username'];
@@ -128,7 +128,7 @@
     $allExtraFiles = is_dir( $path ) ? scandir( $path ) : array();
     foreach( $allExtraFiles as $fileName ) {
         foreach( $extraFileMeta as $category => $fileMeta ) {
-            if( strpos( $fileName, $fileMeta['fileName'] ) !== FALSE ) {
+            if( strpos( $fileName, $fileMeta['fileName'] ) !== false ) {
                 $extraFileMeta[ $category ][ 'files' ][] = $fileName;
             }
         }
@@ -140,13 +140,13 @@
     foreach( $extraFileMeta as $category => $fileMeta ) {
         if( !isset( $fileMeta['files'] ) ) { continue; }
         foreach( $fileMeta['files'] as $fileName ) {
-            $data = GetFromFile( $path.$fileName, FALSE );
-            $d = getFirstLine( $path.$fileName, $testHeader, TRUE );
-            if( $d === FALSE ) { continue; }
+            $data = GetFromFile( $path.$fileName, false );
+            $d = getFirstLine( $path.$fileName, $testHeader, true );
+            if( $d === false ) { continue; }
             $file = fopen( $path.$fileName, "r" );
             $keys = fgetcsv( $file, 0, $d );
             if( $category !== 'Final_Questions' ) { $extraFileMeta[ $category ]['Columns'] += array_flip($keys); }
-            while( ($line = fgetcsv($file, 0, $d)) !== FALSE ) {
+            while( ($line = fgetcsv($file, 0, $d)) !== false ) {
                 $row = array_combine_safely( $keys, $line );
                 
                 if( !isset( $IDs[$row['ID']] ) ) { continue; }      // if we don't have output from this person, we don't use any of their data
@@ -155,10 +155,10 @@
                     if( strtolower(trim($row['Type'])) === 'checkbox' ) {
                         if( $row['Response'] === '' ) { continue; }
                         $IDs[ $row['ID'] ][ $category ][ $row['Question'].'_'.$row['Response'] ] = $row['Response'];
-                        $extraFileMeta[$category]['Columns'][$row['Question'].'_'.$row['Response']] = TRUE;
+                        $extraFileMeta[$category]['Columns'][$row['Question'].'_'.$row['Response']] = true;
                     } else {
                         $IDs[ $row['ID'] ][ $category ][ $row['Question'] ] = $row['Response'];
-                        $extraFileMeta[$category]['Columns'][$row['Question']] = TRUE;
+                        $extraFileMeta[$category]['Columns'][$row['Question']] = true;
                     }
                 } else {
                     $IDs[ $row['ID'] ][ $category ] = $row;

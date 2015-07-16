@@ -2,9 +2,9 @@
     function checkPass ($response, $password, $salt, $hash_algo) {
         $correct = hash($hash_algo, $salt . $password);
         if ($correct === $response) {
-            return TRUE;
+            return true;
         } else {
-            return FALSE;
+            return false;
         }
     }
     
@@ -100,7 +100,7 @@
         for ($i = 0; $i < $bytes; $i++) {
             $seed .= chr(mt_rand(0, 255));
         }
-        $NONCE = hash('sha512', $seed, FALSE);
+        $NONCE = hash('sha512', $seed, false);
         return $NONCE;
     }
     
