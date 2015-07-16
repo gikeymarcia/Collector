@@ -1129,3 +1129,71 @@ function getUserAgentInfo()
     $bc = new phpbrowscap\Browscap('phpbrowscap/cache');
     return $bc->getBrowser();
 }
+/**
+ * Strips the URL scheme (HTTP, HTTPS) from a URL and ensures that the URL
+ * starts with '//'.
+ * @param string $url
+ * @return string
+ */
+function stripUrlScheme($url)
+{
+    $stripped = preg_replace("@^(?:https?:)?//@", "//", $url);
+    if (0 !== strpos($stripped, '//')) {
+        $stripped = '//'.$stripped;
+    }
+    return $stripped;
+}
+
+/**
+ * Returns a normalized YouTube link. All links are converted to YouTube's
+ * embed format and stripped of all parameters passed as queries.
+ * @param string $url The YouTube URL to clean-up
+ * @return string
+ */
+function youtubeUrlCleaner($url, $justReturnId = false)
+{
+    $urlParts = parse_url(stripUrlScheme($url));
+    
+    if ('youtu.be' === strtolower($urlParts['host'])) {
+        // share links: youtu.be/[VIDEO ID]
+        $id = ltrim($urlParts['path'], '/');
+    } else if (stripos($urlParts['path'], 'watch') === 1) {
+        // watch links: youtube.com/watch?v=[VIDEO ID]
+        parse_str($urlParts['query']); 
+        $id = $v;
+    } else {
+        // embed links: youtube.com/embed/[VIDEO ID]
+        // API links: youtube.com/v/[VIDEO ID]
+        $pathParts = explode('/', $urlParts['path']);
+        $id = end($pathParts);
+    }
+    
+    if ($justReturnId) {
+        return $id;
+    } else {
+        return '//www.youtube.com/embed/'.$id;
+    }
+}
+/**
+ * Returns a normalized Vimeo link. All links are converted to Vimeo's
+ * embed format and stripped of all parameters passed as queries.
+ * @param string $url The Vimeo URL to clean-up
+ * @return string
+ */
+function vimeoUrlCleaner($url)
+{
+    $urlParts = parse_url(stripUrlScheme($url));
+    $pathParts = explode('/', $urlParts['path']);
+    $id = end($pathParts);
+    
+    return '//player.vimeo.com/video/'.$id;
+}
+/**
+ * Determines if a file is local or not.
+ * @param string $path The path to check
+ * @return boolean
+ */
+function isLocal($path)
+{
+    return !filter_var($path, FILTER_VALIDATE_URL);
+}
