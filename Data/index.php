@@ -4,9 +4,9 @@
     Copyright 2012-2015 Mikey Garcia & Nate Kornell
  */
     $root = '../';
+    require $root.'/Code/initiateCollector.php';
     require 'GetData/scan.php';
     
-    session_start();
     if( isset( $_POST['LogOut'] ) ) {
         unset( $_SESSION['LoggedIn'] );
     }

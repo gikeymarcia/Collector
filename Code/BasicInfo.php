@@ -6,7 +6,7 @@
     require 'initiateCollector.php';
     
     $title = 'Basic Information';
-    require $_codeF . 'Header.php';
+    require $_FILES->code . '/Header.php';
 ?>
 <style>
     #flexBody {
@@ -125,4 +125,4 @@
 </form>
 
 <?php
-    require $_codeF . 'Footer.php';
+    require $_FILES->code . '/Footer.php';

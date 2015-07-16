@@ -1,16 +1,11 @@
 <?php
     ini_set('auto_detect_line_endings', true);              // fixes problems reading files saved on mac
-    error_reporting(-1);                                    // better to see that errors exist, than to think the data is fine without looking at it
-    $code = 'Code/';
-    require $root.$code.'fileLocations.php';
-    require $root.$code.'customFunctions.php';
     require 'getdataFunctions.php';
-    require $root.$expFiles.'Settings.php';                 // experiment variables
-    
-    $dataF .= $config->experimentName . '-Data/';
     
     if( $config->password === '' ) exit( 'GetData has not been enabled. Please enter a password in the Settings file in your experiment folder.' );
     
+    // filter user input before using
+    $POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
     
     #### Column Prefixes ####
     $expPrefix              = 'Exp_';
@@ -24,8 +19,8 @@
     
     // scan the TrialType folder, and take the name of any file ending in .php as a trial type
     $trialTypes = array();
-    if( is_dir( $root.$code.$trialF ) ) {
-        $trialTypeFiles = scandir( $root.$code.$trialF );
+    if( is_dir( $_FILES->trial_types ) ) {
+        $trialTypeFiles = scandir( $_FILES->trial_types );
         foreach( $trialTypeFiles as $fileName ) {
             if( strtolower(substr( $fileName, -4 )) === '.php' ) {
                 $trialTypes[] = substr( $fileName, 0, -4 );
@@ -39,30 +34,30 @@
     // their output in later sessions or different conditions
     $extraFileMeta = array(
          'Demographics'     => array(
-             'fileName'         => $demographicsFileName
+             'fileName'         => pathinfo($_FILES->demographics, PATHINFO_FILENAME)
             ,'Prefix'           => $demographicsPrefix
             ,'Scope'            => 'Experiment' )
         ,'Final_Questions'  => array(
-             'fileName'         => $finalQuestionsDataFileName
+             'fileName'         => pathinfo($_FILES->final_questions_data, PATHINFO_FILENAME)
             ,'Prefix'           => $finalQuestionsPrefix
             ,'Scope'            => 'Condition' )
         ,'Status_Begin'     => array(
-             'fileName'         => $statusBeginFileName
+             'fileName'         => pathinfo($_FILES->status_begin, PATHINFO_FILENAME)
             ,'Prefix'           => $statusBeginPrefix
             ,'Scope'            => 'ID' )
         ,'Status_End'       => array(
-             'fileName'         => $statusEndFileName
+             'fileName'         => pathinfo($_FILES->status_end, PATHINFO_FILENAME)
             ,'Prefix'           => $statusEndPrefix
             ,'Scope'            => 'ID' )
         ,'Instructions'     => array(
-             'fileName'         => $instructionsDataFileName
+             'fileName'         => pathinfo($_FILES->instructions_data, PATHINFO_FILENAME)
             ,'Prefix'           => $instructionsPrefix
             ,'Scope'            => 'Condition' )
     );
     
-    if( !isset($_POST['Password']) AND count( $_POST ) > 0 ) {
+    if( !isset($POST['Password']) AND count( $POST ) > 0 ) {
         foreach( $extraFileMeta as $category => $fileMeta ) {
-            if( !isset( $_POST[$category] ) OR !isset( $_POST[$category.'_Columns'] ) ) {
+            if( !isset( $POST[$category] ) OR !isset( $POST[$category.'_Columns'] ) ) {
                 unset( $extraFileMeta[$category] );
             }
         }
@@ -93,15 +88,15 @@
      */
     
     $testHeader = 'Username';                                                           // make this a header that you are sure will appear in every output file
-    $path = $root.$dataF.$nonDebugF.$outputF;
+    $path = $_FILES->raw_output;
     $users = array();
-    $IDs = isset($_POST['IDs']) ? array_flip($_POST['IDs']) : array();
+    $IDs = isset($POST['IDs']) ? array_flip($POST['IDs']) : array();
     $outputColumns = array();
     $allOutputFiles = is_dir( $path ) ? scandir( $path ) : array();
     foreach( $allOutputFiles as $fileName ) {
-        $firstRow = getFirstLine( $path.$fileName, $testHeader );
+        $firstRow = getFirstLine( "{$path}/{$fileName}", $testHeader );
         if( $firstRow === false ) { continue; }
-        if( isset( $_POST['IDs'] ) AND !isset($IDs[$firstRow['ID']]) ) { continue; }
+        if( isset( $POST['IDs'] ) AND !isset($IDs[$firstRow['ID']]) ) { continue; }
         $outputColumns += $firstRow;                                                    // we only care about the keys, so the contents don't matter
         $name       = $firstRow['Username'];
         $exp        = $firstRow['ExperimentName'];
@@ -124,26 +119,27 @@
     unset( $allOutputFiles );                                                           // might as well free up some memory
     
     // find all files in the folder for extra data that have a name matching one of our extra files
-    $path = $root.$dataF.$nonDebugF.$extraDataF;
+    $path = $_FILES->extra_data; 
     $allExtraFiles = is_dir( $path ) ? scandir( $path ) : array();
-    foreach( $allExtraFiles as $fileName ) {
+    $extraFiles = array_splice($allExtraFiles, 2); // remove the '.' and '..'
+    foreach( $extraFiles as $fileName ) {
         foreach( $extraFileMeta as $category => $fileMeta ) {
             if( strpos( $fileName, $fileMeta['fileName'] ) !== false ) {
                 $extraFileMeta[ $category ][ 'files' ][] = $fileName;
             }
-        }
+        } 
     }
-    unset( $allExtraFiles );
+    unset($allExtraFiles, $extraFiles);
     
     // inside each extra file, match each row (or rows, for final questions) with its ID in $IDs
     // while we are here, get the column options for the menu
     foreach( $extraFileMeta as $category => $fileMeta ) {
         if( !isset( $fileMeta['files'] ) ) { continue; }
         foreach( $fileMeta['files'] as $fileName ) {
-            $data = GetFromFile( $path.$fileName, false );
-            $d = getFirstLine( $path.$fileName, $testHeader, true );
+            $data = GetFromFile( "{$path}/{$fileName}", false );
+            $d = getFirstLine( "{$path}/{$fileName}", $testHeader, true );
             if( $d === false ) { continue; }
-            $file = fopen( $path.$fileName, "r" );
+            $file = fopen( "{$path}/{$fileName}", "r" );
             $keys = fgetcsv( $file, 0, $d );
             if( $category !== 'Final_Questions' ) { $extraFileMeta[ $category ]['Columns'] += array_flip($keys); }
             while( ($line = fgetcsv($file, 0, $d)) !== false ) {

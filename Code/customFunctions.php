@@ -557,61 +557,44 @@ function GetFromFile($filename, $padding = true, $delimiter = ",")
     return $out;
 }
 /**
- * finds the location of a trial type's files. Returns either an array of file
+ * Finds the location of a trial type's files. Returns either an array of file
  * paths or the boolean false if the type cannot be found.
- * @param string $trialType the name of the trial type
+ * @param string $trialTypeName The name of the trial type
  * @return mixed
  */
-function getTrialTypeFiles($trialType) {
-    $trialType = strtolower(trim($trialType));  // just in case. . .
+function getTrialTypeFiles($trialTypeName) {
+    global $_FILES;
+    
+    // convert user inputs to lowercase; e.g. 'Likert' === 'likert'
+    $trialType = strtolower(trim($trialTypeName));
     
     // initialize a static variable to cache the results, so that we can run
     // the function multiple times and efficiently get our data back
     static $trialTypes = array();
     if (isset($trialTypes[$trialType])) return $trialTypes[$trialType];
     
-    // list all the variables from fileLocations.php that we will need
-    // it seemed wasteful to include the file again, so I just use global
-    // to grab what I need
-    global
-        $_rootF,
-        $codeF,
-        $trialF,
-        $expFiles,
-        $custTTF,
-        $trialTypeDisplay,
-        $customScoring,
-        $customStyle,
-        $customScript,
-        $helperFile,
-        $defaultScoring,
-        $defaultHelper;
-    
     // as it stands, we have two places where trial types can be found
     // we will search the Experiment/ folder first, so that if we find
     // the trial type, we won't have to look in the Code/ folder
     // this way, the Experiment/ trial types will overwrite the Code/ types
-    $possibleDirs = array(
-        $_rootF . $expFiles . $custTTF,
-        $_rootF . $codeF    . $trialF
-    );
+    $possibleDirs = array($_FILES->custom_trial_types, $_FILES->trial_types);
     
     // list the types of files we will be able to use
     $possibleFiles = array(
-        'display' => $trialTypeDisplay,
-        'scoring' => $customScoring,
-        'script'  => $customScript,
-        'style'   => $customStyle,
-        'helper'  => $helperFile
+        'display' => $_FILES->trial_type_files->display,
+        'scoring' => $_FILES->trial_type_files->scoring,
+        'script'  => $_FILES->trial_type_files->script,
+        'style'   => $_FILES->trial_type_files->style,
+        'helper'  => $_FILES->trial_type_files->helper
     );
     
     $trialFiles = array();
     
     foreach ($possibleDirs as $dir) {
-        $ttFolder = is_iDir($dir . $trialType);
+        $ttFolder = is_iDir($dir.'/'. $trialType);
         if ($ttFolder !== false) {
             foreach ($possibleFiles as $type => $filename) {
-                $possibleFile = fileExists($ttFolder . '/' . $filename, true, false);
+                $possibleFile = fileExists("{$ttFolder}/{$filename}", true, false);
                 if ($possibleFile !== false) $trialFiles[$type] = $possibleFile;
             }
             break; // only use the first matching trial type folder
@@ -624,11 +607,11 @@ function getTrialTypeFiles($trialType) {
     } else {
         if (!isset($trialFiles['scoring'])) {
             // fill in the default scoring if this trial doesn't have custom scoring
-            $trialFiles['scoring'] = $_rootF . $codeF . $defaultScoring;
+            $trialFiles['scoring'] = "{$_FILES->code}/{$_FILES->trial_type_files->default_scoring}";
         }
         if (!isset($trialFiles['helper'])) {
             // also find a default helper, for things like $compTime and output columns
-            $trialFiles['helper']  = $_rootF . $codeF . $defaultHelper;
+            $trialFiles['helper']  = "{$_FILES->code}/{$_FILES->trial_type_files->default_helper}";
         }
     }
     

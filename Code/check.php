@@ -4,12 +4,23 @@
     Copyright 2012-2015 Mikey Garcia & Nate Kornell
  */
     if (!isset($_SESSION)) {
-        include 'customFunctions.php';
-        require 'fileLocations.php';                // sends file to the right place
-        require $up . $expFiles . 'Settings.php';   // experiment variables
+        $_root = '..';
+        
+        // load file locations
+        require $_root.'/Code/Parse.php';
+        require $_root.'/Code/fileLocations.php';
+        $fileConfig = Parse::fromConfig($_root.'/Code/FileLocations.ini');
+        $_FILES = new FileLocations($_root, $fileConfig);
+        
+        // load configs
+        $config = Parse::fromConfig($_FILES->expt.'/BasicConfig.ini', true);
+
+        // load custom functions
+        require $_FILES->code.'/customFunctions.php';
     }
+    
     #### variables needed for this page
-    $folder  = $up . $expFiles . $eligF;            // where to look for files containing workers
+    $folder  = $_FILES->ineligible;            // where to look for files containing workers
     $files   = scandir($folder);                    // list all files containing workers
     $toCheck = null;                                // who to check for eligibility
     $checked = array();                             // list of all the files that were checked

@@ -27,11 +27,11 @@
     if (is_array($formData)) {
         foreach ($formData as $resp) {
             $data['Response'] = $resp;
-            arrayToLine($data, $fqDataPath);
+            arrayToLine($data, $_FILES->final_questions_data);
         }
     } else {
         $data['Response'] = $formData;
-        arrayToLine($data, $fqDataPath);
+        arrayToLine($data, $_FILES->final_questions_data);
     }
     
     

@@ -1,35 +1,35 @@
 <?php
-    session_start();                                    // start the session at the top of each page
-    
+    // start the session and error reporting
+    session_start();
     error_reporting(-1);
     
-    $testFile = 'Code/fileLocations.php';
-    $_rootF = '';                                       // $_rootF helps find PHP files
+    // search for root by trying to find index.php in current folder and backtracking
+    $_rootF = '';
     $i = 0;
-    while (!is_file($_rootF . $testFile) AND $i<99) {
+    while (!is_dir($_rootF . 'Code') AND $i<99) {
         $_rootF .= '../';
         ++$i;
     }
+    $_root = realpath($_rootF);
     
-    require $_rootF . 'Code/fileLocations.php';         // sends file to the right place
-    require $_rootF . $codeF . 'customFunctions.php';
-    require $_rootF . $codeF . 'Parse.php';
-    $config = Parse::fromConfig($_rootF . $expFiles . 'BasicConfig.ini', true);
+    // load file locations
+    require $_root.'/Code/Parse.php';
+    require $_root.'/Code/fileLocations.php';
+    $fileConfig = Parse::fromConfig($_root.'/Code/FileLocations.ini');
+    $_FILES = new FileLocations($_root, $fileConfig);
     
+    // load configs
+    $config = Parse::fromConfig($_FILES->expt.'/BasicConfig.ini', true);
     
-    if ($_rootF === '') {
-        $_codeF = $codeF;                               // $_codeF can help link JS/CSS
-    } else {
-        $_codeF = '';
-    }
+    // load custom functions
+    require $_FILES->code.'/customFunctions.php';
     
-    $up     = $_rootF;                                  // update $up to match current location
-    $dataF .= $config->experiment_name . '-Data/';                // So data will appear in Data/Collector-Data/
-    
-    $path = $up . $dataF . $dataSubFolder . $extraDataF;
-    
-    $demoPath        = $path . $demographicsFileName        . $outExt;
-    $statusBeginPath = $path . $statusBeginFileName         . $outExt;
-    $statusEndPath   = $path . $statusEndFileName           . $outExt;
-    $fqDataPath      = $path . $finalQuestionsDataFileName  . $outExt;
-    $instructPath    = $path . $instructionsDataFileName    . $outExt;
+    // update data path so that data will appear in Data/Collector-Data/
+    $_FILES->updateParentPath('data', $_FILES->data->path. '/' . $config->experiment_name.'-Data/');
+            
+    // update data paths with the file extensions
+    $_FILES->demographics->path .= $config->output_file_ext;
+    $_FILES->status_begin->path .= $config->output_file_ext;
+    $_FILES->status_end->path .= $config->output_file_ext;
+    $_FILES->final_questions_data->path .= $config->output_file_ext;
+    $_FILES->instructions_data->path .= $config->output_file_ext;

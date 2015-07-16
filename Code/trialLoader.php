@@ -108,7 +108,6 @@
         ob_start();
         
         #### Presenting different trial types ####
-        $expFiles  = $up . $expFiles;                          // setting relative path to experiments folder for trials launched from this page
         $postTo    = 'experiment.php';
         $trialFail = false;                                    // this will be used to show diagnostic information when a specific trial isn't working
         

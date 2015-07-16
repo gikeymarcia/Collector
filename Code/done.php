@@ -70,7 +70,7 @@
                         'Session'               => $_SESSION['Session'],
                         'Condition_Number'      => $_SESSION['Condition']['Number'],
                         );
-        arrayToLine($data, $statusEndPath);
+        arrayToLine($data, $_FILES->status_end);
         
         
         ######## Save the $_SESSION array as a JSON string
@@ -85,21 +85,18 @@
         }
         
         $jsonSession = json_encode($_SESSION);              // encode the entire $_SESSION array as a json string
+        $jsonPath = $_FILES->json_session . "/{$_SESSION['Username']}.json";
         
-        $jsonDIR  = $_rootF . $dataF . $dataSubFolder . $jsonF;
-        $jsonPath = $jsonDIR . $_SESSION['Username'] . '.json';
-        
-        if (!is_dir($jsonDIR)) {                            // make the folder if it doesn't exist
-            mkdir($jsonDIR, 0777, true);
+        if (!is_dir($_FILES->json_session)) {
+            // make the folder if it doesn't exist
+            mkdir($_FILES->json_session, 0777, true);
         }
-        $jsonHandle = fopen($jsonPath, 'w');                // open the file for writing, zero out any previous data
-        fwrite($jsonHandle, $jsonSession);                  // write the current state of $_SESSION
-        fclose($jsonHandle);
+        file_put_contents($jsonPath, $jsonSession);
         #######
     }
     
         
-    require $_codeF . 'Header.php';
+    require $_FILES->code . '/Header.php';
 ?>
     <form id="content">
         <?php echo $message; ?>
@@ -112,5 +109,5 @@
         }
     </style>
 <?php
-    require $_codeF . 'Footer.php';
+    require $_FILES->code . '/Footer.php';
 ?>

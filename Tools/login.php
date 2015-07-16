@@ -1,8 +1,7 @@
 <?php
-    require '../Code/fileLocations.php';
-    require $up . $expFiles . 'Settings.php';
+    require '../Code/initiateCollector.php';
     require 'loginFunctions.php';
-    session_start();
+    
     $hash_algo = 'sha256';
     $nonce = $_SESSION['admin']['challenge'];
     

@@ -1,9 +1,21 @@
 <?php
-    require '../Code/fileLocations.php';
-    require $up . $codeF . 'customFunctions.php';
-    require $up . $expFiles . 'Settings.php';
-    require 'loginFunctions.php';
     session_start();
+
+    // set the root for initial file locations
+    $_root = '..';
+    
+    // load file locations
+    require $_root.'/Code/Parse.php';
+    require $_root.'/Code/fileLocations.php';
+    $fileConfig = Parse::fromConfig($_root.'/Code/FileLocations.ini');
+    $_FILES = new FileLocations($_root, $fileConfig);
+    
+    // load configs
+    $config = Parse::fromConfig($_FILES->expt.'/BasicConfig.ini', true);
+    
+    // load custom functions
+    require $_FILES->code.'/customFunctions.php';
+    require 'loginFunctions.php';
     
     // declaring admin for first login
     if (!isset($_SESSION['admin'])) {
