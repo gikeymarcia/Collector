@@ -6,58 +6,81 @@
     
     $_SESSION = array();                                    // reset session so it doesn't contain any information from a previous login attempt
     $_SESSION['OutputDelimiter'] = $_CONFIG->delimiter;
-    $_SESSION['Debug'] = $_CONFIG->debug_mode;
+// $_SESSION['Debug'] = $_CONFIG->debug_mode;
     
     $title = 'Preparing the Experiment';
     require $_FILES->code . '/Header.php';
+
+    // login specific classes
+    require 'errorController.php';
+    require 'userController.php';
+    require 'conditionController.php';
+    require 'debugController.php';
+
+    // login objects
+    $errors = new ErrorController();
+    $user   = new UserController();
+    $cond   = new ConditionController();
+    $debug  = new DebugController();
+
+    $user->setUsername();
+    $user->setID();
+
+    $cond->selectedCondition();
+
+    $debug->debugMode( $_CONFIG->debug_name, $user->getUsername() );
+
+
+
+$user->printData();
+
     
-    
-    #### Grabbing username and condition from $_GET
-    // cleaning characters that wouldn't write to a filename
-    $bad_username = filter_input(INPUT_GET, 'Username', FILTER_SANITIZE_EMAIL);
-    $username = str_replace(array( '/', '\\', '?', '%', '*', ':', '|', '"', '<', '>' ), '', $bad_username );
-    $selectedCondition = filter_input(INPUT_GET, 'Condition', FILTER_SANITIZE_STRING);
-    
-    
-    
-    #### Setting a unique ID for this login
-    if (!isset($_SESSION['ID'])) {
-        if (isset($_GET['ID'])) {                                           // if the ID is in the URL
-            $_SESSION['ID'] = $_GET['ID'];                                      // use it as the unique ID
-        } else {
-            $_SESSION['ID'] = rand_string();                                // otherwise, make a new ID
-        }
-    }
-    
-    
-    
-    #### Check for debug mode
-    if ((strlen($_CONFIG->debug_name) > 0)
-        AND (substr($username, 0, strlen($_CONFIG->debug_name)) === $_CONFIG->debug_name)
-    ) {
-        // logged in as debug
-        $_SESSION['Debug'] = true;
-        $username = trim(substr($username, strlen($_CONFIG->debug_name)));
-        if ($username === '') { $username = $_SESSION['ID']; }
-    }
-    if ($_SESSION['Debug'] === true) {
-        // debug mode is definitely on, make sure data is sectioned off
-        $_FILES->updateParentPath('data', $_FILES->data->path. '/' . 'Debug/');
-    }
+#### Grabbing username and condition from $_GET
+// cleaning characters that wouldn't write to a filename
+// $bad_username = filter_input(INPUT_GET, 'Username', FILTER_SANITIZE_EMAIL);
+// $username = str_replace(array( '/', '\\', '?', '%', '*', ':', '|', '"', '<', '>' ), '', $bad_username );
+// $selectedCondition = filter_input(INPUT_GET, 'Condition', FILTER_SANITIZE_STRING);
     
     
     
-    #### Checking info about this username
-    $_SESSION['Username'] = $username;                                      // set Username
+//#### Setting a unique ID for this login
+// if (!isset($_SESSION['ID'])) {
+//     if (isset($_GET['ID'])) {                                           // if the ID is in the URL
+//         $_SESSION['ID'] = $_GET['ID'];                                      // use it as the unique ID
+//     } else {
+//         $_SESSION['ID'] = rand_string();                                // otherwise, make a new ID
+//     }
+// }
     
-    // is the username long enough (> 3 characters)
-    if ((strlen($username) < 3)
-        AND (!$_SESSION['Debug'])
-    ) {
-        echo '<h1> Error: Login username must be 3 characters or longer</h1>'
-           . '<h2>Click <a href="' . $_FILES->root->toUrl() . 'index.php">here</a> to enter a valid username</h2>';
-        exit;
-    }
+    
+    
+#### Check for debug mode
+// if ((strlen($_CONFIG->debug_name) > 0)
+//     AND (substr($username, 0, strlen($_CONFIG->debug_name)) === $_CONFIG->debug_name)
+// ) {
+//     // logged in as debug
+//     $_SESSION['Debug'] = true;
+//     $username = trim(substr($username, strlen($_CONFIG->debug_name)));
+//     if ($username === '') { $username = $_SESSION['ID']; }
+// }
+// if ($_SESSION['Debug'] === true) {
+//     // debug mode is definitely on, make sure data is sectioned off
+//     $_FILES->updateParentPath('data', $_FILES->data->path. '/' . 'Debug/');
+// }
+    
+    
+    
+//#### Checking info about this username
+// $_SESSION['Username'] = $username;                                      // set Username
+
+// is the username long enough (> 3 characters)
+// if ((strlen($username) < 3)
+//     AND (!$_SESSION['Debug'])
+// ) {
+//     echo '<h1> Error: Login username must be 3 characters or longer</h1>'
+//        . '<h2>Click <a href="' . $_FILES->root->toUrl() . 'index.php">here</a> to enter a valid username</h2>';
+//     exit;
+// }
     
     // is this user ineligible to participate in the experiment?
     if (($_CONFIG->check_elig == true)
@@ -66,9 +89,17 @@
         include 'check.php';
     }
     
-    // Has this user already completed session 1?  If so, determine whether they have another session to complete or if they are done
-    $relJsonSessF = $_FILES->json_session->relativeTo($_FILES->root);
-    $sessionFilename = FileExists("{$relJsonSessF}/{$_SESSION['Username']}.json");
+require 'returnVisitController.php';
+$check = new ReturnVisitController($user->getUsername());
+
+$jsonPath = $_FILES->json_session->relativeTo($_FILES->root);
+if ($check->isReturning($jsonPath)) {
+
+}
+exit;
+// Has this user already completed session 1?  If so, determine whether they have another session to complete or if they are done
+// $relJsonSessF = $_FILES->json_session->relativeTo($_FILES->root);
+// $sessionFilename = FileExists("{$relJsonSessF}/{$_SESSION['Username']}.json");
     if ($sessionFilename == true) {              // this file will only exist if this username has completed a session successfully
         $pastSession   = fopen($sessionFilename, 'r');
         $loadedSession = fread($pastSession, filesize($sessionFilename));
