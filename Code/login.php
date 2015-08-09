@@ -25,14 +25,14 @@
 
     $user->setUsername();
     $user->setID();
+    $debug->debugCheck( $_CONFIG->debug_name, $user->getUsername() );
 
     $cond->selectedCondition();
 
-    $debug->debugMode( $_CONFIG->debug_name, $user->getUsername() );
-
-
+    
 
 $user->printData();
+$cond->info();
 
     
 #### Grabbing username and condition from $_GET
@@ -89,13 +89,16 @@ $user->printData();
         include 'check.php';
     }
     
-require 'returnVisitController.php';
-$check = new ReturnVisitController($user->getUsername());
+    require 'returnVisitController.php';
+    $check = new ReturnVisitController($user->getUsername());
 
-$jsonPath = $_FILES->json_session->relativeTo($_FILES->root);
-if ($check->isReturning($jsonPath)) {
+    $jsonPath = $_FILES->json_session->relativeTo($_FILES->root);
+    if ($check->isReturning($jsonPath)) {
 
-}
+    }
+
+
+    
 exit;
 // Has this user already completed session 1?  If so, determine whether they have another session to complete or if they are done
 // $relJsonSessF = $_FILES->json_session->relativeTo($_FILES->root);
@@ -159,35 +162,35 @@ exit;
     
     
     
-    ##### Error Checking Code ####
-    $errors = array('Count' => 0, 'Details' => array());
-    if (file_exists($_FILES->conditions) == false) {      // does conditions exist? (error checking)
-        $errors['Count']++;
-        $errors['Details'][] = "No '{$_FILES->conditions}' found.";
-    }
-    // does the condition file have the required headers?
-    $Conditions = GetFromFile($_FILES->conditions,  false);   // Loading conditions info
-    $errors = keyCheck($Conditions, 'Number'    , $errors, $_FILES->conditions);
-    $errors = keyCheck($Conditions, 'Stimuli'   , $errors, $_FILES->conditions);
-    $errors = keyCheck($Conditions, 'Procedure' , $errors, $_FILES->conditions);
+##### Error Checking Code ####
+// $errors = array('Count' => 0, 'Details' => array());
+// if (file_exists($_FILES->conditions) == false) {      // does conditions exist? (error checking)
+//     $errors['Count']++;
+//     $errors['Details'][] = "No '{$_FILES->conditions}' found.";
+// }
+// does the condition file have the required headers?
+// $Conditions = GetFromFile($_FILES->conditions,  false);   // Loading conditions info
+// $errors = keyCheck($Conditions, 'Number'    , $errors, $_FILES->conditions);
+// $errors = keyCheck($Conditions, 'Stimuli'   , $errors, $_FILES->conditions);
+// $errors = keyCheck($Conditions, 'Procedure' , $errors, $_FILES->conditions);
     
     
     
     #### Code to automatically choose condition assignment
-    $_SESSION['Condition'] = array();
-    $Conditions = GetFromFile($_FILES->conditions,  false);   // Loading conditions info
-    $logFile    = "{$_FILES->counter}/{$_CONFIG->login_counter_file}";
+// $_SESSION['Condition'] = array();
+// $Conditions = GetFromFile($_FILES->conditions,  false);   // Loading conditions info
+// $logFile    = "{$_FILES->counter}/{$_CONFIG->login_counter_file}";
     if ($selectedCondition == 'Auto') {
-        if (!is_dir($_FILES->counter)) {                                  // create the 'Counter' folder if it doesn't exist
-            mkdir($_FILES->counter,  0777,  true);
-        }
+// if (!is_dir($_FILES->counter)) {                                  // create the 'Counter' folder if it doesn't exist
+//     mkdir($_FILES->counter,  0777,  true);
+// }
         
-        if (file_exists($logFile)) {                                            // Read counter file & save value
-            $fileHandle    = fopen($logFile, "r");
-            $loginCount    = fgets($fileHandle);
-            fclose($fileHandle);
-        } else { $loginCount = 0; }
-        
+// if (file_exists($logFile)) {                                            // Read counter file & save value
+//     $fileHandle    = fopen($logFile, "r");
+//     $loginCount    = fgets($fileHandle);
+//     fclose($fileHandle);
+// } else { $loginCount = 0; }
+
         $condCount = count($Conditions);
         while ($_SESSION['Condition'] === array()) {
             $conditionIndex = $loginCount % $condCount;

@@ -8,7 +8,7 @@ class DebugController
      * @param  [string] $debugName [description]
      * @param  [string] $username  [description]
      */
-    public function debugMode($debugCode, $username)
+    public function debugCheck($debugCode, $username)
     {
         if ((strlen($debugCode) > 0)
             AND (substr($username, 0, strlen($debugCode) === $debugCode))

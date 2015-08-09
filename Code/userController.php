@@ -9,7 +9,18 @@ class UserController
     private $id;
     private $id_is_set = false;
     private $valid = false;
+    private $errorHandler = 'errors';
 
+
+    /**
+     * Allows you to change the default error handler object, $errors, to one of your choosing
+     * @param  string $varName will look for variable with the name of the string contents
+     * for example, 'mikey' would cause the errors to be reported to `global $mikey`
+     */
+    public function changeErrorHandler($varName)
+    {
+        $this->errorHandler = $varName;
+    }
     /**
      * Checks $_GET for submitted username, filters characters
      * that shouldn't be in usernames
@@ -30,9 +41,9 @@ class UserController
     {
         $length = strlen($this->username);
         if ($length < 4) {
-            global $errors;
+            global $$this->errorHandler;
             $msg = 'Login username must longer than 3 characters';
-            $errors->add($msg, false);
+            $$this->errorHandler->add($msg, false);
         } else {
             $this->valid = true;
         }
