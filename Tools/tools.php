@@ -88,6 +88,12 @@
         
 <?php   // require the selected tool
         if (isset($admin['tool'])) {
+
+            $dataHolderKey = $admin['tool'] . 'Data';       // key within session where data can be stored
+            if (!isset($admin[$dataHolderKey])) {           // if we haven't made a data holder yet
+                $admin[$dataHolderKey] = array();               // make it
+            }
+            $_DATA =& $admin[$dataHolderKey];               // make alias for each tool to access it's session data
             require_once $tools[$admin['tool']];
         }
 ?>

@@ -11,7 +11,9 @@ function getTools ($dir = '.') {
             continue;
         }
         if (is_dir($item)) {
-           $potentialTools[] = $item;
+            if ($item != 'Sample') {           // don't show the 'Sample' tool
+                $potentialTools[] = $item;
+            }
         }
     }
     $tools = array();
