@@ -174,7 +174,7 @@ class FileLocations
      * @param string $path The path to convert
      * @return string
      */
-    public static function clean($path, $trimSide = null)
+    public static function clean($path, $trimSide = 'r')
     {
         $out = self::convertSlashes($path);
         if ('r' === strtolower($trimSide)) {
