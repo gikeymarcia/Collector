@@ -1,7 +1,7 @@
 <?php
 /*  Collector
     A program for running experiments on the web
-    Copyright 2012-2014 Mikey Garcia & Nate Kornell
+    Copyright 2012-2015 Mikey Garcia & Nate Kornell
  */
     require 'initiateCollector.php';
 
@@ -27,11 +27,11 @@
     if (is_array($formData)) {
         foreach ($formData as $resp) {
             $data['Response'] = $resp;
-            arrayToLine($data, $fqDataPath);
+            arrayToLine($data, $_FILES->final_questions_data);
         }
     } else {
         $data['Response'] = $formData;
-        arrayToLine($data, $fqDataPath);
+        arrayToLine($data, $_FILES->final_questions_data);
     }
     
     
@@ -45,4 +45,3 @@
     
     header("Location: FinalQuestions.php");                             // send back to FinalQuestions.php before any HTML is sent
     exit;
-?>

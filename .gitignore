@@ -1,18 +1,31 @@
+# Windows system files
 Thumbs.db
 desktop.ini
-*.dropbox
-*.project
-*.orig
-.settings/
 
+# Mac system files
 .DS_Store
 .DS_Store?
 ._*
 .Spotlight-V100
 .Trashes
-Icon?
-.git
 
+# Dropbox
+*.dropbox
+
+# Aptana
+*.project
+.settings/
+
+# Netbeans
+/nbproject/
+
+# Git
+.git
+*.orig
+Icon?
+
+# Collector - Data
+!Data/
 Data/**/*
 !Data/*
 !Data/GetData/**/*

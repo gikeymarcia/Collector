@@ -1,18 +1,26 @@
 <?php
     require 'initiateCollector.php';
     
-    $trialTypes = require 'scanTrialTypes.php';
-    $stimFileLoc = $_rootF . $expFiles . $stimF;
+    $trialTypes = array();
+    $trialTypeDirs = array($_FILES->custom_trial_types, $_FILES->trial_types);
+    foreach ($trialTypeDirs as $dir) {
+        $dirScan = scandir($dir);
+        foreach ($dirScan as $entry) {
+            if ($display = fileExists($dir . $entry . '/' . $_FILES->trial_type_files->display)) {
+                $trialTypes[strtolower($entry)] = $display;
+            }
+        }
+    }
     
     if (!isset($_SESSION['Trial Tester']) OR isset($_POST['resetSession'])) {
         $_SESSION = array();
-        $_SESSION['Trial Tester'] = TRUE;
+        $_SESSION['Trial Tester'] = true;
     } elseif (isset($_POST['LoadStimFile'])) {
-        $_SESSION['Stimuli'] = GetFromFile($stimFileLoc . $_POST['StimuliFile']);
-        $redirect = TRUE;
+        $_SESSION['Stimuli'] = GetFromFile($_FILES->stim_files.'/' . $_POST['StimuliFile']);
+        $redirect = true;
     } elseif (isset($_POST['Procedure_Trial_Type'])) {
     
-        $redirect = TRUE;
+        $redirect = true;
         $posts = array();
         foreach ($_POST as $name => $val) {
             $name = explode('_', htmlspecialchars_decode($name));
@@ -41,9 +49,8 @@
             #### Simulating login.php
         
             $_SESSION = array();
-            $_SESSION['Trial Tester'] = TRUE;
-            $_SESSION['Debug'] = FALSE;     // this just messes with timing
-            $_SESSION['Trial Types'] = require 'scanTrialTypes.php';
+            $_SESSION['Trial Tester'] = true;
+            $_SESSION['Debug'] = false;     // this just messes with timing
             
             $_SESSION['Username']   = 'TrialTester';
             $_SESSION['ID']         = 'TrialTester';
@@ -83,7 +90,7 @@
                 'Procedure' => array(
                     'Item'       => $defaultItems, 
                     'Trial Type' => '', 
-                    'Timing'     => 'user', 
+                    'Max Time'   => 'user', 
                     'Text'       => '', 
                     'Shuffle'    => 'off'
                 )
@@ -146,13 +153,13 @@
         exit;
     }
     
-    include 'Header.php';
+    include $_FILES->code . '/Header.php';
     
-    $stimuliFiles = scandir($stimFileLoc);
+    $stimuliFiles = scandir($_FILES->stim_files);
     
     foreach ($stimuliFiles as $i => $fileName)
     {
-        if (!is_file($stimFileLoc . $fileName))
+        if (!is_file("{$_FILES->stim_files}/{$fileName}"))
         {
             unset($stimuliFiles[$i]);
             continue;
@@ -246,14 +253,15 @@
     
 ?>
 <style>
+    html, body, .wrapper      {   height: 100%;   }
     .cframe-inner   {   vertical-align: top;    height: 100%;    }
 
     iframe          {   border: 0px solid #000; width: 100%; border-top-width: 1px; min-height: 100%;  }
     .trialOption    {   text-align: center; margin: 15px;   display: inline-block;   }
-    #allContain     {   height: 100%;   }
+    #allContain     {   height: 100%;   white-space: nowrap; width: 100%;   }
     
-    .expFile        {   width: 49%; display: inline-block;   padding: 0px 100px 0 0; vertical-align: top;  }
-    .fileTitle      {   text-align: center; }
+    .expFile        {   width: 49%; display: inline-block;   margin: 0px 0px 0 0; vertical-align: top;  }
+    .fileTitle      {   text-align: center; margin-bottom: 3px; }
     .fileTitle > h3 {   display: inline;    }
     
     .tableContainer {   display: inline-block;   max-width: 100%;    overflow: auto;    max-height: 600px;  }
@@ -350,7 +358,7 @@
             </div>
         </div>
         <div class="expFile">
-            <h3>Procedure File</h3>
+            <div class="fileTitle"><h3>Procedure File</h3></div>
             <div class="blockContainer">
                 <div class="tableContainer">
                     <?= $procTable ?>
@@ -365,7 +373,7 @@
     <iframe src="<?= $loaderURL ?>"></iframe>
     <?php 
         
-        include 'Footer.php';
+        include $_FILES->code . '/Footer.php';
 
     ?>
 </div>

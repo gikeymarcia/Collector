@@ -1,7 +1,7 @@
 <?php
 /*  Collector
     A program for running experiments on the web
-    Copyright 2012-2014 Mikey Garcia & Nate Kornell
+    Copyright 2012-2015 Mikey Garcia & Nate Kornell
  */
     require 'initiateCollector.php';
 
@@ -10,14 +10,13 @@
           + $_POST;
 
     // write user demographics data to demographics file
-    arrayToLine($data, $demoPath);
+    arrayToLine($data, $_FILES->demographics);
     
-    if ($doInstructions) {
+    if ($_CONFIG->run_instructions) {
         $next = 'instructions.php';
     } else {
-        $next = 'trial.php';
+        $next = 'experiment.php';
     }
     
     header("Location: $next");
     exit;
-?>

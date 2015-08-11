@@ -1,15 +1,26 @@
 <?php
 /*  Collector
     A program for running experiments on the web
-    Copyright 2012-2014 Mikey Garcia & Nate Kornell
+    Copyright 2012-2015 Mikey Garcia & Nate Kornell
  */
     if (!isset($_SESSION)) {
-        include 'CustomFunctions.php';
-        require 'fileLocations.php';                // sends file to the right place
-        require $up . $expFiles . 'Settings.php';   // experiment variables
+        $_root = '..';
+        
+        // load file locations
+        require $_root.'/Code/Parse.php';
+        require $_root.'/Code/fileLocations.php';
+        $fileConfig = Parse::fromConfig($_root.'/Code/FileLocations.ini');
+        $_FILES = new FileLocations($_root, $fileConfig);
+        
+        // load configs
+        $_CONFIG = Parse::fromConfig($_FILES->expt.'/Config.ini', true);
+
+        // load custom functions
+        require $_FILES->code.'/customFunctions.php';
     }
+    
     #### variables needed for this page
-    $folder  = $up . $expFiles . $eligF;            // where to look for files containing workers
+    $folder  = $_FILES->ineligible;            // where to look for files containing workers
     $files   = scandir($folder);                    // list all files containing workers
     $toCheck = null;                                // who to check for eligibility
     $checked = array();                             // list of all the files that were checked
@@ -20,7 +31,7 @@
     $ip = $_SERVER["REMOTE_ADDR"];                  // user's ip address
     $ipFilename = 'rejected-IPs.csv';               // name of bad IP file
     $ipPath = $folder . $ipFilename;                // path to bad IP file
-    $priorExp = FALSE;                              // temporary hack to block people by username who are on whitelisted IPs
+    $priorExp = false;                              // temporary hack to block people by username who are on whitelisted IPs
     
     #### functions needed to make this page work
     
@@ -68,7 +79,7 @@
         }
         
         $current = array();                                         // clear data from current file before loading next one
-        $current = GetFromFile($folder . $file, FALSE, $delimiter); // read a file presumably containing workers
+        $current = GetFromFile($folder . $file, false, $delimiter); // read a file presumably containing workers
         if (!isset($current[0]['WorkerId'])) {                      // skip files without a 'WorkerID' column
             $skipped[] = $file;                                     // keep track of which files we've skipped
         } else {
@@ -107,7 +118,7 @@
         // if (isset($_SESSION)
             // AND file_exists($ipPath)
         // ) {
-            // $badIPs = GetFromFile($ipPath, FALSE);
+            // $badIPs = GetFromFile($ipPath, false);
             // foreach ($badIPs as $rejected) {
                 // if ($ip == $rejected['ip address']) {
                     // $noGo[] = 'Sorry, you are not allowed to login to this experiment more than once.';
@@ -118,7 +129,7 @@
 
         #### if blacklist is enabled, add IP to reject list
         // if (isset($_SESSION)
-            // AND ($blacklist == TRUE)
+            // AND ($config->blacklist == true)
         // ) {
             // logIP();
         // }
@@ -128,15 +139,15 @@
             $noGo[] = 'Sorry, you are not eligible to participate in this study
                        because you have participated in a previous version of
                        this experiment.';
-            $priorExp = TRUE;
-            // if ($blacklist == TRUE) {
+            $priorExp = true;
+            // if ($config->blacklist == true) {
                 // logIP();
             // }
         }
 
-        if (!(in_array($ip, $whitelist, false))) {          // skip the autocheck if IP is allowed
+        if (!(in_array($ip, $_CONFIG->whitelist, false))) {          // skip the autocheck if IP is allowed
             rejectCheck($noGo);                             // print errors
-        } elseif ($priorExp == TRUE) {
+        } elseif ($priorExp == true) {
             echo '<h2>Sorry, you are not eligible to participate in this study
                       because you have participated in a previous version of
                       this experiment.</h2>';

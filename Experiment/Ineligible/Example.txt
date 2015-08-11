@@ -1,0 +1,4 @@
+WorkerId
+Joker
+Bane
+Twoface

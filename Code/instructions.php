@@ -1,7 +1,7 @@
 <?php
 /*  Collector
     A program for running experiments on the web
-    Copyright 2012-2014 Mikey Garcia & Nate Kornell
+    Copyright 2012-2015 Mikey Garcia & Nate Kornell
  */
 
     ####  good place to pull in values and/or compute things that'll be inserted into the HTML below
@@ -9,28 +9,25 @@
 	
     $title = 'Experiment Instructions';
 	$_dataController = 'instructions';
-    require $_codeF . 'Header.php';
+    require $_FILES->code . '/Header.php';
 ?>
-
-	<?php include FileExists($up . $expFiles . $instructionsFileName); ?>
-
-	<form class="hidden" name="Login" action="InstructionsRecord.php" method="post">
-		<input  name="RT"        id="RT"    type="text" value="0" />
-		<input  name="Fails"     id="Fails" type="text" value="0" />
-		<input  id="FormSubmitButton" type="submit" />
-	</form>
-
-    <div class="precache">
+<form name="Login" id="content" action="InstructionsRecord.php" method="post">
+    <div class="alert alert-instructions">Please carefully read the instructions again.</div>
+    <?php include FileExists($_FILES->instructions->relativeTo($_FILES->code)); ?>
+    
+	<input  name="RT"        id="RT"    type="hidden" value="0" />
+	<input  name="Fails"     id="Fails" type="hidden" value="0" />
+	<div class="precache">
     <?php
-    ### PRE-CACHES All cues and answers used in experiment ####
-    foreach ($_SESSION['Trials'] as $Trial) {
-        echo show($Trial['Stimuli']['Cue'])    . ' ';
-        echo show($Trial['Stimuli']['Answer']) . ' ';
-        echo '<br />';
-    }
+        ### PRE-CACHES All cues and answers used in experiment ####
+        foreach ($_SESSION['Trials'] as $Trial) {
+            echo show($Trial['Stimuli']['Cue'])    . ' ';
+            echo show($Trial['Stimuli']['Answer']) . ' ';
+            echo '<br />';
+        }
     ?>
     </div>
-    <div class="alert alert-instructions">Please carefully read the instructions again.</div>
+</form>
 
 <?php
-    require $_codeF . 'Footer.php';
+    require $_FILES->code . '/Footer.php';

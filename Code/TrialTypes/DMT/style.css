@@ -1,0 +1,74 @@
+.dmtTable {
+    background-color: #EEE;
+    border: 2px solid #666;
+    margin: 80px auto 0;
+}
+
+.dmtTable td {
+    vertical-align: middle;
+    text-align: center;
+    padding: 8px 16px;
+    border: 2px solid #666;
+}
+
+.dmtTable .textRow td {
+    vertical-align: top;
+    border-bottom-width: 0;
+}
+
+.displayRow td {
+    padding-top: 2px;
+    vertical-align: top;
+    border-top-width: 0;
+}
+
+.imgHolder {
+    min-width: 400px;
+    height: 400px;
+}
+
+.imgHolder img {
+    border: 3px solid #333;
+}
+
+.optionRow .dmtOption {
+    height: 40px;
+    width: 50%;
+    border: 2px outset #666;
+    background-color: #222;
+    color: #BBB;
+    box-shadow: inset -1px -1px 2px #666;
+    padding: 2px;
+    cursor: pointer;
+}
+
+.optionRow .dmtOption:focus     {   border-color: #666; color: #0B0;    }
+.optionRow .dmtOption:hover     {   border-color: #666; background-color: #333; }
+.optionRow .dmtOption:active    {   border-style: inset;    }
+.chosenOption                   {   color: #0B0 !important; }
+
+.dmtTank {
+    border: 2px solid #000;
+    height: 450px;
+    margin: auto;
+    position: relative;
+    background-color: #888;
+    border-radius: 4px;
+}
+
+.currentTank    {   width: 16px;    }
+.cumulativeTank {   width: 128px;   }
+
+.goalBar {
+    position: absolute;
+    border: 1px dashed #000;
+    width: 100%;
+}
+
+.dmtLevel {
+    height: 0%;
+    background-color: #44E;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+}

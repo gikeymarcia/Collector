@@ -1,13 +1,13 @@
 Cue,Answer,Shuffle,Stimuli Notes
-Dog,Cat,off,high associates
-Word,Pair,off,high associates
-Funny,Bone,off,high associates
+Dog,Cat,#hastag no shuffle,high associates
+Word,Pair,#hastag no shuffle,high associates
+Funny,Bone,#hastag no shuffle,high associates
 Mountain,Door,zoinks,low associate
 Whale,Rocket,zoinks,low associate
 Laptop,Swing,zoinks,low associate
-images/bringing it all back home.jpg,Bob Dylan,picturebank,album covers
-images/I.jpg,Led Zepplin,picturebank,album covers
-images/operation doomsday.jpg,MF DOOM,picturebank,album covers
+Images/bringing it all back home.jpg,Bob Dylan,picturebank,album covers
+Images/I.jpg,Led Zepplin,picturebank,album covers
+Images/operation doomsday.jpg,MF DOOM,picturebank,album covers
 "<p>The standard Lorem Ipsum passage, used since the 1500s</p>
 
 <p>""Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.""

@@ -1,9 +1,9 @@
-Item,Trial Type,Timing,Post 1 Trial Type,Post 1 Timing,Procedure Notes,Shuffle
-2,Study,User,No,-,mass,OFF
-2,Study,User,No,-,mass,OFF
-2,Study,User,No,-,mass,OFF
-6,Study,User,No,-,mass,OFF
-6,Study,User,No,-,mass,OFF
-6,Study,User,No,-,mass,OFF
-2,Test,User,No,-,Showing 3 trials in order,OFF
-6,Test,User,Feedback,User,Showing 3 trials in order,OFF
+Item,Trial Type,Max Time,Post 1 Trial Type,Post 1 Max Time,Procedure Notes,Shuffle
+2,Study,User,No,-,mass,what#ever
+2,Study,User,No,-,mass,what#ever
+2,Study,User,No,-,mass,what#ever
+6,Study,User,No,-,mass,what#ever
+6,Study,User,No,-,mass,what#ever
+6,Study,User,No,-,mass,what#ever
+2,Test,User,No,-,Showing 3 trials in order,what#ever
+6,Test,User,Feedback,User,Showing 3 trials in order,what#ever

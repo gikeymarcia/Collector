@@ -1,48 +1,52 @@
 <?php
 /*  Collector
     A program for running experiments on the web
-    Copyright 2012-2014 Mikey Garcia & Nate Kornell
+    Copyright 2012-2015 Mikey Garcia & Nate Kornell
  */
     require 'initiateCollector.php';
     
+    #### this code was causing more problems than it is solving
+    # Need to think of a better anti-cheat mode but for now we are skipping any done.php check
     // if someone skipped to done.php without doing all trials
-    if ((array_key_exists('finishedTrials', $_SESSION) == FALSE)
-        OR ($_SESSION['finishedTrials'] != TRUE)
-    ) {
-        header("Location: http://www.youtube.com/watch?v=oHg5SJYRHA0");            // rick roll people trying to skip to done.php
-        exit;
-    }
+    // if ((array_key_exists('finishedTrials', $_SESSION) == false)
+    //     OR ($_SESSION['finishedTrials'] != true)
+    // ) {
+    //     header("Location: http://www.youtube.com/watch?v=oHg5SJYRHA0");            // rick roll people trying to skip to done.php
+    //     exit;
+    // }
     
     
     // turn off error reporting for debug mode
     if (array_key_exists('Debug', $_SESSION)) {
-        if ($_SESSION['Debug'] == FALSE) {
+        if ($_SESSION['Debug'] == false) {
             error_reporting(0);
         }
     }
     
     
     // Set the page message
-    if ($nextExperiment == FALSE) {
+    if ($_CONFIG->next_experiment == false) {
         $title   = 'Done!';
         $message = '<h2>Thank you for your participation!</h2>'
                  .  '<p>If you have any questions about the experiment please email '
-                 .      '<a href="mailto:' . $experimenterEmail . '?Subject=Comments%20on%20' . $experimentName . '" target="_top">' . $experimenterEmail . '</a>'
+                 .      '<a href="mailto:' . $_CONFIG->experimenter_email . '?Subject=Comments%20on%20' . $_CONFIG->experiment_name . '" target="_top">' . $_CONFIG->experimenter_email . '</a>'
                  .  '</p>';
-        if ($mTurkMode == TRUE) {
-            $message .= '<h3>Your verification code is: ' . $verification . '-' . $_SESSION['ID'] .'</h3>';
+        if ($_CONFIG->mTurk_mode == true) {
+            $message .= '<h3>Your verification code is: ' . $_CONFIG->verification . '-' . $_SESSION['ID'] .'</h3>';
         }
     } else {
         $title    = 'Quick Break';
         $message  = '<h2>Experiment will resume in 5 seconds.</h2>';
-        $nextLink = 'http://' . $nextExperiment;
-        $username = $_SESSION['Debug'] ? $debugName . ' ' . $_SESSION['Username'] : $_SESSION['Username'];
+        $nextLink = 'http://' . $_CONFIG->next_experiment;
+        $username = $_SESSION['Debug'] ? $_CONFIG->debug_name . ' ' . $_SESSION['Username'] : $_SESSION['Username'];
         echo '<meta http-equiv="refresh" content="5; url=' . $nextLink . 'Code/login.php?Username='
             . urlencode($username) . '&Condition=Auto&ID=' . $_SESSION['ID'] . '">';
     }
     
     
-    if (isset($_SESSION['finishedTrials'])) {
+    if (isset($_SESSION['finishedTrials'])
+        AND (!isset($_SESSION['alreadyDone']))
+        ) {
         // calculate total duration of experiment session
         $duration = time() - strtotime($_SESSION['Start Time']);
         $durationFormatted = $duration;
@@ -65,9 +69,8 @@
                         'Duration_Formatted'    => $durationFormatted,
                         'Session'               => $_SESSION['Session'],
                         'Condition_Number'      => $_SESSION['Condition']['Number'],
-                        'Inclusion Notes'       => $finalNotes,
                         );
-        arrayToLine($data, $statusEndPath);
+        arrayToLine($data, $_FILES->status_end);
         
         
         ######## Save the $_SESSION array as a JSON string
@@ -77,45 +80,34 @@
             $_SESSION['Position']++;                        // increment counter so next session will begin after the *NewSession* (if multisession)
             $_SESSION['Session']++;                         // increment session # so next login will be correctly labeled as the next session
             $_SESSION['ID'] = rand_string();                // generate a new ID (for next login)
-            $_SESSION['finishedTrials'] = FALSE;            // will stop them from skipping to done.php during next session
+            $_SESSION['finishedTrials'] = false;            // will stop them from skipping to done.php during next session
             $_SESSION['LastFinish'] = time();
         }
         
         $jsonSession = json_encode($_SESSION);              // encode the entire $_SESSION array as a json string
+        $jsonPath = $_FILES->json_session . "/{$_SESSION['Username']}.json";
         
-        $jsonDIR  = $_rootF . $dataF . $dataSubFolder . $jsonF;
-        $jsonPath = $jsonDIR . $_SESSION['Username'] . '.json';
-        
-        if (!is_dir($jsonDIR)) {                            // make the folder if it doesn't exist
-            mkdir($jsonDIR, 0777, true);
+        if (!is_dir($_FILES->json_session)) {
+            // make the folder if it doesn't exist
+            mkdir($_FILES->json_session, 0777, true);
         }
-        $jsonHandle = fopen($jsonPath, 'w');                // open the file for writing, zero out any previous data
-        fwrite($jsonHandle, $jsonSession);                  // write the current state of $_SESSION
-        fclose($jsonHandle);
+        file_put_contents($jsonPath, $jsonSession);
         #######
     }
     
-    
-    $_SESSION = array();                        // clear out all session info
-    session_destroy();                          // destroy the session so it doesn't interfere with any future experiments
-    
-    
-    #### TO-DO ####
-    $finalNotes = '';
-    /*
-     * Write code that looks at previous logging in activity and gives recommendations as to whether or not to include someone
-     * ideas:
-     *        if someone has logged in more than once, flag them
-     *        if someone has 1 login and no ends then say they're likely good
-     *        if someone already has 1 finish then say so
-     */
-    
-    
-    require $_codeF . 'Header.php';
+        
+    require $_FILES->code . '/Header.php';
 ?>
-	<div class="cframe-content">
-		<?php echo $message; ?>
-	</div>
+    <form id="content">
+        <?php echo $message; ?>
+    </form>
+    
+    <style>
+        #content {
+            width: 500px;
+            text-rendering: optimizeLegibility;
+        }
+    </style>
 <?php
-    require $_codeF . 'Footer.php';
+    require $_FILES->code . '/Footer.php';
 ?>

@@ -1,589 +1,550 @@
-/*------------------------------------*\
- *
- *  Collector Styles
- * 	Adam Blake
- *  written for www.CogFog.com
- *
-\*------------------------------------*/
+/* ----------------------------------------------------------------------------
 
-/*------------------------------------*\
-    CONTENTS
-    (protip: search $[item] to jump)
-\*------------------------------------*/
-/**
- *  IMPORTS
- *  COLORS
- *	RESET
- *
- *  MAIN
- *  TYPE
- *  SHARED
- *  STRUCTURES
- *
- *  INDEX
- *  INSTRUCTIONS
- *  TRIAL
- *  SOTETRIS
- *  FQS
- *  NO-JS
- *
- *  MISC
- *  MEDIA
- */
+ *  TOOLS
+
+ * Description:    Collector styles
+ * Version:        2.0.0 (2015-01-19)
+ * Website:        http://www.cogfog.com/
+ * Author:         Adam Blake
+
+ 
+ == CONTENTS: =================================================================
+
+ $RESET            HTML5 reset
+ $COLORS           App-wide color palette
+ $FONTS            Custom Fonts
+ $TYPOGRAPHY       Text styling
+ $BUTTONS          Buttons
+ $FORMS            Forms
+ $CONTENT          General styles for main content
+ $NO-JS            Javascript disabled redirect 
+ $PAGE-SPECIFIC    Styles for specific pages:
+                       Basic Info
+                       Instructions
+                       Trial
+ $GRIDS            Grid framework
+ $MEDIA            Responsive styles
+ $TOOLS            Tools styling
+ 
+
+ ---------------------------------------------------------------------------- */
 
 
 
-
-/*------------------------------------*\
-    $IMPORTS
-\*------------------------------------*/
-@import url(http://fonts.googleapis.com/css?family=Open+Sans);
-@import url(http://fonts.googleapis.com/css?family=Roboto);
-
-
-
-
-
-/*------------------------------------*\
-  	$COLORS
-\*------------------------------------*/
-.brand {
-    color:#0055A6;             /* dark blue; rgba(0,85,166,1) */
-}
-.secondary {
-	color:#00A5E5;             /* blue; rgba(0,165,229,1); */
-}
-.action {
-	color:#00FF87;             /* lime green; rgba(0,255,135,1) */
-}
-.alert {
-	background-color:#800000;  /* strong red; rgba(128,0,0,1) */
-}
-
-.brand-bg {
-	background-color:#0055A6;
-}
-.secondary-bg {
-	background-color:#00A5E5;
-}
-.action-bg {
-	background-color:#00FF87;
-}
-
-
-
-
-
-/*------------------------------------*\
-    $RESET
-\*------------------------------------*/
-/**
- * 	Based on Eric Meyer's reset
- *  http://meyerweb.com/eric/tools/css/reset/
- *  v2.0 | 20110126
- *  License: none (public domain)
-*/
-
-html, body, div, span, applet, object, iframe,
+/*  $RESET
+ ---------------------------------------------------------------------------- */
+html, body, div, span, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
+abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var,
+b, i,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
+article, aside, canvas, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section, summary,
 time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font:inherit;
-	vertical-align: baseline;
-	-webkit-box-sizing:border-box;
-	   -moz-box-sizing:border-box;
-	        box-sizing:border-box;
+  margin:0;
+  padding:0;
+  border:0;
+  outline:0;
+  font-size:100%;
+  vertical-align:baseline;
+  background:transparent;
 }
-html {
-	font:18px/1.625 "Roboto", "Open Sans", Arial, Helvetica, sans-serif;
-	color:#333;
+
+body {
+  line-height:1.2;
 }
-ol, ul {
-	list-style: none;
+
+article,aside,details,figcaption,figure,
+footer,header,hgroup,menu,nav,section { 
+  display:block;
 }
+
+nav ul {
+  list-style:none;
+}
+
+blockquote, q {
+  quotes:none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content:'';
+  content:none;
+}
+
+a {
+  margin:0;
+  padding:0;
+  font-size:100%;
+  vertical-align:baseline;
+  background:transparent;
+}
+
+ins {
+  background-color:#ff9;
+  color:#000;
+  text-decoration:none;
+}
+
+mark {
+  background-color:#ff9;
+  color:#000; 
+  font-style:italic;
+  font-weight:bold;
+}
+
+del {
+  text-decoration: line-through;
+}
+
+abbr[title], dfn[title] {
+  border-bottom:1px dotted;
+  cursor: help;
+}
+
 table {
-	border-collapse: collapse;
-	border-spacing: 0;
+  border-collapse:collapse;
+  border-spacing:0;
 }
+
+hr {
+  display:block;
+  height:1px;
+  border:0;   
+  border-top:1px solid #cccccc;
+  margin:1em 0;
+  padding:0;
+}
+
+input, select {
+  vertical-align:middle;
+}
+
 img {
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 
 
 
 
-/*------------------------------------*\
-  	$SHARED
-\*------------------------------------*/
-/* general min/max */
-.main-contain, .cframe-content {
-	max-width:900px;
-	min-width:400px;
+/*  $COLORS
+      note: text is #111, specified in $TYPOGRAPHY
+ ---------------------------------------------------------------------------- */
+.brand {
+  color:#069;     /* dark blue; rgba(0,85,166,1) */
+}
+.secondary {
+  color:#09c;     /* blue; rgba(0,165,229,1); */
+}
+.action {
+  color:#0f9;     /* lime green; rgba(0,255,135,1) */
+}
+.alert {
+  background-color:#900;  /* strong red; rgba(128,0,0,1) */
 }
 
-/* text alignment */
-.textcenter {
-	text-align:center;
+.brand-bg {
+  background-color:#069;
 }
-.textright{
-	text-align:right;
+.secondary-bg {
+  background-color:#09c;
 }
-.textleft{
-    text-align:left;
-}
-
-/* Hidden objects */
-.precache,.precachenext,.hidden,#waiting,#loadingForm {
-	display:none!important;
-}
-.invisible {
-	visibility:hidden!important;
+.action-bg {
+  background-color:#0f9;
 }
 
-/* Shared colors */
+
+
+
+
+/*  $FONTS
+ ---------------------------------------------------------------------------- */
+@font-face {
+    font-family: 'inconsolata_local';
+    src: url('fonts/inconsolata-webfont.eot');
+    src: url('fonts/inconsolata-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/inconsolata-webfont.woff2') format('woff2'),
+         url('fonts/inconsolata-webfont.woff') format('woff'),
+         url('fonts/inconsolata-webfont.ttf') format('truetype'),
+         url('fonts/inconsolata-webfont.svg#inconsolatamedium') format('svg');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'open_sans_local';
+    src: url('fonts/opensans-bold-webfont.eot');
+    src: url('fonts/opensans-bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/opensans-bold-webfont.woff2') format('woff2'),
+         url('fonts/opensans-bold-webfont.woff') format('woff'),
+         url('fonts/opensans-bold-webfont.ttf') format('truetype'),
+         url('fonts/opensans-bold-webfont.svg#open_sansbold') format('svg');
+    font-weight: 700;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'open_sans_local';
+    src: url('fonts/opensans-bolditalic-webfont.eot');
+    src: url('fonts/opensans-bolditalic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/opensans-bolditalic-webfont.woff2') format('woff2'),
+         url('fonts/opensans-bolditalic-webfont.woff') format('woff'),
+         url('fonts/opensans-bolditalic-webfont.ttf') format('truetype'),
+         url('fonts/opensans-bolditalic-webfont.svg#open_sansbold_italic') format('svg');
+    font-weight: 700;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'open_sans_local';
+    src: url('fonts/opensans-italic-webfont.eot');
+    src: url('fonts/opensans-italic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/opensans-italic-webfont.woff2') format('woff2'),
+         url('fonts/opensans-italic-webfont.woff') format('woff'),
+         url('fonts/opensans-italic-webfont.ttf') format('truetype'),
+         url('fonts/opensans-italic-webfont.svg#open_sansitalic') format('svg');
+    font-weight: 400;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'open_sans_local';
+    src: url('fonts/opensans-regular-webfont.eot');
+    src: url('fonts/opensans-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/opensans-regular-webfont.woff2') format('woff2'),
+         url('fonts/opensans-regular-webfont.woff') format('woff'),
+         url('fonts/opensans-regular-webfont.ttf') format('truetype'),
+         url('fonts/opensans-regular-webfont.svg#open_sansregular') format('svg');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'roboto_local';
+    src: url('fonts/roboto-bold-webfont.eot');
+    src: url('fonts/roboto-bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/roboto-bold-webfont.woff2') format('woff2'),
+         url('fonts/roboto-bold-webfont.woff') format('woff'),
+         url('fonts/roboto-bold-webfont.ttf') format('truetype'),
+         url('fonts/roboto-bold-webfont.svg#robotobold') format('svg');
+    font-weight: 700;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'roboto_local';
+    src: url('fonts/roboto-bolditalic-webfont.eot');
+    src: url('fonts/roboto-bolditalic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/roboto-bolditalic-webfont.woff2') format('woff2'),
+         url('fonts/roboto-bolditalic-webfont.woff') format('woff'),
+         url('fonts/roboto-bolditalic-webfont.ttf') format('truetype'),
+         url('fonts/roboto-bolditalic-webfont.svg#robotobold_italic') format('svg');
+    font-weight: 700;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'roboto_local';
+    src: url('fonts/roboto-italic-webfont.eot');
+    src: url('fonts/roboto-italic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/roboto-italic-webfont.woff2') format('woff2'),
+         url('fonts/roboto-italic-webfont.woff') format('woff'),
+         url('fonts/roboto-italic-webfont.ttf') format('truetype'),
+         url('fonts/roboto-italic-webfont.svg#robotoitalic') format('svg');
+    font-weight: 400;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'roboto_local';
+    src: url('fonts/roboto-regular-webfont.eot');
+    src: url('fonts/roboto-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/roboto-regular-webfont.woff2') format('woff2'),
+         url('fonts/roboto-regular-webfont.woff') format('woff'),
+         url('fonts/roboto-regular-webfont.ttf') format('truetype'),
+         url('fonts/roboto-regular-webfont.svg#robotoregular') format('svg');
+    font-weight: 400;
+    font-style: normal;
+}
+
+
+
+
+/*  $TYPOGRAPHY
+      note: for consent form styles, see $FORMS
+ ----------------------------------------------------------------------------- */
+body, html, textbox, select {
+  color: #111;
+  font-family: "Open Sans", "open_sans_local", Arial, sans-serif;
+  font-size: 1em;
+}
+
+input, select, textarea, button {
+  font-family:inherit;
+  font-size:inherit;
+}
+
 h1,h2,h3,h4,h5,h6,a {
-    color:#0055A6;	/* brand color */
-}
-a:hover,a:focus {
-	color:#00A5E5;	/* secondary color */
-}
-a:active {
-	color:#00FF87;	/* action color */
+  color: #069;  /* brand color */
+  font-family: "Roboto", "roboto_local", Arial, sans-serif;
+  font-weight: 400;
 }
 
-
-
-
-
-/*------------------------------------*\
-  	$TYPE
-\*------------------------------------*/
 h1 {
-	font-size: 2em;
-	padding: 0 0 .2em 0;
-	margin-bottom: 0;
+  font-size: 2.5em;
 }
 
 h2 {
-	font-size: 1.5em;
-	padding: .2em 0;
+  font-size: 1.8em;
+  padding: .5em 0;
 }
 
 h3 {
-	font-size: 1.2em;
-	padding: .2em 0;
+  font-size: 1.3em;
+  padding: .2em 0;
+}
+
+h4 {
+  font-size: 1.2em;
 }
 
 p {
-	margin: 1em 0;
+  margin: 1em 0;
+  line-height: 1.5em;
 }
 
-a:hover, a:active {
-    outline: none;
+a:active {
+  color:#0f9;  /* action color */
+}
+
+a:active, a:hover {
+  outline: none;
+}
+
+a:focus, a:hover {
+  color:#09c;  /* secondary color */
 }
 
 strong, b {
-	font-weight: 700;
+  font-weight: 700;
 }
 
 em, i {
-	font-style: italic;
+  font-style: italic;
 }
 
-pre {
-    max-width: 800px;
-    margin-left: 9%;
-    
+code {
+  background: #f7f7f7;
+  font-family: "Inconsolata", "inconsolata_local", "Courier New", Courier, monospace;
+  padding: 3px 5px;
+  font-size: 92%;
+  line-height: 1.45;
+  border-radius: 3px;
+}
+
+/*pre {
+  max-width: 800px;
+  margin-left: 9%;
+  
+}*/
+
+/*stop button outine in mozilla*/
+button::-moz-focus-inner, input::-moz-focus-inner  {
+  border: 0;
 }
 
 
-/*------------------------------------*\
-  	$STRUCTURES
-\*------------------------------------*/
-.main-contain {
-	width: 550px;
-	margin: 0 auto;
+
+/*  $BUTTONS 
+ ---------------------------------------------------------------------------- */
+.collectorButton {
+  font-family:"Open Sans", "open_sans_local", Helvetica, Arial, sans-serif;
+  text-align:center;
+  padding:.25em .4em .45em .4em;
+  color:#fff;
+  background-color:#069;
+  border-radius:4px;
+  border:0;
+  cursor: pointer;
 }
 
-/* 	dynamic vertical centering */
-.cframe-outer {
-	display:table;
-	position:absolute;
-	height:100%;
-	width:100%;
+.collectorButton:hover, 
+.collectorButton:focus {
+  background-color: #09c;
 }
-	.cframe-inner {
-		display:table-cell;
-		vertical-align:middle;
-	}
-		.cframe-content {
-			margin:0 auto 70px auto;
-			width:80%;
-		}
-
-/* grids */
-.grid {
-	margin: 0 0 0 -18px;
-}
-.grid-gutterless {
-	margin-left: 0;
-}
-.grid-gutterless > .grid-item {
-	padding-left: 0;
-}
-.grid-item {
-	display: inline-block;
-	padding-left: 18px;
-	vertical-align: top;
-	width:100%;
-}
-.grid-item > div {
-	margin: 0 0 18px;
-}
-.grid-1-10 {
-	width: 10%;
-}
-.grid-1-8 {
-	width: 12.5%;
-}
-.grid-1-5, .grid-2-10 {
-	width: 20%;
-}
-.grid-1-4, .grid-2-8 {
-    width: 25%;
-}
-.grid-3-10 {
-	width: 30%;
-}
-.grid-1-3, .grid-2-6 {
-	width: 33.333%
-}
-.grid-3-8 {
-	width: 37.5%;
-}
-.grid-2-5, .grid-4-10 {
-	width: 40%;
-}
-.grid-1-2, .grid-2-4, .grid-3-6, .grid-4-8, .grid-5-10 {
-    width: 50%;
-}
-.grid-3-5, .grid-6-10 {
-	width: 60%;
-}
-.grid-5-8 {
-	width: 62.5%;
-}
-.grid-2-3, .grid-4-6 {
-	width: 66.666%;
-}
-.grid-7-10 {
-	width: 70%;
-}
-.grid-3-4, .grid-6-8 {
-    width: 75%;
-}
-.grid-4-5, .grid-8-10 {
-	width: 80%;
-}
-.grid-7-8 {
-	width: 87.5%;
-}
-.grid-9-10 {
-	width: 90%;
-}
-.grid-1-1 {
-	margin-left:0px;
+.collectorButton:focus {
+  outline: 0;
 }
 
-/* buttons */
-.button {
-    font-family: inherit;
-    font-size: 100%;
-    text-align:center;
-    padding: .45em 1em;
-    color: #fff;
-    background-color: #0055A6;
-    text-decoration: none;
-    border-radius: 4px;
-    border:0;
-    cursor:pointer;
+.collectorButtonActive,
+.collectorButtonActive:hover,
+.collectorButton:active {
+  background-color:#0f9;
 }
-.button-hover,.button:hover,.button:focus {
-	background-color: #00A5E5;
-}
-.button:focus {
-    outline: 0;
-}
-.button-active,.button-active:hover,.button:active {
-	background-color:#00FF87;
+.collectorAdvance {
+  margin-top:3em;
 }
 
-/* forms */
-.collector-form {
-    margin: .5em 0;
-    display: block;
+/* styling for when a button is disabled (`Min Time` not reached) */
+.collectorButton:disabled,
+*:disabled, *:disabled:hover  {
+  cursor: not-allowed;
+  background-color:#e1e1e1;
+  border-color:#888;
+  color:#777;
 }
-.collector-form input[type=radio]:focus,.collector-form input[type=checkbox]:focus {
-    outline: thin dotted #333;
-    outline: 1px auto #129FEA;
+
+
+
+
+/*  $FORMS
+ ----------------------------------------------------------------------------- */
+/* see BasicInfo.php for useage, also used in FinalQuestions*/
+.radioButtons > label {
+  margin: 0em 1em 0em 1em;
+  padding: .4em;
+  display: block;
 }
-.collector-form input,.collector-form select,.collector-form textarea {
-    font-family: "Open Sans", Arial, Helvetica, sans-serif;
-    font-size: 100%;
-    padding: .4em .6em;
-    display: inline-block;
-    border: 1px solid #ccc;
-    box-shadow: inset 0 1px 3px #ddd;
-    border-radius: 4px;
-    -webkit-box-sizing: border-box;
-       -moz-box-sizing: border-box;
-            box-sizing: border-box;
+  .radioButtons > label:hover {
+    background-color: #a1ffd9;
+    border-radius: 3px;
+  }
+.radioButtons input {
+  margin: 0em .5em .3em .5em;
 }
-.collector-form input:focus,.collector-form select:focus,.collector-form textarea:focus,
-.collector-form input:hover,.collector-form select:hover,.collector-form textarea:hover {
-    outline: 0;
-    border-color: #00A5E5;
+.radioButtons input:focus {
+  outline: none;
+} 
+
+/* default collector input style */
+.collectorInput {
+  padding: .3em .4em;
+  border-radius: 4px;
+  border: 1px solid #bfbfbf;
 }
-.collector-form input[disabled],.collector-form select[disabled],.collector-form textarea[disabled],
-.collector-form input[disabled]:focus,.collector-form select[disabled]:focus,.collector-form textarea[disabled]:focus {
-	outline:0;
-	border:0;
-    cursor: not-allowed;
-    background-color: #eaeded;
-    color: #666;
-}
-.collector-form-extra input[type=checkbox],.collector-form input[type=radio] {
-    margin: .5em 7px .5em -25px;
-    display: inline-block;
-}
-.collector-form-extra fieldset {
-    border: 1px solid silver;
-    margin: 0 2px;
-    padding: .35em .75em .625em .75em;
-}
-.collector-form-extra label {
-    margin: .3em 0 .3em 25px;
-    display: block;
-}
-.collector-form-extra div.field {
-    padding: .35em .75em .625em .75em;
-}
-.collector-form-extra option {
-	padding-right: 10px;
-}
-.consent {
-	margin-top: 1em;
-}
-.consent-legend {
-	color:#000;
-}
+  .collectorInput:active, .collectorInput:hover, .collectorInput:focus {
+    border-color: #09c;
+    outline: none;
+    box-shadow: inset 1px 1px 4px 0px #C9C9C9;
+  }
+
+/* jQuery slider */
 #slider {
-	margin-top:30px;
+  margin: 2em auto .5em auto;
 }
+
 .amount {
-	margin-top: 10px;
-	text-align: center;
+  margin-top: 10px;
+  text-align: center;
 }
+
 .amount input {
-	width: 80px;
-	text-align: center;
-}
-
-
-/*------------------------------------*\
-  	$INDEX
-\*------------------------------------*/
-.login-pos {
-	margin:0 auto 70px auto;
-	text-align:center;
-}
-.login-pos:after {
-	content:' ';
-	margin: 1em;
-}
-.login-pos select[name=Condition] {
-    max-width: 200px;
+  width: 80px;
+  text-align: center;
 }
 
 
 
 
 
-/*------------------------------------*\
-  	$INSTRUCTIONS
-\*------------------------------------*/
-.readcheck {
-	display:none;
-	width: 60%;
-	margin: 3em auto 1em auto;
-	background: #00FF87;
-	padding: 1.5em;
-	border-radius: 5px;
-}
-.readcheck ul li {
-	width: 80%;
-	margin:1em auto;
-	background: #fff;
-	outline: solid 2px #00a5e5;
-	padding: 5px;
-	cursor:pointer;
-}
-.readcheck ul li:hover {
-	background: #00a5e5;
+/*  $CONTENT
+ ---------------------------------------------------------------------------- */
+html, body {
+  height: 100%;
+  min-height: 100vh;
 }
 
-.alert-instructions {
-	display:none;
-	position:absolute;
-	width:100%;
-	top:0;
-	color:#fff;
-	text-align:center;
+body {              /*Has the ID of 'flexBody'*/
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  width: 100%;
+  box-sizing: content-box;
+}
+
+body > form {       /*Has the ID of 'content'*/
+  flex: 0 0 auto;
+  align-self: center;
+  padding: 25px;
+  margin: 0 auto;
+  width: 700px;
+  height: auto;
+  overflow: visible;
+}
+
+.flexVert {
+  display: flex;          flex-flow: column nowrap;
+  align-items: center;    justify-content: center;
+  align-content: center;
+}
+
+.flexHoriz {
+  display: flex;          flex-flow: row nowrap;
+  align-items: center;    justify-content: center;
+  align-content: center;
+}
+
+.flexChild {
+  flex: 0 0 auto;
+}
+    
+/* text alignment */
+.textcenter {
+  text-align:center;
+}
+.textright{
+  text-align:right;
+}
+.textleft{
+  text-align:left;
+}
+.shim {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.pad {
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+.fullPad {
+  padding: 2em;
 }
 
 
-
-
-
-/*------------------------------------*\
-  	$TRIAL
-\*------------------------------------*/
-/* less obtrusive button for when you just want to advance */
-input[type="submit"].button-trial-advance {
-	font-size:20px;
-	margin:1.2em 0;
-	padding:.2em .5em;
+/* sizing classes */
+.wide {
+  width: 350px;
 }
 
-/* study trial type */
-.study {
-	font-size:3em;
-    overflow:auto;
-}
-.study-left {
-	float:left;
-	width:48%;
-	text-align:right;
-    min-height:1px;
-}
-.study-divider {
-	float:left;
-	width:4%;
-	text-align:center;
-}
-.study-right {
-	float:left;
-	width:48%;
-	text-align:left;
-    min-height:1px;
-}
-
-/* copy trials */
-.collector-form .copybox {
-	font-family: "Roboto", "Open Sans", Arial, Helvetica, sans-serif;
-	font-size:100%;
-	color:#333;
-	padding:.15em 0;
-	margin:0 0 0 -3px;
-	width: 90%;
-	vertical-align:top;
-}
-
-/* MCpic, StudyPic, TestPic trials */
-.pic {
-	margin-bottom: 24px;
-}
-
-/* stepout pages */
-.stepout-clock {
-	position:fixed;
-	top: 20px;
-	right: 20px;
-	padding: 8px;
-	font-size: 1.1em;
-	color: #fff;
-	background-color: #0055A6;
-	text-align:center;
-}
-	.stepout-clock span {
-		margin-bottom: 20px;
-	}
-	.stepout-clock h3 {
-		color:#fff;
-	}
-
-.tetris-wrap {
-	width:550px;
-	margin:0 auto;
-}
-.tetris-controls {
-	margin: 0 auto 2em auto;
-	width: 400px;
-	border: 3px solid #00A5E5;
-}
-.tetris-wrap h3 {
-	padding:1em 0;
-}
-.tetris-controls p {
-	margin: 0 0 .2em 0;
-	text-align: left;
-}
-.tetris {
-	display:none;
-	margin: 50px 0;
-}
-
-/* format diagnostics */
-#showTimer {
-	margin-top:2em;
-}
-.diagnostics {
-	margin-top:2em;
-	font-family: Consolas, monaco, monospace;
-	clear: both;
-	font-size: .9em;
-}
-.diagnostics ul {
-	margin-bottom:1em;
-}
-.collapsibleTitle {
-	margin:1em auto;
-	width: 85%
-}
-.collapsibleTitle h3 {
-	color:#fff;
+.small {
+  font-size: .95em;
 }
 
 
 
+/* Hidden objects */
+.precache, .precachenext, .hidden, #waiting, #loadingForm {
+  display: none!important;
+}
+.invisible {
+  visibility: hidden!important;
+}
 
-/*------------------------------------*\
-  	$FQS
-\*------------------------------------*/
 
 
 
 
 
 
-/*------------------------------------*\
-  	$NO-JS
-\*------------------------------------*/
+/*  $NO-JS
+ ---------------------------------------------------------------------------- */
 .nojs {
   background:#fbe7a8;
   max-width: 900px;
@@ -591,37 +552,323 @@ input[type="submit"].button-trial-advance {
   margin-top: -100px;
 }
 .nojs img {
-    position:absolute;
-    float:left;
-    top:50%;
-    margin: -95px 0 0 15px;
+  position:absolute;
+  float:left;
+  top:50%;
+  margin: -95px 0 0 15px;
 }
 .nojs .nojs-text {
-    margin-left: 90px;
-    padding: 30px;
+  margin-left: 90px;
+  padding: 30px;
 }
 
 
 
 
 
-/*------------------------------------*\
-  	$MISC
-\*------------------------------------*/
-ol {
-    list-style:decimal;
-    margin-left: 35px;
-    padding: 10px auto 10px auto;
+/* $PAGE-SPECIFIC
+ ---------------------------------------------------------------------------- */
+/* ==  Basic Info  == */
+.basicInfo section {
+  padding-left: 1.5em;
+  margin: 2em 0em 1.3em 1.5em;
+}
+  /* Consent form */
+  .consent {
+    width: 500px;
+ }
+ .consent label {
+   width: 425px;
+   display: inline-block;
+ }
+ .consent textarea {
+   background:none repeat scroll 0% 0% #F2F2F2;
+   border:1px solid #CCC;
+   font-family:serif;
+   height:300px;
+   width:400px;
+   overflow:auto;
+   padding:6px;
+   border-radius: 3px;
+   display: block;
+ }
+
+/* ==  Instructions  == */
+
+
+.readcheck {
+  background: #00FF87;
+  border-radius: 5px;
+  display:none;
+  margin: 3em auto 1em auto;
+  padding: 1.5em;
+  width: 60%;
 }
 
-li {
-    padding-bottom: 15px
+.readcheck ul {
+  list-style:none;
+}
+.readcheck ul li {
+  width: 80%;
+  margin:1em auto;
+  background: #fff;
+  outline: solid 2px #00a5e5;
+  padding: 5px;
+  cursor: pointer;
+}
+.readcheck ul li:hover {
+  background: #00a5e5;
+}
+
+.alert-instructions {
+  display:none;
+  width:100%;
+  color:#fff;
+  text-align:center;
+}
+
+.redOutline {
+  outline: 2px dashed #900;
+}
+
+/* ==  Trial  == */
+/* less obtrusive button for when you just want to advance */
+input[type="submit"].button-trial-advance {
+  font-size:20px;
+  margin:1.2em 0;
+  padding:.2em .5em;
+}
+
+/* study trial type */
+.study {
+  font-size: 2em;
+  max-height: 80%;
+}
+.study-left {
+  float:left;
+  width:48.5%;
+  text-align:right;
+  min-height:1px;
+}
+.study-divider {
+  float:left;
+  width:3%;
+  text-align:center;
+}
+.study-right {
+  float:left;
+  width:48.5%;
+  text-align:left;
+  min-height:1px;
+}
+
+/* copy and word-stem (testcue) and free recall trials*/
+.copybox {
+  color:#333;
+  padding:0 0 0 1px;
+  margin:0px 0 0 -2px;
+  max-width: 200px;
+  overflow:visible;
+  width: 90%;
+}
+/* Aligns the Cue + divider with the input field when inside an alignToInput div*/
+.alignToInput .study-left, .alignToInput .study-divider {
+  padding-top: .08em;
+}
+.test-cue input  { 
+  margin:0em 0 0 1px; width: 200px;
+  padding: 0px 0px;
+  max-width: 4em;
+  vertical-align: baseline;
+}
+.fr-textarea {
+  height:10em;
+  width:100%;
+  box-sizing: border-box;
 }
 
 
-/*------------------------------------*\
-    $MEDIA
-\*------------------------------------*/
+/* MCpic, StudyPic, TestPic trials */
+.pic {
+  padding: 1em;
+}
+.mcPicTable td {
+  min-width: 170px;
+  text-align: center;
+  vertical-align: middle; 
+}
+
+.mcPicTable .collectorButton { 
+  margin: 3% 7%; 
+}
+
+
+/* stepout pages */
+.stepout-clock {
+  position:fixed;
+  top: 20px;
+  right: 20px;
+  padding: 8px;
+  font-size: 1.1em;
+  color: #fff;
+  background-color: #0055A6;
+  text-align:center;
+}
+  .stepout-clock span {
+    margin-bottom: 20px;
+  }
+  .stepout-clock h3 {
+    color:#fff;
+  }
+
+.tetris-wrap {
+  width:550px;
+  margin:0 auto;
+}
+.tetris-controls {
+  margin: 0 auto 2em auto;
+  width: 400px;
+  border: 3px solid #00A5E5;
+}
+.tetris-wrap h3 {
+  padding:1em 0;
+}
+.tetris-controls p {
+  margin: 0 0 .2em 0;
+  text-align: left;
+}
+.tetris {
+  display:none;
+  margin: 50px 0;
+}
+
+/* format diagnostics */
+.diagnostics {
+  margin-top:2em;
+  font-family: "Inconsolata", "inconsolata_local", "Courier New", Courier, monospace;
+  clear: both;
+  font-size: .9em;
+}
+.diagnostics ul {
+  margin-bottom:1em;
+}
+.collapsibleTitle {
+  margin:1em auto;
+  width: 85%
+}
+.collapsibleTitle h3 {
+  color:#fff;
+}
+.before, .after {
+    width:   49%;
+    display: block-inline;
+    padding: 3px;
+    float:   left;
+    overflow: hidden;
+    font-size: .9em;
+}
+.before table{
+    background: #CEE5F2;
+}
+.after table{
+    background: #A5DEFC;
+}
+.sectionBreak {
+    float: left;
+    display:block;
+    width:100%;
+}
+
+
+
+
+/* $GRIDS
+ ---------------------------------------------------------------------------- */
+.grid {
+  margin: 0 0 0 -18px;
+}
+.grid-gutterless {
+  margin-left: 0;
+}
+.grid-gutterless > .grid-item {
+  padding-left: 0;
+}
+.grid-item {
+  display: inline-block;
+  padding-left: 18px;
+  vertical-align: top;
+  width:100%;
+}
+.grid-item > div {
+  margin: 0 0 18px;
+}
+.grid-1-10 {
+  width: 10%;
+}
+.grid-1-8 {
+  width: 12.5%;
+}
+.grid-1-5, .grid-2-10 {
+  width: 20%;
+}
+.grid-1-4, .grid-2-8 {
+    width: 25%;
+}
+.grid-3-10 {
+  width: 30%;
+}
+.grid-1-3, .grid-2-6 {
+  width: 33.333%
+}
+.grid-3-8 {
+  width: 37.5%;
+}
+.grid-2-5, .grid-4-10 {
+  width: 40%;
+}
+.grid-1-2, .grid-2-4, .grid-3-6, .grid-4-8, .grid-5-10 {
+    width: 50%;
+}
+.grid-3-5, .grid-6-10 {
+  width: 60%;
+}
+.grid-5-8 {
+  width: 62.5%;
+}
+.grid-2-3, .grid-4-6 {
+  width: 66.666%;
+}
+.grid-7-10 {
+  width: 70%;
+}
+.grid-3-4, .grid-6-8 {
+    width: 75%;
+}
+.grid-4-5, .grid-8-10 {
+  width: 80%;
+}
+.grid-7-8 {
+  width: 87.5%;
+}
+.grid-9-10 {
+  width: 90%;
+}
+.grid-1-1 {
+  margin-left:0px;
+}
+
+
+
+
+/* $MEDIA
+ ---------------------------------------------------------------------------- */
+ul {
+    list-style-type: disc;
+}
+ul li, ol li {
+    margin: 5px 0px 5px 45px;
+}
+
 @media all and (max-width: 980px) {
     .stepout-clock {
         opacity: .5;
@@ -629,11 +876,81 @@ li {
     }
 }
 
-/*------------------------------------*\
-    $TINKER
-\*------------------------------------*/
 
 
 
 
-
+/* $TOOLS
+ ---------------------------------------------------------------------------- */
+#login {
+    width: 450px;
+    margin: 50px auto;
+    text-align: center;
+}
+    #login .wrong {
+        font-weight: 400;
+        line-height: .95em;
+        color: red;
+    }
+    #login p {
+        width: 300px;
+        display: inline-block;
+        margin-bottom: 5px;
+    }
+    #login input[type=password] {
+        margin-left: 10px;
+        margin-right: 5px;
+        width: 220px;
+    }
+    #login h3 {
+        line-height: 1.2em;
+    }
+#salt {
+    font-family: "Inconsolata", "inconsolata_local", "Courier New", Courier, monospace;
+    color: #f7f7f7;         
+    font-weight: 400; /* we only have the 400s for inconsolata */
+    width: 300px;           
+    line-height: 95%;
+    word-wrap: break-word;  
+    display: block;
+    margin: 50px auto 20px auto;
+}
+#nav {
+    width: 90%;
+    overflow: auto;
+    margin:5px auto;
+    background-color: #DEE7EC;
+    border-radius: 8px;
+    padding: 20px 15px;
+}
+    #nav h1 {
+        float: left;
+        line-height: .8em;
+        padding: 0px;
+        font-size: 2em;
+    }
+    #nav div {
+        float: right;
+        margin-right: 25px;
+    }
+    #nav a {
+        float: right;
+        font-size: 1.1em;
+        padding-top: 5px;
+    }
+    #nav select {
+    width: 300px;;
+    }
+    #nav button {
+        margin-left: 2px;
+}
+.toolSelect {
+    background-color: #F2F2F2;
+    font-size: 90%;
+}
+.toolWidth {
+    width: 90%;
+    display: block;
+    margin: 0px auto;
+    overflow: auto;
+}

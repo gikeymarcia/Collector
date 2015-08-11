@@ -1,6 +1,9 @@
-Order allow,deny
-Allow from All
+# Allow access to all files
+Order Allow,Deny
+Allow from all
 
-<FilesMatch "((\.(php|csv|txt))$)">
-        Deny from All
-</FilesMatch>
+#Block access to Settings.php
+<Files Settings.php>
+    Order Deny,Allow
+    Deny from all
+</Files>
