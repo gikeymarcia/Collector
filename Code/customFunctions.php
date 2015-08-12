@@ -727,8 +727,17 @@ function rangeToArray($string, $separator = ',', $rangeIndicator = '::')
         if ($count === 1) {
             $output[] = $endPoints[0];
         } else {
+            $lastPoint       =& $endPointsDirty[$count-1];
+            $stepExploded    =  explode('#', $lastPoint);
+            if (isset($stepExploded[1]) AND is_numeric($stepExploded[1])) {
+                $step = trim($stepExploded[1]);
+            } else {
+                $step = 1;
+            }
+            $lastPoint = trim($stepExploded[0]);
+            unset($lastPoint);
             $output = array_merge(
-                $output, range($endPoints[0], $endPoints[$count-1])
+                $output, range($endPoints[0], $endPoints[$count-1], $step)
             );
         }
     }
