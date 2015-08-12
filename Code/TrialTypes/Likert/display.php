@@ -57,7 +57,6 @@ $texts       = explode('|', $text);
 $question    = array_shift($texts);
 $labelWidth  = floor(1000/max(1, count($texts)))/10;
 $optionWidth = floor(1000/count($likertOptions))/10;
-$labelMid    = (count($texts)-1)/2;
 
 ?><style>
     .likertArea { text-align: center; }
