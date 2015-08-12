@@ -38,47 +38,14 @@
 //     If you put a range (2 entries separated by two colons '::'), the
 //         scale will start from the first entry, and end at the second.
 //         Both number ranges (-3::3) and alphabetical ranges (a::f)
-//         are fine. If the range is numeric, you can also define the
-//         step size using parenthesis after the range ("0::1(.1)").
+//         are fine. You can also define the step size using a # sign 
+//         after the range (e.g., 0::1#.5).
 //
 //     You can also combine ranges using commas, such as "1::3,a::c".
 //         Using these, its possible to have duplicate entries, so
 //         something like "1,1,1,1::4" is possible. If you want to set
-//         the step size for numeric ranges, please enter the step size
-//         after each range, like "1::3(.1), a::g(2), 7::9(.1)"
-
-function trimExplode($delimiter, $string) {
-    $output = array();
-    $explode = explode($delimiter, $string);
-    foreach( $explode as $explosion ) {
-        $output[] = trim($explosion);
-    }
-    return $output;
-}
-
-function createRange($endValue) {
-    $output = array();
-    $step = findRangeStep($endValue);
-    if (is_numeric($endValue)) {
-        $output = range(1, $endValue, $step);
-    } elseif (strtolower($endValue) === $endValue ) {
-        $output = range('a', $endValue, $step);
-    } else {
-        $output = range('A', $endValue, $step);
-    }
-    return $output;
-}
-
-function findRangeStep(&$string) {
-    if (strpos($string, '(') !== false) {
-        $step = substr($string, strpos($string, '('));
-        $step = filter_var($step, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-        $string = substr($string, 0, strpos($string, '('));
-    } else {
-        $step = 1;
-    }
-    return $step;
-}
+//         the step size for multiple ranges, please enter the step size
+//         after each range, like "1::3#.1, a::g # 2, 7::9 #.5"
 
 if (!isset($settings) OR $settings === '') {
     $settings = '1::7';
