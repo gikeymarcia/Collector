@@ -2,12 +2,13 @@
     require 'initiateCollector.php';
     
     $trialTypes = array();
-    $trialTypeDirs = array($_FILES->custom_trial_types, $_FILES->trial_types);
+    $trialTypeDirs = array($_FILES->custom_trial_types->buildPath(), $_FILES->trial_types->buildPath());
     foreach ($trialTypeDirs as $dir) {
         $dirScan = scandir($dir);
         foreach ($dirScan as $entry) {
-            if ($display = fileExists($dir . $entry . '/' . $_FILES->trial_type_files->display)) {
-                $trialTypes[strtolower($entry)] = $display;
+            $files = getTrialTypeFiles($entry);
+            if ($files !== false) {
+                $trialTypes[strtolower($entry)] = $files;
             }
         }
     }
