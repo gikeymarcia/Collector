@@ -80,71 +80,80 @@ function findRangeStep(&$string) {
     return $step;
 }
 
-if (!isset($procedureNotes)) { $procedureNotes = ''; }
-$allTextsAsString = $text;
-$likertTexts = trimExplode( '|', $allTextsAsString );
-
-$likertQuestion = array_shift($likertTexts);
-if (count($likertTexts) < 2) {
-    $likertDescrips = array_pad( $likertTexts, 3, '' );
-} elseif (count($likertTexts) === 2) {
-    $likertDescrips = array();
-    $likertDescrips[] = $likertTexts[0];
-    $likertDescrips[] = '';
-    $likertDescrips[] = $likertTexts[1];
-} else {
-    $likertDescrips = $likertTexts;
+if (!isset($settings) OR $settings === '') {
+    $settings = '1::7';
 }
 
-$text = $likertQuestion . ' | ' . implode(' | ', $likertDescrips);
+$likertOptions = rangeToArray($settings);
 
-if (!isset( $settings)) { $settings = ''; }
+$texts       = explode('|', $text);
+$question    = array_shift($texts);
+$labelWidth  = floor(1000/max(1, count($texts)))/10;
+$optionWidth = floor(1000/count($likertOptions))/10;
+$labelMid    = (count($texts)-1)/2;
 
-if ($settings === '') {
-    $likertScale = range(1,7);
-} else {
-    $likertScale = array();
-    if (strpos($settings, ',' ) === false 
-        && strpos($settings, '::') === false
-    ) {
-        $likertScale = createRange($settings);
-    } else {
-        $ranges = trimExplode(',', $settings);
-        foreach( $ranges as $range ) {
-            if( strpos($range, '::') === false ) {
-                $likertScale[] = $range;
-            } else {
-                $endPoints = trimExplode('::', $range);
-                $first = array_shift($endPoints);
-                $last  = array_pop($endPoints);
-                $step  = findRangeStep( $last );
-                $newRange = range($first, $last, $step);
-                $likertScale = array_merge($likertScale, $newRange);
-            }
+?><style>
+    .likertArea { text-align: center; }
+    
+    .likertQuestion { margin: 0 0 30px 0; font-size: 1.3em; }
+    
+    .likertLabels { display: table; margin: 10px 0; color: #666; width: 100%; }
+    .likertLabel { display: table-cell; padding: 8px;
+                   vertical-align: bottom; width: <?= $labelWidth ?>%; }
+    
+    .likertOptions { display: table; margin: 10px 0; width: 100%; }
+    .likertOption { display: table-cell; text-align: center; padding: 14px 8px 28px 8px;
+                    vertical-align: bottom; width: <?= $optionWidth ?>%; }
+</style>
+
+<div class="likertArea">
+<?php
+
+echo '<div class="likertArea">';
+
+echo '<div class="likertQuestion">' .
+        $question .
+     '</div>';
+
+echo '<div class="likertLabels">';
+foreach ($texts as $i => $label) {
+    if (count($texts) === 2) {
+        if ($i === 0) {
+            $class = 'textleft';
+        } else {
+            $class = 'textright';
         }
+    } elseif (count($texts) === 3) {
+        if ($i === 0) {
+            $class = 'textleft';
+        } elseif ($i === 1) {
+            $class = 'textcenter';
+        } else {
+            $class = 'textright';
+        }
+    } else {
+        $class = 'textcenter';
     }
+    echo "<div class='likertLabel $class'>" .
+            $label .
+         '</div>';
 }
-$width = 100/count($likertScale);
+echo '</div>';
+
+echo '<div class="likertOptions">';
+foreach ($likertOptions as $option) {
+    echo '<label class="likertOption">' . 
+            $option .
+            '<br>' .
+            '<input type="radio" name="Response" value="' . $option . '">' .
+         '</label>';
+}
+echo '</div>';
+
+echo '</div>';
 ?>
+</div>
 
-<style>  .likert label { width: <?php echo $width; ?>%; } </style>
-
-<section class="vcenter">
-  <div class="collector-form-element likert inline-radio">
-    <div class="likert-label"><?php echo $likertQuestion; ?></div>
-    
-    <?php foreach( $likertScale as $value ): 
-    ?><input id="r_<?php echo $value; ?>" type="radio" name="Response" value="<?= $value; ?>"
-     ><label for="r_<?php echo $value; ?>"><?php echo $value; ?></label><?php endforeach; ?>
-    
-    <div class="likert-legend">
-      <div class="likert-legend-left"  ><?php echo $likertDescrips[0]; ?></div
-     ><div class="likert-legend-center"><?php echo $likertDescrips[1]; ?></div
-     ><div class="likert-legend-right" ><?php echo $likertDescrips[2]; ?></div>
-    </div>
-  </div>
-  
-  <div class="collector-form-element textcenter">
-    <input class="collectorButton collectorAdvance" id=FormSubmitButton type=submit value="Submit">
-  </div>
-</section>
+<div class="collector-form-element textcenter">
+    <button type="submit" class="collectorButton collectorAdvance">Submit</button>
+</div>
