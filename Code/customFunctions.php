@@ -619,6 +619,28 @@ function getTrialTypeFiles($trialTypeName) {
     $trialTypes[$trialType] = $trialFiles;
     return $trialFiles;
 }
+
+/**
+ * Finds all trial types and their files
+  * @return array
+ */
+function getAllTrialTypeFiles() {
+    global $_FILES;
+    $trialTypes = array();
+    $trialTypeDirs = array($_FILES->custom_trial_types->buildPath(), $_FILES->trial_types->buildPath());
+    foreach ($trialTypeDirs as $dir) {
+        $dirScan = scandir($dir);
+        foreach ($dirScan as $entry) {
+            $type = strtolower(trim($entry));
+            if (isset($trialTypes[$type])) { continue; }    // dont override custom trial types, found first
+            $files = getTrialTypeFiles($type);
+            if ($files !== false) {
+                $trialTypes[strtolower($entry)] = $files;
+            }
+        }
+    }
+    return $trialTypes;
+}
 /**
  * Checks if a given string can be found within another.
  * (Wrapper function for strpos and stripos.)

@@ -1,17 +1,7 @@
 <?php
     require 'initiateCollector.php';
     
-    $trialTypes = array();
-    $trialTypeDirs = array($_FILES->custom_trial_types->buildPath(), $_FILES->trial_types->buildPath());
-    foreach ($trialTypeDirs as $dir) {
-        $dirScan = scandir($dir);
-        foreach ($dirScan as $entry) {
-            $files = getTrialTypeFiles($entry);
-            if ($files !== false) {
-                $trialTypes[strtolower($entry)] = $files;
-            }
-        }
-    }
+    $trialTypes = getAllTrialTypeFiles();
     
     if (!isset($_SESSION['Trial Tester']) OR isset($_POST['resetSession'])) {
         $_SESSION = array();
