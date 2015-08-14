@@ -9,7 +9,7 @@
 // $_SESSION['Debug'] = $_CONFIG->debug_mode;
     
     $title = 'Preparing the Experiment';
-    require $_FILES->code . '/Header.php';
+    // require $_FILES->code . '/Header.php';
 
     // login specific classes
     require 'errorController.php';
@@ -31,8 +31,8 @@
 
     
 
-$user->printData();
-$cond->info();
+// $user->printData();
+// $cond->info();
 
     
 #### Grabbing username and condition from $_GET
@@ -90,23 +90,28 @@ $cond->info();
     }
     
     require 'returnVisitController.php';
-    $check = new ReturnVisitController($user->getUsername());
+    $check = new ReturnVisitController();
+// $check->alreadyDone();
 
-    $jsonPath = $_FILES->json_session->relativeTo($_FILES->root);
-    if ($check->isReturning($jsonPath)) {
+    if ($check->isReturning()) {
+        if ($check->alreadyDone()) {
 
+        }
+        if ($check->timeToReturn()) {
+
+        } else {
+            // error print method
+        }
     }
-
-
     
 exit;
 // Has this user already completed session 1?  If so, determine whether they have another session to complete or if they are done
 // $relJsonSessF = $_FILES->json_session->relativeTo($_FILES->root);
 // $sessionFilename = FileExists("{$relJsonSessF}/{$_SESSION['Username']}.json");
     if ($sessionFilename == true) {              // this file will only exist if this username has completed a session successfully
-        $pastSession   = fopen($sessionFilename, 'r');
-        $loadedSession = fread($pastSession, filesize($sessionFilename));
-        $sessionData   = json_decode($loadedSession, true);
+// $pastSession   = fopen($sessionFilename, 'r');
+// $loadedSession = fread($pastSession, filesize($sessionFilename));
+// $sessionData   = json_decode($loadedSession, true);
         // Load old session info
         $_SESSION = NULL;                       // get rid of current session in memory
         $_SESSION = $sessionData;               // load old session data into current $_SESSION

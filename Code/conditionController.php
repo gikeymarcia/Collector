@@ -33,9 +33,6 @@ class ConditionController
         $this->location = $_FILES->conditions;
         $this->ConditionsCSVexists($this->location);
         $this->loadConditons();
-        626-383-5408
-        jalapeno + pep / 1 pepperoni
-        hot wings 8
 
         $this->requiredColumns();
         // create the 'Counter' folder if it doesn't exist
@@ -74,10 +71,10 @@ class ConditionController
         $condCount = count($this->ConditionsCSV);
         
         $found = false;
-        while ($found == false) {
-            $choice = $logCount % $condCount;
-            if ($this->ConditionsCSV[$choice])
-        }
+        // while ($found == false) {
+        //     $choice = $logCount % $condCount;
+        //     // if ($this->ConditionsCSV[$choice])
+        // }
     }
     /**
      * Prunes out all conditons from Conditons.csv that are turned off
