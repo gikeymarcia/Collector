@@ -70,7 +70,7 @@
                         'Session'               => $_SESSION['Session'],
                         'Condition_Number'      => $_SESSION['Condition']['Number'],
                         );
-        arrayToLine($data, $_FILES->status_end);
+        arrayToLine($data, $_PATH->get('Status End Data'));
         
         
         ######## Save the $_SESSION array as a JSON string
@@ -85,18 +85,18 @@
         }
         
         $jsonSession = json_encode($_SESSION);              // encode the entire $_SESSION array as a json string
-        $jsonPath = $_FILES->json_session . "/{$_SESSION['Username']}.json";
+        $jsonPath = $_PATH->get('json');
         
-        if (!is_dir($_FILES->json_session)) {
+        if (!is_dir($_PATH->get('JSON Dir'))) {
             // make the folder if it doesn't exist
-            mkdir($_FILES->json_session, 0777, true);
+            mkdir($_PATH->get('JSON Dir'), 0777, true);
         }
         file_put_contents($jsonPath, $jsonSession);
         #######
     }
     
         
-    require $_FILES->code . '/Header.php';
+    require $_PATH->get('Header');
 ?>
     <form id="content">
         <?php echo $message; ?>
@@ -109,5 +109,5 @@
         }
     </style>
 <?php
-    require $_FILES->code . '/Footer.php';
+    require $_PATH->get('Footer');
 ?>

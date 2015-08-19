@@ -10,6 +10,6 @@
          'Date'     => date('c'),
     );
     $data += $_POST;
-    arrayToLine($data, $_FILES->instructions_data);
-    header('Location: experiment.php');
+    arrayToLine($data, $_PATH->get('Instructions Data'));
+    header('Location: ' . $_PATH->get('Experiment Page'));
     exit;

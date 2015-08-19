@@ -26,7 +26,7 @@
      * For example, "/New/New.php"
      *
      * What you have access to in all tools
-     *     - $_FILES
+     *     - $_PATH
      *     - $_CONFIG
      *     - `customFunctions.php`
      *     - $_DATA

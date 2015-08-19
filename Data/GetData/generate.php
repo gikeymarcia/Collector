@@ -109,7 +109,7 @@
         arrayToEcho( array_keys($allColumns), $ext );
     }
     
-    $path = $_FILES->raw_output;
+    $path = $_PATH->output_dir;
     // $testHeader is set in scan.php, default 'Username'
     foreach( $users as $exps ) {
         foreach( $exps as $conds ) {

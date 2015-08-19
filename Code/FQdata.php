@@ -27,21 +27,21 @@
     if (is_array($formData)) {
         foreach ($formData as $resp) {
             $data['Response'] = $resp;
-            arrayToLine($data, $_FILES->final_questions_data);
+            arrayToLine($data, $_PATH->final_questions_data);
         }
     } else {
         $data['Response'] = $formData;
-        arrayToLine($data, $_FILES->final_questions_data);
+        arrayToLine($data, $_PATH->final_questions_data);
     }
     
     
     $pos++;                                                             // advance position counter
     
     if (!isset($allFQs[$pos])) {                                        // if there isn't a question coming up
-        header("Location: done.php");                                       // send to done.php
+        header("Location: " . $_PATH->get('Done'));                                       // send to done.php
         exit;                                                               // don't run the code below
     }
     
     
-    header("Location: FinalQuestions.php");                             // send back to FinalQuestions.php before any HTML is sent
+    header("Location: " . $_PATH->get('Final Questions Page'));                             // send back to FinalQuestions.php before any HTML is sent
     exit;

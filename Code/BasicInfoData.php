@@ -10,12 +10,12 @@
           + $_POST;
 
     // write user demographics data to demographics file
-    arrayToLine($data, $_FILES->demographics);
+    arrayToLine($data, $_PATH->demographics_data);
     
     if ($_CONFIG->run_instructions) {
-        $next = 'instructions.php';
+        $next = $_PATH->get('Instructions Page');
     } else {
-        $next = 'experiment.php';
+        $next = $_PATH->get('Experiment Page');
     }
     
     header("Location: $next");
