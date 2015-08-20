@@ -260,7 +260,7 @@
             } else {
                 $protocol = 'http://';
             }
-            $domain   = $_SERVER['SERVER_NAME'];
+            $domain   = $_SERVER['HTTP_HOST'];
             $resource = $_SERVER['REQUEST_URI'];
             return $protocol . $domain . $resource;
         }
