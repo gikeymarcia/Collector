@@ -14,11 +14,5 @@
         text-rendering: optimizeLegibility;
         font-size: 1.05em;
         line-height: 2.2em;
-    }
-    
-    #flexBody {
-        justify-content: flex-start;
-        /*Make the body align flex children to top of page*/
-    }
-    
+    }    
 </style>

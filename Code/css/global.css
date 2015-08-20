@@ -472,8 +472,8 @@ body > form {       /*Has the ID of 'content'*/
   align-self: center;
   padding: 25px;
   margin: 0 auto;
-  width: 700px;
-  height: auto;
+  width: 700px;         max-width: 100%;
+  height: auto;         max-height: 100%;
   overflow: visible;
 }
 

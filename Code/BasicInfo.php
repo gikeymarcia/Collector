@@ -8,12 +8,7 @@
     $title = 'Basic Information';
     require $_FILES->code . '/Header.php';
 ?>
-<style>
-    #flexBody {
-        justify-content: flex-start;
-        /*Make the body align flex children to top of page*/
-    }
-    
+<style>    
     #content {
         width:auto;
         min-width: 400px;
