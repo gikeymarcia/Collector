@@ -5,11 +5,13 @@
     require 'initiateCollector.php';
     
     $_SESSION = array();                                    // reset session so it doesn't contain any information from a previous login attempt
-    $_SESSION['OutputDelimiter'] = $_CONFIG->delimiter;
+    // $_SESSION['OutputDelimiter'] = $_CONFIG->delimiter; // hard-coded now
     $_SESSION['Debug'] = $_CONFIG->debug_mode;
     
+    $_PATH->loadDefault('Current Data', $_CONFIG->experiment_name . '-Data');
+    
     $title = 'Preparing the Experiment';
-    require $_FILES->code . '/Header.php';
+    require $_PATH->get('Header');
     
     
     #### Grabbing username and condition from $_GET
@@ -42,7 +44,7 @@
     }
     if ($_SESSION['Debug'] === true) {
         // debug mode is definitely on, make sure data is sectioned off
-        $_FILES->updateParentPath('data', $_FILES->data->path. '/' . 'Debug/');
+        $_PATH->loadDefault('Current Data', $_PATH->getDefault('Current Data') . '/' . 'Debug');
     }
     
     
@@ -55,7 +57,7 @@
         AND (!$_SESSION['Debug'])
     ) {
         echo '<h1> Error: Login username must be 3 characters or longer</h1>'
-           . '<h2>Click <a href="' . $_FILES->root->toUrl() . 'index.php">here</a> to enter a valid username</h2>';
+           . '<h2>Click <a href="' . $_PATH->get('index', 'url') . '">here</a> to enter a valid username</h2>';
         exit;
     }
     
@@ -63,12 +65,12 @@
     if (($_CONFIG->check_elig == true)
         AND ($_CONFIG->mTurk_mode == true)
     ) {
-        include 'check.php';
+        include $_PATH->get('Check');   // waiter, can I . . . ?
     }
     
     // Has this user already completed session 1?  If so, determine whether they have another session to complete or if they are done
-    $relJsonSessF = $_FILES->json_session->relativeTo($_FILES->root);
-    $sessionFilename = FileExists("{$relJsonSessF}/{$_SESSION['Username']}.json");
+    $_PATH->loadDefault('json', $_SESSION['Username'] . '.json');
+    $sessionFilename = FileExists($_PATH->get('json'));
     if ($sessionFilename == true) {              // this file will only exist if this username has completed a session successfully
         $pastSession   = fopen($sessionFilename, 'r');
         $loadedSession = fread($pastSession, filesize($sessionFilename));
@@ -90,12 +92,17 @@
             }
         } else {                                                                                            // if the user is done with all sessions then send back to done.php
             $_SESSION['alreadyDone'] = true;
-            echo '<meta http-equiv="refresh" content="1; url=' . $_FILES->code->toUrl() . '/done.php">';
+            echo '<meta http-equiv="refresh" content="1; url=' . $_PATH->get('Done', 'url') . '">';
             exit;
         }
         // Overwrite values that need to be updated
-        $outputFile = ComputeString($_CONFIG->output_file_name) . $_CONFIG->output_file_ext;                                 // write to new file
-        $_SESSION['Output File'] = "{$_FILES->raw_output}/{$outputFile}";
+        $outputFile = 
+            'Output_Session' . 
+            $_SESION['Session'] . '_' . 
+            $_SESSION['Username'] . '_' . 
+            $_SESSION['ID'] .
+            '.csv';
+        $_PATH->loadDefault('Output', $outputFile);
         $_SESSION['Start Time']  = date('c');
         
         #### Record info about the person starting the experiment to the status start file
@@ -108,7 +115,7 @@
             'Session'               => $_SESSION['Session'] ,
             'Condition_Number'      => $_SESSION['Condition']['Number'],
             'Condition_Description' => $_SESSION['Condition']['Condition Description'],
-            'Output_File'           => $outputFile,
+            'Output_File'           => $_PATH->getDefault('Output'),
             'Stimuli_File'          => $_SESSION['Condition']['Stimuli'],
             'Procedure_File'        => $_SESSION['Condition']['Procedure'],
             'Browser'               => $userAgent->Parent,
@@ -116,10 +123,10 @@
             'OS'                    => $userAgent->Platform,
             'IP'                    => $_SERVER["REMOTE_ADDR"],
         );
-        arrayToLine($UserData, $_FILES->status_begin);
+        arrayToLine($UserData, $_PATH->get('Status Begin Data'));
         ###########################################################################
         
-        echo '<meta http-equiv="refresh" content="1; url=' . $_FILES->code->toUrl() . '/experiment.php">';
+        echo '<meta http-equiv="refresh" content="1; url=' . $_PATH->get('Experiment Page', 'url') . '">';
         exit;               // do not run any of the other code, send to experiment.php
         
     } else {
@@ -130,25 +137,25 @@
     
     ##### Error Checking Code ####
     $errors = array('Count' => 0, 'Details' => array());
-    if (file_exists($_FILES->conditions) == false) {      // does conditions exist? (error checking)
+    if (file_exists($_PATH->get('Conditions')) == false) {      // does conditions exist? (error checking)
         $errors['Count']++;
-        $errors['Details'][] = "No '{$_FILES->conditions}' found.";
+        $errors['Details'][] = "No '{$_PATH->conditions}' found.";
     }
     // does the condition file have the required headers?
-    $Conditions = GetFromFile($_FILES->conditions,  false);   // Loading conditions info
-    $errors = keyCheck($Conditions, 'Number'    , $errors, $_FILES->conditions);
-    $errors = keyCheck($Conditions, 'Stimuli'   , $errors, $_FILES->conditions);
-    $errors = keyCheck($Conditions, 'Procedure' , $errors, $_FILES->conditions);
+    $Conditions = GetFromFile($_PATH->get('Conditions'),  false);   // Loading conditions info
+    $errors = keyCheck($Conditions, 'Number'    , $errors, $_PATH->get('Conditions'));
+    $errors = keyCheck($Conditions, 'Stimuli'   , $errors, $_PATH->get('Conditions'));
+    $errors = keyCheck($Conditions, 'Procedure' , $errors, $_PATH->get('Conditions'));
     
     
     
     #### Code to automatically choose condition assignment
     $_SESSION['Condition'] = array();
-    $Conditions = GetFromFile($_FILES->conditions,  false);   // Loading conditions info
-    $logFile    = "{$_FILES->counter}/{$_CONFIG->login_counter_file}";
+    $Conditions = GetFromFile($_PATH->get('Conditions'),  false);   // Loading conditions info
+    $logFile    = $_PATH->get('Counter', 'relative', $_CONFIG->login_counter_file);
     if ($selectedCondition == 'Auto') {
-        if (!is_dir($_FILES->counter)) {                                  // create the 'Counter' folder if it doesn't exist
-            mkdir($_FILES->counter,  0777,  true);
+        if (!is_dir($_PATH->get('Counter Dir'))) {                                  // create the 'Counter' folder if it doesn't exist
+            mkdir($_PATH->get('Counter Dir'),  0777,  true);
         }
         
         if (file_exists($logFile)) {                                            // Read counter file & save value
@@ -182,6 +189,10 @@
     }
     
     
+    $_PATH->loadDefault('Stimuli',   $_SESSION['Condition']['Stimuli']);
+    $_PATH->loadDefault('Procedure', $_SESSION['Condition']['Procedure']);
+    
+    
     
     ###########################################################################
     ##### Error Checking Code #################################################
@@ -189,17 +200,17 @@
     // did we fail to find the condition information?
     if ($_SESSION['Condition'] === array()) {
         $errors['Count']++;
-        $errors['Details'][] = 'Could not find the selected condition index ' . ($conditionIndex+1) . ' in ' . $_FILES->conditions;
+        $errors['Details'][] = 'Could not find the selected condition index ' . ($conditionIndex+1) . ' in ' . $_PATH->get('Conditions');
     }
     
     // calculating path to Stimuli and Procedure file
-    $stimPath = $_FILES->stim_files.'/' . $_SESSION['Condition']['Stimuli'];
-    $procPath = $_FILES->proc_files.'/' . $_SESSION['Condition']['Procedure'];
+    $stimPath = $_PATH->get('Stimuli');
+    $procPath = $_PATH->get('Procedure');
     
     // does this condition point to a valid stimuli file?
     if (file_exists($stimPath) == false) {
         $errors['Count']++;
-        $errors['Details'][] = 'No stimuli file found at "' . $_FILES->stim_files.'/' . $_SESSION['Condition']['Stimuli'] . '"';
+        $errors['Details'][] = 'No stimuli file found at "' . $_PATH->get('Stimuli', 'root') . '"';
     }
     // checking required columns from Stimuli file
     $temp = GetFromFile($stimPath, false);
@@ -209,7 +220,7 @@
     // does this condition point to a valid procedure file?
     if (file_exists($procPath) == false) {
         $errors['Count']++;
-        $errors['Details'][] = 'No procedure file found at "' . $_FILES->proc_files.'/' . $_SESSION['Condition']['Procedure'] . '"';
+        $errors['Details'][] = 'No procedure file found at "' . $_PATH->get('Procedure', 'root') . '"';
     }
     // checking required columns from Procedure file
     $temp = GetFromFile($procPath, false);
@@ -222,7 +233,7 @@
     
     #### Find all of the columns that hold trial types (including 'Post# Trial Type's)
     $trialTypeColumns = array();                                                                // Each position will have the column name of a trial type column
-    $proc = GetFromFile($_FILES->proc_files.'/' . $_SESSION['Condition']['Procedure'], false); // load procedure file without padding
+    $proc = GetFromFile($_PATH->get('Procedure'), false); // load procedure file without padding
     foreach ($proc[0] as $col => $val) {                                    // check all column names
         if (substr($col, -10) == 'Trial Type') {                           // if ends with 'trial type'
             if ($col == 'Trial Type') {                                        // and is trial type
@@ -276,12 +287,12 @@
     ) {
         $stimuliFiles = array();
         if ($_CONFIG->check_all_files == true) {
-            $stimPath = $_FILES->stim_files.'/';
+            $stimPath = $_PATH->get('Stimuli Dir').'/';
             foreach ($Conditions as $row => $cells) {
                 $stimuliFiles[] = $stimPath . $Conditions[$row]['Stimuli'];
             }
         } else {
-            $stimuliFiles[] = $_FILES->stim_files.'/' . $_SESSION['Condition']['Stimuli'];
+            $stimuliFiles[] = $_PATH->get('Stimuli');
         }
         
         foreach ($stimuliFiles as $fileName) {
@@ -292,9 +303,9 @@
                     // show() detects a file extension like .png, and will use FileExists to check that it exists
                     // but it will always return a string, for cases where you are showing regular text
                     // using FileExists, we can see if a cue detected as an image by show() is a file that actually exists
-                    if (FileExists('../Experiment/' . $row['Cue']) === false ) {
+                    if (FileExists($_PATH->get('Experiment') . '/' . $row['Cue']) === false ) {
                         $errors['Count']++;
-                        $errors['Details'][] = 'Image or audio file "../Experiment/' . $row['Cue'] . '" not found for row '
+                        $errors['Details'][] = 'Image or audio file "' . $_PATH->get('Experiment') . $row['Cue'] . '" not found for row '
                                              . $i . ' in Stimuli File "' . basename($fileName) . '".';
                     }
                 }
@@ -305,7 +316,7 @@
     
     
     #### Check that we can find files for all trials in use (also finds custom scoring files)
-    $procedure  = GetFromFile($_FILES->proc_files.'/' . $_SESSION['Condition']['Procedure']);
+    $procedure  = GetFromFile($_PATH->get('Procedure'));
     $trialTypes = array();                                                  // we will make a list of all found trial types, and what level they will be used at
     $notTrials  = array('off'   => true,                                    // if the 'Trial Type' value is one of these then it isn't a trial
                         'no'    => true,
@@ -323,21 +334,19 @@
             $trialTypes[$thisTrialType]['files'] = $trialFiles;
             $trialTypes[$thisTrialType]['levels'][$postNumber] = true;      // make note what levels each trial type are used at (e.g., Study is a regular AND a Post 1 trial)
             if ($trialFiles === false) {
-                $procName = pathinfo($_FILES->proc_files .'/'. $_SESSION['Condition']['Procedure'], PATHINFO_FILENAME);
+                $procName = pathinfo($_PATH->get('Procedure'), PATHINFO_FILENAME);
                 $errors['Count']++;
                 $errors['Details'][] = 
                     'The trial type '. $row[$column] .' for row '. $i .' in '
                   . 'the procedure file '. $procName .' has no folder in '
-                  . 'either the "'. $_FILES->custom_trial_types .'" folder or '
-                  . 'the "'. $_FILES->trial_types .'" folder.';
+                  . 'either the "'. $_PATH->get('Custom Trials Types', 'root') .'" folder or '
+                  . 'the "'. $_PATH->get('Trials Types', 'root') .'" folder.';
             }
         }
     }
     
     unset($procedure);
-    ##### END Error Checking Code #################################################
-    
-    
+    ##### END Error Checking Code #######################################
     
     
     
@@ -346,7 +355,7 @@
     ###############################################################################
     // Setting up all the ['Response'] keys that will be needed during the experiment
     // Also checks scoring files if that trial type lists some required columns
-    $proc = GetFromFile($_FILES->proc_files.'/' . $_SESSION['Condition']['Procedure'], false); // load procedure file without padding
+    $proc = GetFromFile($_PATH->get('Procedure'), false); // load procedure file without padding
     $allColumnsNeeded = array();
     $allColumnsOutput = array();
     foreach ($trialTypes as $type => $info) {
@@ -385,17 +394,17 @@
         $errors = keyCheck($proc, $column, $errors, $_SESSION['Condition']['Procedure']);
     }
     
-    include 'shuffleFunctions.php';
+    include $_PATH->get('Shuffle Functions');
     #### Create $_SESSION['Trials'] 
     #### Load all Stimuli and Procedure info for this participant's condition then combine to create the experiment
     // load stimuli for this condition then block shuffle
-    $cleanStimuli = GetFromFile($_FILES->stim_files.'/' . $_SESSION['Condition']['Stimuli']);
+    $cleanStimuli = GetFromFile($_PATH->get('Stimuli'));
     $stimuli = multiLevelShuffle($cleanStimuli);
     $stimuli = shuffle2dArray($stimuli, $_CONFIG->stop_at_login);
     $_SESSION['Stimuli'] = $stimuli;
     
     // load and block shuffle procedure for this condition
-    $cleanProcedure = GetFromFile($_FILES->proc_files.'/' . $_SESSION['Condition']['Procedure']);
+    $cleanProcedure = GetFromFile($_PATH->get('Procedure'));
     
     $addColumns = array('Text');
     foreach ($addColumns as $add) {
@@ -467,8 +476,13 @@
     
     
     #### Figuring out what the output filename will be
-    $outputFile = ComputeString($_CONFIG->output_file_name) . $_CONFIG->output_file_ext;
-    $_SESSION['Output File'] = "{$_FILES->raw_output}/{$outputFile}";
+    $outputFile = 
+        'Output_Session' . 
+        $_SESSION['Session'] . '_' . 
+        $_SESSION['Username'] . '_' . 
+        $_SESSION['ID'] .
+        '.csv';
+    $_PATH->loadDefault('Output', $outputFile);
     $_SESSION['Start Time']  = date('c');
     
     
@@ -510,7 +524,7 @@
         'Session'               => $_SESSION['Session'] ,
         'Condition_Number'      => $_SESSION['Condition']['Number'],
         'Condition_Description' => $_SESSION['Condition']['Condition Description'],
-        'Output_File'           => $outputFile,
+        'Output_File'           => $_PATH->getDefault('Output'),
         'Stimuli_File'          => $_SESSION['Condition']['Stimuli'],
         'Procedure_File'        => $_SESSION['Condition']['Procedure'],
         'Browser'               => $userAgent->Parent,
@@ -518,7 +532,7 @@
         'OS'                    => $userAgent->Platform,
         'IP'                    => $_SERVER["REMOTE_ADDR"],
     );
-    arrayToLine($UserData, $_FILES->status_begin);
+    arrayToLine($UserData, $_PATH->get('Status Begin Data'));
     ###########################################################################
     
     
@@ -527,18 +541,18 @@
     
     #### Send participant to next phase of experiment (demographics or instructions)
     if ($_CONFIG->run_demographics == true) {
-        $link = 'BasicInfo.php';
+        $link = $_PATH->get('Basic Info');
     } elseif ($_CONFIG->run_instructions) {
-        $link = 'instructions.php';
+        $link = $_PATH->get('Instructions Page');
     } else {
-        $link = 'experiment.php';
+        $link = $_PATH->get('Experiment Page');
     }
     
     
     if ($_CONFIG->stop_at_login == true) {             // if things are going wrong this info will help you figure out when the program broke
         Readable($_SESSION['Condition'],    'Condition information');
-        Readable($stimuli,                  'Stimuli file in use ('   . $_FILES->stim_files.'/' . $_SESSION['Condition']['Stimuli']   . ')');
-        Readable($procedure,                'Procedure file in use (' . $_FILES->proc_files.'/' . $_SESSION['Condition']['Procedure'] . ')');
+        Readable($stimuli,                  'Stimuli file in use ('   . $_PATH->get('Stimuli',   'root') . ')');
+        Readable($procedure,                'Procedure file in use (' . $_PATH->get('Procedure', 'root') . ')');
         Readable($trialTypeColumns,         'Levels of trial types being used');
         Readable($trialTypes,  'All info about trial types used in experiment');
         Readable($_SESSION['Trials'],       '$_SESSION["Trials"] array');
@@ -569,5 +583,5 @@
         echo '<form id="loadingForm" action="' . $link . '" method="get"> </form>';
     }
         
-    require $_FILES->code . '/Footer.php';
+    require $_PATH->get('Footer');
 ?>

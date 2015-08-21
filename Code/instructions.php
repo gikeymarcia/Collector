@@ -9,11 +9,11 @@
 	
     $title = 'Experiment Instructions';
 	$_dataController = 'instructions';
-    require $_FILES->code . '/Header.php';
+    require $_PATH->get('Header');
 ?>
 <form name="Login" id="content" action="InstructionsRecord.php" method="post">
     <div class="alert alert-instructions">Please carefully read the instructions again.</div>
-    <?php include FileExists($_FILES->instructions->relativeTo($_FILES->code)); ?>
+    <?php include FileExists($_PATH->get('Instructions')); ?>
     
 	<input  name="RT"        id="RT"    type="hidden" value="0" />
 	<input  name="Fails"     id="Fails" type="hidden" value="0" />
@@ -30,4 +30,4 @@
 </form>
 
 <?php
-    require $_FILES->code . '/Footer.php';
+    require $_PATH->get('Footer');

@@ -23,19 +23,19 @@
     $_SESSION = array();                             
     
     // load and sort conditions
-    $Conditions = GetFromFile($_FILES->conditions, false);
+    $Conditions = GetFromFile($_PATH->get('Conditions'), false);
     $conditionNumbers = array();
     foreach ($Conditions as $cond) {
         if ($cond['Condition Description'][0] === '#') { continue; }
         if (isset($conditionNumbers[$cond['Number']])) {
-            exit('Error: Multiple Conditions use the same number. Please check your "'.$_FILES->conditions.'" file and make sure each number in the "Number" column is unique.');
+            exit('Error: Multiple Conditions use the same number. Please check your "'.$_PATH->conditions.'" file and make sure each number in the "Number" column is unique.');
         } else {
             $conditionNumbers[$cond['Number']] = true;
-            if (!file_exists($_FILES->stim_files.'/' . $cond['Stimuli'])) {
-                exit('Error: The stimuli file "'   . $cond['Stimuli']   . '" could not be found in the ' . $_FILES->stim_files . ' folder, for Condition ' . $cond['Number'] . ': ' . $cond['Condition Description'] . '. Either rename a file to "' . $cond['Stimuli']   . '" or change this entry in the "'.$_FILES->conditions.'" file to match an existing file.');
+            if (!file_exists($_PATH->get('Stimuli Dir') . '/' . $cond['Stimuli'])) {
+                exit('Error: The stimuli file "'   . $cond['Stimuli']   . '" could not be found in the ' . $_PATH->get('Stimuli Dir') . ' folder, for Condition ' . $cond['Number'] . ': ' . $cond['Condition Description'] . '. Either rename a file to "' . $cond['Stimuli']   . '" or change this entry in the "'.$_PATH->get('Conditions').'" file to match an existing file.');
             }
-            if (!file_exists($_FILES->proc_files.'/' . $cond['Procedure'])) {
-                exit('Error: The procedure file "' . $cond['Procedure'] . '" could not be found in the ' . $_FILES->proc_files . ' folder, for Condition ' . $cond['Number'] . ': ' . $cond['Condition Description'] . '. Either rename a file to "' . $cond['Procedure'] . '" or change this entry in the "'.$_FILES->conditions.'" file to match an existing file.');
+            if (!file_exists($_PATH->get('Procedure Dir') . '/' . $cond['Procedure'])) {
+                exit('Error: The procedure file "' . $cond['Procedure'] . '" could not be found in the ' . $_PATH->get('Procedure Dir') . ' folder, for Condition ' . $cond['Number'] . ': ' . $cond['Condition Description'] . '. Either rename a file to "' . $cond['Procedure'] . '" or change this entry in the "'.$_PATH->get('Conditions').'" file to match an existing file.');
             }
         }
     }
@@ -43,8 +43,8 @@
     
     // load page header
     $title = 'Experiment Login Page';  
-    require $_FILES->code . '/Header.php';
-    $action = $_FILES->code->toUrl() . '/login.php';
+    require $_PATH->get('Header');
+    $action = $_PATH->get('Login', 'url');
 ?>
 <!-- Page specific styling tweaks -->
 <style>
@@ -93,7 +93,7 @@
                     }
                     // showing Stimuli + Procedure files for each condition
                     if ($_CONFIG->show_condition_info) {
-                        $title = ' title="' . $_FILES->stim_files.'/' . $cond['Stimuli'] . ' - ' . $_FILES->proc_files.'/' . $cond['Procedure'] . '"';
+                        $title = ' title="' . $_PATH->stimuli_dir.'/' . $cond['Stimuli'] . ' - ' . $_PATH->procedure_dir.'/' . $cond['Procedure'] . '"';
                     } else {
                         $title = '';
                     }
@@ -113,4 +113,4 @@
     </section>
 </form>
 <?php 
-    require $_FILES->code . '/Footer.php';
+    require $_PATH->get('Footer');

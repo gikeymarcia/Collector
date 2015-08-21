@@ -48,7 +48,7 @@ function arrayToLine(array $data, $filename, $delim = null, $encodeToWin = true)
 {
     // set delimiter
     if (null === $delim) {
-        if (!isset($_SESSION['OutputDelimiter'])) {
+        if (isset($_SESSION['OutputDelimiter'])) {
             $delim = $_SESSION['OutputDelimiter'];
         } else {
             $delim = ',';
@@ -563,7 +563,7 @@ function GetFromFile($filename, $padding = true, $delimiter = ",")
  * @return mixed
  */
 function getTrialTypeFiles($trialTypeName) {
-    global $_FILES;
+    global $_PATH;
     
     // convert user inputs to lowercase; e.g. 'Likert' === 'likert'
     $trialType = strtolower(trim($trialTypeName));
@@ -577,57 +577,54 @@ function getTrialTypeFiles($trialTypeName) {
     // we will search the Experiment/ folder first, so that if we find
     // the trial type, we won't have to look in the Code/ folder
     // this way, the Experiment/ trial types will overwrite the Code/ types
-    $possibleDirs = array($_FILES->custom_trial_types, $_FILES->trial_types);
+    $customDisplay = $_PATH->get('custom trial display', 'relative', $trialType);
+    $normalDisplay = $_PATH->get('trial display',        'relative', $trialType);
     
-    // list the types of files we will be able to use
-    $possibleFiles = array(
-        'display' => $_FILES->trial_type_files->display,
-        'scoring' => $_FILES->trial_type_files->scoring,
-        'script'  => $_FILES->trial_type_files->script,
-        'style'   => $_FILES->trial_type_files->style,
-        'helper'  => $_FILES->trial_type_files->helper
+    if (fileExists($customDisplay)) {
+        $pre = 'custom trial ';
+    } elseif (fileExists($normalDisplay)) {
+        $pre = 'trial ';
+    } else {
+        return false;
+    }
+    
+    $files = array (
+        'display',
+        'scoring',
+        'helper',
+        'script',
+        'style'
     );
     
-    $trialFiles = array();
+    $foundFiles = array();
     
-    foreach ($possibleDirs as $dir) {
-        $ttFolder = fileExists($dir.'/'. $trialType, false, 2);
-        if ($ttFolder !== false) {
-            foreach ($possibleFiles as $type => $filename) {
-                $possibleFile = fileExists("{$ttFolder}/{$filename}", true, false);
-                if ($possibleFile !== false) $trialFiles[$type] = $possibleFile;
-            }
-            break; // only use the first matching trial type folder
+    foreach ($files as $file) {
+        $path = $_PATH->get($pre . $file, 'relative', $trialType);
+        $existingPath = fileExists($path);
+        if ($existingPath !== false) {
+            $foundFiles[$file] = $existingPath;
         }
     }
     
-    if ($trialFiles === array()) {
-        // when you need to see if the trial type exists, check the return for false
-        $trialFiles = false;
-    } else {
-        if (!isset($trialFiles['scoring'])) {
-            // fill in the default scoring if this trial doesn't have custom scoring
-            $trialFiles['scoring'] = "{$_FILES->code}/{$_FILES->trial_type_files->default_scoring}";
-        }
-        if (!isset($trialFiles['helper'])) {
-            // also find a default helper, for things like $compTime and output columns
-            $trialFiles['helper']  = "{$_FILES->code}/{$_FILES->trial_type_files->default_helper}";
-        }
+    if (!isset($foundFiles['scoring'])) {
+        $foundFiles['scoring'] = $_PATH->get('default scoring');
     }
     
-    // store the results in the static cache
-    $trialTypes[$trialType] = $trialFiles;
-    return $trialFiles;
+    if (!isset($foundFiles['helper'])) {
+        $foundFiles['helper'] = $_PATH->get('default helper');
+    }
+    
+    return $foundFiles;
 }
 
 /**
  * Finds all trial types and their files
-  * @return array
+ * @return array
  */
 function getAllTrialTypeFiles() {
-    global $_FILES;
+    global $_PATH;
     $trialTypes = array();
-    $trialTypeDirs = array($_FILES->custom_trial_types->buildPath(), $_FILES->trial_types->buildPath());
+    $trialTypeDirs = array($_PATH->get('Custom Trial Types'), $_PATH->get('Trial Types'));
     foreach ($trialTypeDirs as $dir) {
         $dirScan = scandir($dir);
         foreach ($dirScan as $entry) {
@@ -822,9 +819,10 @@ function removeLabel($input, $label, $extendLabel = true)
  */
 function show($string, $endOnly = true)
 {
+    global $_PATH;
     // navigate path to Experiment folder (unless linking to external file)
     if (!inString('www.', $string)) {
-        $fileName = '../Experiment/' . $string;
+        $fileName = $_PATH->get('Experiment') . '/' . $string;
         if (FileExists($fileName)) {
             $fileName = FileExists($fileName);
         }
@@ -1219,71 +1217,6 @@ function fileExists ($path, $findAltExt = true, $findDir = 1) {
         }
         return $existingPath;
     }
-}
-/**
- * @TODO Unclear what ComputeString() does.
- *
- * @TODO Optimize and/or break-up this function.
- *
- * @param type $template
- * @param type $fileData
- * @return type
- */
-function ComputeString ($template, $fileData = array()) {
-    if (($fileData === array()) && (isset($_SESSION))) {
-        $fileData = $_SESSION;
-    }
-    foreach ($fileData as $key => $value) {
-        // sets $username to $fileData[{Username}]
-        $fileData[strtolower($key)] = $value;
-    }
-    $templateParts = explode('_', $template);
-    $outputParts = array();
-    foreach ($templateParts as $part) {
-        if (strpos($part, '$') === false) {
-            $outputParts[] = $part;
-        } else {
-            // e.g., from 'Sess$Session', get 'Sess'
-            $str = substr($part, 0, strpos($part, '$'));
-            // e.g., from 'Sess$Session', get 'Session'
-            $var = substr($part, strpos($part, '$')+1);
-            if (strpos($var, '[') === false) {
-                if (isset($fileData[$var]) && is_scalar($fileData[$var])) {
-                    $str .= $fileData[$var];
-                } else {
-                    $str .= '$' . $var;
-                }
-            } else {
-                // if they want $_SESSION['Condition']['Condition Description'],
-                // we need to search index by index
-                $key = substr($var, 0, strpos($var, '['));
-                $indices = explode(']', substr($var, strpos($var, '[')));
-                if (isset($fileData[$key])) {
-                    $val = $fileData[$key];
-                    foreach ($indices as $i) {
-                        if (strlen($i) === 0) { continue; }
-                        if ($i[0] !== '[') { continue; }
-                        if (isset($val[ substr($i, strpos($i,'[')+1)  ])) {
-                            $val = $val[ substr($i, strpos($i,'[')+1) ];
-                        } else {
-                            $val = null;
-                            break;
-                        }
-                    }
-                    if (is_scalar($val)) {
-                        $str .= $val;
-                    } else {
-                        $str .= '$' . $var;
-                    }
-                } else {
-                    // prepend a '$' so that it is obvious a variable was searched for and not found
-                    $str .= '$' . $var;
-                }
-            }
-            $outputParts[] = $str;
-        }
-    }
-    return implode('_', $outputParts);
 }
 /**
  * Generates a random, lowercase alphanumeric string.

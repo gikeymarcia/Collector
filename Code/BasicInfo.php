@@ -6,7 +6,7 @@
     require 'initiateCollector.php';
     
     $title = 'Basic Information';
-    require $_FILES->code . '/Header.php';
+    require $_PATH->get('Header');
 ?>
 <style>    
     #content {
@@ -16,7 +16,7 @@
     }
 </style>
 <form id="content" class="basicInfo" name="Demographics"
-      action="BasicInfoData.php" method="post" autocomplete="off">
+      action="<?= $_PATH->get('Basic Info Record') ?>" method="post" autocomplete="off">
     
     <fieldset>
         <legend><h1>Basic Information</h1></legend>
@@ -120,4 +120,4 @@
 </form>
 
 <?php
-    require $_FILES->code . '/Footer.php';
+    require $_PATH->get('Footer');

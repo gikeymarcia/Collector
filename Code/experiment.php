@@ -13,7 +13,7 @@
     
     
     function recordTrial($extraData = array(), $exitIfDone = true, $advancePosition = true) {
-
+        global $_CONFIG, $_PATH;
         #### setting up aliases (for later use)
         $currentPos   =& $_SESSION['Position'];
         $currentTrial =& $_SESSION['Trials'][$currentPos];
@@ -26,7 +26,7 @@
         #### Writing to data file
         $data = array(  'Username'              =>  $_SESSION['Username'],
                         'ID'                    =>  $_SESSION['ID'],
-                        'ExperimentName'        =>  $config->experiment_name,
+                        'ExperimentName'        =>  $_CONFIG->experiment_name,
                         'Session'               =>  $_SESSION['Session'],
                         'Trial'                 =>  $_SESSION['Position'],
                         'Date'                  =>  date("c"),
@@ -48,7 +48,7 @@
             $data[$header] = $datum;
         }
         
-        $writtenArray = arrayToLine($data, $_SESSION['Output File']);                                       // write data line to the file
+        $writtenArray = arrayToLine($data, $_PATH->get('Experiment Output'));                                       // write data line to the file
         ###########################################
 
         // progresses the trial counter
@@ -62,7 +62,7 @@
             $item = $_SESSION['Trials'][$currentPos]['Procedure']['Item'];
             if ($item == 'ExperimentFinished') {
                 $_SESSION['finishedTrials'] = true;             // stops people from skipping to the end
-                header('Location: FinalQuestions.php');
+                header('Location: ' . $_PATH->get('Final Questions Page'));
                 exit;
             }
         }
@@ -88,8 +88,8 @@
         $error = array(
             'Error*Missing_Trial_Type' => 'Post ' . $_SESSION['PostNumber']
         );
-        recordTrial();
-        header('Location: experiment.php');
+        recordTrial($error);
+        header('Location: ' . $_PATH->get('Experiment Page'));
         exit;
     }
     
@@ -137,7 +137,7 @@
     ob_start();
     
     #### Presenting different trial types ####
-    $postTo    = 'experiment.php';
+    $postTo    = $_PATH->get('Experiment Page');
     $trialFail = false;                                    // this will be used to show diagnostic information when a specific trial isn't working
     
     $title = 'Experiment';
@@ -182,7 +182,7 @@
             recordTrial();
         }
         
-        header('Location: experiment.php');
+        header('Location: ' . $_PATH->get('Experiment Page'));
         exit;
     }
 
@@ -190,11 +190,11 @@
     // if we hit a *NewSession* then the experiment is over (this means that we don't ask FinalQuestions until the last session of the experiment)
     if(strtolower($item) == '*newsession*') {
         $_SESSION['finishedTrials'] = true;
-        header('Location: done.php');
+        header('Location: ' . $_PATH->get('Done'));
         exit;
     }
     
-    require $_FILES->code . '/Header.php';
+    require $_PATH->get('Header');
     
 ?>
 
@@ -278,6 +278,6 @@
 </div>
     
 <?php
-    require $_FILES->code . '/Footer.php';
+    require $_PATH->get('Footer');
     
     ob_end_flush();
