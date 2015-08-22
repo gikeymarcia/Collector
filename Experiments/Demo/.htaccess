@@ -3,7 +3,7 @@ Order Allow,Deny
 Allow from all
 
 #Block access to Settings.php
-<Files Settings.php>
+<Files Config.ini>
     Order Deny,Allow
     Deny from all
 </Files>

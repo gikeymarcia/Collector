@@ -11,4 +11,13 @@
     require $_PATH->get('Custom Functions');
     require $_PATH->get('Parse');
     
-    $_CONFIG = Parse::fromConfig($_PATH->get('Config'), true);
+    $_CONFIG = Parse::fromConfig($_PATH->get('Common Config'), true);
+    
+    if ($_PATH->getDefault('Current Experiment') !== null) {
+        $newSettings = Parse::fromConfig($_PATH->get('Experiment Config'));
+        foreach ($newSettings as $settingName => $setting) {
+            $_CONFIG->$settingName = $setting;
+        }
+        unset($newSettings, $settingName, $setting);
+    }
+    

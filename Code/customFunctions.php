@@ -817,12 +817,12 @@ function removeLabel($input, $label, $extendLabel = true)
  * @param string $string
  * @return string
  */
-function show($string, $endOnly = true)
+function show($string, $endOnly = true, $justSrc = false)
 {
     global $_PATH;
     // navigate path to Experiment folder (unless linking to external file)
     if (!inString('www.', $string)) {
-        $fileName = $_PATH->get('Experiment') . '/' . $string;
+        $fileName = $_PATH->get('Common') . '/' . $string;
         if (FileExists($fileName)) {
             $fileName = FileExists($fileName);
         }
@@ -841,13 +841,21 @@ function show($string, $endOnly = true)
         || strripos($searchString, '.bmp') !== false
     ) {
         // add image tags
-        $string = '<img src="' . $fileName . '">';
+        if ($justSrc) {
+            $string = $fileName;
+        } else {
+            $string = '<img src="' . $fileName . '">';
+        }
     } elseif (strripos($searchString, '.mp3')
         || strripos($searchString, '.wav')
         || strripos($searchString, '.ogg')
     ) {
         // audio tags
-        $string = '<source src="' . $fileName . '"/>';
+        if ($justSrc) {
+            $string = $fileName;
+        } else {
+            $string = '<source src="' . $fileName . '"/>';
+        }
     }
     return $string;
 }

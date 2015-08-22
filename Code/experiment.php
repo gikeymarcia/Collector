@@ -26,7 +26,7 @@
         #### Writing to data file
         $data = array(  'Username'              =>  $_SESSION['Username'],
                         'ID'                    =>  $_SESSION['ID'],
-                        'ExperimentName'        =>  $_CONFIG->experiment_name,
+                        'ExperimentName'        =>  $_PATH->getDefault('Current Experiment'),
                         'Session'               =>  $_SESSION['Session'],
                         'Trial'                 =>  $_SESSION['Position'],
                         'Date'                  =>  date("c"),

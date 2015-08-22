@@ -3,12 +3,15 @@
     A program for running experiments on the web
  */
     require 'initiateCollector.php';
+    // save the default found at Welcome.php
     
     $_SESSION = array();                                    // reset session so it doesn't contain any information from a previous login attempt
     // $_SESSION['OutputDelimiter'] = $_CONFIG->delimiter; // hard-coded now
+    $_PATH->updateDefaults(); // restore default 'Current Experiment'
+    
     $_SESSION['Debug'] = $_CONFIG->debug_mode;
     
-    $_PATH->loadDefault('Current Data', $_CONFIG->experiment_name . '-Data');
+    $_PATH->loadDefault('Current Data', $_PATH->getDefault('Current Experiment') . '-Data');
     
     $title = 'Preparing the Experiment';
     require $_PATH->get('Header');
@@ -78,6 +81,7 @@
         // Load old session info
         $_SESSION = NULL;                       // get rid of current session in memory
         $_SESSION = $sessionData;               // load old session data into current $_SESSION
+        $_PATH->updateDefaults();               // make sure Pathfinder is using the loaded defaults from session
         // check if it is time for the next session
         $ExpOverFlag = $_SESSION['Trials'][ ($_SESSION['Position']) ]['Procedure']['Item'];
         if ($ExpOverFlag != 'ExperimentFinished') {                                                         // if this user hasn't done all sessions
@@ -299,13 +303,13 @@
             $temp = GetFromFile($fileName);
             foreach ($temp as $i => $row) {
                 if ($i < 2) { continue; }                   // skip padding rows
-                if (show($row['Cue']) !== $row['Cue']) {
+                if (show($row['Cue'], true, true) !== $row['Cue']) {
                     // show() detects a file extension like .png, and will use FileExists to check that it exists
                     // but it will always return a string, for cases where you are showing regular text
                     // using FileExists, we can see if a cue detected as an image by show() is a file that actually exists
-                    if (FileExists($_PATH->get('Experiment') . '/' . $row['Cue']) === false ) {
+                    if (FileExists(show($row['Cue'], true, true)) === false ) {
                         $errors['Count']++;
-                        $errors['Details'][] = 'Image or audio file "' . $_PATH->get('Experiment') . $row['Cue'] . '" not found for row '
+                        $errors['Details'][] = 'Image or audio file "' . show($row['Cue'], true, true) . '" not found for row '
                                              . $i . ' in Stimuli File "' . basename($fileName) . '".';
                     }
                 }

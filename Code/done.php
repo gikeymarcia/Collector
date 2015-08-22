@@ -29,7 +29,7 @@
         $title   = 'Done!';
         $message = '<h2>Thank you for your participation!</h2>'
                  .  '<p>If you have any questions about the experiment please email '
-                 .      '<a href="mailto:' . $_CONFIG->experimenter_email . '?Subject=Comments%20on%20' . $_CONFIG->experiment_name . '" target="_top">' . $_CONFIG->experimenter_email . '</a>'
+                 .      '<a href="mailto:' . $_CONFIG->experimenter_email . '?Subject=Comments%20on%20' . $_PATH->getDefault('Current Experiment') . '" target="_top">' . $_CONFIG->experimenter_email . '</a>'
                  .  '</p>';
         if ($_CONFIG->mTurk_mode == true) {
             $message .= '<h3>Your verification code is: ' . $_CONFIG->verification . '-' . $_SESSION['ID'] .'</h3>';

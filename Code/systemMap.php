@@ -23,57 +23,72 @@
         
         'index.php' => 'index',
         
-        'Experiment' => array (
-            $dirName => 'Experiment',
+        'Experiments' => array (
+            $dirName => 'Experiments',
             
-            'Conditions.csv' => 'Conditions',
-            'Config.ini' => 'Config',
-            'FinalQuestions.csv' => 'Final Questions',
-            'Instructions.php' => 'Instructions',
-            
-            'Stimuli' => array (
-                $dirName => 'Stimuli Dir',
+            'Common' => array (
+                $dirName => 'Common',
                 
-                $default . 
-                'Stimuli' => 'Stimuli',
-            ),
+                'Common Config.ini' => 'Common Config',
             
-            'Procedure' => array (
-                $dirName => 'Procedure Dir',
+                'Ineligible' => array (
+                    $dirName => 'Ineligibility Dir',
+                ),
                 
-                $default . 
-                'Procedure' => 'Procedure',
-            ),
-            
-            'TrialTypes' => array (
-                $dirName => 'Custom Trial Types',
+                'Images' => array (
+                    $dirName => 'Images',
+                ),
                 
-                $wildCard => array (
-                    $dirName => 'Custom Trial Type Dir',
+                'Audio' => array (
+                    $dirName => 'Audio',
+                ),
+                
+                'TrialTypes' => array (
+                    $dirName => 'Custom Trial Types',
                     
-                    'display.php' => 'Custom Trial Display',
-                    'helper.inc' => 'Custom Trial Helper',
-                    'scoring.php' => 'Custom Trial Scoring',
-                    'script.js' => 'Custom Trial Script',
-                    'style.css' => 'Custom Trial Style',
+                    $wildCard => array (
+                        $dirName => 'Custom Trial Type Dir',
+                        
+                        'display.php' => 'Custom Trial Display',
+                        'helper.inc' => 'Custom Trial Helper',
+                        'scoring.php' => 'Custom Trial Scoring',
+                        'script.js' => 'Custom Trial Script',
+                        'style.css' => 'Custom Trial Style',
+                    ),
                 ),
             ),
             
-            'Ineligible' => array (
-                $dirName => 'Ineligibility Dir',
-            ),
-            
-            'Images' => array (
-                $dirName => 'Images',
-            ),
-            
-            'Audio' => array (
-                $dirName => 'Audio',
+            $default .
+            'Current Experiment' => array (
+                $dirName => 'Current Experiment',
+                
+                'Conditions.csv' => 'Conditions',
+                'Config.ini' => 'Config',
+                'FinalQuestions.csv' => 'Final Questions',
+                'Instructions.php' => 'Instructions',
+                
+                'Config.ini' => 'Experiment Config',
+                
+                'Stimuli' => array (
+                    $dirName => 'Stimuli Dir',
+                    
+                    $default . 
+                    'Stimuli' => 'Stimuli',
+                ),
+                
+                'Procedure' => array (
+                    $dirName => 'Procedure Dir',
+                    
+                    $default . 
+                    'Procedure' => 'Procedure',
+                ),
             ),
         ),
         
         'Code'      => array (
             $dirName    => 'Code',
+            
+            'Welcome.php' => 'Welcome',
             
             'BasicInfo.php' => 'Basic Info',
             'BasicInfoData.php' => 'Basic Info Record',
