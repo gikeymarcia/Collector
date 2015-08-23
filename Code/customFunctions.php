@@ -48,7 +48,7 @@ function arrayToLine(array $data, $filename, $delim = null, $encodeToWin = true)
 {
     // set delimiter
     if (null === $delim) {
-        if (!isset($_SESSION['OutputDelimiter'])) {
+        if (isset($_SESSION['OutputDelimiter'])) {
             $delim = $_SESSION['OutputDelimiter'];
         } else {
             $delim = ',';
@@ -563,7 +563,7 @@ function GetFromFile($filename, $padding = true, $delimiter = ",")
  * @return mixed
  */
 function getTrialTypeFiles($trialTypeName) {
-    global $_FILES;
+    global $_PATH;
     
     // convert user inputs to lowercase; e.g. 'Likert' === 'likert'
     $trialType = strtolower(trim($trialTypeName));
@@ -577,47 +577,66 @@ function getTrialTypeFiles($trialTypeName) {
     // we will search the Experiment/ folder first, so that if we find
     // the trial type, we won't have to look in the Code/ folder
     // this way, the Experiment/ trial types will overwrite the Code/ types
-    $possibleDirs = array($_FILES->custom_trial_types, $_FILES->trial_types);
+    $customDisplay = $_PATH->get('custom trial display', 'relative', $trialType);
+    $normalDisplay = $_PATH->get('trial display',        'relative', $trialType);
     
-    // list the types of files we will be able to use
-    $possibleFiles = array(
-        'display' => $_FILES->trial_type_files->display,
-        'scoring' => $_FILES->trial_type_files->scoring,
-        'script'  => $_FILES->trial_type_files->script,
-        'style'   => $_FILES->trial_type_files->style,
-        'helper'  => $_FILES->trial_type_files->helper
+    if (fileExists($customDisplay)) {
+        $pre = 'custom trial ';
+    } elseif (fileExists($normalDisplay)) {
+        $pre = 'trial ';
+    } else {
+        return false;
+    }
+    
+    $files = array (
+        'display',
+        'scoring',
+        'helper',
+        'script',
+        'style'
     );
     
-    $trialFiles = array();
+    $foundFiles = array();
     
-    foreach ($possibleDirs as $dir) {
-        $ttFolder = is_iDir($dir.'/'. $trialType);
-        if ($ttFolder !== false) {
-            foreach ($possibleFiles as $type => $filename) {
-                $possibleFile = fileExists("{$ttFolder}/{$filename}", true, false);
-                if ($possibleFile !== false) $trialFiles[$type] = $possibleFile;
+    foreach ($files as $file) {
+        $path = $_PATH->get($pre . $file, 'relative', $trialType);
+        $existingPath = fileExists($path);
+        if ($existingPath !== false) {
+            $foundFiles[$file] = $existingPath;
+        }
+    }
+    
+    if (!isset($foundFiles['scoring'])) {
+        $foundFiles['scoring'] = $_PATH->get('default scoring');
+    }
+    
+    if (!isset($foundFiles['helper'])) {
+        $foundFiles['helper'] = $_PATH->get('default helper');
+    }
+    
+    return $foundFiles;
+}
+
+/**
+ * Finds all trial types and their files
+ * @return array
+ */
+function getAllTrialTypeFiles() {
+    global $_PATH;
+    $trialTypes = array();
+    $trialTypeDirs = array($_PATH->get('Custom Trial Types'), $_PATH->get('Trial Types'));
+    foreach ($trialTypeDirs as $dir) {
+        $dirScan = scandir($dir);
+        foreach ($dirScan as $entry) {
+            $type = strtolower(trim($entry));
+            if (isset($trialTypes[$type])) { continue; }    // dont override custom trial types, found first
+            $files = getTrialTypeFiles($type);
+            if ($files !== false) {
+                $trialTypes[strtolower($entry)] = $files;
             }
-            break; // only use the first matching trial type folder
         }
     }
-    
-    if ($trialFiles === array()) {
-        // when you need to see if the trial type exists, check the return for false
-        $trialFiles = false;
-    } else {
-        if (!isset($trialFiles['scoring'])) {
-            // fill in the default scoring if this trial doesn't have custom scoring
-            $trialFiles['scoring'] = "{$_FILES->code}/{$_FILES->trial_type_files->default_scoring}";
-        }
-        if (!isset($trialFiles['helper'])) {
-            // also find a default helper, for things like $compTime and output columns
-            $trialFiles['helper']  = "{$_FILES->code}/{$_FILES->trial_type_files->default_helper}";
-        }
-    }
-    
-    // store the results in the static cache
-    $trialTypes[$trialType] = $trialFiles;
-    return $trialFiles;
+    return $trialTypes;
 }
 /**
  * Checks if a given string can be found within another.
@@ -727,8 +746,17 @@ function rangeToArray($string, $separator = ',', $rangeIndicator = '::')
         if ($count === 1) {
             $output[] = $endPoints[0];
         } else {
+            $lastPoint       =& $endPointsDirty[$count-1];
+            $stepExploded    =  explode('#', $lastPoint);
+            if (isset($stepExploded[1]) AND is_numeric($stepExploded[1])) {
+                $step = trim($stepExploded[1]);
+            } else {
+                $step = 1;
+            }
+            $lastPoint = trim($stepExploded[0]);
+            unset($lastPoint);
             $output = array_merge(
-                $output, range($endPoints[0], $endPoints[$count-1])
+                $output, range($endPoints[0], $endPoints[$count-1], $step)
             );
         }
     }
@@ -791,9 +819,10 @@ function removeLabel($input, $label, $extendLabel = true)
  */
 function show($string, $endOnly = true)
 {
+    global $_PATH;
     // navigate path to Experiment folder (unless linking to external file)
     if (!inString('www.', $string)) {
-        $fileName = '../Experiment/' . $string;
+        $fileName = $_PATH->get('Experiment') . '/' . $string;
         if (FileExists($fileName)) {
             $fileName = FileExists($fileName);
         }
@@ -881,174 +910,313 @@ function trialTiming()
     }
 }
 /**
- * case-insensitive version of is_dir(), returns directory path with existing case if found,
- * returns boolean false if not found
- * @param string $dirname The directory to search for
- * @return string|bool
+ * removes insignificant components of a file path, such as 'dir/../'
+ * @param string $path The path to clean
+ * @return string
  */
-function is_iDir ($dirname) {
-    if (is_dir($dirname)) { return $dirname; }
-    $dirs = explode('/', $dirname);
-    $foundDir = '.';
-    foreach ($dirs as $dir) {
-        if (is_dir($foundDir . '/' . $dir)) {
-            $foundDir .= '/' . $dir;
+function cleanPath ($path) {
+    // Normally, file functions can parse both '\' and '/'
+    // as directory separators, but explode() can't, so we
+    // will convert all possible separators to standard '/'
+    $cleanSeparators = strtr($path, '\\', '/');
+    $pathComponents  = explode('/', $path);
+    
+    // Now lets clean up the path components a little bit.
+    // First, create an array to populate with the indices
+    // of actual directories, as opposed to '.' and '..'
+    $dirs = array();
+    // then, start scanning components and removing unneeded
+    foreach ($pathComponents as $i => &$comp) {
+        $comp = trim($comp);
+        // the current directory, '.', is trivial
+        if ($comp === '.') {
+            unset ($pathComponents[$i]);
             continue;
         }
-        $lowerDir = strtolower($dir);
-        $currentDir = scandir($foundDir);
-        foreach ($currentDir as $dirEntry) {
-            if (!is_dir($foundDir . '/' . $dirEntry)) { continue; }
-            if (strtolower($dirEntry) === $lowerDir) {
-                $foundDir .= '/' . $dirEntry;
-                continue 2;
+        // an empty component, '', is also trivial, except in
+        // the case where it is the first component, indicating
+        // that this is an absolute path in a unix-like OS
+        if ($i > 0 AND $comp === '') {
+            unset ($pathComponents[$i]);
+            continue;
+        }
+        // The other situation to check for is the case when a
+        // directory is entered and then exited, using the parent
+        // directory (e.g. 'dir/../').
+        // However, if this is used to navigate above the current
+        // directory with a relative path, the parent directory
+        // component should be left in (e.g., '../file.php').
+        // We will keep track if there is a parent directory of
+        // the '..' component, keeping in mind that there might
+        // be trivial directories (e.g. '.') in between, so we
+        // can't just use $i and --$i
+        if ($comp === '..') {
+            // if we previously navigated into a folder, then its
+            // index would have been added to $dirs, but made
+            // irrelevant by navigating out with the current '..'
+            if ($dirs !== array()) {
+                $currentDirIndex = array_pop($dirs);
+                unset($pathComponents[$currentDirIndex],
+                      $pathComponents[$i]);
+            }
+        } else {
+            // keep track of indices of actual directories that
+            // might be rendered irrelevant by an upcoming '..'
+            $dirs[] = $i;
+        }
+    }
+    unset($comp);
+    $pathComponents = implode('/', $pathComponents); // rejoin into string
+    return $pathComponents;
+}
+/**
+ * searches a given directory for a target file or directory
+ * @param string $dir The dir to search inside
+ * @param string $target The file or directory to find
+ * @param bool $findAltExt whether or not to ignore file extensions
+ * @param int $findDir Set 0 to only find files
+ *                     Set 1 to find files and directories
+ *                     Set 2 to only find directories
+ * @return string|bool
+ */
+function find_in_dir($dir, $target, $findAltExt = true, $findDir = 1) {
+    // this function is expecting valid file paths
+    // so, if you need to trim or remove bad characters,
+    // do that before sending them to this function
+    
+    $findDir = (int) $findDir; // 0: no, 1: yes, 2: only
+    
+    // efficiency checks
+    if (!is_dir($dir) AND $dir !== '') {
+        return false; // come on now...
+    }
+    $test = $dir . '/' . $target;
+    if (is_file($test)) {
+        if ($findDir < 2) {
+            return $target;
+        } elseif (!$findAltExt) {
+            return false;
+        }
+    }
+    if (is_dir($test)) {
+        if ($findDir > 0) {
+            return $target;
+        } elseif (!$findAltExt) {
+            return false;
+        }
+    }
+    
+    // we need to search the directory, so lets check for
+    // existence and permissions (which might be denied for '/home/')
+    if (!is_readable($dir)) {
+        // we can't scan the dir, but we can guess by removing
+        // the file extension
+        $targets = array(strtolower($target), strtoupper($target));
+        foreach ($targets as $t) {
+            $test = $dir . '/' . $t;
+            if (   (is_file($test) AND $findDir < 2)
+                OR (is_dir( $test) AND $findDir > 0)
+            ) {
+                return $t;
             }
         }
+        if ($findAltExt AND (strpos($target, '.') !== false)) {
+            $target = substr($target, 0, strrpos($target, '.'));
+            $targets = array(strtolower($target), strtoupper($target));
+            foreach ($targets as $t) {
+                $test = $dir . '/' . $t;
+                if (   (is_file($test) AND $findDir < 2)
+                    OR (is_dir( $test) AND $findDir > 0)
+                ) {
+                    return $t;
+                }
+            }
+        }
+        // else, we can't scan, so we must give up
         return false;
     }
-    return substr($foundDir, 2);
+    
+    $scandir = scandir($dir);
+    $lowerTarget = strtolower($target);
+    foreach ($scandir as $entry) {
+        $lowerEntry = strtolower($entry);
+        if ($lowerEntry === $lowerTarget) {
+            $test = $dir . '/' . $entry;
+            if (   (is_file($test) AND $findDir < 2)
+                OR (is_dir( $test) AND $findDir > 0)
+            ) {
+                return $entry;
+            }
+        }
+    }
+    
+    // still haven't found it yet, try alt extensions
+    if ($findAltExt) {
+        if (strpos($lowerTarget, '.') !== false) {
+            $lowerTarget = substr($lowerTarget, 0, strrpos($lowerTarget, '.'));
+        }
+        foreach ($scandir as $entry) {
+            $lowerEntry = strtolower($entry);
+            if (strpos($lowerEntry, '.') !== false) {
+                $lowerEntry = substr($lowerEntry, 0, strrpos($lowerEntry, '.'));
+            }
+            if ($lowerEntry === $lowerTarget) {
+                $test = $dir . '/' . $entry;
+                if (   (is_file($test) AND $findDir < 2)
+                    OR (is_dir( $test) AND $findDir > 0)
+                ) {
+                    return $entry;
+                }
+            }
+        }
+    }
+    
+    // failed to find match, return false
+    return false;
+}
+/**
+ * Given a string that is presumably the start of a file path,
+ * this will convert the path component into the absolute root of
+ * this OS if the given string looks like a root directory
+ * otherwise, returns false
+ * @param string $dir the path component to examine
+ * @return string|bool
+ */
+function convertAbsoluteDir($dir) {
+    // this function expects just the first component of a path
+    if ($dir === '' OR substr($dir, 1, 1) === ':') {
+        return substr(realpath('/'), 0, -1); // return root without trailing slash
+    } else {
+        return false;
+    }
 }
 /**
  * Finds a path to a target file, checking the filename and each directory
  * name in the path case-insensitively. If a target file is found, returns
  * the path with the correct, existing casing. Otherwise, returns false.
  * Optionally searches for files with the same name but alternative
- * extensions (defaults to true). Optionally searches for both files
- * and directories (defaults to true, and if set to false, will return
- * false if a directory is found)
+ * extensions (defaults to true). Optionally searches for only files
+ * ($findDir = 0), files and directories ($findDir = 1), or only
+ * directories ($findDir = 2)
  *
  * @param string $path The file to search for.
  * @param bool $findAltExtensions Set false for strict extension checking.
- * @param bool $findDir Set false to only return paths to actual files,
- *                      rather than directories
+ * @param int  $findDir Set 0 to only return paths to actual files,
+ *                      Set 1 to return paths to both files and directories
+ *                      Set 2 to only return paths to directories
  * @return string|bool
  */
-function fileExists ($path, $findAltExtensions = true, $findDir = true) {
-    if (is_file($path)) { return $path; }
-    if (is_dir($path)) {
-        if ($findDir) {
+function fileExists ($path, $findAltExt = true, $findDir = 1) {
+    // This function is expecting valid path names.
+    // So, if you need to trim or remove bad characters,
+    // do that before sending them to this function
+    
+    // guard against bad input (such as a null path)
+    $findDir = (int) $findDir; // 0: no, 1: yes, 2: only
+    $path    = (string) $path;
+    if ($path === '') { return false; }
+    
+    // efficiency checks
+    if (is_file($path)) {
+        if ($findDir < 2) {
             return $path;
-        } elseif (!$findAltExtensions) {
+        } elseif (!$findAltExt) {
             return false;
         }
     }
-    $path = (string) $path;
-    if ($path === '') { return false; }
-    $pathinfo = pathinfo($path);
-    // find the directory
-    if (!isset($pathinfo['dirname'])) { $pathinfo['dirname'] = '.'; }
-    if (!is_dir($pathinfo['dirname'])) {
-        $pathinfo['dirname'] = is_iDir($pathinfo['dirname']);
-        if ($pathinfo['dirname'] === false) { return false; }
-        $test = $pathinfo['dirname'] . '/' . $pathinfo['basename'];
-        if (is_file($test)) { return $test; }
-        if (is_dir($test)) {
-            if ($findDir) {
-                return $test;
-            } elseif (!$findAltExtensions) {
+    if (is_dir($path)) {
+        if ($findDir > 0) {
+            return $path;
+        } elseif (!$findAltExt) {
+            return false;
+        }
+    }
+    
+    // -convert Windows directory separators '\' to standard '/'
+    // -remove unneeded path elements, such as '.' or 'dir/../'
+    // -remove trailing slash
+    // -trim each component
+    // -this is so we can explode by '/' and correctly identify
+    //  each path components (e.g., 'one' and 'two' from 'one\two')
+    $path = cleanPath($path);
+    $path = explode('/', $path);
+    
+    // if they only supplied a single component, there is the unlikely
+    // case that they are searching for the root directory
+    // Let's check for that, before assuming that they are looking for
+    // a file or directory in the current working directory
+    if (count($path) === 1) {
+        $absDir = convertAbsoluteDir($path[0]);
+        if ($absDir !== false) {
+            // in this case, we have an absolute path of a root directory
+            if ($findDir === 0) {
                 return false;
-            }
-        }
-    }
-    // find the target file or final directory
-    $currentDir = scandir($pathinfo['dirname']);
-    $lowerBase = strtolower($pathinfo['basename']);
-    foreach ($currentDir as $entry) {
-        if (strtolower($entry) === $lowerBase) {
-            $test = $pathinfo['dirname'] . '/' . $entry;
-            if (is_file($test)) { return $test; }
-            if (is_dir($test)) {
-                if ($findDir) {
-                    return $test;
-                } elseif (!$findAltExtensions) {
-                    return false;
-                }
-            }
-        }
-    }
-    // check alt extensions
-    if (!$findAltExtensions) { return false; }
-    $lowerFile = strtolower($pathinfo['filename']);
-    foreach ($currentDir as $entry) {
-        $baseEntry = strtolower($entry);
-        $findDot = strRpos($baseEntry, '.');
-        if ($findDot !== false) {
-            $baseEntry = substr($baseEntry, 0, -$findDot-1);
-        }
-        if ($baseEntry === $lowerFile) {
-            $test = $pathinfo['dirname'] . '/' . $entry;
-            if (is_file($test)) { return $test; }
-            if (is_dir($test) AND $findDir) {
-                return $test;
-            }
-        }
-    }
-    return false;
-}
-/**
- * @TODO Unclear what ComputeString() does.
- *
- * @TODO Optimize and/or break-up this function.
- *
- * @param type $template
- * @param type $fileData
- * @return type
- */
-function ComputeString ($template, $fileData = array()) {
-    if (($fileData === array()) && (isset($_SESSION))) {
-        $fileData = $_SESSION;
-    }
-    foreach ($fileData as $key => $value) {
-        // sets $username to $fileData[{Username}]
-        $fileData[strtolower($key)] = $value;
-    }
-    $templateParts = explode('_', $template);
-    $outputParts = array();
-    foreach ($templateParts as $part) {
-        if (strpos($part, '$') === false) {
-            $outputParts[] = $part;
-        } else {
-            // e.g., from 'Sess$Session', get 'Sess'
-            $str = substr($part, 0, strpos($part, '$'));
-            // e.g., from 'Sess$Session', get 'Session'
-            $var = substr($part, strpos($part, '$')+1);
-            if (strpos($var, '[') === false) {
-                if (isset($fileData[$var]) && is_scalar($fileData[$var])) {
-                    $str .= $fileData[$var];
-                } else {
-                    $str .= '$' . $var;
-                }
             } else {
-                // if they want $_SESSION['Condition']['Condition Description'],
-                // we need to search index by index
-                $key = substr($var, 0, strpos($var, '['));
-                $indices = explode(']', substr($var, strpos($var, '[')));
-                if (isset($fileData[$key])) {
-                    $val = $fileData[$key];
-                    foreach ($indices as $i) {
-                        if (strlen($i) === 0) { continue; }
-                        if ($i[0] !== '[') { continue; }
-                        if (isset($val[ substr($i, strpos($i,'[')+1)  ])) {
-                            $val = $val[ substr($i, strpos($i,'[')+1) ];
-                        } else {
-                            $val = null;
-                            break;
-                        }
-                    }
-                    if (is_scalar($val)) {
-                        $str .= $val;
-                    } else {
-                        $str .= '$' . $var;
-                    }
-                } else {
-                    // prepend a '$' so that it is obvious a variable was searched for and not found
-                    $str .= '$' . $var;
-                }
+                // this will give them the actual root directory for this OS
+                return $absDir;
             }
-            $outputParts[] = $str;
+        } else {
+            // in this case, just try to find a relative target
+            return find_in_dir('.', $path[0], $findAltExt, $findDir);
         }
     }
-    return implode('_', $outputParts);
+    
+    // we are going to search for the final component a bit differently,
+    // since it can be either a directory or a file, so lets pull that off
+    $finalComponent = array_pop($path);
+    
+    // now we need to find the directory portion of the path
+    // if is_dir() cannot find it, then we will start pulling off
+    // components from the end of the path until we get a directory
+    // we can locate
+    $dirsNotFound = array();
+    while (!is_dir(implode('/', $path))) {
+        // for the first dir, check if its an absolute or relative dir
+        if (count($path) === 1) {
+            $absDir = convertAbsoluteDir($path[0]);
+            if ($absDir !== false) {
+                // if absolute, set the starting path to the actual root
+                $path = array($absDir);
+            } else {
+                $dirsNotFound[] = array_pop($path);
+            }
+            break; // checking first dir, can't go back any more
+        } else {
+            // move last dir in $path to start of $dirsNotFound
+            $dirsNotFound[] = array_pop($path);
+        }
+    }
+    $dirsNotFound = array_reverse($dirsNotFound); // correct order of dirs
+    
+    // if $path is empty, not even the first dir could be identified
+    // so, we will assume its a relative path
+    // otherwise, we are going to use what we could
+    if ($path === array()) {
+        $baseDir = '.';
+    } else {
+        $baseDir = implode('/', $path);
+    }
+    
+    // now lets do a case-insensitive search for the rest of the dirs
+    foreach ($dirsNotFound as $targetDir) {
+        // use find_in_dir, but only search for dirs
+        $search = find_in_dir($baseDir, $targetDir, false, 2);
+        if ($search === false) { return false; }
+        $baseDir .= '/' . $search;
+    }
+    
+    // Huzzah! At this point, we should have found our directory,
+    // and we just need to search for the final component
+    $finalSearch = find_in_dir($baseDir, $finalComponent, $findAltExt, $findDir);
+    if ($finalSearch === false) {
+        return false;
+    } else {
+        $existingPath = $baseDir . '/' . $finalSearch;
+        if (substr($existingPath, 0, 2) === './') {
+            $existingPath = substr($existingPath, 2);
+        }
+        return $existingPath;
+    }
 }
 /**
  * Generates a random, lowercase alphanumeric string.

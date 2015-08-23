@@ -5,16 +5,15 @@
     $_root = '..';
     
     // load file locations
-    require $_root.'/Code/Parse.php';
-    require $_root.'/Code/fileLocations.php';
-    $fileConfig = Parse::fromConfig($_root.'/Code/FileLocations.ini');
-    $_FILES = new FileLocations($_root, $fileConfig);
+    require $_root.'/Code/Pathfinder.class.php';
+    $_PATH = new Pathfinder();
     
     // load configs
-    $_CONFIG = Parse::fromConfig($_FILES->expt.'/Config.ini', true);
+    require $_PATH->get('Parse');
+    $_CONFIG = Parse::fromConfig($_PATH->get('Config'), true);
     
     // load custom functions
-    require $_FILES->code.'/customFunctions.php';
+    require $_PATH->get('Custom Functions');
     require 'loginFunctions.php';
     
     // declaring admin for first login
@@ -88,6 +87,12 @@
         
 <?php   // require the selected tool
         if (isset($admin['tool'])) {
+
+            $dataHolderKey = $admin['tool'] . 'Data';       // key within session where data can be stored
+            if (!isset($admin[$dataHolderKey])) {           // if we haven't made a data holder yet
+                $admin[$dataHolderKey] = array();               // make it
+            }
+            $_DATA =& $admin[$dataHolderKey];               // make alias for each tool to access it's session data
             require_once $tools[$admin['tool']];
         }
 ?>

@@ -1,22 +1,13 @@
 <?php
     require 'initiateCollector.php';
     
-    $trialTypes = array();
-    $trialTypeDirs = array($_FILES->custom_trial_types, $_FILES->trial_types);
-    foreach ($trialTypeDirs as $dir) {
-        $dirScan = scandir($dir);
-        foreach ($dirScan as $entry) {
-            if ($display = fileExists($dir . $entry . '/' . $_FILES->trial_type_files->display)) {
-                $trialTypes[strtolower($entry)] = $display;
-            }
-        }
-    }
+    $trialTypes = getAllTrialTypeFiles();
     
     if (!isset($_SESSION['Trial Tester']) OR isset($_POST['resetSession'])) {
         $_SESSION = array();
         $_SESSION['Trial Tester'] = true;
     } elseif (isset($_POST['LoadStimFile'])) {
-        $_SESSION['Stimuli'] = GetFromFile($_FILES->stim_files.'/' . $_POST['StimuliFile']);
+        $_SESSION['Stimuli'] = GetFromFile($_PATH->stimuli_dir.'/' . $_POST['StimuliFile']);
         $redirect = true;
     } elseif (isset($_POST['Procedure_Trial_Type'])) {
     
@@ -153,13 +144,13 @@
         exit;
     }
     
-    include $_FILES->code . '/Header.php';
+    include $_PATH->get('Header');
     
-    $stimuliFiles = scandir($_FILES->stim_files);
+    $stimuliFiles = scandir($_PATH->stimuli_dir);
     
     foreach ($stimuliFiles as $i => $fileName)
     {
-        if (!is_file("{$_FILES->stim_files}/{$fileName}"))
+        if (!is_file("{$_PATH->stimuli_dir}/{$fileName}"))
         {
             unset($stimuliFiles[$i]);
             continue;
@@ -373,7 +364,7 @@
     <iframe src="<?= $loaderURL ?>"></iframe>
     <?php 
         
-        include $_FILES->code . '/Footer.php';
+        include $_PATH->get('Footer');
 
     ?>
 </div>

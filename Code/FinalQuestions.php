@@ -7,7 +7,7 @@
     
     // if this is the first time on FinalQuestions.php then load questions from file
     if (isset($_SESSION['FinalQs']) == false) {
-        $fQ = GetFromFile($_FILES->final_questions->relativeTo($_FILES->code));
+        $fQ = GetFromFile($_PATH->get('Final Questions'));
         // loop that deletes trailing empty positions from $fQ array
         for ($i=(count($fQ)-1); $i>0; $i--) {
             if ($fQ[$i] == null) {
@@ -43,20 +43,20 @@
 
     // if the question starts with '*' then skip it; good for skipping questions when debugging without deleting finalQuestions
     if ($Q[0] == '*') {
-        echo '<meta http-equiv="refresh" content="0; url=FQdata.php">';
+        echo '<meta http-equiv="refresh" content="0; url=' . $_PATH->get('Final Questions Record'). '">';
         exit;
     }
     
     $title = 'Final Questions';
     $_dataController = 'finalQuestions';
     
-    require $_FILES->code . '/Header.php';
+    require $_PATH->get('Header');
 ?>
 <style>
     #content { width: 750px;}
 </style>
 
-<form id="content" name="FinalQuestion" autocomplete="off" action="FQdata.php" method="post" class="finalquestions">
+<form id="content" name="FinalQuestion" autocomplete="off" action="<?= $_PATH->get('Final Questions Record') ?>" method="post" class="finalquestions">
     <h1 class="textcenter">Final Questions</h1>
     <p><?php echo $Q ?>
     <?php
@@ -128,4 +128,4 @@
 </form>
     
 <?php
-    require $_FILES->code . '/Footer.php';
+    require $_PATH->get('Footer');

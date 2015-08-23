@@ -4,6 +4,8 @@
     
     if( $_CONFIG->password === '' ) exit( 'GetData has not been enabled. Please enter a password in the Settings file in your experiment folder.' );
     
+    $_PATH->loadDefault('Current Data', $_CONFIG->experiment_name . '-Data');
+    
     // filter user input before using
     $POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
     
@@ -18,15 +20,7 @@
     
     
     // scan the TrialType folder, and take the name of any file ending in .php as a trial type
-    $trialTypes = array();
-    if( is_dir( $_FILES->trial_types ) ) {
-        $trialTypeFiles = scandir( $_FILES->trial_types );
-        foreach( $trialTypeFiles as $fileName ) {
-            if( strtolower(substr( $fileName, -4 )) === '.php' ) {
-                $trialTypes[] = substr( $fileName, 0, -4 );
-            }
-        }
-    }
+    $trialTypes = array_keys(getAllTrialTypeFiles());
     
     
     // the scopes 'Experiment' and 'Condition' will later cause data in these files to be distributed among all related files in that category
@@ -34,23 +28,23 @@
     // their output in later sessions or different conditions
     $extraFileMeta = array(
          'Demographics'     => array(
-             'fileName'         => pathinfo($_FILES->demographics, PATHINFO_FILENAME)
+             'fileName'         => pathinfo($_PATH->demographics_data, PATHINFO_FILENAME)
             ,'Prefix'           => $demographicsPrefix
             ,'Scope'            => 'Experiment' )
         ,'Final_Questions'  => array(
-             'fileName'         => pathinfo($_FILES->final_questions_data, PATHINFO_FILENAME)
+             'fileName'         => pathinfo($_PATH->final_questions_data, PATHINFO_FILENAME)
             ,'Prefix'           => $finalQuestionsPrefix
             ,'Scope'            => 'Condition' )
         ,'Status_Begin'     => array(
-             'fileName'         => pathinfo($_FILES->status_begin, PATHINFO_FILENAME)
+             'fileName'         => pathinfo($_PATH->status_begin_data, PATHINFO_FILENAME)
             ,'Prefix'           => $statusBeginPrefix
             ,'Scope'            => 'ID' )
         ,'Status_End'       => array(
-             'fileName'         => pathinfo($_FILES->status_end, PATHINFO_FILENAME)
+             'fileName'         => pathinfo($_PATH->status_end_data, PATHINFO_FILENAME)
             ,'Prefix'           => $statusEndPrefix
             ,'Scope'            => 'ID' )
         ,'Instructions'     => array(
-             'fileName'         => pathinfo($_FILES->instructions_data, PATHINFO_FILENAME)
+             'fileName'         => pathinfo($_PATH->instructions_data, PATHINFO_FILENAME)
             ,'Prefix'           => $instructionsPrefix
             ,'Scope'            => 'Condition' )
     );
@@ -88,7 +82,7 @@
      */
     
     $testHeader = 'Username';                                                           // make this a header that you are sure will appear in every output file
-    $path = $_FILES->raw_output;
+    $path = $_PATH->output_dir;
     $users = array();
     $IDs = isset($POST['IDs']) ? array_flip($POST['IDs']) : array();
     $outputColumns = array();
@@ -119,7 +113,7 @@
     unset( $allOutputFiles );                                                           // might as well free up some memory
     
     // find all files in the folder for extra data that have a name matching one of our extra files
-    $path = $_FILES->extra_data; 
+    $path = $_PATH->current_data_dir; 
     $allExtraFiles = is_dir( $path ) ? scandir( $path ) : array();
     $extraFiles = array_splice($allExtraFiles, 2); // remove the '.' and '..'
     foreach( $extraFiles as $fileName ) {

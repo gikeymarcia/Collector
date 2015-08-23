@@ -38,113 +38,88 @@
 //     If you put a range (2 entries separated by two colons '::'), the
 //         scale will start from the first entry, and end at the second.
 //         Both number ranges (-3::3) and alphabetical ranges (a::f)
-//         are fine. If the range is numeric, you can also define the
-//         step size using parenthesis after the range ("0::1(.1)").
+//         are fine. You can also define the step size using a # sign 
+//         after the range (e.g., 0::1#.5).
 //
 //     You can also combine ranges using commas, such as "1::3,a::c".
 //         Using these, its possible to have duplicate entries, so
 //         something like "1,1,1,1::4" is possible. If you want to set
-//         the step size for numeric ranges, please enter the step size
-//         after each range, like "1::3(.1), a::g(2), 7::9(.1)"
+//         the step size for multiple ranges, please enter the step size
+//         after each range, like "1::3#.1, a::g # 2, 7::9 #.5"
 
-function trimExplode($delimiter, $string) {
-    $output = array();
-    $explode = explode($delimiter, $string);
-    foreach( $explode as $explosion ) {
-        $output[] = trim($explosion);
-    }
-    return $output;
+if (!isset($settings) OR $settings === '') {
+    $settings = '1::7';
 }
 
-function createRange($endValue) {
-    $output = array();
-    $step = findRangeStep($endValue);
-    if (is_numeric($endValue)) {
-        $output = range(1, $endValue, $step);
-    } elseif (strtolower($endValue) === $endValue ) {
-        $output = range('a', $endValue, $step);
-    } else {
-        $output = range('A', $endValue, $step);
-    }
-    return $output;
-}
+$likertOptions = rangeToArray($settings);
 
-function findRangeStep(&$string) {
-    if (strpos($string, '(') !== false) {
-        $step = substr($string, strpos($string, '('));
-        $step = filter_var($step, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-        $string = substr($string, 0, strpos($string, '('));
-    } else {
-        $step = 1;
-    }
-    return $step;
-}
+$texts       = explode('|', $text);
+$question    = array_shift($texts);
+$labelWidth  = floor(1000/max(1, count($texts)))/10;
+$optionWidth = floor(1000/count($likertOptions))/10;
 
-if (!isset($procedureNotes)) { $procedureNotes = ''; }
-$allTextsAsString = $text;
-$likertTexts = trimExplode( '|', $allTextsAsString );
+?><style>
+    .likertArea { text-align: center; }
+    
+    .likertQuestion { margin: 0 0 30px 0; font-size: 1.3em; }
+    
+    .likertLabels { display: table; margin: 10px 0; color: #666; width: 100%; }
+    .likertLabel { display: table-cell; padding: 8px;
+                   vertical-align: bottom; width: <?= $labelWidth ?>%; }
+    
+    .likertOptions { display: table; margin: 10px 0; width: 100%; }
+    .likertOption { display: table-cell; text-align: center; padding: 14px 8px 28px 8px;
+                    vertical-align: bottom; width: <?= $optionWidth ?>%; }
+</style>
 
-$likertQuestion = array_shift($likertTexts);
-if (count($likertTexts) < 2) {
-    $likertDescrips = array_pad( $likertTexts, 3, '' );
-} elseif (count($likertTexts) === 2) {
-    $likertDescrips = array();
-    $likertDescrips[] = $likertTexts[0];
-    $likertDescrips[] = '';
-    $likertDescrips[] = $likertTexts[1];
-} else {
-    $likertDescrips = $likertTexts;
-}
+<div class="likertArea">
+<?php
 
-$text = $likertQuestion . ' | ' . implode(' | ', $likertDescrips);
+echo '<div class="likertArea">';
 
-if (!isset( $settings)) { $settings = ''; }
+echo '<div class="likertQuestion">' .
+        $question .
+     '</div>';
 
-if ($settings === '') {
-    $likertScale = range(1,7);
-} else {
-    $likertScale = array();
-    if (strpos($settings, ',' ) === false 
-        && strpos($settings, '::') === false
-    ) {
-        $likertScale = createRange($settings);
-    } else {
-        $ranges = trimExplode(',', $settings);
-        foreach( $ranges as $range ) {
-            if( strpos($range, '::') === false ) {
-                $likertScale[] = $range;
-            } else {
-                $endPoints = trimExplode('::', $range);
-                $first = array_shift($endPoints);
-                $last  = array_pop($endPoints);
-                $step  = findRangeStep( $last );
-                $newRange = range($first, $last, $step);
-                $likertScale = array_merge($likertScale, $newRange);
-            }
+echo '<div class="likertLabels">';
+foreach ($texts as $i => $label) {
+    if (count($texts) === 2) {
+        if ($i === 0) {
+            $class = 'textleft';
+        } else {
+            $class = 'textright';
         }
+    } elseif (count($texts) === 3) {
+        if ($i === 0) {
+            $class = 'textleft';
+        } elseif ($i === 1) {
+            $class = 'textcenter';
+        } else {
+            $class = 'textright';
+        }
+    } else {
+        $class = 'textcenter';
     }
+    echo "<div class='likertLabel $class'>" .
+            $label .
+         '</div>';
 }
-$width = 100/count($likertScale);
+echo '</div>';
+
+echo '<div class="likertOptions">';
+foreach ($likertOptions as $option) {
+    echo '<label class="likertOption">' . 
+            $option .
+            '<br>' .
+            '<input type="radio" name="Response" value="' . $option . '">' .
+         '</label>';
+}
+echo '</div>';
+
+echo '</div>';
 ?>
+</div>
 
-<style>  .likert label { width: <?php echo $width; ?>%; } </style>
-
-<section class="vcenter">
-  <div class="collector-form-element likert inline-radio">
-    <div class="likert-label"><?php echo $likertQuestion; ?></div>
-    
-    <?php foreach( $likertScale as $value ): 
-    ?><input id="r_<?php echo $value; ?>" type="radio" name="Response" value="<?= $value; ?>"
-     ><label for="r_<?php echo $value; ?>"><?php echo $value; ?></label><?php endforeach; ?>
-    
-    <div class="likert-legend">
-      <div class="likert-legend-left"  ><?php echo $likertDescrips[0]; ?></div
-     ><div class="likert-legend-center"><?php echo $likertDescrips[1]; ?></div
-     ><div class="likert-legend-right" ><?php echo $likertDescrips[2]; ?></div>
-    </div>
-  </div>
-  
-  <div class="collector-form-element textcenter">
-    <input class="collectorButton collectorAdvance" id=FormSubmitButton type=submit value="Submit">
-  </div>
-</section>
+<div class="collector-form-element textcenter">
+    <button type="submit" class="collectorButton collectorAdvance">Submit</button>
+</div>

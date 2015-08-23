@@ -29,7 +29,7 @@
         $source = $vidSource.'?'.$parameters;
     } else {
         // video is a local file
-        $source = "{$_FILES->expt}/{$cue}";
+        $source = "{$_PATH->experiment}/{$cue}";
     }
 ?>
 
