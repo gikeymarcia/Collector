@@ -14,10 +14,10 @@
     $_PATH->loadDefault('Current Data', $_CONFIG->experiment_name . '-Data');
 
     // login specific classes
-    require 'errorController.php';
-    require 'userController.php';
-    require 'conditionController.php';
-    require 'debugController.php';
+    require 'errors.class.php';
+    require 'users.class.php';
+    require 'conditions.class.php';
+    require 'debug.class.php';
 
     // login objects
     $errors = new ErrorController();
@@ -91,7 +91,7 @@
         include 'check.php';
     }
     
-    require 'returnVisitController.php';
+    require 'returnVisitor.class.php';
     $check = new ReturnVisitController();
 // $check->alreadyDone();
 
