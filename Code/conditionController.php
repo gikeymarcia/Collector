@@ -24,23 +24,23 @@ class ConditionController
     private $errorHandler = 'errors';   // variable name of error handler object
 
     /**
-     * When making a new ConditionController it automatically uses $_FILES
+     * When making a new ConditionController it automatically uses $_PATH
      * to load the Conditions.csv file into $this->ConditionsCSV
      */
     public function __construct()
     {
-        global $_FILES;
-        $this->location = $_FILES->conditions;
+        global $_PATH;
+        $this->location = $_PATH->get('Conditions');
         $this->ConditionsCSVexists($this->location);
         $this->loadConditons();
 
         $this->requiredColumns();
         // create the 'Counter' folder if it doesn't exist
-        if (!is_dir($_FILES->counter)) {
-            mkdir($_FILES->counter,  0777,  true);
+        if (!is_dir($_PATH->get('Counter Dir')) {
+            mkdir($_PATH->get('Counter Dir',  0777,  true);
         }
         global $_CONFIG;
-        $this->logLocation = "{$_FILES->counter}/{$_CONFIG->login_counter_file}";
+        $this->logLocation = $_PATH->get('Counter', 'relative', $_CONFIG->login_counter_file);
     }
     /**
      * Saves the condition selection made on index.php

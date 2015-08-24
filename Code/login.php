@@ -10,6 +10,8 @@
     
     $title = 'Preparing the Experiment';
     // require $_FILES->code . '/Header.php';
+    
+    $_PATH->loadDefault('Current Data', $_CONFIG->experiment_name . '-Data');
 
     // login specific classes
     require 'errorController.php';

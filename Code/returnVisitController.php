@@ -13,10 +13,9 @@ class ReturnVisitController
         global $user;
         $this->user = $user->getUsername();
 
-        global $_FILES;
-        $this->jsonDir  = $_FILES->json_session->relativeTo($_FILES->root);
-        $this->doneLink = 'done.php';
-        // $this->doneLink = $this->doneLink . '/done.php';
+        global $_PATH;
+        $this->jsonDir  = $_PATH->get('JSON Dir');
+        $this->doneLink = $_PATH->get('Done');
     }
 
     public function isReturning()
@@ -41,8 +40,7 @@ class ReturnVisitController
         $this->pos = $pos;
     }
     public function alreadyDone() {
-        // header("Location: done.php");
-        // echo $this->doneLink;
+        // header("Location: {$this->doneLink}");
         // echo '<meta http-equiv="refresh"; content="5"; url="done.php">';
         // exit;
         $doneCode = 'ExperimentFinished';
@@ -50,7 +48,7 @@ class ReturnVisitController
         if ($flag == $doneCode) {
             $_SESSION = $this->oldSession;
             $_SESSION['alreadyDone'] = true;
-            // header("Location: {$this->doneLink}");
+            header("Location: {$this->doneLink}");
             // Need to figure out how to redirect to done
             exit;
         }

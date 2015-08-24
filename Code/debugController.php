@@ -25,9 +25,10 @@ class DebugController
      */
     private function modifyPath()
     {
-        global $_FILES;
+        global $_PATH;
         if ($this->debugMode === true) {
-            $_FILES->updateParentPath('data', $_FILES->data->path. '/' . 'Debug/');
+            $currentPath = $_PATH->getDefault('Current Data');
+            $_PATH->loadDefault('Current Data',  $currentPath . '/' . 'Debug');
         }
     }
     /**
