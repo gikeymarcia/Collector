@@ -4,8 +4,9 @@
  */
 class ErrorController
 {
-    private $count;
+    private $count = 0;
     private $details = array();
+    private $allowShowStopper = true;
 
     /**
      * logs the given error message
@@ -18,8 +19,11 @@ class ErrorController
             $this->count++;
             $this->details[] = $errMsg;
         }
-        if ($showStopper == true) {
-            echo $errMsg;
+        if (($showStopper == true)
+            && ($this->allowShowStopper == true)
+        ){
+            echo $errMsg . '<br>';
+            $this->printErrors();
             exit;
         }
     }
@@ -37,5 +41,21 @@ class ErrorController
             echo '</ol>';
         }
     }
+    /**
+     * get back the # of errors found
+     * @return int number of errors sent to the object
+     */
+    public function count()
+    {
+        return $this->count;
+    }
+    /**
+     * trasnforms the error handler so it doesn't exit
+     * the code when a $showstopper error occurs
+     */
+    public function noShowStoppers()
+    {
+        $this->allowShowStopper = false;
+    } 
 }
 ?>

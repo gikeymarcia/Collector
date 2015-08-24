@@ -5,7 +5,7 @@
     require 'initiateCollector.php';
     
     $_SESSION = array();                                    // reset session so it doesn't contain any information from a previous login attempt
-    $_SESSION['OutputDelimiter'] = $_CONFIG->delimiter;
+//  $_SESSION['OutputDelimiter'] = $_CONFIG->delimiter;
 // $_SESSION['Debug'] = $_CONFIG->debug_mode;
     
     $title = 'Preparing the Experiment';
@@ -97,12 +97,12 @@
 
     if ($check->isReturning()) {
         if ($check->alreadyDone()) {
-
+            // redirect to done.php
         }
         if ($check->timeToReturn()) {
-
+            // reload to the positon they were at in the previous experiment
         } else {
-            // error print method
+            $check->explainTimeProblem();
         }
     }
     
