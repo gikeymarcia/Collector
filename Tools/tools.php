@@ -10,7 +10,7 @@
     
     // load configs
     require $_PATH->get('Parse');
-    $_CONFIG = Parse::fromConfig($_PATH->get('Config'), true);
+    $_CONFIG = Parse::fromConfig($_PATH->get('Common Config'), true);
     
     // load custom functions
     require $_PATH->get('Custom Functions');
