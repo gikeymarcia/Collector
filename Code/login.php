@@ -11,8 +11,6 @@
     
     $_SESSION['Debug'] = $_CONFIG->debug_mode;
     
-    $_PATH->loadDefault('Current Data', $_PATH->getDefault('Current Experiment') . '-Data');
-    
     $title = 'Preparing the Experiment';
     require $_PATH->get('Header');
     
@@ -47,7 +45,9 @@
     }
     if ($_SESSION['Debug'] === true) {
         // debug mode is definitely on, make sure data is sectioned off
-        $_PATH->loadDefault('Current Data', $_PATH->getDefault('Current Data') . '/' . 'Debug');
+        $_PATH->loadDefault('Data Sub Dir', '/Debug');
+    } else {
+        $_PATH->loadDefault('Data Sub Dir', '');
     }
     
     
@@ -64,6 +64,8 @@
         exit;
     }
     
+    $_PATH->loadDefault('Username', $_SESSION['Username']);
+    
     // is this user ineligible to participate in the experiment?
     if (($_CONFIG->check_elig == true)
         AND ($_CONFIG->mTurk_mode == true)
@@ -72,7 +74,6 @@
     }
     
     // Has this user already completed session 1?  If so, determine whether they have another session to complete or if they are done
-    $_PATH->loadDefault('json', $_SESSION['Username'] . '.json');
     $sessionFilename = FileExists($_PATH->get('json'));
     if ($sessionFilename == true) {              // this file will only exist if this username has completed a session successfully
         $pastSession   = fopen($sessionFilename, 'r');
@@ -102,7 +103,7 @@
         // Overwrite values that need to be updated
         $outputFile = 
             'Output_Session' . 
-            $_SESION['Session'] . '_' . 
+            $_SESSION['Session'] . '_' . 
             $_SESSION['Username'] . '_' . 
             $_SESSION['ID'] .
             '.csv';

@@ -5,7 +5,7 @@
     // contents of a directory, or the label for that directory or file
     //
     // Inside the map, certain keys can be a variable
-    // using $dirName as the key, you can give a label to the directory,
+    // using 'Dir Name' as the key, you can give a label to the directory,
     //
     // using $wildCard, you can provide a point for the user to provide
     // their own information (such as the specific trial type "instruct")
@@ -19,35 +19,35 @@
     
     
     $systemMap = array (
-        $dirName    => 'root',
+        'Dir Name'    => 'root',
         
         'index.php' => 'index',
         
         'Experiments' => array (
-            $dirName => 'Experiments',
+            'Dir Name' => 'Experiments',
             
             'Common' => array (
-                $dirName => 'Common',
+                'Dir Name' => 'Common',
                 
                 'Common Config.ini' => 'Common Config',
             
                 'Ineligible' => array (
-                    $dirName => 'Ineligibility Dir',
+                    'Dir Name' => 'Ineligibility Dir',
                 ),
                 
                 'Images' => array (
-                    $dirName => 'Images',
+                    'Dir Name' => 'Images',
                 ),
                 
                 'Audio' => array (
-                    $dirName => 'Audio',
+                    'Dir Name' => 'Audio',
                 ),
                 
                 'TrialTypes' => array (
-                    $dirName => 'Custom Trial Types',
+                    'Dir Name' => 'Custom Trial Types',
                     
-                    $wildCard => array (
-                        $dirName => 'Custom Trial Type Dir',
+                    '{var}' => array (
+                        'Dir Name' => 'Custom Trial Type Dir',
                         
                         'display.php' => 'Custom Trial Display',
                         'helper.inc' => 'Custom Trial Helper',
@@ -58,9 +58,8 @@
                 ),
             ),
             
-            $default .
-            'Current Experiment' => array (
-                $dirName => 'Current Experiment',
+            '{Current Experiment}' => array (
+                'Dir Name' => 'Current Experiment',
                 
                 'Conditions.csv' => 'Conditions',
                 'Config.ini' => 'Config',
@@ -70,23 +69,21 @@
                 'Config.ini' => 'Experiment Config',
                 
                 'Stimuli' => array (
-                    $dirName => 'Stimuli Dir',
+                    'Dir Name' => 'Stimuli Dir',
                     
-                    $default . 
-                    'Stimuli' => 'Stimuli',
+                    '{Stimuli}' => 'Stimuli',
                 ),
                 
                 'Procedure' => array (
-                    $dirName => 'Procedure Dir',
+                    'Dir Name' => 'Procedure Dir',
                     
-                    $default . 
-                    'Procedure' => 'Procedure',
+                    '{Procedure}' => 'Procedure',
                 ),
             ),
         ),
         
         'Code'      => array (
-            $dirName    => 'Code',
+            'Dir Name'    => 'Code',
             
             'Welcome.php' => 'Welcome',
             
@@ -138,7 +135,7 @@
             'trialTester.php' => 'Trial Tester Menu',
             
             'css' => array (
-                $dirName => 'CSS Dir',
+                'Dir Name' => 'CSS Dir',
                 
                 'global.css' => 'Global CSS',
                 'jquery-ui.min.css' => 'Jquery UI CSS',
@@ -149,20 +146,20 @@
                 'tutorial.css' => 'Tutorial CSS',
                 
                 'fonts' => array (
-                    $dirName => 'Fonts',
+                    'Dir Name' => 'Fonts',
                     
                     // wow there is a lot in here. . .
                 ),
                 
                 'images' => array (
-                    $dirName => 'CSS Images',
+                    'Dir Name' => 'CSS Images',
                     
                     // lots of stuff in here
                 ),
             ),
             
             'javascript' => array (
-                $dirName => 'JS Dir',
+                'Dir Name' => 'JS Dir',
                 
                 'collector_1.0.0.js' => 'Collector JS',
                 
@@ -180,10 +177,10 @@
             ),
             
             'TrialTypes' => array (
-                $dirName => 'Trial Types',
+                'Dir Name' => 'Trial Types',
                 
-                $wildCard => array (
-                    $dirName => 'Trial Type Dir',
+                '{var}' => array (
+                    'Dir Name' => 'Trial Type Dir',
                     
                     'display.php' => 'Trial Display',
                     'helper.inc' => 'Trial Helper',
@@ -195,11 +192,10 @@
         ),
         
         'Data' => array (
-            $dirName => 'Data',
+            'Dir Name' => 'Data',
             
-            $default . 
-            'Current Data' => array (
-                $dirName => 'Current Data Dir',
+            '{Current Experiment}-Data{Data Sub Dir}' => array (
+                'Dir Name' => 'Current Data Dir',
                 
                 'DemographicsData.csv' => 'Demographics Data',
                 'FinalQuestionsData.csv' => 'Final Questions Data',
@@ -208,29 +204,27 @@
                 'Status_End.csv' => 'Status End Data',
                 
                 'Counter' => array (
-                    $dirName => 'Counter Dir',
+                    'Dir Name' => 'Counter Dir',
                     
-                    $wildCard => 'Counter',
+                    '{var}.txt' => 'Counter',
                 ),
                 
                 'JSON_session' => array (
-                    $dirName => 'JSON Dir',
+                    'Dir Name' => 'JSON Dir',
                     
-                    $default .
-                    'json' => 'json',
+                    '{Username}.json' => 'json',
                 ),
                 
                 'Output' => array (
-                    $dirName => 'Output Dir',
+                    'Dir Name' => 'Output Dir',
                     
-                    $default .
-                    'Output' => 'Experiment Output',
+                    '{Output}' => 'Experiment Output',
                 ),
             ),
         ),
         
         'Tools' => array (
-            $dirName => 'Tools',
+            'Dir Name' => 'Tools',
             
             // lots of stuff in here
         ),

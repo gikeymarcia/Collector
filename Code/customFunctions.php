@@ -439,7 +439,12 @@ function durationFormatted($durationInSeconds)
     if ($seconds < 10) {
         $seconds = '0' . $seconds;
     }
-    return $days.'d:' . $hours.'h:' . $minutes.'m:' . $seconds.'s';
+    $output = '';
+    if (isset($days)) {
+        $output .= $days . 'd:';
+    }
+    $output .= $hours.'h:' . $minutes.'m:' . $seconds.'s';
+    return $output;
 }
 /**
  * Formats a time like 5d:2h:3m:20s into seconds.

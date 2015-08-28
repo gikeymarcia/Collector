@@ -121,9 +121,8 @@
             'url'      => '',
         );
         
-        private $_dirName = '*name*';
-        private $_varName = '*variable*';
-        private $_default = '*default*';
+        private $_dirName = 'dir name';
+        private $_varName = 'var';
         
         private $_defaults = array();
         
@@ -138,26 +137,14 @@
             
             $this->setRootPaths();
             
-            foreach ($path as $name => $pathToName) {
-                $name = $this->cleanPathfinderName($name);
-                if (isset($this->$name)) {
-                    throw new exception(
-                        'Bad path name: "'.$name.'" unavailable. ' .
-                        'Make sure names are unique, case-insensitive.'
-                    );
-                }
-                $this->$name = $this->get($name);
-            }
-            
             if (isset($_SESSION)) {
                 $this->updateDefaults();
             }
+            
+            $this->updateHardcodedPaths();
         }
         
         private function getFileMap() {
-            $dirName  = $this->_dirName;
-            $wildCard = $this->_varName;
-            $default  = $this->_default;
             require 'systemMap.php';
             return $systemMap;
         }
@@ -165,11 +152,11 @@
         private function convertFileMapToPathList($systemMap) {
             $list = $this->array_flip_multiDim($systemMap);
             
-            $dirName    = $this->_dirName;
+            $dirName    = strtolower($this->_dirName);
             $dirNameLen = strlen($dirName);
             
             foreach ($list as &$path) {
-                if (substr($path, -$dirNameLen) === $dirName) {
+                if (strtolower(substr($path, -$dirNameLen)) === $dirName) {
                     $path = dirname($path);
                 }
                 
@@ -265,7 +252,25 @@
             return $protocol . $domain . $resource;
         }
         
-        public function get($name, $type = 'relative', $wildCards = array()) {
+        private function updateHardcodedPaths() {
+            $path = $this->_pathList;
+            foreach (array_keys($path) as $name) {
+                $name = $this->cleanPathfinderName($name);
+                unset($this->$name);    // clear everything, so we can write it anew
+            }
+            foreach ($path as $name => $pathToName) {
+                $name = $this->cleanPathfinderName($name);
+                if (isset($this->$name)) {
+                    throw new exception(
+                        'Bad path name: "'.$name.'" unavailable. ' .
+                        'Make sure names are unique, case-insensitive.'
+                    );
+                }
+                $this->$name = $this->get($name);
+            }
+        }
+        
+        public function get($name, $type = 'relative', $variables = array()) {
             $name = $this->cleanPathfinderName($name);
             if (!isset($this->_pathList[$name])) {
                 throw new exception('"'.$name.'" not found in ' . __CLASS__ . ' path list.');
@@ -285,7 +290,7 @@
                     break;
                 
                 case 'static':   # everything after the last variable path component
-                    $path = explode($this->_varName, $path);
+            $path = explode('}', $path);
                     $path = array_pop($path);
                     $path = trim($path, '/');
                     break;
@@ -305,38 +310,52 @@
                     break;
             }
             
-            $default = $this->_default;
-            $pathParts = explode($default, $path);
-            $path = array_shift($pathParts);
-            foreach ($pathParts as $part) {
-                $parts = explode('/', $part);
-                $firstPart = array_shift($parts);
-                $firstPart = $this->getDefault($firstPart);
-                if ($firstPart === null) {
-                    $firstPart = $default;
-                }
-                array_unshift($parts, $firstPart);
-                $part = implode('/', $parts);
-                $path .= $part;
-            }
+            $path = $this->updateVariableString($path, $variables);
             
-            $wildMarker = $this->_varName;
-            
-            if (!is_array($wildCards)) {
-                if (is_string($wildCards)) {
-                    $path = str_replace($wildMarker, $wildCards, $path);
-                }
-            } else {
-                // for arrays, use each replacement only once
-                // this way, it's possible to do something like
-                // data/{$username}/{$trialType}/specialOutput.csv
-                $wildMarker = '/' . preg_quote($wildMarker) . '/';
-                foreach ($wildCards as $wild) {
-                    $path = preg_replace($wildMarker, $wild, $path, 1);
-                }
-            }
+            if (substr($path, -2) === '/.') { $path = substr($path, 0, -2); }
             
             return $path;
+        }
+        
+        private function updateVariableString($string, $variables) {
+            $defaults = array_change_key_case($this->_defaults, CASE_LOWER);
+            
+            $varKeyword = $this->_varName;
+            
+            $explodeLeftBrace = explode('{', $string);
+            $output = array_shift($explodeLeftBrace);
+            
+            foreach ($explodeLeftBrace as $stringWithVar) {
+                $explodeRightBrace = explode('}', $stringWithVar);
+                
+                $var = array_shift($explodeRightBrace);
+                $var = strtolower(trim($var));
+                
+                if ($var === $varKeyword) {
+                    $var = '{' . $varKeyword . '}'; // will do this later
+                } elseif (isset($defaults[$var])) {
+                    $var = $defaults[$var];
+                } else {
+                    $var = '{' . $var . '}'; // missing default
+                }
+                
+                $output .= $var . $explodeRightBrace[0];
+            }
+            
+            $varKeyword = '{' . $varKeyword . '}';
+            
+            if (is_array($variables)) {
+                $varMarker = '/' . preg_quote($varKeyword) . '/';
+                foreach ($variables as $var) {
+                    $output = preg_replace($varMarker, $var, $output, 1);
+                }
+            } else {
+                if (is_string($variables)) {
+                    $output = str_replace($varKeyword, $variables, $output);
+                }
+            }
+            
+            return $output;
         }
         
         public function getStandardPaths() {
@@ -346,9 +365,7 @@
             $paths = array();
             
             foreach ($this->_pathList as $name => $path) {
-                if (    strpos($path, $this->_varName) === FALSE
-                    AND strpos($path, $this->_default) === FALSE
-                ) {
+                if (strpos($path, '{') === FALSE) {
                     $paths[$name] = $path;
                 }
             }
@@ -367,10 +384,11 @@
                 $this->_defaults[$key] = $value;
                 
                 if (isset($_SESSION)) {
-                    
                     $_SESSION[__CLASS__][$key] = $value;
                 }
             }
+            
+            $this->updateHardcodedPaths();
         }
         
         public function getDefault($key) {
@@ -403,5 +421,7 @@
             foreach ($_SESSION[__CLASS__] as $key => $value) {
                 $this->_defaults[$key] = $value;
             }
+            
+            $this->updateHardcodedPaths();
         }
     }
