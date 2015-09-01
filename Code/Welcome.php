@@ -22,17 +22,9 @@
     $_SESSION = array();
     
     // this needs to be done from the index.php file inside the experiment
-    $exp = $_SERVER['REQUEST_URI'];
-    $expFolder = $_PATH->get('Experiments', 'base') . '/';
-    $expFolLen = strlen($expFolder);
-    $expFolStrPos = strpos($exp, $expFolder);
-    if ($expFolStrPos === FALSE) {
-        exit('Major Error: contact ' . $_CONFIG->experimenter_email);
-    }
-    $exp = substr($exp, $expFolStrPos+$expFolLen);
-    $trailingSlashPos = strrpos($exp, '/');
-    $exp = substr($exp, 0, $trailingSlashPos);
-    $exp = urldecode($exp);
+    $exp = $_SERVER['REQUEST_URI'] . 'index.php';
+    $exp = explode('/', $exp);
+    $exp = $exp[count($exp)-2];
     $_PATH->loadDefault('Current Experiment', $exp);
     
     $newSettings = Parse::fromConfig($_PATH->get('Experiment Config'));
