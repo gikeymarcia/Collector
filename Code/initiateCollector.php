@@ -4,7 +4,7 @@
     error_reporting(-1);
     
     // load file locations
-    require 'Pathfinder.class.php';
+    require 'pathfinder.class.php';
     $_PATH = new Pathfinder();
     
     // load custom functions and parse

@@ -344,8 +344,8 @@
                 $errors['Details'][] = 
                     'The trial type '. $row[$column] .' for row '. $i .' in '
                   . 'the procedure file '. $procName .' has no folder in '
-                  . 'either the "'. $_PATH->get('Custom Trials Types', 'root') .'" folder or '
-                  . 'the "'. $_PATH->get('Trials Types', 'root') .'" folder.';
+                  . 'either the "'. $_PATH->get('Custom Trial Types', 'root') .'" folder or '
+                  . 'the "'. $_PATH->get('Trial Types', 'root') .'" folder.';
             }
         }
     }
