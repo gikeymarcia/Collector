@@ -4,7 +4,7 @@
     
     if( $_CONFIG->password === '' ) exit( 'GetData has not been enabled. Please enter a password in the Settings file in your experiment folder.' );
     
-    $_PATH->loadDefault('Current Data', $_CONFIG->experiment_name . '-Data');
+    $_PATH->setDefault('Current Data', $_CONFIG->experiment_name . '-Data');
     
     // filter user input before using
     $POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);

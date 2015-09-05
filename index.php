@@ -18,11 +18,7 @@
  */
     require 'Code/initiateCollector.php';
     
-    if ($_PATH->getDefault('Current Experiment') !== null) {
-        $exp = $_PATH->getDefault('Current Experiment');
-        header('Location: ' . $_PATH->get('Current Experiment'));
-        exit;
-    }
+    $_SESSION = array();
     
     // get possible experiments to choose from
     $experiments     = array();

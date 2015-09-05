@@ -16,24 +16,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+    require 'initiateCollector.php';
 
-    // reset session so it doesn't contain any information from a previous login attempt
-    // session_destroy(); // this was causing some errors with transferring the default values of pathfinder to login
-    $_SESSION = array();
-    
-    // this needs to be done from the index.php file inside the experiment
-    $exp = $_SERVER['REQUEST_URI'] . 'index.php';
-    $exp = explode('/', $exp);
-    $exp = $exp[count($exp)-2];
-    $_PATH->loadDefault('Current Experiment', $exp);
-    
-    $newSettings = Parse::fromConfig($_PATH->get('Experiment Config'));
-    foreach ($newSettings as $settingName => $setting) {
-        $_CONFIG->$settingName = $setting;
-    }
-    unset($newSettings, $settingName, $setting);
-    
-    
     // load and sort conditions
     $Conditions = GetFromFile($_PATH->get('Conditions'), false);
     $conditionNumbers = array();

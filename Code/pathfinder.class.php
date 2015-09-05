@@ -77,8 +77,8 @@
     //      used along with a default label, such as 
     //      'test' => 'dir/$default . 'Username'/output.csv'
     //     -in this case, you would first load a default value for 
-    //      'Username', by using the loadDefault() function, like so:
-    //      $_PATH->loadDefault('Username', 'participant001');
+    //      'Username', by using the setDefault() function, like so:
+    //      $_PATH->setDefault('Username', 'participant001');
     //     -then, when you call $_PATH->get('test'), you would receive
     //      'dir/participant001/subdir/file.php'
     //     -as long as the session has already been started, these defaults
@@ -373,7 +373,7 @@
             return $paths;
         }
         
-        public function loadDefault($arrayOrKey, $value = null) {
+        public function setDefault($arrayOrKey, $value = null) {
             if (is_array($arrayOrKey)) {
                 $newDefaults = $arrayOrKey;
             } else {
@@ -423,5 +423,23 @@
             }
             
             $this->updateHardcodedPaths();
+        }
+        
+        public function atLocation($loc) {
+            $target  = $this->get($loc, 'absolute');
+            $current = realpath($_SERVER['SCRIPT_FILENAME']);
+            $current = strtr($current, '\\', '/');
+            return $current === $target;
+        }
+        
+        public function inDir($dir) {
+            $dirUrl  = $this->get($dir, 'url');
+            $current = $this->getURL();
+            
+            if (stripos($current, $dirUrl) === false) {
+                return false;
+            } else {
+                return true;
+            }
         }
     }

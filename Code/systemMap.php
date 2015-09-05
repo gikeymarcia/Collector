@@ -61,6 +61,8 @@
             '{Current Experiment}' => array (
                 'Dir Name' => 'Current Experiment',
                 
+                'index.php' => 'Current Index',
+                
                 'Conditions.csv' => 'Conditions',
                 'Config.ini' => 'Config',
                 'FinalQuestions.csv' => 'Final Questions',

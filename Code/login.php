@@ -5,9 +5,13 @@
     require 'initiateCollector.php';
     // save the default found at Welcome.php
     
-    $_SESSION = array();                                    // reset session so it doesn't contain any information from a previous login attempt
-    // $_SESSION['OutputDelimiter'] = $_CONFIG->delimiter; // hard-coded now
-    $_PATH->updateDefaults(); // restore default 'Current Experiment'
+    // reset session so it doesn't contain any information from a previous login attempt
+    $currentExp = $_PATH->getDefault('Current Experiment');
+    $_SESSION = array();
+    $_SESSION['Current Collector'] = $_PATH->get('root', 'url');
+    $_PATH->setDefault('Current Experiment', $currentExp);
+    unset($currentExp);
+    
     
     $_SESSION['Debug'] = $_CONFIG->debug_mode;
     
@@ -45,9 +49,9 @@
     }
     if ($_SESSION['Debug'] === true) {
         // debug mode is definitely on, make sure data is sectioned off
-        $_PATH->loadDefault('Data Sub Dir', '/Debug');
+        $_PATH->setDefault('Data Sub Dir', '/Debug');
     } else {
-        $_PATH->loadDefault('Data Sub Dir', '');
+        $_PATH->setDefault('Data Sub Dir', '');
     }
     
     
@@ -64,7 +68,7 @@
         exit;
     }
     
-    $_PATH->loadDefault('Username', $_SESSION['Username']);
+    $_PATH->setDefault('Username', $_SESSION['Username']);
     
     // is this user ineligible to participate in the experiment?
     if (($_CONFIG->check_elig == true)
@@ -107,7 +111,7 @@
             $_SESSION['Username'] . '_' . 
             $_SESSION['ID'] .
             '.csv';
-        $_PATH->loadDefault('Output', $outputFile);
+        $_PATH->setDefault('Output', $outputFile);
         $_SESSION['Start Time']  = date('c');
         
         #### Record info about the person starting the experiment to the status start file
@@ -194,8 +198,8 @@
     }
     
     
-    $_PATH->loadDefault('Stimuli',   $_SESSION['Condition']['Stimuli']);
-    $_PATH->loadDefault('Procedure', $_SESSION['Condition']['Procedure']);
+    $_PATH->setDefault('Stimuli',   $_SESSION['Condition']['Stimuli']);
+    $_PATH->setDefault('Procedure', $_SESSION['Condition']['Procedure']);
     
     
     
@@ -487,7 +491,7 @@
         $_SESSION['Username'] . '_' . 
         $_SESSION['ID'] .
         '.csv';
-    $_PATH->loadDefault('Output', $outputFile);
+    $_PATH->setDefault('Output', $outputFile);
     $_SESSION['Start Time']  = date('c');
     
     
