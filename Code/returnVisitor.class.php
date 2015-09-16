@@ -1,4 +1,19 @@
 <?php
+/**
+ * This class controls logging into new sessions of existing experiments
+ * Logic flow:
+ *   1. __construct(): Grab Username and JSON path
+ *   
+ *   2. isReturning(): Check if JSON file exists for this username
+ *         2a. loadPriorSession() if we are returning
+ *   
+ *   3. alreadyDone():  check if this user is done with all trials
+ *   
+ *   4. timeToReturn(): check if it is time to return
+ *         4a. explainTimeProblem(): if too early/late
+ *   
+ *   5. reload(): 
+ */
 class ReturnVisitController
 {                                                           
     private $user;          // participant username         @see __construct()
@@ -9,15 +24,23 @@ class ReturnVisitController
     private $doneLink;      // relative path to done.php    @see __construct()
     private $earlyMsg;      // msg for early birds          @see timeToReturn()
     private $lateMsg;       // msg for too late people      @see timeToReturn()
+    private $done;
+    private $sessionNumber;
 
-    public function __construct ()
+    // public function __construct ()
+    // {
+    //     global $user;
+    //     $this->user = $user->getUsername();
+
+    //     global $_PATH;
+    //     $this->jsonDir  = $_PATH->get('JSON Dir');
+    //     $this->doneLink = $_PATH->get('Done');
+    // }
+    public function setNeededData($name, $jsonDir, $donePage)
     {
-        global $user;
-        $this->user = $user->getUsername();
-
-        global $_PATH;
-        $this->jsonDir  = $_PATH->get('JSON Dir');
-        $this->doneLink = $_PATH->get('Done');
+        $this->user     = $name;
+        $this->jsonDir  = $jsonDir;
+        $this->doneLink = $donePage;
     }
 
     public function isReturning()
@@ -38,21 +61,34 @@ class ReturnVisitController
         $pos    = $old['Position'];
 
         $this->oldSession = $old;
-        $this->currentRow = $old['Trials'][$pos];
+        $this->currentRow = $old['Trials'][$pos-1];
         $this->pos = $pos;
+        $this->sessionNumber = $old['Session'];
     }
     public function alreadyDone() {
-        // header("Location: {$this->doneLink}");
-        // echo '<meta http-equiv="refresh"; content="5"; url="done.php">';
-        // exit;
         $doneCode = 'ExperimentFinished';
         $flag = $this->currentRow['Procedure']['Item'];
         if ($flag == $doneCode) {
+            $this->done = true;
+            return true;
+            // exit;
+        } else {
+            $this->done = false;
+            return false;
+        }
+    }
+    public function reload()
+    {
+        // what to do when reloading to done.php
+        if ($this->done === true) {
             $_SESSION = $this->oldSession;
             $_SESSION['alreadyDone'] = true;
             header("Location: {$this->doneLink}");
-            // Need to figure out how to redirect to done
             exit;
+        }
+        // what to do when reloading to experiment.php
+        elseif ($this->done === false) {
+            # code...
         }
     }
     /**
@@ -82,7 +118,7 @@ class ReturnVisitController
         $lastFinish = $this->oldSession['LastFinish'];
         $sinceFinish = time() - $lastFinish;
 
-        $early; $late;
+        $early = false; $late = false;
         if ($min > $sinceFinish) {
             $early = true;
             $dif = $min - $sinceFinish;
@@ -177,5 +213,29 @@ class ReturnVisitController
             $seconds = '0' . $seconds;
         }
         return $days.'d:' . $hours.'h:' . $minutes.'m:' . $seconds.'s';
+    }
+    public function debug()
+    {
+        $things = array();
+        $things['user'] = $this->user;
+        $things['jsonPath'] = $this->jsonPath;
+        $things['doneLink'] = $this->doneLink;
+        $things['early']    = $this->earlyMsg;
+        $things['late']     = $this->lateMsg;
+
+        foreach ($things as $var => $value) {
+            echo "<div><b>{$var}</b><br>{$value}</div>";
+        }
+        var_dump('last finish', $this->oldSession['LastFinish']);
+        var_dump('CurrentRow',  $this->currentRow);
+        // var_dump($this);
+    }
+    public function getSession()
+    {
+        if (is_numeric($this->sessionNumber)) {
+            return $this->sessionNumber;
+        } else {
+            return 1;
+        }
     }
 }

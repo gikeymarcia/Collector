@@ -15,41 +15,43 @@
  */
 class ConditionController
 {
-    private $selected;                  // condition selected from $_GET
-    private $location;                  // path to Conditiions.csv
+    private $selection;                 // condition selected from $_GET
+    private $location;                  // how to get to Conditions.csv
     private $logLocation;               // path to login counter
     private $ConditionsCSV;             // GetFromFile() load of Conditiions.csv
     private $assignedCondition = false; // the position of the row being used for this user
     private $userCondition;             // array (keys by column) of the assigned conditon
     private $errorHandler = 'errors';   // variable name of error handler object
 
-    /**
-     * When making a new ConditionController it automatically uses $_PATH
-     * to load the Conditions.csv file into $this->ConditionsCSV
-     */
-    public function __construct()
-    {
-        global $_PATH;
-        $this->location = $_PATH->get('Conditions');
-        $this->ConditionsCSVexists($this->location);
-        $this->loadConditons();
 
-        $this->requiredColumns();
-        // create the 'Counter' folder if it doesn't exist
-        if (!is_dir($_PATH->get('Counter Dir')) {
-            mkdir($_PATH->get('Counter Dir',  0777,  true);
+    /**
+     * This class needs the following information to function
+     * @param string $conditionsLoc relative path to Conditions.csv
+     * @param string $counterDir    relative path to the directory where the counter is held
+     * @param string $logLocation   relative path to the login counter file 
+     */
+    public function setNeededData($conditionsLoc, $logLocation)
+    {
+        $this->location = $conditionsLoc;
+        $this->logLocation = $logLocation;
+        $this->loadConditons();
+        $this->makeCounterDir($logLocation);
+
+    }
+    private function makeCounterDir($logLocation)
+    {
+        $dir = dirname($logLocation);
+        if (!is_dir($dir)) {
+            mkdir($dir,  0777,  true));
         }
-        global $_CONFIG;
-        $this->logLocation = $_PATH->get('Counter', 'relative', $_CONFIG->login_counter_file);
     }
     /**
      * Saves the condition selection made on index.php
      * Pulls input from a $_GET
      */
-    public function selectedCondition()
+    public function selectedCondition($selection)
     {
-        $this->selected = filter_input(INPUT_GET, 'Condition', FILTER_SANITIZE_STRING);
-        $this->candidateCondition();
+        $this->selection = filter_var($selection, FILTER_SANITIZE_STRING);
     }
     /**
      * loads current login counter file and returns what condition this user
@@ -59,7 +61,7 @@ class ConditionController
     public function candidateCondition()
     {
         $logPath = $this->logLocation;
-        if ($this->selected == 'Auto') {
+        if ($this->selection == 'Auto') {
             if (file_exists($logPath)) {
                 $handle   = fopen($logPath, mode);
                 $logCount = fgets($handle);
@@ -77,37 +79,32 @@ class ConditionController
         // }
     }
     /**
-     * Prunes out all conditons from Conditons.csv that are turned off
-     * Conditions are turned off by starting the 'Condition Description' with `#`
-     * @return array Conditions.csv without the turned off rows
-     */
-    private function removeOffConditions($fullConditionsCSV)
-    {
-        $offKey = '#';
-        $check  = 'Condition Description';
-
-        $pruned = array();
-        foreach ($fullConditionsCSV as $condition) {
-            if ($conditon[$check][0] != $offKey) {
-                $pruned[] = $conditon;
-            }
-        }
-        return $pruned;
-    }
-    /**
      * Assigns participant conditon and updates login counter so the next
      * participant will not be assigned the same condiiton
      */
-    public function assignCondition()
+    public function assignCondition($array)
     {
-
+        if(is_array($array)) {
+            $this->assignedCondition = $array;
+        }
+    }
+    /**
+     * Send it the array from a row of a Conditions.csv read
+     * Must be formatted as a getFromFile() array
+     * e.g., = array("Number"=> 1, "Stimuli"=>'something.csv',...)
+     */
+    public function overrideCondition($array)
+    {
+        if(is_array($array)) {
+            $this->
+        }
     }
     /**
      * Debug method for checking what this class does
      */
     public function info()
     {
-        echo '<div>Selected condition: ' . $this->selected . '<ol>';
+        echo '<div>Selected condition: ' . $this->selection . '<ol>';
         foreach ($this->ConditionsCSV as $pos => $row) {
             echo '<li>' . '<strong>stim:</strong> ' . $row['Stimuli'] . '<br>'
                . '<strong>proc:</strong> ' . $row['Procedure'] . '</li><br>';
@@ -133,7 +130,9 @@ class ConditionController
      */
     private function loadConditons()
     {
+        $this->ConditionsCSVexists($this->location);
         $this->ConditionsCSV = getFromFile($this->location, false);
+        $this->requiredColumns();
     }
     private function requiredColumns()
     {
@@ -201,9 +200,9 @@ class ConditionController
      * @param  string $varName will look for variable with the name of the string contents
      * for example, 'mikey' would cause the errors to be reported to `global $mikey`
      */
-    public function changeErrorHandler($varName)
+    public function changeErrorHandler($customErrorHandler)
     {
-        $this->errorHandler = $varName;
+        $this->errorHandler = $customErrorHandler;
     }
 }
 ?>

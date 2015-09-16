@@ -8,7 +8,7 @@ class DebugController
      * @param  [string] $debugName [description]
      * @param  [string] $username  [description]
      */
-    public function debugCheck($debugCode, $username)
+    public function debugCheck($username, $debugCode)
     {
         if ((strlen($debugCode) > 0)
             AND (substr($username, 0, strlen($debugCode) === $debugCode))
@@ -21,21 +21,10 @@ class DebugController
         }
     }
     /**
-     * changes the data path by appending the /Debug/ sub-folder
-     */
-    private function modifyPath()
-    {
-        global $_PATH;
-        if ($this->debugMode === true) {
-            $currentPath = $_PATH->getDefault('Current Data');
-            $_PATH->loadDefault('Current Data',  $currentPath . '/' . 'Debug');
-        }
-    }
-    /**
      * How to check if debug mode has been turned on
      * @return boolean `true` if debug mode is on
      */
-    public function on()
+    public function is_on()
     {
         if ($this->debugMode === true) {
             return true;

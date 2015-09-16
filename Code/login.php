@@ -18,6 +18,7 @@
     require 'users.class.php';
     require 'conditions.class.php';
     require 'debug.class.php';
+    require 'status.class.php';
 
     // login objects
     $errors = new ErrorController();
@@ -25,13 +26,24 @@
     $cond   = new ConditionController();
     $debug  = new DebugController();
 
-    $user->setUsername();
-    $user->setID();
-    $debug->debugCheck( $_CONFIG->debug_name, $user->getUsername() );
+    $user->setUsername($_GET['Username']);
 
-    $cond->selectedCondition();
+    $debug->debugCheck(
+        $user->getUsername(),
+        $_CONFIG->debug_name
+    );
+    if ($debug->is_on()) {
+        // ask tyson how these next two lines can be combined into one command. I think he says it is possible.
+        $currentPath = $_PATH->getDefault('Current Data');
+        $_PATH->loadDefault('Current Data',  $currentPath . '/' . 'Debug');
+    }
 
-    
+    $cond->setNeededData(
+        $_PATH->get('Conditions'),
+        $_PATH->get('Counter', 'relative', $_CONFIG->login_counter_file)
+    );
+
+    $cond->selectedCondition($_GET['Condition']);
 
 // $user->printData();
 // $cond->info();
@@ -92,20 +104,29 @@
     }
     
     require 'returnVisitor.class.php';
-    $check = new ReturnVisitController();
-// $check->alreadyDone();
+    $revisit = new ReturnVisitController();
+    $revisit->setNeededData(
+        $user->getUsername(), 
+        $_PATH->get('JSON Dir'), 
+        $_PATH->get('Done')
+    );
 
-    if ($check->isReturning()) {
-        if ($check->alreadyDone()) {
-            // redirect to done.php
+    if ($revisit->isReturning()) {
+        if ($revisit->alreadyDone()) {
+            $revisit->reload();
         }
-        if ($check->timeToReturn()) {
-            // reload to the positon they were at in the previous experiment
+        if ($revisit->timeToReturn()) {
+            $user->setSession( $revisit->getSession() );        // give $user correct session #
+            // set user session #
+            // set assigned condition
+            $revisit->reload();
         } else {
-            $check->explainTimeProblem();
+            $revisit->explainTimeProblem();
         }
     }
-    
+
+
+$revisit->debug();
 exit;
 // Has this user already completed session 1?  If so, determine whether they have another session to complete or if they are done
 // $relJsonSessF = $_FILES->json_session->relativeTo($_FILES->root);

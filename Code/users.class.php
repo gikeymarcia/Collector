@@ -7,10 +7,9 @@ class UserController
 {
     private $username;
     private $id;
-    private $id_is_set = false;
+    private $sessionNumber = 1;
     private $valid = false;
     private $errorHandler = 'errors';
-
 
     /**
      * Allows you to change the default error handler object, $errors, to one of your choosing
@@ -25,13 +24,14 @@ class UserController
      * Checks $_GET for submitted username, filters characters
      * that shouldn't be in usernames
      */
-    public function setUsername()
+    public function setUsername($name)
     {
-        $dirtyUsername = filter_input(INPUT_GET, 'Username', FILTER_SANITIZE_EMAIL);
+        $name = filter_var($name, FILTER_SANITIZE_EMAIL);
         $illegalCharacters = array('/', '\\', '?', '%', '*', ':', '|', '"', '<', '>' );
-        $cleanUsername = str_replace($illegalCharacters, '', $dirtyUsername);
+        $cleanUsername = str_replace($illegalCharacters, '', $name);
         $this->username = $cleanUsername;
         $this->validateUsername();
+        $this->setID();
     }
     /**
      * Makes sure username is long enough
@@ -39,13 +39,21 @@ class UserController
      */
     private function validateUsername ()
     {
+        $this->checkNameLength();
+        
+    }
+    private function checkNameLength()
+    {
         $length = strlen($this->username);
         if ($length < 4) {
             global $$this->errorHandler;
             $msg = 'Login username must longer than 3 characters';
             $$this->errorHandler->add($msg, false);
         } else {
-            $this->valid = true;
+            if ($this->valid !== false) {
+                $this->valid = true;
+            }
+            
         }
     }
     /**
@@ -64,18 +72,19 @@ class UserController
     /**
      * Sets unique ID for each login
      */
-    public function setID()
+    private function setID()
     {
+        $idLength = 10;
         if (!isset($_SESSION['ID'])) {          // if there is not already an ID set
             if (isset($_GET['ID'])) {           // if the ID is in the URL
                 $this->id = $_GET['ID'];        // use it as the ID
             } else {
-                $this->id = rand_string();      // otherwise make a new random ID
+                $this->id = rand_string($idLength); // otherwise make a new random ID
             }
         } else {
             $this->id = $_SESSION['ID'];        // save existing ID into class
         }
-        $this->id_is_set = true;
+        // $_SESSION['ID'] = $this->id;
     }
     /**
      * Does what you'd think
@@ -83,11 +92,16 @@ class UserController
      */
     public function getID()
     {
-        if ($this->id_is_set) {
+        if (strlen($this->id) > 0) {
             return $this->id;
         } else {
-            $this->id = 'not_set_' . rand_string();
-            return $this->id;
+            return false;
+        }
+    }
+    public function setSession($number)
+    {
+        if (is_int($number) AND ($number > 0)) {
+            $this->sessionNumber = $number;
         }
     }
     /**
@@ -96,7 +110,8 @@ class UserController
      */
     public function appendToUsername($suffix)
     {
-        $this->username = $this->username . $suffix;
+        $potential = $this->username . $suffix;
+        $this->setUsername($potential);
     }
     public function printData()
     {
@@ -107,5 +122,22 @@ class UserController
             echo "<li>{$this->id}</li>";
             echo "<li>{$this->valid}</li>";
         echo '</ol></div>';
+    }
+    public function getSession()
+    {
+        return $this->sessionNumber;
+    }
+    /**
+     * [getOutputFile description]
+     * @return [type] [description]
+     */
+    public function getOutputFile()
+    {
+        $name = 'Output_Session' . 
+                $this->sessionNumber . '_' . 
+                $this->username . '_' . 
+                $this->id .
+                '.csv';
+        return $name;
     }
 }
