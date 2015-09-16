@@ -29,7 +29,7 @@
             'Conditions.csv' => 'Conditions',
             'Config.ini' => 'Config',
             'FinalQuestions.csv' => 'Final Questions',
-            'Instructions.php' => 'Instructions',
+            'Task Instructions.php' => 'Instructions',
             
             'Stimuli' => array (
                 $dirName => 'Stimuli Dir',
@@ -82,20 +82,20 @@
             
             'customFunctions.php' => 'Custom Functions',
             
-            'defaultTrialHelper.inc' => 'default helper',
+            'defaultTrialHelper.php' => 'default helper',
             'defaultTrialScoring.php' => 'default scoring',
             
-            'done.php' => 'Done',
+            'Done.php' => 'Done',
             
             'errorCheck.php' => 'Error Check',
             
-            'experiment.php' => 'Experiment Page',
+            'Experiment.php' => 'Experiment Page',
             
             'FinalQuestions.php' => 'Final Questions Page',
             
-            'Footer.php' => 'Footer',
+            'footer.php' => 'Footer',
             
-            'FQdata.php' => 'Final Questions Record',
+            'fqData.php' => 'Final Questions Record',
             
             'Header.php' => 'Header',
             
@@ -111,9 +111,9 @@
             
             'nojs.php' => 'No JS',
             
-            'Parse.php' => 'Parse',
+            'parse.class.php' => 'Parse',
             
-            'Pathfinder.class.php' => 'Pathfinder',
+            'pathfinder.class.php' => 'Pathfinder',
             
             'shuffleFunctions.php' => 'Shuffle Functions',
             
@@ -171,7 +171,7 @@
                     $dirName => 'Trial Type Dir',
                     
                     'display.php' => 'Trial Display',
-                    'helper.inc' => 'Trial Helper',
+                    'helper.php' => 'Trial Helper',
                     'scoring.php' => 'Trial Scoring',
                     'script.js' => 'Trial Script',
                     'style.css' => 'Trial Style',
