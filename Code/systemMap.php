@@ -7,19 +7,20 @@
     // Inside the map, certain keys can be a variable
     // using 'Dir Name' as the key, you can give a label to the directory,
     //
-    // using $wildCard, you can provide a point for the user to provide
+    // using {var}, you can provide a point for the user to provide
     // their own information (such as the specific trial type "instruct")
     //
-    // using $default . 'Some String', you can create a different type of
-    // wild card, which should only need to be set once for the experiment
+    // using {Default Name}, you can create a different type of
+    // variable, which should only need to be set once for the experiment
     // good uses for this include the default procedure file or the 
     // default output file
+    // This can just be part of a file, such as '{Username}.json'
     //
     // more information can be found inside the Pathfinder class
     
     
     $systemMap = array (
-        'Dir Name'    => 'root',
+        'Dir Name' => 'root',
         
         'index.php' => 'index',
         
@@ -83,8 +84,8 @@
             ),
         ),
         
-        'Code'      => array (
-            'Dir Name'    => 'Code',
+        'Code' => array (
+            'Dir Name' => 'Code',
             
             'Welcome.php' => 'Welcome',
             

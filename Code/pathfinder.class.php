@@ -8,7 +8,7 @@
     //     -this way, a file's location can be independent from its
     //      purpose, and files can be moved/renamed without trouble
     //
-    // To work:
+    // Requirements:
     //     -this class is expecting to be able to require the 
     //      systemMap.php file from the already existing include
     //      paths. So, keep systemMap.php in the same directory
@@ -39,9 +39,9 @@
     //      additional parameters
     //     -the first one is the type of path you want to get back
     //     -by default, you get the relative path, which is formed
-    //      by prepending ../ to navigate back to the root of the 
-    //      program, and then using the path calculated from the
-    //      system map
+    //      by prepending some number of '../' to navigate back to
+    //      the root of the  program, and then using the path
+    //      calculated from the system map
     //     -you can instead ask for 'absolute', 'url', 'base',
     //      'root', or 'static'
     //
@@ -53,54 +53,78 @@
     //      without prepending the ../ needed to get back to
     //      the program root
     //     -'static' will give you the path after the last variable
-    //      directory in the path, so dir/$variable/subdir/file.php
+    //      directory in the path, so dir/{var}/subdir/file.php
     //      would become subdir/file.php
     //
     //     -there are two kinds of variables used to construct these
     //      paths
-    //     -the first kind is the wild card variable, which requires
+    //     -the first kind is the typical variable, which requires
     //      you to pass part of the path along with your get() function
     //      call, as the third parameter
     //     -this would be used with something like a trial type name,
     //      which can vary, but ultimately points to the same 
     //      directory structure.
-    //      in the example 'test' => 'dir/$variable/subdir/file.php', using
+    //      in the example 'test' => 'dir/{var}/subdir/file.php', using
     //      $_PATH->get('test', 'relative', 'instruct') from inside Code/
     //      would return '../dir/instruct/subdir/file.php'
     //
-    //     -certain paths may have more than one wild card
-    //     -when then occurs, passing a wild card will replace both entries
-    //     -if you want to use different wild cards for each step, instead
-    //      pass an array of wild cards. Each will be used once, in order
+    //     -certain paths may have more than one variable
+    //     -when then occurs, passing a variable will replace both entries
+    //     -if you want to use different variables for each step, instead
+    //      pass an array of variables. Each will be used once, in order
     //
     //     -the second kind of variable is the $default setting, which is
-    //      used along with a default label, such as 
-    //      'test' => 'dir/$default . 'Username'/output.csv'
+    //      used along with a default label wrapped in curly braces,
+    //      'test' => 'dir/{Username}/output.csv'
     //     -in this case, you would first load a default value for 
     //      'Username', by using the setDefault() function, like so:
     //      $_PATH->setDefault('Username', 'participant001');
     //     -then, when you call $_PATH->get('test'), you would receive
     //      'dir/participant001/subdir/file.php'
-    //     -as long as the session has already been started, these defaults
-    //      will be loaded into $_SESSION[__CLASS__], so you do not need
-    //      to reload these defaults on each page load
+    //     -when you initialize the Pathfinder, you can pass it a reference
+    //      to some external variable, and the defaults will be shared with
+    //      that array. The file 'initiateCollector.php' has already been
+    //      set up to use the $_SESSION['Pathfinder'] array for this purpose,
+    //      so that on every page, all the defaults set previously are able
+    //      to be accessed.
     //     -therefore, defaults are good for values that won't be changing
     //      much, like username info, while wild cards are used to frequently
     //      changing values, like trial types
     //
+    //     -if you ever lose the external reference to these defaults, you can
+    //      restore the link by using $_PATH->setDefaultsCopy($newArray)
+    //     -this way, if you need to wipe the session, but for some reason want
+    //      to keep using the same defaults, you can simply call this function
+    //      after the session wipe. Although, if you are looking for security,
+    //      you should probably just recreate the $_PATH variable with the 
+    //      wiped session, to start completely fresh
+    //
     //     -you can also check the default value, using getDefault()
     //
     //
-    //     Other functions
+    //     Public functions
     //
-    //     -array_flip_multiDim() - takes an associative array, takes all non-
-    //      values and makes them the keys, joining each array key with a
-    //      separator as the second parameter, default '/'
+    //     -get($pathName, (optional) $pathType, (opt string or array) $variables)
+    //      gets the path from the systemMap. See above for detailed explanation
     //
-    //     -addUniqueToArray() - adds a key => value pair to an array, throwing
+    //     -setDefault((string or array) $defaultKey, (optional string) $value)
+    //      can either pass an associative array, or the key and value as separate
+    //      parameters. Allows replacement of a path component {key} with $value
+    //
+    //     -getDefault($defaultName)
+    //      returns value of this default name, or null if not set
+    //
+    //     -array_flip_multiDim($array)
+    //      takes an associative array, takes all non-valuesand makes them the
+    //      keys, joining each array key with aseparator as the second 
+    //      parameter, default '/'
+    //
+    //     -addUniqueToArray($addedArray, $existingArray)
+    //      adds a key => value pair to an array, throwing
     //      an exception if the key already exists
     //
-    //     -cleanPathfinderName() - trims, lowercases, and replaces internal 
+    //     -cleanPathfinderName($string)
+    //      trims, lowercases, and replaces internal 
     //      spaces with underscores for a string
     //
     //     -getURL() - returns the current URL, complete with protocol
@@ -108,9 +132,15 @@
     //     -getStandardPaths() - gets all paths that dont contain a wild card
     //      or a default value
     //
-    //     -updateDefaults() - makes sure that the internal defaults of the
-    //      object are synced up with the $_SESSION variable. Only helpful 
-    //      if you started the session after loading some defaults
+    //     -setDefaultsCopy(&$array)
+    //      sets the array of defaults to a reference of some external array
+    //
+    //     -clearDefaults() - clears all the defaults that exist in the pathfinder
+    //
+    //     -atLocation($pathName) checks if current URL targets specified path
+    //
+    //     -inDir($pathName) checks if current URL targets file inside specified directory
+    
     
     class Pathfinder
     {
