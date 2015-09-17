@@ -5,6 +5,77 @@
 */
 /* CustomFunctions */
 /**
+ * load settings from common settings, as well as current Experiment folder
+ * @param string (Optional) load settings from specified experiment
+ * @return object
+ */
+function getCollectorSettings($currentExp = null) {
+    global $_PATH;
+    $settings = Parse::fromConfig($_PATH->get('Common Config'), true);
+    
+    if ($currentExp === null AND 
+        $_PATH->getDefault('Current Experiment') !== null
+    ) {
+        $currentExp = $_PATH->getDefault('Current Experiment');
+    }
+    
+    if ($currentExp !== null) {
+        $def = array('Current Experiment' => $currentExp);
+        $newSettings = Parse::fromConfig(
+            $_PATH->get('Experiment Config', 'relative', $def)
+        );
+        foreach ($newSettings as $settingName => $setting) {
+            $settings->$settingName = $setting;
+        }
+    }
+    
+    return $settings;
+}
+/**
+ * create a list of valid experiments found in the Experiments/ folder
+ * @return array
+ */
+function getCollectorExperiments() {
+    global $_PATH;
+    
+    $possibleExperiments = scandir($_PATH->get('Experiments'));
+    foreach ($possibleExperiments as $i => $possExp) {
+        if (   $possExp === '.'
+            OR $possExp === '..'
+            OR $possExp === $_PATH->get('Common', 'base')
+            OR !isValidExperimentDir($possExp)
+        ) {
+            unset($possibleExperiments[$i]);
+        }
+    }
+    
+    return array_values($possibleExperiments);
+}
+/**
+ * check if given experiment name exists as a valid folder in the Experiments/ folder
+ * @param string name of subdirectory to check for in Experiments/ folder
+ * @return bool
+ */
+function isValidExperimentDir($expName) {
+    global $_PATH;
+    
+    $default       = array('Current Experiment' => $expName);
+    $requiredFiles = array(
+        'Current Index', 'Conditions', 'Experiment Config',
+        'Final Questions', 'Stimuli Dir', 'Procedure Dir'
+    );
+    
+    foreach ($requiredFiles as $req) {
+        $test = $_PATH->get($req, 'relative', $default);
+        
+        if (!fileExists($test)) {
+            return false;
+        }
+    }
+    
+    return true;
+}
+/**
  * Add a column (sub-array key) to a 2D-array (like getFromFile() creates)
  * @param array $array The array to add to.
  * @param string $column The name of the key (column) to add.
@@ -146,6 +217,11 @@ function writeLineToFile(array $array, $filename, $delim = ',')
  */
 function readCsv($filename, $delim = ',', $length = 0)
 {
+    if (!is_readable($filename)) {
+        $msg = __FUNCTION__ . '(' . $filename . '): failed to read file: Unreadable or does not exist';
+        trigger_error($msg, E_USER_WARNING);
+        return;
+    }
     $file = fopen($filename, "rb");
     $data = array();
     while (($line = fgetcsv($file, $length, $delim)) !== false) {

@@ -17,6 +17,13 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
     require 'initiateCollector.php';
+    
+    $currentExp = explode('/', $_SERVER['SCRIPT_NAME']);    // get something like array(... , "Collector", "Experiments", "Demo", "index.php")
+    $currentExp = $currentExp[count($currentExp)-2];        // take directory name (from above example, take "Demo")
+    
+    $_PATH->setDefault('Current Experiment', $currentExp);
+    
+    $_CONFIG = getCollectorSettings();
 
     // load and sort conditions
     $Conditions = GetFromFile($_PATH->get('Conditions'), false);
@@ -105,6 +112,7 @@
                 }
         ?>
             </select>
+            <input type="hidden" name="CurrentExp" value="<?= $currentExp ?>">
             <button class="collectorButton" type="submit">Login</button>
         </div>
     </section>

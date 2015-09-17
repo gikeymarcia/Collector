@@ -126,7 +126,7 @@
         
         private $_defaults = array();
         
-        function __construct() {
+        function __construct(&$defaultHolder = null) {
             $map  = $this->getFileMap();
             $path = $this->convertFileMapToPathList($map);
             
@@ -137,8 +137,9 @@
             
             $this->setRootPaths();
             
-            if (isset($_SESSION)) {
-                $this->updateDefaults();
+            // if $defaultHolder was passed, make sure it is an array, then get ready to use it
+            if (func_num_args() > 0) {
+                $this->setDefaultsCopy($defaultHolder);
             }
             
             $this->updateHardcodedPaths();
@@ -252,6 +253,20 @@
             return $protocol . $domain . $resource;
         }
         
+        public function setDefaultsCopy(&$copy) {
+            $defaults = $this->_defaults;
+            
+            $this->_defaults = &$copy;
+            
+            if (!is_array($this->_defaults)) {
+                $this->_defaults = $defaults;
+            } else {
+                foreach ($defaults as $key => $value) {
+                    $this->_defaults[$key] = $value;
+                }
+            }
+        }
+        
         private function updateHardcodedPaths() {
             $path = $this->_pathList;
             foreach (array_keys($path) as $name) {
@@ -271,12 +286,12 @@
         }
         
         public function get($name, $type = 'relative', $variables = array()) {
-            $name = $this->cleanPathfinderName($name);
-            if (!isset($this->_pathList[$name])) {
+            $cleanName = $this->cleanPathfinderName($name);
+            if (!isset($this->_pathList[$cleanName])) {
                 throw new exception('"'.$name.'" not found in ' . __CLASS__ . ' path list.');
             }
             
-            $path = $this->_pathList[$name];
+            $path = $this->_pathList[$cleanName];
             
             # example: getting "support/includes/fileLocations.php" from "core/Error.php"
             switch($type) {
@@ -290,8 +305,11 @@
                     break;
                 
                 case 'static':   # everything after the last variable path component
-            $path = explode('}', $path);
+                    $path = explode('}', $path);
                     $path = array_pop($path);
+                    $path = explode('/', $path);
+                    array_shift($path);
+                    $path = implode('/', $path);
                     $path = trim($path, '/');
                     break;
                 
@@ -318,7 +336,18 @@
         }
         
         private function updateVariableString($string, $variables) {
-            $defaults = array_change_key_case($this->_defaults, CASE_LOWER);
+            $defaults = $this->_defaults;
+            
+            if (is_array($variables)) {
+                foreach ($variables as $i => $var) {
+                    if (!is_numeric($i)) {
+                        unset($variables[$i]);
+                        $defaults[$i] = $var; // allow variables to overwrite defaults, temporarily
+                    }
+                }
+            }
+            
+            $defaults = array_change_key_case($defaults, CASE_LOWER);
             
             $varKeyword = $this->_varName;
             
@@ -328,18 +357,18 @@
             foreach ($explodeLeftBrace as $stringWithVar) {
                 $explodeRightBrace = explode('}', $stringWithVar);
                 
-                $var = array_shift($explodeRightBrace);
-                $var = strtolower(trim($var));
+                $rawVar = array_shift($explodeRightBrace);
+                $var    = strtolower(trim($rawVar));
                 
                 if ($var === $varKeyword) {
-                    $var = '{' . $varKeyword . '}'; // will do this later
+                    $insert = '{' . $varKeyword . '}'; // will do later, but needs to be trim() and strtolower()
                 } elseif (isset($defaults[$var])) {
-                    $var = $defaults[$var];
+                    $insert = $defaults[$var];
                 } else {
-                    $var = '{' . $var . '}'; // missing default
+                    $insert = '{' . $rawVar . '}'; // missing default
                 }
                 
-                $output .= $var . $explodeRightBrace[0];
+                $output .= $insert . $explodeRightBrace[0];
             }
             
             $varKeyword = '{' . $varKeyword . '}';
@@ -382,47 +411,21 @@
             
             foreach ($newDefaults as $key => $value) {
                 $this->_defaults[$key] = $value;
-                
-                if (isset($_SESSION)) {
-                    $_SESSION[__CLASS__][$key] = $value;
-                }
             }
             
             $this->updateHardcodedPaths();
         }
         
         public function getDefault($key) {
-            if (isset($_SESSION[__CLASS__][$key])) {
-                return $_SESSION[__CLASS__][$key];
-            } elseif (isset($this->_defaults[$key])) {
+            if (isset($this->_defaults[$key])) {
                 return $this->_defaults[$key];
             } else {
                 return null;
             }
         }
         
-        public function updateDefaults() {
-            // use this if you set some defaults before starting the session
-            // also used on __construct, to load in the defaults
-            if (!isset($_SESSION)) {
-                throw new exception(
-                    __CLASS__ . ' can\'t update defaults without a global $_SESSION variable'
-                );
-            }
-            
-            if (!isset($_SESSION[__CLASS__]) OR !is_array($_SESSION[__CLASS__])) {
-                $_SESSION[__CLASS__] = array();
-            }
-            
-            foreach ($this->_defaults as $key => $value) {
-                $_SESSION[__CLASS__][$key] = $value;
-            }
-            
-            foreach ($_SESSION[__CLASS__] as $key => $value) {
-                $this->_defaults[$key] = $value;
-            }
-            
-            $this->updateHardcodedPaths();
+        public function clearDefaults() {
+            $this->_defaults = array();
         }
         
         public function atLocation($loc) {

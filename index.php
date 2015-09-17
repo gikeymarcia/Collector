@@ -19,19 +19,13 @@
     require 'Code/initiateCollector.php';
     
     $_SESSION = array();
+    $_PATH    = new Pathfinder($_SESSION['Pathfinder']);
+    $_CONFIG  = getCollectorSettings();
     
     // get possible experiments to choose from
     $experiments     = array();
-    $experimentsScan = scandir($_PATH->get('Experiments'));
-    foreach ($experimentsScan as $exp) {
-        if (   $exp === '.' 
-            || $exp === '..'
-            || $exp === 'Common'
-        ) {
-            // do nothing
-        } else {
-            $experiments[$exp] = $_PATH->get('Experiments') . '/' . $exp;
-        }
+    foreach (getCollectorExperiments() as $expName) {
+        $experiments[$expName] = $_PATH->get('Experiments') . '/' . $expName;
     }
     
     $title = 'Collector Homepage';

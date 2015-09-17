@@ -3,14 +3,31 @@
     A program for running experiments on the web
  */
     require 'initiateCollector.php';
-    // save the default found at Welcome.php
-    
     // reset session so it doesn't contain any information from a previous login attempt
-    $currentExp = $_PATH->getDefault('Current Experiment');
     $_SESSION = array();
+    $_PATH = new Pathfinder($_SESSION['Pathfinder']);
     $_SESSION['Current Collector'] = $_PATH->get('root', 'url');
-    $_PATH->setDefault('Current Experiment', $currentExp);
-    unset($currentExp);
+    
+    
+    if (!isset($_GET['CurrentExp'])) {
+        header('Location: ' . $_PATH->get('root'));
+        exit;
+    }
+    
+    if (!in_array($_GET['CurrentExp'], getCollectorExperiments())) {
+        header('Location: ' . $_PATH->get('root'));
+        exit;
+    }
+    
+    $_PATH->setDefault('Current Experiment', $_GET['CurrentExp']);
+    
+    if (!isset($_GET['Username'], $_GET['Condition'])) {
+        header('Location: ' . $_PATH->get('Current Index'));
+        exit;
+    }
+    
+    
+    $_CONFIG = getCollectorSettings();
     
     
     $_SESSION['Debug'] = $_CONFIG->debug_mode;

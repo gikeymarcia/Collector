@@ -1,5 +1,5 @@
 <div class="textcenter">
-    <audio src="<?= "{$_PATH->experiment}/{$cue}" ?>" autoplay>
+    <audio src="<?= "{$_PATH->common}/{$cue}" ?>" autoplay>
         <p>Your browser does not support the audio element.</p>
     </audio>
 </div>

@@ -64,7 +64,6 @@
                 'index.php' => 'Current Index',
                 
                 'Conditions.csv' => 'Conditions',
-                'Config.ini' => 'Config',
                 'FinalQuestions.csv' => 'Final Questions',
                 'Task Instructions.php' => 'Instructions',
                 
