@@ -174,9 +174,10 @@
         $user->getUsername(),
         $user->getID(),
         $user->getOutputFile(),
+        $user->getSession()
     );
     $status->setConditionInfo(
-        $cond->get();
+        $cond->get()
     );
     $status->setPaths(
         $_PATH->get('Status Begin Data'),
@@ -335,7 +336,7 @@ exit;
     // if (file_exists($procPath) == false) {
     //     $errors['Count']++;
     //     $errors['Details'][] = 'No procedure file found at "' . $_FILES->proc_files.'/' . $_SESSION['Condition']['Procedure'] . '"';
-    }
+    // }
     // checking required columns from Procedure file
     // $temp = GetFromFile($procPath, false);
     // $errors = keyCheck($temp, 'Item'       ,   $errors, $_SESSION['Condition']['Procedure']);
