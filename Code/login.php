@@ -22,12 +22,11 @@
 
     // login objects
     $errors = new ErrorController();
-    $user   = new UserController();
-    $cond   = new ConditionController();
-    $debug  = new DebugController();
 
+    $user = new User();
     $user->setUsername($_GET['Username']);
-
+    
+    $debug = new DebugController();
     $debug->debugCheck(
         $user->getUsername(),
         $_CONFIG->debug_name
@@ -38,11 +37,11 @@
         $_PATH->loadDefault('Current Data',  $currentPath . '/' . 'Debug');
     }
 
+    $cond = new Condition();
     $cond->setNeededData(
         $_PATH->get('Conditions'),
         $_PATH->get('Counter', 'relative', $_CONFIG->login_counter_file)
     );
-
     $cond->selectedCondition($_GET['Condition']);
 
 // $user->printData();
@@ -102,91 +101,155 @@
     ) {
         include 'check.php';
     }
-    
+// var_dump($user,'$user');
+// exit;
+    #### Dealing with people returning to the experiment
     require 'returnVisitor.class.php';
     $revisit = new ReturnVisitController();
     $revisit->setNeededData(
         $user->getUsername(), 
         $_PATH->get('JSON Dir'), 
-        $_PATH->get('Done')
+        $_PATH->get('Done'),
+        $_PATH->get('Experiment Page')
     );
+// var_dump($revisit);
+// exit;
 
     if ($revisit->isReturning()) {
+// exit;
         if ($revisit->alreadyDone()) {
             $revisit->reload();
         }
-        if ($revisit->timeToReturn()) {
-            $user->setSession( $revisit->getSession() );        // give $user correct session #
-            // set user session #
-            // set assigned condition
+        if ($revisit->timeToReturn()) {                     // updating lots of things with info from previous login
+            $user->setSession( $revisit->getSession() );    // give $user correct session #
+            
+            // make status object that will write status begin/end
+            $status = new status;
+            $status->setConditionInfo(                      // pass $status the "row" of previous login condition
+                $revisit->oldCondition()
+            );
+            $status->updateUser(                            // pass $status necessary user information
+                $user->getUsername(),
+                $user->getID(),
+                $user->getOutputFile(),
+                $user->getSession()
+            );
+            $status->setPaths(                              // where to write the data
+                $_PATH->get('Status Begin Data'),
+                $_PATH->get('Status End Data')
+            );
+            // update Output path
+            $_PATH->loadDefault('Output', $user->getOutputFile());
+            $status->writeBegin();                          // write to status begin
             $revisit->reload();
         } else {
             $revisit->explainTimeProblem();
         }
     }
 
+    #### Set user's condition
+    $cond->assignCondition();
+// var_dump($cond);
+// exit;
+    // modify paths based on assigned condition
+    $_PATH->loadDefault('Stimuli',   $cond->stimuli()   );
+    $_PATH->loadDefault('Procedure', $cond->procedure() );
 
-$revisit->debug();
+
+    require 'controlFiles.class.php';
+    require 'procedure.class.php';
+    require 'stimuli.class.php';
+
+    $procedure = new procedure(
+        $_PATH->get('Procedure Dir'),
+        $cond->procedure()
+    );
+    $stimuli = new stimuli(
+        $_PATH->get('Stimuli Dir'),
+        $cond->stimuli()
+    );
+
+    $status = new status();
+    $status->updateUser(
+        $user->getUsername(),
+        $user->getID(),
+        $user->getOutputFile(),
+    );
+    $status->setConditionInfo(
+        $cond->get();
+    );
+    $status->setPaths(
+        $_PATH->get('Status Begin Data'),
+        $_PATH->get('Status End Data')
+    );
+    $status->writeBegin();
+
+// var_dump($procedure);
+
+// echo 'hello world';
+
+// $revisit->debug();
+
 exit;
 // Has this user already completed session 1?  If so, determine whether they have another session to complete or if they are done
 // $relJsonSessF = $_FILES->json_session->relativeTo($_FILES->root);
 // $sessionFilename = FileExists("{$relJsonSessF}/{$_SESSION['Username']}.json");
-    if ($sessionFilename == true) {              // this file will only exist if this username has completed a session successfully
+    // if ($sessionFilename == true) {              // this file will only exist if this username has completed a session successfully
 // $pastSession   = fopen($sessionFilename, 'r');
 // $loadedSession = fread($pastSession, filesize($sessionFilename));
 // $sessionData   = json_decode($loadedSession, true);
         // Load old session info
-        $_SESSION = NULL;                       // get rid of current session in memory
-        $_SESSION = $sessionData;               // load old session data into current $_SESSION
-        // check if it is time for the next session
-        $ExpOverFlag = $_SESSION['Trials'][ ($_SESSION['Position']) ]['Procedure']['Item'];
-        if ($ExpOverFlag != 'ExperimentFinished') {                                                         // if this user hasn't done all sessions
-            $wait = $_SESSION['Trials'][ ($_SESSION['Position']-1) ]['Procedure']['Max Time'];                  // check 'Max Time' column of *newSession* line
-            $wait = durationInSeconds($wait);                                                                   // how many seconds was I supposed to wait until the next session?
-            $sinceFinish = time() - $_SESSION['LastFinish'];
-            if ($sinceFinish < $wait) {
-                $timeRemaining = durationFormatted($wait - $sinceFinish);
-                echo '<h1> Sorry, you must wait before you can complete this part of the experiment'
-                     . '<br> Please return in ' . $timeRemaining . ' </h1>';
-                exit;
-            }
-        } else {                                                                                            // if the user is done with all sessions then send back to done.php
-            $_SESSION['alreadyDone'] = true;
-            echo '<meta http-equiv="refresh" content="1; url=' . $_FILES->code->toUrl() . '/done.php">';
-            exit;
-        }
-        // Overwrite values that need to be updated
-        $outputFile = ComputeString($_CONFIG->output_file_name) . $_CONFIG->output_file_ext;                                 // write to new file
-        $_SESSION['Output File'] = "{$_FILES->raw_output}/{$outputFile}";
-        $_SESSION['Start Time']  = date('c');
+    //     $_SESSION = NULL;                       // get rid of current session in memory
+    //     $_SESSION = $sessionData;               // load old session data into current $_SESSION
+    //     // check if it is time for the next session
+    //     $ExpOverFlag = $_SESSION['Trials'][ ($_SESSION['Position']) ]['Procedure']['Item'];
+    //     if ($ExpOverFlag != 'ExperimentFinished') {                                                         // if this user hasn't done all sessions
+    //         $wait = $_SESSION['Trials'][ ($_SESSION['Position']-1) ]['Procedure']['Max Time'];                  // check 'Max Time' column of *newSession* line
+    //         $wait = durationInSeconds($wait);                                                                   // how many seconds was I supposed to wait until the next session?
+    //         $sinceFinish = time() - $_SESSION['LastFinish'];
+    //         if ($sinceFinish < $wait) {
+    //             $timeRemaining = durationFormatted($wait - $sinceFinish);
+    //             echo '<h1> Sorry, you must wait before you can complete this part of the experiment'
+    //                  . '<br> Please return in ' . $timeRemaining . ' </h1>';
+    //             exit;
+    //         }
+    //     } else {                                                                                            // if the user is done with all sessions then send back to done.php
+    //         $_SESSION['alreadyDone'] = true;
+    //         echo '<meta http-equiv="refresh" content="1; url=' . $_FILES->code->toUrl() . '/done.php">';
+    //         exit;
+    //     }
+    //     // Overwrite values that need to be updated
+    //     $outputFile = ComputeString($_CONFIG->output_file_name) . $_CONFIG->output_file_ext;                                 // write to new file
+    //     $_SESSION['Output File'] = "{$_FILES->raw_output}/{$outputFile}";
+    //     $_SESSION['Start Time']  = date('c');
         
-        #### Record info about the person starting the experiment to the status start file
-        // information about the user logging in
-        $userAgent = getUserAgentInfo();
-        $UserData = array(
-            'Username'              => $_SESSION['Username'],
-            'ID'                    => $_SESSION['ID'],
-            'Date'                  => $_SESSION['Start Time'],
-            'Session'               => $_SESSION['Session'] ,
-            'Condition_Number'      => $_SESSION['Condition']['Number'],
-            'Condition_Description' => $_SESSION['Condition']['Condition Description'],
-            'Output_File'           => $outputFile,
-            'Stimuli_File'          => $_SESSION['Condition']['Stimuli'],
-            'Procedure_File'        => $_SESSION['Condition']['Procedure'],
-            'Browser'               => $userAgent->Parent,
-            'DeviceType'            => $userAgent->Device_Type,
-            'OS'                    => $userAgent->Platform,
-            'IP'                    => $_SERVER["REMOTE_ADDR"],
-        );
-        arrayToLine($UserData, $_FILES->status_begin);
-        ###########################################################################
+    //     #### Record info about the person starting the experiment to the status start file
+    //     // information about the user logging in
+    //     $userAgent = getUserAgentInfo();
+    //     $UserData = array(
+    //         'Username'              => $_SESSION['Username'],
+    //         'ID'                    => $_SESSION['ID'],
+    //         'Date'                  => $_SESSION['Start Time'],
+    //         'Session'               => $_SESSION['Session'] ,
+    //         'Condition_Number'      => $_SESSION['Condition']['Number'],
+    //         'Condition_Description' => $_SESSION['Condition']['Condition Description'],
+    //         'Output_File'           => $outputFile,
+    //         'Stimuli_File'          => $_SESSION['Condition']['Stimuli'],
+    //         'Procedure_File'        => $_SESSION['Condition']['Procedure'],
+    //         'Browser'               => $userAgent->Parent,
+    //         'DeviceType'            => $userAgent->Device_Type,
+    //         'OS'                    => $userAgent->Platform,
+    //         'IP'                    => $_SERVER["REMOTE_ADDR"],
+    //     );
+    //     arrayToLine($UserData, $_FILES->status_begin);
+    //     ###########################################################################
         
-        echo '<meta http-equiv="refresh" content="1; url=' . $_FILES->code->toUrl() . '/experiment.php">';
-        exit;               // do not run any of the other code, send to experiment.php
+    //     echo '<meta http-equiv="refresh" content="1; url=' . $_FILES->code->toUrl() . '/experiment.php">';
+    //     exit;               // do not run any of the other code, send to experiment.php
         
-    } else {
-        $_SESSION['Session'] = 1;               // if they have no .json file then they are in session 1
-    }
+    // } else {
+    //     $_SESSION['Session'] = 1;               // if they have no .json file then they are in session 1
+    // }
     
     
     
@@ -208,7 +271,7 @@ exit;
 // $_SESSION['Condition'] = array();
 // $Conditions = GetFromFile($_FILES->conditions,  false);   // Loading conditions info
 // $logFile    = "{$_FILES->counter}/{$_CONFIG->login_counter_file}";
-    if ($selectedCondition == 'Auto') {
+    // if ($selectedCondition == 'Auto') {
 // if (!is_dir($_FILES->counter)) {                                  // create the 'Counter' folder if it doesn't exist
 //     mkdir($_FILES->counter,  0777,  true);
 // }
@@ -219,29 +282,29 @@ exit;
 //     fclose($fileHandle);
 // } else { $loginCount = 0; }
 
-        $condCount = count($Conditions);
-        while ($_SESSION['Condition'] === array()) {
-            $conditionIndex = $loginCount % $condCount;
-            if ($Conditions[$conditionIndex]['Condition Description'][0] === '#') {
-                ++$loginCount;
-            } else {
-                $_SESSION['Condition'] = $Conditions[$conditionIndex];
-            }
-        }
+    //     $condCount = count($Conditions);
+    //     while ($_SESSION['Condition'] === array()) {
+    //         $conditionIndex = $loginCount % $condCount;
+    //         if ($Conditions[$conditionIndex]['Condition Description'][0] === '#') {
+    //             ++$loginCount;
+    //         } else {
+    //             $_SESSION['Condition'] = $Conditions[$conditionIndex];
+    //         }
+    //     }
         
-        // write old value + 1 to login counter
-        $fileHandle    = fopen($logFile, "w");
-        fputs($fileHandle, $loginCount+1);
-        fclose($fileHandle);
+    //     // write old value + 1 to login counter
+    //     $fileHandle    = fopen($logFile, "w");
+    //     fputs($fileHandle, $loginCount+1);
+    //     fclose($fileHandle);
         
-        $conditionIndex = ($loginCount % count($Conditions))+1;                // cycles through current condition assignment based on login counter
-    }
-    else {
-        $conditionIndex = $selectedCondition;
-        if (isset($Conditions[$conditionIndex])) {
-            $_SESSION['Condition'] = $Conditions[$conditionIndex];
-        }
-    }
+    //     $conditionIndex = ($loginCount % count($Conditions))+1;                // cycles through current condition assignment based on login counter
+    // }
+    // else {
+    //     $conditionIndex = $selectedCondition;
+    //     if (isset($Conditions[$conditionIndex])) {
+    //         $_SESSION['Condition'] = $Conditions[$conditionIndex];
+    //     }
+    // }
     
     
     
@@ -249,36 +312,36 @@ exit;
     ##### Error Checking Code #################################################
     ###########################################################################
     // did we fail to find the condition information?
-    if ($_SESSION['Condition'] === array()) {
-        $errors['Count']++;
-        $errors['Details'][] = 'Could not find the selected condition index ' . ($conditionIndex+1) . ' in ' . $_FILES->conditions;
-    }
+    // if ($_SESSION['Condition'] === array()) {
+    //     $errors['Count']++;
+    //     $errors['Details'][] = 'Could not find the selected condition index ' . ($conditionIndex+1) . ' in ' . $_FILES->conditions;
+    // }
     
     // calculating path to Stimuli and Procedure file
-    $stimPath = $_FILES->stim_files.'/' . $_SESSION['Condition']['Stimuli'];
-    $procPath = $_FILES->proc_files.'/' . $_SESSION['Condition']['Procedure'];
+    // $stimPath = $_FILES->stim_files.'/' . $_SESSION['Condition']['Stimuli'];
+    // $procPath = $_FILES->proc_files.'/' . $_SESSION['Condition']['Procedure'];
     
     // does this condition point to a valid stimuli file?
-    if (file_exists($stimPath) == false) {
-        $errors['Count']++;
-        $errors['Details'][] = 'No stimuli file found at "' . $_FILES->stim_files.'/' . $_SESSION['Condition']['Stimuli'] . '"';
-    }
+    // if (file_exists($stimPath) == false) {
+    //     $errors['Count']++;
+    //     $errors['Details'][] = 'No stimuli file found at "' . $_FILES->stim_files.'/' . $_SESSION['Condition']['Stimuli'] . '"';
+    // }
     // checking required columns from Stimuli file
-    $temp = GetFromFile($stimPath, false);
-    $errors = keyCheck($temp, 'Cue'    ,   $errors, $_SESSION['Condition']['Stimuli']);
-    $errors = keyCheck($temp, 'Answer' ,   $errors, $_SESSION['Condition']['Stimuli']);
+    // $temp = GetFromFile($stimPath, false);
+    // $errors = keyCheck($temp, 'Cue'    ,   $errors, $_SESSION['Condition']['Stimuli']);
+    // $errors = keyCheck($temp, 'Answer' ,   $errors, $_SESSION['Condition']['Stimuli']);
     
     // does this condition point to a valid procedure file?
-    if (file_exists($procPath) == false) {
-        $errors['Count']++;
-        $errors['Details'][] = 'No procedure file found at "' . $_FILES->proc_files.'/' . $_SESSION['Condition']['Procedure'] . '"';
+    // if (file_exists($procPath) == false) {
+    //     $errors['Count']++;
+    //     $errors['Details'][] = 'No procedure file found at "' . $_FILES->proc_files.'/' . $_SESSION['Condition']['Procedure'] . '"';
     }
     // checking required columns from Procedure file
-    $temp = GetFromFile($procPath, false);
-    $errors = keyCheck($temp, 'Item'       ,   $errors, $_SESSION['Condition']['Procedure']);
-    $errors = keyCheck($temp, 'Trial Type' ,   $errors, $_SESSION['Condition']['Procedure']);
-    $errors = keyCheck($temp, 'Max Time'     ,   $errors, $_SESSION['Condition']['Procedure']);
-    unset($temp);           // clear $temp
+    // $temp = GetFromFile($procPath, false);
+    // $errors = keyCheck($temp, 'Item'       ,   $errors, $_SESSION['Condition']['Procedure']);
+    // $errors = keyCheck($temp, 'Trial Type' ,   $errors, $_SESSION['Condition']['Procedure']);
+    // $errors = keyCheck($temp, 'Max Time'     ,   $errors, $_SESSION['Condition']['Procedure']);
+    // unset($temp);           // clear $temp
     
     
     
@@ -564,23 +627,23 @@ exit;
     
     #### Record info about the person starting the experiment to the status start file
     // information about the user logging in
-    $userAgent = getUserAgentInfo();
-    $UserData = array(
-        'Username'              => $_SESSION['Username'],
-        'ID'                    => $_SESSION['ID'],
-        'Date'                  => $_SESSION['Start Time'],
-        'Session'               => $_SESSION['Session'] ,
-        'Condition_Number'      => $_SESSION['Condition']['Number'],
-        'Condition_Description' => $_SESSION['Condition']['Condition Description'],
-        'Output_File'           => $outputFile,
-        'Stimuli_File'          => $_SESSION['Condition']['Stimuli'],
-        'Procedure_File'        => $_SESSION['Condition']['Procedure'],
-        'Browser'               => $userAgent->Parent,
-        'DeviceType'            => $userAgent->Device_Type,
-        'OS'                    => $userAgent->Platform,
-        'IP'                    => $_SERVER["REMOTE_ADDR"],
-    );
-    arrayToLine($UserData, $_FILES->status_begin);
+    // $userAgent = getUserAgentInfo();
+    // $UserData = array(
+    //     'Username'              => $_SESSION['Username'],
+    //     'ID'                    => $_SESSION['ID'],
+    //     'Date'                  => $_SESSION['Start Time'],
+    //     'Session'               => $_SESSION['Session'] ,
+    //     'Condition_Number'      => $_SESSION['Condition']['Number'],
+    //     'Condition_Description' => $_SESSION['Condition']['Condition Description'],
+    //     'Output_File'           => $outputFile,
+    //     'Stimuli_File'          => $_SESSION['Condition']['Stimuli'],
+    //     'Procedure_File'        => $_SESSION['Condition']['Procedure'],
+    //     'Browser'               => $userAgent->Parent,
+    //     'DeviceType'            => $userAgent->Device_Type,
+    //     'OS'                    => $userAgent->Platform,
+    //     'IP'                    => $_SERVER["REMOTE_ADDR"],
+    // );
+    // arrayToLine($UserData, $_FILES->status_begin);
     ###########################################################################
     
     

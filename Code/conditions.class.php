@@ -13,13 +13,13 @@
  *     - $this->notes()         :   @return 'Condition Notes' cell string
  *     - $this->get()           :   @return  keyed array of assigned condition (row)
  */
-class ConditionController
+class Condition
 {
     private $selection;                 // condition selected from $_GET
     private $location;                  // how to get to Conditions.csv
     private $logLocation;               // path to login counter
     private $ConditionsCSV;             // GetFromFile() load of Conditiions.csv
-    private $assignedCondition = false; // the position of the row being used for this user
+    private $assignedCondition = false; // tells whether a conditions has been assigned or not
     private $userCondition;             // array (keys by column) of the assigned conditon
     private $errorHandler = 'errors';   // variable name of error handler object
 
@@ -42,7 +42,7 @@ class ConditionController
     {
         $dir = dirname($logLocation);
         if (!is_dir($dir)) {
-            mkdir($dir,  0777,  true));
+            mkdir($dir,  0777,  true);
         }
     }
     /**
@@ -51,42 +51,91 @@ class ConditionController
      */
     public function selectedCondition($selection)
     {
-        $this->selection = filter_var($selection, FILTER_SANITIZE_STRING);
-    }
-    /**
-     * loads current login counter file and returns what condition this user
-     * would be assigned to if the current conditon was being assigned
-     * @return int position of the row that would be assigned
-     */
-    public function candidateCondition()
-    {
-        $logPath = $this->logLocation;
-        if ($this->selection == 'Auto') {
-            if (file_exists($logPath)) {
-                $handle   = fopen($logPath, mode);
-                $logCount = fgets($handle);
-                fclose($handle);
-            } else {
-                $logCount = 0;
-            }
+        $selection = filter_var($selection, FILTER_SANITIZE_STRING);
+        if (is_numeric($selection) OR ($selection == 'Auto')) {
+            $this->selection = $selection;
+        } else {
+            global $$this->errorHandler;
+            $msg = 'Your condition selection: "' . $selection . '" is not valid';
+            $$this->errorHandler->add($msg, true);
         }
-        $condCount = count($this->ConditionsCSV);
-        
-        $found = false;
-        // while ($found == false) {
-        //     $choice = $logCount % $condCount;
-        //     // if ($this->ConditionsCSV[$choice])
-        // }
     }
+    // /**
+    //  * loads current login counter file and returns what condition this user
+    //  * would be assigned to if the current conditon was being assigned
+    //  * @return int position of the row that would be assigned
+    //  */
+    // public function candidateCondition()
+    // {
+    //     $logPath = $this->logLocation;
+    //     if ($this->selection == 'Auto') {
+    //         if (file_exists($logPath)) {
+    //             $handle   = fopen($logPath, mode);
+    //             $logCount = fgets($handle);
+    //             fclose($handle);
+    //         } else {
+    //             $logCount = 0;
+    //         }
+    //     }
+    //     $condCount = count($this->ConditionsCSV);
+        
+    //     $found = false;
+    //     // while ($found == false) {
+    //     //     $choice = $logCount % $condCount;
+    //     //     // if ($this->ConditionsCSV[$choice])
+    //     // }
+    // }
     /**
      * Assigns participant conditon and updates login counter so the next
      * participant will not be assigned the same condiiton
      */
-    public function assignCondition($array)
+    public function assignCondition()
     {
-        if(is_array($array)) {
-            $this->assignedCondition = $array;
+        $validConds = $this->removeOffConditions();
+        if ($this->selection == 'Auto') {
+            $log = $this->getLogVal();
+            $index = $log % count($validConds);
+            $this->userCondition = $validConds[$index];
+            $this->incrementLog($log);
+            $this->assignedCondition = true;
+        } else {
+            $index = $this->selection;
+            if (isset($validConds[$index])) {
+                $this->userCondition = $validConds[$index];
+                $this->assignedCondition = true;
+            }
+        }        
+    }
+    private function getLogVal()
+    {
+        $logPath = $this->logLocation;
+        if (file_exists($logPath)) {
+            $handle   = fopen($logPath, "r");
+            $logCount = fgets($handle);
+            fclose($handle);
+            return $logCount;
+        } else {
+            return 0;
         }
+    }
+    private function incrementLog($oldVal)
+    {
+        $newVal = $oldVal + 1;
+        $handle = fopen($this->logLocation, "w");
+        fputs($handle, $newVal);
+        fclose($handle);
+    }
+    private function removeOffConditions()
+    {
+        $on = array();
+        foreach ($this->ConditionsCSV as $row) {
+            if ($row['Condition Description'][0] === '#') {
+                continue;
+            } else {
+                $on[] = $row;
+            }
+        }
+        return $on;
     }
     /**
      * Send it the array from a row of a Conditions.csv read
@@ -96,7 +145,7 @@ class ConditionController
     public function overrideCondition($array)
     {
         if(is_array($array)) {
-            $this->
+            $this->userCondition = $array;
         }
     }
     /**
@@ -117,11 +166,11 @@ class ConditionController
      * @see $this->__construct()
      * @param string $location path to Conditions.csv
      */
-    private function ConditionsCSVexists($location)
+    private function conditionsExists()
     {
         global $$this->errorHandler;
-        if (!FileExists($location)) {
-            $msg = 'Cannot find Conditons.csv at ' . $location;
+        if (!FileExists($this->location)) {
+            $msg = 'Cannot find Conditons.csv at: ' . $this->location;
             $$this->errorHandler->add($msg, true);
         }
     }
@@ -130,7 +179,7 @@ class ConditionController
      */
     private function loadConditons()
     {
-        $this->ConditionsCSVexists($this->location);
+        $this->conditionsExists();
         $this->ConditionsCSV = getFromFile($this->location, false);
         $this->requiredColumns();
     }

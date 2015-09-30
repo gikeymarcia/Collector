@@ -3,12 +3,12 @@
  * Handles the setting, getting, and validating of username given to Collector
  * Also handles setting of user ID
  */
-class UserController
+class User
 {
     private $username;
     private $id;
     private $sessionNumber = 1;
-    private $valid = false;
+    private $valid = null;
     private $errorHandler = 'errors';
 
     /**

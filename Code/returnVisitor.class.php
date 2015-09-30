@@ -22,6 +22,7 @@ class ReturnVisitController
     private $oldSession;    // loaded JSON session          @see loadPriorSession()
     private $currentRow;    // row returning to             @see loadPriorSession()
     private $doneLink;      // relative path to done.php    @see __construct()
+    private $expLink;       // relative path to experiment.php
     private $earlyMsg;      // msg for early birds          @see timeToReturn()
     private $lateMsg;       // msg for too late people      @see timeToReturn()
     private $done;
@@ -36,17 +37,19 @@ class ReturnVisitController
     //     $this->jsonDir  = $_PATH->get('JSON Dir');
     //     $this->doneLink = $_PATH->get('Done');
     // }
-    public function setNeededData($name, $jsonDir, $donePage)
+    public function setNeededData($name, $jsonDir, $donePage, $expPage)
     {
         $this->user     = $name;
         $this->jsonDir  = $jsonDir;
         $this->doneLink = $donePage;
+        $this->expLink  = $expPage;
+
     }
 
     public function isReturning()
     {   
         $this->jsonPath = $this->jsonDir . '/' . $this->user . '.json';
-        if (FileExists($this->jsonPath) == true) {
+        if (fileExists($this->jsonPath) == true) {
             $this->loadPriorSession();
             return true;
         } else {
@@ -79,16 +82,18 @@ class ReturnVisitController
     }
     public function reload()
     {
+        $_SESSION = $this->oldSession;
         // what to do when reloading to done.php
         if ($this->done === true) {
-            $_SESSION = $this->oldSession;
             $_SESSION['alreadyDone'] = true;
             header("Location: {$this->doneLink}");
             exit;
         }
         // what to do when reloading to experiment.php
         elseif ($this->done === false) {
-            # code...
+            $_SESSION['Start Time']  = date('c');
+            header("Location: {$this->expLink}");
+            exit;
         }
     }
     /**
@@ -237,5 +242,9 @@ class ReturnVisitController
         } else {
             return 1;
         }
+    }
+    public function oldCondition()
+    {
+        $oldConditon  = $this->oldSession['Condition'];
     }
 }
