@@ -4,9 +4,9 @@
  */
 class ErrorController
 {
-    private $count = 0;
-    private $details = array();
-    private $allowShowStopper = true;
+    protected $count = 0;
+    protected $details = array();
+    protected $allowShowStopper = true;
 
     /**
      * logs the given error message

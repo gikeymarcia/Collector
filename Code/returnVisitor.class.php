@@ -16,17 +16,17 @@
  */
 class ReturnVisitController
 {                                                           
-    private $user;          // participant username         @see __construct()
-    private $jsonDir;       // where JSON files are stored  @see __construct()
-    private $jsonPath;      // user's JSON filepath         @see isReturning()
-    private $oldSession;    // loaded JSON session          @see loadPriorSession()
-    private $currentRow;    // row returning to             @see loadPriorSession()
-    private $doneLink;      // relative path to done.php    @see __construct()
-    private $expLink;       // relative path to experiment.php
-    private $earlyMsg;      // msg for early birds          @see timeToReturn()
-    private $lateMsg;       // msg for too late people      @see timeToReturn()
-    private $done;
-    private $sessionNumber;
+    protected $user;          // participant username         @see __construct()
+    protected $jsonDir;       // where JSON files are stored  @see __construct()
+    protected $jsonPath;      // user's JSON filepath         @see isReturning()
+    protected $oldSession;    // loaded JSON session          @see loadPriorSession()
+    protected $currentRow;    // row returning to             @see loadPriorSession()
+    protected $doneLink;      // relative path to done.php    @see __construct()
+    protected $expLink;       // relative path to experiment.php
+    protected $earlyMsg;      // msg for early birds          @see timeToReturn()
+    protected $lateMsg;       // msg for too late people      @see timeToReturn()
+    protected $done;
+    protected $sessionNumber;
 
     // public function __construct ()
     // {
@@ -56,7 +56,7 @@ class ReturnVisitController
             return false;
         }
     }
-    private function loadPriorSession()
+    protected function loadPriorSession()
     {
         $handle = fopen($this->jsonPath, 'r');
         $old    = fread($handle, filesize($this->jsonPath));
@@ -168,7 +168,7 @@ class ReturnVisitController
      * @param  string $string excepts things in the format of 3d:2h:5m:10s
      * @return int returns a number
      */
-    private function durationInSeconds($string)
+    protected function durationInSeconds($string)
     {
         if ($duration = '') {
             // no duration was given
@@ -196,7 +196,7 @@ class ReturnVisitController
         }
         return $output;
     }
-    private function durationFormatted()
+    protected function durationFormatted()
     {
         $hours   = floor($durationInSeconds/3600);
         $minutes = floor(($durationInSeconds - $hours*3600)/60);

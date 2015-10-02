@@ -15,7 +15,7 @@ class procedure extends controlFileSetup
     /**
      * Uses parent method requiredColumns() to check that the file has all necessary columns
      */
-    private function columns()
+    protected function columns()
     {
         $required = array('Item', 'Trial Type', 'Max Time');
         $file = 'Procedure';

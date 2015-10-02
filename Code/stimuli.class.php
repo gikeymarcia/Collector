@@ -10,7 +10,7 @@ class stimuli extends controlFileSetup
         $this->columns();
         // I will do each check as it's own method
     }
-    private function columns()
+    protected function columns()
     {
         $required = array('Cue', 'Answer');
         $file = 'Stimuli';

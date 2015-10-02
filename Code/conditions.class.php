@@ -15,13 +15,13 @@
  */
 class Condition
 {
-    private $selection;                 // condition selected from $_GET
-    private $location;                  // how to get to Conditions.csv
-    private $logLocation;               // path to login counter
-    private $ConditionsCSV;             // GetFromFile() load of Conditiions.csv
-    private $assignedCondition = false; // tells whether a conditions has been assigned or not
-    private $userCondition;             // array (keys by column) of the assigned conditon
-    private $errorHandler = 'errors';   // variable name of error handler object
+    protected $selection;                 // condition selected from $_GET
+    protected $location;                  // how to get to Conditions.csv
+    protected $logLocation;               // path to login counter
+    protected $ConditionsCSV;             // GetFromFile() load of Conditiions.csv
+    protected $assignedCondition = false; // tells whether a conditions has been assigned or not
+    protected $userCondition;             // array (keys by column) of the assigned conditon
+    protected $errorHandler = 'errors';   // variable name of error handler object
 
 
     /**
@@ -38,7 +38,7 @@ class Condition
         $this->makeCounterDir($logLocation);
 
     }
-    private function makeCounterDir($logLocation)
+    protected function makeCounterDir($logLocation)
     {
         $dir = dirname($logLocation);
         if (!is_dir($dir)) {
@@ -106,7 +106,7 @@ class Condition
             }
         }        
     }
-    private function getLogVal()
+    protected function getLogVal()
     {
         $logPath = $this->logLocation;
         if (file_exists($logPath)) {
@@ -118,14 +118,14 @@ class Condition
             return 0;
         }
     }
-    private function incrementLog($oldVal)
+    protected function incrementLog($oldVal)
     {
         $newVal = $oldVal + 1;
         $handle = fopen($this->logLocation, "w");
         fputs($handle, $newVal);
         fclose($handle);
     }
-    private function removeOffConditions()
+    protected function removeOffConditions()
     {
         $on = array();
         foreach ($this->ConditionsCSV as $row) {
@@ -166,7 +166,7 @@ class Condition
      * @see $this->__construct()
      * @param string $location path to Conditions.csv
      */
-    private function conditionsExists()
+    protected function conditionsExists()
     {
         global $$this->errorHandler;
         if (!FileExists($this->location)) {
@@ -177,13 +177,13 @@ class Condition
     /**
      * Save GetFromFile() results of Conditions.csv into the object
      */
-    private function loadConditons()
+    protected function loadConditons()
     {
         $this->conditionsExists();
         $this->ConditionsCSV = getFromFile($this->location, false);
         $this->requiredColumns();
     }
-    private function requiredColumns()
+    protected function requiredColumns()
     {
         global $$this->errorHandler;
         $requiredColumns = array('Number', 'Stimuli', 'Procedure');

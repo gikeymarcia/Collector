@@ -5,11 +5,11 @@
  */
 class User
 {
-    private $username;
-    private $id;
-    private $sessionNumber = 1;
-    private $valid = null;
-    private $errorHandler = 'errors';
+    protected $username;
+    protected $id;
+    protected $sessionNumber = 1;
+    protected $valid = null;
+    protected $errorHandler = 'errors';
 
     /**
      * Allows you to change the default error handler object, $errors, to one of your choosing
@@ -37,12 +37,12 @@ class User
      * Makes sure username is long enough
      * @return [type] [description]
      */
-    private function validateUsername ()
+    protected function validateUsername ()
     {
         $this->checkNameLength();
         
     }
-    private function checkNameLength()
+    protected function checkNameLength()
     {
         $length = strlen($this->username);
         if ($length < 4) {
@@ -72,7 +72,7 @@ class User
     /**
      * Sets unique ID for each login
      */
-    private function setID()
+    protected function setID()
     {
         $idLength = 10;
         if (!isset($_SESSION['ID'])) {          // if there is not already an ID set

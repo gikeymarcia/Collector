@@ -11,9 +11,9 @@
  */
 class controlFileSetup
 {
-    private $dir;
-    private $files;
-    private $stitched = array();
+    protected $dir;
+    protected $files;
+    protected $stitched = array();
 
     public function __construct($dir, $filenames)
     {
@@ -34,7 +34,7 @@ class controlFileSetup
         }
         return $contents;
     }
-    private function readFiles()
+    protected function readFiles()
     {
         foreach ($this->files as $file) {
             $fullPath = $this->dir . '/' . $file;
@@ -44,7 +44,7 @@ class controlFileSetup
             $this->stitch($data);
         }
     }
-    private function stitch($in)
+    protected function stitch($in)
     {
         if (count($this->stitched) == 0) {               // add first file without checks
 // var_dump($in,'first file in');
@@ -65,7 +65,7 @@ class controlFileSetup
             }
         }
     }
-    private function keyMatch($new)
+    protected function keyMatch($new)
     {
         $existingKeys = array_keys($this->stitched[0]);
         $newKeys      = array_keys($new[0]);
@@ -81,7 +81,7 @@ class controlFileSetup
         }
         return true;
     }
-    private function conform($newData)
+    protected function conform($newData)
     {
 // var_dump($newData);
         $oldKeys = array_keys($this->stitched);
@@ -108,14 +108,14 @@ class controlFileSetup
         }
         return $aligned;
     }
-    private function addKey($key)
+    protected function addKey($key)
     {
 // var_dump($this->stitched[0], 'what');
         foreach ($this->stitched as $pos => $array) {
             $this->stitched[$pos][$key] = '';
         }
     }
-    private function exists($path)
+    protected function exists($path)
     {
         if(fileExists($path)) {
             return true;
@@ -126,7 +126,7 @@ class controlFileSetup
             $errors->add($msg, true);
         }
     }
-    private function requiredColumns($filename, $cols)
+    protected function requiredColumns($filename, $cols)
     {
         foreach ($cols as $column) {
             if(!isset($this->stitched[0][$column])) {

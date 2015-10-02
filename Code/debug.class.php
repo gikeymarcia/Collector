@@ -1,7 +1,7 @@
 <?php
 class DebugController
 {
-    private $debugMode = false;
+    protected $debugMode = false;
 
     /**
      * Figures out if the user logged in as debug

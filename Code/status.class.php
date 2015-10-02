@@ -6,22 +6,22 @@
 class status
 {
     // browser info
-    private $browser;
-    private $deviceType;
-    private $OS;
+    protected $browser;
+    protected $deviceType;
+    protected $OS;
     // user info
-    private $username;
-    private $id;
-    private $outputFile;
-    private $sessionNum;
+    protected $username;
+    protected $id;
+    protected $outputFile;
+    protected $sessionNum;
     // Conditon Info
-    private $number;
-    private $description;
-    private $stimuli;
-    private $procedure;
+    protected $number;
+    protected $description;
+    protected $stimuli;
+    protected $procedure;
     // Where to write status begin/end
-    private $beginPath;
-    private $endPath;
+    protected $beginPath;
+    protected $endPath;
 
     function __construct()
     {
