@@ -34,9 +34,17 @@ class Condition
     {
         $this->location = $conditionsLoc;
         $this->logLocation = $logLocation;
-        $this->loadConditons();
         $this->makeCounterDir($logLocation);
-
+        $this->loadConditons();
+    }
+    /**
+     * Save GetFromFile() results of Conditions.csv into the object
+     */
+    protected function loadConditons()
+    {
+        $this->conditionsExists();
+        $this->ConditionsCSV = getFromFile($this->location, false);
+        $this->requiredColumns();
     }
     protected function makeCounterDir($logLocation)
     {
@@ -60,31 +68,6 @@ class Condition
             $$this->errorHandler->add($msg, true);
         }
     }
-    // /**
-    //  * loads current login counter file and returns what condition this user
-    //  * would be assigned to if the current conditon was being assigned
-    //  * @return int position of the row that would be assigned
-    //  */
-    // public function candidateCondition()
-    // {
-    //     $logPath = $this->logLocation;
-    //     if ($this->selection == 'Auto') {
-    //         if (file_exists($logPath)) {
-    //             $handle   = fopen($logPath, mode);
-    //             $logCount = fgets($handle);
-    //             fclose($handle);
-    //         } else {
-    //             $logCount = 0;
-    //         }
-    //     }
-    //     $condCount = count($this->ConditionsCSV);
-        
-    //     $found = false;
-    //     // while ($found == false) {
-    //     //     $choice = $logCount % $condCount;
-    //     //     // if ($this->ConditionsCSV[$choice])
-    //     // }
-    // }
     /**
      * Assigns participant conditon and updates login counter so the next
      * participant will not be assigned the same condiiton
@@ -174,15 +157,7 @@ class Condition
             $$this->errorHandler->add($msg, true);
         }
     }
-    /**
-     * Save GetFromFile() results of Conditions.csv into the object
-     */
-    protected function loadConditons()
-    {
-        $this->conditionsExists();
-        $this->ConditionsCSV = getFromFile($this->location, false);
-        $this->requiredColumns();
-    }
+    
     protected function requiredColumns()
     {
         global $$this->errorHandler;

@@ -11,18 +11,14 @@ class User
     protected $valid = null;
     protected $errorHandler = 'errors';
 
+    
     /**
-     * Allows you to change the default error handler object, $errors, to one of your choosing
-     * @param  string $varName will look for variable with the name of the string contents
-     * for example, 'mikey' would cause the errors to be reported to `global $mikey`
-     */
-    public function changeErrorHandler($varName)
-    {
-        $this->errorHandler = $varName;
-    }
-    /**
-     * Checks $_GET for submitted username, filters characters
-     * that shouldn't be in usernames
+     * Takes a string and sets it as the username
+     * Chains:
+     *     username filtering
+     *     username validation
+     *     ID creation
+     * @param string $name username for participant
      */
     public function setUsername($name)
     {
@@ -84,7 +80,6 @@ class User
         } else {
             $this->id = $_SESSION['ID'];        // save existing ID into class
         }
-        // $_SESSION['ID'] = $this->id;
     }
     /**
      * Does what you'd think
@@ -113,16 +108,6 @@ class User
         $potential = $this->username . $suffix;
         $this->setUsername($potential);
     }
-    public function printData()
-    {
-        echo '<div>This is what we know about the $user' .
-        '<ol>';
-            echo "<li>{$this->username}</li>";
-            echo "<li>{$this->id_is_set}</li>";
-            echo "<li>{$this->id}</li>";
-            echo "<li>{$this->valid}</li>";
-        echo '</ol></div>';
-    }
     public function getSession()
     {
         return $this->sessionNumber;
@@ -139,5 +124,24 @@ class User
                 $this->id .
                 '.csv';
         return $name;
+    }
+    /**
+     * Allows you to change the default error handler object, $errors, to one of your choosing
+     * @param  string $varName will look for variable with the name of the string contents
+     * for example, 'mikey' would cause the errors to be reported to `global $mikey`
+     */
+    public function changeErrorHandler($varName)
+    {
+        $this->errorHandler = $varName;
+    }
+    public function printData()
+    {
+        echo '<div>This is what we know about the $user' .
+        '<ol>';
+            echo "<li>{$this->username}</li>";
+            echo "<li>{$this->id_is_set}</li>";
+            echo "<li>{$this->id}</li>";
+            echo "<li>{$this->valid}</li>";
+        echo '</ol></div>';
     }
 }
