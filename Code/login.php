@@ -305,7 +305,7 @@
                     // using FileExists, we can see if a cue detected as an image by show() is a file that actually exists
                     if (FileExists($_PATH->get('Experiment') . '/' . $row['Cue']) === false ) {
                         $errors['Count']++;
-                        $errors['Details'][] = 'Image or audio file "' . $_PATH->get('Experiment') . $row['Cue'] . '" not found for row '
+                        $errors['Details'][] = 'Image or audio file "' . $_PATH->get('Experiment') . '/' . $row['Cue'] . '" not found for row '
                                              . $i . ' in Stimuli File "' . basename($fileName) . '".';
                     }
                 }
@@ -339,8 +339,8 @@
                 $errors['Details'][] = 
                     'The trial type '. $row[$column] .' for row '. $i .' in '
                   . 'the procedure file '. $procName .' has no folder in '
-                  . 'either the "'. $_PATH->get('Custom Trials Types', 'root') .'" folder or '
-                  . 'the "'. $_PATH->get('Trials Types', 'root') .'" folder.';
+                  . 'either the "'. $_PATH->get('Custom Trial Types', 'root') .'" folder or '
+                  . 'the "'. $_PATH->get('Trial Types', 'root') .'" folder.';
             }
         }
     }

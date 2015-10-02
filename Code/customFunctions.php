@@ -836,6 +836,7 @@ function show($string, $endOnly = true)
     }
     // check extension to determine which tags to add
     if (strripos($searchString, '.jpg') !== false
+        || strripos($searchString, '.jpeg') !== false
         || strripos($searchString, '.png') !== false
         || strripos($searchString, '.gif') !== false
         || strripos($searchString, '.bmp') !== false

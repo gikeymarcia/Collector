@@ -215,7 +215,7 @@
         ),
         
         'Tools' => array (
-            $dirName = 'Tools',
+            $dirName => 'Tools',
             
             // lots of stuff in here
         ),
