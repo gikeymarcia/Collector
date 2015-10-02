@@ -1,4 +1,4 @@
-<?php
+f<?php
 /*  Collector
     A program for running experiments on the web
  */
@@ -9,7 +9,6 @@
 // $_SESSION['Debug'] = $_CONFIG->debug_mode;
     
     $title = 'Preparing the Experiment';
-    // require $_FILES->code . '/Header.php';
     
     $_PATH->loadDefault('Current Data', $_CONFIG->experiment_name . '-Data');
 
@@ -26,10 +25,10 @@
     $user = new User();
     $user->setUsername($_GET['Username']);
     
-    $debug = new DebugController();
-    $debug->debugCheck(
-        $user->getUsername(),
-        $_CONFIG->debug_name
+    $debug = new DebugController(
+        $user->getUsername(), 
+        $_CONFIG->debug_name,
+        $_CONFIG->debug_mode
     );
     if ($debug->is_on()) {
         // ask tyson how these next two lines can be combined into one command. I think he says it is possible.

@@ -1,28 +1,70 @@
 <?php
 class DebugController
 {
-    protected $debugMode = false;
+    protected $debugMode = false;   // debugCheck() can change this to true
+    protected $username;
+    protected $debugName;
+    protected $debugSwitch;
 
     /**
-     * Figures out if the user logged in as debug
-     * @param  [string] $debugName [description]
-     * @param  [string] $username  [description]
+     * Save values needed to check debug and runs the debugCheck()
+     * @param string  $username  user's login name
+     * @param string  $debugName codeword to login with/as to start debug mode
+     * @param boolean $setting   value from config that can turn debug on/off for all logins
      */
-    public function debugCheck($username, $debugCode)
+    public function __construct($username, $debugName, $setting)
     {
-        if ((strlen($debugCode) > 0)
-            AND (substr($username, 0, strlen($debugCode) === $debugCode))
-        ) {
+        $this->username    = $username;
+        $this->debugName   = $debugName;
+        $this->debugSwitch = $setting;
+        $this->debugCheck();
+    }
+    /**
+     * Method that runs the checks.  If any check returns true then debug mode is turned on.
+     * A boolean is saved to $_SESSION['Debug'] which tells if debug is on/off
+     * @return [type]           [description]
+     */
+    public function debugCheck()
+    {
+        if ($this->checkName() OR $this->checkConfig()){
             $this->debugMode = true;
-            $this->modifyPath();
-            $_SESSION['Debug'] = true;
         } else {
-            $_SESSION['Debug'] = false;
+            $this->debugMode = false;
+        }
+        $_SESSION['Debug'] = $this->debugMode;
+    }
+    /**
+     * Checks if the username begins with the debug name
+     * @return boolean true/false login name begins with debug code
+     */
+    protected function checkName()
+    {
+        $name = $this->username;
+        $code = $this->debugName;
+        $dbLen = strlen($code);
+        if (($dbLen > 0)
+            AND (substr($name, 0, $dbLen) === $code)
+        ) {
+            return true;
+        } else {
+            return false;
         }
     }
     /**
-     * How to check if debug mode has been turned on
-     * @return boolean `true` if debug mode is on
+     * Checks if the configuration file has specified debug mode be turned on
+     * @return boolean
+     */
+    protected function checkConfig()
+    {
+        if ($this->debugSwitch == true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    /**
+     * public way to check if debug mode is on/off
+     * @return boolean true=debug is on, false=debug is off
      */
     public function is_on()
     {
@@ -32,4 +74,9 @@ class DebugController
             return false;
         }
     } 
+    public function changeName($name)
+    {
+        $this->username = $name;
+        $this->debugCheck();
+    }
 }
