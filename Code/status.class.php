@@ -2,6 +2,14 @@
 /**
 *  Writes status begin/end messages
 *  -- currently only used in login.php but will be expanded to write end status later
+*  Logic: upon __construct() grabs browser info
+*  Needs user info $this->updateUser()
+*  Needs condition $this->setConditionInfo()
+*  Needs paths $this->setPaths()
+*
+* Will write a status begin with $this->writeBegin()
+* FUTURE: will write an end with $this->writeEnd()
+*  
 */
 class status
 {
@@ -94,6 +102,22 @@ class status
             'IP'                    => $_SERVER["REMOTE_ADDR"]
         );
         arrayToLine($UserData, $this->beginPath);
+    }
+    protected function writeEnd()
+    {
+        // below is copied from done.php
+        // Not functional yet so the metho is protected to prevent it from being run from within the experiment
+        $data = array(
+            'Username'              => $this->username,
+            'ID'                    => $this->id,
+            'Date'                  => date('c'),
+            'Duration'              => $duration,
+            
+            'Duration_Formatted'    => $durationFormatted,
+            'Session'               => $_SESSION['Session'],
+            'Condition_Number'      => $_SESSION['Condition']['Number'],
+        );
+        arrayToLine($data, $_PATH->get('Status End Data'));
     }
 }
 ?>

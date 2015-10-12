@@ -28,24 +28,13 @@ class ReturnVisitController
     protected $done;
     protected $sessionNumber;
 
-    // public function __construct ()
-    // {
-    //     global $user;
-    //     $this->user = $user->getUsername();
-
-    //     global $_PATH;
-    //     $this->jsonDir  = $_PATH->get('JSON Dir');
-    //     $this->doneLink = $_PATH->get('Done');
-    // }
-    public function setNeededData($name, $jsonDir, $donePage, $expPage)
+    public function __construct($name, $jsonDir, $donePage, $expPage)
     {
         $this->user     = $name;
         $this->jsonDir  = $jsonDir;
         $this->doneLink = $donePage;
         $this->expLink  = $expPage;
-
     }
-
     public function isReturning()
     {   
         $this->jsonPath = $this->jsonDir . '/' . $this->user . '.json';

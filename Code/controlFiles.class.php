@@ -14,57 +14,66 @@ class controlFileSetup
     protected $dir;
     protected $files;
     protected $stitched = array();
+    protected $shuffled = false;
 
+    /**
+     * Reads in control files and combines them into
+     * one array with consistent keys called $this->stitched
+     * @param string $dir       location where the files exist
+     * @param string $filenames list of .csv flenames (comma separated)
+     */
     public function __construct($dir, $filenames)
     {
         $this->dir   = $dir;
-        $this->files = $this->split($filenames);
+        $this->files = explode(',', $this->filenames);
         $this->readFiles();
+        $this->errorCheck();
 
     }
-    public function split($strings)
-    {
-        if (strpos($strings, ',')) {
-            $contents = explode(',', $strings);
-        } else {
-            $contents = array(0 => $strings);
-        }
-        foreach ($contents as $key => $value) {
-            $value = trim($value);
-        }
-        return $contents;
-    }
+    /**
+     * Takes an array of .csv filenames
+     * and combines them all together into $this->stitched
+     * @return n/a updates $this->stitched
+     */
     protected function readFiles()
     {
         foreach ($this->files as $file) {
-            $fullPath = $this->dir . '/' . $file;
+            $fullPath = $this->dir . '/' . trim($file);
             $this->exists($fullPath);
             $data = getFromFile($fullPath, false);
-// var_dump($data, 'this is bullshit');
             $this->stitch($data);
         }
     }
+    /**
+     * Receives a 2d array and adds that array to $this->stitched
+     * Makes sure keys are consistent throughout $this-stitched
+     * even if $in doesn't match $this->stitched
+     * @param  array $in array being added to $this->stitched
+     * @return n/a     updates value of $this->stitched
+     */
     protected function stitch($in)
     {
         if (count($this->stitched) == 0) {               // add first file without checks
-// var_dump($in,'first file in');
             $this->stitched = $in;
         } else {
-// var_dump($in, 'coming in hot');
             if ($this->keyMatch($in)) {                  // if newfile matches old pattern
                 foreach ($in as $row => $value) {
                     $this->stitched[] = $value;             // add each row to $this->stitched
                 }
             } else {                                    // otherwise
-// var_dump($this, 'middle of stitch');
                 $in = $this->conform($in);                  // make new data fit old pattern
-// var_dump($in, 'did it conform?');
                 foreach ($in as $pos => $array) {
                     $this->stitched[] = $array;             // add each row to $this->stitched
                 }
             }
         }
     }
+    /**
+     * Receives a 2d array and checks if the keys in it's first position
+     * matches the keys in the first position of $this-stitched
+     * @param  array $new 2d-array
+     * @return boolean      true/false if keys match
+     */
     protected function keyMatch($new)
     {
         $existingKeys = array_keys($this->stitched[0]);
@@ -81,21 +90,23 @@ class controlFileSetup
         }
         return true;
     }
+    /**
+     * Makes a given array ($newData) match the keys used in 
+     * $this->stitched.  If $newData has keys that don't exist in 
+     * $this->stitched then they are added to $this->stitched
+     * @param  array $newData data being conformed to match $this->stitched
+     * @return array          $newData transformed to match $this->stitched
+     */
     protected function conform($newData)
     {
-// var_dump($newData);
         $oldKeys = array_keys($this->stitched);
         $newKeys = array_keys($newData);
-// var_dump($newData, 'this is what Im adding');
-// var_dump($this->stitched, 'this is what we had');
         foreach ($newData[0] as $key => $value) {
             if(!isset($this->stitched[0][$key])) {
-// var_dump($this->stitched, 'keys should be filling in');
                 $this->addKey($key);
             }
         }
         $updatedKeys = array_keys($this->stitched[0]);
-// var_dump($updatedKeys);
         $aligned = array();
         foreach ($newData as $pos => $array) {
             foreach ($updatedKeys as $key) {
@@ -110,7 +121,6 @@ class controlFileSetup
     }
     protected function addKey($key)
     {
-// var_dump($this->stitched[0], 'what');
         foreach ($this->stitched as $pos => $array) {
             $this->stitched[$pos][$key] = '';
         }
@@ -135,5 +145,24 @@ class controlFileSetup
                 $errors->add($msg);
             }
         }
+    }
+    public function shuffle()
+    {
+        $data = multiLevelShuffle($this->stitched);
+        $data = shuffle2dArray($data);
+        $this->shuffled = $data;
+        return $data;
+    }
+    public function shuffled()
+    {
+        return $this->shuffled;
+    }
+    public function unshuffled()
+    {
+        return $this->stitched;
+    }
+    public function manual($array)
+    {
+        $this->stitched = $array;
     }
 }

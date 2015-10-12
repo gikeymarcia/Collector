@@ -11,7 +11,10 @@ class User
     protected $valid = null;
     protected $errorHandler = 'errors';
 
-    
+    public function __construct($name)
+    {
+        $this->setUsername($name);
+    }
     /**
      * Takes a string and sets it as the username
      * Chains:

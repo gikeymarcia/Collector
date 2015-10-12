@@ -30,7 +30,7 @@ class Condition
      * @param string $counterDir    relative path to the directory where the counter is held
      * @param string $logLocation   relative path to the login counter file 
      */
-    public function setNeededData($conditionsLoc, $logLocation)
+    public function __construct($conditionsLoc, $logLocation)
     {
         $this->location = $conditionsLoc;
         $this->logLocation = $logLocation;

@@ -1,4 +1,4 @@
-f<?php
+<?php
 /*  Collector
     A program for running experiments on the web
  */
@@ -8,7 +8,7 @@ f<?php
 //  $_SESSION['OutputDelimiter'] = $_CONFIG->delimiter;
 // $_SESSION['Debug'] = $_CONFIG->debug_mode;
     
-    $title = 'Preparing the Experiment';
+    // $title = 'Preparing the Experiment';
     
     $_PATH->loadDefault('Current Data', $_CONFIG->experiment_name . '-Data');
 
@@ -19,11 +19,11 @@ f<?php
     require 'debug.class.php';
     require 'status.class.php';
 
+
     // login objects
     $errors = new ErrorController();
 
-    $user = new User();
-    $user->setUsername($_GET['Username']);
+    $user = new User($_GET['Username']);
     
     $debug = new DebugController(
         $user->getUsername(), 
@@ -36,17 +36,11 @@ f<?php
         $_PATH->loadDefault('Current Data',  $currentPath . '/' . 'Debug');
     }
 
-    $cond = new Condition();
-    $cond->setNeededData(
+    $cond = new Condition(
         $_PATH->get('Conditions'),
         $_PATH->get('Counter', 'relative', $_CONFIG->login_counter_file)
     );
     $cond->selectedCondition($_GET['Condition']);
-
-// $user->printData();
-// $cond->info();
-
-    
 
     
     // is this user ineligible to participate in the experiment?
@@ -57,20 +51,18 @@ f<?php
     }
 // var_dump($user,'$user');
 // exit;
+
+
     #### Dealing with people returning to the experiment
     require 'returnVisitor.class.php';
-    $revisit = new ReturnVisitController();
-    $revisit->setNeededData(
+    $revisit = new ReturnVisitController(
         $user->getUsername(), 
         $_PATH->get('JSON Dir'), 
         $_PATH->get('Done'),
         $_PATH->get('Experiment Page')
     );
-// var_dump($revisit);
-// exit;
 
     if ($revisit->isReturning()) {
-// exit;
         if ($revisit->alreadyDone()) {
             $revisit->reload();
         }
@@ -103,11 +95,9 @@ f<?php
 
     #### Set user's condition
     $cond->assignCondition();
-// var_dump($cond);
-// exit;
     // modify paths based on assigned condition
-    $_PATH->loadDefault('Stimuli',   $cond->stimuli()   );
-    $_PATH->loadDefault('Procedure', $cond->procedure() );
+    $_PATH->loadDefault('Stimuli',   $cond->stimuli()   );  // are these necessary anymore?
+    $_PATH->loadDefault('Procedure', $cond->procedure() );  // are these necessary anymore?
 
 
     require 'controlFiles.class.php';
