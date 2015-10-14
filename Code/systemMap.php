@@ -123,6 +123,16 @@
             
             'login.php' => 'Login',
             
+            'errors.class.php'        => 'Errors Class',
+            'users.class.php'         => 'Users Class',
+            'conditions.class.php'    => 'Conditions Class',
+            'debug.class.php'         => 'Debug Class',
+            'status.class.php'        => 'Status Class',
+            'returnVisitor.class.php' => 'Return Class',
+            'controlFiles.class.php'  => 'Control Files Class',
+            'procedure.class.php'     => 'Procedure Class',
+            'stimuli.class.php'       => 'Stimuli Class',
+            
             'nojs.php' => 'No JS',
             
             'parse.class.php' => 'Parse',

@@ -72,6 +72,8 @@ class ReturnVisitController
     public function reload()
     {
         $_SESSION = $this->oldSession;
+        global $_PATH;
+        $_PATH = new Pathfinder($_SESSION['Pathfinder']);
         // what to do when reloading to done.php
         if ($this->done === true) {
             $_SESSION['alreadyDone'] = true;

@@ -3,11 +3,15 @@
     A program for running experiments on the web
  */
     require 'initiateCollector.php';
-    require 'shuffleFunctions.php';
+    
+    // reset session so it doesn't contain any information from a previous login attempt
     $_SESSION = array();
     $_PATH = new Pathfinder($_SESSION['Pathfinder']);
     $_SESSION['Current Collector'] = $_PATH->get('root', 'url');
     
+    require $_PATH->get('Shuffle Functions');
+    
+    if (!isset($_GET['CurrentExp'])) {
         header('Location: ' . $_PATH->get('root'));
         exit;
     }
@@ -31,15 +35,14 @@
     $_SESSION['Debug'] = $_CONFIG->debug_mode;
 
     // $title = 'Preparing the Experiment';
-    
-    $_PATH->loadDefault('Current Data', $_CONFIG->experiment_name . '-Data');
 
     // login specific classes
-    require 'errors.class.php';
-    require 'users.class.php';
-    require 'conditions.class.php';
-    require 'debug.class.php';
-    require 'status.class.php';
+    // later, maybe replace these with autoloaders
+    require $_PATH->get('Errors Class');
+    require $_PATH->get('Users Class');
+    require $_PATH->get('Conditions Class');
+    require $_PATH->get('Debug Class');
+    require $_PATH->get('Status Class');
 
 
     // login objects
@@ -53,9 +56,7 @@
         $_CONFIG->debug_mode
     );
     if ($debug->is_on()) {
-        // ask tyson how these next two lines can be combined into one command. I think he says it is possible.
-        $currentPath = $_PATH->getDefault('Current Data');
-        $_PATH->loadDefault('Current Data',  $currentPath . '/' . 'Debug');
+        $_PATH->setDefault('Data Sub Dir', '/Debug');
     } else {
         $_PATH->setDefault('Data Sub Dir', '');
     }
@@ -66,23 +67,20 @@
         $_CONFIG->hide_flagged_conditions
     );
     $cond->selectedCondition($_GET['Condition']);
-
     
-    $_PATH->setDefault('Username', $_SESSION['Username']);
     
     // is this user ineligible to participate in the experiment?
     if (($_CONFIG->check_elig == true)
         AND ($_CONFIG->mTurk_mode == true)
     ) {
-        include 'check.php';
+        include $_PATH->get('check');
     }
 // var_dump($user,'$user');
 // exit;
-
-        $_PATH->updateDefaults();               // make sure Pathfinder is using the loaded defaults from session
+    
 
     #### Dealing with people returning to the experiment
-    require 'returnVisitor.class.php';
+    require $_PATH->get('Return Class');
     $revisit = new ReturnVisitController(
         $user->getUsername(), 
         $_PATH->get('JSON Dir'), 
@@ -113,7 +111,7 @@
                 $_PATH->get('Status End Data')
             );
             // update Output path
-            $_PATH->loadDefault('Output', $user->getOutputFile());
+            $_PATH->setDefault('Output', $user->getOutputFile());
             $status->writeBegin();                          // write to status begin
             $revisit->reload();
         } else {
@@ -126,9 +124,9 @@
     // modify paths based on assigned condition
 
 
-    require 'controlFiles.class.php';
-    require 'procedure.class.php';
-    require 'stimuli.class.php';
+    require $_PATH->get('Control Files Class');
+    require $_PATH->get('Procedure Class');
+    require $_PATH->get('Stimuli Class');
     // require 'trialTypes.class.php';
     // $trialTypes = new trialTypes(
     //     $_PATH->get('Trial Types'),
