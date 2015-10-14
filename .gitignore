@@ -16,6 +16,10 @@ desktop.ini
 *.project
 .settings/
 
+#SublimeText
+*.sublime-project
+*.sublime-workspace
+
 # Netbeans
 /nbproject/
 
