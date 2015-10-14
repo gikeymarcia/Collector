@@ -120,7 +120,7 @@ var COLLECTOR = {
             var startTime = COLLECTOR.startTime;
 
             // these happen immediately on load
-            $(':input:enabled:visible:first').focusWithoutScrolling();          // focus cursor on first input
+            $(':input:not(:radio):enabled:visible:first').focusWithoutScrolling();          // focus cursor on first input
             $("#loadingForm").submit();                         // submit form to advance page
 
             $("form").submit( function(event){
@@ -198,7 +198,7 @@ var COLLECTOR = {
             if (isNaN(trialTime) || trialTime > 0) {
                 $("#content").removeClass("invisible");                     // unhide trial contents
                 COLLECTOR.startTime = Date.now();
-                $(':input:enabled:visible:first').focusWithoutScrolling();  // focus cursor on first input
+                $(':input:not(:radio,:checkbox):enabled:visible:first').focusWithoutScrolling();  // focus cursor on first input
             } else {
                 $("form").submit();
             }
