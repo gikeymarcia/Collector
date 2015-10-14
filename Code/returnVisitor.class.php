@@ -118,7 +118,7 @@ class ReturnVisitController
             $dif = $min - $sinceFinish;
             $remaining = $this->durationFormatted($dif);
             $msg = "You are too eary to participate in this part. You can return 
-                    in {$remaining} time to start this next part.";
+                    in $remaining time to start this next part.";
             $this->earlyMsg = $msg;
         }
         if (($sinceFinish > $max)

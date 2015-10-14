@@ -7,17 +7,13 @@ class stimuli extends controlFileSetup
 {
     public function errorCheck()
     {
-        $this->columns();
+        $this->checkColumns();
         // I will do each check as it's own method
     }
-    protected function columns()
+    protected function checkColumns()
     {
         $required = array('Cue', 'Answer');
         $file = 'Stimuli';
         $this->requiredColumns($file, $required);
-    }
-    public function getStimuliArray()
-    {
-        return $this->stitched;
     }
 }

@@ -25,9 +25,10 @@ class controlFileSetup
     public function __construct($dir, $filenames)
     {
         $this->dir   = $dir;
-        $this->files = explode(',', $this->filenames);
+        $this->files = explode(',', $filenames);
         $this->readFiles();
         $this->errorCheck();
+        // $this->checkShuffleCols();
 
     }
     /**
@@ -119,12 +120,23 @@ class controlFileSetup
         }
         return $aligned;
     }
+    /**
+     * Adds a key to with the value of an empty string for
+     * each position in stitched
+     * @param string $key name of key to add
+     */
     protected function addKey($key)
     {
         foreach ($this->stitched as $pos => $array) {
             $this->stitched[$pos][$key] = '';
         }
     }
+    /**
+     * checks if a file exists
+     * @param  string $path path to get to the file being checked
+     * @return boolean       true if the path points at a file
+     *                       and showstopper error if the file doesn't exist
+     */ 
     protected function exists($path)
     {
         if(fileExists($path)) {
@@ -136,6 +148,12 @@ class controlFileSetup
             $errors->add($msg, true);
         }
     }
+    /**
+     * Makes sure that the array has all required columns
+     * @param  string $filename type of file being checked (usually stimuli or procedure)
+     * @param  [type] $cols     [description]
+     * @return [type]           [description]
+     */
     protected function requiredColumns($filename, $cols)
     {
         foreach ($cols as $column) {
@@ -146,6 +164,10 @@ class controlFileSetup
             }
         }
     }
+    /**
+     * Shuffles $this->stitched and returns the result
+     * @return [type] [description]
+     */
     public function shuffle()
     {
         $data = multiLevelShuffle($this->stitched);
@@ -153,16 +175,90 @@ class controlFileSetup
         $this->shuffled = $data;
         return $data;
     }
+    /**
+     * Returns the specific shuffled version that was 
+     * created last time $this->shuffle() was run
+     * @return array result of the last time $this->shuffle() was used
+     */
     public function shuffled()
     {
         return $this->shuffled;
     }
+    /**
+     * Return $this->stitched without shuffling
+     * @return array stitched outcome of reading the control file(s)
+     */
     public function unshuffled()
     {
         return $this->stitched;
     }
-    public function manual($array)
+    /**
+     * Overrides whatever was created for $this->stitched
+     * with the array you pass it
+     * @param  array $newStitched expecting something in 2d getFromFile() format
+     */
+    public function manual($newStitched)
     {
-        $this->stitched = $array;
+        $this->stitched = $newStitched;
     }
+    /**
+     * Use to get a list of the keys used in $this->stitched
+     * @return $array (e.g., array(0=> 'item', 1=>'trial type'))
+     */
+    public function getKeys()
+    {
+        return array_keys($this->stitched[0]);
+    }
+    /**
+     * Checks if a set of given keys overlaps
+     * with the keys of the current object (stimuli or procedure)
+     * $errors->add() called if overlap is found
+     * @param  array $otherKeys list of keys [expecting format of $this->getKeys()]
+     * @return n/a              does not return anything but can add() to errors if there is overlap
+     */
+    public function overlap($otherKeys)
+    {
+        $doubles = array();
+        $objKeys = $this->getKeys();
+        $objKeys = array_flip($objKeys);
+        foreach ($otherKeys as $key) {
+            if (isset($objKeys[$key])) {
+                $doubles[] = $key;
+            }
+        }
+        if (count($doubles) > 0) {
+            $msg = '<ol>Your stimuli and procedure files cannot contain column(s) with the same name(s)<br>
+            The following columns are in both your stimuli and procedure file:<br>';
+            foreach ($doubles as $columnName) {
+                $msg .= '<li>' . $columnName . '</li>';
+            }
+            global $errors;
+            $errors->add($msg);
+        }
+    }
+    /**
+     * Work in progress -Goal is that it correct for the Derek mistake
+     * @return [type] [description]
+     */
+    protected function checkShuffleCols()
+    {
+        $shuffleBase = 'Shuffle';
+        $keys = $this->getKeys();
+        // remove all columns names that don't have 'Shuffle' in them
+        foreach ($keys as $pos => $name) {
+            if (strpos($name, $shuffleBase) === false) {
+                unset($keys[$pos]);
+            }
+        }
+        $keys = array_flip($keys);
+        $validShuffles = 0;
+        for ($i=1; $i < count($keys); $i++) { 
+            if($i == 1 
+                AND (isset($keys[$shuffleBase]))
+            ) {
+                $validShuffles++;
+            }
+        }
+    }
+
 }

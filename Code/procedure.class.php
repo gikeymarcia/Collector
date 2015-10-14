@@ -17,7 +17,7 @@ class procedure extends controlFileSetup
      */
     protected function columns()
     {
-        $required = array('Item', 'Trial Type', 'Max Time');
+        $required = array('Item', 'Trial Type', 'Max Time', 'Text');
         $file = 'Procedure';
         $this->requiredColumns($file, $required);
     }

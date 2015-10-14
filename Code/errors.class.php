@@ -56,6 +56,14 @@ class ErrorController
     public function noShowStoppers()
     {
         $this->allowShowStopper = false;
-    } 
+    }
+    public function arePresent()
+    {
+        if ($this->count() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
 ?>

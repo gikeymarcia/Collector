@@ -18,6 +18,7 @@ class Condition
     protected $selection;                 // condition selected from $_GET
     protected $location;                  // how to get to Conditions.csv
     protected $logLocation;               // path to login counter
+    protected $showFlagged;
     protected $ConditionsCSV;             // GetFromFile() load of Conditiions.csv
     protected $assignedCondition = false; // tells whether a conditions has been assigned or not
     protected $userCondition;             // array (keys by column) of the assigned conditon
@@ -30,10 +31,11 @@ class Condition
      * @param string $counterDir    relative path to the directory where the counter is held
      * @param string $logLocation   relative path to the login counter file 
      */
-    public function __construct($conditionsLoc, $logLocation)
+    public function __construct($conditionsLoc, $logLocation, $showFlagged = false)
     {
         $this->location = $conditionsLoc;
         $this->logLocation = $logLocation;
+        $this->showFlagged = $showFlagged;
         $this->makeCounterDir($logLocation);
         $this->loadConditons();
     }
@@ -110,6 +112,9 @@ class Condition
     }
     protected function removeOffConditions()
     {
+        if ($this->showFlagged === true) {
+            return $this->ConditionsCSV;
+        }
         $on = array();
         foreach ($this->ConditionsCSV as $row) {
             if ($row['Condition Description'][0] === '#') {

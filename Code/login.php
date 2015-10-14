@@ -3,11 +3,10 @@
     A program for running experiments on the web
  */
     require 'initiateCollector.php';
+    require 'shuffleFunctions.php';
     
     $_SESSION = array();                                    // reset session so it doesn't contain any information from a previous login attempt
-//  $_SESSION['OutputDelimiter'] = $_CONFIG->delimiter;
-// $_SESSION['Debug'] = $_CONFIG->debug_mode;
-    
+
     // $title = 'Preparing the Experiment';
     
     $_PATH->loadDefault('Current Data', $_CONFIG->experiment_name . '-Data');
@@ -25,7 +24,7 @@
 
     $user = new User($_GET['Username']);
     
-    $debug = new DebugController(
+    $debug = new DebugController(           // sets $_SESSION['Debug'] value
         $user->getUsername(), 
         $_CONFIG->debug_name,
         $_CONFIG->debug_mode
@@ -38,7 +37,8 @@
 
     $cond = new Condition(
         $_PATH->get('Conditions'),
-        $_PATH->get('Counter', 'relative', $_CONFIG->login_counter_file)
+        $_PATH->get('Counter', 'relative', $_CONFIG->login_counter_file),
+        $_CONFIG->hide_flagged_conditions
     );
     $cond->selectedCondition($_GET['Condition']);
 
@@ -96,13 +96,18 @@
     #### Set user's condition
     $cond->assignCondition();
     // modify paths based on assigned condition
-    $_PATH->loadDefault('Stimuli',   $cond->stimuli()   );  // are these necessary anymore?
-    $_PATH->loadDefault('Procedure', $cond->procedure() );  // are these necessary anymore?
 
 
     require 'controlFiles.class.php';
     require 'procedure.class.php';
     require 'stimuli.class.php';
+    // require 'trialTypes.class.php';
+    // $trialTypes = new trialTypes(
+    //     $_PATH->get('Trial Types'),
+    //     $_PATH->get('Custom Trial Types'),
+    //     $_PATH->get('default scoring'),
+    //     $_PATH
+    // );
 
     $procedure = new procedure(
         $_PATH->get('Procedure Dir'),
@@ -129,6 +134,21 @@
     );
     $status->writeBegin();
 
+    // check if procedure and stimuli files have unique column names
+    $procedure->overlap( $stimuli->getKeys() );
+
+    $procedure->shuffle();
+    $stimuli->shuffle();
+
+
+    var_dump($user, $cond, $debug, $errors, $revisit, $status, $procedure, $stimuli);
+    if ($errors->arePresent()) {
+        // redirects to a page where the erros are printed and shows a continue to experiment button
+        header("Location: " . $_PATH->get('Final Questions Page'));
+    } else {
+
+    }
+    
 // var_dump($procedure);
 
 // echo 'hello world';
@@ -263,115 +283,115 @@ exit;
     ###############################################################################
     // Setting up all the ['Response'] keys that will be needed during the experiment
     // Also checks scoring files if that trial type lists some required columns
-    $proc = GetFromFile($_FILES->proc_files.'/' . $_SESSION['Condition']['Procedure'], false); // load procedure file without padding
-    $allColumnsNeeded = array();
-    $allColumnsOutput = array();
-    foreach ($trialTypes as $type => $info) {
-        if (isset($info['files']['helper'])) {
-            $neededColumns = array();
-            $outputColumns = array();
-            include $info['files']['helper'];
-            $trialTypes[$type]['neededColumns'] = $neededColumns;
-            $trialTypes[$type]['outputColumns'] = $outputColumns;
-            if (isset($info['levels'][0])) {
-                $allColumnsNeeded += array_flip($neededColumns);
-                $allColumnsOutput += array_flip($outputColumns);
-            }
-        }
-    }
-    foreach ($trialTypes as $type => $info) {
-        foreach ($info['levels'] as $postNumber => $null) {
-            if ($postNumber === 0) continue;
-            foreach ($info['neededColumns'] as $column) {
-                $column = 'Post ' . $postNumber . ' ' . $column;
-                $allColumnsNeeded[$column] = true;
-            }
-            foreach ($info['outputColumns'] as $column) {
-                $column = 'post'  . $postNumber . '_' . $column;
-                $allColumnsOutput[$column] = true;
-            }
-        }
-    }
-    foreach ($allColumnsOutput as &$column) {
-        $column = null;
-    }
-    unset($column);
+    // $proc = GetFromFile($_FILES->proc_files.'/' . $_SESSION['Condition']['Procedure'], false); // load procedure file without padding
+    // $allColumnsNeeded = array();
+    // $allColumnsOutput = array();
+    // foreach ($trialTypes as $type => $info) {
+    //     if (isset($info['files']['helper'])) {
+    //         $neededColumns = array();
+    //         $outputColumns = array();
+    //         include $info['files']['helper'];
+    //         $trialTypes[$type]['neededColumns'] = $neededColumns;
+    //         $trialTypes[$type]['outputColumns'] = $outputColumns;
+    //         if (isset($info['levels'][0])) {
+    //             $allColumnsNeeded += array_flip($neededColumns);
+    //             $allColumnsOutput += array_flip($outputColumns);
+    //         }
+    //     }
+    // }
+    // foreach ($trialTypes as $type => $info) {
+    //     foreach ($info['levels'] as $postNumber => $null) {
+    //         if ($postNumber === 0) continue;
+    //         foreach ($info['neededColumns'] as $column) {
+    //             $column = 'Post ' . $postNumber . ' ' . $column;
+    //             $allColumnsNeeded[$column] = true;
+    //         }
+    //         foreach ($info['outputColumns'] as $column) {
+    //             $column = 'post'  . $postNumber . '_' . $column;
+    //             $allColumnsOutput[$column] = true;
+    //         }
+    //     }
+    // }
+    // foreach ($allColumnsOutput as &$column) {
+    //     $column = null;
+    // }
+    // unset($column);
     
     
-    foreach (array_keys($allColumnsNeeded) as $column) {
-        $errors = keyCheck($proc, $column, $errors, $_SESSION['Condition']['Procedure']);
-    }
+    // foreach (array_keys($allColumnsNeeded) as $column) {
+    //     $errors = keyCheck($proc, $column, $errors, $_SESSION['Condition']['Procedure']);
+    // }
     
-    include 'shuffleFunctions.php';
+    // include 'shuffleFunctions.php';
     #### Create $_SESSION['Trials'] 
     #### Load all Stimuli and Procedure info for this participant's condition then combine to create the experiment
     // load stimuli for this condition then block shuffle
-    $cleanStimuli = GetFromFile($_FILES->stim_files.'/' . $_SESSION['Condition']['Stimuli']);
-    $stimuli = multiLevelShuffle($cleanStimuli);
-    $stimuli = shuffle2dArray($stimuli, $_CONFIG->stop_at_login);
+    // $cleanStimuli = GetFromFile($_FILES->stim_files.'/' . $_SESSION['Condition']['Stimuli']);
+    // $stimuli = multiLevelShuffle($cleanStimuli);
+    // $stimuli = shuffle2dArray($stimuli, $_CONFIG->stop_at_login);
     $_SESSION['Stimuli'] = $stimuli;
     
     // load and block shuffle procedure for this condition
-    $cleanProcedure = GetFromFile($_FILES->proc_files.'/' . $_SESSION['Condition']['Procedure']);
+    // $cleanProcedure = GetFromFile($_FILES->proc_files.'/' . $_SESSION['Condition']['Procedure']);
     
-    $addColumns = array('Text');
-    foreach ($addColumns as $add) {
-        foreach ($trialTypeColumns as $number => $colName) {                                // check all trial type levels we found
-            if ($number == 0) {
-                $prefix = '';
-            } else {
-                $prefix = 'Post' . ' ' . $number . ' ';
-            }
-            $column = $prefix . $add;
-            addColumn($cleanProcedure, $column);                // this will only add columns if they don't already exist; nothing is overwritten
-        }
-    }
+    // $addColumns = array('Text');
+    // foreach ($addColumns as $add) {
+    //     foreach ($trialTypeColumns as $number => $colName) {                                // check all trial type levels we found
+    //         if ($number == 0) {
+    //             $prefix = '';
+    //         } else {
+    //             $prefix = 'Post' . ' ' . $number . ' ';
+    //         }
+    //         $column = $prefix . $add;
+    //         addColumn($cleanProcedure, $column);                // this will only add columns if they don't already exist; nothing is overwritten
+    //     }
+    // }
     
-    $procedure = multiLevelShuffle($cleanProcedure);
-    $procedure = shuffle2dArray($procedure, $_CONFIG->stop_at_login);
+    // $procedure = multiLevelShuffle($cleanProcedure);
+    // $procedure = shuffle2dArray($procedure, $_CONFIG->stop_at_login);
     
     $_SESSION['Procedure'] = $procedure;
     
     // Load entire experiment into $Trials[1-X] where X is the number of trials
-    $Trials = array(0=> 0);
-    $procedureLength = count($procedure);
-    for ($count=2; $count<$procedureLength; $count++) {
-        // $Trials[$count-1] = makeTrial($procedure[$count]['Item']);
-        $items = rangeToArray($procedure[$count]['Item']);
-        $stim = array();
-        foreach ($items as $item) {
-            if (isset($stimuli[$item]) and is_array($stimuli[$item])) {
-                foreach ($stimuli[$item] as $column => $value) {
-                    $stim[$column][] = $value;
-                }
-            }
-        }
-        if ($stim === array()) {
-            foreach ($stimuli[2] as $column => $value) {
-                $stim[$column][] = '';
-            }
-        }
-        foreach ($stim as $column => $valueArray) {
-            $Trials[$count-1]['Stimuli'][$column] = implode('|', $valueArray);
-        }
-        // $Trials[$count-1]['Stimuli']    = $stimuli[ ($procedure[$count]['Item']) ];         // adding 'Stimuli', as an array, to each position of $Trials
-        $Trials[$count-1]['Procedure']  = $procedure[$count];                               // adding 'Procedure', as an array, to each position of $Trials
-        $Trials[$count-1]['Response']   = $allColumnsOutput;
+    // $Trials = array(0=> 0);
+    // $procedureLength = count($procedure);
+    // for ($count=2; $count<$procedureLength; $count++) {
+    //     // $Trials[$count-1] = makeTrial($procedure[$count]['Item']);
+    //     $items = rangeToArray($procedure[$count]['Item']);
+    //     $stim = array();
+    //     foreach ($items as $item) {
+    //         if (isset($stimuli[$item]) and is_array($stimuli[$item])) {
+    //             foreach ($stimuli[$item] as $column => $value) {
+    //                 $stim[$column][] = $value;
+    //             }
+    //         }
+    //     }
+    //     if ($stim === array()) {
+    //         foreach ($stimuli[2] as $column => $value) {
+    //             $stim[$column][] = '';
+    //         }
+    //     }
+    //     foreach ($stim as $column => $valueArray) {
+    //         $Trials[$count-1]['Stimuli'][$column] = implode('|', $valueArray);
+    //     }
+    //     // $Trials[$count-1]['Stimuli']    = $stimuli[ ($procedure[$count]['Item']) ];         // adding 'Stimuli', as an array, to each position of $Trials
+    //     $Trials[$count-1]['Procedure']  = $procedure[$count];                               // adding 'Procedure', as an array, to each position of $Trials
+    //     $Trials[$count-1]['Response']   = $allColumnsOutput;
         
-        // on trials with no Stimuli info (e.g., freerecall) keep the same Stimuli structure but fill with 'n/a' values
-        // I need a consistent Trial structure to do all of the automatic output creation I do later on
-        if ($Trials[$count-1]['Stimuli'] == NULL) {
-            $stim       =& $Trials[$count-1]['Stimuli'];
-            $stim       =  $stimuli[2];
-            $stimKey    =  array_keys($stim);
-            $empty      =  array_fill_keys($stimKey, 'n/a');
-            $Trials[$count-1]['Stimuli'] = $empty;
-        }
-        if ($count == ($procedureLength-1)) {                               // when the last trial has been loaded
-            $Trials[$count] = cleanTrial($Trials[$count-1]);                    // return a copy of the last trial without any values in it
-            $Trials[$count]['Procedure']['Item'] = 'ExperimentFinished';        // add this flag so we know when participants are done with all sessions
-        }
-    }
+    //     // on trials with no Stimuli info (e.g., freerecall) keep the same Stimuli structure but fill with 'n/a' values
+    //     // I need a consistent Trial structure to do all of the automatic output creation I do later on
+    //     if ($Trials[$count-1]['Stimuli'] == NULL) {
+    //         $stim       =& $Trials[$count-1]['Stimuli'];
+    //         $stim       =  $stimuli[2];
+    //         $stimKey    =  array_keys($stim);
+    //         $empty      =  array_fill_keys($stimKey, 'n/a');
+    //         $Trials[$count-1]['Stimuli'] = $empty;
+    //     }
+    //     if ($count == ($procedureLength-1)) {                               // when the last trial has been loaded
+    //         $Trials[$count] = cleanTrial($Trials[$count-1]);                    // return a copy of the last trial without any values in it
+    //         $Trials[$count]['Procedure']['Item'] = 'ExperimentFinished';        // add this flag so we know when participants are done with all sessions
+    //     }
+    // }
     
     
     
@@ -384,7 +404,7 @@ exit;
     
     
     #### Figuring out what the output filename will be
-    $outputFile = ComputeString($_CONFIG->output_file_name) . $_CONFIG->output_file_ext;
+    // $outputFile = ComputeString($_CONFIG->output_file_name) . $_CONFIG->output_file_ext;
     $_SESSION['Output File'] = "{$_FILES->raw_output}/{$outputFile}";
     $_SESSION['Start Time']  = date('c');
     
