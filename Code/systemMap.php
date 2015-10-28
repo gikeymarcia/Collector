@@ -50,11 +50,12 @@
                     '{var}' => array (
                         'Dir Name' => 'Custom Trial Type Dir',
                         
-                        'display.php' => 'Custom Trial Display',
-                        'helper.inc' => 'Custom Trial Helper',
-                        'scoring.php' => 'Custom Trial Scoring',
-                        'script.js' => 'Custom Trial Script',
-                        'style.css' => 'Custom Trial Style',
+                        'display.php'   => 'Custom Trial Display',
+                        'helper.inc'    => 'Custom Trial Helper',
+                        'scoring.php'   => 'Custom Trial Scoring',
+                        'script.js'     => 'Custom Trial Script',
+                        'style.css'     => 'Custom Trial Style',
+                        'validator.php' => 'Custom Trial Validator',
                     ),
                 ),
             ),
@@ -123,15 +124,16 @@
             
             'login.php' => 'Login',
             
-            'errors.class.php'        => 'Errors Class',
-            'users.class.php'         => 'Users Class',
-            'conditions.class.php'    => 'Conditions Class',
-            'debug.class.php'         => 'Debug Class',
-            'status.class.php'        => 'Status Class',
-            'returnVisitor.class.php' => 'Return Class',
-            'controlFiles.class.php'  => 'Control Files Class',
-            'procedure.class.php'     => 'Procedure Class',
-            'stimuli.class.php'       => 'Stimuli Class',
+            'errors.class.php'         => 'Errors Class',
+            'users.class.php'          => 'Users Class',
+            'conditions.class.php'     => 'Conditions Class',
+            'debug.class.php'          => 'Debug Class',
+            'status.class.php'         => 'Status Class',
+            'returnVisitor.class.php'  => 'Return Class',
+            'controlFiles.class.php'   => 'Control Files Class',
+            'procedure.class.php'      => 'Procedure Class',
+            'stimuli.class.php'        => 'Stimuli Class',
+            'trialValidator.class.php' => 'Trial Validator Class',
             
             'nojs.php' => 'No JS',
             
@@ -194,11 +196,12 @@
                 '{var}' => array (
                     'Dir Name' => 'Trial Type Dir',
                     
-                    'display.php' => 'Trial Display',
-                    'helper.php' => 'Trial Helper',
-                    'scoring.php' => 'Trial Scoring',
-                    'script.js' => 'Trial Script',
-                    'style.css' => 'Trial Style',
+                    'display.php'   => 'Trial Display',
+                    'helper.php'    => 'Trial Helper',
+                    'scoring.php'   => 'Trial Scoring',
+                    'script.js'     => 'Trial Script',
+                    'style.css'     => 'Trial Style',
+                    'validator.php' => 'Trial Validator',
                 ),
             ),
         ),
@@ -209,11 +212,11 @@
             '{Current Experiment}-Data{Data Sub Dir}' => array (
                 'Dir Name' => 'Current Data Dir',
                 
-                'DemographicsData.csv' => 'Demographics Data',
+                'DemographicsData.csv'   => 'Demographics Data',
                 'FinalQuestionsData.csv' => 'Final Questions Data',
-                'InstructionsData.csv' => 'Instructions Data',
-                'Status_Begin.csv' => 'Status Begin Data',
-                'Status_End.csv' => 'Status End Data',
+                'InstructionsData.csv'   => 'Instructions Data',
+                'Status_Begin.csv'       => 'Status Begin Data',
+                'Status_End.csv'         => 'Status End Data',
                 
                 'Counter' => array (
                     'Dir Name' => 'Counter Dir',

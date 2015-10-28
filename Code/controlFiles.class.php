@@ -15,6 +15,7 @@ class controlFileSetup
     protected $files;
     protected $stitched = array();
     protected $shuffled = false;
+    protected $rowOrigins = array();
 
     /**
      * Reads in control files and combines them into
@@ -39,10 +40,18 @@ class controlFileSetup
     protected function readFiles()
     {
         foreach ($this->files as $file) {
-            $fullPath = $this->dir . '/' . trim($file);
+            $file = trim($file);
+            $fullPath = $this->dir . '/' . $file;
             $this->exists($fullPath);
             $data = getFromFile($fullPath, false);
             $this->stitch($data);
+            foreach ($data as $i => $row) {
+                // I'm using the ? char as a delimiter
+                // this way, if I find out later that row 328 in the proc file has some error,
+                // I can check and see which file it came from, and which row in that file,
+                // even though several files may have been stitched together
+                $this->rowOrigins[] = $file . '?' . $i;
+            }
         }
     }
     /**
@@ -258,6 +267,25 @@ class controlFileSetup
             ) {
                 $validShuffles++;
             }
+        }
+    }
+    
+    /**
+     * Finds the filename and actual row number of a row in the stitched procedure
+     * @param int $i index of procedure to get origins
+     * @return array assoc array with indices 'filename' and 'row'
+     */
+    public function getRowOrigin($i) {
+        if (!isset($this->rowOrigins[$i])) {
+            // issue error
+            $errMsg = "Cannot get row origins for row $i in ".get_class($this).": Row does not exist";
+            trigger_error($errMsg, E_USER_WARNING);
+            return false;
+        } else {
+            $rowOrig = $this->rowOrigins[$i];
+            $rowOrig = explode('?', $rowOrig);
+            $rowOrig = array('filename' => $rowOrig[0], 'row' => $rowOrig[1]+2);
+            return $rowOrig;
         }
     }
 

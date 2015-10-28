@@ -165,7 +165,13 @@
 
     $procedure->shuffle();
     $stimuli->shuffle();
-
+    
+    $doTrialValidations = true;
+    if ($doTrialValidations) {
+        require $_PATH->get('Trial Validator Class');
+        $trialValidator = new TrialValidator($stimuli, $procedure, $errors);
+    }
+    
 
     var_dump($user, $cond, $debug, $errors, $revisit, $status, $procedure, $stimuli);
     if ($errors->arePresent()) {

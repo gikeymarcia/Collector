@@ -674,7 +674,8 @@ function getTrialTypeFiles($trialTypeName) {
         'scoring',
         'helper',
         'script',
-        'style'
+        'style',
+        'validator'
     );
     
     $foundFiles = array();
