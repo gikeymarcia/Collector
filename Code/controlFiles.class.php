@@ -241,7 +241,7 @@ class controlFileSetup
             foreach ($doubles as $columnName) {
                 $msg .= "<li>$columnName</li>";
             }
-            echo "<ol>";
+            $msg .= "</ol>";
             global $errors;
             $errors->add($msg);
         }
