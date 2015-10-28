@@ -227,11 +227,12 @@ class controlFileSetup
             }
         }
         if (count($doubles) > 0) {
-            $msg = '<ol>Your stimuli and procedure files cannot contain column(s) with the same name(s)<br>
-            The following columns are in both your stimuli and procedure file:<br>';
+            $msg = "<ol>Your stimuli and procedure files cannot contain column(s) with the same name(s)<br>
+            The following columns are in both your stimuli and procedure file:<br>";
             foreach ($doubles as $columnName) {
-                $msg .= '<li>' . $columnName . '</li>';
+                $msg .= "<li>$columnName</li>";
             }
+            echo "<ol>";
             global $errors;
             $errors->add($msg);
         }
