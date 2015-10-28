@@ -82,12 +82,12 @@ class Condition
             $index = $log % count($validConds);
             $this->userCondition = $validConds[$index];
             $this->incrementLog($log);
-            $this->assignedCondition = true;
+            $this->assignedCondition = $index;
         } else {
             $index = $this->selection;
             if (isset($validConds[$index])) {
                 $this->userCondition = $validConds[$index];
-                $this->assignedCondition = true;
+                $this->assignedCondition = $index;
             }
         }        
     }
@@ -134,6 +134,7 @@ class Condition
     {
         if(is_array($array)) {
             $this->userCondition = $array;
+            $this->assignedCondition = 'overridden-' . microtime(true);
         }
     }
     /**
@@ -180,7 +181,7 @@ class Condition
      */
     public function stimuli()
     {
-        if ($this->assignedCondition === true) {
+        if ($this->assignedCondition !== false) {
             return $this->userCondition['Stimuli'];
         }
     }
@@ -190,7 +191,7 @@ class Condition
      */
     public function procedure()
     {
-        if ($this->assignedCondition === true) {
+        if ($this->assignedCondition !== false) {
             return $this->userCondition['Procedure'];
         }
     }
@@ -200,7 +201,7 @@ class Condition
      */
     public function description()
     {
-        if ($this->assignedCondition === true) {
+        if ($this->assignedCondition !== false) {
             return $this->userCondition['Condition Description'];
         }
     }
@@ -210,7 +211,7 @@ class Condition
      */
     public function notes()
     {
-        if ($this->assignedCondition === true) {
+        if ($this->assignedCondition !== false) {
             return $this->userCondition['Condition Notes'];
         }
     }
@@ -220,9 +221,16 @@ class Condition
      */
     public function get()
     {
-        if ($this->assignedCondition === true) {
+        if ($this->assignedCondition !== false) {
             return $this->userCondition;
         }
+    }
+    /**
+     * Gets the index, which is sort of the row number, of the assigned condition
+     * @return bool|int|string false if not set, int if assigned typically, string if overridden
+     */
+    public function getAssignedIndex() {
+        return $this->assignedCondition;
     }
     /**
      * Allows you to change the default error handler object, $errors, to one of your choosing

@@ -895,6 +895,31 @@ function removeLabel($input, $label, $extendLabel = true)
     }
 }
 /**
+ * Get all the file paths inside a given dir
+ * @param string $dir Directory to scan
+ * @return array List of complete paths to file
+ */
+function scanDirRecursively($dir) {
+    $scan = scandir($dir);
+    foreach ($scan as $i => $entry) {
+        if ($entry === '.' || $entry === '..') {
+            unset($scan[$i]);
+            continue;
+        }
+        
+        $path = "$dir/$entry";
+        if (is_dir($path)) {
+            unset($scan[$i]);
+            foreach (scanDirRecursively($path) as $subPath) {
+                $scan[] = $subPath;
+            }
+        } else {
+            $scan[$i] = $path;
+        }
+    }
+    return array_values($scan);
+}
+/**
  * Determine if the string refers to an audio or image file and generate tags.
  * @param string $string
  * @return string

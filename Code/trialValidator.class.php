@@ -95,6 +95,18 @@ class TrialValidator
         }
     }
     
+    /**
+     * Checks if any errors have been found by this class
+     * @return bool
+     */
+    public function isValid() {
+        if ($this->foundErrors === array()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     protected function sendErrorsToErrorController() {
         foreach ($this->foundErrors as $errMsg) {
             $this->oErr->add($errMsg);

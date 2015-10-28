@@ -235,6 +235,12 @@
                     
                     '{Output}' => 'Experiment Output',
                 ),
+                
+                'validations' => array (
+                    'Dir Name' => 'Trial Validations Dir',
+                    
+                    'scanTime-{Condition Index}.txt' => 'Trial Validation Scan Time',
+                ),
             ),
         ),
         
