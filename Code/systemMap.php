@@ -135,6 +135,8 @@
             'stimuli.class.php'        => 'Stimuli Class',
             'trialValidator.class.php' => 'Trial Validator Class',
             
+            'trialValidator.require.php' => 'Trial Validator Require',
+            
             'nojs.php' => 'No JS',
             
             'parse.class.php' => 'Parse',
