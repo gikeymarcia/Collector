@@ -11,7 +11,12 @@
 
   <link rel="stylesheet" href="<?= $_PATH->get('Global CSS', 'url') ?>">
   <link rel="stylesheet" href="<?= $_PATH->get('Jquery UI Custom CSS', 'url') ?>">
-  <script src="<?= $_PATH->get('Jquery', 'url') ?>"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script>
+    if (typeof jQuery === "undefined") {
+      document.write("<script src='<?= $_PATH->get('Jquery', 'url') ?>'><\/script>");
+    }
+  </script>
   <script src="<?= $_PATH->get('Jquery UI Custom', 'url') ?>"></script>
   <script src="<?= $_PATH->get('Collector JS', 'url') ?>"></script>
   
