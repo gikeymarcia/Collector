@@ -9,7 +9,7 @@
  *     OR it can be a series of files
  *     e.g., 'Instructions.csv, Demo.csv, FinalQuestions.csv'
  */
-class controlFileSetup
+class controlFile
 {
     protected $dir;
     protected $files;

@@ -3,7 +3,7 @@
  * Handles the setting, getting, and validating of username given to Collector
  * Also handles setting of user ID
  */
-class User
+class user
 {
     protected $username;
     protected $id;

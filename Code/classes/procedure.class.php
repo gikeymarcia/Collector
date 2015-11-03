@@ -3,7 +3,7 @@
 *  Controls the error checking for procedure file
 *  Parent class: controlFileSetup handles the reading and stitching together of files
 */
-class procedure extends controlFileSetup
+class procedure extends controlFile
 {
     /**
      * Will run all of the error checking required for procedure files

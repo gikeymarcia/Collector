@@ -2,6 +2,17 @@
 /*  Collector
     A program for running experiments on the web
  */
+
+    // automatically load classes when they are needed
+    function autoClassLoader($className) {
+        $loc = "classes/$className.class.php";
+        if (is_file($loc)) {
+            require $loc;
+        } else {
+            echo "Object $className is not found";
+        }
+    }
+    spl_autoload_register("autoClassLoader");
     require 'initiateCollector.php';
     
     // reset session so it doesn't contain any information from a previous login attempt
@@ -30,27 +41,13 @@
     
     
     $_CONFIG = getCollectorSettings();
-    
-    
     $_SESSION['Debug'] = $_CONFIG->debug_mode;
 
-    // $title = 'Preparing the Experiment';
-
-    // login specific classes
-    // later, maybe replace these with autoloaders
-    require $_PATH->get('Errors Class');
-    require $_PATH->get('Users Class');
-    require $_PATH->get('Conditions Class');
-    require $_PATH->get('Debug Class');
-    require $_PATH->get('Status Class');
-
-
     // login objects
-    $errors = new ErrorController();
-
-    $user = new User($_GET['Username']);
+    $errors = new errorController();
+    $user = new user($_GET['Username']);
     
-    $debug = new DebugController(           // sets $_SESSION['Debug'] value
+    $debug = new debugController(           // sets $_SESSION['Debug'] value
         $user->getUsername(), 
         $_CONFIG->debug_name,
         $_CONFIG->debug_mode
@@ -61,7 +58,7 @@
         $_PATH->setDefault('Data Sub Dir', '');
     }
 
-    $cond = new Condition(
+    $cond = new conditionController(
         $_PATH->get('Conditions'),
         $_PATH->get('Counter', 'relative', $_CONFIG->login_counter_file),
         $_CONFIG->hide_flagged_conditions
@@ -80,7 +77,7 @@
     
 
     #### Dealing with people returning to the experiment
-    require $_PATH->get('Return Class');
+    // require $_PATH->get('Return Class');
     $revisit = new ReturnVisitController(
         $user->getUsername(), 
         $_PATH->get('JSON Dir'), 
@@ -96,7 +93,7 @@
             $user->setSession( $revisit->getSession() );    // give $user correct session #
             
             // make status object that will write status begin/end
-            $status = new status;
+            $status = new statusController();
             $status->setConditionInfo(                      // pass $status the "row" of previous login condition
                 $revisit->oldCondition()
             );
@@ -125,9 +122,9 @@
     // modify paths based on assigned condition
 
 
-    require $_PATH->get('Control Files Class');
-    require $_PATH->get('Procedure Class');
-    require $_PATH->get('Stimuli Class');
+    // require $_PATH->get('Control Files Class');
+    // require $_PATH->get('Procedure Class');
+    // require $_PATH->get('Stimuli Class');
     // require 'trialTypes.class.php';
     // $trialTypes = new trialTypes(
     //     $_PATH->get('Trial Types'),
@@ -145,7 +142,7 @@
         $cond->stimuli()
     );
 
-    $status = new status();
+    $status = new statusController();
     $status->updateUser(
         $user->getUsername(),
         $user->getID(),
@@ -171,8 +168,9 @@
     #### Trial Validation
     require $_PATH->get('Trial Validator Require');
     
-
-    var_dump($user, $cond, $debug, $errors, $revisit, $status, $procedure, $stimuli);
+    echo "<pre>";
+        var_dump($user, $cond, $debug, $errors, $revisit, $status, $procedure, $stimuli);
+    echo "</pre>";
     if ($errors->arePresent()) {
         // redirects to a page where the erros are printed and shows a continue to experiment button
         header("Location: " . $_PATH->get('Final Questions Page'));

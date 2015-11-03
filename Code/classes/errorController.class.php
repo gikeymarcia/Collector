@@ -2,7 +2,7 @@
 /**
  * Used to keep track of error messages during the login process
  */
-class ErrorController
+class errorController
 {
     protected $count = 0;
     protected $details = array();

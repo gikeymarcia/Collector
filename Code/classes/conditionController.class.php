@@ -13,7 +13,7 @@
  *     - $this->notes()         :   @return 'Condition Notes' cell string
  *     - $this->get()           :   @return  keyed array of assigned condition (row)
  */
-class Condition
+class conditionController
 {
     protected $selection;                 // condition selected from $_GET
     protected $location;                  // how to get to Conditions.csv

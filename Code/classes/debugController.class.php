@@ -1,5 +1,5 @@
 <?php
-class DebugController
+class debugController
 {
     protected $debugMode = false;   // debugCheck() can change this to true
     protected $username;

@@ -3,7 +3,7 @@
  * Controls the error checking for stimuli files
 *  Parent class: controlFileSetup handles the reading and stitching together of files
  */
-class stimuli extends controlFileSetup
+class stimuli extends controlFile
 {
     public function errorCheck()
     {
