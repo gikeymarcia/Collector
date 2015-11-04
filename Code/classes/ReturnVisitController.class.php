@@ -77,13 +77,13 @@ class ReturnVisitController
         // what to do when reloading to done.php
         if ($this->done === true) {
             $_SESSION['alreadyDone'] = true;
-            header("Location: {$this->doneLink}");
+            header("Location: $this->doneLink");
             exit;
         }
         // what to do when reloading to experiment.php
         elseif ($this->done === false) {
             $_SESSION['Start Time']  = date('c');
-            header("Location: {$this->expLink}");
+            header("Location: $this->expLink");
             exit;
         }
     }
@@ -220,11 +220,10 @@ class ReturnVisitController
         $things['late']     = $this->lateMsg;
 
         foreach ($things as $var => $value) {
-            echo "<div><b>{$var}</b><br>{$value}</div>";
+            echo "<div><b>$var</b><br>$value</div>";
         }
         var_dump('last finish', $this->oldSession['LastFinish']);
         var_dump('CurrentRow',  $this->currentRow);
-        // var_dump($this);
     }
     public function getSession()
     {

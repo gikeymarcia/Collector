@@ -22,17 +22,19 @@ class conditionController
     protected $ConditionsCSV;             // GetFromFile() load of Conditiions.csv
     protected $assignedCondition = false; // tells whether a conditions has been assigned or not
     protected $userCondition;             // array (keys by column) of the assigned conditon
-    protected $errorHandler = 'errors';   // variable name of error handler object
+    protected $errObj;                    // name of error handler object
 
 
     /**
      * This class needs the following information to function
-     * @param string $conditionsLoc relative path to Conditions.csv
-     * @param string $counterDir    relative path to the directory where the counter is held
-     * @param string $logLocation   relative path to the login counter file 
+     * @param string            $conditionsLoc relative path to Conditions.csv
+     * @param string            $counterDir    relative path to the directory where the counter is held
+     * @param string            $logLocation   relative path to the login counter file
+     * @param errorController   $errorHandler  object that will capture and log
      */
-    public function __construct($conditionsLoc, $logLocation, $showFlagged = false)
+    public function __construct($conditionsLoc, $logLocation, $showFlagged = false, errorController $errorHandler)
     {
+        $this->errObj   = $errorHandler;
         $this->location = $conditionsLoc;
         $this->logLocation = $logLocation;
         $this->showFlagged = $showFlagged;
@@ -65,9 +67,8 @@ class conditionController
         if (is_numeric($selection) OR ($selection == 'Auto')) {
             $this->selection = $selection;
         } else {
-            global $$this->errorHandler;
-            $msg = 'Your condition selection: "' . $selection . '" is not valid';
-            $$this->errorHandler->add($msg, true);
+            $msg = "Your condition selection: $selection is not valid";
+            $this->errObj->add($msg, true);
         }
     }
     /**
@@ -142,12 +143,15 @@ class conditionController
      */
     public function info()
     {
-        echo '<div>Selected condition: ' . $this->selection . '<ol>';
+        // echo '<div>Selected condition: ' . $this->selection . '<ol>';
+        echo "<div>Selected contion: $this->selection <ol>";
         foreach ($this->ConditionsCSV as $pos => $row) {
-            echo '<li>' . '<strong>stim:</strong> ' . $row['Stimuli'] . '<br>'
-               . '<strong>proc:</strong> ' . $row['Procedure'] . '</li><br>';
+            echo "<li>
+                      <strong>stim:</strong>{$row['Stimuli']}<br>
+                      <strong>proc:</strong>{$row['Procedure']}
+                  </li>";
         }
-        echo '</li></div>';
+        echo '</ol></div>';
     }
     /**
      * Makes sure the conditions file can be found.
@@ -157,21 +161,21 @@ class conditionController
      */
     protected function conditionsExists()
     {
-        global $$this->errorHandler;
+        
         if (!FileExists($this->location)) {
-            $msg = 'Cannot find Conditons.csv at: ' . $this->location;
-            $$this->errorHandler->add($msg, true);
+            $msg = "Cannot find Conditions.csv at $this->location";
+            $this->errObj->add($msg, true);
         }
     }
     
     protected function requiredColumns()
     {
-        global $$this->errorHandler;
+        
         $requiredColumns = array('Number', 'Stimuli', 'Procedure');
         foreach ($requiredColumns as $pos => $col) {
             if(!isset($this->ConditionsCSV[0][$col])) {
-                $msg = 'Your Conditions.csv file is missing the "' . $col . '" column';
-                $$this->errorHandler->add($msg, true);
+                $msg = "Your Conditions.csv file is missing the $col column";
+                $this->errObj->add($msg, true);
             }
         }
     }
@@ -237,9 +241,9 @@ class conditionController
      * @param  string $varName will look for variable with the name of the string contents
      * for example, 'mikey' would cause the errors to be reported to `global $mikey`
      */
-    public function changeErrorHandler($customErrorHandler)
+    public function changeErrorHandler(errorController $newErrHandler)
     {
-        $this->errorHandler = $customErrorHandler;
+        $this->errObj = $newErrHandler;
     }
 }
 ?>

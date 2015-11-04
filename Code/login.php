@@ -48,7 +48,6 @@
         $_GET['Username'],
         $errors
     );
-    $user->printData();
     
     $debug = new debugController(           // sets $_SESSION['Debug'] value
         $user->getUsername(), 
@@ -65,7 +64,8 @@
     $cond = new conditionController(
         $_PATH->get('Conditions'),
         $_PATH->get('Counter', 'relative', $_CONFIG->login_counter_file),
-        $_CONFIG->hide_flagged_conditions
+        $_CONFIG->hide_flagged_conditions,
+        $errors
     );
     $cond->selectedCondition($_GET['Condition']);
     

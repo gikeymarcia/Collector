@@ -13,21 +13,8 @@ class user
 
     public function __construct($name, errorController $errorController)
     {
-        $this->setUsername($name);
         $this->errObj = $errorController;
-        #####
-        echo "<pre>";
-            $test = get_class_methods($errorController);
-            var_dump($test);
-            var_dump($errorController);
-            echo "<br><br>";
-
-            $test2= get_class_methods($this->errObj);
-            var_dump($this->errObj);
-            var_dump($test2);
-        echo "</pre>";
-        ####
-        // exit;
+        $this->setUsername($name);
     }
     /**
      * Takes a string and sets it as the username
@@ -53,26 +40,17 @@ class user
     protected function validateUsername ()
     {
         $this->checkNameLength();
-        
     }
     protected function checkNameLength()
     {
         $length = strlen($this->username);
         if ($length < 4) {
-        // echo "<pre>";
-        //     $test = get_class_methods($this->errObj);
-        //     var_dump($test);
-        // echo "</pre>";
-        // global $this->errObj;
             $msg = 'Login username must longer than 3 characters';
-            var_dump($this->errObj);
-            var_dump(get_class_methods($this->errObj));
             $this->errObj->add($msg, false);
         } else {
             if ($this->valid !== false) {
                 $this->valid = true;
             }
-            
         }
     }
     /**
@@ -153,9 +131,9 @@ class user
      * @param  string $varName will look for variable with the name of the string contents
      * for example, 'mikey' would cause the errors to be reported to `global $mikey`
      */
-    public function changeErrorHandler(errorController $varName)
+    public function changeErrorHandler(errorController $altErrObj)
     {
-        $this->errObj = $varName;
+        $this->errObj = $altErrObj;
     }
     public function printData()
     {
