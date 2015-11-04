@@ -79,4 +79,8 @@ class debugController
         $this->username = $name;
         $this->debugCheck();
     }
+    public function toSession()
+    {
+        $_SESSION['Debug'] = $this->is_on();
+    }
 }

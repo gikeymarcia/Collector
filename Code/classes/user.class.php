@@ -9,11 +9,25 @@ class user
     protected $id;
     protected $sessionNumber = 1;
     protected $valid = null;
-    protected $errorHandler = 'errors';
+    protected $errObj;
 
-    public function __construct($name)
+    public function __construct($name, errorController $errorController)
     {
         $this->setUsername($name);
+        $this->errObj = $errorController;
+        #####
+        echo "<pre>";
+            $test = get_class_methods($errorController);
+            var_dump($test);
+            var_dump($errorController);
+            echo "<br><br>";
+
+            $test2= get_class_methods($this->errObj);
+            var_dump($this->errObj);
+            var_dump($test2);
+        echo "</pre>";
+        ####
+        // exit;
     }
     /**
      * Takes a string and sets it as the username
@@ -45,9 +59,15 @@ class user
     {
         $length = strlen($this->username);
         if ($length < 4) {
-            global $$this->errorHandler;
+        // echo "<pre>";
+        //     $test = get_class_methods($this->errObj);
+        //     var_dump($test);
+        // echo "</pre>";
+        // global $this->errObj;
             $msg = 'Login username must longer than 3 characters';
-            $$this->errorHandler->add($msg, false);
+            var_dump($this->errObj);
+            var_dump(get_class_methods($this->errObj));
+            $this->errObj->add($msg, false);
         } else {
             if ($this->valid !== false) {
                 $this->valid = true;
@@ -133,18 +153,20 @@ class user
      * @param  string $varName will look for variable with the name of the string contents
      * for example, 'mikey' would cause the errors to be reported to `global $mikey`
      */
-    public function changeErrorHandler($varName)
+    public function changeErrorHandler(errorController $varName)
     {
-        $this->errorHandler = $varName;
+        $this->errObj = $varName;
     }
     public function printData()
     {
-        echo '<div>This is what we know about the $user' .
-        '<ol>';
-            echo "<li>{$this->username}</li>";
-            echo "<li>{$this->id_is_set}</li>";
-            echo "<li>{$this->id}</li>";
-            echo "<li>{$this->valid}</li>";
-        echo '</ol></div>';
+        echo
+        "<div>This is what we know about the \$user
+             <ol>
+                <li><b>Name:</b> $this->username</li>
+                <li><b>Id#:</b> $this->id</li>
+                <li><b>is Valid:</b> $this->valid</li>
+                <li><b>Session#:</b> $this->sessionNumber</li>
+             </ol>
+         </div>";
     }
 }

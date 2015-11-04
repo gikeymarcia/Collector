@@ -41,11 +41,14 @@
     
     
     $_CONFIG = getCollectorSettings();
-    $_SESSION['Debug'] = $_CONFIG->debug_mode;
 
     // login objects
     $errors = new errorController();
-    $user = new user($_GET['Username']);
+    $user   = new user(
+        $_GET['Username'],
+        $errors
+    );
+    $user->printData();
     
     $debug = new debugController(           // sets $_SESSION['Debug'] value
         $user->getUsername(), 
@@ -57,6 +60,7 @@
     } else {
         $_PATH->setDefault('Data Sub Dir', '');
     }
+    $debug->toSession();                  // sets $_SESSION['Debug'] to a bool
 
     $cond = new conditionController(
         $_PATH->get('Conditions'),
@@ -72,8 +76,6 @@
     ) {
         include $_PATH->get('check');
     }
-// var_dump($user,'$user');
-// exit;
     
 
     #### Dealing with people returning to the experiment
@@ -120,18 +122,6 @@
     $cond->assignCondition();
     $_PATH->setDefault('Condition Index', $cond->getAssignedIndex());
     // modify paths based on assigned condition
-
-
-    // require $_PATH->get('Control Files Class');
-    // require $_PATH->get('Procedure Class');
-    // require $_PATH->get('Stimuli Class');
-    // require 'trialTypes.class.php';
-    // $trialTypes = new trialTypes(
-    //     $_PATH->get('Trial Types'),
-    //     $_PATH->get('Custom Trial Types'),
-    //     $_PATH->get('default scoring'),
-    //     $_PATH
-    // );
 
     $procedure = new procedure(
         $_PATH->get('Procedure Dir'),
