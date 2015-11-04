@@ -32,7 +32,6 @@
     // if we need to validate, use the validation class
     // if successful, record the mod times of the current scan
     if ($doTrialValidation) {
-        require $_PATH->get('Trial Validator Class');
         
         $trialValidator = new TrialValidator($stimuli, $procedure, $errors);
         
