@@ -269,14 +269,14 @@
     $data['unmatchedResp']  = implode( '|', $unmatchedResp  );
     $data['Errors']         = implode( '|', $differences    );  //and we can see how far off they were (so if we set leniency = 2, we can still which were 0, 1, or 2 off)
     
-    $currentTrial['Response'] = placeData($data, $currentTrial['Response'], $keyMod);
+    saveResponses($data);
     
     
     
     if ($expandOutput) {
     
         $stimInfo = array();
-        foreach ($currentStimuli as $header => $contents) {
+        foreach ($currentTrial['Stimuli'] as $header => $contents) {
             $stimInfo[$header] = explode('|', $contents);
         }
         
@@ -312,6 +312,6 @@
                 $extraData['Serial_strictVal']    = 0;
             }
             
-            recordTrial($extraData, false, false);
+            recordTrial($extraData);
         }
     }

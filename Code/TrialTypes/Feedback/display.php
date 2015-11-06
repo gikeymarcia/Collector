@@ -1,5 +1,6 @@
 <?php
-    $firstTrialType = trim(strtolower($currentTrial['Procedure']['Trial Type']));
+    $firstTrial = getProcedure($currentPos, 0);
+    $firstTrialType = strtolower($firstTrial['Trial Type']);
     if (!isset($text) || $text === '') {
         $text = 'The correct answer was:';
     }

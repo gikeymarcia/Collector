@@ -48,6 +48,7 @@
         $_GET['Username'],
         $errors
     );
+    $_PATH->setDefault('Output', $user->getOutputFile());
     
     $debug = new debugController(           // sets $_SESSION['Debug'] value
         $user->getUsername(), 
@@ -170,6 +171,8 @@
     
     $_SESSION['Stimuli']     = $stimuli->shuffled();
     $_SESSION['Procedure']   = $procedure->shuffled();
+    
+    $_SESSION['Responses']   = array();
     ####################################
 
 
