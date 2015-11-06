@@ -75,6 +75,70 @@
     
     $currentPos     =& $_SESSION['Position'];
     $currentPost    =& $_SESSION['PostNumber'];
+
+    ########################### DOIN' STUFF
+    $procRow  = $_SESSION['Procedure'][$currentPos];
+    $procCols = array();
+
+    if ($currentPos === 0) {
+        foreach ($procRow as $col => $val) {
+            if (substr($col, 0, 5) === 'Post ') {
+                continue;
+            } else {
+                $procCols[$col] = $val;
+            }
+        }
+    } else {
+        $colPre = "Post $currentPos ";
+        $colPreLen = strlen($colPre);
+        
+        foreach ($procRow as $col => $val) {
+            if (substr($col, 0, $colPreLen) !== $colPre) {
+                continue;
+            } else {
+                $colClean = substr($col, $colPreLen);
+                $procCols[$colClean] = $val;
+            }
+        }
+    }
+    // disregard post1 items
+    if (!isset($procCols['Item'])) {
+        $procCols['Item'] = $procRow['Item'];
+    }
+    // done getting procedure, time for stimuli
+    $items = rangeToArray($procCols['Item']);
+    $stim = array();
+    foreach ($items as $i) {
+        if(isset($_SESSION['Stimuli'][$i-2])) {
+            $stim[] = $_SESSION['Stimuli'][$i-2];
+        }
+    }
+    // if no item then populate with nothing
+    if ($stim === array()) {
+        foreach ($_SESSION['Stimuli'][0] as $key => $value) {
+            $stim[$key] = '.';
+        }
+    }
+    $stimCols = array();
+    foreach ($stim as $row) {
+        foreach ($row as $stimCol => $stimVal) {
+            $stimCols[$stimCol] = $stimVal;
+        }
+    }
+    foreach ($stimCols as $key => $value) {
+        $stimCols[$key] = implode('|', $value);
+    }
+    $currentTrial = array(
+        'Stimuli'   => $stimCols,
+        'Procedure' => $procCols
+        'Response'  => array()
+    );
+    $_SESSION['Trials'] = 
+
+////////hhhhhhhhhhhhhhhhhhh
+    
+
+
     $currentTrial   =& $_SESSION['Trials'][$currentPos];
     
     $currentStimuli =  $currentTrial['Stimuli'];
