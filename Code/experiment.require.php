@@ -84,9 +84,6 @@ function getStimuli($item) {
  * @see getProcedure(), getStimuli()
  */
 function getTrial($pos = null, $post = null) {
-    if ($pos  === null) $pos  = $_SESSION['Position'];
-    if ($post === null) $post = $_SESSION['PostNumber'];
-    
     $procedure = getProcedure($pos, $post);
     $stimuli   = getStimuli($procedure['Item']);
     
@@ -152,6 +149,10 @@ function getTrialTiming(&$max_time, $compTime) {
 function saveResponses($data, $pos = null, $post = null) {
     if ($pos  === null) $pos  = $_SESSION['Position'];
     if ($post === null) $post = $_SESSION['PostNumber'];
+    
+    if (!isset($_SESSION['Responses'][$pos])) {
+        $_SESSION['Responses'][$pos] = array();
+    }
     
     if ($post == 0) {
         foreach ($data as $col => $val) {
@@ -273,14 +274,12 @@ function recordTrial($extraData = array(), $pos = null) {
     arrayToLine($data, $_PATH->get('Experiment Output'));
 }
 /**
- * gets the next trial, whether its the next post trial or the
- * first trial of the next row. Returns false if no trials left
+ * gets the proc row index and post trial number of the next trial
  * @param $pos,  int, optional, defaults to $_SESSION['Position']
  * @param $post, int, optional, defaults to $_SESSION['PostNumber']
- * @return array|bool, array as returned by getTrial(), or false
- * @see getTrial()
+ * @return array|bool, array with position and post-trial indices, or false
  */
-function getNextTrial($pos = null, $post = null) {
+function getNextTrialIndex($pos = null, $post = null) {
     if ($pos  === null) $pos  = $_SESSION['Position'];
     if ($post === null) $post = $_SESSION['PostNumber'];
     
@@ -295,7 +294,56 @@ function getNextTrial($pos = null, $post = null) {
     
     if (!isset($_SESSION['Procedure'][$nextPos])) return false;
     
-    return getTrial($nextPos, $nextPost);
+    return array($nextPos, $nextPost);
+}
+/**
+ * gets the next trial, whether its the next post trial or the
+ * first trial of the next row. Returns false if no trials left
+ * @param $pos,  int, optional, defaults to $_SESSION['Position']
+ * @param $post, int, optional, defaults to $_SESSION['PostNumber']
+ * @return array|bool, array as returned by getTrial(), or false
+ * @see getTrial(), getNextTrialIndex()
+ */
+function getNextTrial($pos = null, $post = null) {
+    $nextIndex = getNextTrialIndex($pos, $post);
+    if ($nextIndex === false) return false;
+    
+    return getTrial($nextIndex[0], $nextIndex[1]);
+}
+/**
+ * Advances program to next trial, or sends to Done
+ * @param $pos,  int, optional, defaults to $_SESSION['Position']
+ * @param $post, int, optional, defaults to $_SESSION['PostNumber']
+ * @return nothing, doesn't return, sends a header redirect and exits
+ * @see getNextTrialIndex()
+ */
+function goToNextTrial($pos = null, $post = null) {
+    global $_PATH;
+    $nextTrial = getNextTrialIndex($pos, $post);
+    if ($nextTrial === false) {
+        $next = $_PATH->get('Final Questions Page');
+    } else {
+        $_SESSION['Position']   = $nextTrial[0];
+        $_SESSION['PostNumber'] = $nextTrial[1];
+        $next = $_PATH->get('Experiment Page');
+    }
+    header("Location: $next");
+    exit();
+}
+/**
+ * checks if its any trials exist, and if not, redirects to Done
+ * @return null, will exit out if no future trial found
+ * @see getNextTrialIndex()
+ */
+function checkIfDone() {
+    // can do some error/fraud detection here
+    global $_PATH;
+    $pos = $_SESSION['Position'];
+    if (!isset($_SESSION['Procedure'][$pos])) {
+        $_SESSION['finishedTrials'] = true;
+        header('Location: ' . $_PATH->get('Final Questions Page'));
+        exit;
+    }
 }
 /**
  * adds images from next trial to a hidden div
@@ -305,9 +353,6 @@ function getNextTrial($pos = null, $post = null) {
  * @see getNextTrial()
  */
 function precacheNext($pos = null, $post = null) {
-    if ($pos  === null) $pos  = $_SESSION['Position'];
-    if ($post === null) $post = $_SESSION['PostNumber'];
-    
     $nextTrial = getNextTrial($pos, $post);
     
     if ($nextTrial === false) return false;
@@ -323,20 +368,6 @@ function precacheNext($pos = null, $post = null) {
     echo '</div>';
     
     return true;    // just return true to mark success
-}
-/**
- * checks if its any trials exist, and if not, redirects to Done
- * @return null, will exit out if no future trial found
- * @see getTrialTrial()
- */
-function checkIfDone() {
-    // can do some error/fraud detection here
-    global $_PATH;
-    if (getNextTrial() === false) {
-        $_SESSION['finishedTrials'] = true;
-        header('Location: ' . $_PATH->get('Done'));
-        exit;
-    }
 }
 /**
  * shows all available info for trial, helpful if trial fails
@@ -360,16 +391,17 @@ function showTrialDiagnostics($pos = null, $post = null) {
         .        '<li> Condition description: '    . $clean_session['Condition']['Condition Description'] . '</li>'
         .    '</ul>'
         .    '<ul>'
-        .        '<li> Trial Number: '         . $currentPos                                  . '</li>'
-        .        '<li> Trial Type: '           . $trialType                                   . '</li>'
-        .        '<li> Trial max time: '       . $clean_currentTrial['Procedure']['Max Time'] . '</li>'
-        .        '<li> Trial Time (seconds): ' . $maxTime                                     . '</li>'
+        .        '<li> Trial Number: '   . $pos                                           . '</li>'
+        .        '<li> Trial Type: '     . $clean_currentTrial['Procedure']['Trial Type'] . '</li>'
+        .        '<li> Trial max time: ' . $clean_currentTrial['Procedure']['Max Time']   . '</li>'
         .    '</ul>'
         .    '<ul>'
-        .        '<li> Cue: '    . show($cue)    . '</li>'
-        .        '<li> Answer: ' . show($answer) . '</li>'
+        .        '<li> Cue: '    . show($clean_currentTrial['Stimuli']['Cue'])    . '</li>'
+        .        '<li> Answer: ' . show($clean_currentTrial['Stimuli']['Answer']) . '</li>'
         .    '</ul>';
-    readable($currentTrial,         "Information loaded about the current trial");
-    readable($_SESSION['Trials'],   "Information loaded about the entire experiment");
+    readable($clean_currentTrial,    "Information loaded about the current trial");
+    readable($_SESSION['Stimuli'],   "Information loaded about the stimuli");
+    readable($_SESSION['Procedure'], "Information loaded about the procedure");
+    readable($_SESSION['Responses'], "Information loaded about the responses");
     echo '</div>';
 }

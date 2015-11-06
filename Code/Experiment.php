@@ -99,22 +99,14 @@
     if ($_POST !== array()) {
         require $trialFiles['scoring'];
         if (!isset($data)) { $data = $_POST; }
-        #### merging $data into $currentTrial['Response]
         saveResponses($data);
-        
-        $nextPostLevel = getNextPostLevel();
-        
-        if ($nextPostLevel === false) {
+        $nextTrialIndex = getNextTrialIndex();
+        if (   $nextTrialIndex === false
+            || $nextTrialIndex[0] > $currentPos
+        ) {
             recordTrial();
-            $currentPos++;
-            checkIfDone();
-            $currentPost = 0;
-        } else {
-            $currentPost = $nextPostLevel;
         }
-        
-        header('Location: ' . $_PATH->get('Experiment Page'));
-        exit;
+        goToNextTrial();
     }
 
 
