@@ -33,7 +33,14 @@ class errorController
     public function printErrors()
     {
         if (count($this->details) > 0) {
-            echo '<ol>';
+            echo
+            "<style type='text/css' media='screen'>
+                .err {
+                    margin-left: .8em;
+                    margin-top:  1em;
+                }
+            </style>";
+            echo '<ol class="err">';
             foreach ($this->details as $pos => $messsage) {
                 $li = '<li>' . $messsage . '</li>';
                 echo $li;

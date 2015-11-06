@@ -159,14 +159,18 @@
     require $_PATH->get('Trial Validator Require');
     
     echo "<pre>";
-        var_dump($user, $cond, $debug, $errors, $revisit, $status, $procedure, $stimuli);
+        // var_dump($user, $cond, $debug, $errors, $revisit, $status, $procedure, $stimuli);
     echo "</pre>";
     if ($errors->arePresent()) {
-        // redirects to a page where the erros are printed and shows a continue to experiment button
-        header("Location: " . $_PATH->get('Final Questions Page'));
+        $errors->printErrors();
+        echo "<div>Oops, something has gone wrong. Email the experimenter at <b>$_CONFIG->experimenter_email</b><br>";
+        echo '<button type="button" onClick="window.location.reload(true);">Click here to refresh</button>';
+        exit;
     } else {
 
     }
+
+    
     
 // var_dump($procedure);
 

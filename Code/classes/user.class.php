@@ -147,4 +147,8 @@ class user
              </ol>
          </div>";
     }
+    public function oldVersionShim ()
+    {
+        
+    }
 }

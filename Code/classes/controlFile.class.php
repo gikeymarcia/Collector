@@ -236,10 +236,10 @@ class controlFile
             }
         }
         if (count($doubles) > 0) {
-            $msg = "<ol>Your stimuli and procedure files cannot contain column(s) with the same name(s)<br>
+            $msg = "<ol type='a'>Your stimuli and procedure files cannot contain column(s) with the same name(s)<br>
             The following columns are in both your stimuli and procedure file:<br>";
             foreach ($doubles as $columnName) {
-                $msg .= "<li>$columnName</li>";
+                $msg .= "<li><b>$columnName</b></li>";
             }
             $msg .= "</ol>";
             global $errors;
@@ -247,11 +247,19 @@ class controlFile
         }
     }
     /**
-     * Work in progress -Goal is that it correct for the Derek mistake
+     * Work in progress -Goal is that it corrects for the Derek mistake
      * @return [type] [description]
      */
     protected function checkShuffleCols()
     {
+        $cols = $this->getKeys();
+        $cols = array_flip($cols);
+        foreach ($cols as $key => &$value) {
+            $value = str_replace(" ","",$key);
+        }
+        $name = get_class($this);
+        var_dump($value, $name);
+
         $shuffleBase = 'Shuffle';
         $keys = $this->getKeys();
         // remove all columns names that don't have 'Shuffle' in them
