@@ -120,14 +120,14 @@ function prepareAliases($trial) {
 /**
  * Determines which timing to apply to the current trial.
  * @param &$max_time string indicating number of seconds to wait until trial submit, or "user"
- * @param $compTime string or int indicating value to use for $max_time if $max_time === 'computer'
+ * @param $defaultMaxTime string or int indicating value to use for $max_time if $max_time === 'computer'
  * @return string class name to add to form
  */
-function getTrialTiming(&$max_time, $compTime) {
-    if (!is_numeric($compTime)) $compTime = 'user';
+function getTrialTiming(&$max_time, $defaultMaxTime) {
+    if (!is_numeric($defaultMaxTime)) $defaultMaxTime = 'user';
     $max_time = strtolower($max_time);
     if ($max_time === 'computer' || $max_time === 'default') {
-        $max_time = $compTime;
+        $max_time = $defaultMaxTime;
     }
     if (!is_numeric($max_time)) {
         $max_time === 'user';

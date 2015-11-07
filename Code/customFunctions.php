@@ -982,50 +982,6 @@ function SortByKey(array $input, $key)
     return $input;
 }
 /**
- * Determines which timing to apply to the current trial.
- * @global string $formClass The CSS timing class to apply to form elements.
- * @global int|string $maxTime Either specifies the amount of time for the trial in
- * seconds, or is a string indicating manual ('user') or computer timing.
- * @global int|string $minTime min time of trial
- * @global int $compTime The trial's specified computer timing, if set.
- * @global int|string $timingReported The timing value indicated by the creator.
- * @global int|string $debugTime Amount of time to use when debuging, if set.
- * @global Config config The experiment configuration file.
- */
-function trialTiming()
-{
-    global $formClass;
-    global $maxTime;
-    global $minTime;
-    global $compTime;
-    global $timingReported;
-    global $_SESSION;
-    global $_CONFIG;
-    // determine which timing value to use
-    if (is_numeric($timingReported)) {
-        // use manually set time if possible
-        $maxTime = $timingReported;
-    } elseif ($timingReported != 'computer') {
-        // if not manual or computer then timing is user
-        $maxTime = 'user';
-    } elseif (isset($compTime)) {
-        // if a $compTime is set then use that
-        $maxTime = $compTime;
-    } else { $maxTime = 'user'; } // default compTime if none is set
-    
-    // override time in debug mode, use standard timing if no debug time is set
-    if ($_SESSION['Debug'] == true && $_CONFIG->debug_time != '') {
-        $maxTime = $_CONFIG->debug_time;
-    }
-    
-    // set class for input form (shows or hides 'submit' button)
-    if ($maxTime == 'user') {
-        $formClass = 'UserTiming';
-    } else {
-        $formClass = 'ComputerTiming';
-    }
-}
-/**
  * removes insignificant components of a file path, such as 'dir/../'
  * @param string $path The path to clean
  * @return string

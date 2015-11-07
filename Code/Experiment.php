@@ -36,6 +36,11 @@
     #### CREATE ALIASES
     $trialValues = prepareAliases($currentTrial);
     extract($trialValues, EXTR_SKIP); // do not overwrite with aliases, in case they have a "condition" column
+    // from this point on, we should use variables that have at least
+    // one capital letter in them, so that we can be guaranteed not
+    // to overwrite any aliases set for this trial. All aliases
+    // will be lowered and spaces replaced with underscores
+    // e.g., column "Trial Type" is now $trial_type, so dont override the $trial_type variable
 
 
     #### GET TRIAL TYPE FILES
@@ -72,14 +77,14 @@
         $max_time = $_CONFIG->debug_time;
     }
 
-    if (!isset($min_time)) $min_time = 'not set';
-    if (!isset($compTime)) $compTime = null;
+    if (!isset($min_time))       $min_time = 'not set';
+    if (!isset($defaultMaxTime)) $defaultMaxTime = null;
 
     // $max_time passed by reference here
-    $formClass = getTrialTiming($max_time, $compTime);
+    $formClass = getTrialTiming($max_time, $defaultMaxTime);
 
 
-    #### Presenting different trial types ####
+    #### PREPARE TO DISPLAY ####
     $postTo    = $_PATH->get('Experiment Page');
     $trialFail = false;                                    // this will be used to show diagnostic information when a specific trial isn't working
     
@@ -106,6 +111,7 @@
         ) {
             recordTrial();
         }
+        // goToNextTrial will header redirect and exit
         goToNextTrial();
     }
 
@@ -123,9 +129,13 @@
 
     // actually include the trial type display file here
     if ($trialFiles['display']):
-        trialTiming();                                   // find out what kind of class name to give the up-coming form
         ?><form class="<?php echo $formClass; ?> invisible" action="<?php echo $postTo; ?>" method="post" id="content">
               <?php include $trialFiles['display'] ?>
+              <?php
+                if ($_SESSION['Debug']) {
+                    ?><button type="submit" style="position: absolute; top: 50px; right: 50px;">Debug Submit!</button><?php
+                }
+              ?>
               <input id="RT"       name="RT"      type="hidden"  value="-1"/>
               <input id="RTfirst"  name="RTfirst" type="hidden"  value="-1"/>
               <input id="RTlast"   name="RTlast"  type="hidden"  value="-1"/>

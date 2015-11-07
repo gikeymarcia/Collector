@@ -11,6 +11,17 @@
      *         set to false to disable the submit button until video completion
      **************************************************************************/
     
+    // set parameters to append to the URL (https://developers.google.com/youtube/player_parameters)
+    $parameters = array(
+        'autoplay'       => 1,           // 1: starts the video immediately
+        'modestbranding' => 1,           // 1: removes logo from controls
+        'controls'       => 0,           // 0: hides the controls entirely
+        'rel'            => 0,           // 0: does not show related videos
+        'showinfo'       => 0,           // 0: does not show info like title
+        'iv_load_policy' => 3,           // 3: removes annotations
+     // 'start'          => see line 67, // start time in seconds
+     // 'end'            => see line 67  // end time in seconds
+    );
     
     /**
      * Determines if the video is a valid YouTube link.
@@ -61,17 +72,8 @@
         $endTime   = 'na'; 
     }
     
-    // set parameters to append to the URL (https://developers.google.com/youtube/player_parameters)
-    $parameters = array(
-        'autoplay'       => 1,           // 1: starts the video immediately
-        'modestbranding' => 1,           // 1: removes logo from controls
-        'controls'       => 0,           // 0: hides the controls entirely
-        'rel'            => 0,           // 0: does not show related videos
-        'showinfo'       => 0,           // 0: does not show info like title
-        'iv_load_policy' => 3,           // 3: removes annotations
-        'start'          => $startTime,  // start time in seconds
-        'end'            => $endTime     // end time in seconds
-    );
+    $parameters['start'] = $startTime;
+    $parameters['end']   = $endtime;
     
 ?>
 
