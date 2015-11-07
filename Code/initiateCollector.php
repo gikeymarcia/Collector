@@ -1,4 +1,15 @@
 <?php
+    // automatically load classes when they are needed
+    function autoClassLoader($className) {
+        $loc = "classes/$className.class.php";
+        if (is_file($loc)) {
+            require $loc;
+        } else {
+            echo "Object $className is not found";
+        }
+    }
+    spl_autoload_register("autoClassLoader");
+    
     // start the session and error reporting
     session_start();
     error_reporting(-1);
