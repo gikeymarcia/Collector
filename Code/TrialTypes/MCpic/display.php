@@ -211,3 +211,27 @@
 
   <input class="hidden" name="Response" id="Response" type="text" value="">
   <button class="hidden" id="FormSubmitButton">Submit</button>
+  
+  <script>
+    // updates the response value when a MC button is pressed
+    $(".TestMC").click(function() {
+        var clicked = $(this).html();
+        $("#Response").prop("value",clicked);       // record which button was clicked
+        $("#RT").val( COLLECTOR.getRT() );          // set RT
+        $("form").addClass("submitAfterMinTime");
+
+        // if UserTiming, submit, but only highlight choice otherwise
+        if ($("form").hasClass("UserTiming")) {
+            $("form").submit();                         // see common:init "intercept FormSubmitButton"
+        } else {
+            if (keypress === false) {
+                $("#RTfirst").val( COLLECTOR.getRT() );   // set first keypress times
+                keypress === true;
+            }
+            $("#RTlast").val( COLLECTOR.getRT() );      // update 'RTlast' time
+
+            $(".TestMC").removeClass("collectorButtonActive");  // remove highlighting from all buttons
+            $(this).addClass("collectorButtonActive");          // add highlighting to clicked button
+        }
+    });
+  </script>
