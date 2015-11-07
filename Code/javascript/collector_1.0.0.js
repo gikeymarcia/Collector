@@ -236,6 +236,10 @@ var COLLECTOR = {
                 COLLECTOR.timer(minTime, function() {           // run timer for minTime
                     fsubmit.prop("disabled", false);            // enable
                     $(":input").removeClass("noEnter");
+                    $("form").removeClass("ComputerTiming").addClass("UserTiming");
+                    if ($("form").hasClass("submitAfterMinTime")) {
+                        $("form").submit();
+                    }
                 }, false );
             }
 
@@ -253,27 +257,6 @@ var COLLECTOR = {
                         keypress = true;
                     }
                     $("#RTlast").val( COLLECTOR.getRT() );      // update 'RTlast' time
-                }
-            });
-
-            // updates the response value when a MC button is pressed
-            $(".TestMC").click(function() {
-                var clicked = $(this).html();
-                    $("#Response").prop("value",clicked);       // record which button was clicked
-                    $("#RT").val( COLLECTOR.getRT() );          // set RT
-
-                // if UserTiming, submit, but only highlight choice otherwise
-                if ($("form").hasClass("UserTiming")) {
-                    $("form").submit();                         // see common:init "intercept FormSubmitButton"
-                } else {
-                    if (keypress === false) {
-                        $("#RTfirst").val( COLLECTOR.getRT() );   // set first keypress times
-                        keypress === true;
-                    }
-                    $("#RTlast").val( COLLECTOR.getRT() );      // update 'RTlast' time
-
-                    $(".TestMC").removeClass("collectorButtonActive");  // remove highlighting from all buttons
-                    $(this).addClass("collectorButtonActive");          // add highlighting to clicked button
                 }
             });
 
