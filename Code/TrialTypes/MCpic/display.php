@@ -216,13 +216,14 @@
     // updates the response value when a MC button is pressed
     $(".TestMC").click(function() {
         var clicked = $(this).html();
+        var form = $("form");
         $("#Response").prop("value",clicked);       // record which button was clicked
         $("#RT").val( COLLECTOR.getRT() );          // set RT
-        $("form").addClass("submitAfterMinTime");
+        form.addClass("submitAfterMinTime");
 
         // if UserTiming, submit, but only highlight choice otherwise
-        if ($("form").hasClass("UserTiming")) {
-            $("form").submit();                         // see common:init "intercept FormSubmitButton"
+        if (form.hasClass("UserTiming") && !form.hasClass("WaitingForMinTime")) {
+            form.submit();                         // see common:init "intercept FormSubmitButton"
         } else {
             if (keypress === false) {
                 $("#RTfirst").val( COLLECTOR.getRT() );   // set first keypress times

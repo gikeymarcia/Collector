@@ -233,10 +233,13 @@ var COLLECTOR = {
                 fsubmit.prop("disabled", true);                 // disable submit button when minTime is set
                 $(":input").addClass("noEnter");                // disable enter from submitting the trial
                 $("textarea").removeClass("noEnter");               // allow line return in <textarea>
+                $("form").addClass("WaitingForMinTime");
                 COLLECTOR.timer(minTime, function() {           // run timer for minTime
                     fsubmit.prop("disabled", false);            // enable
                     $(":input").removeClass("noEnter");
-                    $("form").removeClass("ComputerTiming").addClass("UserTiming");
+                    $("form").removeClass("ComputerTiming")
+                             .removeClass("WaitingForMinTime")
+                             .addClass("UserTiming");
                     if ($("form").hasClass("submitAfterMinTime")) {
                         $("form").submit();
                     }
