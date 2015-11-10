@@ -68,8 +68,8 @@
                         
                         'Duration_Formatted'    => $durationFormatted,
                         'Session'               => $_SESSION['Session'],
-                        'Condition_Number'      => $_SESSION['Condition']['Number'],
                         );
+        // TO-DO ... import status
         arrayToLine($data, $_PATH->get('Status End Data'));
         
         

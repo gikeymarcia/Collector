@@ -9,8 +9,8 @@
  * --Public Methods
  *     - $this->stimuli()       :   @return 'Stimuli' cell string
  *     - $this->procedure()     :   @return 'Procedure' cell string
- *     - $this->description()   :   @return 'Condition Description' cell string
- *     - $this->notes()         :   @return 'Condition Notes' cell string
+ *     - $this->description()   :   @return 'Description' cell string
+ *     - $this->notes()         :   @return 'Notes' cell string
  *     - $this->get()           :   @return  keyed array of assigned condition (row)
  */
 class conditionController
@@ -136,7 +136,7 @@ class conditionController
         }
         $on = array();
         foreach ($this->ConditionsCSV as $row) {
-            if ($row['Condition Description'][0] === '#') {
+            if ($row['Description'][0] === '#') {
                 continue;
             } else {
                 $on[] = $row;
@@ -178,7 +178,8 @@ class conditionController
      * @param string $location path to Conditions.csv
      */
     protected function conditionsExists()
-    {   
+    {
+        
         if (!FileExists($this->location)) {
             $msg = "Cannot find Conditions.csv at $this->location";
             $this->errObj->add($msg, true);
@@ -187,7 +188,7 @@ class conditionController
     
     protected function requiredColumns()
     {
-        $requiredColumns = array('Number', 'Stimuli', 'Procedure');
+        $requiredColumns = array('Stimuli', 'Procedure', 'Description');
         foreach ($requiredColumns as $pos => $col) {
             if(!isset($this->ConditionsCSV[0][$col])) {
                 $msg = "Your Conditions.csv file is missing the $col column";
@@ -216,23 +217,23 @@ class conditionController
         }
     }
     /**
-     * Once a condition has been assigned this will return the 'Condition Description' string
-     * @return string contents of 'Condition Description' column
+     * Once a condition has been assigned this will return the 'Description' string
+     * @return string contents of 'Description' column
      */
     public function description()
     {
         if ($this->assignedCondition !== false) {
-            return $this->userCondition['Condition Description'];
+            return $this->userCondition['Description'];
         }
     }
     /**
-     * Once a condition has been assigned this will return the 'Condition Notes' string
-     * @return string contents of 'Condition Notes' column
+     * Once a condition has been assigned this will return the 'Notes' string
+     * @return string contents of 'Notes' column
      */
     public function notes()
     {
         if ($this->assignedCondition !== false) {
-            return $this->userCondition['Condition Notes'];
+            return $this->userCondition['Notes'];
         }
     }
     /**

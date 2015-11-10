@@ -94,8 +94,7 @@
         $outputColumns += $firstRow;                                                    // we only care about the keys, so the contents don't matter
         $name       = $firstRow['Username'];
         $exp        = $firstRow['ExperimentName'];
-        $condNum    = $firstRow['Condition Number'];
-        $condName   = $firstRow['Condition Description'];
+        $condName   = $firstRow['Description'];
         $session    = $firstRow['Session'];
         $id         = $firstRow['ID'];
         $date       = $firstRow['Date'];

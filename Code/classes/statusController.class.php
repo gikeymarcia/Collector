@@ -23,10 +23,11 @@ class statusController
     protected $outputFile;
     protected $sessionNum;
     // Conditon Info
-    protected $number;
-    protected $description;
-    protected $stimuli;
-    protected $procedure;
+    protected $condition;
+    // protected $number;
+    // protected $description;
+    // protected $stimuli;
+    // protected $procedure;
     // Where to write status begin/end
     protected $beginPath;
     protected $endPath;
@@ -66,10 +67,7 @@ class statusController
      */
     public function setConditionInfo($conditionRow)
     {
-        $this->number      = $conditionRow['Number'];
-        $this->description = $conditionRow['Condition Description'];
-        $this->stimuli     = $conditionRow['Stimuli'];
-        $this->procedure   = $conditionRow['Procedure'];
+        $this->condition = $conditionRow;
     }
     /**
      * relative paths' for writing the status begin and end logs
@@ -91,18 +89,18 @@ class statusController
             'ID'                    => $this->id,
             'Date'                  => date('c'),
             'Session'               => $this->sessionNum,
-            'Condition_Number'      => $this->number,
-            'Condition_Description' => $this->description,
             'Output_File'           => $this->outputFile,
-            'Stimuli_File'          => $this->stimuli,
-            'Procedure_File'        => $this->procedure,
             'Browser'               => $this->browser,
             'DeviceType'            => $this->deviceType,
             'OS'                    => $this->OS,
             'IP'                    => $_SERVER["REMOTE_ADDR"]
         );
+        foreach ($this->condition as $key => $value) {
+            $UserData["Cond_$key"] = $value;
+        }
         arrayToLine($UserData, $this->beginPath);
     }
+    // Current not meant to be used
     protected function writeEnd()
     {
         // below is copied from done.php
@@ -115,7 +113,6 @@ class statusController
             
             'Duration_Formatted'    => $durationFormatted,
             'Session'               => $_SESSION['Session'],
-            'Condition_Number'      => $_SESSION['Condition']['Number'],
         );
         arrayToLine($data, $_PATH->get('Status End Data'));
     }

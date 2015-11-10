@@ -53,7 +53,7 @@
 
     $cond = new conditionController(
         $_PATH->get('Conditions'),
-        $_PATH->get('Counter', 'relative', $_CONFIG->login_counter_file),
+        $_PATH->get('Counter'),
         $_CONFIG->hide_flagged_conditions,
         $errors
     );

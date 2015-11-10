@@ -17,7 +17,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
     require 'initiateCollector.php';
-    
+    // load page header
+    $title = 'Experiment Login Page';  
+    require $_PATH->get('Header');
+    $action = $_PATH->get('Login', 'url');
+
+
     $currentExp = explode('/', $_SERVER['SCRIPT_NAME']);    // get something like array(... , "Collector", "Experiments", "Demo", "index.php")
     $currentExp = $currentExp[count($currentExp)-2];        // take directory name (from above example, take "Demo")
     
@@ -27,27 +32,29 @@
 
     // load and sort conditions
     $Conditions = GetFromFile($_PATH->get('Conditions'), false);
-    $conditionNumbers = array();
-    foreach ($Conditions as $cond) {
-        if ($cond['Condition Description'][0] === '#') { continue; }
-        if (isset($conditionNumbers[$cond['Number']])) {
-            exit('Error: Multiple Conditions use the same number. Please check your "'.$_PATH->get('Conditons', 'base').'" file and make sure each number in the "Number" column is unique.');
-        } else {
-            $conditionNumbers[$cond['Number']] = true;
-            if (!file_exists($_PATH->get('Stimuli Dir') . '/' . $cond['Stimuli'])) {
-                exit('Error: The stimuli file "'   . $cond['Stimuli']   . '" could not be found in the ' . $_PATH->get('Stimuli Dir', 'root') . ' folder, for Condition ' . $cond['Number'] . ': ' . $cond['Condition Description'] . '. Either rename a file to "' . $cond['Stimuli']   . '" or change this entry in the "'.$_PATH->get('Conditions', 'root').'" file to match an existing file.');
-            }
-            if (!file_exists($_PATH->get('Procedure Dir') . '/' . $cond['Procedure'])) {
-                exit('Error: The procedure file "' . $cond['Procedure'] . '" could not be found in the ' . $_PATH->get('Procedure Dir', 'root') . ' folder, for Condition ' . $cond['Number'] . ': ' . $cond['Condition Description'] . '. Either rename a file to "' . $cond['Procedure'] . '" or change this entry in the "'.$_PATH->get('Conditions', 'root').'" file to match an existing file.');
-            }
+    foreach ($Conditions as $i => $cond) {
+        $row = $i+2;
+        $descrip = $cond['Description'];
+        $stim = $cond['Stimuli'];
+        $proc = $cond['Procedure'];
+        $stimRoot = $_PATH->get('Stimuli Dir',   'root');
+        $procRoot = $_PATH->get('Procedure Dir', 'root');
+        $condRoot = $_PATH->get('Conditions',    'root');
+
+        if (substr($descrip,0,1) === '#') { continue; }
+        if (!file_exists($_PATH->get('Stimuli Dir') . "/$stim")) {
+            $errMsg = "<div class='errorBox'>Error: The stimuli file <b>'$stim'</b> could not be found in the <code>$stimRoot</code> "
+                    . " folder for Condition row <b>$row</b>, which has the description: <b>'$descrip'</b>. Either rename a file to <b>'$stim'</b>"
+                    . " or change this row in the <code>$condRoot</code> file to match an existing file.</div>";
+            exit($errMsg);
+        }
+        if (!file_exists($_PATH->get('Procedure Dir') . "/$proc")) {
+            $errMsg = "<div class='errorBox'>Error: The stimuli file <b>'$proc'</b> could not be found in the <code>$procRoot</code> "
+                    . " folder for Condition row <b>$row</b>, which has the description: <b>'$descrip'</b>. Either rename a file to <b>'$proc'</b>"
+                    . " or change this row in the <code>$condRoot</code> file to match an existing file.</div>";
+            exit($errMsg);
         }
     }
-    $tempCond   = SortByKey($Conditions, 'Number');
-    
-    // load page header
-    $title = 'Experiment Login Page';  
-    require $_PATH->get('Header');
-    $action = $_PATH->get('Login', 'url');
 ?>
 <!-- Page specific styling tweaks -->
 <style>
@@ -73,7 +80,7 @@
     
     <section id="indexLogin" class="flexVert">
         <div class="textcenter flexChild">
-            <?= 'Please enter your ' . $_CONFIG->ask_for_login;  ?>
+            <?= "Please enter your $_CONFIG->ask_for_login"  ?>
         </div>
         <div class="flexChild">
             <input name="Username" type="text" value="" autocomplete="off" class="collectorInput" placeholder="<?= $_CONFIG->ask_for_login ?>">
@@ -87,28 +94,27 @@
                 <option default selected value="Auto">Auto</option>
         <?php  // Display conditions as options
                 foreach ($Conditions as $i => $cond) {
-                    if ($_CONFIG->hide_flagged_conditions AND $cond['Condition Description'][0] === '#') { continue; }
-                    // showing condition description on hover
+                    if ($_CONFIG->hide_flagged_conditions AND substr($cond['Description'],0,1) === '#') { continue; }
+                    // showing Description on hover
                     if ($_CONFIG->use_condition_names) {
-                        $name = $cond['Number'] . '. ' . $cond['Condition Description'];
+                        $name = $cond['Description'];
                     } else {
-                        $name = $cond['Number'];
+                        $name = $i+1;
                     }
                     // showing Stimuli + Procedure files for each condition
                     if ($_CONFIG->show_condition_info) {
-                        $title = ' title="' . $cond['Stimuli'] . ' - ' . 
-                                 $cond['Procedure'] . '"';
+                        $title = "title={$cond['Stimuli']} - {$cond['Procedure']}";
                     } else {
                         $title = '';
                     }
                     // make flagged conditions grey
-                    if ($cond['Condition Description'][0] === '#') {
-                        $style = ' style="color: grey;"';
+                    if (substr($cond['Description'],0,1) === '#') {
+                        $style = 'style="color: grey;"';
                     } else {
                         $style = '';
                     }
                     // put this condition in the dropdown selector
-                    echo '<option value="' . $i . '"'. $title . $style . '>' . $name . '</option>';
+                    echo "<option value='$i' $title $style>$name</option>";
                 }
         ?>
             </select>

@@ -337,7 +337,7 @@ em, i {
 }
 
 code {
-  background: #f7f7f7;
+  background: #f0f0f0;
   font-family: "Inconsolata", "inconsolata_local", "Courier New", Courier, monospace;
   padding: 3px 5px;
   font-size: 92%;
@@ -356,6 +356,21 @@ button::-moz-focus-inner, input::-moz-focus-inner  {
   border: 0;
 }
 
+hide {
+    display: none;
+}
+inv {
+    visibility: hidden;
+}
+
+.errorBox {
+    width: 800px;
+    margin: auto;
+    font-size: 1.2em;
+}
+.errorBox code {
+    white-space: nowrap;
+}
 
 
 /*  $BUTTONS 

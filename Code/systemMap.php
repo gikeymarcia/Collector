@@ -224,7 +224,7 @@
                 'Counter' => array (
                     'Dir Name' => 'Counter Dir',
                     
-                    '{var}.txt' => 'Counter',
+                    'Counter.csv' => 'Counter',
                 ),
                 
                 'JSON_session' => array (
