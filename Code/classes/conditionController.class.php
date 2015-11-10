@@ -79,11 +79,8 @@ class conditionController
     {
         $validConds = $this->removeOffConditions();
         if ($this->selection == 'Auto') {
-            $log = $this->getLogVal();
-            $index = $log % count($validConds);
-            $this->userCondition = $validConds[$index];
-            $this->incrementLog($log);
-            $this->assignedCondition = $index;
+            $this->assignedCondition = $this->getLogVal();
+            $this->userCondition = $validConds[$this->assignedCondition];
         } else {
             $index = $this->selection;
             if (isset($validConds[$index])) {
@@ -94,21 +91,42 @@ class conditionController
     }
     protected function getLogVal()
     {
-        $logPath = $this->logLocation;
-        if (file_exists($logPath)) {
-            $handle   = fopen($logPath, "r");
-            $logCount = fgets($handle);
+        $file = $this->logLocation;                 // where to find the log
+        if (file_exists($file)) {
+            $handle = fopen($file, "r");
+            $available = fgetcsv($handle);          // read values as exploded csv
             fclose($handle);
-            return $logCount;
+            if (is_numeric($available[0])) {        // if the first position is a #
+                $this->updateLogFile($available);   // update log file
+                return $available[0];               // return # we read
+            } else {
+                $this->populateLogFile();           // fill log file with conditions
+                return $this->getLogVal();          // read the log file
+            }
         } else {
-            return 0;
+            $this->populateLogFile();               // fill log file with conditions
+            return $this->getLogVal();              // read the log file
         }
     }
-    protected function incrementLog($oldVal)
+    protected function populateLogFile()
     {
-        $newVal = $oldVal + 1;
-        $handle = fopen($this->logLocation, "w");
-        fputs($handle, $newVal);
+        $file  = $this->logLocation;
+        $conds = count($this->removeOffConditions());
+        $possible = array();
+        for ($i=0; $i < $conds; $i++) {
+            $possible[] = $i;
+        }
+        shuffle($possible);
+        $handle = fopen($file, 'w');
+        fputcsv($handle, $possible);
+        fclose($handle);
+    }
+    protected function updateLogFile($condsFound)
+    {
+        $used = array_shift($condsFound);       // pull off the value we used
+        $log  = $this->logLocation;
+        $handle = fopen($log, 'w');
+        fputcsv($handle, $condsFound);             // write what is left as csv
         fclose($handle);
     }
     protected function removeOffConditions()
@@ -160,8 +178,7 @@ class conditionController
      * @param string $location path to Conditions.csv
      */
     protected function conditionsExists()
-    {
-        
+    {   
         if (!FileExists($this->location)) {
             $msg = "Cannot find Conditions.csv at $this->location";
             $this->errObj->add($msg, true);
@@ -170,7 +187,6 @@ class conditionController
     
     protected function requiredColumns()
     {
-        
         $requiredColumns = array('Number', 'Stimuli', 'Procedure');
         foreach ($requiredColumns as $pos => $col) {
             if(!isset($this->ConditionsCSV[0][$col])) {
