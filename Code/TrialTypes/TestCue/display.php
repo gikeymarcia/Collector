@@ -16,8 +16,8 @@
 
 <!-- stimulus -->
 <div class="study test-cue">
-    <span class="study-left"><?php echo $cue; ?></span>
-    <span class="study-divider">         :      </span>
+    <span class="study-left"   ><?php echo $cue; ?></span>
+    <span class="study-divider"><?php echo ":";  ?></span>
     <span class="study-right"
       ><?php echo substr($answer,0,2); ?><input name="Response" type="text" value="" autocomplete="off" class="collectorInput"></span>
 </div>
