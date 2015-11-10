@@ -12,6 +12,6 @@
 </div>
   
 <div class="textcenter">
-    <input name="JOL" type="text" value="" autocomplete="off" class="forceNumeric textcenter collectorInput">
+    <input name="JOL" type="text" value="" class="forceNumeric textcenter collectorInput">
     <button class="collectorButton" id="FormSubmitButton">Submit</button>
 </div>

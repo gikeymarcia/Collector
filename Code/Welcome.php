@@ -83,7 +83,7 @@
             <?= "Please enter your $_CONFIG->ask_for_login"  ?>
         </div>
         <div class="flexChild">
-            <input name="Username" type="text" value="" autocomplete="off" class="collectorInput" placeholder="<?= $_CONFIG->ask_for_login ?>">
+            <input name="Username" type="text" value="" class="collectorInput" placeholder="<?= $_CONFIG->ask_for_login ?>">
             
             <!-- Condition selector -->
         <?php if ($_CONFIG->show_condition_selector == true): ?>

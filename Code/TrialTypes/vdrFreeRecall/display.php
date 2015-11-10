@@ -52,7 +52,7 @@
                  --><?php
                         $answerCount = substr_count($answer, '|')+1;
                         for ($i=1; $i<=$answerCount; ++$i) {
-                            echo '<input type="text" name="Response' . $i . '" autocomplete="off" class="noEnter"/>';
+                            echo '<input type="text" name="Response' . $i . '" class="noEnter"/>';
                         }
                     ?><!--
              --></div><br><button class="collectorButton collectorAdvance" id="FormSubmitButton" autofocus>Submit</button>
@@ -68,7 +68,7 @@
              --><div class="freeRecallArea"><!--
                  --><?php
                         for ($i=1; $i<=$input; ++$i) {
-                            echo '<input type="text" name="Response' . $i . '" autocomplete="off" class="noEnter"/>';
+                            echo '<input type="text" name="Response' . $i . '" class="noEnter"/>';
                         }
                     ?><!--
              --></div><br><button class="collectorButton collectorAdvance" id="FormSubmitButton" autofocus>Submit</button>

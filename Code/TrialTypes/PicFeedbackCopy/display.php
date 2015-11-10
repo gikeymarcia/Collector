@@ -22,7 +22,7 @@
     
     <!-- copy the answer -->
     <div class="textcenter pad">
-       <input name="Response" type="text" value="" class="copybox collectorInput" autocomplete="off" id="Response"/>
+       <input name="Response" type="text" value="" class="copybox collectorInput" id="Response"/>
     </div>
     
     <!-- include form to collect RT and advance page -->

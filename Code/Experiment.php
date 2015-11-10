@@ -129,7 +129,7 @@
 
     // actually include the trial type display file here
     if ($trialFiles['display']):
-        ?><form class="<?php echo $formClass; ?> invisible" action="<?php echo $postTo; ?>" method="post" id="content">
+        ?><form class="<?php echo $formClass; ?> invisible" action="<?php echo $postTo; ?>" method="post" id="content" autocomplete="off">
               <?php include $trialFiles['display'] ?>
               <?php
                 if ($_SESSION['Debug']) {
@@ -147,7 +147,7 @@
 
         <!-- default trial is always user timing so you can click 'Done' and progress through the experiment -->
         <div>
-            <form name="UserTiming" class="UserTiming" action="<?php echo $postTo; ?>" method="post">
+            <form name="UserTiming" class="UserTiming" action="<?php echo $postTo; ?>" method="post" autocomplete="off">
                 <input id="RT"       name="RT"      type="hidden"  value="-1"/>
                 <input id="RTfirst"  name="RTfirst" type="hidden"  value="-1"/>
                 <input id="RTlast"   name="RTlast"  type="hidden"  value="-1"/>

@@ -19,7 +19,7 @@
     <span class="study-left"><?php echo $cue; ?></span>
     <span class="study-divider">         :      </span>
     <span class="study-right"
-      ><?php echo substr($answer,0,2); ?><input name="Response" type="text" value="" autocomplete="off" class="collectorInput"></span>
+      ><?php echo substr($answer,0,2); ?><input name="Response" type="text" value="" class="collectorInput"></span>
 </div>
   
 <div class="textcenter">
