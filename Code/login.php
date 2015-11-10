@@ -115,11 +115,13 @@
 
     $procedure = new procedure(
         $_PATH->get('Procedure Dir'),
-        $cond->procedure()
+        $cond->procedure(),
+        $errors
     );
     $stimuli = new stimuli(
         $_PATH->get('Stimuli Dir'),
-        $cond->stimuli()
+        $cond->stimuli(),
+        $errors
     );
 
     $status = new statusController();

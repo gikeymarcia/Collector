@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <link rel="icon" href="<?= $_PATH->get('Icon', 'url') ?>" type="image/png">
   <link rel="shortcut icon" href="<?= $_PATH->get('Icon', 'url') ?>" type="image/png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Custom fonts: Roboto (headers), Open Sans (body), Inconsolata (monospace) -->
   <link href='http://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>          
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
@@ -25,12 +26,12 @@
   <?php
     if (isset($addedStyles)) {
         foreach ($addedStyles as $additionalStyle) {
-            echo '<link rel="stylesheet" href="' . $additionalStyle . '">';
+            echo "<link rel='stylesheet' href='$additionalStyle'>";
         }
     }
     if (isset($addedScripts)) {
         foreach ($addedScripts as $additionalScript) {
-            echo '<script src="' . $additionalScript . '"></script>';
+            echo "<script src='$additionalScript'></script>";
         }
     }
   ?>

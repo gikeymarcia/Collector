@@ -77,7 +77,7 @@
                 <select name="tool" form="toolSelector" class="toolSelect collectorInput">
                     <option value="" selected="true">Choose a tool</option>
 <?php      foreach ($tools as $tool => $location) {
-              echo '<option value="' . $tool . '"><b>' . $tool . '</b></option>';
+              echo "<option value='$tool'><b>$tool</b></option>";
             }
 ?>              </select>
                 <button type="submit" form="toolSelector" class="collectorButton">Go!</button>

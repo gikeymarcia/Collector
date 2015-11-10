@@ -16,6 +16,7 @@ class controlFile
     protected $stitched = array();
     protected $shuffled = false;
     protected $rowOrigins = array();
+    protected $errorObj;
 
     /**
      * Reads in control files and combines them into
@@ -23,8 +24,9 @@ class controlFile
      * @param string $dir       location where the files exist
      * @param string $filenames list of .csv flenames (comma separated)
      */
-    public function __construct($dir, $filenames)
+    public function __construct($dir, $filenames, errorController $errObj)
     {
+        $this->errorObj = $errObj;
         $this->dir   = $dir;
         $this->files = explode(',', $filenames);
         $this->readFiles();
@@ -151,10 +153,8 @@ class controlFile
         if(fileExists($path)) {
             return true;
         } else {
-            global $errors;
-            $msg = 'Could not find the following file specified by your Conditons file: <br><b>' .
-            $path . '</b>';
-            $errors->add($msg, true);
+            $msg = "Could not find the following file specified by your Conditons file: <br><b>$path</b>";
+            $this->errorObj->add($msg, true);
         }
     }
     /**
@@ -167,9 +167,8 @@ class controlFile
     {
         foreach ($cols as $column) {
             if(!isset($this->stitched[0][$column])) {
-                global $errors;
-                $msg = "Your {$filename} file does not contain the following required column: {$column}";
-                $errors->add($msg);
+                $msg = "Your $filename file does not contain the following required column: $column";
+                $this->errorObj->add($msg);
             }
         }
     }
@@ -242,8 +241,7 @@ class controlFile
                 $msg .= "<li><b>$columnName</b></li>";
             }
             $msg .= "</ol>";
-            global $errors;
-            $errors->add($msg);
+            $this->errorObj->add($msg);
         }
     }
     /**

@@ -25,7 +25,7 @@
     // get possible experiments to choose from
     $experiments     = array();
     foreach (getCollectorExperiments() as $expName) {
-        $experiments[$expName] = $_PATH->get('Experiments') . '/' . $expName;
+        $experiments[$expName] = $_PATH->get('Experiments') . "/$expName";
     }
     
     $title = 'Collector Homepage';
@@ -40,7 +40,7 @@
     <ul>
     <?php
         foreach ($experiments as $name => $path) {
-            echo '<li> <a href="' . $path . '">' . $name . '</a> </li>';
+            echo "<li><a href='$path'>$name</a></li>";
         }
     ?>
     </ul>

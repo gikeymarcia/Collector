@@ -13,7 +13,7 @@
     
     // save selected file if in URL
     if (isset($_GET['shuffleFile'])) {
-        $store['loc']  = $root . 'Experiment/' . $_GET['shuffleFile'];
+        $store['loc']  = "{$root}Experiment/{$_GET['shuffleFile']}";
         $store['get']  = $_GET['shuffleFile'];
         $store['name'] = substr($store['loc'], strrpos($store['loc'], '/')+1 );
     }
@@ -31,7 +31,7 @@
         'Procedure' => array()
     );
     foreach ($ShuffleFolders as $type => $empty) {
-        $searching = scandir($root . 'Experiment/' . $type . '/');
+        $searching = scandir("{$root}Experiment/$type/");
         foreach ($searching as $item => $path) {
             if(!instring('.csv', $path, true)) {
                 unset($searching[$item]);                       // remove files that aren't .csv
@@ -114,15 +114,14 @@
                 <select form="shuffleFile" class="toolSelect collectorInput" name="shuffleFile">
                 <?php
                     foreach ($ShuffleFolders as $type => $files) {
-                        echo '<optgroup label="' . $type . ' Files">';                  // group options by type: Stimuli OR Procedure
+                        echo "<optgroup label='$type Files'>";                  // group options by type: Stimuli OR Procedure
                         foreach ($files as $file) {
-                            if ($store['get'] == $type . '/' . $file) {                 // marks choosen file as selected
+                            if ($store['get'] == "$type/$file") {                 // marks choosen file as selected
                                 $selected = ' selected';
                             } else {
                                 $selected = '';
                             }
-                            // show option for each file readable format--- <option label="$file" value="$type/$file" $selected>  $file  </option>
-                           echo '<option label="' . $file . '" value="' .  $type . '/' . $file . '"' .  $selected . '>' . $file . '</option>';
+                           echo "<option label='$file' value='$type/$file' $selected>$file</option>";
                         }
                     }
                 ?>
