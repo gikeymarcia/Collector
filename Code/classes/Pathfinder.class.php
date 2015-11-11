@@ -246,7 +246,7 @@
                 $relRoot .= '../';
                 $urlRoot = dirname($urlRoot);
                 ++$i;
-                if ($i > 100) {
+                if ($i > 5) {
                     throw new Exception('Root path not found.');
                 }
             }

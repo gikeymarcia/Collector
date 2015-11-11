@@ -1,10 +1,17 @@
 <?php
     // automatically load classes when they are needed
     function autoClassLoader($className) {
-        $loc = "classes/$className.class.php";
+        $root = '';
+        $ancestors = 0;
+        while (!is_dir("{$root}Code/classes") AND ($ancestors < 3)) {
+            $root .= "../";
+            ++$ancestors;
+        }
+        $loc = "{$root}Code/classes/$className.class.php";
         if (is_file($loc)) {
             require $loc;
         } else {
+            var_dump(scandir(dirName($loc)));
             echo "Object $className is not found";
         }
     }
@@ -15,12 +22,10 @@
     error_reporting(-1);
     
     // load file locations
-    require 'pathfinder.class.php';
     $_PATH = new Pathfinder($_SESSION['Pathfinder']);
     
     // load custom functions and parse
     require $_PATH->get('Custom Functions');
-    require $_PATH->get('Parse');
     
     
     // check if they switched Collectors (e.g., went from 'MG/Collector/Code/Done.php' to 'TK/Collector/Code/Done.php')
