@@ -7,7 +7,7 @@
     
     if(isset($_POST['response'])) {
         $response = $_POST['response'];
-        if (checkPass($response, $_CONFIG->password, $nonce, $hash_algo) === true) {
+        if (checkPass($response, $_SETTINGS->password, $nonce, $hash_algo) === true) {
             $_SESSION['admin']['challenge'] = makeNonce();
             $_SESSION['admin']['status'] = 'loggedIn';
             $_SESSION['admin']['birth'] = time();

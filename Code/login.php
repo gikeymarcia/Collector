@@ -29,7 +29,7 @@
     }
     
     
-    $_CONFIG = getCollectorSettings();
+    $_SETTINGS = getCollectorSettings();
 
     // login objects
     $errors = new errorController();
@@ -41,8 +41,8 @@
     
     $debug = new debugController(           // sets $_SESSION['Debug'] value
         $user->getUsername(), 
-        $_CONFIG->debug_name,
-        $_CONFIG->debug_mode
+        $_SETTINGS->debug_name,
+        $_SETTINGS->debug_mode
     );
     if ($debug->is_on()) {
         $_PATH->setDefault('Data Sub Dir', '/Debug');
@@ -54,15 +54,15 @@
     $cond = new conditionController(
         $_PATH->get('Conditions'),
         $_PATH->get('Counter'),
-        $_CONFIG->hide_flagged_conditions,
+        $_SETTINGS->hide_flagged_conditions,
         $errors
     );
     $cond->selectedCondition($_GET['Condition']);
     
     
     // is this user ineligible to participate in the experiment?
-    if (($_CONFIG->check_elig == true)
-        AND ($_CONFIG->mTurk_mode == true)
+    if (($_SETTINGS->check_elig == true)
+        AND ($_SETTINGS->mTurk_mode == true)
     ) {
         include $_PATH->get('check');
     }
@@ -109,7 +109,7 @@
     }
 
     // stop people who are specifically trying to return that we don't know about
-    if (!empty($_GET['returning']) {
+    if (!empty($_GET['returning'])) {
         echo "We could not find the next part of the experiment for " . $user->getUsername();
         exit;
     }
@@ -178,7 +178,7 @@
     echo "</pre>";
     if ($errors->arePresent() AND FALSE) {
         $errors->printErrors();
-        echo "<div>Oops, something has gone wrong. Email the experimenter at <b>$_CONFIG->experimenter_email</b><br>";
+        echo "<div>Oops, something has gone wrong. Email the experimenter at <b>$_SETTINGS->experimenter_email</b><br>";
         echo '<button type="button" onClick="window.location.reload(true);">Click here to refresh</button>';
         exit;
     } else {
@@ -247,11 +247,11 @@ exit;
     
     
     // #### Checking stimuli files for correct image/media path and filenames
-    // if (($_CONFIG->check_all_files == true)
-    //     OR ($_CONFIG->check_current_files == true)
+    // if (($_SETTINGS->check_all_files == true)
+    //     OR ($_SETTINGS->check_current_files == true)
     // ) {
     //     $stimuliFiles = array();
-    //     if ($_CONFIG->check_all_files == true) {
+    //     if ($_SETTINGS->check_all_files == true) {
     //         $stimPath = $_FILES->stim_files.'/';
     //         foreach ($Conditions as $row => $cells) {
     //             $stimuliFiles[] = $stimPath . $Conditions[$row]['Stimuli'];
@@ -367,7 +367,7 @@ exit;
     // load stimuli for this condition then block shuffle
     // $cleanStimuli = GetFromFile($_FILES->stim_files.'/' . $_SESSION['Condition']['Stimuli']);
     // $stimuli = multiLevelShuffle($cleanStimuli);
-    // $stimuli = shuffle2dArray($stimuli, $_CONFIG->stop_at_login);
+    // $stimuli = shuffle2dArray($stimuli, $_SETTINGS->stop_at_login);
     $_SESSION['Stimuli'] = $stimuli;
     
     // load and block shuffle procedure for this condition
@@ -387,7 +387,7 @@ exit;
     // }
     
     // $procedure = multiLevelShuffle($cleanProcedure);
-    // $procedure = shuffle2dArray($procedure, $_CONFIG->stop_at_login);
+    // $procedure = shuffle2dArray($procedure, $_SETTINGS->stop_at_login);
     
     $_SESSION['Procedure'] = $procedure;
     
@@ -443,7 +443,7 @@ exit;
     
     
     #### Figuring out what the output filename will be
-    // $outputFile = ComputeString($_CONFIG->output_file_name) . $_CONFIG->output_file_ext;
+    // $outputFile = ComputeString($_SETTINGS->output_file_name) . $_SETTINGS->output_file_ext;
     $_SESSION['Output File'] = "{$_FILES->raw_output}/{$outputFile}";
     $_SESSION['Start Time']  = date('c');
     
@@ -458,16 +458,16 @@ exit;
     
     
     #### Send participant to next phase of experiment (demographics or instructions)
-    if ($_CONFIG->run_demographics == true) {
+    if ($_SETTINGS->run_demographics == true) {
         $link = 'BasicInfo.php';
-    } elseif ($_CONFIG->run_instructions) {
+    } elseif ($_SETTINGS->run_instructions) {
         $link = 'instructions.php';
     } else {
         $link = 'experiment.php';
     }
     
     
-    if ($_CONFIG->stop_at_login == true) {             // if things are going wrong this info will help you figure out when the program broke
+    if ($_SETTINGS->stop_at_login == true) {             // if things are going wrong this info will help you figure out when the program broke
         // Readable($_SESSION['Condition'],    'Condition information');
         // Readable($stimuli,                  'Stimuli file in use ('   . $_FILES->stim_files.'/' . $_SESSION['Condition']['Stimuli']   . ')');
         // Readable($procedure,                'Procedure file in use (' . $_FILES->proc_files.'/' . $_SESSION['Condition']['Procedure'] . ')');

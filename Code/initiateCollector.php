@@ -46,4 +46,4 @@
     
     
     // load settings
-    $_CONFIG = getCollectorSettings();
+    $_SETTINGS = getCollectorSettings();

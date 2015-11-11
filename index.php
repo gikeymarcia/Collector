@@ -20,7 +20,7 @@
     
     $_SESSION = array();
     $_PATH    = new Pathfinder($_SESSION['Pathfinder']);
-    $_CONFIG  = getCollectorSettings();
+    $_SETTINGS  = getCollectorSettings();
     
     // get possible experiments to choose from
     $experiments     = array();

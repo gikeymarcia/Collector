@@ -28,7 +28,7 @@
     
     $_PATH->setDefault('Current Experiment', $currentExp);
     
-    $_CONFIG = getCollectorSettings();
+    $_SETTINGS = getCollectorSettings();
 
     // load and sort conditions
     $Conditions = GetFromFile($_PATH->get('Conditions'), false);
@@ -75,15 +75,15 @@
 <form   id="content"            name="Login"
         action="<?=$action?>"   method="get"
         autocomplete="off"      class="index"   >
-    <h1 class="textcenter"><?= $_CONFIG->welcome ?></h1>
-    <?= $_CONFIG->exp_description ?>
+    <h1 class="textcenter"><?= $_SETTINGS->welcome ?></h1>
+    <?= $_SETTINGS->exp_description ?>
     
     <section id="indexLogin" class="flexVert">
         <div class="textcenter flexChild">
-            <?= "Please enter your $_CONFIG->ask_for_login and make sure it is the same one you used last time"  ?>
+            <?= "Please enter your $_SETTINGS->ask_for_login and make sure it is the same one you used last time"  ?>
         </div>
         <div class="flexChild">
-            <input name="Username" type="text" value="" class="collectorInput" placeholder="<?= $_CONFIG->ask_for_login ?>">
+            <input name="Username" type="text" value="" class="collectorInput" placeholder="<?= $_SETTINGS->ask_for_login ?>">
             
             <select class="hidden" name="Condition">
                 <option default selected value="Auto">Auto</option>

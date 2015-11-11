@@ -12,7 +12,7 @@
     // write user demographics data to demographics file
     arrayToLine($data, $_PATH->demographics_data);
     
-    if ($_CONFIG->run_instructions) {
+    if ($_SETTINGS->run_instructions) {
         $next = $_PATH->get('Instructions Page');
     } else {
         $next = $_PATH->get('Experiment Page');

@@ -30,7 +30,7 @@
             'Common' => array (
                 'Dir Name' => 'Common',
                 
-                'Common Config.ini' => 'Common Config',
+                'Common Settings.ini' => 'Common Settings',
             
                 'Ineligible' => array (
                     'Dir Name' => 'Ineligibility Dir',
@@ -70,7 +70,7 @@
                 'FinalQuestions.csv' => 'Final Questions',
                 'Task Instructions.php' => 'Instructions',
                 
-                'Config.ini' => 'Experiment Config',
+                'Settings.ini' => 'Experiment Settings',
                 
                 'Stimuli' => array (
                     'Dir Name' => 'Stimuli Dir',
