@@ -64,6 +64,7 @@
                 'Dir Name' => 'Current Experiment',
                 
                 'index.php' => 'Current Index',
+                'Return.php' => 'Current Return',
                 
                 'Conditions.csv' => 'Conditions',
                 'FinalQuestions.csv' => 'Final Questions',
@@ -88,7 +89,8 @@
         'Code' => array (
             'Dir Name' => 'Code',
             
-            'Welcome.php' => 'Welcome',
+            'Welcome.php'     => 'Welcome',
+            'WelcomeBack.php' => 'Welcome Back',
             
             'BasicInfo.php' => 'Basic Info',
             'BasicInfoData.php' => 'Basic Info Record',

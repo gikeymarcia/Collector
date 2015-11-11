@@ -108,6 +108,12 @@
         }
     }
 
+    // stop people who are specifically trying to return that we don't know about
+    if (!empty($_GET['returning']) {
+        echo "We could not find the next part of the experiment for " . $user->getUsername();
+        exit;
+    }
+
     #### Set user's condition
     $cond->assignCondition();
     $_PATH->setDefault('Condition Index', $cond->getAssignedIndex());
