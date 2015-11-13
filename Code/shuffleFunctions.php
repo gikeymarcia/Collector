@@ -403,7 +403,7 @@
  * @see GetFromFile()
  */
 function multiLevelShuffle ($input, $levels = 0) {
-    $root   = 'Shuffle';
+    $root   = 'Shuffle ';
     $offChar = '#';
     $output = array();
     $subset = array(); 
@@ -414,36 +414,29 @@ function multiLevelShuffle ($input, $levels = 0) {
         while ($input[0] === 0) {
             $padding[] = array_shift($input);
         }
-        if (!isset($input[0][$root])) {                             // skip shuffling if no 'Shuffle' column is present
-            for ($i=0; $i < count($padding); $i++) {                // prepend the removed padding
-                array_unshift($input, 0);
-            }
-            return $input;
-        }
-        $checkLevel = 2;                                            // Find maximum Shuffle level used
+        $checkLevel = 1;                                            // Find maximum Shuffle level used
         while (isset($input[0][$root.$checkLevel])) {                   // while 'Shuffle#' exists
             $checkLevel++;                                                  // check next level of shuffling
         }
         $maxLevel = $checkLevel - 1;
-        $output   = multiLevelShuffle($input, (int)$maxLevel);      // run this function at the highest shuffle level
-        for ($i=0; $i < count($padding); $i++) {                    // prepend the removed padding
-            array_unshift($output, 0);
+        if ($maxLevel == 0) {
+            return array_merge($padding, $input);                 // prepend the removed padding
         }
-        return $output;
+        $output = multiLevelShuffle($input, (int)$maxLevel);      // run this function at the highest shuffle level
+        
+        return array_merge($padding, $output);
     }
     
     #### do higher order block shuffling from max down to 2
     if ($levels > 1) {
-        $subLevel = '';                                             // What is below the current level
-        if ($levels > 2) {
-            $subLevel = $levels - 1;
-        }
+        $subLevel = $levels - 1;                                    // What is below the current level
         $begin = $input[0][$root.$levels];                          // save starting shuffle code
         for ($i=0; $i < count($input); $i++) {
             $current   = $input[$i][$root.$levels];                     // save current shuffle code
             $currentLo = $input[$i][$root.$subLevel];                   // save lower shuffle code
             if ((strpos($begin, $offChar) !== false)                     // if the current shuffle code is turned off
                  OR (strtolower($begin) == 'off')
+                 OR ($begin == '')
              ) {
                 if ($begin == $current) {
                     $subset[] = $input[$i];                             // add it to the subset if the code hasn't changed
@@ -455,6 +448,7 @@ function multiLevelShuffle ($input, $levels = 0) {
                     // $beginLo = $currentLo;
                     if ((strpos($begin, $offChar) !== false)                 // if the next code is turned off
                          OR (strtolower($begin) == 'off')
+                         OR ($begin == '')
                      ) {
                         $subset[] = $input[$i];                             // add it to the current subset
                         continue;
@@ -478,6 +472,7 @@ function multiLevelShuffle ($input, $levels = 0) {
                 $holder = array();
                 if ((strpos($begin, $offChar) !== false)
                     OR (strtolower($begin) == 'off')
+                    OR ($begin == '')
                 ) {
                     $subset[] = $input[$i];                         // add current item to the subset if shuffle code is off
                 } else {
@@ -504,12 +499,13 @@ function multiLevelShuffle ($input, $levels = 0) {
     if ($levels == 1) {
         $groupedItems = array();
         foreach ($input as $subArray) {
-            $group = $subArray[$root];
+            $group = $subArray[$root.$levels];
             $groupedItems[$group][] = $subArray;                    // group each item by shuffle code
         }
         foreach ($groupedItems as $shuffleType => &$items) {
-            if ((strtolower($shuffleType) == 'off')                 // if the group code is set to off
-                OR (strpos($shuffleType, $offChar) !== false)
+            if ((strpos($shuffleType, $offChar) !== false)                 // if the group code is set to off
+                OR (strtolower($shuffleType) == 'off')
+                OR ($shuffleType == '')
             ) {
                 continue;                                               // skip shuffling of items (within the group)
             } else {
@@ -517,9 +513,10 @@ function multiLevelShuffle ($input, $levels = 0) {
             }
         }
         foreach ($input as $pos => $item) {                             // go through unshuffled input
-            $shuffleCode  = $item[$root];
+            $shuffleCode  = $item[$root.$levels];
             $output[$pos] = array_shift($groupedItems[$shuffleCode]);   // pull items from the shuffled groups and put them into the output
         }
         return $output;
+        var_dump($root, $levels);
     }
 }

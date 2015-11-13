@@ -4,8 +4,8 @@
     adminOnly();                                        // only allow tool use when logged in
     
     // needed for this tool
-    $root = '../';                                      // gets us to the root
-    require_once $root . 'Code/shuffleFunctions.php';  // load shuffle functions
+    $root = '../';
+    require_once $_PATH->get('Shuffle Functions');      // load shuffle functions
     
     // making a place to store all variables (storing inside admin is best because it will be wiped on logout)
     $_SESSION['admin']['shuffleTester'] = array();
@@ -13,7 +13,7 @@
     
     // save selected file if in URL
     if (isset($_GET['shuffleFile'])) {
-        $store['loc']  = "{$root}Experiment/{$_GET['shuffleFile']}";
+        $store['loc']  = "{$root}Experiments/Demo/{$_GET['shuffleFile']}";
         $store['get']  = $_GET['shuffleFile'];
         $store['name'] = substr($store['loc'], strrpos($store['loc'], '/')+1 );
     }
@@ -31,7 +31,7 @@
         'Procedure' => array()
     );
     foreach ($ShuffleFolders as $type => $empty) {
-        $searching = scandir("{$root}Experiment/$type/");
+        $searching = scandir("{$root}Experiments/Demo/$type/");
         foreach ($searching as $item => $path) {
             if(!instring('.csv', $path, true)) {
                 unset($searching[$item]);                       // remove files that aren't .csv

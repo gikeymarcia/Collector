@@ -5,7 +5,7 @@
     $_root = '..';
     
     // load file locations
-    require $_root.'/Code/pathfinder.class.php';
+    require $_root.'/Code/classes/Pathfinder.class.php';
     $_PATH = new Pathfinder();
     
     // load configs
