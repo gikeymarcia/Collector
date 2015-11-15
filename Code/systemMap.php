@@ -66,7 +66,6 @@
                 'index.php' => 'Current Index',
                 
                 'Conditions.csv' => 'Conditions',
-                'FinalQuestions.csv' => 'Final Questions',
                 'Task Instructions.php' => 'Instructions',
                 
                 'Config.ini' => 'Experiment Config',
@@ -90,9 +89,6 @@
             
             'Welcome.php' => 'Welcome',
             
-            'BasicInfo.php' => 'Basic Info',
-            'BasicInfoData.php' => 'Basic Info Record',
-            
             'check.php' => 'Check',
             
             'customFunctions.php' => 'Custom Functions',
@@ -107,11 +103,7 @@
             'Experiment.php' => 'Experiment Page',
             'experiment.require.php' => 'Experiment Require',
             
-            'FinalQuestions.php' => 'Final Questions Page',
-            
             'footer.php' => 'Footer',
-            
-            'fqData.php' => 'Final Questions Record',
             
             'Header.php' => 'Header',
             
@@ -215,8 +207,6 @@
             '{Current Experiment}-Data{Data Sub Dir}' => array (
                 'Dir Name' => 'Current Data Dir',
                 
-                'DemographicsData.csv'   => 'Demographics Data',
-                'FinalQuestionsData.csv' => 'Final Questions Data',
                 'InstructionsData.csv'   => 'Instructions Data',
                 'Status_Begin.csv'       => 'Status Begin Data',
                 'Status_End.csv'         => 'Status End Data',

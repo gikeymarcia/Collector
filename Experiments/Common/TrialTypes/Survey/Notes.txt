@@ -1,0 +1,65 @@
+Survey
+
+The Cue for this trial should be a filename
+of a file located in Common/Surveys/
+
+Each survey file is like another stimuli file.
+Inside, there should be the following columns:
+
+Question
+    Text to be displayed for this question
+Question Name
+    The column this question's data will be stored under
+Type
+    The format of the question. These formats can be found
+    inside this trial type's folder, in the Type/ subfolder
+    You can find more details about each type by looking at
+    their specific file.
+Answers
+    For survey types with limited answers, such as likert 
+    or dropdown responses, the options are defined in this
+    column. Ranges can be defined, with "," as the separator
+    and "::" as the connector, so something like "1::4,10"
+    will create the answers (1, 2, 3, 4, 10). You can also 
+    use non-numeric answers, such as "Not at all, Slightly,
+    Greatly, Completely". If you need to use a comma inside
+    an answer, place a "\" character before it, like so:
+    "Yes\, I agree, No\, I don't agree".
+Values
+    These can be used with scoring column to determine the
+    numeric value of each of the answers. For example, you
+    could set the Answers to "Not at all, Slightly, Greatly,
+    Completely", and code these as (0, 1, 2, 3), so that
+    scores can be calculated by summing/averaging these
+    responses. You can re-use values, but there must be an
+    equal number of values and answers (so, [0, 0, 1, 1] is
+    fine, but [0, 1] with 4 answers would not work). If there
+    aren't the same number of values and answers, an error
+    message will be displayed.
+    The actual answer will still be recorded as raw data.
+Required (Optional)
+    Questions can be marked as required or not, and
+    participants will not be able to submit the page without
+    first answering this question. By default, questions are
+    required, but if you put "No" in this column, then this
+    question can be left blank.
+Shuffle (Optional)
+    Shuffling survey files works the same as any other
+    Collector spreadsheet, and you can test out your shuffles
+    using the Collector Tool "ShuffleTester".
+Score [type]: X
+    Any column starting with "Score" will be treated as
+    instructions for scoring the data. Before the colon,
+    you can also add the keyword "Average", to have the sum
+    converted into an average (by default, the sum will be
+    recorded in the data). For example,
+    "Score Average: Depression" will create a column in the
+    output called "Score_Depression" with the average value
+    of the responses for this scale. In this column, a blank
+    cell means that the current question should not be 
+    considered for this score, so you can set up multiple 
+    sub-scales to be calculated for the same survey.
+
+Certain types will use additional columns, most commonly a
+"Settings" column. Look at the files for that type in the
+Type/ subfolder of the survey trial type for more information.

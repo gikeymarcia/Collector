@@ -62,7 +62,7 @@ function isValidExperimentDir($expName) {
     $default       = array('Current Experiment' => $expName);
     $requiredFiles = array(
         'Current Index', 'Conditions', 'Experiment Config',
-        'Final Questions', 'Stimuli Dir', 'Procedure Dir'
+        'Stimuli Dir', 'Procedure Dir'
     );
     
     foreach ($requiredFiles as $req) {
@@ -819,7 +819,23 @@ function rangeToArray($string, $separator = ',', $rangeIndicator = '::')
 {
     $output = array();
     $ranges = explode($separator, $string);
-    foreach ($ranges as $range) {
+    $rangesCount = count($ranges);
+    $rangesEscaped = array();
+    $currentStr = '';
+    for ($i=0; $i<$rangesCount; ++$i) {
+        if (isset($ranges[$i][0]) AND $ranges[$i][strlen($ranges[$i])-1] === '\\') {
+            // escaped
+            $currentStr .= substr($ranges[$i], 0, -1) . $separator; // remove backslash, add separator
+        } else {
+            $rangesEscaped[] = $currentStr . $ranges[$i];
+            $currentStr = null;
+        }
+    }
+    // if the last string appeared escaped, add it in
+    if ($currentStr !== null) {
+        $rangesEscaped[] = substr($currentStr, 0, -strlen($separator));
+    }
+    foreach ($rangesEscaped as $range) {
         // get the end points of the range
         $endPointsDirty = explode($rangeIndicator, $range);
         $endPoints = array_map('trim', $endPointsDirty);

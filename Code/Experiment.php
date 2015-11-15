@@ -129,11 +129,11 @@
 
     // actually include the trial type display file here
     if ($trialFiles['display']):
-        ?><form class="<?php echo $formClass; ?> invisible" action="<?php echo $postTo; ?>" method="post" id="content" autocomplete="off">
+        ?><form class="experimentForm <?php echo $formClass; ?> invisible" action="<?php echo $postTo; ?>" method="post" id="content" autocomplete="off">
               <?php include $trialFiles['display'] ?>
               <?php
                 if ($_SESSION['Debug']) {
-                    ?><button type="submit" style="position: absolute; top: 50px; right: 50px;">Debug Submit!</button><?php
+                    ?><button type="submit" style="position: absolute; top: 50px; right: 50px;" onclick="$('form').submit()" >Debug Submit!</button><?php
                 }
               ?>
               <input id="RT"       name="RT"      type="hidden"  value="-1"/>

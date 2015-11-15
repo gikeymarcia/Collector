@@ -1,0 +1,36 @@
+Question Name,Question,Type,Answers,Values,Score: Score1,Score Average: Score2
+radio1,Choose an option,radio,"a,b,c",,,
+radio2,"Really, choose an option. Really, choose an option. Really, choose an option. Really, choose an option. Really, choose an option. Really, choose an option. Really, choose an option. Really, choose an option. Really, choose an option. Really, choose an option. Really, choose an option. Really, choose an option. ",radio,"Absolutely Absolutely Absolutely Absolutely Absolutely Absolutely Absolutely Absolutely Absolutely Absolutely Absolutely Absolutely Absolutely Absolutely Absolutely Absolutely Absolutely Absolutely Absolutely, b, c, d",,,
+short1,is this working,shortAnswer,,,,
+short2,is this working,shortAnswer,,,,
+slider1,slider1,slider,1::7,1::7,,
+slider2,slider2,slider,1::7,1::7,,
+,First paragraph,instruct,,,,
+,Second paragraph,instruct,,,,
+,,type break,,,,
+,Third paragraph,instruct,,,,
+weather,How is the weather?,Likert,"horrible,unpleasant,pleasant,fantastic","0,1,2,3",1,r1
+mood,How is your mood?,Likert,"horrible,unpleasant,pleasant,fantastic","0,1,2,3",1,r1
+day,How is your day?,Likert,"horrible,unpleasant,pleasant,fantastic","0,1,2,3",1,r1
+life,How is your life?,Likert,"bad, ok, good, great","1,2,3,4",r1,
+likert,How is this likert?,Likert,"bad, ok, good, great","1,2,3,4",r1,
+survey,How is this survey?,Likert,"bad, ok, good, great","1,2,3,4",r1,
+age,What is your age?,Number,,,,
+,,page break,,,,
+,next page,instruct,,,,
+requires,Are the requires working?,Likert,"not at all, a little, mostly, completely","0,1,2,3",2,
+pages,are the pages working?,Likert,"not at all, a little, mostly, completely","0,1,2,3",2,
+,,type break,,,,
+scoring,How is scoring going?,Likert,"meh,hmm,ok,nice","0,1,2,3",,1
+data,How does the data look?,Likert,"meh,hmm,ok,nice","0,1,2,3",,1
+hoursSlept,How many hours of sleep did you get last night?,number,,,,
+hoursWatchTv,"How many hours of TV do you watch every day, on average?",number,,,,
+,,type break,,,,
+daysLeft,How many days are left until the weekend?,number,,,,
+caffeine,How many caffeinated drinks have you had this week?,number,,,,
+,,page break,,,,
+dropdown,choose an option,dropdown,"aaa,bbb,ccc,ddd,eee,fff,ggg",1::7,,
+date1,what is the date?,date,,,,
+number1,enter a number,number,,,,
+text1,text in here,text,,,,
+datetime1,date and time together,datetime,,,,

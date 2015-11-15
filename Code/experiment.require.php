@@ -321,7 +321,7 @@ function goToNextTrial($pos = null, $post = null) {
     global $_PATH;
     $nextTrial = getNextTrialIndex($pos, $post);
     if ($nextTrial === false) {
-        $next = $_PATH->get('Final Questions Page');
+        $next = $_PATH->get('Done');
     } else {
         $_SESSION['Position']   = $nextTrial[0];
         $_SESSION['PostNumber'] = $nextTrial[1];
@@ -341,7 +341,7 @@ function checkIfDone() {
     $pos = $_SESSION['Position'];
     if (!isset($_SESSION['Procedure'][$pos])) {
         $_SESSION['finishedTrials'] = true;
-        header('Location: ' . $_PATH->get('Final Questions Page'));
+        header('Location: ' . $_PATH->get('Done'));
         exit;
     }
 }
