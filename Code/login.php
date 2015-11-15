@@ -147,7 +147,7 @@
     $status->writeBegin();
 
     // check if procedure and stimuli files have unique column names
-    $procedure->overlap( $stimuli->getKeys() );
+    $procedure->overlap( $stimuli->getKeys(true) );
 
     $procedure->shuffle();
     $stimuli->shuffle();
@@ -176,10 +176,12 @@
     echo "<pre>";
         // var_dump($user, $cond, $debug, $errors, $revisit, $status, $procedure, $stimuli);
     echo "</pre>";
-    if ($errors->arePresent() AND FALSE) {
+    if ($errors->arePresent()) {
         $errors->printErrors();
-        echo "<div>Oops, something has gone wrong. Email the experimenter at <b>$_SETTINGS->experimenter_email</b><br>";
-        echo '<button type="button" onClick="window.location.reload(true);">Click here to refresh</button>';
+        echo "<div>
+                Oops, something has gone wrong. Email the experimenter at <b>$_SETTINGS->experimenter_email</b><br>
+                <button type='button' onClick='window.location.reload(true);'>Click here to refresh</button>
+              </div>";
         exit;
     } else {
         header("Location: Experiment.php");

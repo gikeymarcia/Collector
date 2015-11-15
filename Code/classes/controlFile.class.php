@@ -211,11 +211,26 @@ class controlFile
     }
     /**
      * Use to get a list of the keys used in $this->stitched
+     * @param  bool $noShuffles defaults to false but if set to true then all shuffle related keys will be removed
      * @return $array (e.g., array(0=> 'item', 1=>'trial type'))
      */
-    public function getKeys()
+    public function getKeys($noShuffles = false)
     {
-        return array_keys($this->stitched[0]);
+        if ($noShuffles == false) {
+            return array_keys($this->stitched[0]);
+        } else {
+            $allKeys = array_keys($this->stitched[0]);
+            $subset  = array();
+            foreach ($allKeys as $key) {
+                // if it isn't one of the shuffle columns then include it
+                if (    substr($key, 0, 8)  != "Shuffle "
+                    AND substr($key, 0, 10) != "AdvShuffle"
+                ) {
+                    $subset[] = $key;
+                }
+            }
+            return $subset;
+        }
     }
     /**
      * Checks if a set of given keys overlaps
@@ -227,7 +242,7 @@ class controlFile
     public function overlap($otherKeys)
     {
         $doubles = array();
-        $objKeys = $this->getKeys();
+        $objKeys = $this->getKeys(true);
         $objKeys = array_flip($objKeys);
         foreach ($otherKeys as $key) {
             if (isset($objKeys[$key])) {
@@ -243,40 +258,7 @@ class controlFile
             $msg .= "</ol>";
             $this->errorObj->add($msg);
         }
-    }
-    /**
-     * Work in progress -Goal is that it corrects for the Derek mistake
-     * @return [type] [description]
-     */
-    protected function checkShuffleCols()
-    {
-        $cols = $this->getKeys();
-        $cols = array_flip($cols);
-        foreach ($cols as $key => &$value) {
-            $value = str_replace(" ","",$key);
-        }
-        $name = get_class($this);
-        var_dump($value, $name);
-
-        $shuffleBase = 'Shuffle';
-        $keys = $this->getKeys();
-        // remove all columns names that don't have 'Shuffle' in them
-        foreach ($keys as $pos => $name) {
-            if (strpos($name, $shuffleBase) === false) {
-                unset($keys[$pos]);
-            }
-        }
-        $keys = array_flip($keys);
-        $validShuffles = 0;
-        for ($i=1; $i < count($keys); $i++) { 
-            if($i == 1 
-                AND (isset($keys[$shuffleBase]))
-            ) {
-                $validShuffles++;
-            }
-        }
-    }
-    
+    }    
     /**
      * Finds the filename and actual row number of a row in the stitched procedure
      * @param int $i index of procedure to get origins
