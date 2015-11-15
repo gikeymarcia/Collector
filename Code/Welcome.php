@@ -103,7 +103,7 @@
                     }
                     // showing Stimuli + Procedure files for each condition
                     if ($_SETTINGS->show_condition_info) {
-                        $title = "title={$cond['Stimuli']} - {$cond['Procedure']}";
+                        $title = "title='{$cond['Stimuli']} - {$cond['Procedure']}'";
                     } else {
                         $title = '';
                     }
