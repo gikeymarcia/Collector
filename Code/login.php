@@ -157,19 +157,20 @@
     require $_PATH->get('Trial Validator Require');
     
     ######## Feed stuff to login #######
-    $_SESSION['Username']  = $user->getUsername();
-    $_SESSION['ID']        = $user->getID();
-    $_SESSION['Session']   = $user->getSession();
+    $_SESSION['Username']   = $user->getUsername();
+    $_SESSION['ID']         = $user->getID();
+    $_SESSION['Session']    = $user->getSession();
     
-    $_SESSION['Start Time']  = date('c');
-    $_SESSION['Condition']   = $cond->get();
-    $_SESSION['Position']    = 0;
-    $_SESSION['PostNumber']  = 0;
+    $_SESSION['Start Time'] = time();
+    $_SESSION['Condition']  = $cond->get();
+    $_SESSION['Position']   = 0;
+    $_SESSION['PostNumber'] = 0;
     
-    $_SESSION['Stimuli']     = $stimuli->shuffled();
-    $_SESSION['Procedure']   = $procedure->shuffled();
+    $_SESSION['Stimuli']    = $stimuli->shuffled();
+    $_SESSION['Procedure']  = $procedure->shuffled();
     
-    $_SESSION['Responses']   = array();
+    $_SESSION['Responses']  = array();
+    
     ####################################
 
 

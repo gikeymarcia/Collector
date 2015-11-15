@@ -85,15 +85,15 @@ class statusController
     public function writeBegin()
     {
         $UserData = array(
-            'Username'              => $this->username,
-            'ID'                    => $this->id,
-            'Date'                  => date('c'),
-            'Session'               => $this->sessionNum,
-            'Output_File'           => $this->outputFile,
-            'Browser'               => $this->browser,
-            'DeviceType'            => $this->deviceType,
-            'OS'                    => $this->OS,
-            'IP'                    => $_SERVER["REMOTE_ADDR"]
+            'Username'    => $this->username,
+            'ID'          => $this->id,
+            'Date'        => date('c'),
+            'Session'     => $this->sessionNum,
+            'Output_File' => $this->outputFile,
+            'Browser'     => $this->browser,
+            'DeviceType'  => $this->deviceType,
+            'OS'          => $this->OS,
+            'IP'          => $_SERVER["REMOTE_ADDR"]
         );
         foreach ($this->condition as $key => $value) {
             $UserData["Cond_$key"] = $value;
@@ -106,13 +106,12 @@ class statusController
         // below is copied from done.php
         // Not functional yet so the metho is protected to prevent it from being run from within the experiment
         $data = array(
-            'Username'              => $this->username,
-            'ID'                    => $this->id,
-            'Date'                  => date('c'),
-            'Duration'              => $duration,
-            
-            'Duration_Formatted'    => $durationFormatted,
-            'Session'               => $_SESSION['Session'],
+            'Username'           => $this->username,
+            'ID'                 => $this->id,
+            'Date'               => date('c'),
+            'Duration'           => $duration,
+            'Duration_Formatted' => $durationFormatted,
+            'Session'            => $_SESSION['Session'],
         );
         arrayToLine($data, $_PATH->get('Status End Data'));
     }
