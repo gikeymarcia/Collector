@@ -121,7 +121,6 @@ var COLLECTOR = {
 
             // these happen immediately on load
             $(':input:not(:radio):enabled:visible:first').focusWithoutScrolling();          // focus cursor on first input
-            $("#loadingForm").submit();                         // submit form to advance page
 
             $("form").submit( function(event){
                 $("#content").addClass("invisible");            // hide content
