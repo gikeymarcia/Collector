@@ -30,7 +30,7 @@
             'Common' => array (
                 'Dir Name' => 'Common',
                 
-                'Common Config.ini' => 'Common Config',
+                'Common Settings.ini' => 'Common Settings',
             
                 'Ineligible' => array (
                     'Dir Name' => 'Ineligibility Dir',
@@ -64,11 +64,12 @@
                 'Dir Name' => 'Current Experiment',
                 
                 'index.php' => 'Current Index',
+                'Return.php' => 'Current Return',
                 
                 'Conditions.csv' => 'Conditions',
                 'Task Instructions.php' => 'Instructions',
                 
-                'Config.ini' => 'Experiment Config',
+                'Settings.ini' => 'Experiment Settings',
                 
                 'Stimuli' => array (
                     'Dir Name' => 'Stimuli Dir',
@@ -87,7 +88,8 @@
         'Code' => array (
             'Dir Name' => 'Code',
             
-            'Welcome.php' => 'Welcome',
+            'Welcome.php'     => 'Welcome',
+            'WelcomeBack.php' => 'Welcome Back',
             
             'check.php' => 'Check',
             
@@ -117,31 +119,14 @@
             
             'login.php' => 'Login',
             
-            'errors.class.php'         => 'Errors Class',
-            'users.class.php'          => 'Users Class',
-            'conditions.class.php'     => 'Conditions Class',
-            'debug.class.php'          => 'Debug Class',
-            'status.class.php'         => 'Status Class',
-            'returnVisitor.class.php'  => 'Return Class',
-            'controlFiles.class.php'   => 'Control Files Class',
-            'procedure.class.php'      => 'Procedure Class',
-            'stimuli.class.php'        => 'Stimuli Class',
-            'trialValidator.class.php' => 'Trial Validator Class',
-            
             'trialValidator.require.php' => 'Trial Validator Require',
             
             'nojs.php' => 'No JS',
-            
-            'parse.class.php' => 'Parse',
-            
-            'pathfinder.class.php' => 'Pathfinder',
             
             'shuffleFunctions.php' => 'Shuffle Functions',
             
             'systemMap.php' => 'system map',
             
-            'trialLoader.php' => 'Trial Tester Loader',
-            'trialTester.php' => 'Trial Tester Menu',
             
             'css' => array (
                 'Dir Name' => 'CSS Dir',
@@ -165,6 +150,23 @@
                     
                     // lots of stuff in here
                 ),
+            ),
+
+            'classes' => array (
+                'Dir Name' => 'Classes',
+
+                'conditionController.class.php'     => 'Conditions Class',
+                'controlFile.class.php'             => 'Control Files Class',
+                'debugController.class.php'         => 'Debug Class',
+                'errorController.class'             => 'Errors Class',
+                'Parse.class.php'                   => 'Parse',
+                'Pathfinder.class.php'              => 'Pathfinder',
+                'procedure.class.php'               => 'Procedure Class',
+                'ReturnVisitController.class.php'   => 'Return Class',
+                'statusController.class.php'        => 'Status Class',
+                'stimuli.class.php'                 => 'Stimuli Class',
+                'trialValidator.class.php'          => 'Trial Validator Class',
+                'user.class.php'                    => 'Users Class',
             ),
             
             'javascript' => array (

@@ -73,8 +73,8 @@
 
     #### TIMING
     // override time in debug mode, use standard timing if no debug time is set
-    if ($_SESSION['Debug'] == true && $_CONFIG->debug_time != '') {
-        $max_time = $_CONFIG->debug_time;
+    if ($_SESSION['Debug'] == true && $_SETTINGS->debug_time != '') {
+        $max_time = $_SETTINGS->debug_time;
     }
 
     if (!isset($min_time))       $min_time = 'not set';
@@ -168,7 +168,7 @@
 
 
     #### Diagnostics ####
-    if (($_CONFIG->trial_diagnostics == true)
+    if (($_SETTINGS->trial_diagnostics == true)
         OR ($trialFail == true)
     ) {
         showTrialDiagnostics();

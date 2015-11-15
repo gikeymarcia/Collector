@@ -7,3 +7,8 @@ Allow from all
     Order Deny,Allow
     Deny from all
 </Files>
+
+<Files "Common Settings.ini">
+    Order Deny,Allow
+    Deny from all
+</Files>

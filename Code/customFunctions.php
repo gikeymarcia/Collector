@@ -11,7 +11,7 @@
  */
 function getCollectorSettings($currentExp = null) {
     global $_PATH;
-    $settings = Parse::fromConfig($_PATH->get('Common Config'), true);
+    $settings = Parse::fromConfig($_PATH->get('Common Settings'), true);
     
     if ($currentExp === null AND 
         $_PATH->getDefault('Current Experiment') !== null
@@ -22,7 +22,7 @@ function getCollectorSettings($currentExp = null) {
     if ($currentExp !== null) {
         $def = array('Current Experiment' => $currentExp);
         $newSettings = Parse::fromConfig(
-            $_PATH->get('Experiment Config', 'relative', $def)
+            $_PATH->get('Experiment Settings', 'relative', $def)
         );
         foreach ($newSettings as $settingName => $setting) {
             $settings->$settingName = $setting;
@@ -61,7 +61,7 @@ function isValidExperimentDir($expName) {
     
     $default       = array('Current Experiment' => $expName);
     $requiredFiles = array(
-        'Current Index', 'Conditions', 'Experiment Config',
+        'Current Index', 'Conditions', 'Experiment Settings',
         'Stimuli Dir', 'Procedure Dir'
     );
     

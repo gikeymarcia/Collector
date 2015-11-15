@@ -80,45 +80,16 @@
     
     <section id="indexLogin" class="flexVert">
         <div class="textcenter flexChild">
-            <?= "Please enter your $_SETTINGS->ask_for_login"  ?>
+            <?= "Please enter your $_SETTINGS->ask_for_login and make sure it is the same one you used last time"  ?>
         </div>
         <div class="flexChild">
             <input name="Username" type="text" value="" class="collectorInput" placeholder="<?= $_SETTINGS->ask_for_login ?>">
             
-            <!-- Condition selector -->
-        <?php if ($_SETTINGS->show_condition_selector == true): ?>
-            <select name="Condition" class="collectorInput">
-        <?php else: ?>
             <select class="hidden" name="Condition">
-        <?php endif; ?>
                 <option default selected value="Auto">Auto</option>
-        <?php  // Display conditions as options
-                foreach ($Conditions as $i => $cond) {
-                    if ($_SETTINGS->hide_flagged_conditions AND substr($cond['Description'],0,1) === '#') { continue; }
-                    // showing Description on hover
-                    if ($_SETTINGS->use_condition_names) {
-                        $name = $cond['Description'];
-                    } else {
-                        $name = $i+1;
-                    }
-                    // showing Stimuli + Procedure files for each condition
-                    if ($_SETTINGS->show_condition_info) {
-                        $title = "title={$cond['Stimuli']} - {$cond['Procedure']}";
-                    } else {
-                        $title = '';
-                    }
-                    // make flagged conditions grey
-                    if (substr($cond['Description'],0,1) === '#') {
-                        $style = 'style="color: grey;"';
-                    } else {
-                        $style = '';
-                    }
-                    // put this condition in the dropdown selector
-                    echo "<option value='$i' $title $style>$name</option>";
-                }
-        ?>
             </select>
             <input type="hidden" name="CurrentExp" value="<?= $currentExp ?>">
+            <input type="hidden" name="returning" value="1">
             <button class="collectorButton" type="submit">Login</button>
         </div>
     </section>

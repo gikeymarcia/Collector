@@ -27,7 +27,7 @@
      *
      * What you have access to in all tools
      *     - $_PATH
-     *     - $_CONFIG
+     *     - $_SETTINGS
      *     - `customFunctions.php`
      *     - $_DATA
      *         -- This is a special holder array that you can use to store information into $_SESSION

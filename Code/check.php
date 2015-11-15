@@ -13,7 +13,7 @@
         require $_PATH->get('Parse');
         
         // load configs
-        $_CONFIG = Parse::fromConfig($_PATH->get('Config'), true);
+        $_SETTINGS = Parse::fromConfig($_PATH->get('Config'), true);
 
         // load custom functions
         require $_PATH->get('Custom Functions');
@@ -145,7 +145,7 @@
             // }
         }
 
-        if (!(in_array($ip, $_CONFIG->whitelist, false))) {          // skip the autocheck if IP is allowed
+        if (!(in_array($ip, $_SETTINGS->whitelist, false))) {          // skip the autocheck if IP is allowed
             rejectCheck($noGo);                             // print errors
         } elseif ($priorExp == true) {
             echo '<h2>Sorry, you are not eligible to participate in this study

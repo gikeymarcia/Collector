@@ -2,8 +2,8 @@
 Order Allow,Deny
 Allow from all
 
-#Block access to Settings.php
-<Files Config.ini>
+#Block access to Settings.ini
+<Files Settings.ini>
     Order Deny,Allow
     Deny from all
 </Files>

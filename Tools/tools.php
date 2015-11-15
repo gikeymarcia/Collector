@@ -5,12 +5,12 @@
     $_root = '..';
     
     // load file locations
-    require $_root.'/Code/pathfinder.class.php';
+    require $_root.'/Code/classes/Pathfinder.class.php';
     $_PATH = new Pathfinder();
     
     // load configs
     require $_PATH->get('Parse');
-    $_CONFIG = Parse::fromConfig($_PATH->get('Common Config'), true);
+    $_SETTINGS = Parse::fromConfig($_PATH->get('Common Settings'), true);
     
     // load custom functions
     require $_PATH->get('Custom Functions');
@@ -59,7 +59,7 @@
 	<body id="flexBody">
 <?php
     // handling login state and display of login prompt
-    $state = loginState($_CONFIG->password);
+    $state = loginState($_SETTINGS->password);
     if ($state != 'loggedIn') {
         LoginPrompt($state);
         $admin['status'] = 'attempting';
