@@ -16,7 +16,7 @@
      *
      * All valid tools populate the tool selector dropdown menu
      *
-     * When somone picks a tool the primary script (e.g./ `/Tools/NewThing/NewThing.php`) is 
+     * When somone picks a tool the primary script (e.g. `/Tools/NewThing/NewThing.php`) is 
      * included from within /Tool/tools.php
      *
      * Essentially, anything you write on your script runs as if it was running from /Tools/tools.php
@@ -34,6 +34,9 @@
      *            I highly recommend you use $_DATA and not make your own holder in $_SESSION
      *            By using $_DATA the session data you make will be wiped when the user logs out
      *            $_DATA is actually an alias for $_SESSION['admin']['(toolname)Data'] = array();
+     *     - class autoloader.  Any class in /Code/classes/ will be loaded once you attempt to make a new
+     *            instance. For example, if I try to make `$object = new user ("mikey", $errors);`
+     *            the autoloader will `require "Code/classes/user.class.php"`. 
      *
      * 
      * General structure of page where your tool will be included:

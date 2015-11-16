@@ -7,7 +7,7 @@
 
 <style type="text/css">
     .space {
-        margin-bottom: 100px;;
+        margin-bottom: 100px;
     }
     .namingIsYourBusiness {
         font-size: 100%;
@@ -35,9 +35,9 @@ a new paragraph.<br> Follow the steps below to edit your first CSS code.</p>
 
 <span>This is how you make an ordered list</span>
 <ol>
-    <li>Open up the code in <code>Experiment/Tools/Tinker/Tinker.php</code></li>
+    <li>Open up the code in <code>/Tools/Tinker/Tinker.php</code></li>
     <li>Find the CSS style that defines the class <code>namingIsYourBusiness</code></li>
-    <li>Add the property <code>width: 600px;</code></li>
+    <li>Add the property <code>width: 650px;</code></li>
     <li>Save the file then reload this page. Looks better, right?</li>
     <li>Add a second property <code>margin: 20px auto;</code>. Save and refresh again</li>
     <li><code>margin:</code> controls the distance between elements on the page. There 
@@ -81,21 +81,21 @@ a new paragraph.<br> Follow the steps below to edit your first CSS code.</p>
     #### Use this area to test out your php code ideas.
     
     // this is the most basic way you can tell PHP to output some HTML to the page
-    echo '<h1> This is from PHP</h1>';
+    echo "<h1> This is from PHP</h1>";
     
-    // this is a variable and I'm giving it the value of my name
-    $name = 'Mikey';
+    // this is a variable and I"m giving it the value of my name
+    $name = "Mikey";
     
     // we can insert variables into the HTML we output
-    echo '<h2> Hi ' . $name . '! Welcome to PHP</h2>';
+    echo "<h2> Hi $name! Welcome to PHP</h2>";
     
     // we can also use IF, ELSEIF, and ELSE statements to give different HTML depending on variable values
-    if ($name == 'Mikey') {
-        echo '<p>Welcome back creator</p>';
-    } elseif ($name == 'Tyson') {
-        echo '<p>Welcome back friend</p>';
+    if ($name == "Mikey") {
+        echo "<p>Welcome back creator</p>";
+    } elseif ($name == "Tyson") {
+        echo "<p>Welcome back friend</p>";
     } else {
-        echo '<p>Who are you?</p>';
+        echo "<p>Who are you?</p>";
     }
     
     // Change the $name to Tyson then save/refresh. Try giving a different name.

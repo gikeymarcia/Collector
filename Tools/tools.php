@@ -3,18 +3,34 @@
 
     // set the root for initial file locations
     $_root = '..';
+
+    // automatically load classes when they are needed
+    function autoClassLoader($className) {
+        $root = '';
+        $ancestors = 0;
+        while (!is_dir("{$root}Code/classes") AND ($ancestors < 3)) {
+            $root .= "../";
+            ++$ancestors;
+        }
+        $loc = "{$root}Code/classes/$className.class.php";
+        if (is_file($loc)) {
+            require $loc;
+        } else {
+            var_dump(scandir(dirName($loc)));
+            echo "Object $className is not found";
+        }
+    }
+    spl_autoload_register("autoClassLoader");
     
     // load file locations
-    require $_root.'/Code/classes/Pathfinder.class.php';
     $_PATH = new Pathfinder();
-    
-    // load configs
-    require $_PATH->get('Parse');
-    $_SETTINGS = Parse::fromConfig($_PATH->get('Common Settings'), true);
     
     // load custom functions
     require $_PATH->get('Custom Functions');
     require 'loginFunctions.php';
+    
+    // load configs
+    $_SETTINGS = getCollectorSettings();
     
     // declaring admin for first login
     if (!isset($_SESSION['admin'])) {
