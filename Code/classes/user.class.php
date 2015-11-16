@@ -147,8 +147,9 @@ class user
              </ol>
          </div>";
     }
-    public function oldVersionShim ()
+    public function feedPathfinder (Pathfinder $pathfinder) 
     {
-        
+        $pathfinder->setDefault('Username', $this->getUsername());
+        $pathfinder->setDefault('Output',   $this->getOutputFile());
     }
 }

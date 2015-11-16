@@ -5,84 +5,46 @@
  */
     require 'initiateCollector.php';
     
-    #### this code was causing more problems than it is solving
-    # Need to think of a better anti-cheat mode but for now we are skipping any done.php check
-    // if someone skipped to done.php without doing all trials
-    // if ((array_key_exists('finishedTrials', $_SESSION) == false)
-    //     OR ($_SESSION['finishedTrials'] != true)
-    // ) {
-    //     header("Location: http://www.youtube.com/watch?v=oHg5SJYRHA0");            // rick roll people trying to skip to done.php
-    //     exit;
-    // }
-    
-    
-    // turn off error reporting for debug mode
-    if (array_key_exists('Debug', $_SESSION)) {
-        if ($_SESSION['Debug'] == false) {
-            error_reporting(0);
-        }
-    }
-    
-    
     // Set the page message
     if ($_SETTINGS->next_experiment == false) {
-        $title   = 'Done!';
-        $message = '<h2>Thank you for your participation!</h2>'
-                 .  '<p>If you have any questions about the experiment please email '
-                 .      '<a href="mailto:' . $_SETTINGS->experimenter_email . '?Subject=Comments%20on%20' . $_PATH->getDefault('Current Experiment') . '" target="_top">' . $_SETTINGS->experimenter_email . '</a>'
-                 .  '</p>';
+        $email = $_SETTINGS->experimenter_email;
+        $currentExperiment = $_PATH->getDefault('Current Experiment');
+        $verification_code = "$_SETTINGS->verification-{$_SESSION['ID']}";
+        $title   = "Done!";
+        $message = "<h2>Thank you for your participation!</h2>"
+                 .  "<p>If you have any questions about the experiment please email "
+                 .      "<a href='mailto:$email?Subject=Comments%20on%20$currentExperiment' target='_top'>$email</a>"
+                 .  "</p>";
         if ($_SETTINGS->mTurk_mode == true) {
-            $message .= '<h3>Your verification code is: ' . $_SETTINGS->verification . '-' . $_SESSION['ID'] .'</h3>';
+            $message .= "<h3>Your verification code is: $verification_code.</h3>";
         }
     } else {
-        $title    = 'Quick Break';
-        $message  = '<h2>Experiment will resume in 5 seconds.</h2>';
-        $nextLink = 'http://' . $_SETTINGS->next_experiment;
-        $username = $_SESSION['Debug'] ? $_SETTINGS->debug_name . ' ' . $_SESSION['Username'] : $_SESSION['Username'];
-        echo '<meta http-equiv="refresh" content="5; url=' . $nextLink . 'Code/login.php?Username='
-            . urlencode($username) . '&Condition=Auto&ID=' . $_SESSION['ID'] . '">';
+        $title     = "Quick Break";
+        $message   = "<h2>Experiment will resume in 5 seconds.</h2>";
+
+        $username  = urlencode($_SESSION['Username']);
+        $nextLink  = "http://$_SETTINGS->next_experiment";
+        $nextLink .= "/login.php?Username=$username&Condition=Auto";
+        ?>
+        <script type="text/javascript">
+            window.location.replace("<?= $nextLink ?>");
+        </script>
+        <?php
     }
-    
-    
-    if (isset($_SESSION['finishedTrials'])
-        AND (!isset($_SESSION['alreadyDone']))
-        ) {
-        // calculate total duration of experiment session
-        $duration = time() - strtotime($_SESSION['Start Time']);
-        $durationFormatted = $duration;
-        $hours   = floor($durationFormatted/3600);
-        $minutes = floor( ($durationFormatted - $hours*3600)/60);
-        $seconds = $durationFormatted - $hours*3600 - $minutes*60;
-        if ($hours   < 10 ) { $hours   = '0' . $hours;   }
-        if ($minutes < 10 ) { $minutes = '0' . $minutes; }
-        if ($seconds < 10 ) { $seconds = '0' . $seconds; }
-        $durationFormatted = $hours . ':' . $minutes . ':' . $seconds;
-        
-        
-        #### Record info about the person ending the experiment to status finish file
-        $data = array(
-                        'Username'              => $_SESSION['Username'],
-                        'ID'                    => $_SESSION['ID'],
-                        'Date'                  => date('c'),
-                        'Duration'              => $duration,
-                        
-                        'Duration_Formatted'    => $durationFormatted,
-                        'Session'               => $_SESSION['Session'],
-                        );
-        // TO-DO ... import status
-        arrayToLine($data, $_PATH->get('Status End Data'));
-        
-        
-        ######## Save the $_SESSION array as a JSON string
-        $ExpOverFlag = $_SESSION['Trials'][ ($_SESSION['Position']) ]['Procedure']['Item'];
-        // if you haven't finished all sessions yet
-        if ($ExpOverFlag != 'ExperimentFinished') {           
-            $_SESSION['Position']++;                        // increment counter so next session will begin after the *NewSession* (if multisession)
-            $_SESSION['Session']++;                         // increment session # so next login will be correctly labeled as the next session
-            $_SESSION['ID'] = rand_string();                // generate a new ID (for next login)
-            $_SESSION['finishedTrials'] = false;            // will stop them from skipping to done.php during next session
-            $_SESSION['LastFinish'] = time();
-        }
+
+
+    ######## Save the $_SESSION array as a JSON string
+    // do these things if we aren't at the end of the experiment
+    if ($_SESSION['state'] == 'break') {
+
+        $status = unserialize($_SESSION['Status']);
+        $status->writeEnd($_SESSION['Start Time']);
+
+        // preparing $_SESSION for the next run
+        $_SESSION['state'] = 'return';
+        $_SESSION['Position']++;                        // increment counter so next session will begin after the NewSession (if multisession)
+        $_SESSION['Session']++;                         // increment session # so next login will be correctly labeled as the next session
+        $_SESSION['ID'] = rand_string();                // generate a new ID (for next login)
         
         $jsonSession = json_encode($_SESSION);              // encode the entire $_SESSION array as a json string
         $jsonPath = $_PATH->get('json');

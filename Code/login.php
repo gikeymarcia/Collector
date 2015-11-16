@@ -4,52 +4,47 @@
  */
     require 'initiateCollector.php';
     
-    // reset session so it doesn't contain any information from a previous login attempt
+    #### Reset session so it doesn't contain any information from a previous login attempt
     $_SESSION = array();
+    $_SESSION['state'] = 'init';
+
+
+    #### initiate the object that finds files for us
     $_PATH = new Pathfinder($_SESSION['Pathfinder']);
+    require $_PATH->get('Shuffle Functions');               // load shuffle functions we will use later
+
+
+    #### Establish which experiment is active
     $_SESSION['Current Collector'] = $_PATH->get('root', 'url');
-    
-    require $_PATH->get('Shuffle Functions');
-    
-    if (!isset($_GET['CurrentExp'])) {
-        header('Location: ' . $_PATH->get('root'));
+    $current = empty($_GET['CurrentExp']) ? '' : $_GET['CurrentExp'];       // if no experiment is set then set current to empty string
+    if (in_array($current, getCollectorExperiments()) ) {
+        $_PATH->setDefault('Current Experiment', $_GET['CurrentExp']);      // tell pathfinder the current experiment
+    } else {
+        header('Location: ' . $_PATH->get('root'));                         // send back to index
         exit;
     }
     
-    if (!in_array($_GET['CurrentExp'], getCollectorExperiments())) {
-        header('Location: ' . $_PATH->get('root'));
-        exit;
-    }
-    
-    $_PATH->setDefault('Current Experiment', $_GET['CurrentExp']);
-    
-    if (!isset($_GET['Username'], $_GET['Condition'])) {
-        header('Location: ' . $_PATH->get('Current Index'));
-        exit;
-    }
-    
-    
+
+    #### load settings from common AND from current experiment folder
     $_SETTINGS = getCollectorSettings();
 
-    // login objects
+
+    #### login objects
     $errors = new errorController();
+
     $user   = new user(
         $_GET['Username'],
         $errors
     );
-    $_PATH->setDefault('Output', $user->getOutputFile());
+    $user->feedPathfinder($_PATH);
     
     $debug = new debugController(           // sets $_SESSION['Debug'] value
         $user->getUsername(), 
         $_SETTINGS->debug_name,
         $_SETTINGS->debug_mode
     );
-    if ($debug->is_on()) {
-        $_PATH->setDefault('Data Sub Dir', '/Debug');
-    } else {
-        $_PATH->setDefault('Data Sub Dir', '');
-    }
-    $debug->toSession();                  // sets $_SESSION['Debug'] to a bool
+    $debug->feedPathfinder($_PATH);         // change data recording directory if debug mode is on
+    $debug->toSession();                    // sets $_SESSION['Debug'] to a bool
 
     $cond = new conditionController(
         $_PATH->get('Conditions'),
@@ -69,40 +64,51 @@
     
 
     #### Dealing with people returning to the experiment
-    // require $_PATH->get('Return Class');
     $revisit = new ReturnVisitController(
-        $user->getUsername(), 
-        $_PATH->get('JSON Dir'), 
+        $_PATH->get('json'), 
         $_PATH->get('Done'),
         $_PATH->get('Experiment Page')
     );
 
     if ($revisit->isReturning()) {
         if ($revisit->alreadyDone()) {
-            $revisit->reload();
+echo "already done!";
+// echo "PHP thinks we done.<br>";
+// echo "<pre>";
+//     var_dump($revisit);
+// echo "</pre>";
+            $revisit->reloadToDone();
         }
         if ($revisit->timeToReturn()) {                     // updating lots of things with info from previous login
-            $user->setSession( $revisit->getSession() );    // give $user correct session #
-            
-            // make status object that will write status begin/end
-            $status = new statusController();
-            $status->setConditionInfo(                      // pass $status the "row" of previous login condition
-                $revisit->oldCondition()
-            );
-            $status->updateUser(                            // pass $status necessary user information
-                $user->getUsername(),
-                $user->getID(),
-                $user->getOutputFile(),
-                $user->getSession()
-            );
-            $status->setPaths(                              // where to write the data
-                $_PATH->get('Status Begin Data'),
-                $_PATH->get('Status End Data')
-            );
-            // update Output path
-            $_PATH->setDefault('Output', $user->getOutputFile());
-            $status->writeBegin();                          // write to status begin
-            $revisit->reload();
+// echo "code says it is time to return!<br>";
+            $revisit->reloadToExperiment($_PATH, $user);            
+// $user->setSession( $revisit->getSession() );    // give $user correct session #
+// $user->feedPathfinder($_PATH);
+// $user->printData();
+
+// // make status object that will write status begin/end
+// $status = new statusController();
+// $status->setConditionInfo(                      // pass $status the "row" of previous login condition
+//     $revisit->oldCondition()
+// );
+// $status->updateUser(                            // pass $status necessary user information
+//     $user->getUsername(),
+//     $user->getID(),
+//     $user->getOutputFile(),
+//     $user->getSession()
+// );
+// $status->setPaths(                              // where to write the data
+//     $_PATH->get('Status Begin Data'),
+//     $_PATH->get('Status End Data')
+// );
+// // update Output path
+// $status->writeBegin();                          // write to status begin
+// $_SESSION['Status'] = serialize($status);       // save status so we can write the status end
+// echo "PHP thinks we are already done.<br>";
+// echo "<pre>";
+//     var_dump($revisit, $user, $status);
+// echo "</pre>";
+// $revisit->reloadToExperiment();
         } else {
             $revisit->explainTimeProblem();
         }
@@ -145,6 +151,7 @@
         $_PATH->get('Status End Data')
     );
     $status->writeBegin();
+    $_SESSION['Status'] = serialize($status);
 
     // check if procedure and stimuli files have unique column names
     $procedure->overlap( $stimuli->getKeys(true) );
@@ -176,6 +183,7 @@
 
     echo "<pre>";
         // var_dump($user, $cond, $debug, $errors, $revisit, $status, $procedure, $stimuli);
+        // exit;
     echo "</pre>";
     if ($errors->arePresent()) {
         $errors->printErrors();
@@ -185,19 +193,19 @@
               </div>";
         exit;
     } else {
+        $_SESSION['state'] = 'exp';
         header("Location: Experiment.php");
     }
 
-    
-    
-    
-// var_dump($procedure);
-
-// echo 'hello world';
-
-// $revisit->debug();
-
 exit;
+                        #             #
+                       ###           ###
+                      #####         #####
+                     #######       #######
+                    #########     #########
+                   ###########   ###########
+                 ############## ##############
+                ################################
     
     #### Find all of the columns that hold trial types (including 'Post# Trial Type's)
     // $trialTypeColumns = array();                                                                // Each position will have the column name of a trial type column
@@ -371,7 +379,7 @@ exit;
     // $cleanStimuli = GetFromFile($_FILES->stim_files.'/' . $_SESSION['Condition']['Stimuli']);
     // $stimuli = multiLevelShuffle($cleanStimuli);
     // $stimuli = shuffle2dArray($stimuli, $_SETTINGS->stop_at_login);
-    $_SESSION['Stimuli'] = $stimuli;
+    // $_SESSION['Stimuli'] = $stimuli;
     
     // load and block shuffle procedure for this condition
     // $cleanProcedure = GetFromFile($_FILES->proc_files.'/' . $_SESSION['Condition']['Procedure']);
@@ -392,7 +400,7 @@ exit;
     // $procedure = multiLevelShuffle($cleanProcedure);
     // $procedure = shuffle2dArray($procedure, $_SETTINGS->stop_at_login);
     
-    $_SESSION['Procedure'] = $procedure;
+    // $_SESSION['Procedure'] = $procedure;
     
     // Load entire experiment into $Trials[1-X] where X is the number of trials
     // $Trials = array(0=> 0);
@@ -439,9 +447,9 @@ exit;
     
     #### Establishing $_SESSION['Trials'] as the place where all experiment trials are stored
     // $Trials also contains trials for other sessions but experiment.php sends to done.php once a *NewSession* shows up
-    $_SESSION['Trials']     = $Trials;
-    $_SESSION['Position']   = 1;
-    $_SESSION['PostNumber'] = 0;
+    // $_SESSION['Trials']     = $Trials;
+    // $_SESSION['Position']   = 1;
+    // $_SESSION['PostNumber'] = 0;
     
     
     

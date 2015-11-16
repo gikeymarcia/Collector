@@ -35,7 +35,6 @@ class statusController
     function __construct()
     {
         $this->updateBrowser();
-        
     }
     /**
      * Grabs the browser's useragent string and returns usable information
@@ -100,9 +99,15 @@ class statusController
         }
         arrayToLine($UserData, $this->beginPath);
     }
-    // Current not meant to be used
-    protected function writeEnd()
+    /**
+     * Write a status end message
+     * @param  int $startTime the # of seconds from the UNIX epoch
+     * @return n/a            Writes a file but doens't return text
+     */
+    public function writeEnd($startTime)
     {
+        $duration = time() - $startTime;
+        $durationFormatted = durationFormatted($duration);
         // below is copied from done.php
         // Not functional yet so the metho is protected to prevent it from being run from within the experiment
         $data = array(
@@ -113,7 +118,10 @@ class statusController
             'Duration_Formatted' => $durationFormatted,
             'Session'            => $_SESSION['Session'],
         );
-        arrayToLine($data, $_PATH->get('Status End Data'));
+        foreach ($this->condition as $key => $value) {
+            $UserData["Cond_$key"] = $value;
+        }
+        arrayToLine($data, $this->endPath);
     }
 }
 ?>

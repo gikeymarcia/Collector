@@ -496,31 +496,26 @@ function getColumnsFrom2d(array $array)
  */
 function durationFormatted($durationInSeconds)
 {
-    $hours   = floor($durationInSeconds/3600);
-    $minutes = floor(($durationInSeconds - $hours*3600)/60);
-    $seconds = $durationInSeconds - $hours*3600 - $minutes*60;
-    if ($hours > 23) {
-        $days = floor($hours/24);
-        $hours = $hours - $days*24;
-        if ($days < 10) {
-            $days = '0' . $days;
+    $min  = 60;
+    $hour = 60*60;
+    $day  = 60*60*24;
+     
+    $time = array();
+    $time['d'] = floor($durationInSeconds/$day);
+    $time['h'] = floor(($durationInSeconds - $time['d']*$day) / $hour);
+    $time['m'] = floor(($durationInSeconds - $time['d']*$day - $time['h']*$hour) / $min);
+    $time['s'] =        $durationInSeconds - $time['d']*$day - $time['h']*$hour - $time['m']*$min;
+    $output = "";
+    foreach ($time as $chunk => $amount) {
+        if ($amount > 0) {
+            if($amount < 10) {
+                $output .= "0$amount{$chunk}:";
+            } else {
+                $output .= "$amount{$chunk}:";
+            }
         }
     }
-    if ($hours < 10) {
-        $hours   = '0' . $hours;
-    }
-    if ($minutes < 10) {
-        $minutes = '0' . $minutes;
-    }
-    if ($seconds < 10) {
-        $seconds = '0' . $seconds;
-    }
-    $output = '';
-    if (isset($days)) {
-        $output .= $days . 'd:';
-    }
-    $output .= $hours.'h:' . $minutes.'m:' . $seconds.'s';
-    return $output;
+    return rtrim($output, ":");
 }
 /**
  * Formats a time like 5d:2h:3m:20s into seconds.

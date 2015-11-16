@@ -340,7 +340,7 @@ function checkIfDone() {
     global $_PATH;
     $pos = $_SESSION['Position'];
     if (!isset($_SESSION['Procedure'][$pos])) {
-        $_SESSION['finishedTrials'] = true;
+        $_SESSION['state'] = 'done';
         header('Location: ' . $_PATH->get('Done'));
         exit;
     }

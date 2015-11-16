@@ -16,29 +16,27 @@
  */
 class ReturnVisitController
 {                                                           
-    protected $user;          // participant username         @see __construct()
-    protected $jsonDir;       // where JSON files are stored  @see __construct()
     protected $jsonPath;      // user's JSON filepath         @see isReturning()
     protected $oldSession;    // loaded JSON session          @see loadPriorSession()
-    protected $currentRow;    // row returning to             @see loadPriorSession()
     protected $doneLink;      // relative path to done.php    @see __construct()
     protected $expLink;       // relative path to experiment.php
-    protected $earlyMsg;      // msg for early birds          @see timeToReturn()
-    protected $lateMsg;       // msg for too late people      @see timeToReturn()
+    protected $earlyMsg = null;      // msg for early birds          @see timeToReturn()
+    protected $lateMsg  = null;       // msg for too late people      @see timeToReturn()
     protected $done;
     protected $sessionNumber;
 
-    public function __construct($name, $jsonDir, $donePage, $expPage)
+    public function __construct($jsonPath, $donePage, $expPage)
     {
-        $this->user     = $name;
-        $this->jsonDir  = $jsonDir;
+        $this->jsonPath = $jsonPath;
         $this->doneLink = $donePage;
         $this->expLink  = $expPage;
     }
     public function isReturning()
     {   
-        $this->jsonPath = $this->jsonDir . '/' . $this->user . '.json';
-        if (fileExists($this->jsonPath) == true) {
+        $path = $this->jsonPath;
+        $path = "whatever";
+        if (fileExists($path) == true) {
+            echo "$path: exists";
             $this->loadPriorSession();
             return true;
         } else {
@@ -50,93 +48,90 @@ class ReturnVisitController
         $handle = fopen($this->jsonPath, 'r');
         $old    = fread($handle, filesize($this->jsonPath));
         $old    = json_decode($old, true);
-        $pos    = $old['Position'];
 
         $this->oldSession = $old;
-        $this->currentRow = $old['Trials'][$pos-1];
-        $this->pos = $pos;
         $this->sessionNumber = $old['Session'];
     }
     public function alreadyDone() {
-        $doneCode = 'ExperimentFinished';
-        $flag = $this->currentRow['Procedure']['Item'];
-        if ($flag == $doneCode) {
+// echo "whyyyy: " . $this->oldSession['state'] . "<br>";
+        if ($this->oldSession['state'] == 'done') {
+// var_dump($this->oldSession,'old session');
             $this->done = true;
             return true;
-            // exit;
         } else {
+// echo "done is false<br>";
             $this->done = false;
             return false;
         }
     }
-    public function reload()
+    public function reloadToExperiment(Pathfinder $pathfinder, user $user)
     {
         $_SESSION = $this->oldSession;
-        global $_PATH;
-        $_PATH = new Pathfinder($_SESSION['Pathfinder']);
-        // what to do when reloading to done.php
-        if ($this->done === true) {
-            $_SESSION['alreadyDone'] = true;
-            header("Location: $this->doneLink");
-            exit;
-        }
-        // what to do when reloading to experiment.php
-        elseif ($this->done === false) {
-            $_SESSION['Start Time']  = date('c');
-            header("Location: $this->expLink");
-            exit;
-        }
+        $user->setSession($this->getSession());
+        $user->feedPathfinder($pathfinder);
+        $status = unserialize($_SESSION['status']);
+        $status->updateUser(
+            $user->getUsername(),
+            $user->getID(),
+            $user->getOutputFile(),
+            $user->getSession()
+        );
+        $status->writeBegin();
+        $_SESSION['Status'] = serialize($status);
+        $_SESSION['Start Time']  = time();
+        $_SESSION['state']       = 'exp';
+        header("Location: $this->expLink");
+        exit;
+    }
+    public function reloadToDone()
+    {
+        $_SESSION = $this->oldSession;
+        header("Location: $this->doneLink");
+        exit;
     }
     /**
      * Checks if this participate is ready to login to the next session
-     * of the experiment. Looks at the 'Min Time' and 'Max Time' cells
-     * from the *NewSession* line of the procedure
+     * of the experiment. Return time is based on teh 'Min Time' and 'Max Time' cells
+     * from the `NewSession` line of the procedure
      * In the case that it is not time to return then it echos the time
      * until return (for min) or a sorry message for when over max
      * @return bool true/false
      */
     public function timeToReturn()
     {
-        if (isset($this->currentRow['Procedure']['Min Time'])){
-            $min = $this->currentRow['Procedure']['Min Time'];
-            $min = $this->durationInSeconds($min);
-            if (!is_numeric($min)) { $min = 0; }
-        } else {
-            $min = 0;
-        }
-        if (isset($this->currentRow['Procedure']['Max Time'])) {
-            $max = $this->currentRow['Procedure']['Max Time'];
-            $max = $this->durationInSeconds($max);
-            if (!is_numeric($max)) { $max = 0; }
-        } else {
-            $max = 0;
-        }
-        $lastFinish = $this->oldSession['LastFinish'];
-        $sinceFinish = time() - $lastFinish;
+        $now = time();
+        $minRet = $this->oldSession['Min Return'];
+        $maxRet = $this->oldSession['Max Return'];
 
+        // determines if it is too late to return
         $early = false; $late = false;
-        if ($min > $sinceFinish) {
-            $early = true;
-            $dif = $min - $sinceFinish;
-            $remaining = $this->durationFormatted($dif);
-            $msg = "You are too eary to participate in this part. You can return 
-                    in $remaining time to start this next part.";
-            $this->earlyMsg = $msg;
-        }
-        if (($sinceFinish > $max)
-            AND ($max !== 0)
-        ){
+
+        if ($maxRet !== false AND $now > $maxRet) {
             $late = true;
             $msg = "Sorry, you have returned too late to participate.";
             $this->lateMsg = $msg;
         }
-
-        if (($late === true)
-            OR ($early === true)
+        if ($now < $minRet) {
+            $early = true;
+            $dif   = $minRet - $now;
+            $remaining = durationFormatted($dif);
+            $msg = "You are too eary to participate in this part. You can return 
+                    in $remaining to start this next part.";
+            $this->earlyMsg = $msg;
+        }
+// echo "now: $now<br>
+//      min_return: $minRet<br>
+//      max_return: $maxRet<br>
+//      dif: $dif<br>
+//      late: $late<br>
+//      early:$early<br>";
+        // return whether or not to continue on
+        if (($late == true)
+            OR ($early == true)
         ){
-            return true;
-        } else {
             return false;
+        } else {
+            return true;
         }
     }
     /**
@@ -147,6 +142,7 @@ class ReturnVisitController
      */
     public function explainTimeProblem()
     {
+// echo "this is from explainTimeProblem and earlyMsg is : '$this->earlyMsg'<br> latemsg is: $this->lateMsg";
         if ($this->earlyMsg !== null) {
             echo $this->earlyMsg;
         }
@@ -154,66 +150,9 @@ class ReturnVisitController
             echo $this->lateMsg;
         }
     }
-    /**
-     * Used to turn a formatted sting to a time in seconds
-     * @param  string $string excepts things in the format of 3d:2h:5m:10s
-     * @return int returns a number
-     */
-    protected function durationInSeconds($string)
-    {
-        if ($duration = '') {
-            // no duration was given
-            return 0;
-        }
-        // format the duration and convert to array based on colon delimiters
-        $durationArray = explode(':', trim(strtolower($duration)));
-        $output = 0;
-        foreach ($durationArray as $part) {
-            // sanitize each part to just the digits
-            $value = preg_replace('/[^0-9]/', '', $part);
-            if(stripos($part, 'd') !== false) {
-                // days in seconds
-                $output += ($value * 24 * 60 * 60);
-            } else if (stripos($part, 'h') !== false){
-                // hours in seconds
-                $output += ($value * 60 * 60);
-            } else if (stripos($part, 'm') !== false){
-                // minutes in seconds
-                $output += ($value * 60);
-            } else if (stripos($part, 's') !== false){
-                // seconds... in seconds
-                $output += $value;
-            }
-        }
-        return $output;
-    }
-    protected function durationFormatted()
-    {
-        $hours   = floor($durationInSeconds/3600);
-        $minutes = floor(($durationInSeconds - $hours*3600)/60);
-        $seconds = $durationInSeconds - $hours*3600 - $minutes*60;
-        if ($hours > 23) {
-            $days = floor($hours/24);
-            $hours = $hours - $days*24;
-            if ($days < 10) {
-                $days = '0' . $days;
-            }
-        }
-        if ($hours < 10) {
-            $hours   = '0' . $hours;
-        }
-        if ($minutes < 10) {
-            $minutes = '0' . $minutes;
-        }
-        if ($seconds < 10) {
-            $seconds = '0' . $seconds;
-        }
-        return $days.'d:' . $hours.'h:' . $minutes.'m:' . $seconds.'s';
-    }
     public function debug()
     {
         $things = array();
-        $things['user'] = $this->user;
         $things['jsonPath'] = $this->jsonPath;
         $things['doneLink'] = $this->doneLink;
         $things['early']    = $this->earlyMsg;
@@ -222,8 +161,6 @@ class ReturnVisitController
         foreach ($things as $var => $value) {
             echo "<div><b>$var</b><br>$value</div>";
         }
-        var_dump('last finish', $this->oldSession['LastFinish']);
-        var_dump('CurrentRow',  $this->currentRow);
     }
     public function getSession()
     {
@@ -235,6 +172,6 @@ class ReturnVisitController
     }
     public function oldCondition()
     {
-        $oldConditon  = $this->oldSession['Condition'];
+        return $this->oldSession['Condition'];
     }
 }

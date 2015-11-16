@@ -7,6 +7,14 @@
     require 'initiateCollector.php';
     require $_PATH->get('Experiment Require');
 
+    
+    if (empty($_SESSION['state'])) {
+        // get out if you're not supposed to be here
+        $root = $_PATH->get('root');
+        header("Location: $root");
+        exit;
+    }
+
     // this only happens once, so that refreshing the page doesn't do anything, and recording a new line of data is the only way to update the timestamp
     if (!isset($_SESSION['Timestamp'])) {
         $_SESSION['Timestamp'] = microtime(true);
@@ -115,14 +123,6 @@
         }
         // goToNextTrial will header redirect and exit
         goToNextTrial();
-    }
-
-
-    // if we hit a *NewSession* then the experiment is over (this means that we don't ask FinalQuestions until the last session of the experiment)
-    if(strtolower($item) == '*newsession*') {
-        $_SESSION['finishedTrials'] = true;
-        header('Location: ' . $_PATH->get('Done'));
-        exit;
     }
 
 

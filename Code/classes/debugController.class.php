@@ -83,4 +83,12 @@ class debugController
     {
         $_SESSION['Debug'] = $this->is_on();
     }
+    public function feedPathfinder(Pathfinder $pathfinder)
+    {
+        if ($this->is_on()) {
+            $pathfinder->setDefault('Data Sub Dir', '/Debug');
+        } else {
+            $pathfinder->setDefault('Data Sub Dir', '');
+        }
+    }
 }
