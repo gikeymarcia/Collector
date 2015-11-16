@@ -67,6 +67,8 @@
             $textReplace[] = $trialVal;
         }
         $text = str_replace($textSearch, $textReplace, $text);
+    } else {
+        $text = '';
     }
     unset($trialCol, $trialVal);
 
