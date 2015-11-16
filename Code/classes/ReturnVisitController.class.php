@@ -34,9 +34,7 @@ class ReturnVisitController
     public function isReturning()
     {   
         $path = $this->jsonPath;
-        $path = "whatever";
         if (fileExists($path) == true) {
-            echo "$path: exists";
             $this->loadPriorSession();
             return true;
         } else {
@@ -69,7 +67,7 @@ class ReturnVisitController
         $_SESSION = $this->oldSession;
         $user->setSession($this->getSession());
         $user->feedPathfinder($pathfinder);
-        $status = unserialize($_SESSION['status']);
+        $status = unserialize($_SESSION['Status']);
         $status->updateUser(
             $user->getUsername(),
             $user->getID(),
@@ -149,6 +147,7 @@ class ReturnVisitController
         if ($this->lateMsg !== null) {
             echo $this->lateMsg;
         }
+        exit;
     }
     public function debug()
     {

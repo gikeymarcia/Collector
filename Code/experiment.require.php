@@ -321,7 +321,8 @@ function goToNextTrial($pos = null, $post = null) {
     global $_PATH;
     $nextTrial = getNextTrialIndex($pos, $post);
     if ($nextTrial === false) {
-        $next = $_PATH->get('Done');
+        ++$_SESSION['Position'];
+        checkIfDone();
     } else {
         $_SESSION['Position']   = $nextTrial[0];
         $_SESSION['PostNumber'] = $nextTrial[1];
