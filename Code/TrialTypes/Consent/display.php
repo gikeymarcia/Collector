@@ -4,7 +4,6 @@
     ){
         $text = $cue;
     }
-    $text = 'consent.php';
     
     $fileDir = $_PATH->get('Common');
     $filePath = fileExists("$fileDir/$text");
