@@ -65,6 +65,7 @@ class ReturnVisitController
     public function reloadToExperiment(Pathfinder $pathfinder, user $user)
     {
         $_SESSION = $this->oldSession;
+        $pathfinder->setDefaultsCopy($_SESSION['Pathfinder']);
         $user->setSession($this->getSession());
         $user->feedPathfinder($pathfinder);
         $status = unserialize($_SESSION['Status']);
