@@ -34,7 +34,9 @@
 
 
     ######## Save the $_SESSION array as a JSON string
-    if ($_SESSION['state'] == 'break' OR $_SESSION['state'] == 'done') {
+    if (($_SESSION['state'] == 'break' OR $_SESSION['state'] == 'done')
+        AND !empty($_SESSION['finalJSON'])
+    ) {
 
         $status = unserialize($_SESSION['Status']);
         $status->writeEnd($_SESSION['Start Time']);
@@ -45,6 +47,8 @@
             $_SESSION['Position']++;                        // increment counter so next session will begin after the NewSession (if multisession)
             $_SESSION['Session']++;                         // increment session # so next login will be correctly labeled as the next session
             $_SESSION['ID'] = rand_string();                // generate a new ID (for next login)
+        } else {
+            $_SESSION['finalJSON'] = true;                  // only write this json file the first time your $_SESSION['state']='done'
         }
         
         $jsonSession = json_encode($_SESSION);              // encode the entire $_SESSION array as a json string
