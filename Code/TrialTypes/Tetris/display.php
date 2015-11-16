@@ -41,7 +41,7 @@
     </div>
 
 <?php
-    if (is_numeric($maxTime)) {
+    if (is_numeric($max_time)) {
         ?>
         <div class="stepout-clock">
             <span>Seconds remaining</span>
@@ -49,7 +49,7 @@
         </div>
 
         <!-- used to set timer -->
-        <div id="maxTime" class="hidden"><?php echo trim($maxTime); ?></div>
+        <div id="maxTime" class="hidden"><?php echo trim($max_time); ?></div>
         <?php
     } else {
         ?>
