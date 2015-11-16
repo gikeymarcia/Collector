@@ -15,7 +15,7 @@
                  .  "<p>If you have any questions about the experiment please email "
                  .      "<a href='mailto:$email?Subject=Comments%20on%20$currentExperiment' target='_top'>$email</a>"
                  .  "</p>";
-        if ($_SETTINGS->mTurk_mode == true) {
+        if ($_SETTINGS->verification != '') {
             $message .= "<h3>Your verification code is: $verification_code.</h3>";
         }
     } else {
