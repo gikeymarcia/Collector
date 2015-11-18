@@ -1,4 +1,4 @@
-Description,Notes,Stimuli,Procedure
+Description,Notes,Stimuli 1,Procedure 1
 How to use Collector,Walks through the basics files controlling Collector,LearningStimFiles.csv,LearningProcedureFiles.csv
 All study; The most simple case,Most simple example of using Collector to show stimuli in predefined order,WordPairHigh.csv,studyNoShuffle.csv
 Study and test trials,Showing how `Trial Type` influences presentation of the stimuli,WordPairHigh.csv,studyTestNoShuffle.csv

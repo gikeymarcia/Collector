@@ -165,8 +165,8 @@ class conditionController
         echo "<div>Selected contion: $this->selection <ol>";
         foreach ($this->ConditionsCSV as $pos => $row) {
             echo "<li>
-                      <strong>stim:</strong>{$row['Stimuli']}<br>
-                      <strong>proc:</strong>{$row['Procedure']}
+                      <strong>stim:</strong>{$row['Stimuli 1']}<br>
+                      <strong>proc:</strong>{$row['Procedure 1']}
                   </li>";
         }
         echo '</ol></div>';
@@ -188,7 +188,7 @@ class conditionController
     
     protected function requiredColumns()
     {
-        $requiredColumns = array('Stimuli', 'Procedure', 'Description');
+        $requiredColumns = array('Stimuli 1', 'Procedure 1', 'Description');
         foreach ($requiredColumns as $pos => $col) {
             if(!isset($this->ConditionsCSV[0][$col])) {
                 $msg = "Your Conditions.csv file is missing the $col column";
@@ -200,22 +200,94 @@ class conditionController
      * Once a condition has been assigned this will return the stimuli file string
      * @return string contents of 'Stimuli' column
      */
-    public function stimuli()
+    public function stimuli($num = 1, $safeSearch = false)
     {
         if ($this->assignedCondition !== false) {
-            return $this->userCondition['Stimuli'];
+            if (empty($this->userCondition["Stimuli $num"])) {
+                if ($safeSearch == true) {  return false;  }
+                else {
+                    $msg = "You have tried to get the value for 'Stimuli $num' but that column does not exist in your Conditions.csv file at
+                            <code>$this->location</code>.";
+                    $this->errObj->add($msg, true);
+                }
+            } else {
+                return $this->userCondition["Stimuli $num"];
+            }
+        } else {
+            $msg = "You are trying to get the value of 'Stimuli $num' before you have assigned a condition.
+                    <br>Run \$cond->assignCondition() before attempting to use this method.";
+            $this->errObj->add($msg);
         }
     }
     /**
-     * Once a condition has been assigned this will return the procedure file string
+     * Check conditions file for all cells that point to stimuli files
+     * @return string implode by comma of all stim
+     */
+    public function allStim()
+    {
+        $valid = array();
+        $toCheck = $this->colsContaining("Stimuli");
+        for ($i=1; $i < count($toCheck); $i++) { 
+            if (         isset($this->ConditionsCSV["Stimuli $i"])
+                AND strtolower($this->ConditionsCSV["Stimuli $i"]) != "off"
+                AND            $this->ConditionsCSV["Stimuli $i"]  != ""
+                AND            $this->ConditionsCSV["Stimuli $i"]  != "."
+            ){
+                $valid[] = $this->ConditionsCSV["Stimuli $i"];
+            }
+        }
+        return implode(",", $valid);
+    }
+    protected function colsContaining($needle)
+    {
+        $matches = array();
+        foreach ($this->ConditionsCSV[0] as $key => $cell) {
+            if (strpos($key,$needle) !== false) {
+                $matches[] = $key;
+            }
+        }
+        return $matches;
+    }
+    /**
+     * Once a condition has been assigned this will return the first procedre file string
+     * @param  string optionally pass an interger to tell me which procedure to pull
      * @return string contents of 'Procedure' column
      */
-    public function procedure()
+    public function procedure($num = 1, $safeSearch = false)
     {
         if ($this->assignedCondition !== false) {
-            return $this->userCondition['Procedure'];
+            if (empty($this->userCondition["Procedure $num"])) {
+                if ($safeSearch == true) {  return false;  }
+                else {
+                    $msg = "You have tried to get the value for 'Procedure $num' but that column does not exist in your Conditions.csv file at
+                            <code>$this->location</code>.";
+                    $this->errObj->add($msg, true);
+                }
+            } else {
+                return $this->userCondition["Procedure $num"];
+            }
+        } else {
+            $msg = "You are trying to get the value of 'Procedure $num' before you have assigned a condition.
+                    <br>Run \$cond->assignCondition() before attempting to use this method.";
+            $this->errObj->add($msg);
         }
     }
+    public function allProc()
+    {
+        $valid = array();
+        $toCheck = $this->colsContaining("Procedure");
+        for ($i=1; $i < count($toCheck); $i++) { 
+            if (         isset($this->ConditionsCSV["Procedure $i"])
+                AND strtolower($this->ConditionsCSV["Procedure $i"]) != "off"
+                AND            $this->ConditionsCSV["Procedure $i"]  != ""
+                AND            $this->ConditionsCSV["Procedure $i"]  != "."
+            ){
+                $valid[] = $this->ConditionsCSV["Procedure $i"];
+            }
+        }
+        return implode(",", $valid);
+    }
+
     /**
      * Once a condition has been assigned this will return the 'Description' string
      * @return string contents of 'Description' column

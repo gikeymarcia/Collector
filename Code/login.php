@@ -127,12 +127,12 @@ echo "already done!";
 
     $procedure = new procedure(
         $_PATH->get('Procedure Dir'),
-        $cond->procedure(),
+        $cond->allProc(),
         $errors
     );
     $stimuli = new stimuli(
         $_PATH->get('Stimuli Dir'),
-        $cond->stimuli(),
+        $cond->allStim(),
         $errors
     );
 
