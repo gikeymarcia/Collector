@@ -338,5 +338,78 @@ class conditionController
     {
         $this->errObj = $newErrHandler;
     }
+    /**
+     * Gives a modified version of the conditions csv file
+     * Procedures and Stimuli will be joined together by commas
+     * If not using flagged conditions, they wont be included
+     * Used in Welcome.php
+     */
+    public function getAllConditions()
+    {
+        $conditions = array();
+        $rows = $this->removeOffConditions();
+        foreach ($rows as $i => $condRow) {
+            $temp = array();
+            foreach ($condRow as $key => $value) {
+                if (    strpos($key, 'Stimuli')   === false
+                    AND strpos($key, 'Procedure') === false
+                ) {
+                    $temp[$key] = $value;
+                }
+                $temp['Procedure'] = $this->allProc($i);
+                $temp['Stimuli']   = $this->allStim($i);
+            }
+            $conditions[] = $temp;
+        }
+        return $conditions;
+    }
+    /**
+     * Checks the entire conditions file for bad rows
+     * Used at Welcome.php
+     */
+    public function checkConditionsFile($procDir, $stimDir)
+    {
+        foreach ($this->ConditionsCSV as $i => $condRow) {
+            $procs = $this->allProc($i);
+            $stims = $this->allStim($i);
+            $files = array (
+                'Procedure' => $this->allProc($i),
+                'Stimuli'   => $this->allStim($i)
+            );
+            $paths = array (
+                'Procedure' => $procDir,
+                'Stimuli'   => $stimDir
+            );
+            foreach ($files as $fileTypes => $filesCommaSeparated) {
+                if ($filesCommaSeparated === '') {
+                    $errMsg = "In the Conditions file, on row " . ($i+2) . ", "
+                            . "there are no valid $fileTypes entries. At least "
+                            . "one of the $fileTypes columns for this row must "
+                            . "contain an actual filename.";
+                    $this->errObj->add($errMsg);
+                } else {
+                    $files = explode(',', $filesCommaSeparated);
+                    foreach ($files as $file) {
+                        if (strpos($file, '..') !== false) {
+                            $errMsg = "In the Conditions file, on row " . ($i+2) . ", "
+                                    . "at least one of the $fileTypes filenames contains "
+                                    . "\"..\", which is not allowed. "
+                                    . "Please remove this part from the entry.";
+                            $this->errObj->add($errMsg);
+                        } else {
+                            if (!fileExists("$paths[$fileTypes]/$file")) {
+                                $errMsg = "In the Conditions file, on row " . ($i+2) . ", "
+                                        . "the filename contains a $fileTypes file \"$file\" "
+                                        . "which does not exist in the $fileTypes folder. "
+                                        . "Please make sure that there isn't a typo in either "
+                                        . "the filename or the entry in the Conditions file.";
+                                $this->errObj->add($errMsg);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 ?>

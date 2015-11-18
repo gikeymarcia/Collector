@@ -27,34 +27,27 @@
     $currentExp = $currentExp[count($currentExp)-2];        // take directory name (from above example, take "Demo")
     
     $_PATH->setDefault('Current Experiment', $currentExp);
+    $_PATH->setDefault('Data Sub Dir', '');                 // the conditions class will automatically create a login counter dir, and it needs this value
     
     $_SETTINGS = getCollectorSettings();
+    
+    
+    #### login objects
+    $errors = new errorController();
 
-    // load and sort conditions
-    $Conditions = GetFromFile($_PATH->get('Conditions'), false);
-    foreach ($Conditions as $i => $cond) {
-        $row = $i+2;
-        $descrip = $cond['Description'];
-        $stim = $cond['Stimuli'];
-        $proc = $cond['Procedure'];
-        $stimRoot = $_PATH->get('Stimuli Dir',   'root');
-        $procRoot = $_PATH->get('Procedure Dir', 'root');
-        $condRoot = $_PATH->get('Conditions',    'root');
-
-        if (substr($descrip,0,1) === '#') { continue; }
-        if (!file_exists($_PATH->get('Stimuli Dir') . "/$stim")) {
-            $errMsg = "<div class='errorBox'>Error: The stimuli file <b>'$stim'</b> could not be found in the <code>$stimRoot</code> "
-                    . " folder for Condition row <b>$row</b>, which has the description: <b>'$descrip'</b>. Either rename a file to <b>'$stim'</b>"
-                    . " or change this row in the <code>$condRoot</code> file to match an existing file.</div>";
-            exit($errMsg);
-        }
-        if (!file_exists($_PATH->get('Procedure Dir') . "/$proc")) {
-            $errMsg = "<div class='errorBox'>Error: The stimuli file <b>'$proc'</b> could not be found in the <code>$procRoot</code> "
-                    . " folder for Condition row <b>$row</b>, which has the description: <b>'$descrip'</b>. Either rename a file to <b>'$proc'</b>"
-                    . " or change this row in the <code>$condRoot</code> file to match an existing file.</div>";
-            exit($errMsg);
-        }
+    $cond = new conditionController(
+        $_PATH->get('Conditions'),
+        $_PATH->get('Counter'),
+        $_SETTINGS->hide_flagged_conditions,
+        $errors
+    );
+    
+    $cond->checkConditionsFile($_PATH->get('Procedure Dir'), $_PATH->get('Stimuli Dir'));
+    if ($errors->arePresent()) {
+        $errors->printErrors();
+        exit;
     }
+    $conditions = $cond->getAllConditions();
 ?>
 <!-- Page specific styling tweaks -->
 <style>
@@ -93,9 +86,7 @@
         <?php endif; ?>
                 <option default selected value="Auto">Auto</option>
         <?php  // Display conditions as options
-                foreach ($Conditions as $i => $cond) {
-                    if ($_SETTINGS->hide_flagged_conditions AND substr($cond['Description'],0,1) === '#') { continue; }
-                    // showing Description on hover
+                foreach ($conditions as $i => $cond) {
                     if ($_SETTINGS->use_condition_names) {
                         $name = $cond['Description'];
                     } else {
