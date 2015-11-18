@@ -72,43 +72,10 @@
 
     if ($revisit->isReturning()) {
         if ($revisit->alreadyDone()) {
-echo "already done!";
-// echo "PHP thinks we done.<br>";
-// echo "<pre>";
-//     var_dump($revisit);
-// echo "</pre>";
             $revisit->reloadToDone();
         }
         if ($revisit->timeToReturn()) {                     // updating lots of things with info from previous login
-// echo "code says it is time to return!<br>";
             $revisit->reloadToExperiment($_PATH, $user);            
-// $user->setSession( $revisit->getSession() );    // give $user correct session #
-// $user->feedPathfinder($_PATH);
-// $user->printData();
-
-// // make status object that will write status begin/end
-// $status = new statusController();
-// $status->setConditionInfo(                      // pass $status the "row" of previous login condition
-//     $revisit->oldCondition()
-// );
-// $status->updateUser(                            // pass $status necessary user information
-//     $user->getUsername(),
-//     $user->getID(),
-//     $user->getOutputFile(),
-//     $user->getSession()
-// );
-// $status->setPaths(                              // where to write the data
-//     $_PATH->get('Status Begin Data'),
-//     $_PATH->get('Status End Data')
-// );
-// // update Output path
-// $status->writeBegin();                          // write to status begin
-// $_SESSION['Status'] = serialize($status);       // save status so we can write the status end
-// echo "PHP thinks we are already done.<br>";
-// echo "<pre>";
-//     var_dump($revisit, $user, $status);
-// echo "</pre>";
-// $revisit->reloadToExperiment();
         } else {
             $revisit->explainTimeProblem();
         }
