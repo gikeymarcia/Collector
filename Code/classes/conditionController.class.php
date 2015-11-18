@@ -223,17 +223,19 @@ class conditionController
      * Check conditions file for all cells that point to stimuli files
      * @return string implode by comma of all stim
      */
-    public function allStim()
+    public function allStim($index = null)
     {
+        if ($index === null) $index = $this->assignedCondition;
         $valid = array();
         $toCheck = $this->colsContaining("Stimuli");
-        for ($i=1; $i < count($toCheck); $i++) { 
-            if (         isset($this->ConditionsCSV["Stimuli $i"])
-                AND strtolower($this->ConditionsCSV["Stimuli $i"]) != "off"
-                AND            $this->ConditionsCSV["Stimuli $i"]  != ""
-                AND            $this->ConditionsCSV["Stimuli $i"]  != "."
+        $row = $this->ConditionsCSV[$index];
+        for ($i=1; $i <= count($toCheck); $i++) { 
+            if (         isset($row["Stimuli $i"])
+                AND strtolower($row["Stimuli $i"]) != "off"
+                AND            $row["Stimuli $i"]  != ""
+                AND            $row["Stimuli $i"]  != "."
             ){
-                $valid[] = $this->ConditionsCSV["Stimuli $i"];
+                $valid[] = $row["Stimuli $i"];
             }
         }
         return implode(",", $valid);
@@ -272,17 +274,19 @@ class conditionController
             $this->errObj->add($msg);
         }
     }
-    public function allProc()
+    public function allProc($index = null)
     {
+        if ($index === null) $index = $this->assignedCondition;
         $valid = array();
         $toCheck = $this->colsContaining("Procedure");
-        for ($i=1; $i < count($toCheck); $i++) { 
-            if (         isset($this->ConditionsCSV["Procedure $i"])
-                AND strtolower($this->ConditionsCSV["Procedure $i"]) != "off"
-                AND            $this->ConditionsCSV["Procedure $i"]  != ""
-                AND            $this->ConditionsCSV["Procedure $i"]  != "."
+        $row = $this->ConditionsCSV[$index];
+        for ($i=1; $i <= count($toCheck); $i++) { 
+            if (         isset($row["Procedure $i"])
+                AND strtolower($row["Procedure $i"]) != "off"
+                AND            $row["Procedure $i"]  != ""
+                AND            $row["Procedure $i"]  != "."
             ){
-                $valid[] = $this->ConditionsCSV["Procedure $i"];
+                $valid[] = $row["Procedure $i"];
             }
         }
         return implode(",", $valid);
