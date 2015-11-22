@@ -153,39 +153,6 @@ var COLLECTOR = {
         }
     },
 
-    instructions: {
-        init: function() {
-            var fails = 0;
-
-            // reveal readcheck questions
-            $("#revealRC").click( function() {
-                $(".instructions").slideToggle(400);            // hide instructions
-                $(".readcheck").slideToggle(400);               // show questions
-                if (fails > 0) {                                // if you've missed the question before
-                    $(".alert").slideToggle();                      // hide the alert
-                    $("#content").removeClass("redOutline");        // remove the red outline
-                }
-            });
-            
-            // When a button is clicked it checks if the user is right/wrong
-            // either advance page or gives notice to read closely
-            $(".MCbutton").click( function() {
-                if (this.id == "correct") {
-                    $("#RT").val( COLLECTOR.getRT() );
-                    $("form").submit();
-                }
-                else {
-                    $(".instructions").slideToggle(400);        // show instructions text
-                    $(".readcheck").slideToggle(400);           // hide multiple choice questions
-                    fails++;                                    // add to fails counter
-                    $("#Fails").val(fails);                     // set value of fails
-                    $(".alert").slideDown();                    // show alert that the user is wrong
-                    $("#content").addClass("redOutline");       // add a red outline to the form
-                }
-            });
-        }
-    },
-
     experiment: {
         init: function() {
             var trialTime = parseFloat( $("#maxTime").html() ),
@@ -281,11 +248,6 @@ var COLLECTOR = {
             });
         },
 
-        passage: function() {
-            // make sure trial is starting at the top of the page
-            $("body").scrollTop(0);
-        },
-
         tetris: function() {
             // get trial time from page and run timer
             COLLECTOR.timer(parseFloat($("#maxTime").html() )-5, function () {
@@ -312,22 +274,6 @@ var COLLECTOR = {
             });
         }
     },
-
-    finalQuestions: {
-        init: function() {
-            // slider for Likert questions
-            $("#slider").slider({
-                value:1,
-                min:  1,
-                max:  7,
-                step: 1,
-                slide: function(event, ui) {
-                    $("#amount").val(ui.value);
-                }
-            });
-            $("#amount").val( $("#slider").slider("value") );
-        }
-    }
 };
 
 UTIL = {

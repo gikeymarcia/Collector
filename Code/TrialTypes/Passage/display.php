@@ -14,5 +14,10 @@
         text-rendering: optimizeLegibility;
         font-size: 1.05em;
         line-height: 2.2em;
-    }    
+    }
 </style>
+
+
+<script type="text/javascript">
+    // $("body").scrollTop(0);
+</script>

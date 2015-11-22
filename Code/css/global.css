@@ -497,6 +497,7 @@ body > div > form {       /*Has the ID of 'content'*/
   width: 700px;         max-width: 100%;
   height: auto;         max-height: 100%;
   overflow: visible;
+  text-align: left;
 }
 
 .flexVert {
