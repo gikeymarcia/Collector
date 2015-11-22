@@ -2,43 +2,58 @@
     // access control
     require_once 'loginFunctions.php';
     adminOnly();                                        // only allow tool use when logged in
-    
+
     // needed for this tool
-    $root = '../';
     require_once $_PATH->get('Shuffle Functions');      // load shuffle functions
-    
-    // making a place to store all variables (storing inside admin is best because it will be wiped on logout)
-    $_SESSION['admin']['shuffleTester'] = array();
-    $store =& $_SESSION['admin']['shuffleTester'];
-    
-    // save selected file if in URL
-    if (isset($_GET['shuffleFile'])) {
-        $store['loc']  = "{$root}Experiments/Demo/{$_GET['shuffleFile']}";
-        $store['get']  = $_GET['shuffleFile'];
-        $store['name'] = substr($store['loc'], strrpos($store['loc'], '/')+1 );
+
+    // Find all available experiments
+    $experiments = array_flip(getCollectorExperiments());
+
+
+    // save selected experimet if availavle and valid
+    if (isset($_GET['exp'])
+        AND isset($experiments[$_GET['exp']])
+    ) {
+        $_DATA['exp'] = $_GET['exp'];
+    } elseif (empty($_DATA['exp'])) {
+        $_DATA['exp'] = "";
     }
-    
-    // set defaults if values have not been set
-    if (!isset($store['loc'])) {
-        $store['loc']  = '';
-        $store['get']  = '';
-        $store['name'] = '';
-    }
-    
-    // scan for stimuli and procedure files
-    $ShuffleFolders = array(
-        'Stimuli'   => array(),
-        'Procedure' => array()
-    );
-    foreach ($ShuffleFolders as $type => $empty) {
-        $searching = scandir("{$root}Experiments/Demo/$type/");
-        foreach ($searching as $item => $path) {
-            if(!instring('.csv', $path, true)) {
-                unset($searching[$item]);                       // remove files that aren't .csv
+
+    // if an experimet has been selected
+    if (!empty($_DATA['exp'])) {
+        $exp = $_DATA['exp'];
+
+        // scan for procedure and stim files
+        $ShuffleFolders = array(
+            'Stimuli'   => array(),
+            'Procedure' => array()
+        );
+        foreach ($ShuffleFolders as $type => $empty) {
+            $searching = scandir("{$_root}/Experiments/$exp/$type/");
+            foreach ($searching as $item => $path) {
+                if(!instring('.csv', $path, true)) {
+                    unset($searching[$item]);                       // remove files that aren't .csv
+                }
+                $ShuffleFolders[$type] = $searching;
             }
-            $ShuffleFolders[$type] = $searching;
+        }
+
+        // save selected file if in URL
+        if (isset($_GET['shuffleFile'])) {
+            $_DATA['get']  = $_GET['shuffleFile'];
+            $_DATA['name'] = substr($_DATA['loc'], strrpos($_DATA['loc'], '/')+1 );
+            $_DATA['loc']  = "{$_root}/Experiments/$exp/{$_GET['shuffleFile']}";
+            if (!file_exists($_DATA['loc'])) {
+                $_DATA['loc'] = "";
+            }
         }
     }
+
+    // set defaults if values have not been set (otherwise leave alone)
+    $_DATA['loc']  = empty($_DATA['loc'])  ? "" : $_DATA['loc'];
+    $_DATA['get']  = empty($_DATA['get'])  ? "" : $_DATA['get'];
+    $_DATA['name'] = empty($_DATA['name']) ? "" : $_DATA['name'];
+    
 ?>
     <!-- Custom CSS specific to shuffle tester -->
     <style type="text/css">
@@ -103,9 +118,32 @@
             clear: left;
             padding-top:20px;
         }
+        #expSelect > *{
+            float:left;
+        }
+        #expSelect > h4 {
+            margin-right: 1.3em;
+        }
+        #expSelect > button {
+            margin: 0em .3em;
+            font-size: .7em;
+        }
+
     </style>
+
+    <div class="toolWidth" id="expSelect">
+        <h4>Which experiment?</h4>
+        <?php
+        foreach ($experiments as $expName => $value) {
+            echo "<button form='shuffleFile' class='collectorButton' name='exp' value='$expName'>$expName</button>";
+        }
+        ?>
+    </div>
     
     <!-- Show bar with dropdown file selector + zoom in/out reset buttons -->
+    <?php
+        if ($_DATA['exp'] != "") {
+?>
     <div class="toolWidth">
         <div id="shuffleSelectBar">
             <h3>Which file would you like to shuffle?</h3>
@@ -116,12 +154,9 @@
                     foreach ($ShuffleFolders as $type => $files) {
                         echo "<optgroup label='$type Files'>";                  // group options by type: Stimuli OR Procedure
                         foreach ($files as $file) {
-                            if ($store['get'] == "$type/$file") {                 // marks choosen file as selected
-                                $selected = ' selected';
-                            } else {
-                                $selected = '';
-                            }
-                           echo "<option label='$file' value='$type/$file' $selected>$file</option>";
+                            $value = "$type/$file";
+                            $selected = ($_DATA['get'] == $value) ? " selected" : "";
+                           echo "<option label='$file' value='$value' class='goShuffle' $selected>$file</option>";
                         }
                     }
                 ?>
@@ -141,6 +176,11 @@
     <div class="toolWidth">
         <textarea id="cellContents" readonly></textarea>
     </div>
+
+<?php
+        }
+    ?>
+
     
 <?php
     // check if a custom zoom value is in the get
@@ -153,10 +193,11 @@
     <form id="shuffleFile" action="" method="get"></form>                   <!-- the form that submits the selctions made on this page -->
 
 <?php    
-    if (($store['loc'] !== '')                              // if a shuffle file has been choosen
-        && (inString('.csv', $store['loc']) == true)        // and it is a csv file
+    if (    ($_DATA['loc'] !== "")                              // if a shuffle file has been choosen
+        AND ($_DATA['exp'] !== "")
+        AND inString('.csv', $_DATA['loc']) == true           // and it is a csv file
     ){                     
-        $before = GetFromFile($store['loc']);           // grab file to shuffle
+        $before = GetFromFile($_DATA['loc']);           // grab file to shuffle
         $timer  = microtime(true);                      // start a timer
         $after  = multiLevelShuffle($before);           // run basic shuffles
         $after  = shuffle2dArray($after);               // run advanced shuffles
@@ -178,9 +219,9 @@
     <!-- Debug to make sure I'm getting the right stuff back -->
     <dl class="brand">
         <dt>Filename</dt>
-        <dd><code><?= $store['name'] ?></code></dd>
+        <dd><code><?= $_DATA['name'] ?></code></dd>
         <dt>File location</dt>
-        <dd><code><?= $store['loc']  ?></code></dd>
+        <dd><code><?= $_DATA['loc']  ?></code></dd>
 <?php
         if (isset($timer)) {                         // only show duration when a file was actually shuffled
             echo  '<dt>Time to shuffle</dt>'
@@ -197,13 +238,13 @@
     var zoom = parseFloat($("#zoomVal").html());                                // save custom zoom value
     var clicked = 0;                                                            // reset click binary (0 = not locked, 1 = locked contents)
     $(".display2dArray").css("font-size", zoom);                                // change table zoom to custom zoom
-    if(!isNaN(zoom)) {                                                          // if a custom zoom is set us it as starting point for zoom in/out calls
+    if(!isNaN(zoom)) {                                                          // if a custom zoom is set use it as starting point for zoom in/out calls
         size = zoom;
     }
     
     $(window).ready(function () {
         $('#in').click(function (){                         // when zoom in button is clicked
-           size = size * 1.1;                                    // scale up the size
+           size = size * 1.1;                                   // scale up the size
            $(".display2dArray").css("font-size", size);         // change font to new size value
            $(".zoomInput").val(size);                           // put new zoom value into hidden input
         });
@@ -238,4 +279,7 @@
         });
         
     });
+    $(".goShuffle").click(function(){
+        $("#shuffleFile").submit();
+    })
 </script>

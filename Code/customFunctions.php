@@ -874,6 +874,15 @@ function readable(array $displayArray, $name = "Untitled array")
           . '<pre>', print_r($clean_displayArray, true), '</pre>'
        . '</div>';
 }
+function pre_var_dump($input, $label = "")
+{
+    echo "<pre>";
+        if ($label !== "") {
+            echo "<b>$label</b><br>";
+        }
+        var_dump($input);
+    echo "</pre>";
+}
 /**
  * Removes the label from a string.
  * @param string $input The string to strip the label from.
