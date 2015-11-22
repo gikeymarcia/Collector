@@ -56,8 +56,7 @@
     
     
     // is this user ineligible to participate in the experiment?
-    if (($_SETTINGS->check_elig == true)
-        AND ($_SETTINGS->mTurk_mode == true)
+    if ($_SETTINGS->check_elig == true)
     ) {
         include $_PATH->get('check');
     }
