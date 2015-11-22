@@ -6,7 +6,7 @@
     require 'initiateCollector.php';
     
     // Set the page message
-    if ($_SETTINGS->next_experiment == false) {
+    if (empty($_SESSION['next'])) {
         $email = $_SETTINGS->experimenter_email;
         $currentExperiment = $_PATH->getDefault('Current Experiment');
         $verification_code = "$_SETTINGS->verification-{$_SESSION['ID']}";
@@ -19,15 +19,15 @@
             $message .= "<h3>Your verification code is: $verification_code.</h3>";
         }
     } else {
-        $title     = "Quick Break";
-        $message   = "<h2>Experiment will resume in 5 seconds.</h2>";
+        $next      = $_SESSION['next'];
 
         $username  = urlencode($_SESSION['Username']);
         $nextLink  = "http://$_SETTINGS->next_experiment";
         $nextLink .= "/login.php?Username=$username&Condition=Auto";
+        $msg       = "";
         ?>
         <script type="text/javascript">
-            window.location.replace("<?= $nextLink ?>");
+            window.location.replace("<?= $next ?>");
         </script>
         <?php
     }

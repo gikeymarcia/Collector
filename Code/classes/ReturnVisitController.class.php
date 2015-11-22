@@ -79,12 +79,14 @@ class ReturnVisitController
         $_SESSION['Status'] = serialize($status);
         $_SESSION['Start Time']  = time();
         $_SESSION['state']       = 'exp';
+        unset($_SESSION['next']);
         header("Location: $this->expLink");
         exit;
     }
     public function reloadToDone()
     {
         $_SESSION = $this->oldSession;
+        unset($_SESSION['next']);
         header("Location: $this->doneLink");
         exit;
     }

@@ -33,5 +33,8 @@
 
     // updating state as coming from a newsession and sending to done.php
     $_SESSION['state'] = 'break';
+    if (!empty($next)) {
+        $_SESSION['next'] = $next;
+    }
     header("Location: " . $_PATH->get("Done"));
     exit;
