@@ -94,10 +94,7 @@
             'check.php' => 'Check',
             
             'customFunctions.php' => 'Custom Functions',
-            
-            'defaultTrialHelper.php' => 'default helper',
-            'defaultTrialScoring.php' => 'default scoring',
-            
+                        
             'Done.php' => 'Done',
             
             'errorCheck.php' => 'Error Check',
@@ -187,20 +184,6 @@
                 // more stuff in here
             ),
             
-            'TrialTypes' => array (
-                'Dir Name' => 'Trial Types',
-                
-                '{var}' => array (
-                    'Dir Name' => 'Trial Type Dir',
-                    
-                    'display.php'   => 'Trial Display',
-                    'helper.php'    => 'Trial Helper',
-                    'scoring.php'   => 'Trial Scoring',
-                    'script.js'     => 'Trial Script',
-                    'style.css'     => 'Trial Style',
-                    'validator.php' => 'Trial Validator',
-                ),
-            ),
         ),
         
         'Data' => array (
@@ -243,5 +226,22 @@
             'Dir Name' => 'Tools',
             
             // lots of stuff in here
+        ),
+
+        'TrialTypes' => array (
+            'Dir Name' => 'Trial Types',
+            
+            '{var}' => array (
+                'Dir Name' => 'Trial Type Dir',
+                
+                'display.php'   => 'Trial Display',
+                'helper.php'    => 'Trial Helper',
+                'scoring.php'   => 'Trial Scoring',
+                'script.js'     => 'Trial Script',
+                'style.css'     => 'Trial Style',
+                'validator.php' => 'Trial Validator',
+            ),
+            'defaultTrialHelper.php' => 'default helper',
+            'defaultTrialScoring.php' => 'default scoring',
         ),
     );
