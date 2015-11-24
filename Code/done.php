@@ -5,14 +5,6 @@
  */
     require 'initiateCollector.php';
     
-    // if someone skipped to done.php without doing all trials
-    if ((array_key_exists('finishedTrials', $_SESSION) == FALSE)
-        OR ($_SESSION['finishedTrials'] != TRUE)
-    ) {
-        header("Location: http://www.youtube.com/watch?v=oHg5SJYRHA0");            // rick roll people trying to skip to done.php
-        exit;
-    }
-    
     
     // turn off error reporting for debug mode
     if (array_key_exists('Debug', $_SESSION)) {
