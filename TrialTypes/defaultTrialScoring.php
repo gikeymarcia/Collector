@@ -5,10 +5,14 @@
  */
     $data = $_POST;
     /*
-     * Q: Why are we using $data instead of setting values directly into $_SESSION['Trials']?
-     * A: $data holds all scoring information and once scoring is complete $data is merged into $_SESSION['Trials'][$currentPos]['Response']
-     *    Using $data as a middle man is needed becasue if scoring is happening on a `Post # Trial Type` then when merging $data back into $currentTrial['Respnonse']
-     *    the program will automatically prepend each stored key with 'post#_' (e.g., $data['RT'] would be merged as $data['post#_RT] iF scoring is happening for a 'Post 1 Trial Type')
+     * Q: Why are we using $data instead of setting values directly into $_SESSION['Responses']?
+     * 
+     * A: $data holds all scoring information and once scoring is complete $data is merged
+     *    into $_SESSION['Responses'][$currentPos-1]
+     *    
+     *    This is done so when scoring a post trial all data will be prepended with the 
+     *    correct post# (e.g., $data['RT'] would be merged as $data['post#_RT] iF scoring 
+     *    is happening for a 'Post 1 Trial Type')
      */
     
     
