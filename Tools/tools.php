@@ -57,11 +57,13 @@
 <!DOCTYPE HTML>
 <head>
     <link rel="icon" href="../Code/icon.png" type="image/png">
-    <link href="../Code/css/global.css"  rel="stylesheet"   type="text/css"/>
-    <script src="../Code/javascript/jquery.js"   type="text/javascript"></script>
-    <script src="../Code/javascript/sha256.js"              type="text/javascript"></script>
-    <script src="../Code/javascript/loggingIn.js"           type="text/javascript"></script>
-    
+    <?php
+        $_PATH->stylesheet("Global CSS");
+        $_PATH->stylesheet("Tools CSS");
+        $_PATH->script("Jquery");
+        $_PATH->script("Sha256 JS");
+        $_PATH->script("Login JS");
+    ?>
     <title>Collector Tools -- <?= $admin['heading'] ?></title>
 </head>
 <html>

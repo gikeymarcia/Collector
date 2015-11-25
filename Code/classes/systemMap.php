@@ -133,7 +133,8 @@
                 'jquery-ui-1.10.4.custom.min.css' => 'Jquery UI Custom CSS',
                 
                 'nojswarning.png' => 'No JS Warning',
-                
+
+                'tools.css' => 'Tools CSS',
                 'tutorial.css' => 'Tutorial CSS',
                 
                 'fonts' => array (

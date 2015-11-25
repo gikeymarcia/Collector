@@ -1,3 +1,4 @@
+<div class="alert alert-instructions">Please carefully read the instructions again.</div>
 <section class="instructions">
     <h2 class="textcenter">Task Instructions</h2>
     <p>In this study you will be studying some stuff then you will need to recall that stuff.

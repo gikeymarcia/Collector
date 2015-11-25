@@ -1,0 +1,74 @@
+/* $TOOLS
+ ---------------------------------------------------------------------------- */
+#login {
+    width: 450px;
+    margin: 50px auto;
+    text-align: center;
+}
+    #login .wrong {
+        font-weight: 400;
+        line-height: .95em;
+        color: red;
+    }
+    #login p {
+        width: 300px;
+        display: inline-block;
+        margin-bottom: 5px;
+    }
+    #login input[type=password] {
+        margin-left: 10px;
+        margin-right: 5px;
+        width: 220px;
+    }
+    #login h3 {
+        line-height: 1.2em;
+    }
+#salt {
+    font-family: "Inconsolata", "inconsolata_local", "Courier New", Courier, monospace;
+    color: #f7f7f7;         
+    font-weight: 400; /* we only have the 400s for inconsolata */
+    width: 300px;           
+    line-height: 95%;
+    word-wrap: break-word;  
+    display: block;
+    margin: 50px auto 20px auto;
+}
+#nav {
+    width: 90%;
+    overflow: auto;
+    margin:5px auto;
+    background-color: #DEE7EC;
+    border-radius: 8px;
+    padding: 20px 15px;
+}
+    #nav h1 {
+        float: left;
+        line-height: .8em;
+        padding: 0px;
+        font-size: 2em;
+    }
+    #nav div {
+        float: right;
+        margin-right: 25px;
+    }
+    #nav a {
+        float: right;
+        font-size: 1.1em;
+        padding-top: 5px;
+    }
+    #nav select {
+    width: 300px;;
+    }
+    #nav button {
+        margin-left: 2px;
+}
+.toolSelect {
+    background-color: #F2F2F2;
+    font-size: 90%;
+}
+.toolWidth {
+    width: 90%;
+    display: block;
+    margin: 0px auto;
+    overflow: auto;
+}

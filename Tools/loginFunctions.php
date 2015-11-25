@@ -65,7 +65,7 @@
             '<input type="password" id="pass" class= "collectorInput" autofocus></input>' .
             '<input id="fauxSubmit" type="submit" value="Submit" class="collectorButton"></input>' .
             '<form id="hashSubmit" action="login.php" method="post" class="hidden">' .
-                '<span id="nonce">' . $salt . '</span>' .
+                "<span id='nonce'>$salt</span>" .
                 '<input id="realInput" name="response" type="text"></input>' .
             '</form>';
             
@@ -88,7 +88,7 @@
                 break;
         }
         echo '</div>';
-        echo '<div id="salt""><b>salt=</b>' . $salt . '</div>';
+        echo "<div id='salt'><b>salt=</b>$salt</div>";
     }
     
     

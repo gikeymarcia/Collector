@@ -475,4 +475,16 @@
                 return true;
             }
         }
+        // Sends a string appropriate for calling a stylesheet in the HTML document head
+        public function stylesheet($selector)
+        {
+            $path = $this->get($selector);
+            echo "<link href='$path'  rel='stylesheet'   type='text/css'/>";
+        }
+        // Sends a string appropriate for calling a script in the HTML document head
+        public function script($selector)
+        {
+            $path = $this->get($selector);
+            echo "<script src='$path' type='text/javascript'></script>";
+        }
     }

@@ -1,0 +1,34 @@
+.readcheck {
+  background: #00FF87;
+  border-radius: 5px;
+  display:none;
+  margin: 3em auto 1em auto;
+  padding: 1.5em;
+  width: 60%;
+}
+
+.readcheck ul {
+  list-style:none;
+}
+.readcheck ul li {
+  width: 80%;
+  margin:1em auto;
+  background: #fff;
+  outline: solid 2px #00a5e5;
+  padding: 5px;
+  cursor: pointer;
+}
+.readcheck ul li:hover {
+  background: #00a5e5;
+}
+
+.redOutline {
+  outline: 2px dashed #900;
+}
+
+.alert-instructions {
+  display:none;
+  width:100%;
+  color:#fff;
+  text-align:center;
+}
