@@ -5,6 +5,17 @@
  */
     require 'initiateCollector.php';
     
+    // redirect people who aren't supposed to be here
+    if (empty($_SESSION['state'])) {
+        $bounceTo = "../";
+    } elseif ($_SESSION['state'] == "exp") {
+        $bounceTo = $_PATH->get("Experiment Page");
+    }
+    if (isset($bounceTo)) {
+        header("Location: $bounceTo");
+        exit;
+    }
+
     // Set the page message
     if (empty($_SESSION['next'])) {
         $email = $_SETTINGS->experimenter_email;
