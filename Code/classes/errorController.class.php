@@ -4,7 +4,6 @@
  */
 class errorController
 {
-    protected $count = 0;
     protected $details = array();
     protected $allowShowStopper = true;
 
@@ -20,9 +19,9 @@ class errorController
             $this->details[] = $errMsg;
         }
         if (($showStopper == true)
-            && ($this->allowShowStopper == true)
+            AND ($this->allowShowStopper == true)
         ){
-            echo $errMsg . '<br>';
+            echo "$errMsg<br>";
             $this->printErrors();
             exit;
         }
@@ -42,7 +41,7 @@ class errorController
             </style>";
             echo '<ol class="err">';
             foreach ($this->details as $pos => $messsage) {
-                $li = '<li>' . $messsage . '</li>';
+                $li = "<li>$messsage</li>";
                 echo $li;
             }
             echo '</ol>';
@@ -54,7 +53,7 @@ class errorController
      */
     public function count()
     {
-        return $this->count;
+        return count($this->details);
     }
     /**
      * trasnforms the error handler so it doesn't exit
@@ -71,6 +70,13 @@ class errorController
         } else {
             return false;
         }
+    }
+    public function __toString()
+    {
+        ob_start();
+        $this->printErrors();
+        $string = ob_get_clean();
+        return $string;
     }
 }
 ?>

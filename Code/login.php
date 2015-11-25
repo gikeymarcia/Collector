@@ -147,12 +147,8 @@
     ####################################
 
 
-    echo "<pre>";
-        // var_dump($user, $cond, $debug, $errors, $revisit, $status, $procedure, $stimuli);
-        // exit;
-    echo "</pre>";
     if ($errors->arePresent()) {
-        $errors->printErrors();
+        echo $errors;
         echo "<div>
                 Oops, something has gone wrong. Email the experimenter at <b>$_SETTINGS->experimenter_email</b><br>
                 <button type='button' onClick='window.location.reload(true);'>Click here to refresh</button>
@@ -160,7 +156,9 @@
         exit;
     } else {
         $_SESSION['state'] = 'exp';
-        header("Location: Experiment.php");
+        $experiment = $_PATH->get("Experiment Page");
+        header("Location: $experiment");
+        exit;
     }
 
 exit;
