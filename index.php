@@ -31,13 +31,17 @@
     $title = 'Collector Homepage';
     require $_PATH->get('Header');
 ?>
+    <style>
+        .inlineUL { display: inline-block; margin: auto; text-align: left; }
+    </style>
+    
     <h1>Collector</h1>
     <h2>A program for running experiments on the web</h2>
     
     <p>Welcome to the Collector. If you would like to begin an experiment,
          click on one of the links below.</p>
     
-    <ul>
+    <ul class="inlineUL">
     <?php
         foreach ($experiments as $name => $path) {
             echo "<li><a href='$path'>$name</a></li>";
@@ -45,7 +49,9 @@
     ?>
     </ul>
     
-    <p>Otherwise, you can access one of the other tools 
-         <a href="<?= $_PATH->get('Tools') ?>">here</a>.</p>
+    <p>
+        Otherwise, you can access one of the other tools 
+        <a href="<?= $_PATH->get('Tools') ?>">here</a>.
+    </p>
 <?php
     require $_PATH->get('Footer');
