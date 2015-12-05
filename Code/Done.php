@@ -55,7 +55,7 @@
         // preparing $_SESSION for the next run
         if ($_SESSION['state'] == 'break') {
             $_SESSION['state'] = 'return';
-            $_SESSION['Position']++;                        // increment counter so next session will begin after the NewSession (if multisession)
+            $_EXPT->position++;                        // increment counter so next session will begin after the NewSession (if multisession)
             $_SESSION['Session']++;                         // increment session # so next login will be correctly labeled as the next session
             $_SESSION['ID'] = rand_string();                // generate a new ID (for next login)
         } else {

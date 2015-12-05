@@ -18,7 +18,7 @@
     
     $currentPos;                   // the current trial in the experiment (i.e. row in the Procedure file). This variable is automatically defined for every trial, because of separate code found in Experiment.php, in the Code/ folder
     $prevPos    = $currentPos - 1; // the position of the last trial, where we would ask a survey
-    $responses  = $_SESSION['Responses'][$prevPos]; // the responses on the last trial
+    $responses  = $_EXPT->responses[$prevPos]; // the responses on the last trial
     
     if (isset($responses['Age']) AND $responses['Age'] < 18) {
         // 1. do we have the response for their age?

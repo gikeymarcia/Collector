@@ -133,16 +133,15 @@
     $_SESSION['Username']   = $user->getUsername();
     $_SESSION['ID']         = $user->getID();
     $_SESSION['Session']    = $user->getSession();
-    
     $_SESSION['Start Time'] = time();
-    $_SESSION['Condition']  = $cond->get();
-    $_SESSION['Position']   = 0;
-    $_SESSION['PostNumber'] = 0;
     
-    $_SESSION['Stimuli']    = $stimuli->shuffled();
-    $_SESSION['Procedure']  = $procedure->shuffled();
-    
-    $_SESSION['Responses']  = array();
+    // access stimuli, procedure, and condition arrays using $_EXPT->[name]
+    $_EXPT = new Experiment(
+                $stimuli->shuffled(),
+                $procedure->shuffled(),
+                $cond->get()
+            );
+    $_SESSION['_EXPT'] = $_EXPT;
     
     ####################################
 

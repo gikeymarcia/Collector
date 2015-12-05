@@ -6,8 +6,8 @@
 
     require 'initiateCollector.php';
     require $_PATH->get('Experiment Require');
-
-    
+  
+    // check that the state is set    
     if (empty($_SESSION['state'])) {
         // get out if you're not supposed to be here
         $root = $_PATH->get('root');
@@ -23,26 +23,25 @@
     ob_start(); // start an output buffer, so that if we need to redirect, we aren't blocked by previously sent content
     
     // setting up easier to use and read aliases(shortcuts) of $_SESSION data
-    $condition   =& $_SESSION['Condition'];
+    $condition   =& $_EXPT->condition;
+    $currentPos  =& $_EXPT->position;
+    $currentPost =& $_EXPT->postNumber;
     
-    $currentPos  =& $_SESSION['Position'];
-    $currentPost =& $_SESSION['PostNumber'];
+    if ($_EXPT->isDone()) { gotoDone(); }
     
-    checkIfDone();
-    
-    if (!isset($_SESSION['Responses'][$currentPos])) {
-        $_SESSION['Responses'][$currentPos] = array();
+    if (!isset($_EXPT->responses[$currentPos])) {
+        $_EXPT->responses[$currentPos] = array();
     }
 
     #### CREATE CURRENT TRIAL
     // also create aliases to proc and stim data
-    $currentTrial = getTrial();
+    $currentTrial = $_EXPT->getTrial();
     $procedure    = $currentTrial['Procedure'];
     $stimuli      = $currentTrial['Stimuli'];
 
 
     #### CREATE ALIASES
-    $trialValues = prepareAliases($currentTrial);
+    $trialValues = $_EXPT->prepareAliases();
     extract($trialValues, EXTR_SKIP); // do not overwrite with aliases, in case they have a "condition" column
     // from this point on, we should use variables that have at least
     // one capital letter in them, so that we can be guaranteed not
@@ -62,7 +61,7 @@
         $addedStyles  = array($trialFiles['style']);
     }
 
-    if (isset($trialFiles['helper'])) include $trialFiles['helper'];
+    if (isset($trialFiles['helper'])) { include $trialFiles['helper']; }
 
 
     #### TEXT REPLACEMENT
@@ -87,11 +86,18 @@
         $max_time = $_SETTINGS->debug_time;
     }
 
-    if (!isset($min_time))       $min_time = 'not set';
-    if (!isset($defaultMaxTime)) $defaultMaxTime = null;
+    if (!isset($min_time))       { $min_time = 'not set'; }
+    if (!isset($defaultMaxTime)) { $defaultMaxTime = null; }
 
-    // $max_time passed by reference here
-    $formClass = getTrialTiming($max_time, $defaultMaxTime);
+    // set class for input form (shows or hides 'submit' button)
+    $max_time = strtolower($max_time);
+    if ($max_time === 'computer' || $max_time === 'default') {
+        $max_time = is_numeric($defaultMaxTime) ? $defaultMaxTime : 'user';
+    }
+    if (!is_numeric($max_time)) {
+        $max_time = 'user';
+    }
+    $formClass = ($max_time === 'user') ? 'UserTiming' : 'ComputerTiming';
 
 
     #### PREPARE TO DISPLAY ####
@@ -113,16 +119,28 @@
      */
     if ($_POST !== array()) {
         require $trialFiles['scoring'];
+        
         if (!isset($data)) { $data = $_POST; }
-        saveResponses($data);
-        $nextTrialIndex = getNextTrialIndex();
-        if (   $nextTrialIndex === false
-            || $nextTrialIndex[0] > $currentPos
-        ) {
+        $_EXPT->recordResponses($data);
+        
+        $nextTrialIndex = $_EXPT->getNextTrialIndex();
+        if ($nextTrialIndex === false || $nextTrialIndex[0] > $currentPos) {
             recordTrial();
         }
-        // goToNextTrial will header redirect and exit
-        goToNextTrial();
+        
+        // go to the next trial or end experiment
+        $nextTrial = $_EXPT->getNextTrialIndex();
+        if ($nextTrial !== false) {
+            $_EXPT->position   = $nextTrial[0];
+            $_EXPT->postNumber = $nextTrial[1];
+            header('Location: ' . $_PATH->get('Experiment Page'));
+            exit;
+        }           
+        
+        ++$_EXPT->position;
+        if ($_EXPT->isDone()) {
+            gotoDone();
+        }
     }
 
 
@@ -173,12 +191,12 @@
     if (($_SETTINGS->trial_diagnostics == true)
         OR ($trialFail == true)
     ) {
-        showTrialDiagnostics();
+        $_EXPT->showTrialDiagnostics();
     }
 
 
     #### PRECACHE
-    precacheNext();
+    echo $_EXPT->getPrecache();
     
     require $_PATH->get('Footer');
     

@@ -5,10 +5,10 @@
  */
     $data = $_POST;
     /*
-     * Q: Why are we using $data instead of setting values directly into $_SESSION['Responses']?
+     * Q: Why are we using $data instead of setting values directly into $_EXPT->responses?
      * 
      * A: $data holds all scoring information and once scoring is complete $data is merged
-     *    into $_SESSION['Responses'][$currentPos-1]
+     *    into $_EXPT->responses[$currentPos-1]
      *    
      *    This is done so when scoring a post trial all data will be prepended with the 
      *    correct post# (e.g., $data['RT'] would be merged as $data['post#_RT] iF scoring 

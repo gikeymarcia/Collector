@@ -110,7 +110,7 @@
                     if (isset($stimCols[$col])) {
                         $index = rangeToArray($index);
                         foreach ($index as $i) {
-                            $newButtons[] = $_SESSION[ 'Stimuli' ][ $i ][ $stimCols[$col] ];
+                            $newButtons[] = $_EXPT->stimuli[$i][$stimCols[$col]];
                         }
                     } else {
                         $newButtons[] = $thisButton;                    // so we can see which button is being outputted as $bad button [2o3nri...
