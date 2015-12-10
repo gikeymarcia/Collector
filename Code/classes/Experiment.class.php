@@ -20,6 +20,7 @@ class Experiment
     public $stimuli;
     public $procedure;
     public $responses;
+    public $condition;
     
     public function __construct(array $stimuli, array $procedure, 
         array $conditionInfo, array $responses = array()
@@ -309,26 +310,39 @@ class Experiment
     {
         if ($pos  === null) { $pos  = $this->position; }
         if ($post === null) { $post = $this->postNumber; }
+        $currentTrial = $this->getTrial($pos, $post);
+
         // clean the arrays used so that they output strings, not code
-        $clean_session      = arrayCleaner($_SESSION);
-        $clean_currentTrial = arrayCleaner($this->getTrial($pos, $post));
+        $clean_cond = arrayCleaner($this->condition);
+        $stimfiles = $procfiles = [];
+        foreach($clean_cond as $key => $val) {
+            if (strpos($key, 'Stimuli') === 0) {
+                $stimfiles[] = $val;
+            }
+            if (strpos($key, 'Procedure') === 0) {
+                $procfiles[] = $val;
+            }
+        }
+        
+        $clean_proc = arrayCleaner($currentTrial['Procedure']);
+        $clean_stim = arrayCleaner($currentTrial['Stimuli']);
         echo '<div class=diagnostics>'
             .  '<h2>Diagnostic information</h2>'
             .  '<ul>'
-            .    '<li> Condition Stimuli File: '   . $clean_session['Condition']['Stimuli']
-            .    '<li> Condition Procedure File: ' . $clean_session['Condition']['Procedure']
-            .    '<li> Condition description: '    . $clean_session['Condition']['Description']
+            .    '<li> Condition Stimuli File: '   . implode(', ', $stimfiles)
+            .    '<li> Condition Procedure File: ' . implode(', ', $procfiles)
+            .    '<li> Condition description: '    . $clean_cond['Description']
             .  '</ul>'
             .  '<ul>'
             .    '<li> Trial Number: '   . $pos
-            .    '<li> Trial Type: '     . $clean_currentTrial['Procedure']['Trial Type']
-            .    '<li> Trial max time: ' . $clean_currentTrial['Procedure']['Max Time']
+            .    '<li> Trial Type: '     . $clean_proc['Trial Type']
+            .    '<li> Trial max time: ' . $clean_proc['Max Time']
             .  '</ul>'
             .  '<ul>'
-            .    '<li> Cue: '    . show($clean_currentTrial['Stimuli']['Cue'])
-            .    '<li> Answer: ' . show($clean_currentTrial['Stimuli']['Answer'])
+            .    '<li> Cue: '    . show($clean_stim['Cue'])
+            .    '<li> Answer: ' . show($clean_stim['Answer'])
             .  '</ul>';
-        readable($clean_currentTrial, "Information loaded about the current trial");
+        readable(['Stimuli'=>$clean_stim, 'Procedure' => $clean_proc], "Information loaded about the current trial");
         readable($this->stimuli,      "Information loaded about the stimuli");
         readable($this->procedure,    "Information loaded about the procedure");
         readable($this->responses,    "Information loaded about the responses");
