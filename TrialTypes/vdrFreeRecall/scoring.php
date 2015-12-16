@@ -3,7 +3,9 @@
     A program for running experiments on the web
     Copyright 2012-2015 Mikey Garcia & Nate Kornell
  */
-    
+   
+    $_EXPT = isset($_EXPT) ? $_EXPT : $_SESSION['_EXPT'];
+
     // to make sure that everything is recorded, just throw all of POST into
     // $data, which will eventually be recorded into the output file.
     // To create new columns, simply assign the new data you want to record
@@ -269,7 +271,7 @@
     $data['unmatchedResp']  = implode( '|', $unmatchedResp  );
     $data['Errors']         = implode( '|', $differences    );  //and we can see how far off they were (so if we set leniency = 2, we can still which were 0, 1, or 2 off)
     
-    saveResponses($data);
+    $_EXPT->recordResponses($data);
     
     
     

@@ -28,7 +28,7 @@
     $data['Time']       = $date;
     $data['Min Return'] = $_SESSION['Min Return'];
     $data['Max Return'] = $_SESSION['Max Return'];
-    saveResponses($data);
+    $_EXPT->recordResponses($data);
 
 
     // updating state as coming from a newsession and sending to done.php

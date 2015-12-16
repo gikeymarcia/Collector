@@ -1,5 +1,7 @@
 <?php
-    $firstTrial = getProcedure($currentPos, 0);
+    $_EXPT = isset($_EXPT) ? $_EXPT : $_SESSION['_EXPT'];
+
+    $firstTrial = $_EXPT->getTrialProcedure($currentPos, 0);
     $firstTrialType = strtolower($firstTrial['Trial Type']);
     if (!isset($text) || $text === '') {
         $text = 'The correct answer was:';
