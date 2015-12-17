@@ -1,14 +1,29 @@
 <?php
 /**
+ * ErrorController class.
+ */
+
+/**
+ * @todo update all docblocks in ErrorController
+ * 
  * Used to keep track of error messages during the login process
  */
 class ErrorController
 {
+    /**
+     * All of the error messages.
+     * @var array
+     */
     protected $details = array();
+    
+    /**
+     * Indicates whether errors can stop the entire experiment.
+     * @var bool
+     */
     protected $allowShowStopper = true;
 
     /**
-     * logs the given error message
+     * logs the given error message.
      * @param string  $errMsg      [details of specific error]
      * @param boolean $showStopper [if set to `true` immediately print error and stop program]
      */
@@ -27,7 +42,7 @@ class ErrorController
         }
     }
     /**
-     * Show all errors
+     * Show all errors.
      */
     public function printErrors()
     {
@@ -48,8 +63,8 @@ class ErrorController
         }
     }
     /**
-     * get back the # of errors found
-     * @return int number of errors sent to the object
+     * Get the number of errors found.
+     * @return int Number of errors stored in this object.
      */
     public function count()
     {
@@ -63,6 +78,11 @@ class ErrorController
     {
         $this->allowShowStopper = false;
     }
+    
+    /**
+     * Indicates whether any errors are present.
+     * @return boolean True if errors are present.
+     */
     public function arePresent()
     {
         if ($this->count() > 0) {
@@ -71,6 +91,12 @@ class ErrorController
             return false;
         }
     }
+    
+    /**
+     * Converts all logged errors to a single string and returns the string.
+     * @return string All of the logged errors.
+     * @see ErrorController::printErrors.
+     */
     public function __toString()
     {
         ob_start();
@@ -79,4 +105,3 @@ class ErrorController
         return $string;
     }
 }
-?>

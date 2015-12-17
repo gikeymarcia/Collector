@@ -1,19 +1,28 @@
 <?php
 /**
-*  Controls the error checking for procedure file
-*  Parent class: controlFileSetup handles the reading and stitching together of files
+ * Procedure class.
+ */
+
+/**
+*  Controls the error checking for procedure file.
+*  @see ControlFile
 */
 class Procedure extends ControlFile
 {
     /**
-     * Will run all of the error checking required for procedure files
+     * @todo rename?
+     * 
+     * Runs all of the error checking required for procedure files.
      */
     public function errorCheck()
     {
         $this->columns();
     }
     /**
-     * Uses parent method requiredColumns() to check that the file has all necessary columns
+     * @todo rename?
+     * 
+     * Uses ControlFile::requiredColumns() to check that the file has all of the
+     * necessary columns.
      */
     protected function columns()
     {
@@ -21,9 +30,10 @@ class Procedure extends ControlFile
         $file = 'Procedure';
         $this->requiredColumns($file, $required);
     }
+    
     /**
-     * How to get the stimuli file that will be used for this participant
-     * @return array     Stitched and unshuffled version of the stimuli file
+     * Gets the procedure file that will be used for this participant.
+     * @return array Stitched and unshuffled version of the procedure file.
      */
     public function getProcedureArray()
     {

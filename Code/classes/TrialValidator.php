@@ -1,14 +1,55 @@
 <?php
+/**
+ * TrialValidator class
+ */
+
+/**
+ * @todo summary for TrialValidator class
+ */
 class TrialValidator
 {
+    /**
+     * @todo docblock for TrialValidator::oStim
+     * @var Stimuli
+     */
     protected $oStim;
+    
+    /**
+     * @todo docblock for TrialValidator::oProc
+     * @var Procedure
+     */
     protected $oProc;
+    
+    /**
+     * @todo docblock for TrialValidator::oErr
+     * @var ErrorController
+     */
     protected $oErr;
     
+    /**
+     * @todo docblock for TrialValidator::trialTypes
+     * @var array
+     */
     protected $trialTypes;
+    
+    /**
+     * @todo docblock for TrialValidator::validators
+     * @var array
+     */
     protected $validators = array();
+    
+    /**
+     * @todo docblock for TrialValidator::foundErrors
+     * @var array
+     */
     protected $foundErrors = array();
     
+    /**
+     * @todo docblock for TrialValidator::__construct
+     * @param Stimuli $oStim
+     * @param Procedure $oProc
+     * @param ErrorController $oErr
+     */
     function __construct(Stimuli $oStim, Procedure $oProc, ErrorController $oErr) {
         $this->oStim = $oStim;
         $this->oProc = $oProc;
@@ -21,6 +62,9 @@ class TrialValidator
         $this->sendErrorsToErrorController();
     }
     
+    /**
+     * @todo docblock for TrialValidator::validateAllTrials()
+     */
     protected function validateAllTrials() {
         $postTrials = $this->determinePostTrialLevels();
         $postTrials = range(0, $postTrials);
@@ -39,6 +83,12 @@ class TrialValidator
         }
     }
     
+    /**
+     * @todo docblock for TrialValidator::validateTrial
+     * @param array $trialValues
+     * @param array $procRow
+     * @param int $postTrial
+     */
     protected function validateTrial($trialValues, $procRow, $postTrial) {
         $trialType = $trialValues['Trial Type'];
         $trialType = strtolower($trialType);
@@ -96,8 +146,9 @@ class TrialValidator
     }
     
     /**
-     * Checks if any errors have been found by this class
-     * @return bool
+     * Indicates whether the trial is valid or not.
+     * Checks if any errors have been logged in TrialValidator::foundErrors.
+     * @return bool True if no errors were found, or false.
      */
     public function isValid() {
         if ($this->foundErrors === array()) {
@@ -107,12 +158,19 @@ class TrialValidator
         }
     }
     
+    /**
+     * @todo docblock for TrialValidator::sendErrorsToErrorController()
+     */
     protected function sendErrorsToErrorController() {
         foreach ($this->foundErrors as $errMsg) {
             $this->oErr->add($errMsg);
         }
     }
     
+    /**
+     * @todo docblock for TrialValidator::determinePostTrialLevels()
+     * @return int
+     */
     protected function determinePostTrialLevels() {
         $level = 0;
         
@@ -126,6 +184,12 @@ class TrialValidator
         return $level;
     }
     
+    /**
+     * @todo docblock for TrialValidator::getTrialValues()
+     * @param array $procRow
+     * @param int $postN
+     * @return bool|array
+     */
     protected function getTrialValues($procRow, $postN) {
         // returns false if you are getting a post trial that is "off","no",""
         // else, returns the array of columns, stim and proc, that will be available to that trial

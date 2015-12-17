@@ -1,43 +1,100 @@
 <?php
 /**
-*  Writes status begin/end messages
-*  -- currently only used in login.php but will be expanded to write end status later
+ * StatusController class.
+ */
+
+/**
+*  Writes status begin/end messages.
 *  Logic: upon __construct() grabs browser info
 *  Needs user info $this->updateUser()
 *  Needs condition $this->setConditionInfo()
 *  Needs paths $this->setPaths()
 *
 * Will write a status begin with $this->writeBegin()
-* FUTURE: will write an end with $this->writeEnd()
+* @todo Write an end status with $this->writeEnd()
 *  
 */
 class StatusController
 {
-    // browser info
-    protected $browser;
-    protected $deviceType;
-    protected $OS;
-    // user info
-    protected $username;
-    protected $id;
-    protected $outputFile;
-    protected $sessionNum;
-    // Conditon Info
-    protected $condition;
-    // protected $number;
-    // protected $description;
-    // protected $stimuli;
-    // protected $procedure;
-    // Where to write status begin/end
+    /**
+     * Path to status begin file.
+     * @var string
+     */
     protected $beginPath;
+    
+    /**
+     * Path to status end file.
+     * @var string
+     */
     protected $endPath;
+    
+    /*
+     * Browser information
+     */
+    
+    /**
+     * The user's browser.
+     * @var string
+     */
+    protected $browser;
+    
+    /**
+     * The user's device type.
+     * @var string
+     */
+    protected $deviceType;
+    
+    /**
+     * The user's operating system.
+     * @var type 
+     */
+    protected $OS;
+    
+    /*
+     * User information
+     */
+    
+    /**
+     * The user's username.
+     * @var string
+     */
+    protected $username;
+    
+    /**
+     * The user's unique ID.
+     * @var string
+     */
+    protected $id;
+    
+    /**
+     * The user's output file for the JSON session etc.
+     * @var string
+     */
+    protected $outputFile;
+    
+    /**
+     * The user's current session number.
+     * @var int
+     */
+    protected $sessionNum;
+    
+    /**
+     * Information about the current condition
+     * @var array
+     */
+    protected $condition;
 
+    
+    /**
+     * Constructor.
+     */
     function __construct()
     {
         $this->updateBrowser();
     }
+    
     /**
-     * Grabs the browser's useragent string and returns usable information
+     * Grabs the browser's user-agent string and returns usable information.
      */
     public function updateBrowser()
     {
@@ -46,40 +103,45 @@ class StatusController
         $this->deviceType = $userAgent->Device_Type;
         $this->OS         = $userAgent->Platform;
     }
+    
     /**
-     * sets all important user information needed for status writes
-     * @param  string  $user       User's name
-     * @param  string  $id         User's login ID
-     * @param  string  $outputFile filename where the data will be written
-     * @param  integer $session    Which session is this user logging into? Defaults to 1
+     * Sets all important user information needed for status writes.
+     * @param  string  $user       User's username.
+     * @param  string  $id         User's unique login ID.
+     * @param  string  $outputFile Path to where the data will be written.
+     * @param  int     $session    The current session (default: 1).
      */
-    public function updateUser($user, $id, $outputFile, $session=1)
+    public function updateUser($user, $id, $outputFile, $session = 1)
     {
         $this->username   = $user;
         $this->id         = $id;
         $this->outputFile = $outputFile;
         $this->sessionNum = $session;
     }
+    
     /**
-     * sets all important information about the user's condition
-     * @param array $conditionRow   Keyed array from a getFromFile() read of Conditions.csv
+     * Sets all important information about the user's condition.
+     * @param array $conditionRow Associative array of condition information
+     *          formatted as a getFromFile() read of the Conditions.csv file.
      */
     public function setConditionInfo($conditionRow)
     {
         $this->condition = $conditionRow;
     }
+    
     /**
-     * relative paths' for writing the status begin and end logs
-     * @param string $begin Where to write status begins
-     * @param string $end   Where to write status ends
+     * Relative paths for writing the status begin and end logs.
+     * @param string $begin Where to write status begin.
+     * @param string $end   Where to write status end.
      */
     public function setPaths($begin, $end)
     {
         $this->beginPath = $begin;
         $this->endPath   = $end;
     }
+    
     /**
-     * Writings a line to the status begin log
+     * Writes a line to the status begin log.
      */
     public function writeBegin()
     {
@@ -99,10 +161,10 @@ class StatusController
         }
         arrayToLine($UserData, $this->beginPath);
     }
+    
     /**
-     * Write a status end message
-     * @param  int $startTime the # of seconds from the UNIX epoch
-     * @return n/a            Writes a file but doens't return text
+     * Writes a status end message.
+     * @param int $startTime The number of seconds from the UNIX epoch
      */
     public function writeEnd($startTime)
     {

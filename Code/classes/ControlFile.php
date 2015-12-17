@@ -1,6 +1,10 @@
 <?php
 /**
- * Handles the reading and stitching together of control files
+ * ControlFile class
+ */
+
+/**
+ * Handles the reading and stitching together of control files.
  * Both the Stimuli & Procedure classes will extend this object
  * on __construct you give it the base control file directory + files to be used
  *
@@ -9,20 +13,50 @@
  *     OR it can be a series of files
  *     e.g., 'Instructions.csv, Demo.csv, FinalQuestions.csv'
  */
-class ControlFile
+abstract class ControlFile
 {
+    /**
+     * The location of the control file.
+     * @var string
+     */
     protected $dir;
+    
+    /**
+     * The files to use when creating the object.
+     * @var array
+     */
     protected $files;
+    
+    /**
+     * The combined control files.
+     * @var array
+     */
     protected $stitched = array();
+    
+    /**
+     * The shuffled control file.
+     * @var array|bool
+     */
     protected $shuffled = false;
+    
+    /**
+     * The filenames and actual row numbers of rows in the stitched procedure.
+     * @var type 
+     */
     protected $rowOrigins = array();
+    
+    /**
+     * ErrorController object for handling errors.
+     * @var ErrorController
+     */
     protected $errorObj;
 
     /**
-     * Reads in control files and combines them into
-     * one array with consistent keys called $this->stitched
-     * @param string $dir       location where the files exist
-     * @param string $filenames list of .csv flenames (comma separated)
+     * Reads in control files and combines them into one array with 
+     * consistent keys stored in ControlFile::stitched.
+     * @param string $dir       The directory of the files to use.
+     * @param string $filenames Comma-separated list of .csv flenames to use.
+     * @param ErrorController $errObj An object that handles errors.
      */
     public function __construct($dir, $filenames, ErrorController $errObj)
     {
@@ -32,12 +66,11 @@ class ControlFile
         $this->readFiles();
         $this->errorCheck();
         // $this->checkShuffleCols();
-
     }
     /**
-     * Takes an array of .csv filenames
-     * and combines them all together into $this->stitched
-     * @return n/a updates $this->stitched
+     * Takes an array of .csv filenames and combines them all together and then
+     * stores them to ControlFile::stitched.
+     * @see ControlFile::stitched
      */
     protected function readFiles()
     {
@@ -56,14 +89,15 @@ class ControlFile
             }
         }
     }
+    
     /**
-     * Receives a 2d array and adds that array to $this->stitched
-     * Makes sure keys are consistent throughout $this-stitched
-     * even if $in doesn't match $this->stitched
-     * @param  array $in array being added to $this->stitched
-     * @return n/a     updates value of $this->stitched
+     * Receives a 2d array and adds that array to ControlFile::stitched.
+     * Makes sure keys are consistent throughout ControlFile::stitched even if
+     * passed array keys do not match ControlFile::stitched keys.
+     * @param array $in Array being added to ControlFile::stitched
+     * @todo update docblock for ControlFile::stitch()
      */
-    protected function stitch($in)
+    protected function stitch(array $in)
     {
         if (count($this->stitched) == 0) {               // add first file without checks
             $this->stitched = $in;
@@ -80,13 +114,16 @@ class ControlFile
             }
         }
     }
+    
     /**
-     * Receives a 2d array and checks if the keys in it's first position
-     * matches the keys in the first position of $this-stitched
-     * @param  array $new 2d-array
-     * @return boolean      true/false if keys match
+     * Receives a 2-D array and checks if the keys in its first position's array
+     * matche the keys in the first position of ControlFile::stitched.
+     * @param  array $new 2-D array to check.
+     * @return bool True if keys match, else false.
+     * 
+     * @todo ControlFile::keyMatch will always return false.
      */
-    protected function keyMatch($new)
+    protected function keyMatch(array $new)
     {
         $existingKeys = array_keys($this->stitched[0]);
         $newKeys      = array_keys($new[0]);
@@ -100,14 +137,16 @@ class ControlFile
         } else {
             return false;
         }
+        
         return true;
     }
+    
     /**
-     * Makes a given array ($newData) match the keys used in 
-     * $this->stitched.  If $newData has keys that don't exist in 
-     * $this->stitched then they are added to $this->stitched
-     * @param  array $newData data being conformed to match $this->stitched
-     * @return array          $newData transformed to match $this->stitched
+     * Makes a given array ($newData) match the keys used in ControlFile::stitched.
+     * If $newData has keys that don't exist in ControlFile::stitched then they 
+     * are added to the stitched array.
+     * @param  array $newData The array being conformed.
+     * @return array The array conformed to the ControlFile::stitched array.
      */
     protected function conform($newData)
     {
@@ -131,10 +170,10 @@ class ControlFile
         }
         return $aligned;
     }
+    
     /**
-     * Adds a key to with the value of an empty string for
-     * each position in stitched
-     * @param string $key name of key to add
+     * Adds a key with the an empty string for each position in ControlFile::stitched.
+     * @param string $key Name of key to add.
      */
     protected function addKey($key)
     {
@@ -142,11 +181,12 @@ class ControlFile
             $this->stitched[$pos][$key] = '';
         }
     }
+    
     /**
-     * checks if a file exists
+     * Checks if a file exists. The experiment will be halted entirely if the
+     * file does not exist.
      * @param  string $path path to get to the file being checked
-     * @return boolean       true if the path points at a file
-     *                       and showstopper error if the file doesn't exist
+     * @return boolean True if the path points at a file.
      */ 
     protected function exists($path)
     {
@@ -157,7 +197,10 @@ class ControlFile
             $this->errorObj->add($msg, true);
         }
     }
+    
     /**
+     * @todo update docblock for ControlFile::requiredColumns()
+     * 
      * Makes sure that the array has all required columns
      * @param  string $filename type of file being checked (usually stimuli or procedure)
      * @param  [type] $cols     [description]
@@ -172,7 +215,10 @@ class ControlFile
             }
         }
     }
+    
     /**
+     * @todo update docblock for ControlFile::shuffle()
+     * 
      * Shuffles $this->stitched and returns the result
      * @return [type] [description]
      */
@@ -183,7 +229,11 @@ class ControlFile
         $this->shuffled = $data;
         return $data;
     }
+    
     /**
+     * @todo update docblock for ControlFile::shuffled()
+     * @todo change ControlFile::shuffled() to a public property?
+     * 
      * Returns the specific shuffled version that was 
      * created last time $this->shuffle() was run
      * @return array result of the last time $this->shuffle() was used
@@ -192,7 +242,11 @@ class ControlFile
     {
         return $this->shuffled;
     }
+    
     /**
+     * @todo update docblock for ControlFile::unshuffled()
+     * @todo change ControlFile::stitched to a public property?
+     * 
      * Return $this->stitched without shuffling
      * @return array stitched outcome of reading the control file(s)
      */
@@ -200,7 +254,10 @@ class ControlFile
     {
         return $this->stitched;
     }
+    
     /**
+     * @todo update docblock for ControlFile::manual()
+     * 
      * Overrides whatever was created for $this->stitched
      * with the array you pass it
      * @param  array $newStitched expecting something in 2d getFromFile() format
@@ -209,7 +266,10 @@ class ControlFile
     {
         $this->stitched = $newStitched;
     }
+    
     /**
+     * @todo update docblock for ControlFile::getKeys()
+     * 
      * Use to get a list of the keys used in $this->stitched
      * @param  bool $noShuffles defaults to false but if set to true then all shuffle related keys will be removed
      * @return $array (e.g., array(0=> 'item', 1=>'trial type'))
@@ -232,7 +292,10 @@ class ControlFile
             return $subset;
         }
     }
+    
     /**
+     * @todo update docblock for ControlFile::overlap()
+     * 
      * Checks if a set of given keys overlaps
      * with the keys of the current object (stimuli or procedure)
      * $errors->add() called if overlap is found
@@ -258,8 +321,11 @@ class ControlFile
             $msg .= "</ol>";
             $this->errorObj->add($msg);
         }
-    }    
+    }  
+    
     /**
+     * @todo update docblock for ControlFile::getRowOrigin()
+     * 
      * Finds the filename and actual row number of a row in the stitched procedure
      * @param int $i index of procedure to get origins
      * @return array assoc array with indices 'filename' and 'row'

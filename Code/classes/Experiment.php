@@ -1,27 +1,59 @@
 <?php
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Experiment class
  */
 
 /**
- * Description of Experiment
- *
- * @author Adam
+ * @todo Description of Experiment class
+ * @todo update all docblocks in this class
+ * @todo add Experiment::validate($pos = 'all') method
  */
-
-/* @TODO add validate($pos = 'all') method */
 class Experiment
 {
+    /**
+     * The position of the current trial.
+     * @var int
+     */
     public $position;
+    
+    /**
+     * The current Post Trial position.
+     * @var int
+     */
     public $postNumber;
+    
+    /**
+     * All the (shuffled) stimuli array for the Experiment.
+     * @var array
+     */
     public $stimuli;
+    
+    /**
+     * The (shuffled) procedure array for the Experiment.
+     * @var array
+     */
     public $procedure;
+    
+    /**
+     * Indexed array of recorded responses (corresponds to position)
+     * @var array
+     */
     public $responses;
+    
+    /**
+     * The condition information for the Experiment.
+     * @var array
+     */
     public $condition;
     
+    /**
+     * Constructor.
+     * @param array $stimuli The stimuli to use in the Experiment.
+     * @param array $procedure The procedure to follow for the Experiment.
+     * @param array $conditionInfo The condition information for the Experiment.
+     * @param array $responses The responses associated with each trial.
+     *                         (Generally this will be left as an empty array.)
+     */
     public function __construct(array $stimuli, array $procedure, 
         array $conditionInfo, array $responses = array()
     ) {
@@ -35,8 +67,8 @@ class Experiment
     
     /**
      * Gets procedure and stimuli data for given procedure row and post trial.
-     * @param  int   $pos  int The row of the procedure file to use
-     * @param  int   $post int The post trial to use
+     * @param int $pos The row of the procedure file to use
+     * @param int $post The post trial to use
      * @return array Associative array of the "Stimuli" and "Procedure"
      * @see Experiment::getTrialProcedure(), Experiment::getTrialStimuli()
      */
@@ -52,8 +84,8 @@ class Experiment
      * Gets procedure columns for single trial, optionally specifying
      * specific position and post trial number. Post trial columns are
      * transformed into their unposted form ('Text' instead of 'Post 1 Text')
-     * @param  int   $pos The position of the desired trial in Procedure
-     * @param  int   $postPos The position of the desired Post Trial
+     * @param int $pos The position of the desired trial in Procedure
+     * @param int $postPos The position of the desired Post Trial
      * @return array The array of procedure items for the trial
      */
     public function getTrialProcedure($pos = null, $postPos = null)
@@ -76,8 +108,8 @@ class Experiment
     
     /**
      * Gets all items from a Procedure Row array, excluding Post Trial items.
-     * @param  array $array The array to process.
-     * @return array        The stripped array.
+     * @param array $array The array to process.
+     * @return array The stripped array.
      */
     private function extractProcColsForTrial(array $array)
     {
@@ -93,9 +125,9 @@ class Experiment
     
     /**
      * Gets all items from a Procedure Row array with the given Post Trial #
-     * @param  array $array   The array to process
-     * @param  int   $postPos The Post Trial to extract
-     * @return array          The stripped array.
+     * @param array $array The array to process
+     * @param int $postPos The Post Trial to extract
+     * @return array The stripped array.
      */
     private function extractProcColsForPostTrial(array $array, $postPos)
     {
@@ -115,7 +147,7 @@ class Experiment
     
     /**
      * Get stimuli for given item(s)
-     * @param  int|str $item Typically, contents of "Item" column in proc file
+     * @param  int|string $item Typically, contents of "Item" column in proc file
      * @return array Stimuli, with column values imploded with | if multiple items specified
      * @see Experiment::getTrialProcedure(), Experiment::getTrial()
      */
@@ -151,14 +183,13 @@ class Experiment
     }
     
     /**
-     * @TODO: Should also be a method of a Trial class
+     * @todo Should also be a method of a Trial class
      * 
      * Saves array of data into (optionally) specified trial's response array. "Post" prefixes appended appropriately
      * @param array $data The 1-D array of responses to save, typically $_POST with custom scoring
-     * @param int   $pos  Optional, defaults to $this->position
-     * @param int   $postPos Optional, defaults to $this->postNumber
-     * @return void
-     */
+     * @param int $pos Optional, defaults to $this->position
+     * @param int $postPos Optional, defaults to $this->postNumber
+     * @return void */
     public function recordResponses(array $data, $pos = null, $postPos = null)
     {
         if ($pos  === null) { $pos  = $this->position; }
@@ -182,7 +213,7 @@ class Experiment
     /**
      * Finds next post trial after current (or given) trial, or returns false if row
      * has no more valid trials.
-     * @param int $pos  int [Optional] The position in the experiment
+     * @param int $pos int [Optional] The position in the experiment
      * @param int $post int [Optional] The post trial position
      * @return int|bool The position of the next valid post trial level, or false
      * @see getValidPostTrials()
@@ -205,7 +236,7 @@ class Experiment
 
     /**
      * Gets all levels of post trials with valid trial types for row in procedure
-     * @param  int $pos [Optional] The position to extract Post Trials from
+     * @param int $pos [Optional] The position to extract Post Trials from
      * @return array Integers specifying which post trials are valid, including 0 for non-post trials
      */
     public function getValidPostTrials($pos = null)
@@ -235,8 +266,8 @@ class Experiment
     /**
      * Gets the next trial, whether its the next post trial or the
      * first trial of the next row. Returns false if no trials left
-     * @param int $pos  [optional] defaults to $this->position
-     * @param int $post [optional] defaults to $this->postNumber
+     * @param int $pos [Optional] defaults to $this->position
+     * @param int $post [Optional] defaults to $this->postNumber
      * @return array|bool, Array as returned by getTrial(), or false
      * @see Experiment::getTrial(), Experiment::getNextTrialIndex()
      */
@@ -251,7 +282,7 @@ class Experiment
     
     /**
      * Gets the proc row index and post trial number of the next trial
-     * @param int $pos  [Optional] defaults to $this->position
+     * @param int $pos [Optional] defaults to $this->position
      * @param int $post [Optional] defaults to $this->postNumber
      * @return array|bool, Array with position and post-trial indices, or false
      */
@@ -276,11 +307,11 @@ class Experiment
     
     /**
      * Adds images from next trial to a hidden div
-     * @param int $pos  [optional] The position of the trial prior to the trial
+     * @param int $pos [Optional] The position of the trial prior to the trial
      *                  that is being precached (default: current trial)
-     * @param int $post [optional] The post position of the trial prior to the
+     * @param int $post [Optional] The post position of the trial prior to the
      *                  one being precached (default: current post position)
-     * @return str|bool The precache or false if next trial does not exist
+     * @return string|bool The precache or false if next trial does not exist
      * @see Experiment::getNextTrial()
      */
     public function getPrecache($pos = null, $post = null)
@@ -301,10 +332,9 @@ class Experiment
     
     /**
      * Shows all available info for trial, helpful if trial fails
-     * @param int $pos  [optional] defaults to $this->position
-     * @param int $post [optional] defaults to $this->postNumber
-     * @return void
-     * @see Experiment::getTrial()
+     * @param int $pos [Optional] defaults to $this->position
+     * @param int $post [Optional] defaults to $this->postNumber
+     * @return void * @see Experiment::getTrial()
      */
     public function showTrialDiagnostics($pos = null, $post = null)
     {
@@ -350,14 +380,14 @@ class Experiment
     }
     
     /**
-     * @TODO: should be a method of a Trial class
+     * @todo should be a method of a Trial class
      * 
      * Converts 2-D associative array into a 1-D array for extract(). Array keys are
      * converted to variables. For overlapping column names (e.g. "Cue" in both
      * the Procedure and the Stimuli files, or "Cue" in the Stimulli file and 
      * "Post 1 Cue" in the Procedure file) only the first value will be kept and a
      * warning will be triggered.
-     * @param  array $pos Position of the trial to be extract()ed (default: current)
+     * @param array $pos Position of the trial to be extract()ed (default: current)
      * @return array Converted array: columns to lowercase, spaces to underscores
      */
     public function prepareAliases($pos = null)
@@ -394,8 +424,8 @@ class Experiment
     
     /**
      * Retrieves and organizes data from a specific trial.
-     * @param type $pos
-     * @return type
+     * @param int $pos The position of the trial.
+     * @return array Associative array of the data.
      */
     public function getTrialRecord($pos = null)
     {

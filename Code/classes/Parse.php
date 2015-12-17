@@ -1,18 +1,23 @@
 <?php
+/**
+ * Parse class.
+ */
 
 //use Symfony\Component\Yaml\Yaml;
 
 /**
  * Collection of static functions for parsing files.
- *
+ * 
  * @author Adam Blake <adamblake@g.ucla.edu>
+ * @copyright Adam B. Blake 2014
  */
 class Parse {
 
     /**
      * Parses a configuration file and returns an associative array.
-     * @param string $filename configuration file to parse
-     * @return array|stdClass associative array or class of the configurations
+     * @param string $filename The configuration file to parse.
+     * @param bool $returnObject Indicates whether to return an object or array.
+     * @return array|stdClass Associative array or class of the configurations.
      * @throws Exception
      */
     public static function fromConfig($filename, $returnObject = false)
@@ -40,11 +45,11 @@ class Parse {
     }
 
     /**
-     * Parses a YAML file or string
-     * @param string $input The YAML file path or YAML string
-     * @param bool $isString Switch to true for string input instead of file
-     * @return array
-     * @throws \InvalidArgumentException when config cannot be parsed
+     * Parses a YAML file or string.
+     * @param string $input The YAML file path or YAML string.
+     * @param bool $isString Set true for string input instead of file.
+     * @return array Associative array of the file.
+     * @throws \InvalidArgumentException when config cannot be parsed.
      */
     public static function fromYaml($input, $isString = false)
     {
@@ -66,11 +71,11 @@ class Parse {
     }
 
     /**
-     * Parses a JSON file or string
-     * @param string $input The JSON file path or JSON string
-     * @param bool $isString Switch to true for string input instead of file
-     * @return array
-     * @throws \LogicException when JSON decode cannot parse the file
+     * Parses a JSON file or string.
+     * @param string $input The JSON file path or JSON string.
+     * @param bool $isString Set to true for string input instead of file.
+     * @return array Associative array of the file.
+     * @throws \LogicException when JSON decode cannot parse the file.
      */
     public static function fromJson($input, $isString = false)
     {
@@ -93,11 +98,11 @@ class Parse {
     }
 
     /**
-     * Parses an INI file or string
-     * @param string $input The INI file path or INI string
-     * @param bool $isString Switch to true for string input instead of file
-     * @return array
-     * @throws \InvalidArgumentException when the INI file cannot be parsed
+     * Parses an INI file or string.
+     * @param string $input The INI file path or INI string.
+     * @param bool $isString Switch to true for string input instead of file.
+     * @return array Associative array of the file.
+     * @throws \InvalidArgumentException when the INI file cannot be parsed.
      */
     public static function fromIni($input, $isString = false)
     {
@@ -122,7 +127,7 @@ class Parse {
     }
 
     /**
-     * Unpacks nested INI sections/arrays
+     * Unpacks nested INI sections/arrays.
      * @param array $ini_arr The INI array to unpack.
      */
     private static function fixIniMulti(array &$ini_arr)
@@ -149,8 +154,8 @@ class Parse {
     
     /**
      * Converts an array to an object using stdClass.
-     * @param array $array The array to convert
-     * @return \stdClass
+     * @param array $array The array to convert.
+     * @return \stdClass The object form of the array.
      */
     public static function arrayToObject(array $array)
     {
@@ -162,7 +167,7 @@ class Parse {
     }
 
     /**
-     * @TODO something seems to be wrong with the call_user_func_array in combination with the file_get_contents: returns empty string
+     * @todo something seems to be wrong with the call_user_func_array in combination with the file_get_contents: returns empty string
      * 
      * Wrapper for file_get_contents that throws Exceptions, rather than 
      * returning false and throwing a warning.
@@ -198,7 +203,7 @@ class Parse {
     /**
      * Determines the extension of a given file.
      * @param string $filename The path to the file.
-     * @return string
+     * @return string The extension of the file.
      */
     public static function getExt($filename)
     {
@@ -208,7 +213,7 @@ class Parse {
     /**
      * Detects the end-of-line character(s) of a string.
      * @param string $string String to check.
-     * @return string Detected EOL.
+     * @return string The detected EOL.
      */
     public static function detectEol($string)
     {
