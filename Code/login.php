@@ -30,15 +30,15 @@
 
 
     #### login objects
-    $errors = new errorController();
+    $errors = new ErrorController();
 
-    $user   = new user(
+    $user   = new User(
         $_GET['Username'],
         $errors
     );
     $user->feedPathfinder($_PATH);
     
-    $debug = new debugController(           // sets $_SESSION['Debug'] value
+    $debug = new DebugController(           // sets $_SESSION['Debug'] value
         $user->getUsername(), 
         $_SETTINGS->debug_name,
         $_SETTINGS->debug_mode
@@ -46,7 +46,7 @@
     $debug->feedPathfinder($_PATH);         // change data recording directory if debug mode is on
     $debug->toSession();                    // sets $_SESSION['Debug'] to a bool
 
-    $cond = new conditionController(
+    $cond = new ConditionController(
         $_PATH->get('Conditions'),
         $_PATH->get('Counter'),
         $_SETTINGS->hide_flagged_conditions,
@@ -91,18 +91,18 @@
     $_PATH->setDefault('Condition Index', $cond->getAssignedIndex());
     // modify paths based on assigned condition
 
-    $procedure = new procedure(
+    $procedure = new Procedure(
         $_PATH->get('Procedure Dir'),
         $cond->allProc(),
         $errors
     );
-    $stimuli = new stimuli(
+    $stimuli = new Stimuli(
         $_PATH->get('Stimuli Dir'),
         $cond->allStim(),
         $errors
     );
 
-    $status = new statusController();
+    $status = new StatusController();
     $status->updateUser(
         $user->getUsername(),
         $user->getID(),

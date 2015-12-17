@@ -62,7 +62,7 @@ class ReturnVisitController
             return false;
         }
     }
-    public function reloadToExperiment(Pathfinder $pathfinder, user $user)
+    public function reloadToExperiment(Pathfinder $pathfinder, User $user)
     {
         $_SESSION = $this->oldSession;
         $pathfinder->setDefaultsCopy($_SESSION['Pathfinder']);

@@ -11,7 +11,7 @@
 * FUTURE: will write an end with $this->writeEnd()
 *  
 */
-class statusController
+class StatusController
 {
     // browser info
     protected $browser;

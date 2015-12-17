@@ -9,7 +9,7 @@
  *     OR it can be a series of files
  *     e.g., 'Instructions.csv, Demo.csv, FinalQuestions.csv'
  */
-class controlFile
+class ControlFile
 {
     protected $dir;
     protected $files;
@@ -24,7 +24,7 @@ class controlFile
      * @param string $dir       location where the files exist
      * @param string $filenames list of .csv flenames (comma separated)
      */
-    public function __construct($dir, $filenames, errorController $errObj)
+    public function __construct($dir, $filenames, ErrorController $errObj)
     {
         $this->errorObj = $errObj;
         $this->dir   = $dir;

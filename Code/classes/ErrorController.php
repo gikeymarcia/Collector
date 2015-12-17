@@ -2,7 +2,7 @@
 /**
  * Used to keep track of error messages during the login process
  */
-class errorController
+class ErrorController
 {
     protected $details = array();
     protected $allowShowStopper = true;

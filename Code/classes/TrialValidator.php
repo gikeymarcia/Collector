@@ -1,5 +1,5 @@
 <?php
-class trialValidator
+class TrialValidator
 {
     protected $oStim;
     protected $oProc;
@@ -9,7 +9,7 @@ class trialValidator
     protected $validators = array();
     protected $foundErrors = array();
     
-    function __construct(stimuli $oStim, procedure $oProc, errorController $oErr) {
+    function __construct(Stimuli $oStim, Procedure $oProc, ErrorController $oErr) {
         $this->oStim = $oStim;
         $this->oProc = $oProc;
         $this->oErr  = $oErr;

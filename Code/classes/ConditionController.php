@@ -13,7 +13,7 @@
  *     - $this->notes()         :   @return 'Notes' cell string
  *     - $this->get()           :   @return  keyed array of assigned condition (row)
  */
-class conditionController
+class ConditionController
 {
     protected $selection;                 // condition selected from $_GET
     protected $location;                  // how to get to Conditions.csv
@@ -30,9 +30,9 @@ class conditionController
      * @param string            $conditionsLoc relative path to Conditions.csv
      * @param string            $counterDir    relative path to the directory where the counter is held
      * @param string            $logLocation   relative path to the login counter file
-     * @param errorController   $errorHandler  object that will capture and log
+     * @param ErrorController   $errorHandler  object that will capture and log
      */
-    public function __construct($conditionsLoc, $logLocation, $showFlagged = false, errorController $errorHandler)
+    public function __construct($conditionsLoc, $logLocation, $showFlagged = false, ErrorController $errorHandler)
     {
         $this->errObj   = $errorHandler;
         $this->location = $conditionsLoc;
@@ -334,7 +334,7 @@ class conditionController
      * @param  string $varName will look for variable with the name of the string contents
      * for example, 'mikey' would cause the errors to be reported to `global $mikey`
      */
-    public function changeErrorHandler(errorController $newErrHandler)
+    public function changeErrorHandler(ErrorController $newErrHandler)
     {
         $this->errObj = $newErrHandler;
     }

@@ -33,9 +33,9 @@
     
     
     #### login objects
-    $errors = new errorController();
+    $errors = new ErrorController();
 
-    $cond = new conditionController(
+    $cond = new ConditionController(
         $_PATH->get('Conditions'),
         $_PATH->get('Counter'),
         $_SETTINGS->hide_flagged_conditions,

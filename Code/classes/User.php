@@ -3,7 +3,7 @@
  * Handles the setting, getting, and validating of username given to Collector
  * Also handles setting of user ID
  */
-class user
+class User
 {
     protected $username;
     protected $id;
@@ -11,7 +11,7 @@ class user
     protected $valid = null;
     protected $errObj;
 
-    public function __construct($name, errorController $errorController)
+    public function __construct($name, ErrorController $errorController)
     {
         $this->errObj = $errorController;
         $this->setUsername($name);
@@ -131,7 +131,7 @@ class user
      * @param  string $varName will look for variable with the name of the string contents
      * for example, 'mikey' would cause the errors to be reported to `global $mikey`
      */
-    public function changeErrorHandler(errorController $altErrObj)
+    public function changeErrorHandler(ErrorController $altErrObj)
     {
         $this->errObj = $altErrObj;
     }

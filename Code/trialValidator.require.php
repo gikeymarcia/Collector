@@ -33,7 +33,7 @@
     // if successful, record the mod times of the current scan
     if ($doTrialValidation) {
         
-        $trialValidator = new trialValidator($stimuli, $procedure, $errors);
+        $trialValidator = new TrialValidator($stimuli, $procedure, $errors);
         
         if ($trialValidator->isValid()) {
             $dir = dirname($trialValidationTimeFile);
