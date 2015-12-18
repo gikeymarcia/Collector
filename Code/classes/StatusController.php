@@ -4,166 +4,179 @@
  */
 
 /**
-*  Writes status begin/end messages.
-*  Logic: upon __construct() grabs browser info
-*  Needs user info $this->updateUser()
-*  Needs condition $this->setConditionInfo()
-*  Needs paths $this->setPaths()
-*
-* Will write a status begin with $this->writeBegin()
-* @todo Write an end status with $this->writeEnd()
-*  
-*/
+ *  Writes status begin/end messages.
+ *  Logic: upon __construct() grabs browser info
+ *  Needs user info $this->updateUser()
+ *  Needs condition $this->setConditionInfo()
+ *  Needs paths $this->setPaths().
+ *
+ * Will write a status begin with $this->writeBegin()
+ *
+ * @todo Write an end status with $this->writeEnd()
+ */
 class StatusController
 {
     /**
      * Path to status begin file.
+     *
      * @var string
      */
     protected $beginPath;
-    
+
     /**
      * Path to status end file.
+     *
      * @var string
      */
     protected $endPath;
-    
+
     /*
      * Browser information
      */
-    
+
     /**
      * The user's browser.
+     *
      * @var string
      */
     protected $browser;
-    
+
     /**
      * The user's device type.
+     *
      * @var string
      */
     protected $deviceType;
-    
+
     /**
      * The user's operating system.
-     * @var type 
+     *
+     * @var type
      */
     protected $OS;
-    
+
     /*
      * User information
      */
-    
+
     /**
      * The user's username.
+     *
      * @var string
      */
     protected $username;
-    
+
     /**
      * The user's unique ID.
+     *
      * @var string
      */
     protected $id;
-    
+
     /**
      * The user's output file for the JSON session etc.
+     *
      * @var string
      */
     protected $outputFile;
-    
+
     /**
      * The user's current session number.
+     *
      * @var int
      */
     protected $sessionNum;
-    
+
     /**
-     * Information about the current condition
+     * Information about the current condition.
+     *
      * @var array
      */
     protected $condition;
 
-    
     /**
      * Constructor.
      */
-    function __construct()
+    public function __construct()
     {
         $this->updateBrowser();
     }
-    
+
     /**
      * Grabs the browser's user-agent string and returns usable information.
      */
     public function updateBrowser()
     {
         $userAgent = getUserAgentInfo();
-        $this->browser    = $userAgent->Parent;
+        $this->browser = $userAgent->Parent;
         $this->deviceType = $userAgent->Device_Type;
-        $this->OS         = $userAgent->Platform;
+        $this->OS = $userAgent->Platform;
     }
-    
+
     /**
      * Sets all important user information needed for status writes.
-     * @param  string  $user       User's username.
-     * @param  string  $id         User's unique login ID.
-     * @param  string  $outputFile Path to where the data will be written.
-     * @param  int     $session    The current session (default: 1).
+     *
+     * @param string $user       User's username.
+     * @param string $id         User's unique login ID.
+     * @param string $outputFile Path to where the data will be written.
+     * @param int    $session    The current session (default: 1).
      */
     public function updateUser($user, $id, $outputFile, $session = 1)
     {
-        $this->username   = $user;
-        $this->id         = $id;
+        $this->username = $user;
+        $this->id = $id;
         $this->outputFile = $outputFile;
         $this->sessionNum = $session;
     }
-    
+
     /**
      * Sets all important information about the user's condition.
+     *
      * @param array $conditionRow Associative array of condition information
-     *          formatted as a getFromFile() read of the Conditions.csv file.
+     *                            formatted as a getFromFile() read of the Conditions.csv file.
      */
     public function setConditionInfo($conditionRow)
     {
         $this->condition = $conditionRow;
     }
-    
+
     /**
      * Relative paths for writing the status begin and end logs.
+     *
      * @param string $begin Where to write status begin.
      * @param string $end   Where to write status end.
      */
     public function setPaths($begin, $end)
     {
         $this->beginPath = $begin;
-        $this->endPath   = $end;
+        $this->endPath = $end;
     }
-    
+
     /**
      * Writes a line to the status begin log.
      */
     public function writeBegin()
     {
         $UserData = array(
-            'Username'    => $this->username,
-            'ID'          => $this->id,
-            'Date'        => date('c'),
-            'Session'     => $this->sessionNum,
+            'Username' => $this->username,
+            'ID' => $this->id,
+            'Date' => date('c'),
+            'Session' => $this->sessionNum,
             'Output_File' => $this->outputFile,
-            'Browser'     => $this->browser,
-            'DeviceType'  => $this->deviceType,
-            'OS'          => $this->OS,
-            'IP'          => $_SERVER["REMOTE_ADDR"]
+            'Browser' => $this->browser,
+            'DeviceType' => $this->deviceType,
+            'OS' => $this->OS,
+            'IP' => $_SERVER['REMOTE_ADDR'],
         );
         foreach ($this->condition as $key => $value) {
             $UserData["Cond_$key"] = $value;
         }
         arrayToLine($UserData, $this->beginPath);
     }
-    
+
     /**
      * Writes a status end message.
+     *
      * @param int $startTime The number of seconds from the UNIX epoch
      */
     public function writeEnd($startTime)
@@ -173,12 +186,12 @@ class StatusController
         // below is copied from done.php
         // Not functional yet so the metho is protected to prevent it from being run from within the experiment
         $data = array(
-            'Username'           => $this->username,
-            'ID'                 => $this->id,
-            'Date'               => date('c'),
-            'Duration'           => $duration,
+            'Username' => $this->username,
+            'ID' => $this->id,
+            'Date' => date('c'),
+            'Duration' => $duration,
             'Duration_Formatted' => $durationFormatted,
-            'Session'            => $_SESSION['Session'],
+            'Session' => $_SESSION['Session'],
         );
         foreach ($this->condition as $key => $value) {
             $UserData["Cond_$key"] = $value;
@@ -186,4 +199,3 @@ class StatusController
         arrayToLine($data, $this->endPath);
     }
 }
-?>

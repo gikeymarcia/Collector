@@ -4,11 +4,12 @@
  */
 
 /**
-*  Controls the error checking for procedure file.
-*  @see ControlFile
+ *  Controls the error checking for procedure file.
+ *
+ *  @see ControlFile
  * 
  * @todo the current functions should be abstract functions in ControlFile
-*/
+ */
 class Procedure extends ControlFile
 {
     /**
@@ -32,9 +33,10 @@ class Procedure extends ControlFile
         $file = 'Procedure';
         $this->requiredColumns($file, $required);
     }
-    
+
     /**
      * Gets the procedure file that will be used for this participant.
+     *
      * @return array Stitched and unshuffled version of the procedure file.
      */
     public function getProcedureArray()
@@ -42,5 +44,3 @@ class Procedure extends ControlFile
         return $this->stitched;
     }
 }
-
-?>

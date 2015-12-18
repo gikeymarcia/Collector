@@ -2,8 +2,10 @@
 /**
  * Pathfinder class.
  */
-   
+
 /**
+ * Provides access to a system map.
+ * 
  * Goals:
  * - provide a way to use system map, so that you can ask for
  *   each file or directory simply by a label
@@ -108,30 +110,34 @@ class Pathfinder
 {
     /**
      * The associative array of all the names => paths.
+     *
      * @var array
      */
-    private $_pathList  = array ();
-    
+    private $_pathList = array();
+
     /**
      * The relative, absolute, and url paths to the root from current location.
-     * @var array 
+     *
+     * @var array
      */
-    private $_rootPath  = array (
+    private $_rootPath = array(
         'relative' => '',
         'absolute' => '',
-        'url'      => '',
+        'url' => '',
     );
 
     /**
      * The directory name.
-     * @var string 
+     *
+     * @var string
      * 
      * @todo what is this used for?
      */
     private $_dirName = 'dir name';
-    
+
     /**
      * The variable name.
+     *
      * @var string
      * 
      * @todo what is this used for?
@@ -140,17 +146,20 @@ class Pathfinder
 
     /**
      * The default values for the Pathfinder.
+     *
      * @var array
      */
     private $_defaults = array();
 
     /**
      * Constructor.
+     *
      * @param array $defaultHolder An external array passed by-reference to hold
-     *            the default values.
+     *                             the default values.
      */
-    function __construct(array &$defaultHolder = null) {
-        $map  = $this->getFileMap();
+    public function __construct(array &$defaultHolder = null)
+    {
+        $map = $this->getFileMap();
         $path = $this->convertFileMapToPathList($map);
 
         foreach ($path as $name => $thisPath) {
@@ -170,24 +179,30 @@ class Pathfinder
 
     /**
      * Retrives the system map from it's file.
+     *
      * @return array An associative array of all named paths in system map.
      * 
      * @todo update systemMap.php to return the value, not set the variable.
      */
-    private function getFileMap() {
+    private function getFileMap()
+    {
         require 'systemMap.php';
+
         return $systemMap;
     }
 
     /**
      * Converts the system map array from a tree to a list.
+     *
      * @param array $systemMap The system map from Pathfinder::getFileMap().
+     *
      * @return array The system map with trees joined.
      */
-    private function convertFileMapToPathList($systemMap) {
+    private function convertFileMapToPathList($systemMap)
+    {
         $list = $this->array_flip_multiDim($systemMap);
 
-        $dirName    = strtolower($this->_dirName);
+        $dirName = strtolower($this->_dirName);
         $dirNameLen = strlen($dirName);
 
         foreach ($list as &$path) {
@@ -197,7 +212,9 @@ class Pathfinder
 
             $path = strtr($path, '\\', '/');
 
-            if ($path === '/') { $path = ''; }
+            if ($path === '/') {
+                $path = '';
+            }
         }
 
         return $list;
@@ -207,18 +224,21 @@ class Pathfinder
      * Performs array_flip on a multidimensional array.
      * Takes an associative array, takes all non-array values and makes them the
      * keys, joining each array key with a separator.
-     * @param array $array The array to flip.
-     * @param string $sep The character to use when joining keys.
+     *
+     * @param array  $array The array to flip.
+     * @param string $sep   The character to use when joining keys.
+     *
      * @return array The flipped array.
      */
-    public function array_flip_multiDim(array $array, $sep = '/') {
+    public function array_flip_multiDim(array $array, $sep = '/')
+    {
         $list = array();
 
         foreach ($array as $key => $value) {
             if (is_array($value)) {
                 $values = $this->array_flip_multiDim($value);
                 foreach ($values as &$subKey) {
-                    $subKey = $key . $sep . $subKey;
+                    $subKey = $key.$sep.$subKey;
                 }
                 unset($val);
             } else {
@@ -233,15 +253,18 @@ class Pathfinder
     /**
      * Adds a key => value pair to an array, throwing an exception if the key 
      * already exists.
-     * @param array $array The array (by-reference) to modify.
+     *
+     * @param array $array    The array (by-reference) to modify.
      * @param array $mergedIn The key => value pair to merge in.
+     *
      * @throws Exception Throws if the key already exists in the array.
      */
-    public function addUniqueToArray(array &$array, array $mergedIn) {
+    public function addUniqueToArray(array &$array, array $mergedIn)
+    {
         foreach ($mergedIn as $key => $value) {
             if (isset($array[$key])) {
                 throw new Exception(
-                    'Could not add "'.$key.'" to array in ' . __FUNCTION__ .
+                    'Could not add "'.$key.'" to array in '.__FUNCTION__.
                     ', this key already exists.'
                 );
             }
@@ -252,26 +275,32 @@ class Pathfinder
     /**
      * Cleans a string.
      * Trims, lowercases, and replaces internal spaces with underscores.
+     *
      * @param string $name The string to clean.
+     *
      * @return string The cleaned string.
      */
-    public function cleanPathfinderName($name) {
+    public function cleanPathfinderName($name)
+    {
         $name = strtolower(trim($name));
         $name = str_replace(' ', '_', $name);
+
         return $name;
     }
 
     /**
      * Finds the relative path, absolute path, and url path to the root.
+     *
      * @throws Exception Throws if root cannoth be found.
      */
-    private function setRootPaths() {
-        $i       = 0;
-        $test    = $this->get('Pathfinder');
+    private function setRootPaths()
+    {
+        $i = 0;
+        $test = $this->get('Pathfinder');
         $relRoot = '';
-        $urlRoot = dirname($this->getURL() . 'a');
+        $urlRoot = dirname($this->getURL().'a');
 
-        while (!is_file('./' . $relRoot . $test)) {
+        while (!is_file('./'.$relRoot.$test)) {
             $relRoot .= '../';
             $urlRoot = dirname($urlRoot);
             ++$i;
@@ -286,7 +315,7 @@ class Pathfinder
         $roots = array(
             'relative' => $relRoot,
             'absolute' => $absRoot,
-            'url'      => $urlRoot
+            'url' => $urlRoot,
         );
 
         foreach ($roots as $root => $path) {
@@ -297,29 +326,34 @@ class Pathfinder
 
     /**
      * Gets the current URL, complete with protocol.
+     *
      * @return string The current URL.
      */
-    public function getURL() {
+    public function getURL()
+    {
         // from http://stackoverflow.com/q/4503135
-        if (   $_SERVER['SERVER_PORT'] == 443
-            OR (    isset($_SERVER['HTTPS'])
-                AND $_SERVER['HTTPS'] !== 'off'
+        if ($_SERVER['SERVER_PORT'] == 443
+            or (isset($_SERVER['HTTPS'])
+                and $_SERVER['HTTPS'] !== 'off'
                )
         ) {
             $protocol = 'https://';
         } else {
             $protocol = 'http://';
         }
-        $domain   = $_SERVER['HTTP_HOST'];
+        $domain = $_SERVER['HTTP_HOST'];
         $resource = $_SERVER['REQUEST_URI'];
-        return $protocol . $domain . $resource;
+
+        return $protocol.$domain.$resource;
     }
 
     /**
      * Sets the array of defaults to a reference of some external array.
+     *
      * @param mixed $copy The external array (other types will be converted).
      */
-    public function setDefaultsCopy(&$copy) {
+    public function setDefaultsCopy(&$copy)
+    {
         $defaults = $this->_defaults;
 
         $this->_defaults = &$copy;
@@ -335,9 +369,11 @@ class Pathfinder
 
     /**
      * Updates all of the path names using the values from Pathfinder::_pathList.
+     *
      * @throws Exception If the path names are not unique.
      */
-    private function updateHardcodedPaths() {
+    private function updateHardcodedPaths()
+    {
         $path = $this->_pathList;
         foreach (array_keys($path) as $name) {
             $name = $this->cleanPathfinderName($name);
@@ -347,7 +383,7 @@ class Pathfinder
             $name = $this->cleanPathfinderName($name);
             if (isset($this->$name)) {
                 throw new Exception(
-                    'Bad path name: "'.$name.'" unavailable. ' .
+                    'Bad path name: "'.$name.'" unavailable. '.
                     'Make sure names are unique, case-insensitive.'
                 );
             }
@@ -357,22 +393,26 @@ class Pathfinder
 
     /**
      * Gets the path from the systemMap.
-     * @param string $name The name of the path.
-     * @param string $type Type of path to get: relative, absolute, or url.
+     *
+     * @param string       $name      The name of the path.
+     * @param string       $type      Type of path to get: relative, absolute, or url.
      * @param array|string $variables Variables for modifying the path.
+     *
      * @return string The requested path.
+     *
      * @throws Exception Throws if the requested path name does not exist.
      */
-    public function get($name, $type = 'relative', $variables = array()) {
+    public function get($name, $type = 'relative', $variables = array())
+    {
         $cleanName = $this->cleanPathfinderName($name);
         if (!isset($this->_pathList[$cleanName])) {
-            throw new Exception('"'.$name.'" not found in ' . __CLASS__ . ' path list.');
+            throw new Exception('"'.$name.'" not found in '.__CLASS__.' path list.');
         }
 
         $path = $this->_pathList[$cleanName];
 
         # example: getting "support/includes/fileLocations.php" from "core/Error.php"
-        switch($type) {
+        switch ($type) {
             case 'base':     # fileLocations.php
                 $path = explode('/', $path);
                 $path = array_pop($path);
@@ -392,34 +432,41 @@ class Pathfinder
                 break;
 
             case 'absolute': # C:/wamp/www/Collector/support/includes/fileLocations.php
-                $path = $this->_rootPath['absolute'] . '/' . $path;
+                $path = $this->_rootPath['absolute'].'/'.$path;
                 break;
 
             case 'url':      # http://localhost/Collector/support/includes/fileLocations.php
-                $path = $this->_rootPath['url']      . '/' . $path;
+                $path = $this->_rootPath['url'].'/'.$path;
                 break;
 
             default:         # relative, ../support/includes/fileLocations.php
-                $pre  = $this->_rootPath['relative'];
-                if ($pre !== '') { $pre .= '/'; }
-                $path = $pre . $path;
+                $pre = $this->_rootPath['relative'];
+                if ($pre !== '') {
+                    $pre .= '/';
+                }
+                $path = $pre.$path;
                 break;
         }
 
         $path = $this->updateVariableString($path, $variables);
 
-        if (substr($path, -2) === '/.') { $path = substr($path, 0, -2); }
+        if (substr($path, -2) === '/.') {
+            $path = substr($path, 0, -2);
+        }
 
         return $path;
     }
 
     /**
      * Modifies a string using the passed variables.
-     * @param string $string The string to modify.
+     *
+     * @param string       $string    The string to modify.
      * @param array|string $variables The array of variables, or string to use.
+     *
      * @return string The modified string.
      */
-    private function updateVariableString($string, $variables) {
+    private function updateVariableString($string, $variables)
+    {
         $defaults = $this->_defaults;
 
         if (is_array($variables)) {
@@ -442,23 +489,23 @@ class Pathfinder
             $explodeRightBrace = explode('}', $stringWithVar);
 
             $rawVar = array_shift($explodeRightBrace);
-            $var    = strtolower(trim($rawVar));
+            $var = strtolower(trim($rawVar));
 
             if ($var === $varKeyword) {
-                $insert = '{' . $varKeyword . '}'; // will do later, but needs to be trim() and strtolower()
+                $insert = '{'.$varKeyword.'}'; // will do later, but needs to be trim() and strtolower()
             } elseif (isset($defaults[$var])) {
                 $insert = $defaults[$var];
             } else {
-                $insert = '{' . $rawVar . '}'; // missing default
+                $insert = '{'.$rawVar.'}'; // missing default
             }
 
-            $output .= $insert . $explodeRightBrace[0];
+            $output .= $insert.$explodeRightBrace[0];
         }
 
-        $varKeyword = '{' . $varKeyword . '}';
+        $varKeyword = '{'.$varKeyword.'}';
 
         if (is_array($variables)) {
-            $varMarker = '/' . preg_quote($varKeyword) . '/';
+            $varMarker = '/'.preg_quote($varKeyword).'/';
             foreach ($variables as $var) {
                 $output = preg_replace($varMarker, $var, $output, 1);
             }
@@ -475,12 +522,14 @@ class Pathfinder
      * Gets all paths that do not contain a wild card or a default value.
      * Use this to get a list of all non-variable paths. You can then run 
      * fileExists() on them, as a diagnostic check that all typical files exist.
+     *
      * @return array The array of standard paths.
      */
-    public function getStandardPaths() {
+    public function getStandardPaths()
+    {
         $paths = array();
         foreach ($this->_pathList as $name => $path) {
-            if (strpos($path, '{') === FALSE) {
+            if (strpos($path, '{') === false) {
                 $paths[$name] = $path;
             }
         }
@@ -492,11 +541,13 @@ class Pathfinder
      * Replaces a path component default with a new value.
      * Can either pass an associative array to set multiple defaults at once, 
      * or a single key and value as separate parameters.
+     *
      * @param array|string $arrayOrKey The array of keys => values to set, or a 
-    *             single key to set.
-     * @param string $value The value to set if a single key is passed.
+     *                                 single key to set.
+     * @param string       $value      The value to set if a single key is passed.
      */
-    public function setDefault($arrayOrKey, $value = null) {
+    public function setDefault($arrayOrKey, $value = null)
+    {
         if (is_array($arrayOrKey)) {
             $newDefaults = $arrayOrKey;
         } else {
@@ -512,43 +563,54 @@ class Pathfinder
 
     /**
      * Gets the value of the desired default setting.
+     *
      * @param string $key The name of the setting to return.
+     *
      * @return string|null The value of the setting or null.
      */
-    public function getDefault($key) {
+    public function getDefault($key)
+    {
         if (isset($this->_defaults[$key])) {
             return $this->_defaults[$key];
         }
-        
-        return null;
+
+        return;
     }
 
     /**
      * Clears all the defaults that exist in the Pathfinder.
      */
-    public function clearDefaults() {
+    public function clearDefaults()
+    {
         $this->_defaults = array();
     }
 
     /**
      * Determines if current URL targets specified path.
+     *
      * @param string $loc The path to check against.
+     *
      * @return bool True if the path matches current location.
      */
-    public function atLocation($loc) {
-        $target  = $this->get($loc, 'absolute');
+    public function atLocation($loc)
+    {
+        $target = $this->get($loc, 'absolute');
         $current = realpath($_SERVER['SCRIPT_FILENAME']);
         $current = strtr($current, '\\', '/');
+
         return $current === $target;
     }
 
     /**
      * Checks if current URL targets a file inside the specified directory.
+     *
      * @param string $dir The directory to check against.
+     *
      * @return bool True if the directory holds the current file.
      */
-    public function inDir($dir) {
-        $dirUrl  = $this->get($dir, 'url');
+    public function inDir($dir)
+    {
+        $dirUrl = $this->get($dir, 'url');
         $current = $this->getURL();
 
         if (stripos($current, $dirUrl) === false) {
@@ -557,9 +619,10 @@ class Pathfinder
             return true;
         }
     }
-    
+
     /**
      * Sends a string appropriate for calling a stylesheet in the HTML header.
+     *
      * @param string $selector The stylesheet to get the element for.
      * 
      * @todo rename?
@@ -570,9 +633,10 @@ class Pathfinder
         $path = $this->get($selector);
         echo "<link href='$path'  rel='stylesheet'   type='text/css'/>";
     }
-    
+
     /**
      * Sends a string appropriate for calling a script in the HTML header.
+     *
      * @param string $selector The script to get the element for.
      * 
      * @todo rename?

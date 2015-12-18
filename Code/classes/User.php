@@ -11,37 +11,43 @@ class User
 {
     /**
      * The username of the participant.
+     *
      * @var string
      */
     protected $username;
-    
+
     /**
      * Unique ID for the participant.
-     * @var type 
+     *
+     * @var type
      */
     protected $id;
-    
+
     /**
      * The current session for this participant.
-     * @var type 
+     *
+     * @var type
      */
     protected $sessionNumber = 1;
-    
+
     /**
      * Indicates whether the username is valid or not.
+     *
      * @var bool
      */
     protected $valid = null;
-    
+
     /**
      * ErrorController object for handling errors.
-     * @var ErrorController 
+     *
+     * @var ErrorController
      */
     protected $errObj;
 
     /**
      * Constructor.
-     * @param string $name The participant's username.
+     *
+     * @param string          $name            The participant's username.
      * @param ErrorController $errorController Object for handling errors.
      */
     public function __construct($name, ErrorController $errorController)
@@ -49,12 +55,14 @@ class User
         $this->errObj = $errorController;
         $this->setUsername($name);
     }
-    
+
     /**
      * Takes a string and sets it as the username.
      * Desired username is filtered, set as the username, validated, and then
      * an ID is created and set for it.
+     *
      * @param string $name The participant's desired username.
+     *
      * @uses User::username
      * @uses User::validateUsername()
      * @uses User::setID()
@@ -64,13 +72,13 @@ class User
     public function setUsername($name)
     {
         $name = filter_var($name, FILTER_SANITIZE_EMAIL);
-        $illegalCharacters = array('/', '\\', '?', '%', '*', ':', '|', '"', '<', '>' );
+        $illegalCharacters = array('/', '\\', '?', '%', '*', ':', '|', '"', '<', '>');
         $cleanUsername = str_replace($illegalCharacters, '', $name);
         $this->username = $cleanUsername;
         $this->validateUsername();
         $this->setID();
     }
-    
+
     /**
      * Checks if username is valid and then sets User::valid to true or false.
      * 
@@ -80,9 +88,10 @@ class User
     {
         $this->checkNameLength();
     }
-    
+
     /**
      * Checks that the username is longer than three characters.
+     *
      * @uses User::valid Sets the valid state depending on if the check passes.
      */
     protected function checkNameLength()
@@ -97,10 +106,12 @@ class User
             }
         }
     }
-    
+
     /**
      * Returns the username if it is valid.
-     * @return string|boolean Filtered username or false if it is invalid.
+     *
+     * @return string|bool Filtered username or false if it is invalid.
+     *
      * @uses User::username Returns this if it is valid.
      */
     public function getUsername()
@@ -111,9 +122,10 @@ class User
             return false;
         }
     }
-    
+
     /**
      * Sets unique ID for each login.
+     *
      * @uses User::id Sets this value after finding or creating it.
      * 
      * @todo filter_input on $_GET
@@ -135,10 +147,12 @@ class User
             $this->id = $_SESSION['ID'];
         }
     }
-    
+
     /**
      * Returns the participant's ID.
+     *
      * @return string The participant's unique ID.
+     *
      * @uses User::id Returned by this function if it exists.
      */
     public function getID()
@@ -149,44 +163,52 @@ class User
             return false;
         }
     }
-    
+
     /**
      * Sets the current session number (for use in multi-session experiments).
+     *
      * @param int $number The number of the session.
+     *
      * @uses User::sessionNumber Sets a new value to this if the value is valid.
      */
     public function setSession($number)
     {
-        if (is_int($number) AND ($number > 0)) {
+        if (is_int($number) and ($number > 0)) {
             $this->sessionNumber = $number;
         }
     }
-    
+
     /**
      * Appends a string to the username and passes it to User::setUsername.
+     *
      * @param string $suffix The string to append to User::username.
+     *
      * @uses User::username Appends suffix to current username.
      * @uses User::setUsername() Passes the new value for filtering/validation.
      */
     public function appendToUsername($suffix)
     {
-        $potential = $this->username . $suffix;
+        $potential = $this->username.$suffix;
         $this->setUsername($potential);
     }
-    
+
     /**
      * Gets the current session number.
+     *
      * @return int The currently stored session number.
+     *
      * @uses User:sessionNumber Returns this value.
      */
     public function getSession()
     {
         return $this->sessionNumber;
     }
-    
+
     /**
      * Creates and returns the output file's name.
+     *
      * @return string The name of the output file.
+     *
      * @uses User::sessionNumber Stitches into the output file name.
      * @uses User::username Stitches into the output file name.
      * @uses User::id Stitches into the output file name.
@@ -194,21 +216,24 @@ class User
     public function getOutputFile()
     {
         return "Output_Session{$this->sessionNumber}_{$this->username}_"
-                . "{$this->id}.csv";
+                ."{$this->id}.csv";
     }
-    
+
     /**
      * Changes the default error handler to a new instance of ErrorController.
+     *
      * @param ErrorController $altErrObj Error handler object.
+     *
      * @uses User::errObj Sets this value to the new error handler.
      */
     public function changeErrorHandler(ErrorController $altErrObj)
     {
         $this->errObj = $altErrObj;
     }
-    
+
     /**
      * Echoes an HTML formatted list of the User's information.
+     *
      * @uses User::username
      * @uses User::id
      * @uses User::valid
@@ -228,12 +253,13 @@ class User
              </ol>
          </div>";
     }
-    
+
     /**
      * Sets relevant User information in the passed Pathfinder object.
+     *
      * @param Pathfinder $pathfinder The Pathfinder to update.
      */
-    public function feedPathfinder(Pathfinder $pathfinder) 
+    public function feedPathfinder(Pathfinder $pathfinder)
     {
         $pathfinder->setDefault('Username', $this->getUsername());
         $pathfinder->setDefault('Output',   $this->getOutputFile());

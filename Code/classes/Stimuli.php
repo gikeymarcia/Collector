@@ -5,6 +5,7 @@
 
 /**
  * Controls the error checking for stimuli files.
+ *
  * @see ControlFile
  * 
  * @todo the current functions should be abstract functions in ControlFile
@@ -21,7 +22,7 @@ class Stimuli extends ControlFile
         $this->checkColumns();
         // implement each check as its own method
     }
-    
+
     /**
      * Uses ControlFile::requiredColumns() to check that the file has all of the
      * necessary columns.
