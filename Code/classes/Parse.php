@@ -167,8 +167,6 @@ class Parse {
     }
 
     /**
-     * @todo something seems to be wrong with the call_user_func_array in combination with the file_get_contents: returns empty string
-     * 
      * Wrapper for file_get_contents that throws Exceptions, rather than 
      * returning false and throwing a warning.
      * 
@@ -186,7 +184,10 @@ class Parse {
      *   to read until end of file is reached. Note that this parameter is 
      *   applied to the stream processed by the filters.
      * @return string The read data.
-     * @throws \Exception Throws an exception when file_get_contents cannot open the file.
+     * @throws \Exception Throws an exception when file_get_contents cannot open 
+     *   the file.
+     * 
+     * @todo something seems to be wrong with the call_user_func_array in combination with the file_get_contents: returns empty string
      */
     public static function fget_contents($filename, $use_include_path = false, 
         $context = null, $offset = -1, $maxlen = null

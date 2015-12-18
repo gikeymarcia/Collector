@@ -75,6 +75,8 @@ class ConditionController
      * @param string $logLocation Relative path to the login counter file.
      * @param bool $showFlagged Inital value for the showFlagged property.
      * @param ErrorController $errorHandler Object that logs errors.
+     * 
+     * @todo fix order of arguments (showFlagged should be last to allow default)
      */
     public function __construct($conditionsLoc, $logLocation, $showFlagged = false, ErrorController $errorHandler)
     {
@@ -112,12 +114,12 @@ class ConditionController
     }
     
     /**
-     * @todo rename ConditionController::selectedCondition() to setSelection
-     * 
      * Sets the selected condition.
      * Sets the condition to the value specified. If the selected condition is 
      * not numeric or 'Auto' an error will fire.
      * @param int|string $selection The number of the condition or 'Auto'.
+     * 
+     * @todo rename ConditionController::selectedCondition() to setSelection
      */
     public function selectedCondition($selection)
     {
@@ -152,8 +154,10 @@ class ConditionController
     }
     
     /**
-     * @todo documentation for ConditionController::getLogVal()
-     * @return int
+     * Gets the first position of the log, which should be the condition number.
+     * If the value is not numeric or the file does not exist, the method
+     * ConditionController::populateLogFile() is called.
+     * @return int The number of the current condition.
      */
     protected function getLogVal()
     {
@@ -182,7 +186,8 @@ class ConditionController
     }
     
     /**
-     * @todo documentation for ConditionController::populateLogFile()
+     * Fills the log with information about the conditions.
+     * Excludes conditions flagged as "off".
      */
     protected function populateLogFile()
     {
@@ -199,8 +204,9 @@ class ConditionController
     }
     
     /**
-     * @todo documentation for ConditionController::updateLogFile()
-     * @param array $condsFound
+     * Removes the first position of the log file (a number) and rewrites the
+     * log file without it.
+     * @param array $condsFound The conditions found in the log.
      */
     protected function updateLogFile(array $condsFound)
     {
@@ -253,10 +259,9 @@ class ConditionController
     }
     
     /**
-     * @todo documentation for ConditionController::info()
-     * @todo change ConditionController::info() to return a string
+     * Debug method that echoes out the data from this class.
      * 
-     * Debug method for checking what this class does
+     * @todo change ConditionController::info() to return a string?
      */
     public function info()
     {
@@ -271,14 +276,14 @@ class ConditionController
     }
     
     /**
-     * @todo rename ConditionController::conditionsExists() to conditionsFileExists()
-     * 
      * Indicates that "Conditions.csv" exists.
      * Makes sure the conditions file can be found. If not found then trigger a
      * showstopper with the ErrorController.
      * @return bool True if the file exists.
      * @see ConditionController::__construct()
      * @see ConditionController::location
+     * 
+     * @todo rename ConditionController::conditionsExists() to conditionsFileExists()
      */
     protected function conditionsExists()
     {
@@ -370,13 +375,13 @@ class ConditionController
         return $matches;
     }
     /**
-     * @todo refactor with ConditionController::stimuli() code
-     * 
      * Gets the stimuli file string for the assigned condition, or false if it
      * has not been assigned, or an error if it does not exist.
      * @param string $num Optionally pass the integer for a specific procedure.
      * @param bool $safeSearch Forces false instead of an error.
      * @return string Contents of 'Procedure' column.
+     * 
+     * @todo refactor with ConditionController::stimuli() code
      */
     public function procedure($num = 1, $safeSearch = false)
     {
@@ -399,12 +404,12 @@ class ConditionController
     }
     
     /**
-     * @todo refactor with ConditionController::allStim()
-     * 
      * Gets the strings from all cells in a row that point to procedure files.
      * @param int $index Optionally indicate which row to retrieve from.
      * @return string Comma-separated list of all procedure files.
      * @uses ConditionController::assignedCondition Used if no index is given.
+     * 
+     * @todo refactor with ConditionController::allStim()
      */
     public function allProc($index = null)
     {

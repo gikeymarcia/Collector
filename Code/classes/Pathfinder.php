@@ -123,14 +123,18 @@ class Pathfinder
     );
 
     /**
-     * @todo what is this used for?
+     * The directory name.
      * @var string 
+     * 
+     * @todo what is this used for?
      */
     private $_dirName = 'dir name';
     
     /**
+     * The variable name.
+     * @var string
+     * 
      * @todo what is this used for?
-     * @var string 
      */
     private $_varName = 'var';
 
@@ -165,10 +169,10 @@ class Pathfinder
     }
 
     /**
-     * @todo update systemMap.php to return the value, not set the variable.
-     * 
      * Retrives the system map from it's file.
      * @return array An associative array of all named paths in system map.
+     * 
+     * @todo update systemMap.php to return the value, not set the variable.
      */
     private function getFileMap() {
         require 'systemMap.php';
@@ -555,11 +559,11 @@ class Pathfinder
     }
     
     /**
-     * @todo rename?
-     * @todo change to return a string instead of echoing it.
-     * 
      * Sends a string appropriate for calling a stylesheet in the HTML header.
      * @param string $selector The stylesheet to get the element for.
+     * 
+     * @todo rename?
+     * @todo change to return a string instead of echoing it?
      */
     public function stylesheet($selector)
     {
@@ -568,11 +572,11 @@ class Pathfinder
     }
     
     /**
-     * @todo rename?
-     * @todo change to return a string instead of echoing it.
-     * 
      * Sends a string appropriate for calling a script in the HTML header.
      * @param string $selector The script to get the element for.
+     * 
+     * @todo rename?
+     * @todo change to return a string instead of echoing it.
      */
     public function script($selector)
     {

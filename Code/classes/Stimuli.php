@@ -5,12 +5,16 @@
 
 /**
  * Controls the error checking for stimuli files.
-*  @see ControlFile
+ * @see ControlFile
+ * 
+ * @todo the current functions should be abstract functions in ControlFile
  */
 class Stimuli extends ControlFile
 {
     /**
-     * @todo docblock for Stimuli::errorCheck()
+     * Runs all of the error checking required for procedure files.
+     * 
+     * @todo rename?
      */
     public function errorCheck()
     {
@@ -19,7 +23,10 @@ class Stimuli extends ControlFile
     }
     
     /**
-     * @todo docblock for Stimuli::checkColumns()
+     * Uses ControlFile::requiredColumns() to check that the file has all of the
+     * necessary columns.
+     * 
+     * @todo rename?
      */
     protected function checkColumns()
     {

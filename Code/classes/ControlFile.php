@@ -30,6 +30,8 @@ abstract class ControlFile
     /**
      * The combined control files.
      * @var array
+     * 
+     * @todo rename to data
      */
     protected $stitched = array();
     
@@ -187,6 +189,8 @@ abstract class ControlFile
      * file does not exist.
      * @param  string $path path to get to the file being checked
      * @return boolean True if the path points at a file.
+     * 
+     * @todo update code
      */ 
     protected function exists($path)
     {
@@ -199,28 +203,26 @@ abstract class ControlFile
     }
     
     /**
-     * @todo update docblock for ControlFile::requiredColumns()
+     * Ensures that a ControlFile file has has all the required columns.
+     * @param  string $controlFileType The type of ControlFile being checked: 
+     *             'stimuli', 'procedure'.
+     * @param  array $cols The required columns.
      * 
-     * Makes sure that the array has all required columns
-     * @param  string $filename type of file being checked (usually stimuli or procedure)
-     * @param  [type] $cols     [description]
-     * @return [type]           [description]
+     * @todo refactor out the $controlFileType argument
      */
-    protected function requiredColumns($filename, $cols)
+    protected function requiredColumns($controlFileType, array $cols)
     {
         foreach ($cols as $column) {
             if(!isset($this->stitched[0][$column])) {
-                $msg = "Your $filename file does not contain the following required column: $column";
+                $msg = "Your $controlFileType file does not contain the following required column: $column";
                 $this->errorObj->add($msg);
             }
         }
     }
     
     /**
-     * @todo update docblock for ControlFile::shuffle()
-     * 
-     * Shuffles $this->stitched and returns the result
-     * @return [type] [description]
+     * Shuffles ControlFile::stitched and returns the shuffled array.
+     * @return array The shuffled data.
      */
     public function shuffle()
     {
@@ -231,12 +233,11 @@ abstract class ControlFile
     }
     
     /**
-     * @todo update docblock for ControlFile::shuffled()
-     * @todo change ControlFile::shuffled() to a public property?
+     * Returns the specific shuffled version that was created last time 
+     * ControlFile::shuffle() was run.
+     * @return array The previously shuffled data.
      * 
-     * Returns the specific shuffled version that was 
-     * created last time $this->shuffle() was run
-     * @return array result of the last time $this->shuffle() was used
+     * @todo change ControlFile::shuffled() to a public property?
      */
     public function shuffled()
     {
@@ -244,11 +245,10 @@ abstract class ControlFile
     }
     
     /**
-     * @todo update docblock for ControlFile::unshuffled()
-     * @todo change ControlFile::stitched to a public property?
+     * Returns the ControlFile data without shuffling it.
+     * @return array The stitched control file(s), unshuffled.
      * 
-     * Return $this->stitched without shuffling
-     * @return array stitched outcome of reading the control file(s)
+     * @todo change ControlFile::stitched to a public property?
      */
     public function unshuffled()
     {
@@ -256,23 +256,23 @@ abstract class ControlFile
     }
     
     /**
-     * @todo update docblock for ControlFile::manual()
+     * Sets the value for ControlFile::stitched.
+     * @param array $data The data to set (should be formatted as a 2-D array 
+     *            like getFromFile() would produce).
      * 
-     * Overrides whatever was created for $this->stitched
-     * with the array you pass it
-     * @param  array $newStitched expecting something in 2d getFromFile() format
+     * @todo make ControlFile::stitched a public property?
      */
-    public function manual($newStitched)
+    public function manual($data)
     {
-        $this->stitched = $newStitched;
+        $this->stitched = $data;
     }
     
     /**
-     * @todo update docblock for ControlFile::getKeys()
+     * Gets the list of the keys used in the stitched ControlFile data.
+     * @param  bool $noShuffles Set true to remove shuffle related keys.
+     * @return array All the keys (e.g., array(0=> 'item', 1=>'trial type')).
      * 
-     * Use to get a list of the keys used in $this->stitched
-     * @param  bool $noShuffles defaults to false but if set to true then all shuffle related keys will be removed
-     * @return $array (e.g., array(0=> 'item', 1=>'trial type'))
+     * @todo update code (!=, AND, return)
      */
     public function getKeys($noShuffles = false)
     {
@@ -294,13 +294,12 @@ abstract class ControlFile
     }
     
     /**
-     * @todo update docblock for ControlFile::overlap()
+     * Checks if a set of given keys overlaps with the keys of the current 
+     * ControlFile object. If an overlap is found, an error is added to the
+     * ErrorController.
+     * @param  array $otherKeys Indexed array of keys.
      * 
-     * Checks if a set of given keys overlaps
-     * with the keys of the current object (stimuli or procedure)
-     * $errors->add() called if overlap is found
-     * @param  array $otherKeys list of keys [expecting format of $this->getKeys()]
-     * @return n/a              does not return anything but can add() to errors if there is overlap
+     * @todo rename function to make it clear errors are the result (or refactor)
      */
     public function overlap($otherKeys)
     {
@@ -321,14 +320,13 @@ abstract class ControlFile
             $msg .= "</ol>";
             $this->errorObj->add($msg);
         }
-    }  
+    }
     
     /**
-     * @todo update docblock for ControlFile::getRowOrigin()
-     * 
-     * Finds the filename and actual row number of a row in the stitched procedure
-     * @param int $i index of procedure to get origins
-     * @return array assoc array with indices 'filename' and 'row'
+     * Finds the filename and actual row number of a row in the stitched data.
+     * @param int $i Index of item for which to retrieve row origin.
+     * @return array|bool Associative array with keys 'filename' and 'row', or 
+     *             false if the method fails.
      */
     public function getRowOrigin($i) {
         if (!isset($this->rowOrigins[$i])) {

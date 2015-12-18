@@ -113,12 +113,12 @@ class ReturnVisitController
     }
     
     /**
-     * @todo rename to isDone()
-     * 
      * Determines if the oldSession is done or not and records the value.
      * @return boolean True if it has a state of 'done'.
      * @uses ReturnVisitController::oldSession Checks the state from this array.
-     * ReturnVisitController::done Sets the done value here.
+     * @uses ReturnVisitController::done Sets the done value here.
+     * 
+     * @todo rename to isDone()
      */
     public function alreadyDone() {
         if ($this->oldSession['state'] == 'done') {
@@ -167,17 +167,16 @@ class ReturnVisitController
         exit;
     }
     /**
-     * @todo rename isTimeToReturn()
-     * @todo update Docblock part about echoing
-     * 
      * Checks if this participate is ready to login to the next session.
      * Return time is based on the 'Min Time' and 'Max Time' cells from the 
      * `NewSession` line of the procedure. In the case that it is not time to 
-     * return then it echoes the time until return (for min) or a sorry message 
-     * for when over max time.
+     * return then it sets the time until return (earlyMsg) or a sorry message 
+     * for when over max time (lateMsg).
      * @return bool True if it is time to start the next session, else false.
      * @uses ReturnVisitController::earlyMsg Shows this string to early returns.
      * @uses ReturnVisitController::earlyMsg Shows this string to early returns.
+     * 
+     * @todo rename isTimeToReturn()
      */
     public function timeToReturn()
     {
@@ -208,14 +207,14 @@ class ReturnVisitController
         return true;
     }
     /**
-     * @todo return a string instead of echoing.
-     * 
      * Shows either the late or early return time error message.
      * Each var is initiated with each class instance but the value is only 
      * modified if $this->timeToReturn() finds it is too early or too late to 
      * come back.
      * @uses ReturnVisitController::earlyMsg Displays this value if it is set.
      * @uses ReturnVisitController::lateMsg Displays this value if it is set.
+     * 
+     * @todo return a string instead of echoing?
      */
     public function explainTimeProblem()
     {
@@ -231,9 +230,9 @@ class ReturnVisitController
     }
     
     /**
-     * @todo return a string instead of echoing.
-     * 
      * Echoes a list of information about this class.
+     * 
+     * @todo return a string instead of echoing?
      */
     public function debug()
     {

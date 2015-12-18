@@ -4,56 +4,58 @@
  */
 
 /**
- * @todo summary for TrialValidator class
+ * Handles validation for trials, including global and custom validation.
  */
 class TrialValidator
 {
     /**
-     * @todo docblock for TrialValidator::oStim
+     * The stimuli object to use.
      * @var Stimuli
      */
-    protected $oStim;
+    protected $stimuli;
     
     /**
-     * @todo docblock for TrialValidator::oProc
+     * The procedure object to use.
      * @var Procedure
      */
-    protected $oProc;
+    protected $procedure;
     
     /**
-     * @todo docblock for TrialValidator::oErr
+     * The associated ErrorController object.
      * @var ErrorController
      */
-    protected $oErr;
+    protected $errObj;
     
     /**
-     * @todo docblock for TrialValidator::trialTypes
+     * The trial types available to Collector.
      * @var array
      */
     protected $trialTypes;
     
     /**
-     * @todo docblock for TrialValidator::validators
+     * The validators available to Collector.
      * @var array
      */
     protected $validators = array();
     
     /**
-     * @todo docblock for TrialValidator::foundErrors
+     * The errors found during validation.
      * @var array
      */
     protected $foundErrors = array();
     
     /**
-     * @todo docblock for TrialValidator::__construct
-     * @param Stimuli $oStim
-     * @param Procedure $oProc
-     * @param ErrorController $oErr
+     * Constructor.
+     * @param Stimuli $stimuli The Stimuli object to use.
+     * @param Procedure $procedure The Procedure object to use.
+     * @param ErrorController $errObj The ErrorController to use.
      */
-    function __construct(Stimuli $oStim, Procedure $oProc, ErrorController $oErr) {
-        $this->oStim = $oStim;
-        $this->oProc = $oProc;
-        $this->oErr  = $oErr;
+    function __construct(Stimuli $stimuli, Procedure $procedure, 
+        ErrorController $errObj
+    ) {
+        $this->stimuli = $stimuli;
+        $this->procedure = $procedure;
+        $this->errObj  = $errObj;
         
         $this->trialTypes = getAllTrialTypeFiles();
         
@@ -63,12 +65,12 @@ class TrialValidator
     }
     
     /**
-     * @todo docblock for TrialValidator::validateAllTrials()
+     * Validates all trials in the procedure.
      */
     protected function validateAllTrials() {
         $postTrials = $this->determinePostTrialLevels();
         $postTrials = range(0, $postTrials);
-        $procedure  = $this->oProc->unshuffled();
+        $procedure  = $this->procedure->unshuffled();
         
         foreach ($procedure as $pos => $row) {
             foreach ($postTrials as $postN) {
@@ -84,12 +86,12 @@ class TrialValidator
     }
     
     /**
-     * @todo docblock for TrialValidator::validateTrial
-     * @param array $trialValues
-     * @param array $procRow
-     * @param int $postTrial
+     * Validates a trial.
+     * @param array $trialValues The array of information about the trial.
+     * @param array $procRow The array of information from the procedure row.
+     * @param int $post The post trial level to use.
      */
-    protected function validateTrial($trialValues, $procRow, $postTrial) {
+    protected function validateTrial(array $trialValues, $procRow, $post) {
         $trialType = $trialValues['Trial Type'];
         $trialType = strtolower($trialType);
         
@@ -129,10 +131,10 @@ class TrialValidator
             
             // yay, they returned the correct type. If errors are found, add to error class
             if ($foundErrors !== array()) {
-                $rowOrigin = $this->oProc->getRowOrigin($procRow);
+                $rowOrigin = $this->procedure->getRowOrigin($procRow);
                 $errMsg = "Validator for trial type '<b>$trialType</b>' has found something wrong "
                         . "in the procedure file '<b>{$rowOrigin['filename']}</b>', in row <b>{$rowOrigin['row']}</b>, "
-                        . "for post trial level <b>$postTrial</b>.<ol>";
+                        . "for post trial level <b>$post</b>.<ol>";
                 
                 foreach ($foundErrors as $err) {
                     $errMsg .= "<li>$err</li>";
@@ -159,22 +161,22 @@ class TrialValidator
     }
     
     /**
-     * @todo docblock for TrialValidator::sendErrorsToErrorController()
+     * Passes errors to the ErrorController object.
      */
     protected function sendErrorsToErrorController() {
         foreach ($this->foundErrors as $errMsg) {
-            $this->oErr->add($errMsg);
+            $this->errObj->add($errMsg);
         }
     }
     
     /**
-     * @todo docblock for TrialValidator::determinePostTrialLevels()
-     * @return int
+     * Determines the number of post trial levels.
+     * @return int The number of post trial levels.
      */
     protected function determinePostTrialLevels() {
         $level = 0;
         
-        $procColumns = $this->oProc->getKeys();
+        $procColumns = $this->procedure->getKeys();
         $procColumns = array_flip($procColumns);
         
         while (isset($procColumns["Post $level Trial Type"])) {
@@ -185,15 +187,15 @@ class TrialValidator
     }
     
     /**
-     * @todo docblock for TrialValidator::getTrialValues()
-     * @param array $procRow
-     * @param int $postN
-     * @return bool|array
+     * Gets the the array of columns from the stimuli and procedure that will be
+     * available to that trial.
+     * Returns false if you are getting a post trial that is "off","no", or "".
+     * @param array $procRow The array of information from the procedure row.
+     * @param int $post The post trial number.
+     * @return array|bool The array of columns, or false if it is an "off" post.
      */
-    protected function getTrialValues($procRow, $postN) {
-        // returns false if you are getting a post trial that is "off","no",""
-        // else, returns the array of columns, stim and proc, that will be available to that trial
-        $stimuli = $this->oStim->shuffled();
+    protected function getTrialValues($procRow, $post) {
+        $stimuli = $this->stimuli->shuffled();
         $procCols = array();
         $procCols['Item'] = $procRow['Item'];   // this can be overwritten, if there is a "Post 1 Item"
         
@@ -202,7 +204,7 @@ class TrialValidator
         // else, make sure that the column starts with "Post X "
         // if we are getting post columns, trim out the post part 
         // e.g., "Post 1 Trial Type" becomes "Trial Type"
-        if ($postN === 0) {
+        if ($post === 0) {
             foreach ($procRow as $col => $val) {
                 if (substr($col, 0, 5) === 'Post ') {
                     continue;
@@ -211,7 +213,7 @@ class TrialValidator
                 }
             }
         } else {
-            $colPre = "Post $postN ";
+            $colPre = "Post $post ";
             $colPreLen = strlen($colPre);
             
             foreach ($procRow as $col => $val) {

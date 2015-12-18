@@ -49,9 +49,8 @@ class User
         $this->errObj = $errorController;
         $this->setUsername($name);
     }
+    
     /**
-     * @todo clean up filtering code?
-     * 
      * Takes a string and sets it as the username.
      * Desired username is filtered, set as the username, validated, and then
      * an ID is created and set for it.
@@ -59,6 +58,8 @@ class User
      * @uses User::username
      * @uses User::validateUsername()
      * @uses User::setID()
+     * 
+     * @todo clean up filtering code?
      */
     public function setUsername($name)
     {
@@ -69,10 +70,11 @@ class User
         $this->validateUsername();
         $this->setID();
     }
+    
     /**
-     * @todo move code setting User::valid to User::validateUsername()
-     * 
      * Checks if username is valid and then sets User::valid to true or false.
+     * 
+     * @todo move code setting User::valid to User::validateUsername()?
      */
     protected function validateUsername()
     {
@@ -111,10 +113,10 @@ class User
     }
     
     /**
-     * @todo filter_input on $_GET
-     * 
      * Sets unique ID for each login.
      * @uses User::id Sets this value after finding or creating it.
+     * 
+     * @todo filter_input on $_GET
      */
     protected function setID()
     {
@@ -206,13 +208,13 @@ class User
     }
     
     /**
-     * @todo convert to return a string instead of echoing.
-     * 
      * Echoes an HTML formatted list of the User's information.
      * @uses User::username
      * @uses User::id
      * @uses User::valid
      * @uses User::sessionNumber
+     * 
+     * @todo convert to return a string instead of echoing?
      */
     public function printData()
     {

@@ -4,8 +4,7 @@
  */
 
 /**
- * @todo description for DebugController.
- * @todo description for DebugController.
+ * Handles validating debug users and storing debug data.
  */
 class DebugController
 {
@@ -91,10 +90,10 @@ class DebugController
         return false;
     }
     /**
-     * @todo rename isOn()
-     * 
      * Checks whether debug is on or off.
      * @return bool True if debug is on, else false.
+     * 
+     * @todo rename to isOn()?
      */
     public function is_on()
     {

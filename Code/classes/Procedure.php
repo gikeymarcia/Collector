@@ -6,23 +6,25 @@
 /**
 *  Controls the error checking for procedure file.
 *  @see ControlFile
+ * 
+ * @todo the current functions should be abstract functions in ControlFile
 */
 class Procedure extends ControlFile
 {
     /**
-     * @todo rename?
-     * 
      * Runs all of the error checking required for procedure files.
+     * 
+     * @todo rename?
      */
     public function errorCheck()
     {
         $this->columns();
     }
     /**
-     * @todo rename?
-     * 
      * Uses ControlFile::requiredColumns() to check that the file has all of the
      * necessary columns.
+     * 
+     * @todo rename?
      */
     protected function columns()
     {
