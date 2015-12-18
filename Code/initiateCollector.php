@@ -7,7 +7,7 @@
             $root .= "../";
             ++$ancestors;
         }
-        $loc = "{$root}Code/classes/$className.class.php";
+        $loc = "{$root}Code/classes/$className.php";
         if (is_file($loc)) {
             require $loc;
         } else {
