@@ -438,7 +438,8 @@ class Experiment
             .'<li> Cue: '.show($clean_stim['Cue'])
             .'<li> Answer: '.show($clean_stim['Answer'])
             .'</ul>';
-        readable(['Stimuli' => $clean_stim, 'Procedure' => $clean_proc], 'Information loaded about the current trial');
+        $trial = ['Stimuli' => $clean_stim, 'Procedure' => $clean_proc];
+        readable($trial, 'Information loaded about the current trial');
         readable($this->stimuli,      'Information loaded about the stimuli');
         readable($this->procedure,    'Information loaded about the procedure');
         readable($this->responses,    'Information loaded about the responses');
@@ -458,27 +459,30 @@ class Experiment
      * @return array Converted array: columns to lowercase, spaces to underscores
      * 
      * @todo should be a method of a Trial class
-     * @todo update error message to include that the variable is available in the stimuli and procedure properties
      */
     public function prepareAliases($pos = null)
     {
         $trialValues = array();
-        foreach (array_values($this->getTrial($pos)) as $row) {
+
+        //var_dump($this->getTrial($pos)); exit;
+        foreach ($this->getTrial($pos) as $name => $row) {
             foreach ($row as $col => $val) {
                 $aliasCol = str_replace(' ', '_', strtolower($col));
 
-                // trigger warning warning if already set
-                if (isset($trialValues[$aliasCol])) {
-                    // temp hack until we work out how to handle shuffle cols
-                    if (stripos($aliasCol, 'shuffle') !== false) {
-                        continue;
-                    }
-
-                    $err = "Overlap with aliases: $aliasCol already defined, $col not used";
-                    trigger_error($err, E_USER_WARNING);
-                } else {
-                    $trialValues[$aliasCol] = $val;
+                // temp hack until we work out how to handle shuffle cols
+                if (stripos($aliasCol, 'shuffle') !== false) {
+                    continue;
                 }
+
+                // trigger warning warning if already set and skip it
+                if (isset($trialValues[$aliasCol])) {
+                    $err = "Overlap with aliases: $aliasCol is already defined, "
+                            ."$col from $name not used";
+                    trigger_error($err, E_USER_WARNING);
+                    continue;
+                }
+
+                $trialValues[$aliasCol] = $val;
             }
         }
 

@@ -100,7 +100,7 @@ class ReturnVisitController
     public function isReturning()
     {
         $path = $this->jsonPath;
-        if (fileExists($path) == true) {
+        if (fileExists($path) === true) {
             $this->loadPriorSession();
 
             return true;
@@ -119,8 +119,8 @@ class ReturnVisitController
     protected function loadPriorSession()
     {
         $handle = fopen($this->jsonPath, 'r');
-        $old = fread($handle, filesize($this->jsonPath));
-        $old = json_decode($old, true);
+        $oldjson = fread($handle, filesize($this->jsonPath));
+        $old = json_decode($oldjson, true);
 
         $this->oldSession = $old;
         $this->sessionNumber = $old['Session'];
@@ -138,7 +138,7 @@ class ReturnVisitController
      */
     public function alreadyDone()
     {
-        if ($this->oldSession['state'] == 'done') {
+        if ($this->oldSession['state'] === 'done') {
             $this->done = true;
 
             return true;
@@ -208,7 +208,7 @@ class ReturnVisitController
         // determines if it is too late to return
         $early = $late = false;
 
-        if ($maxRet !== false and $now > $maxRet) {
+        if ($maxRet !== false && $now > $maxRet) {
             $late = true;
             $this->lateMsg = 'Sorry, you have returned too late to participate.';
         }
@@ -221,12 +221,9 @@ class ReturnVisitController
                     ."can return in $remaining to start this next part.";
         }
 
-        if (($late == true) or ($early == true)) {
-            return false;
-        }
-
-        return true;
+        return ($late === true) || ($early === true);
     }
+
     /**
      * Shows either the late or early return time error message.
      * Each var is initiated with each class instance but the value is only 
@@ -279,11 +276,7 @@ class ReturnVisitController
      */
     public function getSession()
     {
-        if (is_numeric($this->sessionNumber)) {
-            return $this->sessionNumber;
-        }
-
-        return 1;
+        return is_numeric($this->sessionNumber) ? $this->sessionNumber : 1;
     }
 
     /**

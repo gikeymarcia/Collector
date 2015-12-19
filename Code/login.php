@@ -49,8 +49,8 @@
     $cond = new ConditionController(
         $_PATH->get('Conditions'),
         $_PATH->get('Counter'),
-        $_SETTINGS->hide_flagged_conditions,
-        $errors
+        $errors,
+        $_SETTINGS->hide_flagged_conditions
     );
     $cond->selectedCondition($_GET['Condition']);
     

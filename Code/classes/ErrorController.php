@@ -37,9 +37,7 @@ class ErrorController
             ++$this->count;
             $this->details[] = $errMsg;
         }
-        if (($showStopper == true)
-            and ($this->allowShowStopper == true)
-        ) {
+        if (($showStopper == true) && ($this->allowShowStopper == true)) {
             echo "$errMsg<br>";
             $this->printErrors();
             exit;
@@ -62,7 +60,7 @@ class ErrorController
                 }
             </style>";
             echo '<ol class="err">';
-            foreach ($this->details as $pos => $messsage) {
+            foreach ($this->details as $messsage) {
                 $li = "<li>$messsage</li>";
                 echo $li;
             }
@@ -96,11 +94,7 @@ class ErrorController
      */
     public function arePresent()
     {
-        if ($this->count() > 0) {
-            return true;
-        }
-
-        return false;
+        return ($this->count() > 0) ? true : false;
     }
 
     /**

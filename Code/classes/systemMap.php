@@ -4,7 +4,8 @@
  * 
  * To use this file, map out the directory structure of the program, using keys 
  * as directory or file names, and values as either the contents of a directory,
- * or the label for that directory or file.
+ * or the label for that directory or file. Then set a variable equal to a
+ * require or include of the file, e.g. $sysMap = require 'systemMap.php';
  * 
  * Inside the map, certain keys can be a variable using 'Dir Name' as the key, 
  * you can give a label to the directory, using {var}, you can provide a point 
@@ -20,7 +21,7 @@
  * 
  * @see Pathfinder
  */
-$systemMap = array(
+return array(
     'Dir Name' => 'root',
 
     'index.php' => 'index',

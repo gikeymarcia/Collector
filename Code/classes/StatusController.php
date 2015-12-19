@@ -157,7 +157,7 @@ class StatusController
      */
     public function writeBegin()
     {
-        $UserData = array(
+        $data = array(
             'Username' => $this->username,
             'ID' => $this->id,
             'Date' => date('c'),
@@ -166,25 +166,26 @@ class StatusController
             'Browser' => $this->browser,
             'DeviceType' => $this->deviceType,
             'OS' => $this->OS,
-            'IP' => $_SERVER['REMOTE_ADDR'],
+            'IP' => $_SERVER['REMOTE_ADDR'], // some IDEs will say 'filter superglobals!' but: http://stackoverflow.com/a/2018561
         );
         foreach ($this->condition as $key => $value) {
-            $UserData["Cond_$key"] = $value;
+            $data["Cond_$key"] = $value;
         }
-        arrayToLine($UserData, $this->beginPath);
+        arrayToLine($data, $this->beginPath);
     }
 
     /**
      * Writes a status end message.
      *
      * @param int $startTime The number of seconds from the UNIX epoch
+     * 
+     * @todo below is copied from done.php --- not functional yet so the method is protected to prevent it from being run from within the experiment
      */
     public function writeEnd($startTime)
     {
         $duration = time() - $startTime;
         $durationFormatted = durationFormatted($duration);
-        // below is copied from done.php
-        // Not functional yet so the metho is protected to prevent it from being run from within the experiment
+
         $data = array(
             'Username' => $this->username,
             'ID' => $this->id,
@@ -194,7 +195,7 @@ class StatusController
             'Session' => $_SESSION['Session'],
         );
         foreach ($this->condition as $key => $value) {
-            $UserData["Cond_$key"] = $value;
+            $data["Cond_$key"] = $value;
         }
         arrayToLine($data, $this->endPath);
     }

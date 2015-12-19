@@ -61,19 +61,17 @@ class User
      * Desired username is filtered, set as the username, validated, and then
      * an ID is created and set for it.
      *
-     * @param string $name The participant's desired username.
+     * @param string $input The participant's desired username.
      *
      * @uses User::username
      * @uses User::validateUsername()
      * @uses User::setID()
-     * 
-     * @todo clean up filtering code?
      */
-    public function setUsername($name)
+    public function setUsername($input)
     {
-        $name = filter_var($name, FILTER_SANITIZE_EMAIL);
+        $username = filter_var($input, FILTER_SANITIZE_EMAIL);
         $illegalCharacters = array('/', '\\', '?', '%', '*', ':', '|', '"', '<', '>');
-        $cleanUsername = str_replace($illegalCharacters, '', $name);
+        $cleanUsername = str_replace($illegalCharacters, '', $username);
         $this->username = $cleanUsername;
         $this->validateUsername();
         $this->setID();
@@ -100,10 +98,8 @@ class User
         if ($length < 4) {
             $msg = 'Login username must longer than 3 characters';
             $this->errObj->add($msg, false);
-        } else {
-            if ($this->valid !== false) {
-                $this->valid = true;
-            }
+        } elseif ($this->valid !== false) {
+            $this->valid = true;
         }
     }
 
@@ -116,32 +112,22 @@ class User
      */
     public function getUsername()
     {
-        if ($this->valid) {
-            return $this->username;
-        } else {
-            return false;
-        }
+        return $this->valid ? $this->username : false;
     }
 
     /**
      * Sets unique ID for each login.
      *
      * @uses User::id Sets this value after finding or creating it.
-     * 
-     * @todo filter_input on $_GET
      */
     protected function setID()
     {
         $idLength = 10;
+
         if (!isset($_SESSION['ID'])) {
             // an ID is not yet set
-            if (isset($_GET['ID'])) {
-                // the ID is in the URL
-                $this->id = $_GET['ID'];
-            } else {
-                // make a new random ID
-                $this->id = rand_string($idLength);
-            }
+            $getId = filter_input(INPUT_GET, 'ID', FILTER_SANITIZE_STRING);
+            $this->id = ($getId !== null) ? $getId : rand_string($idLength);
         } else {
             // ID is already set, store it here
             $this->id = $_SESSION['ID'];
@@ -157,11 +143,7 @@ class User
      */
     public function getID()
     {
-        if (strlen($this->id) > 0) {
-            return $this->id;
-        } else {
-            return false;
-        }
+        return (strlen($this->id) > 0) ? $this->id : false;
     }
 
     /**
@@ -173,7 +155,7 @@ class User
      */
     public function setSession($number)
     {
-        if (is_int($number) and ($number > 0)) {
+        if (is_int($number) && ($number > 0)) {
             $this->sessionNumber = $number;
         }
     }
@@ -215,8 +197,7 @@ class User
      */
     public function getOutputFile()
     {
-        return "Output_Session{$this->sessionNumber}_{$this->username}_"
-                ."{$this->id}.csv";
+        return "Output_Session{$this->sessionNumber}_{$this->username}_{$this->id}.csv";
     }
 
     /**

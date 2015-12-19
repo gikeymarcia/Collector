@@ -79,33 +79,29 @@ class ConditionController
 
     /**
      * Constructor.
+     * 
+     * Accepts the required locations to the Conditions and Log files as well as
+     * a boolean indicating whether flagged conditions should be shown. Then, 
+     * the Conditions.csv information is loaded and the required columns are
+     * checked in the resultant array.
      *
      * @param string          $conditionsLoc Relative path to "Conditions.csv".
      * @param string          $logLocation   Relative path to the login counter file.
-     * @param bool            $showFlagged   Inital value for the showFlagged property.
      * @param ErrorController $errorHandler  Object that logs errors.
+     * @param bool            $showFlagged   Inital value for the showFlagged property.
      * 
-     * @todo fix order of arguments (showFlagged should be last to allow default)
+     * @see getFromFile()
      */
-    public function __construct($conditionsLoc, $logLocation, $showFlagged = false, ErrorController $errorHandler)
-    {
+    public function __construct($conditionsLoc, $logLocation,
+        ErrorController $errorHandler, $showFlagged = false
+    ) {
         $this->errObj = $errorHandler;
         $this->location = $conditionsLoc;
         $this->logLocation = $logLocation;
         $this->showFlagged = $showFlagged;
         $this->makeCounterDir($logLocation);
-        $this->loadConditons();
-    }
 
-    /**
-     * Loads the "Conditions.csv" information.
-     * Stores the getFromFile() results of Conditions.csv to 
-     * ConditionController::ConditionsCSV.
-     *
-     * @see getFromFile()
-     */
-    protected function loadConditons()
-    {
+        // load the Conditions.csv information and check columns
         $this->conditionsExists();
         $this->ConditionsCSV = getFromFile($this->location, false);
         $this->requiredColumns();
@@ -129,19 +125,18 @@ class ConditionController
      * Sets the condition to the value specified. If the selected condition is 
      * not numeric or 'Auto' an error will fire.
      *
-     * @param int|string $selection The number of the condition or 'Auto'.
+     * @param int|string $userChoice The number of the condition or 'Auto'.
      * 
      * @todo rename ConditionController::selectedCondition() to setSelection
      */
-    public function selectedCondition($selection)
+    public function selectedCondition($userChoice)
     {
-        $selection = filter_var($selection, FILTER_SANITIZE_STRING);
-        if (is_numeric($selection) or ($selection == 'Auto')) {
-            $this->selection = $selection;
-        } else {
+        $selection = filter_var($userChoice, FILTER_SANITIZE_STRING);
+        if (!is_numeric($selection) && ($selection !== 'Auto')) {
             $msg = "Your condition selection: $selection is not valid";
             $this->errObj->add($msg, true);
         }
+        $this->selection = $selection;
     }
 
     /**
@@ -156,12 +151,9 @@ class ConditionController
         if ($this->selection == 'Auto') {
             $this->assignedCondition = $this->getLogVal();
             $this->userCondition = $validConds[$this->assignedCondition];
-        } else {
-            $index = $this->selection;
-            if (isset($validConds[$index])) {
-                $this->userCondition = $validConds[$index];
-                $this->assignedCondition = $index;
-            }
+        } elseif (isset($validConds[$this->selection])) {
+            $this->userCondition = $validConds[$this->selection];
+            $this->assignedCondition = $this->selection;
         }
     }
 
@@ -228,7 +220,7 @@ class ConditionController
     protected function updateLogFile(array $condsFound)
     {
         // pull off the value we used
-        $used = array_shift($condsFound);
+        array_shift($condsFound);
 
         // write what is left as csv
         $log = $this->logLocation;
@@ -244,19 +236,18 @@ class ConditionController
      */
     protected function removeOffConditions()
     {
-        if ($this->showFlagged === true) {
-            return $this->ConditionsCSV;
-        }
-        $on = array();
-        foreach ($this->ConditionsCSV as $row) {
-            if ($row['Description'][0] === '#') {
-                continue;
-            } else {
-                $on[] = $row;
+        $conditions = $this->ConditionsCSV;
+        if ($this->showFlagged !== true) {
+            $on = array();
+            foreach ($conditions as $row) {
+                if ($row['Description'][0] !== '#') {
+                    $on[] = $row;
+                }
             }
+            $conditions = $on;
         }
 
-        return $on;
+        return $conditions;
     }
 
     /**
@@ -287,7 +278,7 @@ class ConditionController
     public function info()
     {
         echo "<div>Selected condition: $this->selection <ol>";
-        foreach ($this->ConditionsCSV as $pos => $row) {
+        foreach ($this->ConditionsCSV as $row) {
             echo "<li>
                       <strong>stim:</strong>{$row['Stimuli 1']}<br>
                       <strong>proc:</strong>{$row['Procedure 1']}
@@ -322,7 +313,7 @@ class ConditionController
     protected function requiredColumns()
     {
         $requiredColumns = array('Stimuli 1', 'Procedure 1', 'Description');
-        foreach ($requiredColumns as $pos => $col) {
+        foreach ($requiredColumns as $col) {
             if (!isset($this->ConditionsCSV[0][$col])) {
                 $msg = "Your Conditions.csv file is missing the $col column";
                 $this->errObj->add($msg, true);
@@ -331,58 +322,123 @@ class ConditionController
     }
 
     /**
-     * Gets the stimuli file string for the assigned condition, or false if it
+     * Gets the Stimuli file string for the assigned condition, or false if it
      * has not been assigned, or an error if it does not exist.
      *
-     * @param string $num        Optionally pass the integer for a specific procedure.
-     * @param bool   $safeSearch Forces false instead of an error.
-     *
-     * @return string Contents of the 'Stimuli' column.
+     * @param int  $num        [Optional] The number of a specific procedure.
+     * @param bool $safeSearch Forces false instead of an error.
+     * 
+     * @return bool Contents of the 'Stimuli' column or an error/false.
+     * 
+     * @uses ConditionController::getFileString to do all the work.
      */
     public function stimuli($num = 1, $safeSearch = false)
     {
-        if ($this->assignedCondition !== false) {
-            if (empty($this->userCondition["Stimuli $num"])) {
-                if ($safeSearch == true) {
-                    return false;
-                } else {
-                    $msg = "You have tried to get the value for 'Stimuli $num' but that column does not exist in your Conditions.csv file at
-                            <code>$this->location</code>.";
-                    $this->errObj->add($msg, true);
-                }
-            } else {
-                return $this->userCondition["Stimuli $num"];
-            }
-        } else {
-            $msg = "You are trying to get the value of 'Stimuli $num' before you have assigned a condition.
-                    <br>Run \$cond->assignCondition() before attempting to use this method.";
+        return $this->getFileString('Stimuli', $num, $safeSearch);
+    }
+
+    /**
+     * Gets the Procedure file string for the assigned condition, or false if it
+     * has not been assigned, or an error if it does not exist.
+     *
+     * @param int  $num        [Optional] The number of a specific procedure.
+     * @param bool $safeSearch Forces false instead of an error.
+     * 
+     * @return bool Contents of the 'Procedure' column or an error/false.
+     * 
+     * @uses ConditionController::getFileString to do all the work.
+     */
+    public function procedure($num = 1, $safeSearch = false)
+    {
+        return $this->getFileString('Procedure', $num, $safeSearch);
+    }
+
+    /**
+     * Gets the control file string for the assigned condition, or false if it
+     * has not been assigned, or an error if it does not exist.
+     * 
+     * @param string $type       The type of file to retrieve (e.g. 'Stimuli').
+     * @param int    $num        [Optional] The number of a specific procedure.
+     * @param bool   $safeSearch Forces false instead of an error.
+     * 
+     * @return bool Contents of the $type's column or an error/false.
+     */
+    protected function getFileString($type, $num, $safeSearch)
+    {
+        if ($this->assignedCondition === false) {
+            $msg = "You are trying to get the value of '$type $num' before "
+            .'you have assigned a condition.<br>Run $cond->assignCondition() '
+            .'before attempting to use this method.';
             $this->errObj->add($msg);
         }
+
+        if (empty($this->userCondition["Stimuli $num"])) {
+            if ($safeSearch == true) {
+                return false;
+            } else {
+                $msg = "You have tried to get the value for '$type $num' "
+                    .'but that column does not exist in your Conditions.csv'
+                    ."file at <code>$this->location</code>.";
+                $this->errObj->add($msg, true);
+            }
+        }
+
+        return $this->userCondition["$type $num"];
     }
+
     /**
-     * Gets the strings from all cells that point to stimuli files.
+     * Gets the strings from all cells that point to Stimuli files.
      *
-     * @param int $index Optionally indicate which row to retrieve from.
+     * @param int $index [Optional] Indicates which row to retrieve from.
+     *
+     * @return string Comma-separated list of all stimuli files.
+     *
+     * @uses ConditionController::getAllFilesOfType
+     */
+    public function allStim($index = null)
+    {
+        return $this->getAllFilesOfType('Stimuli', $index);
+    }
+
+    /**
+     * Gets the strings from all cells that point to Procedure files.
+     *
+     * @param int $index [Optional] Indicates which row to retrieve from.
+     *
+     * @return string Comma-separated list of all Procedure files.
+     *
+     * @uses ConditionController::getAllFilesOfType
+     */
+    public function allProc($index = null)
+    {
+        return $this->getAllFilesOfType('Procedure', $index);
+    }
+
+    /**
+     * Gets the strings from all cells that point to the given control files.
+     *
+     * @param string $type  The type of file to retrieve (e.g. 'Stimuli').
+     * @param int    $index [Optional] Indicates which row to retrieve from.
      *
      * @return string Comma-separated list of all stimuli files.
      *
      * @uses ConditionController::assignedCondition Used if no index is given.
      */
-    public function allStim($index = null)
+    protected function getAllFilesOfType($type, $index = null)
     {
         if ($index === null) {
             $index = $this->assignedCondition;
         }
-        $valid = array();
-        $toCheck = $this->colsContaining('Stimuli');
         $row = $this->ConditionsCSV[$index];
-        for ($i = 1; $i <= count($toCheck); ++$i) {
-            if (isset($row["Stimuli $i"])
-                and strtolower($row["Stimuli $i"]) != 'off'
-                and            $row["Stimuli $i"]  != ''
-                and            $row["Stimuli $i"]  != '.'
+
+        $valid = array();
+        $toCheck = $this->colsContaining($type);
+        for ($i = 1; $i < count($toCheck) + 1; ++$i) {
+            $noLoad = array('off' => 1, '' => 1, '.' => 1);
+            if (isset($row["$type $i"])
+                && !isset($noLoad[strtolower($row["$type $i"])])
             ) {
-                $valid[] = $row["Stimuli $i"];
+                $valid[] = $row["$type $i"];
             }
         }
 
@@ -402,76 +458,13 @@ class ConditionController
     protected function colsContaining($needle)
     {
         $matches = array();
-        foreach ($this->ConditionsCSV[0] as $key => $cell) {
+        foreach (array_keys($this->ConditionsCSV[0]) as $key) {
             if (strpos($key, $needle) !== false) {
                 $matches[] = $key;
             }
         }
 
         return $matches;
-    }
-    /**
-     * Gets the stimuli file string for the assigned condition, or false if it
-     * has not been assigned, or an error if it does not exist.
-     *
-     * @param string $num        Optionally pass the integer for a specific procedure.
-     * @param bool   $safeSearch Forces false instead of an error.
-     *
-     * @return string Contents of 'Procedure' column.
-     * 
-     * @todo refactor with ConditionController::stimuli() code
-     */
-    public function procedure($num = 1, $safeSearch = false)
-    {
-        if ($this->assignedCondition !== false) {
-            if (empty($this->userCondition["Procedure $num"])) {
-                if ($safeSearch == true) {
-                    return false;
-                } else {
-                    $msg = "You have tried to get the value for 'Procedure $num' but that column does not exist in your Conditions.csv file at
-                            <code>$this->location</code>.";
-                    $this->errObj->add($msg, true);
-                }
-            } else {
-                return $this->userCondition["Procedure $num"];
-            }
-        } else {
-            $msg = "You are trying to get the value of 'Procedure $num' before you have assigned a condition.
-                    <br>Run \$cond->assignCondition() before attempting to use this method.";
-            $this->errObj->add($msg);
-        }
-    }
-
-    /**
-     * Gets the strings from all cells in a row that point to procedure files.
-     *
-     * @param int $index Optionally indicate which row to retrieve from.
-     *
-     * @return string Comma-separated list of all procedure files.
-     *
-     * @uses ConditionController::assignedCondition Used if no index is given.
-     * 
-     * @todo refactor with ConditionController::allStim()
-     */
-    public function allProc($index = null)
-    {
-        if ($index === null) {
-            $index = $this->assignedCondition;
-        }
-        $valid = array();
-        $toCheck = $this->colsContaining('Procedure');
-        $row = $this->ConditionsCSV[$index];
-        for ($i = 1; $i <= count($toCheck); ++$i) {
-            if (isset($row["Procedure $i"])
-                and strtolower($row["Procedure $i"]) != 'off'
-                and            $row["Procedure $i"]  != ''
-                and            $row["Procedure $i"]  != '.'
-            ) {
-                $valid[] = $row["Procedure $i"];
-            }
-        }
-
-        return implode(',', $valid);
     }
 
     /**
@@ -562,7 +555,7 @@ class ConditionController
             $temp = array();
             foreach ($condRow as $key => $value) {
                 if (strpos($key, 'Stimuli')   === false
-                    and strpos($key, 'Procedure') === false
+                    && strpos($key, 'Procedure') === false
                 ) {
                     $temp[$key] = $value;
                 }
@@ -587,43 +580,41 @@ class ConditionController
      */
     public function checkConditionsFile($procDir, $stimDir)
     {
-        foreach ($this->ConditionsCSV as $i => $condRow) {
-            $procs = $this->allProc($i);
-            $stims = $this->allStim($i);
+        foreach (array_keys($this->ConditionsCSV) as $i) {
             $files = array(
                 'Procedure' => $this->allProc($i),
                 'Stimuli' => $this->allStim($i),
             );
+
             $paths = array(
                 'Procedure' => $procDir,
                 'Stimuli' => $stimDir,
             );
+
+            $row = $i + 2;
             foreach ($files as $fileTypes => $filesCommaSeparated) {
                 if ($filesCommaSeparated === '') {
-                    $errMsg = 'In the Conditions file, on row '.($i + 2).', '
-                            ."there are no valid $fileTypes entries. At least "
-                            ."one of the $fileTypes columns for this row must "
-                            .'contain an actual filename.';
-                    $this->errObj->add($errMsg);
-                } else {
-                    $files = explode(',', $filesCommaSeparated);
-                    foreach ($files as $file) {
-                        if (strpos($file, '..') !== false) {
-                            $errMsg = 'In the Conditions file, on row '.($i + 2).', '
-                                    ."at least one of the $fileTypes filenames contains "
-                                    .'"..", which is not allowed. '
-                                    .'Please remove this part from the entry.';
-                            $this->errObj->add($errMsg);
-                        } else {
-                            if (!fileExists("$paths[$fileTypes]/$file")) {
-                                $errMsg = 'In the Conditions file, on row '.($i + 2).', '
-                                        ."the filename contains a $fileTypes file \"$file\" "
-                                        ."which does not exist in the $fileTypes folder. "
-                                        ."Please make sure that there isn't a typo in either "
-                                        .'the filename or the entry in the Conditions file.';
-                                $this->errObj->add($errMsg);
-                            }
-                        }
+                    $this->errObj->add("In the Conditions file, on row $row, "
+                        ."there are no valid $fileTypes entries. At least one "
+                        ."of the $fileTypes columns for this row must contain "
+                        .'an actual filename.');
+                    continue;
+                }
+
+                $files = explode(',', $filesCommaSeparated);
+                foreach ($files as $file) {
+                    if (strpos($file, '..') !== false) {
+                        $this->errObj->add("In the Conditions file, on row $row, "
+                            ."at least one of the $fileTypes filenames contains "
+                            ."'..', which is not allowed. Please remove this "
+                            .'part from the entry.');
+                    } elseif (!fileExists("$paths[$fileTypes]/$file")) {
+                        $this->errObj->add("In the Conditions file, on row $row, "
+                            ."the filename contains a $fileTypes file \"$file\" "
+                            ."which does not exist in the $fileTypes folder. "
+                            ."Please make sure that there isn't a typo in "
+                            .'either the filename or the entry in the '
+                            .'Conditions file.');
                     }
                 }
             }

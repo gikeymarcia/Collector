@@ -76,17 +76,14 @@ class TrialValidator
      */
     protected function validateAllTrials()
     {
-        $postTrials = $this->determinePostTrialLevels();
-        $postTrials = range(0, $postTrials);
+        $postTrials = range(0, $this->determinePostTrialLevels());
         $procedure = $this->procedure->unshuffled();
 
         foreach ($procedure as $pos => $row) {
             foreach ($postTrials as $postN) {
                 $trialValues = $this->getTrialValues($row, $postN);
 
-                if ($trialValues === false) {
-                    continue; // post-trial set to one of the "off" values
-                } else {
+                if ($trialValues !== false) {
                     $this->validateTrial($trialValues, $pos, $postN);
                 }
             }
@@ -102,28 +99,26 @@ class TrialValidator
      */
     protected function validateTrial(array $trialValues, $procRow, $post)
     {
-        $trialType = $trialValues['Trial Type'];
-        $trialType = strtolower($trialType);
+        $trialType = strtolower($trialValues['Trial Type']);
 
         // if haven't checked this trialType for a validator, do so
         if (!isset($this->validators[$trialType])) {
             if (isset($this->trialTypes[$trialType]['validator'])) {
                 $this->validators[$trialType] = require $this->trialTypes[$trialType]['validator'];
-            } else {
-                $this->validators[$trialType] = false;
             }
         }
 
         // if this trial type has a validator, run it
-        if ($this->validators[$trialType] !== false) {
+        if (isset($this->validators[$trialType])) {
             $foundErrors = $this->validators[$trialType]($trialValues);
-            // lets be strict about this. The validator must return an array of strings
+
+            // the validator must return an array of strings
             if (!is_array($foundErrors)) {
                 $errMsg = "Validator for '<b>$trialType</b>' must return an array of strings. "
                         ."What it actually returned was of type '<b>".getType($foundErrors)."</b>'. "
                         .'Check the <b>Validator.php</b> file for this trial type, '
                         ."located at '<b>".$this->trialTypes[$trialType]['validator']."</b>'";
-                // can we make this a strict error that needs fixing immediately, but also allow the rest of the error checks?
+                // @todo can we make this a strict error that needs fixing immediately, but also allow the rest of the error checks?
                 $this->foundErrors[] = $errMsg;
 
                 return;
@@ -134,7 +129,7 @@ class TrialValidator
                             ."However, at least one value inside the returned array was of type '<b>".getType($err)."</b>'. "
                             .'Check the <b>Validator.php</b> file for this trial type, '
                             ."located at '<b>".$this->trialTypes[$trialType]['validator']."</b>'";
-                    // can we make this a strict error that needs fixing immediately, but also allow the rest of the error checks?
+                    // @todo can we make this a strict error that needs fixing immediately, but also allow the rest of the error checks?
                     $this->foundErrors[] = $errMsg;
 
                     return;
@@ -167,11 +162,7 @@ class TrialValidator
      */
     public function isValid()
     {
-        if ($this->foundErrors === array()) {
-            return true;
-        } else {
-            return false;
-        }
+        return ($this->foundErrors === array()) ? true : false;
     }
 
     /**
@@ -193,10 +184,10 @@ class TrialValidator
     {
         $level = 0;
 
-        $procColumns = $this->procedure->getKeys();
-        $procColumns = array_flip($procColumns);
+        $keys = $this->procedure->getKeys();
+        $keysFlipped = array_flip($keys);
 
-        while (isset($procColumns["Post $level Trial Type"])) {
+        while (isset($keysFlipped["Post $level Trial Type"])) {
             ++$level;
         }
 

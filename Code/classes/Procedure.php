@@ -14,24 +14,13 @@ class Procedure extends ControlFile
 {
     /**
      * Runs all of the error checking required for procedure files.
-     * 
-     * @todo rename?
      */
     public function errorCheck()
     {
-        $this->columns();
-    }
-    /**
-     * Uses ControlFile::requiredColumns() to check that the file has all of the
-     * necessary columns.
-     * 
-     * @todo rename?
-     */
-    protected function columns()
-    {
-        $required = array('Item', 'Trial Type', 'Max Time');
-        $file = 'Procedure';
-        $this->requiredColumns($file, $required);
+        // check that the file has all of the necessary columns
+        $this->requiredColumns(array('Item', 'Trial Type', 'Max Time'));
+
+        // implement any other checks here
     }
 
     /**

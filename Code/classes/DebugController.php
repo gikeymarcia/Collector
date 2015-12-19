@@ -76,7 +76,7 @@ class DebugController
         $code = $this->debugName;
         $dbLen = strlen($code);
         if (($dbLen > 0)
-            and (substr($name, 0, $dbLen) === $code)
+            && (substr($name, 0, $dbLen) === $code)
         ) {
             return true;
         }
@@ -90,26 +90,16 @@ class DebugController
      */
     protected function checkConfig()
     {
-        if ($this->debugSwitch == true) {
-            return true;
-        }
-
-        return false;
+        return ($this->debugSwitch === true) ? true : false;
     }
     /**
      * Checks whether debug is on or off.
      *
      * @return bool True if debug is on, else false.
-     * 
-     * @todo rename to isOn()?
      */
-    public function is_on()
+    public function isOn()
     {
-        if ($this->debugMode === true) {
-            return true;
-        }
-
-        return false;
+        return ($this->debugMode === true) ? true : false;
     }
 
     /**
@@ -130,7 +120,7 @@ class DebugController
      */
     public function toSession()
     {
-        $_SESSION['Debug'] = $this->is_on();
+        $_SESSION['Debug'] = $this->isOn();
     }
 
     /**
@@ -140,8 +130,9 @@ class DebugController
      */
     public function feedPathfinder(Pathfinder $pathfinder)
     {
-        $pathfinder->setDefault('Data Sub Dir', '');
-        if ($this->is_on()) {
+        if (!$this->isOn()) {
+            $pathfinder->setDefault('Data Sub Dir', '');
+        } else {
             $pathfinder->setDefault('Data Sub Dir', '/Debug');
         }
     }
