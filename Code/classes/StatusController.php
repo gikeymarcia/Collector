@@ -179,7 +179,7 @@ class StatusController
      *
      * @param int $startTime The number of seconds from the UNIX epoch
      * 
-     * @todo below is copied from done.php --- not functional yet so the method is protected to prevent it from being run from within the experiment
+     * @todo writeEnd() is copied from done.php --- not functional yet!
      */
     public function writeEnd($startTime)
     {

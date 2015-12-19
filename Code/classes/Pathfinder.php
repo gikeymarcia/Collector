@@ -131,7 +131,7 @@ class Pathfinder
      *
      * @var string
      * 
-     * @todo what is this used for?
+     * @todo what is $dirName used for? update property docblock
      */
     private $dirName = 'dir name';
 
@@ -140,7 +140,7 @@ class Pathfinder
      *
      * @var string
      * 
-     * @todo what is this used for?
+     * @todo what is $varName used for? update property docblock
      */
     private $varName = 'var';
 
@@ -605,27 +605,23 @@ class Pathfinder
      * Sends a string appropriate for calling a stylesheet in the HTML header.
      *
      * @param string $selector The stylesheet to get the element for.
-     * 
-     * @todo rename?
-     * @todo change to return a string instead of echoing it?
      */
-    public function stylesheet($selector)
+    public function getStylesheetTag($selector)
     {
         $path = $this->get($selector);
-        echo "<link href='$path'  rel='stylesheet'   type='text/css'/>";
+
+        return "<link href='$path' rel='stylesheet' type='text/css'/>";
     }
 
     /**
      * Sends a string appropriate for calling a script in the HTML header.
      *
      * @param string $selector The script to get the element for.
-     * 
-     * @todo rename?
-     * @todo change to return a string instead of echoing it.
      */
-    public function script($selector)
+    public function getScriptTag($selector)
     {
         $path = $this->get($selector);
-        echo "<script src='$path' type='text/javascript'></script>";
+
+        return "<script src='$path' type='text/javascript'></script>";
     }
 }

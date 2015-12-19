@@ -33,10 +33,8 @@ abstract class ControlFile
      * The combined control files.
      *
      * @var array
-     * 
-     * @todo rename to data
      */
-    protected $stitched = array();
+    protected $data = array();
 
     /**
      * The shuffled control file.
@@ -109,10 +107,10 @@ abstract class ControlFile
     protected function stitch(array $in)
     {
         // if not first file and key conflicts exist, data needs to be conformed
-        if (count($this->stitched) > 0 && !$this->keyMatch($in)) {
+        if (count($this->data) > 0 && !$this->keyMatch($in)) {
             // add any new keys to the current stitched data
             foreach (array_keys($in[0]) as $key) {
-                if (!isset($this->stitched[0][$key])) {
+                if (!isset($this->data[0][$key])) {
                     $this->addKey($key);
                 }
             }
@@ -122,7 +120,7 @@ abstract class ControlFile
         }
 
         foreach ($in as $value) {
-            $this->stitched[] = $value;
+            $this->data[] = $value;
         }
     }
 
@@ -136,7 +134,7 @@ abstract class ControlFile
      */
     protected function keyMatch(array $new)
     {
-        $existingKeys = array_keys($this->stitched[0]);
+        $existingKeys = array_keys($this->data[0]);
         $newKeys = array_keys($new[0]);
 
         if (count($existingKeys) !== count($newKeys)) {
@@ -163,7 +161,7 @@ abstract class ControlFile
      */
     protected function conform($newData)
     {
-        $keys = array_keys($this->stitched[0]);
+        $keys = array_keys($this->data[0]);
         $conformed = array();
         foreach ($newData as $pos => $row) {
             foreach ($keys as $key) {
@@ -181,8 +179,8 @@ abstract class ControlFile
      */
     protected function addKey($key)
     {
-        foreach (array_keys($this->stitched) as $pos) {
-            $this->stitched[$pos][$key] = '';
+        foreach (array_keys($this->data) as $pos) {
+            $this->data[$pos][$key] = '';
         }
     }
 
@@ -193,15 +191,13 @@ abstract class ControlFile
      * @param string $path path to get to the file being checked
      *
      * @return bool True if the path points at a file.
-     * 
-     * @todo method name implies that it will return a bool, not throw error
      */
     protected function exists($path)
     {
         if (!fileExists($path)) {
             // stop the show with an error
             $this->errorObj->add('Could not find the following file specified '
-                ."by your Conditons file: <br><b>{$path}</b>", true);
+                ."by your Conditions file: <br><b>{$path}</b>", true);
         }
 
         return true;
@@ -217,7 +213,7 @@ abstract class ControlFile
     protected function requiredColumns(array $cols)
     {
         foreach ($cols as $column) {
-            if (!isset($this->stitched[0][$column])) {
+            if (!isset($this->data[0][$column])) {
                 $msg = 'Your '.get_class($this).' file(s) does not contain the '
                     ."following required column: {$column}";
                 $this->errorObj->add($msg);
@@ -232,7 +228,7 @@ abstract class ControlFile
      */
     public function shuffle()
     {
-        $shuffled = shuffle2dArray(multiLevelShuffle($this->stitched));
+        $shuffled = shuffle2dArray(multiLevelShuffle($this->data));
         $this->shuffled = $shuffled;
 
         return $shuffled;
@@ -243,10 +239,8 @@ abstract class ControlFile
      * ControlFile::shuffle() was run.
      *
      * @return array The previously shuffled data.
-     * 
-     * @todo change ControlFile::shuffled() to a public property?
      */
-    public function shuffled()
+    public function getShuffled()
     {
         return $this->shuffled;
     }
@@ -255,12 +249,10 @@ abstract class ControlFile
      * Returns the ControlFile data without shuffling it.
      *
      * @return array The stitched control file(s), unshuffled.
-     * 
-     * @todo change ControlFile::stitched to a public property?
      */
-    public function unshuffled()
+    public function getUnshuffled()
     {
-        return $this->stitched;
+        return $this->data;
     }
 
     /**
@@ -268,12 +260,22 @@ abstract class ControlFile
      *
      * @param array $data The data to set (should be formatted as a 2-D array 
      *                    like getFromFile() would produce).
-     * 
-     * @todo make ControlFile::stitched a public property?
      */
-    public function manual($data)
+    public function setData($data)
     {
-        $this->stitched = $data;
+        $this->data = $data;
+    }
+
+    /**
+     * Alias for ControlFile::manual().
+     * 
+     * @param array $data The data to set.
+     * 
+     * @see ControlFile::manual()
+     */
+    public function setUnshuffled($data)
+    {
+        $this->setData($data);
     }
 
     /**
@@ -285,7 +287,7 @@ abstract class ControlFile
      */
     public function getKeys($noShuffles = false)
     {
-        $keys = array_keys($this->stitched[0]);
+        $keys = array_keys($this->data[0]);
 
         // filter out the shuffle columns if requested
         if ($noShuffles === true) {
@@ -311,10 +313,8 @@ abstract class ControlFile
      * ErrorController.
      *
      * @param array $otherKeys Indexed array of keys.
-     * 
-     * @todo rename function to make it clear errors are the result (or refactor error handler out)
      */
-    public function overlap($otherKeys)
+    public function checkOverlap($otherKeys)
     {
         $doubles = array();
         $objKeys = array_flip($this->getKeys(true));
@@ -341,8 +341,6 @@ abstract class ControlFile
      *
      * @return array|bool Associative array with keys 'filename' and 'row', or 
      *                    false if the method fails.
-     *
-     * @todo error handling should probably be refactored out of here
      */
     public function getRowOrigin($i)
     {

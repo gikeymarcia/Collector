@@ -7,8 +7,6 @@
  *  Controls the error checking for procedure file.
  *
  *  @see ControlFile
- * 
- * @todo the current functions should be abstract functions in ControlFile
  */
 class Procedure extends ControlFile
 {
@@ -30,6 +28,6 @@ class Procedure extends ControlFile
      */
     public function getProcedureArray()
     {
-        return $this->stitched;
+        return $this->data;
     }
 }

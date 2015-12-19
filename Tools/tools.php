@@ -58,11 +58,11 @@
 <head>
     <link rel="icon" href="../Code/icon.png" type="image/png">
     <?php
-        $_PATH->stylesheet("Global CSS");
-        $_PATH->stylesheet("Tools CSS");
-        $_PATH->script("Jquery");
-        $_PATH->script("Sha256 JS");
-        $_PATH->script("Login JS");
+        echo $_PATH->getStylesheetTag("Global CSS");
+        echo $_PATH->getStylesheetTag("Tools CSS");
+        echo $_PATH->getScriptTag("Jquery");
+        echo $_PATH->getScriptTag("Sha256 JS");
+        echo $_PATH->getScriptTag("Login JS");
     ?>
     <title>Collector Tools -- <?= $admin['heading'] ?></title>
 </head>

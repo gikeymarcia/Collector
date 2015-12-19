@@ -7,7 +7,7 @@
  * Stores and manipulates all information about the current Experiment.
  * 
  * @todo add detailed description of how this class should be used
- * @todo add Experiment::validate($pos = 'all') method
+ * @todo add validate($pos = 'all') method
  */
 class Experiment
 {
@@ -219,7 +219,7 @@ class Experiment
      * @param int   $pos  The position of the trial (defaults to current position).
      * @param int   $post The post trial number (defaults to current post).
      * 
-     * @todo Should also be a method of a Trial class
+     * @todo recordResponses should probably be a method of a Trial class
      */
     public function recordResponses(array $data, $pos = null, $post = null)
     {
@@ -458,7 +458,7 @@ class Experiment
      *
      * @return array Converted array: columns to lowercase, spaces to underscores
      * 
-     * @todo should be a method of a Trial class
+     * @todo prepareAliases should probably be a method of a Trial class
      */
     public function prepareAliases($pos = null)
     {

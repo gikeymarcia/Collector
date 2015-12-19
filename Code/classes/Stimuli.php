@@ -7,8 +7,6 @@
  * Controls the error checking for stimuli files.
  *
  * @see ControlFile
- * 
- * @todo the current functions should be abstract functions in ControlFile
  */
 class Stimuli extends ControlFile
 {

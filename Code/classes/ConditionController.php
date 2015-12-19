@@ -102,7 +102,7 @@ class ConditionController
         $this->makeCounterDir($logLocation);
 
         // load the Conditions.csv information and check columns
-        $this->conditionsExists();
+        $this->conditionsFileExists();
         $this->ConditionsCSV = getFromFile($this->location, false);
         $this->requiredColumns();
     }
@@ -126,10 +126,8 @@ class ConditionController
      * not numeric or 'Auto' an error will fire.
      *
      * @param int|string $userChoice The number of the condition or 'Auto'.
-     * 
-     * @todo rename ConditionController::selectedCondition() to setSelection
      */
-    public function selectedCondition($userChoice)
+    public function setSelected($userChoice)
     {
         $selection = filter_var($userChoice, FILTER_SANITIZE_STRING);
         if (!is_numeric($selection) && ($selection !== 'Auto')) {
@@ -273,18 +271,27 @@ class ConditionController
     /**
      * Debug method that echoes out the data from this class.
      * 
-     * @todo change ConditionController::info() to return a string?
+     * @param bool $asString Converts the info to an HTML formatted string.
      */
-    public function info()
+    public function getInfo($asString = true)
     {
-        echo "<div>Selected condition: $this->selection <ol>";
-        foreach ($this->ConditionsCSV as $row) {
-            echo "<li>
-                      <strong>stim:</strong>{$row['Stimuli 1']}<br>
-                      <strong>proc:</strong>{$row['Procedure 1']}
-                  </li>";
+        $info = array('selection' => $this->selection, 'options' => array());
+        for ($i = 0; $i < count($this->ConditionsCSV); ++$i) {
+            $info['options'][$i]['Stimuli'] = $this->allStim($i);
+            $info['options'][$i]['Procedure'] = $this->allProc($i);
         }
-        echo '</ol></div>';
+
+        if ($asString === true) {
+            $selection = $this->selection + 1;
+            $str = "Selected condition: {$selection} <ol>";
+            foreach ($info['options'] as $option) {
+                $str .= "<li><strong>stim:</strong>{$option['Stimuli']}";
+                $str .= "<br><strong>proc:</strong>{$option['Procedure']}";
+            }
+            $info = $str.'</ol>';
+        }
+
+        return $info;
     }
 
     /**
@@ -296,10 +303,8 @@ class ConditionController
      *
      * @see ConditionController::__construct()
      * @see ConditionController::location
-     * 
-     * @todo rename ConditionController::conditionsExists() to conditionsFileExists()
      */
-    protected function conditionsExists()
+    protected function conditionsFileExists()
     {
         if (!FileExists($this->location)) {
             $msg = "Cannot find Conditions.csv at $this->location";

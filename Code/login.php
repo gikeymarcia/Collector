@@ -52,7 +52,7 @@
         $errors,
         $_SETTINGS->hide_flagged_conditions
     );
-    $cond->selectedCondition($_GET['Condition']);
+    $cond->setSelected($_GET['Condition']);
     
     
     // is this user ineligible to participate in the experiment?
@@ -70,13 +70,14 @@
     );
 
     if ($revisit->isReturning()) {
-        if ($revisit->alreadyDone()) {
+        if ($revisit->isDone()) {
             $revisit->reloadToDone();
         }
-        if ($revisit->timeToReturn()) {                     // updating lots of things with info from previous login
+        if ($revisit->isTimeToReturn()) {                     // updating lots of things with info from previous login
             $revisit->reloadToExperiment($_PATH, $user);            
         } else {
-            $revisit->explainTimeProblem();
+            echo $revisit->getTimeProblem();
+            exit;
         }
     }
 
@@ -120,7 +121,7 @@
     $_SESSION['Status'] = serialize($status);
 
     // check if procedure and stimuli files have unique column names
-    $procedure->overlap( $stimuli->getKeys(true) );
+    $procedure->checkOverlap( $stimuli->getKeys(true) );
 
     $procedure->shuffle();
     $stimuli->shuffle();
@@ -137,8 +138,8 @@
     
     // access stimuli, procedure, and condition arrays using $_EXPT->[name]
     $_EXPT = new Experiment(
-                $stimuli->shuffled(),
-                $procedure->shuffled(),
+                $stimuli->getShuffled(),
+                $procedure->getShuffled(),
                 $cond->get()
             );
     $_SESSION['_EXPT'] = $_EXPT;

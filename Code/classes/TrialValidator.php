@@ -77,7 +77,7 @@ class TrialValidator
     protected function validateAllTrials()
     {
         $postTrials = range(0, $this->determinePostTrialLevels());
-        $procedure = $this->procedure->unshuffled();
+        $procedure = $this->procedure->getUnshuffled();
 
         foreach ($procedure as $pos => $row) {
             foreach ($postTrials as $postN) {
@@ -206,7 +206,7 @@ class TrialValidator
      */
     protected function getTrialValues($procRow, $post)
     {
-        $stimuli = $this->stimuli->shuffled();
+        $stimuli = $this->stimuli->getShuffled();
         $procCols = array();
         $procCols['Item'] = $procRow['Item'];   // this can be overwritten, if there is a "Post 1 Item"
 

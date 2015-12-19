@@ -80,27 +80,27 @@ class User
     /**
      * Checks if username is valid and then sets User::valid to true or false.
      * 
-     * @todo move code setting User::valid to User::validateUsername()?
+     * @uses User::valid Sets the valid state depending on if the checks pass.
      */
     protected function validateUsername()
     {
-        $this->checkNameLength();
+        $this->valid = $this->isValidNameLength();
     }
 
     /**
      * Checks that the username is longer than three characters.
-     *
-     * @uses User::valid Sets the valid state depending on if the check passes.
+     * 
+     * @uses User::errObj
      */
-    protected function checkNameLength()
+    protected function isValidNameLength()
     {
         $length = strlen($this->username);
         if ($length < 4) {
             $msg = 'Login username must longer than 3 characters';
             $this->errObj->add($msg, false);
-        } elseif ($this->valid !== false) {
-            $this->valid = true;
         }
+
+        return true;
     }
 
     /**
@@ -219,8 +219,6 @@ class User
      * @uses User::id
      * @uses User::valid
      * @uses User::sessionNumber
-     * 
-     * @todo convert to return a string instead of echoing?
      */
     public function printData()
     {

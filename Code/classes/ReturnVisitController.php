@@ -133,10 +133,8 @@ class ReturnVisitController
      *
      * @uses ReturnVisitController::oldSession Checks the state from this array.
      * @uses ReturnVisitController::done Sets the done value here.
-     * 
-     * @todo rename to isDone()
      */
-    public function alreadyDone()
+    public function isDone()
     {
         if ($this->oldSession['state'] === 'done') {
             $this->done = true;
@@ -196,10 +194,8 @@ class ReturnVisitController
      *
      * @uses ReturnVisitController::earlyMsg Shows this string to early returns.
      * @uses ReturnVisitController::earlyMsg Shows this string to early returns.
-     * 
-     * @todo rename isTimeToReturn()
      */
-    public function timeToReturn()
+    public function isTimeToReturn()
     {
         $now = time();
         $minRet = $this->oldSession['Min Return'];
@@ -232,38 +228,42 @@ class ReturnVisitController
      *
      * @uses ReturnVisitController::earlyMsg Displays this value if it is set.
      * @uses ReturnVisitController::lateMsg Displays this value if it is set.
-     * 
-     * @todo return a string instead of echoing?
      */
-    public function explainTimeProblem()
+    public function getTimeProblem()
     {
         if ($this->earlyMsg !== null) {
-            echo $this->earlyMsg;
+            return $this->earlyMsg;
         }
 
         if ($this->lateMsg !== null) {
-            echo $this->lateMsg;
+            return $this->lateMsg;
         }
-
-        exit;
     }
 
     /**
-     * Echoes a list of information about this class.
+     * Returns an array of information about this class. Array is optionally
+     * converted to an HTML formatted string.
      * 
-     * @todo return a string instead of echoing?
+     * @param bool $asString Set true to convert to an HTML formatted string.
      */
-    public function debug()
+    public function debug($asString = true)
     {
-        $things = array();
-        $things['jsonPath'] = $this->jsonPath;
-        $things['doneLink'] = $this->doneLink;
-        $things['early'] = $this->earlyMsg;
-        $things['late'] = $this->lateMsg;
+        $info = array(
+            'jsonPath' => $this->jsonPath,
+            'doneLink' => $this->doneLink,
+            'early' => $this->earlyMsg,
+            'late' => $this->lateMsg,
+        );
 
-        foreach ($things as $var => $value) {
-            echo "<div><b>$var</b><br>$value</div>";
+        if ($asString === true) {
+            $str = '<ul>';
+            foreach ($info as $key => $val) {
+                $str .= "<li><strong>{$key}</strong><br>{$val}</li>";
+            }
+            $info = $str.'</ul>';
         }
+
+        return $info;
     }
 
     /**

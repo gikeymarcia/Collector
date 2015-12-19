@@ -47,17 +47,13 @@ class ErrorController
     /**
      * Prints all errors to the page.
      * 
-     * @todo perhaps change to return a string?
+     * @todo if we change errors to go to an error page, styles should be in a css file for that page
      */
     public function printErrors()
     {
         if (count($this->details) > 0) {
-            echo
-            "<style type='text/css' media='screen'>
-                .err {
-                    margin-left: .8em;
-                    margin-top:  1em;
-                }
+            echo "<style type='text/css' media='screen'>
+                .err { margin-left: .8em; margin-top:  1em; }
             </style>";
             echo '<ol class="err">';
             foreach ($this->details as $messsage) {
