@@ -16,42 +16,42 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-    require 'Code/initiateCollector.php';
-    
-    $_SESSION = array();
-    $_PATH    = new Pathfinder($_SESSION['Pathfinder']);
-    $_SETTINGS  = getCollectorSettings();
-    
-    // get possible experiments to choose from
-    $experiments     = array();
-    foreach (getCollectorExperiments() as $expName) {
-        $experiments[$expName] = $_PATH->get('Experiments') . "/$expName";
-    }
-    
-    $title = 'Collector Homepage';
-    require $_PATH->get('Header');
+require 'Code/initiateCollector.php';
+
+$_SESSION = array();
+$_PATH = new Pathfinder($_SESSION['Pathfinder']);
+$_SETTINGS = getCollectorSettings();
+
+// get possible experiments to choose from
+$experiments = array();
+foreach (getCollectorExperiments() as $expName) {
+    $experiments[$expName] = $_PATH->get('Experiments')."/$expName";
+}
+
+$title = 'Collector Homepage';
+require $_PATH->get('Header');
 ?>
-    <style>
-        .inlineUL { display: inline-block; margin: auto; text-align: left; }
-    </style>
-    
-    <h1>Collector</h1>
-    <h2>A program for running experiments on the web</h2>
-    
-    <p>Welcome to the Collector. If you would like to begin an experiment,
-         click on one of the links below.</p>
-    
-    <ul class="inlineUL">
-    <?php
-        foreach ($experiments as $name => $path) {
-            echo "<li><a href='$path'>$name</a></li>";
-        }
-    ?>
-    </ul>
-    
-    <p>
-        Otherwise, you can access one of the other tools 
-        <a href="<?= $_PATH->get('Tools') ?>">here</a>.
-    </p>
+
+<style>
+  .inlineUL { display: inline-block; margin: auto; text-align: left; }
+</style>
+
+<h1>Collector</h1>
+<h2>A program for running experiments on the web</h2>
+
+<p>Welcome to the Collector. If you would like to begin an experiment,
+   click on one of the links below.
+</p>
+
+<ul class="inlineUL">
+  <?php foreach ($experiments as $name => $path): ?>
+  <li><a href='<?= $path ?>'><?= $name ?></a></li>
+  <?php endforeach; ?>
+</ul>
+
+<p>Otherwise, you can access one of the other tools 
+   <a href="<?= $_PATH->get('Tools') ?>">here</a>.
+</p>
+
 <?php
-    require $_PATH->get('Footer');
+require $_PATH->get('Footer');
