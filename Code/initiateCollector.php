@@ -1,54 +1,59 @@
 <?php
-    // automatically load classes when they are needed
-    function autoClassLoader($className)
-    {
-        $root = '';
-        $ancestors = 0;
-        while (!is_dir("{$root}Code/classes") && ($ancestors < 3)) {
-            $root .= '../';
-            ++$ancestors;
-        }
-        $loc = "{$root}Code/classes/$className.php";
-        if (is_file($loc)) {
-            require $loc;
-        } else {
-            var_dump(scandir(dirName($loc)));
-            echo "Object $className could not be found";
-        }
+/**
+ * Autoloader function for Collector.
+ * 
+ * @param string $className The class to load.
+ */
+function autoClassLoader($className)
+{
+    $root = '';
+    $ancestors = 0;
+    while (!is_dir("{$root}Code/classes") && ($ancestors < 3)) {
+        $root .= '../';
+        ++$ancestors;
     }
-    spl_autoload_register('autoClassLoader');
+    $loc = "{$root}Code/classes/$className.php";
+    if (is_file($loc)) {
+        require $loc;
+    } else {
+        var_dump(scandir(dirName($loc)));
+        echo "Object $className could not be found";
+    }
+}
+spl_autoload_register('autoClassLoader');
 
-    // start the session and error reporting
-    session_start();
-    error_reporting(-1);
+// start the session and error reporting
+session_start();
+error_reporting(-1);
 
-    // load file locations
+// load file locations
+$_PATH = new Pathfinder($_SESSION['Pathfinder']);
+
+// load custom functions and parse
+require $_PATH->get('Custom Functions');
+
+// check if they switched Collectors 
+// (e.g., went from 'MG/Collector/Code/Done.php' to 'TK/Collector/Code/Done.php')
+$currentCollector = $_PATH->get('root', 'url');
+if (!isset($_SESSION['Current Collector'])
+    ||  $_SESSION['Current Collector'] !== $currentCollector
+) {
+    $_SESSION = array();
+    $_SESSION['Current Collector'] = $currentCollector;
     $_PATH = new Pathfinder($_SESSION['Pathfinder']);
 
-    // load custom functions and parse
-    require $_PATH->get('Custom Functions');
-
-    // check if they switched Collectors (e.g., went from 'MG/Collector/Code/Done.php' to 'TK/Collector/Code/Done.php')
-    $currentCollector = $_PATH->get('root', 'url');
-    if (!isset($_SESSION['Current Collector'])
-        ||  $_SESSION['Current Collector'] !== $currentCollector
-    ) {
-        $_SESSION = array();
-        $_SESSION['Current Collector'] = $currentCollector;
-        $_PATH = new Pathfinder($_SESSION['Pathfinder']);
-
-        // if inside Code/ redirect to index
-        if ($_PATH->inDir('Code') && !$_PATH->atLocation('Login')) {
-            header('Location: '.$_PATH->get('index'));
-            exit;
-        }
+    // if inside Code/ redirect to index
+    if ($_PATH->inDir('Code') && !$_PATH->atLocation('Login')) {
+        header('Location: '.$_PATH->get('index'));
+        exit;
     }
-    unset($currentCollector);
+}
+unset($currentCollector);
 
-    // load settings
-    $_SETTINGS = getCollectorSettings();
+// load settings
+$_SETTINGS = getCollectorSettings();
 
-    // if experiment has been loaded (after login) set the variable
-    if (isset($_SESSION['_EXPT'])) {
-        $_EXPT = $_SESSION['_EXPT'];
-    }
+// if experiment has been loaded (after login) set the variable
+if (isset($_SESSION['_EXPT'])) {
+    $_EXPT = $_SESSION['_EXPT'];
+}
