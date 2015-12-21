@@ -2,11 +2,21 @@
 <phpdoc>
   <parser>
     <target>../phpdoc/Collector/output</target>
+    <markers>
+        <item>TODO</item>
+        <item>FIXME</item>
+    </markers>
   </parser>
   <transformer>
     <target>./Documentation/API</target>
   </transformer>
+  <transformations>
+    <template name="clean"/>
+    <!--template name="responsive-twig"/-->
+  </transformations>
   <files>
     <directory>./Code/classes</directory>
+    <!--directory>./Code/phpbrowscap</directory-->
+    <file>./Code/customFunctions.php</file>
   </files>
 </phpdoc>

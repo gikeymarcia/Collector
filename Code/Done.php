@@ -57,7 +57,7 @@
             $_SESSION['state'] = 'return';
             $_EXPT->position++;                        // increment counter so next session will begin after the NewSession (if multisession)
             $_SESSION['Session']++;                         // increment session # so next login will be correctly labeled as the next session
-            $_SESSION['ID'] = rand_string();                // generate a new ID (for next login)
+            $_SESSION['ID'] = randString();                // generate a new ID (for next login)
         } else {
             $_SESSION['finalJSON'] = true;                  // only write this json file the first time your $_SESSION['state']='done'
         }

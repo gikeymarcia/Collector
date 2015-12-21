@@ -79,7 +79,7 @@
         }
         
         $current = array();                                         // clear data from current file before loading next one
-        $current = GetFromFile($folder . $file, false, $delimiter); // read a file presumably containing workers
+        $current = getFromFile($folder . $file, false, $delimiter); // read a file presumably containing workers
         if (!isset($current[0]['WorkerId'])) {                      // skip files without a 'WorkerID' column
             $skipped[] = $file;                                     // keep track of which files we've skipped
         } else {

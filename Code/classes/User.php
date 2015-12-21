@@ -127,7 +127,7 @@ class User
         if (!isset($_SESSION['ID'])) {
             // an ID is not yet set
             $getId = filter_input(INPUT_GET, 'ID', FILTER_SANITIZE_STRING);
-            $this->id = ($getId !== null) ? $getId : rand_string($idLength);
+            $this->id = ($getId !== null) ? $getId : randString($idLength);
         } else {
             // ID is already set, store it here
             $this->id = $_SESSION['ID'];

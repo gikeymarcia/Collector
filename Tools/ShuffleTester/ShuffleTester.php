@@ -197,7 +197,7 @@
         AND ($_DATA['exp'] !== "")
         AND inString('.csv', $_DATA['loc']) == true           // and it is a csv file
     ){                     
-        $before = GetFromFile($_DATA['loc']);           // grab file to shuffle
+        $before = getFromFile($_DATA['loc']);           // grab file to shuffle
         $timer  = microtime(true);                      // start a timer
         $after  = multiLevelShuffle($before);           // run basic shuffles
         $after  = shuffle2dArray($after);               // run advanced shuffles
