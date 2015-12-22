@@ -18,5 +18,6 @@
     <directory>./Code/classes</directory>
     <!--directory>./Code/phpbrowscap</directory-->
     <file>./Code/customFunctions.php</file>
+    <file>./Code/shuffleFunctions.php</file>
   </files>
 </phpdoc>
