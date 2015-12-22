@@ -18,7 +18,7 @@ function getTools ($dir = '.') {
     }
     $tools = array();
     foreach ($potentialTools as $check) {
-        if (FileExists($check . '/' . $check . '.php', false, false)) {
+        if (fileExists($check . '/' . $check . '.php', false, false)) {
             // use name as the key and file location as value
             $tools[$check] = $check . '/' . $check . '.php';
         }

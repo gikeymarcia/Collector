@@ -306,7 +306,7 @@ class ConditionController
      */
     protected function conditionsFileExists()
     {
-        if (!FileExists($this->location)) {
+        if (!fileExists($this->location)) {
             $msg = "Cannot find Conditions.csv at $this->location";
             $this->errObj->add($msg, true);
         }
