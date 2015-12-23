@@ -1,36 +1,27 @@
 <?php
-/*  Collector
-    A program for running experiments on the web
-    Copyright 2012-2015 Mikey Garcia & Nate Kornell
+/**
+ *  Code that saves and scores information when user input is given.
  */
-    $data = $_POST;
-    
-    
-    #### Code that saves and scores information when user input is given
-    if (isset($_POST['Response'])) {                                        // if there is a response given then do scoring
-        
-        ### cleaning up response and answer (for later comparisons)
-        $response      = $_POST['Response'];
-        $response      = trim(strtolower($response));
-        $correctAns    = explode('|', $answer);                             // if there is a range of answers, just use the first one for scoring
-        $correctAns    = array_shift($correctAns);
-        $correctAns    = trim(strtolower($correctAns));
-        $Acc           = NULL;
-        
-        #### Calculating and saving accuracy for trials with user input
-        similar_text($response, $correctAns, $Acc);                   // determine text similarity and store as $Acc
-        $data['Accuracy'] = $Acc;
-        
-        #### Scoring and saving scores
-        if ($Acc == 100) {                          // strict scoring
-            $data['strictAcc'] = 1;
-        } else {
-            $data['strictAcc'] = 0;
-        }
-        
-        if ($Acc >= $_SETTINGS->lenient_criteria) {             // lenient scoring
-            $data['lenientAcc'] = 1;
-        } else {
-            $data['lenientAcc'] = 0;
-        }
-    }
+$data = $_POST;
+
+// if there is a response given then do scoring
+$response = filter_input(INPUT_POST, 'Response', FILTER_SANITIZE_STRING);
+if ($response !== null) {
+    // clean up response and answer (for later comparisons)
+    $response = trim(strtolower($response));
+
+    // if there is a range of answers, just use the first one for scoring
+    $answers = explode('|', $answer);
+    $correctAns = trim(strtolower(array_shift($answers)));
+
+    // determine text similarity (accuracy) and store as $Acc
+    $Acc = null;
+    similar_text($response, $correctAns, $Acc);
+    $data['Accuracy'] = $Acc;
+
+    // perform strict scoring
+    $data['strictAcc'] = ($Acc === 100) ? 1 : 0;
+
+    // perform lenient scoring
+    $data['lenientAcc'] = ($Acc >= $_SETTINGS->lenient_criteria) ? 1 : 0;
+}

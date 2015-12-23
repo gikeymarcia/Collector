@@ -1,34 +1,34 @@
 <style>
-    #content {
-        width: 90%;
-        max-width: 800px;
-    }
+  #content {
+    width: 90%;
+    max-width: 800px;
+  }
 </style>
 
-<div><?php echo $text; ?></div>
+<div><?= $text; ?></div>
 
 <div class="study">
-    <span class="study-left">  <?php echo $cue; ?>    </span>
-    <span class="study-divider">         :            </span>
-    <span class="study-right">         &nbsp;         </span>
+  <span class="study-left">  <?= $cue; ?>  </span>
+  <span class="study-divider">     :       </span>
+  <span class="study-right">     &nbsp;    </span>
 </div>
 
 <div class="study alignToInput">
-    <span class="study-left">  <?php echo $cue; ?>    </span>
-    <span class="study-divider">         :            </span>
-    <div class="study-right">
-        <input name="Response" type="text" value="" class="copybox collectorInput">
-    </div>
+  <span class="study-left">  <?= $cue; ?>  </span>
+  <span class="study-divider">     :       </span>
+  <div class="study-right">
+    <input name="Response" type="text" value="" class="copybox collectorInput">
+  </div>
 </div>
   
 <div class="textcenter">
-    <button class="collectorButton collectorAdvance" id="FormSubmitButton">Submit</button>
+  <button class="collectorButton collectorAdvance" id="FormSubmitButton">Submit</button>
 </div>
 
 <script>
-    COLLECTOR.experiment.delaycopy = function() {
-        COLLECTOR.timer( 3, function() {
-            $(".study-right").first().html( "<?= $answer; ?>" );
-        });
-    };
+  COLLECTOR.experiment.delaycopy = function() {
+    COLLECTOR.timer( 3, function() {
+      $(".study-right").first().html( "<?= $answer; ?>" );
+    });
+  };
 </script>
