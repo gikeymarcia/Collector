@@ -1257,29 +1257,29 @@ function SortByKey(array $input, $key)
  *                         (1) both files and directories should be searched, or
  *                         (2) only directories should be searched.
  * 
- * @return string|boolean The path to the file, or false if one was not found.
+ * @return string|bool The path to the file, or false if one was not found.
  */
 function fileExists($filename, $altExt = true, $findDir = 1)
 {
     // normalize the path
     $search = str_replace(DIRECTORY_SEPARATOR, '/', $filename);
-    
+
     if (!is_file($search) && ($findDir < 2) && ($altExt === true)) {
         // no exact match found, but we can search for other extensions
         $path = altFileExists($search);
     }
-    
+
     // no file with other ext exists, but a dir might: restore search if false
     $path = isset($path) ? $path : $search;
-    
+
     // alter output based on $findDir's value
-    if (($findDir === 1 && file_exists($path)) 
-        || ($findDir === 0 && is_file($path)) 
+    if (($findDir === 1 && file_exists($path))
+        || ($findDir === 0 && is_file($path))
         || ($findDir === 2 && is_dir($path))
     ) {
         return $path;
     }
-    
+
     return false;
 }
 
@@ -1305,7 +1305,7 @@ function altFileExists($path)
             }
         }
     }
-    
+
     return false;
 }
 

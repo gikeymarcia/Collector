@@ -216,7 +216,7 @@ class ReturnVisitController
             $this->earlyMsg = 'You are too eary to participate in this part. You'
                     ."can return in $remaining to start this next part.";
         }
-        
+
         return ($late === true) || ($early === true);
     }
 

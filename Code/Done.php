@@ -21,14 +21,14 @@ if (isset($bounceTo)) {
 /*
  *  Save the $_SESSION array
  */
-$validStates = array('break' => 0, 'done' => 0, );
+$validStates = array('break' => 0, 'done' => 0);
 if (isset($validStates[$_SESSION['state']])) {
     $status = unserialize($_SESSION['Status']);
     $status->writeEnd($_SESSION['Start Time']);
 
     // preparing $_SESSION for the next run
     if ($_SESSION['state'] == 'break') {
-//        $_SESSION['state'] = 'return';
+        //        $_SESSION['state'] = 'return';
         // increment counter so next session will begin after the NewSession
         ++$_EXPT->position;
         // increment session # so next login will labeled as the next session
@@ -40,7 +40,7 @@ if (isset($validStates[$_SESSION['state']])) {
     // encode the entire $_SESSION array as a json string
     $sessionString = base64_encode(serialize($_SESSION));
     $sessionStoragePath = $_PATH->get('Session Storage');
-    
+
     if (!is_dir($_PATH->get('Session Storage Dir'))) {
         // make the folder if it doesn't exist
         mkdir($_PATH->get('Session Storage Dir'), 0777, true);
