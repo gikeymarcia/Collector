@@ -24,7 +24,7 @@ class ReturnVisitController
      *
      * @var string
      */
-    protected $jsonPath;
+    protected $sessionStoragePath;
 
     /**
      * The loaded JSON session.
@@ -78,13 +78,14 @@ class ReturnVisitController
     /**
      * Constructor.
      *
-     * @param string $jsonPath
-     * @param string $doneLink
-     * @param string $expLink
+     * @param string $sessionStoragePath The location of the previously stored
+     *                                   $_SESSION data.
+     * @param string $doneLink           The relative path to done.php
+     * @param string $expLink            The relative path to Experiment.php
      */
-    public function __construct($jsonPath, $doneLink, $expLink)
+    public function __construct($sessionStoragePath, $doneLink, $expLink)
     {
-        $this->jsonPath = $jsonPath;
+        $this->sessionStoragePath = $sessionStoragePath;
         $this->doneLink = $doneLink;
         $this->expLink = $expLink;
     }
@@ -99,8 +100,7 @@ class ReturnVisitController
      */
     public function isReturning()
     {
-        $path = $this->jsonPath;
-        if (fileExists($path) === true) {
+        if (fileExists($this->sessionStoragePath) !== false) {
             $this->loadPriorSession();
 
             return true;
@@ -118,9 +118,9 @@ class ReturnVisitController
      */
     protected function loadPriorSession()
     {
-        $handle = fopen($this->jsonPath, 'r');
-        $oldjson = fread($handle, filesize($this->jsonPath));
-        $old = json_decode($oldjson, true);
+        $handle = fopen($this->sessionStoragePath, 'r');
+        $data = fread($handle, filesize($this->sessionStoragePath));
+        $old = unserialize(base64_decode($data));
 
         $this->oldSession = $old;
         $this->sessionNumber = $old['Session'];
@@ -204,7 +204,7 @@ class ReturnVisitController
         // determines if it is too late to return
         $early = $late = false;
 
-        if ($maxRet !== false && $now > $maxRet) {
+        if (!empty($maxRet) && $now > $maxRet) {
             $late = true;
             $this->lateMsg = 'Sorry, you have returned too late to participate.';
         }
@@ -216,7 +216,7 @@ class ReturnVisitController
             $this->earlyMsg = 'You are too eary to participate in this part. You'
                     ."can return in $remaining to start this next part.";
         }
-
+        
         return ($late === true) || ($early === true);
     }
 
@@ -249,7 +249,7 @@ class ReturnVisitController
     public function debug($asString = true)
     {
         $info = array(
-            'jsonPath' => $this->jsonPath,
+            'sessionStoragePath' => $this->sessionStoragePath,
             'doneLink' => $this->doneLink,
             'early' => $this->earlyMsg,
             'late' => $this->lateMsg,

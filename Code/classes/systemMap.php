@@ -204,10 +204,11 @@ return array(
                 'Counter.csv' => 'Counter',
             ),
 
-            'JSON_session' => array(
-                'Dir Name' => 'JSON Dir',
+            'session' => array(
+                'Dir Name' => 'Session Storage Dir',
 
-                '{Username}.json' => 'json',
+//                '{Username}.json' => 'Session Storage',
+                '{Username}.txt' => 'Session Storage',
             ),
 
             'Output' => array(

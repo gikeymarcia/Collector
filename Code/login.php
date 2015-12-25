@@ -68,7 +68,7 @@ if ($_SETTINGS->check_elig == true) {
  * Returning participants
  */
 $revisit = new ReturnVisitController(
-    $_PATH->get('json'),
+    $_PATH->get('Session Storage'),
     $_PATH->get('Done'),
     $_PATH->get('Experiment Page')
 );
@@ -78,7 +78,7 @@ if ($revisit->isReturning()) {
         $revisit->reloadToDone();
     }
 
-    if (!$revisit->isTimeToReturn()) {
+    if ($revisit->isTimeToReturn()) {
         exit($revisit->getTimeProblem());
     }
 

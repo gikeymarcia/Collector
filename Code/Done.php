@@ -19,37 +19,33 @@ if (isset($bounceTo)) {
 }
 
 /*
- *  Save the $_SESSION array as a JSON string
+ *  Save the $_SESSION array
  */
-if (($_SESSION['state'] === 'break' || $_SESSION['state'] === 'done')
-    && !empty($_SESSION['finalJSON'])
-) {
+$validStates = array('break' => 0, 'done' => 0, );
+if (isset($validStates[$_SESSION['state']])) {
     $status = unserialize($_SESSION['Status']);
     $status->writeEnd($_SESSION['Start Time']);
 
     // preparing $_SESSION for the next run
     if ($_SESSION['state'] == 'break') {
-        $_SESSION['state'] = 'return';
+//        $_SESSION['state'] = 'return';
         // increment counter so next session will begin after the NewSession
         ++$_EXPT->position;
-        // increment session # so next login will be correctly labeled as the next session
+        // increment session # so next login will labeled as the next session
         ++$_SESSION['Session'];
         // generate a new ID (for next login)
         $_SESSION['ID'] = randString();
-    } else {
-        // only write this json file the first time the state is 'done'
-        $_SESSION['finalJSON'] = true;
     }
 
     // encode the entire $_SESSION array as a json string
-    $jsonSession = json_encode($_SESSION);
-    $jsonPath = $_PATH->get('json');
-
-    if (!is_dir($_PATH->get('JSON Dir'))) {
+    $sessionString = base64_encode(serialize($_SESSION));
+    $sessionStoragePath = $_PATH->get('Session Storage');
+    
+    if (!is_dir($_PATH->get('Session Storage Dir'))) {
         // make the folder if it doesn't exist
-        mkdir($_PATH->get('JSON Dir'), 0777, true);
+        mkdir($_PATH->get('Session Storage Dir'), 0777, true);
     }
-    file_put_contents($jsonPath, $jsonSession);
+    file_put_contents($sessionStoragePath, $sessionString);
 }
 
 /*

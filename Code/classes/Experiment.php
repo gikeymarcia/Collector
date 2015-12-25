@@ -464,7 +464,6 @@ class Experiment
     {
         $trialValues = array();
 
-        //var_dump($this->getTrial($pos)); exit;
         foreach ($this->getTrial($pos) as $name => $row) {
             foreach ($row as $col => $val) {
                 $aliasCol = str_replace(' ', '_', strtolower($col));

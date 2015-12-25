@@ -146,7 +146,7 @@ class ConditionController
     public function assignCondition()
     {
         $validConds = $this->removeOffConditions();
-        if ($this->selection == 'Auto') {
+        if ($this->selection === 'Auto') {
             $this->assignedCondition = $this->getLogVal();
             $this->userCondition = $validConds[$this->assignedCondition];
         } elseif (isset($validConds[$this->selection])) {
