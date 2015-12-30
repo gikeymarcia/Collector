@@ -35,7 +35,7 @@ $_PATH->setDefault('Current Experiment', $currentExp);
 $_PATH->setDefault('Data Sub Dir', '');
 
 // refresh settings to read from correct experiment settings
-$_SETTINGS->up_to_date($_PATH);
+$_SETTINGS->upToDate($_PATH);
 
 /*
  * Login objects

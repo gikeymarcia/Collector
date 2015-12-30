@@ -53,7 +53,7 @@ unset($currentCollector);
 // load settings
 if (isset($_SESSION['settings'])) {
     $_SETTINGS = &$_SESSION['settings'];
-    $_SETTINGS->up_to_date($_PATH);
+    $_SETTINGS->upToDate($_PATH);
 } else {
     $_SESSION['settings'] = new Settings(
         $_PATH->get('Common Settings'),
