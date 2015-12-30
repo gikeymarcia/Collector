@@ -9,7 +9,7 @@
 class Settings
 {
     /**
-     * The default password set in "Common Settings.json".
+     * The default password. It is stored in Password.php
      *
      * @var string
      */
@@ -17,6 +17,7 @@ class Settings
 
     /**
      * The default settings in "Common Settings.json".
+     * If "Common Settings.json" is not present these settings will be used
      *
      * @var array
      */
@@ -33,8 +34,8 @@ class Settings
     );
 
     /**
-     * The default settings in the Settings.json for all new experiments.
-     *
+     * The default settings in the "Settings.json" for all new experiments.
+     * If "Settings.json" is not present these settings will be used
      * @var array
      */
     protected $defaultExp = array(
@@ -88,7 +89,7 @@ class Settings
     protected $temp = array();
 
     /**
-     * The path to the password.
+     * The path to the password file.
      *
      * @var string
      */
@@ -169,7 +170,7 @@ class Settings
      */
     public function __set($var, $val)
     {
-        $this->temp[strtolower($var)][$val];
+        $this->temp[trim(strtolower($var))][$val];
     }
 
     /**

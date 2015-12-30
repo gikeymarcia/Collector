@@ -24,7 +24,7 @@ spl_autoload_register('autoClassLoader');
 
 // start the session and error reporting
 session_start();
-error_reporting(-1);
+error_reporting(E_ALL);
 
 // load file locations
 $_PATH = new Pathfinder($_SESSION['Pathfinder']);

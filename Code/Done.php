@@ -77,6 +77,7 @@ require $_PATH->get('Header');
     text-rendering: optimizeLegibility;
   }
 </style>
+<form id="content">
   <h2>Thank you for your participation!</h2>
   
   <p>If you have any questions about the experiment please email 
@@ -86,10 +87,6 @@ require $_PATH->get('Header');
   <?php if ($_SETTINGS->verification !== ''): ?>
   <h3>Your verification code is: <?= $verification_code ?></h3>
   <?php endif; ?>
-  
-    
-<form id="content">
-  
 </form>
 
 <?php
