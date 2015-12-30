@@ -265,7 +265,7 @@
                                             foreach( $sessS as $sess => $ids ) {
                                                 foreach( $ids as $id => $fileName ) {
                                                     $i=1;
-                                                    $flags = SortArrayLikeArray( $IDs[$id]['Error Flags'], $images );
+                                                    $flags = sortArrayLikeArray( $IDs[$id]['Error Flags'], $images );
                                                     echo '<label class="ChoiceLabel">
                                                             <div class="OutputTableCell"><input type="checkbox" name="IDs[]"    value="'.$id.'"     /></div>
                                                             <div class="OutputTableCell Username">'.$user.'</div>

@@ -47,42 +47,27 @@
 //         the step size for multiple ranges, please enter the step size
 //         after each range, like "1::3#.1, a::g # 2, 7::9 #.5"
 
-if (!isset($settings) OR $settings === '') {
+if (!isset($settings) || $settings === '') {
     $settings = '1::7';
 }
 
 $likertOptions = rangeToArray($settings);
 
-$texts       = explode('|', $text);
-$question    = array_shift($texts);
-$labelWidth  = floor(1000/max(1, count($texts)))/10;
-$optionWidth = floor(1000/count($likertOptions))/10;
+$texts = explode('|', $text);
+$question = array_shift($texts);
+$labelWidth = floor(1000 / max(1, count($texts))) / 10;
+$optionWidth = floor(1000 / count($likertOptions)) / 10;
 
-?><style>
-    .likertArea { text-align: center; }
-    
-    .likertQuestion { margin: 0 0 30px 0; font-size: 1.3em; }
-    
-    .likertLabels { display: table; margin: 10px 0; color: #666; width: 100%; }
-    .likertLabel { display: table-cell; padding: 8px;
-                   vertical-align: bottom; width: <?= $labelWidth ?>%; }
-    
-    .likertOptions { display: table; margin: 10px 0; width: 100%; }
-    .likertOption { display: table-cell; text-align: center; padding: 14px 8px 28px 8px;
-                    vertical-align: bottom; width: <?= $optionWidth ?>%; }
-</style>
-
-<div class="likertArea">
-<?php
-
-echo '<div class="likertArea">';
-
-echo '<div class="likertQuestion">' .
-        $question .
-     '</div>';
-
-echo '<div class="likertLabels">';
-foreach ($texts as $i => $label) {
+/*
+ * Determines which text-alignment class to use during the display of the Likert
+ * labels.
+ * 
+ * @param array $texts
+ * @param int   $i     Current iteration in the foreach loop.
+ * 
+ * @return string The class name to use.
+ */
+$determineClass = function ($texts, $i) {
     if (count($texts) === 2) {
         if ($i === 0) {
             $class = 'textleft';
@@ -100,26 +85,71 @@ foreach ($texts as $i => $label) {
     } else {
         $class = 'textcenter';
     }
-    echo "<div class='likertLabel $class'>" .
-            $label .
-         '</div>';
-}
-echo '</div>';
 
-echo '<div class="likertOptions">';
-foreach ($likertOptions as $option) {
-    echo '<label class="likertOption">' . 
-            $option .
-            '<br>' .
-            '<input type="radio" name="Response" value="' . $option . '">' .
-         '</label>';
+    return $class;
 }
-echo '</div>';
-
-echo '</div>';
 ?>
+
+<style>
+  .likertArea {
+      text-align:center;
+  }
+    
+  .likertQuestion {
+    margin:0 0 30px 0;
+    font-size:1.3em;
+  }
+    
+  .likertLabels {
+    display:table;
+    margin:10px 0;
+    color:#666;
+    width:100%;
+  }
+  .likertLabel {
+    display:table-cell;
+    padding:8px;
+    vertical-align:bottom;
+    width:<?= $labelWidth ?>%;
+  }
+    
+  .likertOptions {
+    display:table;
+    margin:10px 0;
+    width:100%;
+  }
+  .likertOption {
+    display:table-cell;
+    text-align:center;
+    padding:14px 8px 28px 8px;
+    vertical-align:bottom;
+    width:<?= $optionWidth ?>%;
+  }
+</style>
+
+<div class="likertArea">
+  <div class="likertQuestion">
+    <?= $question ?>
+  </div>
+
+  <div class="likertLabels">
+    <?php foreach ($texts as $i => $label): ?>
+    <div class='likertLabel <?= $determineClass($texts, $i) ?>'>
+      <?= $label ?>
+    </div>
+    <?php endforeach; ?>
+  </div>
+
+  <div class="likertOptions">
+    <?php foreach ($likertOptions as $option): ?>
+    <label class="likertOption">
+      <?= $option ?>
+      <br><input type="radio" name="Response" value="<?= $option ?>">
+    </label>
+    <?php endforeach ?>
+  </div>
 </div>
 
 <div class="collector-form-element textcenter">
-    <button type="submit" class="collectorButton collectorAdvance">Submit</button>
+  <button type="submit" class="collectorButton collectorAdvance">Submit</button>
 </div>

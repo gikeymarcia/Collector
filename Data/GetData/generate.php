@@ -70,12 +70,12 @@
     $getTimings = array_flip($getTimings);      // we will need to do special checks for this filter
     
     
-    $allColumns = AddPrefixToArray( $expPrefix, $outputColumns )
-                + AddPrefixToArray( $demographicsPrefix, $demographicsColumns )
-                + AddPrefixToArray( $finalQuestionsPrefix, $finalQuestionsColumns ) 
-                + AddPrefixToArray( $statusBeginPrefix, $statusBeginColumns ) 
-                + AddPrefixToArray( $statusEndPrefix, $statusEndColumns ) 
-                + AddPrefixToArray( $instructionsPrefix, $instructionsColumns );
+    $allColumns = addPrefixToArray( $expPrefix, $outputColumns )
+                + addPrefixToArray( $demographicsPrefix, $demographicsColumns )
+                + addPrefixToArray( $finalQuestionsPrefix, $finalQuestionsColumns ) 
+                + addPrefixToArray( $statusBeginPrefix, $statusBeginColumns ) 
+                + addPrefixToArray( $statusEndPrefix, $statusEndColumns ) 
+                + addPrefixToArray( $instructionsPrefix, $instructionsColumns );
     
     $ext = $POST['File_Type'];
     if( $ext === 'browser' ) {
@@ -132,14 +132,14 @@
                                     $col = implode( '|', $col );
                                 }
                                 unset( $col );
-                                $output += AddPrefixToArray( $fileMeta['Prefix'], $temp );
+                                $output += addPrefixToArray( $fileMeta['Prefix'], $temp );
                             } else {
-                                $output += AddPrefixToArray( $fileMeta['Prefix'], $IDs[$id][$category] );
+                                $output += addPrefixToArray( $fileMeta['Prefix'], $IDs[$id][$category] );
                             }
                         }
                         
                         if( !$getExp ) {
-                            arrayToEcho( SortArrayLikeArray($output, $allColumns), $ext );
+                            arrayToEcho( sortArrayLikeArray($output, $allColumns), $ext );
                         } else {
                             $first = getFirstLine( "{$path}/{$fileName}", $testHeader );
                             foreach( $fileFilters as $column => $allowed ) {
@@ -153,7 +153,7 @@
                                 foreach( $rowFilters as $column => $allowed ) {
                                     if( !isset( $allowed[ $row[$column] ] ) ) { continue; }
                                 }
-                                arrayToEcho( SortArrayLikeArray($output + AddPrefixToArray( $expPrefix, $row ), $allColumns), $ext );
+                                arrayToEcho( sortArrayLikeArray($output + addPrefixToArray( $expPrefix, $row ), $allColumns), $ext );
                             }
                             fclose($file);
                         }

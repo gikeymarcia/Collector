@@ -28,6 +28,9 @@ desktop.ini
 *.orig
 Icon?
 
+# PHPDocumentor
+phpdoc.xml
+
 # Collector - Data
 !Data/
 Data/**/*

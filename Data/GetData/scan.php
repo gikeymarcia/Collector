@@ -129,7 +129,7 @@
     foreach( $extraFileMeta as $category => $fileMeta ) {
         if( !isset( $fileMeta['files'] ) ) { continue; }
         foreach( $fileMeta['files'] as $fileName ) {
-            $data = GetFromFile( "{$path}/{$fileName}", false );
+            $data = getFromFile( "{$path}/{$fileName}", false );
             $d = getFirstLine( "{$path}/{$fileName}", $testHeader, true );
             if( $d === false ) { continue; }
             $file = fopen( "{$path}/{$fileName}", "r" );

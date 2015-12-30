@@ -1,2 +1,3 @@
 <?php
-    require '../../Code/Welcome.php';
+
+require '../../Code/Welcome.php';

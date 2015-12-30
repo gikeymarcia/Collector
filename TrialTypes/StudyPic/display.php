@@ -1,12 +1,12 @@
-<div><?php echo $text; ?></div>
+<div><?= $text; ?></div>
   
 <!-- show the image -->
 <div class="pic">
-    <?php echo show($cue); ?>
+  <?= show($cue) ?>
 </div>
   
 <!-- show the answer -->
-<h2 class="textcenter"><?php echo $answer; ?></h2>
+<h2 class="textcenter"><?= $answer ?></h2>
 
 <!-- response and RT form -->
 <div class="textcenter">
