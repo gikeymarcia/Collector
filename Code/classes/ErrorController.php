@@ -34,7 +34,6 @@ class ErrorController
     public function add($errMsg, $showStopper = false)
     {
         if (strlen($errMsg) > 0) {
-            ++$this->count;
             $this->details[] = $errMsg;
         }
         if (($showStopper == true) && ($this->allowShowStopper == true)) {

@@ -35,7 +35,7 @@ $_PATH->setDefault('Current Experiment', $currentExp);
 $_PATH->setDefault('Data Sub Dir', '');
 
 // refresh settings to read from correct experiment settings
-$_SETTINGS->up_to_date($_PATH);         
+$_SETTINGS->up_to_date($_PATH);
 
 /*
  * Login objects
@@ -156,4 +156,4 @@ if ($_SETTINGS->show_condition_selector == true && !$isReturningUser) {
 </form>
 
 <?php 
-    require $_PATH->get('Footer');
+require $_PATH->get('Footer');

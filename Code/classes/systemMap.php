@@ -34,7 +34,7 @@ return array(
 
             'Common Settings.json' => 'Common Settings',
 
-            'Password.php'  => 'Password',
+            'Password.php' => 'Password',
 
             'Ineligible' => array(
                 'Dir Name' => 'Ineligibility Dir',

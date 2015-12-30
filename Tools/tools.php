@@ -36,7 +36,7 @@ require $_PATH->get('Custom Functions');
 require 'loginFunctions.php';
 
 // load configs
-$_SETTINGS = new settings (
+$_SETTINGS = new Settings (
     $_PATH->get("Common Settings"),
     $_PATH->get("Experiment Settings"),
     $_PATH->get("Password")

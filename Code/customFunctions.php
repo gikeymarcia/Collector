@@ -18,32 +18,6 @@
  * @param string $currentExp (Optional) Load settings for the given experiment.
  * 
  * @return stdClass Object with a property for each setting.
-function getCollectorSettings($currentExp = null)
-{
-    global $_PATH;
-    $settings = Parse::fromConfig($_PATH->get('Common Settings'), true);
-
-    if ($currentExp === null &&
-        $_PATH->getDefault('Current Experiment') !== null
-    ) {
-        $currentExp = $_PATH->getDefault('Current Experiment');
-    }
-
-    if ($currentExp !== null) {
-        $def = array('Current Experiment' => $currentExp);
-        $newSettings = Parse::fromConfig(
-            $_PATH->get('Experiment Settings', 'relative', $def)
-        );
-        foreach ($newSettings as $settingName => $setting) {
-            $settings->$settingName = $setting;
-        }
-    }
-
-    return $settings;
-}
-
-/**
- * Create a list of valid experiments found in the Experiments folder.
  * 
  * @global Pathfinder $_PATH Pathfinder object currently in use.
  * 
@@ -83,13 +57,13 @@ function getCollectorExperiments()
 function isValidExperimentDir($expName)
 {
     global $_PATH;
-    
-    $default       = array('Current Experiment' => $expName);
+
+    $default = array('Current Experiment' => $expName);
     $requiredFiles = array(
         'Current Index', 'Conditions',
-        'Stimuli Dir', 'Procedure Dir'
+        'Stimuli Dir', 'Procedure Dir',
     );
-    
+
     foreach ($requiredFiles as $req) {
         $test = $_PATH->get($req, 'relative', $default);
 

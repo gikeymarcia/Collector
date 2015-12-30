@@ -4,7 +4,7 @@ require_once 'loginFunctions.php';      // This is so we can run the function be
 adminOnly();
 
 $exps = getCollectorExperiments();
-$yourSettings = new settings(
+$yourSettings = new Settings(
     $_PATH->get("Common Settings"),
     $_PATH->get("Experiment Settings"),
     $_PATH->get("Password")
@@ -13,7 +13,7 @@ $yourSettings = new settings(
 require 'RecordPosts.php';
 
 // functions to make all the setting inputs
-function setting_string(settings $settingClass, $name, $label)
+function setting_string(Settings $settingClass, $name, $label)
 {
     $current = $settingClass->$name;
     echo
