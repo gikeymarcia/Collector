@@ -51,4 +51,14 @@
     
     
     // load settings
-    $_SETTINGS = getCollectorSettings();
+    if (isset($_SESSION["settings"])) {
+        $_SETTINGS =& $_SESSION["settings"];
+        $_SETTINGS->up_to_date($_PATH);
+    } else {
+        $_SESSION["settings"] = new settings (
+            $_PATH->get("Common Settings"),
+            $_PATH->get("Experiment Settings"),
+            $_PATH->get("Password")
+        );
+        $_SETTINGS =& $_SESSION["settings"];
+    }

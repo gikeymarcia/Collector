@@ -26,7 +26,12 @@
     
 
     #### load settings from common AND from current experiment folder
-    $_SETTINGS = getCollectorSettings();
+    $_SESSION['settings'] = new settings (
+        $_PATH->get("Common Settings"),
+        $_PATH->get("Experiment Settings"),
+        $_PATH->get("Password")
+    );
+    $_SETTINGS =& $_SESSION['settings'];
 
 
     #### login objects

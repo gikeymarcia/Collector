@@ -5,33 +5,6 @@
 */
 /* CustomFunctions */
 /**
- * load settings from common settings, as well as current Experiment folder
- * @param string (Optional) load settings from specified experiment
- * @return object
- */
-function getCollectorSettings($currentExp = null) {
-    global $_PATH;
-    $settings = Parse::fromConfig($_PATH->get('Common Settings'), true);
-    
-    if ($currentExp === null AND 
-        $_PATH->getDefault('Current Experiment') !== null
-    ) {
-        $currentExp = $_PATH->getDefault('Current Experiment');
-    }
-    
-    if ($currentExp !== null) {
-        $def = array('Current Experiment' => $currentExp);
-        $newSettings = Parse::fromConfig(
-            $_PATH->get('Experiment Settings', 'relative', $def)
-        );
-        foreach ($newSettings as $settingName => $setting) {
-            $settings->$settingName = $setting;
-        }
-    }
-    
-    return $settings;
-}
-/**
  * create a list of valid experiments found in the Experiments/ folder
  * @return array
  */
@@ -61,7 +34,7 @@ function isValidExperimentDir($expName) {
     
     $default       = array('Current Experiment' => $expName);
     $requiredFiles = array(
-        'Current Index', 'Conditions', 'Experiment Settings',
+        'Current Index', 'Conditions',
         'Stimuli Dir', 'Procedure Dir'
     );
     

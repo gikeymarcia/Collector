@@ -28,7 +28,7 @@
     
     $_PATH->setDefault('Current Experiment', $currentExp);
     
-    $_SETTINGS = getCollectorSettings();
+    $_SETTINGS->up_to_date();
 
     // load and sort conditions
     $Conditions = GetFromFile($_PATH->get('Conditions'), false);
