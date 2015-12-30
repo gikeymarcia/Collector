@@ -37,7 +37,7 @@ function loginState($Password)
     $LoginExpiration = 60 * 60 * 2;
 
     // No password set
-    if ($Password === 'weakpassword') {
+    if ($Password === null) {
         return 'noPass';
     }
 
@@ -89,7 +89,7 @@ function loginPrompt($state)
     $noPass =
         '<div class="error">'.
           '<h2>You are not allowed to use <code>Tools</code> until you have set a password</h2>'.
-          '<p> The password can be set within <code>Experiments/Common/Common Settings.ini</code></p>'.
+          '<p> The password can be set within <code>Experiments/Common/Password.php</code></p>'.
         '</div>';
     $unknown =
         '<p>We have no idea how you got here.'.

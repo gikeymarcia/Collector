@@ -34,8 +34,8 @@ $_PATH->setDefault('Current Experiment', $currentExp);
 // the conditions class will automatically create a login counter dir, and it needs this value
 $_PATH->setDefault('Data Sub Dir', '');
 
-// load other settings from the appropriate configuration files
-$_SETTINGS = getCollectorSettings();
+// refresh settings to read from correct experiment settings
+$_SETTINGS->up_to_date($_PATH);         
 
 /*
  * Login objects

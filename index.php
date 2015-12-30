@@ -20,7 +20,7 @@ require 'Code/initiateCollector.php';
 
 $_SESSION = array();
 $_PATH = new Pathfinder($_SESSION['Pathfinder']);
-$_SETTINGS = getCollectorSettings();
+$_SETTINGS->up_to_date($_PATH);
 
 // get possible experiments to choose from
 $experiments = array();

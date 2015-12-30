@@ -47,13 +47,19 @@ if (!isset($_SESSION['Current Collector'])
         header('Location: '.$_PATH->get('index'));
         exit;
     }
-}
-unset($currentCollector);
-
-// load settings
-$_SETTINGS = getCollectorSettings();
-
-// if experiment has been loaded (after login) set the variable
-if (isset($_SESSION['_EXPT'])) {
-    $_EXPT = $_SESSION['_EXPT'];
-}
+    
+    unset($currentCollector);
+    
+    
+    // load settings
+    if (isset($_SESSION["settings"])) {
+        $_SETTINGS =& $_SESSION["settings"];
+        $_SETTINGS->up_to_date($_PATH);
+    } else {
+        $_SESSION["settings"] = new settings (
+            $_PATH->get("Common Settings"),
+            $_PATH->get("Experiment Settings"),
+            $_PATH->get("Password")
+        );
+        $_SETTINGS =& $_SESSION["settings"];
+    }

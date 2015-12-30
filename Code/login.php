@@ -26,7 +26,12 @@ if (!in_array($current, getCollectorExperiments())) {
 
 // tell pathfinder the current experiment and load common/experiment settings
 $_PATH->setDefault('Current Experiment', $current);
-$_SETTINGS = getCollectorSettings();
+$_SESSION['settings'] = new settings (
+    $_PATH->get("Common Settings"),
+    $_PATH->get("Experiment Settings"),
+    $_PATH->get("Password")
+);
+$_SETTINGS =& $_SESSION['settings'];
 
 /*
  * Login objects

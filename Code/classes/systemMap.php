@@ -32,7 +32,9 @@ return array(
         'Common' => array(
             'Dir Name' => 'Common',
 
-            'Common Settings.ini' => 'Common Settings',
+            'Common Settings.json' => 'Common Settings',
+
+            'Password.php'  => 'Password',
 
             'Ineligible' => array(
                 'Dir Name' => 'Ineligibility Dir',
@@ -71,7 +73,7 @@ return array(
             'Conditions.csv' => 'Conditions',
             'Task Instructions.php' => 'Instructions',
 
-            'Settings.ini' => 'Experiment Settings',
+            'Settings.json' => 'Experiment Settings',
 
             'Stimuli' => array(
                 'Dir Name' => 'Stimuli Dir',

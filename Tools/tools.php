@@ -36,7 +36,11 @@ require $_PATH->get('Custom Functions');
 require 'loginFunctions.php';
 
 // load configs
-$_SETTINGS = getCollectorSettings();
+$_SETTINGS = new settings (
+    $_PATH->get("Common Settings"),
+    $_PATH->get("Experiment Settings"),
+    $_PATH->get("Password")
+);
 
 // declaring admin for first login
 if (!isset($_SESSION['admin'])) {

@@ -18,7 +18,6 @@
  * @param string $currentExp (Optional) Load settings for the given experiment.
  * 
  * @return stdClass Object with a property for each setting.
- */
 function getCollectorSettings($currentExp = null)
 {
     global $_PATH;
@@ -84,11 +83,13 @@ function getCollectorExperiments()
 function isValidExperimentDir($expName)
 {
     global $_PATH;
-
-    $default = array('Current Experiment' => $expName);
-    $requiredFiles = array('Current Index', 'Conditions', 'Experiment Settings',
-        'Stimuli Dir', 'Procedure Dir', );
-
+    
+    $default       = array('Current Experiment' => $expName);
+    $requiredFiles = array(
+        'Current Index', 'Conditions',
+        'Stimuli Dir', 'Procedure Dir'
+    );
+    
     foreach ($requiredFiles as $req) {
         $test = $_PATH->get($req, 'relative', $default);
 
