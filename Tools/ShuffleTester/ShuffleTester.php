@@ -11,8 +11,8 @@ $experiments = array_flip(getCollectorExperiments());
 
 // save selected experimet if available and valid
 $exp = filter_input(INPUT_GET, 'exp', FILTER_SANITIZE_STRING);
-if (($exp !== null) && isset($experiments[$get])) {
-    $_DATA['exp'] = $get;
+if (($exp !== null) && isset($experiments[$exp])) {
+    $_DATA['exp'] = $exp;
 } elseif (empty($_DATA['exp'])) {
     $_DATA['exp'] = '';
 }
@@ -133,7 +133,7 @@ $_DATA['name'] = empty($_DATA['name']) ? '' : $_DATA['name'];
 <div class="toolWidth" id="expSelect">
   <h4>Which experiment?</h4>
   <?php foreach ($experiments as $expName => $value): ?>
-  <button form='shuffleFile' class='collectorButton' name='exp' value='$expName'>
+  <button form='shuffleFile' class='collectorButton' name='exp' value='<?= $expName?>'>
       <?= $expName ?>
   </button>
   <?php endforeach; ?>
@@ -155,7 +155,7 @@ $_DATA['name'] = empty($_DATA['name']) ? '' : $_DATA['name'];
               $value = "$type/$file";
               $selected = ($_DATA['get'] == $value) ? ' selected' : '';
           ?>
-          <option label='$file' value='$value' class='goShuffle' <?= $selected ?>>
+          <option label='<?= $file ?>' value='<?= $value?>' class='goShuffle' <?= $selected ?>>
             <?= $file ?>
           </option>
           <?php endforeach; ?>
