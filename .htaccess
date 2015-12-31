@@ -1,0 +1,8 @@
+# Allow access to the directory
+Order Allow,Deny
+Allow from all
+
+# Block access to all .csv, .json, .txt files
+<FilesMatch "\.(csv|json|txt)">
+    Deny from all
+</FilesMatch>
