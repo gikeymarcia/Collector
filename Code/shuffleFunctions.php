@@ -640,10 +640,10 @@ function multiLevelShuffle($input, $levels = 0)
             $groupedItems[$group][] = $subArray;
         }
         foreach ($groupedItems as $shuffleType => &$items) {
-            // skip shuffling of items (within the group) if the group code is set to off
+            // skip shuffling of items as long as none of the "don't shuffle" conditons are met
             if ((strpos($shuffleType, $offChar) === false)
-                || (strtolower($shuffleType) !== 'off')
-                || ($shuffleType !== '')
+                && (strtolower($shuffleType) !== 'off')
+                && ($shuffleType !== '')
             ) {
                 shuffle($items);
             }
@@ -653,7 +653,6 @@ function multiLevelShuffle($input, $levels = 0)
             $shuffleCode = $item[$root.$levels];
             $output[$pos] = array_shift($groupedItems[$shuffleCode]);
         }
-
         return $output;
     }
 }
