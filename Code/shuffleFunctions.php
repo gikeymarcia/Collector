@@ -546,7 +546,8 @@ function multiLevelShuffle($input, $levels = 0)
 
         // starting shuffle code
         $begin = $input[0][$root.$levels];
-        for ($i = 0; $i < count($input); ++$i) {
+        $size = count($input);
+        for ($i = 0; $i < $size; ++$i) {
             // current shuffle code
             $current = $input[$i][$root.$levels];
 

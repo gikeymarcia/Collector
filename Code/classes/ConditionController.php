@@ -276,7 +276,8 @@ class ConditionController
     public function getInfo($asString = true)
     {
         $info = array('selection' => $this->selection, 'options' => array());
-        for ($i = 0; $i < count($this->ConditionsCSV); ++$i) {
+        $length = count($this->ConditionsCSV);
+        for ($i = 0; $i < $length; ++$i) {
             $info['options'][$i]['Stimuli'] = $this->allStim($i);
             $info['options'][$i]['Procedure'] = $this->allProc($i);
         }
@@ -438,7 +439,8 @@ class ConditionController
 
         $valid = array();
         $toCheck = $this->colsContaining($type);
-        for ($i = 1; $i < count($toCheck) + 1; ++$i) {
+        $length = count($toCheck) + 1;
+        for ($i = 1; $i < $length; ++$i) {
             $noLoad = array('off' => 1, '' => 1, '.' => 1);
             if (isset($row["$type $i"])
                 && !isset($noLoad[strtolower($row["$type $i"])])

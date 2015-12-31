@@ -140,8 +140,8 @@ abstract class ControlFile
         if (count($existingKeys) !== count($newKeys)) {
             return false;
         }
-
-        for ($i = 0; $i < count($existingKeys); ++$i) {
+        $length = count($existingKeys);
+        for ($i = 0; $i < $length; ++$i) {
             if ($newKeys[$i] !== $existingKeys[$i]) {
                 return false;
             }
