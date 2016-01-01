@@ -4,10 +4,20 @@
  */
 
 /**
- * Checks that the entered password matches with the stored hash.
+ * Checks that the scrambled+hashed response matches what the server
+ * calculates when it does the same scramble+hash with the stored password.
+ *
+ * This is done so the user doesn't send us the password. Instead we 
+ * hash(salt+password) server side and challenge the user to get the 
+ * same resultant hash (i.e., they entered the correct password)
+ *
+ * By doing this procedure anyone sniffing the transmission is never shown
+ * the password and the response they see transmitted cannot be used in the
+ * future to login becasue each login is dependent on a unique salt the 
+ * sever generates for every login attempt
  * 
- * @param string $response  The user-entered password.
- * @param string $password  The stored password in Settings.
+ * @param string $response  The user response = hash(user input + salt).
+ * @param string $password  The stored password in Password.php.
  * @param string $salt      The salt for the password.
  * @param string $hash_algo The hash algorithm to use.
  * 
