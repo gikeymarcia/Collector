@@ -34,6 +34,7 @@
         background-color: #F5F7FD;
         display: inline-block;
         min-width: 600px;
+        border-radius: 5px;
     }
     .SurveyPage {
         display: none;

@@ -5,7 +5,7 @@
   <?= show($cue) ?>
 </div>
   
-<!-- show the answer -->
+<!-- show the caption -->
 <h2 class="textcenter"><?= $answer ?></h2>
 
 <!-- response and RT form -->
