@@ -43,6 +43,20 @@ function getCollectorExperiments()
 }
 
 /**
+ * Indicates whether the named experiment is a valid collector experiment.
+ *
+ * @param string $name The name of the experiment to check.
+ *
+ * @return bool True if the experiment exists and is valid, else false.
+ */
+function issetCollectorExperiment($name)
+{
+	$flippedExpts = array_flip(getCollectorExperiments());
+
+	return isset($flippedExpts[$name]);
+}
+
+/**
  * Determines if the given experiment name is a valid experiment directory.
  * Checks if the given experiment directory existsand if it has the required 
  * directory tree: index file, settings file, conditions file, stimuli 
