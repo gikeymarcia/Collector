@@ -65,5 +65,5 @@ if (isset($_SESSION['settings'])) {
 
 // if experiment has been loaded (after login) set the variable
 if (isset($_SESSION['_EXPT'])) {
-    $_EXPT = $_SESSION['_EXPT'];
+    $_EXPT = &$_SESSION['_EXPT'];
 }
