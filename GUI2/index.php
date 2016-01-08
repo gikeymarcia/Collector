@@ -26,14 +26,14 @@
     require '../Code/initiateCollector.php';
     
     // now lets get a list of possible experiments to edit
-    $branches = getCollectorExperiments();
+    //$branches = getCollectorExperiments();
  
- /*
+ 
   # list of all studies
   $branches = scandir("../Experiments");
-  $branches = array_slice($branches,2);
+  //$branches = array_slice($branches,2);
   #print_r($branches);
-*/
+
 	
     $title = 'Collector GUI';
     require $_PATH->get('Header');
@@ -49,14 +49,28 @@
     Which study do you want to edit?
     <select id="studyName" name="studyName" onchange="updateGuiStudyName()">
       <?php
+		$guiArray=array();
         foreach ($branches as $study) {
-          echo "<option value='$study'>$study</option>";
-        }    
+			if(strcmp($study,'New Experiment')!=0){
+				//detect whether there is a name file in the folder
+				//echo "../Experiments/$study/name.txt";
+				if(file_exists("../Experiments/".$study."/name.txt")==1){
+					$study=file_get_contents("../Experiments/$study/name.txt");
+				}
+				echo "<option value='$study'>$study</option>";
+
+				//code to identify whether there is a gui file in each folder explored
+				if(file_exists("../Experiments/$study/gui.txt")==1){	
+					array_push($guiArray,$study);
+				}
+			}
+        }
+		$guiArrayJson=json_encode($guiArray);
       ?>
     </select>
-    <input name="submitButton" class="collectorButton" type="submit" value="Edit CSVs">
+    <input name="submitButton" class="collectorButton" type="submit" value="Edit CSV">
   </form>
-
+  
   <form class="guiTasks" action="gui.php" method="post">
     <input name="guiEdit" class="collectorButton" type="submit" value="Edit GUI" >
     <textarea name="guiStudyName" id="guiStudyName" style="display:none"></textarea>
@@ -78,6 +92,12 @@
   function updateGuiStudyName(){
 	guiStudyName.value=studyName.value;
   }
+  alert(guiStudyName.value);
+  guiArray=<?=$guiArrayJson?>;
+  for (i=0;i<guiArray.length;i++){
+	alert(guiArray[i]);
+  }
+
 </script>
 
 <?php
