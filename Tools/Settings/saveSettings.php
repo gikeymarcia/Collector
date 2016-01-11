@@ -27,11 +27,18 @@
         "whitelist"
     );
 
+    $found = false;
     foreach ($check_these_settings as $var) {
         if (isset($_POST[$var])) {
+            $found = true;
             $value = $_POST[$var];
             if ($value != $yourSettings->$var) {
                 $yourSettings->set($var, $value);
             }
         }
+    }
+
+    if ($found === true) {
+        $yourSettings->writeSettings();
+        header('Location: ./');
     }

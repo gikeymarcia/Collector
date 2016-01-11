@@ -1,86 +1,112 @@
 <?php
 // access control
-require_once 'loginFunctions.php';      // This is so we can run the function below
 adminOnly();
 
-$exps = getCollectorExperiments();
-$yourSettings = new Settings(
-    $_PATH->get("Common Settings"),
-    $_PATH->get("Experiment Settings"),
-    $_PATH->get("Password")
-);
+// make a temporary pathfinder to get us to the right settings
+$tempPath = new Pathfinder($_DATA['path']);
+$exps = array_flip(getCollectorExperiments());
 
-require 'RecordPosts.php';
-
-// functions to make all the setting inputs
-function setting_string(Settings $settingClass, $name, $label)
-{
-    $current = $settingClass->$name;
-    echo
-        "<label>
-            <span>$label</span>
-            <input form='toMod' type='textbox' name='$name'
-            value='$current'/>
-        </label>";
+// change experiment if one is selected
+if (isset($_GET['Exp'])
+    && isset($exps[$_GET['Exp']])
+) {
+    $_DATA['exp'] = $_GET['Exp'];
+    $tempPath->setDefault('Current Experiment', $_GET['Exp']);
+}
+$_DATA['exp'] = (isset($_DATA['exp'])) ? $_DATA['exp'] : "";
+if (!empty($_DATA['exp'])) {
+    $tempPath->setDefault('Current Experiment', $_DATA['exp']);
 }
 
-?>
+// make a new instance of the settings class
+$yourSettings = new Settings(
+    $tempPath->get("Common Settings"),
+    $tempPath->get("Experiment Settings"),
+    $tempPath->get("Password")
+);
 
+require 'saveSettings.php';
+require 'makeSettingOptions.php';
+
+?>
+<link rel="stylesheet" type="text/css" href="Settings/styles.css">
+
+<!-- This is where you choose what to edit -->
 <div class="toolWidth expSelect">
-    <h3>Which settings would you like to edit?</h3>
-    <select class="collectorInput">
-        <option select id="selectLabel">Choose your settings</option>
+    <h3>Which experiment settings would you like to edit?</h3>
+    <select class="collectorInput" name="Exp" form="chooseExp">
+        <option id="selectLabel">Choose your settings</option>
         <?php
-            foreach ($exps as $i => $name) {
-                echo "<option value='$name'>$name</option>";
+            foreach ($exps as $name => $i) {
+                $selected = ($_DATA["exp"] == $name) ? " selected" : "";
+                echo "<option value='$name' $selected>$name</option>";
             }
         ?>
     </select>
 </div>
-<div class="common toolWidth">
-    <h3>Common Settings</h3>
+
+<?php
+    if (!empty($_DATA['exp'])) {
+        $name = $_DATA['exp'];
+        echo '<div class="exp settings toolWidth">';
+            echo "<h3 class='type'>Experiment Settings ($name)</h3>";
+            setting_string($yourSettings, "experiment_name", "Experiment Name", $tooltips);
+            setting_bool  ($yourSettings, "debug_mode", "Debug Mode", $tooltips);
+            setting_string($yourSettings, "lenient_criteria", "Lenient Criteria", $tooltips);
+
+            echo "<div class='subgroup'><h4>Welcome Screen Settings</h4>";
+            setting_string($yourSettings, "welcome", "Welcome Message", $tooltips);
+            setting_string($yourSettings, "exp_description", "Welcome Description", $tooltips);
+            setting_string($yourSettings, "ask_for_login", "Asked for Login", $tooltips);
+            setting_bool($yourSettings, "show_condition_selector", "Conditon Selector", $tooltips);setting_bool($yourSettings, "use_condition_names", "Show Condition Names", $tooltips);
+            setting_bool($yourSettings, "show_condition_info", "Show Condition Info", $tooltips);
+            setting_bool($yourSettings, "hide_flagged_conditions", "Hide Flagged Conditions", $tooltips);
+            echo "</div>";
+
+            echo "<div class='subgroup'><h4>Done Screen</h4>";
+            setting_string($yourSettings, "verification", "Verification Code", $tooltips);
+            echo "</div>";
+
+        echo '</div>';
+    }
+?>
+
+<!-- This is where you edit common experiment settings -->
+<div class="common settings toolWidth">
+    <h3 class='type'>Common Settings (Shared Across Experiments)</h3>
     <?php
-        setting_string($yourSettings, "experimenter_email", "Experimenter Email")
+        // echo ""
+        setting_string($yourSettings, "experimenter_email" , "Experimenter Email" , $tooltips);
+        setting_bool  ($yourSettings, "check_all_files"    , "Check All Files"    , $tooltips);
+        setting_bool  ($yourSettings, "check_current_files", "Check Current Files", $tooltips);
+        setting_string($yourSettings, "debug_name", "Debug Name" , $tooltips);
+        setting_string($yourSettings, "debug_time", "Debug Time" , $tooltips);
+        setting_bool  ($yourSettings, "trial_diagnostics", "Show Trial Diagnostics", $tooltips);
     ?>
 </div>
 
-<form id="toMod" method="post" action="">
-</form>
+<button id="saveSettings" form="toMod">Save Changes</button>
 
-<style type="text/css">
-    h4 {
-        display: inline-block;
-    }
-    .expSelect h4 {
-        padding: .3em 2em .3em 0em;
-    }
-    .expSelect * {
-        float: left;
-    }
-    .common {
-        text-align: left;
-        margin-top: 1em;
-        line-height: 1.5em;
-        background-color: #F1F1F1;
-        border-radius: 5px;
-        padding: 1em;
-    }
+<form id="toMod" method="post" action=""></form>
+<form id="chooseExp" method="get" action=""></form>
 
-    .common input {
-        width: 500px;
-        padding: 0px 0px 0px .25em;
-        vertical-align: bottom;
-        /*line-height: 1.5em;*/
-    }
-    .common span {
-        /*line-height: 1.5em;*/
-        display: inline-block;
-        padding-top: 5px;
-    }
-</style>
 <script type="text/javascript">
     // hide the default option when showing the dropdown box
-    $(".expSelect").focusin(function(event) {
+    $(".expSelect select").focusin(function(event) {
         $("#selectLabel").css("display","none");
+    });
+
+    // submit as soon as an experiment is selected
+    $(".expSelect select").change(function(){
+        $("#chooseExp").submit();
+    });
+
+    // click header to toggle experiment/common settings
+    $(".type").click(function() {
+        $(this).siblings().toggle(350);
+    });
+    // click subheading to toggle a group of settings
+    $(".subgroup h4").click(function(event) {
+        $(this).siblings().toggle(350);
     });
 </script>

@@ -299,22 +299,23 @@ class Settings
 
         // only allow bools to replace bools
         if (is_bool($current)) {
-            if (is_bool($val)) {
+            // toggling the posted strings of true/false to boolean true/false
+            if ($val === 'true' || $val === "false") {
+                $val = ($val === 'true') ? true : false;
                 $source['data'][$key] = $val;
             } else {
-                trigger_error("Your setting '{$key}' should be a boolean but it is a {$type}", E_WARNING);
+                trigger_error("Your setting '{$key}' should be a boolean but it is, {$val}, a ({$type}):", E_WARNING);
             }
-
-        // only numbers to replace numbers
-        } elseif (is_numeric($current)) {
-            if (is_numeric($val)) {
-                $source['data'][$key] = $val;
-            } else {
-                trigger_error("Your setting '{$key}' should be a number but it is a {$type}", E_WARNING);
-            }
-
+        
+        // save number values as numbers
+        } elseif (is_numeric($val)) {
+            $int = (int)$val;
+            $float = (float)$val;
+            $val = ($int == $float) ? $int : $float;
+            $source['data'][$key] = $val;
         // allow all other types to be juggled
         } else {
+            // $val = htmlspecialchars($val);
             $source['data'][$key] = $val;
         }
     }
