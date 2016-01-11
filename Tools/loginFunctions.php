@@ -53,7 +53,6 @@ function loginState($Password)
 
     // not logged in
     if (!isset($_SESSION['admin']['status'])
-        || $_SESSION['admin']['status'] !== 'loggedIn'
     ) {
         $_SESSION['admin']['challenge'] = makeNonce();
 
@@ -79,6 +78,10 @@ function loginState($Password)
         } else {
             return 'loggedIn';
         }
+    } else {
+        $_SESSION['admin']['challenge'] = makeNonce();
+        
+        return 'newChallenger';
     }
 
     // how'd you do that?
