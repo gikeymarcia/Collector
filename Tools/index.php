@@ -121,14 +121,16 @@ if ($state !== 'loggedIn') {
 
   <div>
     <!-- tool selector dropdown -->
-    <select name="tool" form="toolSelector" class="toolSelect collectorInput">
+    <select name="tool" form="toolForm" class="toolSelect collectorInput" id="selectTool">
       <option value="" selected="true">Choose a tool</option>
-      <?php foreach ($tools as $tool => $location): ?>
-      <option value='<?= $tool ?>' class='go'><b><?= $tool ?></b></option>
+      <?php foreach ($tools as $tool => $location):
+        $selectedTool = ($tool == $admin['tool']) ? " selected" : "";
+      ?>
+      <option value='<?= $tool ?>' <?= $selectedTool ?> ><b><?= $tool ?></b></option>
       <?php endforeach; ?>
     </select>
 
-    <button type="submit" form="toolSelector" class="collectorButton">Go!</button>
+    <button type="submit" form="toolForm" class="collectorButton">Go!</button>
   </div>
 </div>
 
@@ -151,10 +153,10 @@ if (isset($admin['tool'])) {
 ?>
 
 <!-- form submission -->
-<form id="toolSelector" action="" method="post"></form>
+<form id="toolForm" action="" method="post"></form>
 <script type="text/javascript">
-  $(".go").click(function(){
-    $("#toolSelector").submit();
+  $("#selectTool").change(function(){
+    $("#toolForm").submit();
   });
 </script>
 

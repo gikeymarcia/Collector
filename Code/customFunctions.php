@@ -1009,6 +1009,8 @@ function rangeToArray($string, $separator = ',', $rangeIndicator = '::')
  *
  * @param array  $displayArray The array to print.
  * @param string $name         The title of the array.
+ *
+ * @todo make it function cleanly as it did in Collector 1.0
  */
 function readable(array $displayArray, $name = 'Untitled array')
 {
@@ -1026,12 +1028,11 @@ function readable(array $displayArray, $name = 'Untitled array')
 
 /**
  * Var_dump's the input value inside of pre tags.
+ * Used to debug code and inspect arrays
  * 
  * @param mixed  $input
  * @param string $label
  * 
- * @deprecated This is not used anywhere in the Collector. This function will be
- *             removed.
  */
 function pre_var_dump($input, $label = '')
 {
