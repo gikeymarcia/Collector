@@ -1,1 +1,1 @@
-<?php return 'weakpassword'; ?>
+<?php return 'anthonyPassword'; ?>

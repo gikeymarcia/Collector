@@ -83,7 +83,7 @@ if(empty($instructions)){
 	$rowUnique=array_unique($eventInfo->eventDetails->groupSelected);
 	$rowUnique=array_values($rowUnique); // otherwise the array keys may jump e.g. from 0 to 2.	
 	
-	print_r($rowUnique);
+	//print_r($rowUnique);
 	
 	
 	foreach($instructions as $instruction){

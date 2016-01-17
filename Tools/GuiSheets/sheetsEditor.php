@@ -23,10 +23,11 @@
  */
 
     // start the session, load our custom functions, and create $_PATH
-    require '../Code/initiateCollector.php';
+    //require '../Code/initiateCollector.php';
     $title = 'Collector GUI';
     require $_PATH->get('Header');
-	require ('guiFunctions.php'); // these need to be incorporated with other functions. 
+		require ('guiFunctions.php'); // these need to be incorporated with other functions. 
+		require('guiClasses.php');
 		
 ?>
 
@@ -49,70 +50,74 @@
 
 
 <?php
-				
 	
-	$_POST['csvSelected']=str_ireplace('.csv','',$_POST['csvSelected']);
-
+	$thisDirInfo = new csvDirInfo(); // calling in class for directory information
+	$studySheetsInfo = new csvSheetsInfo(); // calling in class for sheets information
 	
-	//Convert all relevant $_SESSION and $_POST variables into standardised $variables 
-	
-	{//$thisDir
+	//identifying file name
+	if (isset($_POST['csvPostName'])){
+		$thisDirInfo->studyDir="../Experiments/".$_POST['csvPostName'];		
+		$_SESSION['thisDir']=$thisDirInfo->studyDir;//redundant??
+		$_SESSION['studyName']=$_POST['csvPostName'];
+	} else {
 		if(isset($_SESSION['studyName'])){
-			$thisDir="../Experiments/".$_SESSION['studyName'];
-			$studyName=$_SESSION['studyName'];
-		}
-		else {
-			if (isset($_POST['studyName'])){
-				$thisDir="../Experiments/".$_POST['studyName'];		
-				$_SESSION['thisDir']=$thisDir;
-				$_SESSION['studyName']=$_POST['studyName'];
-				$studyName=$_SESSION['studyName'];
-			}	
-			else {
-				$thisDir=$_SESSION['thisDir'];
-			}
+			$thisDirInfo->studyDir=$_SESSION['thisDir'];
+			$thisDirInfo->studyName=$_SESSION['studyName'];
 		}
 	}
-	{//$thisFile and $thisLocation - duplications???
-		if (isset($_POST['csvSelected']) & !isset($_POST['Save'])){
-			$selectedCSV=$_POST['csvSelected'];
-			$_SESSION['csvSelected']=$selectedCSV;
-		} else {
-			if (isset($_SESSION['csvSelected'])){
-				$selectedCSV=$_SESSION['csvSelected'];
-			} else {
-				$selectedCSV=$condFiles[0];
-			}
-		}
-		$csvFile=explode(',',$selectedCSV);
-		if (isset($csvFile[1])){
-			$csvLocation=$csvFile[1];
-		} else {
-			$csvLocation='';
-		}
-		$csvFile=$csvFile[0].'.csv';
-		if ($csvFile==''){
-			$csvFile=$condFiles[0];
-		}
-	}		
-	if(isset($_POST['Delete'])){//check if anything should be deleted
-		$deleteStim=explode(',',$_POST['csvSelected']);
-		$deleteFile=$deleteStim[0];
-		$deleteLocation=$thisDir.'/'.$deleteStim[1].'/'.$deleteStim[0].'.csv';
-		unlink ($deleteLocation);
-		unset($_POST['eventName']);
-		unset($_POST['csvSelected']);
-		unset($_SESSION['csvSelected']);
+	
+	if(!file_exists("$thisDirInfo->studyDir/name.txt")){ //create name.txt for first run
+		file_put_contents("$thisDirInfo->studyDir/name.txt",$_SESSION['studyName']);
 	}
-	{ // updating study name if necessary
-		file_put_contents($thisDir.'/name.txt',$_POST['currStudyName']);
-		$studyName=file_get_contents($thisDir.'/name.txt');
+	
+	if(isset($_POST['csvSelected'])){ //to allow reference to session if post doesn't exist (although may want to check if this can be tidier in future).
+		$_SESSION['csvSelected']=$_POST['csvSelected'];
 	}
-	{// List csv files in the directories
-		$condFiles=getCsvsInDir($thisDir);
-		$stimFiles=getCsvsInDir($thisDir.'/Stimuli/');
-		$procFiles=getCsvsInDir($thisDir.'/Procedure/');
+	
+	//updating study name
+	$thisDirInfo->studyName=file_get_contents("$thisDirInfo->studyDir/name.txt");
+
+	// get a list of all the filenames to allow checking for duplications
+	$branches = scandir("../Experiments");
+	$listStudyNames=array();
+	foreach($branches as $branch){
+		if(file_exists("../Experiments/$branch/name.txt")){
+			array_push($listStudyNames,file_get_contents("../Experiments/$branch/name.txt"));
+		}
 	}
+	$listStudyNamesJson=json_encode($listStudyNames);
+	
+	if(!isset($_SESSION['csvSelected'])){ //i.e. if this page has just been opened
+		$studySheetsInfo->thisSheetName='Conditions';
+		$studySheetsInfo->thisSheetFilename='Conditions.csv';
+		$studySheetsInfo->thisSheetFolder='';
+	} else { // checking whether browsing to "Conditions.csv";
+		if(strcmp($_SESSION['csvSelected'],'Conditions.csv,')==0){
+			$studySheetsInfo->thisSheetName='Conditions';
+			$studySheetsInfo->thisSheetFolder='';
+			$studySheetsInfo->thisSheetFilename="$studySheetsInfo->thisSheetFolder/Conditions.csv";
+		}	else {
+			$studySheetsInfo->postSheetInfo($_SESSION['csvSelected']);	
+		}	
+	}
+	
+	if(isset($_POST['Delete'])){//something is being deleted
+		unlink ("$thisDirInfo->studyDir/$studySheetsInfo->thisSheetFilename");
+		$studySheetsInfo->thisSheetName='Conditions';
+		$studySheetsInfo->thisSheetFolder='';
+		$studySheetsInfo->thisSheetFilename="$studySheetsInfo->thisSheetFolder/Conditions.csv";
+	}
+	
+	// updating study name - doesn't need a save to do this
+	if(isset($_POST['currStudyName'])){
+		file_put_contents($thisDirInfo->studyDir.'/name.txt',$_POST['currStudyName']);
+		$thisDirInfo->studyName=file_get_contents($thisDirInfo->studyDir.'/name.txt');
+	}
+	
+	// List csv files in the directories
+	$studySheetsInfo->stimSheets=getCsvsInDir($thisDirInfo->studyDir.'/Stimuli/');
+	$studySheetsInfo->procSheets=getCsvsInDir($thisDirInfo->studyDir.'/Procedure/');
+	
 	if(isset($_POST['newSheet'])){	//code for creating a new CSV sheet
 		$newName=0;
 		$newNo=0;
@@ -121,138 +126,110 @@
 				//identify what novel filename needs to be					
 				while ($newName==0){
 					$newNo++;
-					$newFail=0;//have I identified a novel name
-					foreach($stimFiles as $stimFile){
-						if(strcmp($stimFile,"newStim$newNo.csv")==0){
-							$newFail=1;
-						}
-					}
-					if($newFail==0){
+					if(!in_array("Stimuli$newNo.csv",$studySheetsInfo->stimSheets)){
 						$newName=1;
-					}
+					}					
 				}
-				copy("../Experiments/New Experiment/Stimuli/Stimuli.csv",$thisDir."/Stimuli/newStim$newNo.csv");
-				break;
-				
-			case "proc":					
+				$studySheetsInfo->thisSheetName="Stimuli$newNo";
+				$studySheetsInfo->thisSheetFolder="Stimuli";
+				$studySheetsInfo->thisSheetFilename="$studySheetsInfo->thisSheetFolder/$studySheetsInfo->thisSheetName.csv";
+				copy("../Experiments/New Experiment/Stimuli/Stimuli.csv","$thisDirInfo->studyDir/$studySheetsInfo->thisSheetFilename");
+				break;		
+			case "proc":
+				//identify what novel filename needs to be					
 				while ($newName==0){
 					$newNo++;
-					$newFail=0;//have I identified a novel name
-					foreach($procFiles as $procFile){
-						if(strcmp($procFile,"newProc$newNo.csv")==0){
-							$newFail=1;
-						}
-					}
-					if($newFail==0){
+					if(!in_array("Procedure$newNo.csv",$studySheetsInfo->procSheets)){
 						$newName=1;
-					}
-				}
-				copy("../Experiments/New Experiment/Procedure/Procedure.csv",$thisDir."/Procedure/newProc$newNo.csv");
+					}					
+				}		
+				$studySheetsInfo->thisSheetName="Procedure$newNo";
+				$studySheetsInfo->thisSheetFolder="Procedure";
+				$studySheetsInfo->thisSheetFilename="$studySheetsInfo->thisSheetFolder/$studySheetsInfo->thisSheetName.csv";
+				copy("../Experiments/New Experiment/Procedure/Procedure.csv","$thisDirInfo->studyDir/$studySheetsInfo->thisSheetFilename");
 				break;
 		}
 	}
+	
 	if (isset($_POST['Save'])){ //Saving whichever csv you are currently working on
-		{// this is potentially duplicated code
-			$csvFileName=explode(",",$_POST['csvSelected']);
-			$csvFileName=$csvFileName[0];
-			$csvFileName=str_ireplace('.csv','',$csvFileName);		
-		}
-		{// renaming file if the user renamed it
-			if (strcmp($_POST['eventName'],$csvFileName)!=0){
-				$newFile=$thisDir.'/'.$csvLocation.'/'.$_POST['eventName'].'.csv';
-				$originalFile=$thisDir.'/'.$csvLocation.'/'.$csvFileName.'.csv';
+		// renaming file if the user renamed it
+		if (strcmp($studySheetsInfo->thisSheetName,'Conditions')==0){
+			// skip this renaming process
+		} else {
+			if (strcmp($_POST['eventName'],$studySheetsInfo->thisSheetName)!=0){
 				$illegalChars=array('	',' ','.');
 				foreach ($illegalChars as $illegalChar){
-					$destFile=str_ireplace('	','',$newFile);
+					$_POST['eventName']=str_ireplace($illegalChar,'',$_POST['eventName']);
 				}
-				rename($originalFile,$newFile);
-				$_SESSION['csvSelected']=$_POST['eventName'].','.$csvLocation;
+				$newFile=$thisDirInfo->studyDir.'/'.$studySheetsInfo->thisSheetFolder.'/'.$_POST['eventName'].'.csv';
+				$originalFile=$thisDirInfo->studyDir.'/'.$studySheetsInfo->thisSheetFilename;
+				copy($originalFile,$newFile);
+				unlink($originalFile);
+				$studySheetsInfo->thisSheetName=$_POST['eventName'];
+				// do not change $studySheetsInfo->thisSheetFolder it's the same folder
+				$studySheetsInfo->thisSheetFilename="$studySheetsInfo->thisSheetFolder/$studySheetsInfo->thisSheetName.csv";				
 			}
 		}
-		//Note that there is some duplicate code below - needs to be tidied
-		{// this is potentially duplicated code
-			$csvFileName=explode(",",$_POST['csvSelected']);
-			$csvFileName=$csvFileName[0];
-			$csvFileName=str_ireplace('.csv','',$csvFileName);		
-		}
-		{// converting raw table data into usable array
-			//removing symbols
-			$stimTableArray=str_replace('[','',$_POST['stimTableInput']);
-			$stimTableArray=str_replace('"','',$stimTableArray);
-			$stimTableArray=str_replace('null','',$stimTableArray);
-			// exploding into an array
-			$stimTableArray=explode(']',$stimTableArray);		
-			$stimKeys=explode(',',$stimTableArray[0]);	
-			for ($i=1; $i<=count($stimTableArray); $i++){
-				$stimTableArray[$i]=explode(',',$stimTableArray[$i]);
-				if (empty($stimTableArray[$i][0])){
-					unset($stimTableArray[$i][0]);
-				}
-				if (count($stimTableArray[$i])==count($stimKeys)){
-					$stimTableArray[$i]=array_combine($stimKeys,$stimTableArray[$i]);
-				} else {
-					unset ($stimTableArray[$i]);
-				}
+		// converting raw table data into usable array
+		//removing symbols
+		$stimTableArray=str_replace('[','',$_POST['stimTableInput']);
+		$stimTableArray=str_replace('"','',$stimTableArray);
+		$stimTableArray=str_replace('null','',$stimTableArray);
+		$stimTableArray=explode(']',$stimTableArray); // exploding into an array
+		$stimKeys=explode(',',$stimTableArray[0]);	
+		for ($i=1; $i<=count($stimTableArray); $i++){
+			$stimTableArray[$i]=explode(',',$stimTableArray[$i]);
+			if (empty($stimTableArray[$i][0])){
+				unset($stimTableArray[$i][0]);
 			}
-		}
-		{//this is duplicated from above!!!
-			$explodeEventName=explode(',',$_SESSION['csvSelected']);
-			$folderLoc=$explodeEventName[1]; 
-			$filename=$explodeEventName[0];
-			$thisFileName=$thisDir.'/'.$folderLoc.'/'.$filename.'.csv';
-		}			
-		{//Save table as a .csv file;
-			$fp = fopen($thisFileName, 'w');
-			$stimTableArray[0]=explode(',',$stimTableArray[0]);
-			fputcsv($fp, $stimTableArray[0]);
-			for($i=1; $i<count($stimTableArray); $i++){
-				fputcsv($fp, $stimTableArray[$i]);
+			if (count($stimTableArray[$i])==count($stimKeys)){
+				$stimTableArray[$i]=array_combine($stimKeys,$stimTableArray[$i]);
+			} else {
+				unset ($stimTableArray[$i]);
 			}
-			fclose($fp);	
-		}			
-	}
-	{//confirming csvFileName and Title (i.e. without .csv at end) - this needs to be done in case a file has been renamed during SAVE		
-		
-		/*
-		print_r($_POST);
-		if(!isset($_POST['eventName'])){
-			
-		} else {
-			$fileTitle = $_POST['eventName'];
+		}	
+		//Save table as a .csv file;
+		$fp = fopen("$thisDirInfo->studyDir/$studySheetsInfo->thisSheetFilename", 'w');
+		$stimTableArray[0]=explode(',',$stimTableArray[0]);
+		fputcsv($fp, $stimTableArray[0]);
+		for($i=1; $i<count($stimTableArray); $i++){
+			fputcsv($fp, $stimTableArray[$i]);
 		}
-		*/
-		$fileTitle = explode (',',$_SESSION['csvSelected']);
-		$fileTitle=$fileTitle[0];
-		$fileName="$fileTitle.csv";
-		$fileName=$csvFile;
+		fclose($fp);	
+	}			
+	
+	// extract table from csv file
+	$stimuli   = csv_to_array("$thisDirInfo->studyDir/$studySheetsInfo->thisSheetFilename");
+	$stimKeys = array_keys($stimuli[0]);	
+	$stimData = array(array_keys(reset($stimuli)));
+	foreach ($stimuli as $row) {
+		$stimData[] = array_values($row);
 	}
-	{// extract table from csv file
-		echo $fileName;
-		$stimuli   = csv_to_array("$thisDir/$csvLocation/$fileName");
-		$stimKeys = array_keys($stimuli[0]);	
-		$stimData = array(array_keys(reset($stimuli)));
-		foreach ($stimuli as $row) {
-			$stimData[] = array_values($row);
-		}
-		$stimData = json_encode($stimData);			
-	}	
-	{//list all csv files
-		$condFiles=getCsvsInDir($thisDir);
-		$stimFiles=getCsvsInDir($thisDir.'/Stimuli/');
-		$procFiles=getCsvsInDir($thisDir.'/Procedure/');
+	$stimData = json_encode($stimData);			
+	
+	//list all csv files - should this be a function within $studySheetsInfo?
+	$studySheetsInfo->stimSheets=getCsvsInDir($thisDirInfo->studyDir.'/Stimuli/');
+	$studySheetsInfo->procSheets=getCsvsInDir($thisDirInfo->studyDir.'/Procedure/');
+	$sheetsList=array();
+	foreach($studySheetsInfo->stimSheets as $stimSheet){
+		array_push($sheetsList,$stimSheet);
 	}
-			
+	foreach($studySheetsInfo->procSheets as $procSheet){
+		array_push($sheetsList,$procSheet);
+	}
+	$jsonSheets=json_encode($sheetsList);
+	
 ?>
-
-<form action="index.php">
-	<button class="collectorButton"> return to index </button>	 
+<form action="index.php" method="post">
+	<textarea name="currentGuiSheetPage" style="display:none">indexGui</textarea>
+	<button class="collectorButton"> return to index </button>
 </form>
-<form action='csvRoar.php' method='post'>
+<form action='index.php' method='post'>
+	<textarea name="currentGuiSheetPage" style="display:none">sheetsEditor</textarea>
 	<h1>
-		<textarea name="currStudyName" style="color:#069;" rows="1"
-			><?=$studyName?></textarea>
+		<textarea id="currStudyName" name="currStudyName" style="color:#069;" rows="1"
+		onkeyup="checkName()"><?=$thisDirInfo->studyName?></textarea>
 	</h1>
-
 	<span>
 		<button class="collectorButton" id="stimButton"> list of stimuli </button>
 		<button name="newSheet" value="stim" class="collectorButton" id="newStimButton"> new stimuli sheet </button>
@@ -260,28 +237,25 @@
 	</span>
 	<br>	
 	<br>
-
-		<div>
-			<select name=csvSelected title="[filename],[folder]">	
+	<div>
 		<?php
-		if (!$fileTitle==''){ 
-			echo"<option name='csvSelected' value='$fileName,$csvLocation'>$fileName,$csvLocation</option>";			
+		
+		
+		echo '<select name="csvSelected" title="[filename],[folder]">';
+		
+			if (!$studySheetsInfo->thisSheetFilename==''){ //if nature is redundant? 
+				echo"<option name='csvSelected' value='$studySheetsInfo->thisSheetName.csv,$studySheetsInfo->thisSheetFolder'>$studySheetsInfo->thisSheetName.csv,$studySheetsInfo->thisSheetFolder</option>";			
 			} 
-			
-			foreach ($condFiles as $condFile){
-				if($condFile != $fileName){
-					echo "<option name='csvSelected' value='$condFile,'>$condFile,</option>";
-				}
-			}
-			
-			foreach ($procFiles as $procFile){
-				if($procFile != $fileName){
+			if('Conditions' != $studySheetsInfo->thisSheetName){
+				echo "<option name='csvSelected' value='Conditions.csv,'>Conditions.csv,</option>";
+			}			
+			foreach ($studySheetsInfo->procSheets as $procFile){
+				if($procFile != "$studySheetsInfo->thisSheetName.csv"){
 					echo "<option name='csvSelected' value='$procFile,Procedure'>$procFile,Procedure</option>";
 				}	
-			}
-			
-			foreach ($stimFiles as $stimFile){
-				if($stimFile != $fileName){
+			}			
+			foreach ($studySheetsInfo->stimSheets as $stimFile){
+				if($stimFile != "$studySheetsInfo->thisSheetName.csv"){
 					echo "<option name='csvSelected' value='$stimFile,Stimuli'>$stimFile,Stimuli</option>";	
 				}
 			}
@@ -290,24 +264,22 @@
 		<button type='submit' class='collectorButton' value='Select'>Select</button>
 	</div>		
 	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-	<link rel="stylesheet" href="handsontables/handsontables.full.css">
-	<script src="handsontables/handsontables.full.js"></script>
+	<link rel="stylesheet" href="GuiSheets/handsontables/handsontables.full.css">
+	<script src="GuiSheets/handsontables/handsontables.full.js"></script>
 
 	<?php
-		if (strcmp($fileTitle,'Conditions.csv')==0){ ?>
+		if (strcmp("$studySheetsInfo->thisSheetName.csv","Conditions.csv")==0){ ?>
 			<h2 title="You cannot edit the Conditions.csv filename or delete the file.">Conditions.csv</h2>
-		<?php 		
-		} else { 
-		
-			$viewFileTitle=str_ireplace('.csv','',$fileTitle);
-		
-		?>
-			<h2>
-				<textarea name="eventName" style="color:#069;" rows="1"><?=$viewFileTitle?></textarea>
-			</h2>
 			<?php		
-		}	
-	?>
+		}	else {
+			?>
+			
+			<h2>
+				<textarea id="sheetName" name="eventName" style="color:#069;" rows="1" onkeyup="checkSheetName()"><?=$studySheetsInfo->thisSheetName?></textarea>
+			</h2>
+			<?php 
+			}
+			?>	
 
 	<div>   
 		
@@ -320,11 +292,12 @@
 	?>
 
 		<br>
-		
-	<button id="submitButton" type="submit" name="Save" class="collectorButton" value="Save">Save</button> 
+	
+	<input id="saveButton" type="button" class="collectorButton" value="Save">	
+	<button id="submitButton" type="submit" name="Save" class="collectorButton" style="display:none"></button> 
 
 	<?php
-		if (strcmp($fileTitle,'Conditions.csv')!=0){  ?>
+		if (strcmp("$studySheetsInfo->thisSheetName.csv",'Conditions.csv')!=0){  ?>
 			<input type="button" id="deleteButton" name="Delete" class="collectorButton" value="Delete?">	
 			<button id="deleteActivate" type="submit" name="Delete" class="collectorButton" value="Delete" style="display:none">No text needed</button>
 		<?php		
@@ -339,6 +312,46 @@
 
 
 <script type="text/javascript">
+//importing json encoded lists from php
+listStudyNames=<?=$listStudyNamesJson?>;
+listSheetsNames=<?=$jsonSheets?>;
+
+//removing the current study's name from the list (because this list is to prevent duplication)
+studyIndex=listStudyNames.indexOf(currStudyName.value);
+listStudyNames.splice(studyIndex,1);
+
+// Checks for preventing repeating study names
+var revertStudyName=currStudyName.value;
+function checkName(){
+	// check if member of array
+	if($.inArray(currStudyName.value,listStudyNames)!=-1){
+		alert("This is the same name of another study, reverting to unique name");
+		currStudyName.value=revertStudyName;
+	} else{
+		revertStudyName=currStudyName.value;
+	}
+}
+
+
+//checks for preventing repeating sheet names
+
+//removing the current study's name from the list (because this list is to prevent duplication)
+if (typeof sheetName !== 'undefined'){
+	sheetIndex=listSheetsNames.indexOf(sheetName.value+'.csv');
+	listSheetsNames.splice(sheetIndex,1);
+	var revertSheetName=sheetName.value;
+	function checkSheetName(){
+		potentialSheetName=sheetName.value+'.csv';
+		// check if member of array
+		if($.inArray(potentialSheetName,listSheetsNames)!=-1){
+			alert("This is the same name of another sheet, reverting to unique name");
+			sheetName.value=revertSheetName;
+		} else{
+			revertSheetName=sheetName.value; // could delete to revert to name when page loaded
+		}
+		//put in a check to see if there are any illegal symbols here in future version - this is currently being checked after saving	
+	}	
+}
 
 var stimTable;
     function isTrialTypeHeader(colHeader) {
@@ -483,7 +496,7 @@ var stimTable;
 					}						
 					if (!this.isEmptyRow(k) & middleRowEmpty==1){
 						postEmptyRow =1;
-						alert ("You have an empty row in the middle - Please fix this!");
+						alert ("You have an empty row in the middle - Being removed from table!");
 						this.alter("remove_row",k-1); //delete column that is empty
 					}						
 				}				
@@ -557,7 +570,7 @@ var stimTable;
     
 	var stimContainer = document.getElementById("stimTable");
 	var stimData = <?= $stimData ?>;
-	stimTable = createHoT(stimContainer, stimData);        
+	stimTable = createHoT(stimContainer, stimData);
     
     // limit resize events to once every 100 ms
     var resizeTimer;
@@ -574,15 +587,15 @@ $("#submitButton").on("click", function() {
 });
 
 $("#stimButton").on("click", function() {
-	var myWindow = window.open("stimList.php", "", "width=400, height=1000");
+	var myWindow = window.open("GuiSheets/stimList.php", "", "width=800, height=600");
 });
 
 $("#newStimButton").on("click", function() {
-	alert("creating new Stim File");
+	alert("Creating new Stimuli sheet");
 });
 
 $("#newProcButton").on("click", function() {
-	alert("creating new Proc File");
+	alert("Creating new Procedure sheet");
 });
 
 $("#deleteButton").on("click", function() {
@@ -592,6 +605,21 @@ $("#deleteButton").on("click", function() {
 	}	
 });
 
+$("#saveButton").on("click", function() { //final checks before saving
+	//are there too many empty column headers?
+  emptyHeadCols=0;
+	for(i=0; i<stimTable.countCols();i++){
+		if(stimTable.getDataAtCell(0,i)==''){
+			emptyHeadCols++;
+		}
+	}
+	if(emptyHeadCols>1){
+		alert("You have an empty header - will not save. Fix before trying to save again.");
+	} else {
+		$('#submitButton').click();
+	}
+});
+
 $(window).bind('keydown', function(event) {
     if (event.ctrlKey || event.metaKey) {
         switch (String.fromCharCode(event.which).toLowerCase()) {
@@ -599,7 +627,7 @@ $(window).bind('keydown', function(event) {
             event.preventDefault();
             alert('Saving');
 			stimTable.deselectCell();			
-			$("#submitButton").click();
+			$("#saveButton").click();
             break;
         case 'd':
             event.preventDefault();
@@ -609,3 +637,4 @@ $(window).bind('keydown', function(event) {
     }
 });
 </script>
+
