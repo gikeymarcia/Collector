@@ -6,12 +6,12 @@ if (!isset($text) || $text === '') {
 }
 
 // picture trial version of feedback
-if ($firstTrialType === 'studypic'
-    || $firstTrialType === 'testpic'
-    || $firstTrialType === 'mcpic'
+if ($firstTrialType === 'cuepic'
+    || $firstTrialType === 'cuedrecallpic'
+    || $firstTrialType === 'multiplechoicepic'
 ): ?>
     <!-- show the image -->
-    <div class="pic"><?php echo show($cue); ?> </div>
+    <div class="pic"><?= show($cue) ?> </div>
 
     <!-- show the answer -->
     <div class="textcenter"><h3><?= $text ?> </h3></div>
