@@ -63,6 +63,12 @@ if (isset($_SESSION['settings'])) {
     $_SETTINGS = &$_SESSION['settings'];
 }
 
+if ($_SETTINGS->password === null) {
+    $noPass = true;
+    require $_PATH->get("Set Password");
+    if ($noPass === true) exit;
+}
+
 // if experiment has been loaded (after login) set the variable
 if (isset($_SESSION['_EXPT'])) {
     $_EXPT = &$_SESSION['_EXPT'];

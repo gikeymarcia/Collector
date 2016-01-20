@@ -124,6 +124,8 @@ return array(
 
         'nojs.php' => 'No JS',
 
+        'setPassword.php' => 'Set Password',
+
         'shuffleFunctions.php' => 'Shuffle Functions',
 
         'systemMap.php' => 'system map',

@@ -209,6 +209,10 @@ class Settings
             $input = $this->defaultPass;
         }
 
+        if (!isset($input[2])) {
+            return;
+        }
+
         // @todo Perhaps this password should be sanitized? Is it from a user-input form?
         $php_string = "<?php return '$input'; ?>";
         file_put_contents($this->passLoc, $php_string);
@@ -260,6 +264,8 @@ class Settings
         ) {
             $this->experiment = $this->load($expLoc);
         }
+
+        $this->passLoc = $paths->get("Password");
 
         // clear out temporary settings
         $this->temp = array();
