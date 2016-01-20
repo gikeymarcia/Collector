@@ -1,6 +1,0 @@
-Type,Question,1,2,3,4,5,6
-Radio,"Did the experiment go smoothly or were there problems? (Note: Your compensation will not depend on your answer below, so please be honest.)!!!",Smooth|It went smoothly.,MinorBumps|There were minor problems.,ExcludeMe|There were significant problems. I don't think my responses should be included in the data.,,,
-Radio,Have you participated in this experiment (or another experiment using the same learning materials) before?,"Naive|No, this is my first time.","DoneItBefore|Yes, I've done it before",,,,
-Likert,How much fun was this experiment?    <p>1 being very fun  --  7 being the MOST FUN EVER</p>,,,,,,
-Text,Were you doing anything else while this experiment was going on?  You will get credit no matter how you respond here.,,,,,,
-Checkbox,Which of the following problems did you have?,reload|Sometimes a page wouldn't load and I would have to reload the page,blank page|Sometimes the page loaded but there was nothing there,internet connectivity problems|During the experiment I experienced problems with my internet connection,none|Everything ran smoothly,,

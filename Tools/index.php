@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+ob_start();
 
 // set the root for initial file locations (used in other tools scripts)
 $_root = '..';

@@ -43,6 +43,7 @@ require 'makeSettingOptions.php';
             }
         ?>
     </select>
+    <button id="saveSettings" form="toMod">Save All</button>
 </div>
 
 <?php
@@ -50,17 +51,18 @@ require 'makeSettingOptions.php';
         $name = $_DATA['exp'];
         echo '<div class="exp settings toolWidth">';
             echo "<h3 class='type'>Experiment Settings ($name)</h3>";
-            setting_string($yourSettings, "experiment_name", "Experiment Name", $tooltips);
-            setting_bool  ($yourSettings, "debug_mode", "Debug Mode", $tooltips);
+            setting_string($yourSettings, "experiment_name" ,  "Experiment Name", $tooltips);
+            setting_bool  ($yourSettings, "debug_mode"      ,  "Debug Mode"     , $tooltips);
             setting_string($yourSettings, "lenient_criteria", "Lenient Criteria", $tooltips);
 
             echo "<div class='subgroup'><h4>Welcome Screen Settings</h4>";
-            setting_string($yourSettings, "welcome", "Welcome Message", $tooltips);
-            setting_string($yourSettings, "exp_description", "Welcome Description", $tooltips);
-            setting_string($yourSettings, "ask_for_login", "Asked for Login", $tooltips);
-            setting_bool($yourSettings, "show_condition_selector", "Conditon Selector", $tooltips);setting_bool($yourSettings, "use_condition_names", "Show Condition Names", $tooltips);
-            setting_bool($yourSettings, "show_condition_info", "Show Condition Info", $tooltips);
-            setting_bool($yourSettings, "hide_flagged_conditions", "Hide Flagged Conditions", $tooltips);
+            setting_string($yourSettings, "welcome"                , "Welcome Message"        , $tooltips);
+            setting_string($yourSettings, "exp_description"        , "Welcome Description"    , $tooltips);
+            setting_string($yourSettings, "ask_for_login"          , "Asked for Login"        , $tooltips);
+            setting_bool  ($yourSettings, "show_condition_selector", "Conditon Selector"      , $tooltips);
+            setting_bool  ($yourSettings, "use_condition_names"    , "Show Condition Names"   , $tooltips);
+            setting_bool  ($yourSettings, "show_condition_info"    , "Show Condition Info"    , $tooltips);
+            setting_bool  ($yourSettings, "hide_flagged_conditions", "Hide Flagged Conditions", $tooltips);
             echo "</div>";
 
             echo "<div class='subgroup'><h4>Done Screen</h4>";
@@ -85,7 +87,7 @@ require 'makeSettingOptions.php';
     ?>
 </div>
 
-<button id="saveSettings" form="toMod">Save Changes</button>
+<!-- <button id="saveSettings" form="toMod">Save All</button> -->
 
 <form id="toMod" method="post" action=""></form>
 <form id="chooseExp" method="get" action=""></form>

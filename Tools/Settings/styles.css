@@ -59,15 +59,11 @@ h4 {
   margin-bottom: .5em;
 }
 #saveSettings {
-  position: fixed;
-  bottom: 0px;
-  right: 0px;
   background-color: #0f9;
-  padding: .5em;
+  padding: .5em 2em;
   border-style: none;
-  font-size: 1.4em;
-  width: 100%;
-  height: 50px;
+  border-radius: 3px;
+  margin-left: 1em;
 }
 #saveSettings:hover {
   background-color: #ffd200;

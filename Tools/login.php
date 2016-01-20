@@ -4,7 +4,8 @@ require '../Code/initiateCollector.php';
 require 'loginFunctions.php';
 
 $hash_algo = 'sha256';
-$nonce = $_SESSION['admin']['challenge'];
+$nonce = (isset($_SESSION['admin']['challenge'])) ? 
+    $_SESSION['admin']['challenge'] : "";
 
 $response = filter_input(INPUT_POST, 'response', FILTER_SANITIZE_STRING);
 if ($response !== null) {

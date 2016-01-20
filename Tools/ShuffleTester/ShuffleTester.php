@@ -1,6 +1,5 @@
 <?php
 // access control: disable access to non-admin
-require_once 'loginFunctions.php';
 adminOnly();
 
 // load shuffle functions needed for this tool
