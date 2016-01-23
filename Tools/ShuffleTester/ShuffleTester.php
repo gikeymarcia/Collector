@@ -70,7 +70,7 @@ $_DATA['name'] = empty($_DATA['name']) ? '' : $_DATA['name'];
 <div class="toolWidth">
   <div id="shuffleSelectBar">
     <h3>Which file would you like to shuffle?</h3>
-    
+
     <!-- Create the menu and populate it with procedure and stimuli files -->
     <div>
       <select form="shuffleFile" class="toolSelect collectorInput" name="shuffleFile">
@@ -86,10 +86,10 @@ $_DATA['name'] = empty($_DATA['name']) ? '' : $_DATA['name'];
           <?php endforeach; ?>
         <?php endforeach; ?>
       </select>
-        
+
       <button form="shuffleFile">Shuffle!</button>
     </div>
-    
+
     <!-- Show zoom and reset buttons. Functionality is handled by Jquery at the bottom of the page -->
     <div id="zoom">
       <button id="in"   ><b>Zoom +</b></button>
@@ -121,7 +121,7 @@ $val = ($zoom !== null) ? $zoom : 'default';
 <form id="shuffleFile" action="" method="get"></form>
 
 
-<?php 
+<?php
 // if a shuffle file has been choosen and it is a csv file
 if (($_DATA['loc'] !== '') && ($_DATA['exp'] !== '')
     && inString('.csv', $_DATA['loc']) === true
@@ -163,112 +163,112 @@ if (($_DATA['loc'] !== '') && ($_DATA['exp'] !== '')
     // calculate table creation time round to nearest microsecond
     $tableTimer = round((microtime(true) - $tableStart) * 1000000, 0);
 }
-?>  
+?>
 
 <!-- Debug to make sure I'm getting the right stuff back -->
 <dl class="brand">
   <dt>Filename</dt>
   <dd><code><?= $_DATA['name'] ?></code></dd>
-  
+
   <dt>File location</dt>
   <dd><code><?= $_DATA['loc']  ?></code></dd>
-  
+
   <?php if (isset($timer)): // only show duration when a file was actually shuffled ?>
   <dt>Time to shuffle</dt>
   <dd><?= number_format($timer) ?> microseconds</dd>
-  
+
   <dt>Time to build display tables</dt>
   <dd><?= number_format($tableTimer) ?> microseconds</dd>
   <?php endif; ?>
 </dl>
-    
+
 <script type="text/javascript">
   // default table font size
   var iniitalSize = parseFloat( $(".display2dArray").css("font-size") );
   var size = iniitalSize;
-  
+
   // custom zoom value
   var zoom = parseFloat($("#zoomVal").html());
-  
+
   // reset click binary (0 = not locked, 1 = locked contents)
   var clicked = 0;
-  
+
   // change table zoom to custom zoom
   $(".display2dArray").css("font-size", zoom);
-  
+
   // if a custom zoom is set use it as starting point for zoom in/out calls
-  if (!isNaN(zoom)) {
+  if ($.isNumeric(zoom)) {
     size = zoom;
   }
-  
+
   $(window).ready(function () {
     // when zoom in button is clicked
     $('#in').click(function (){
       // scale up the size
       size = size * 1.1;
       // change font to new size value
-      $(".display2dArray").css("font-size", size);     
+      $(".display2dArray").css("font-size", size);
       // put new zoom value into hidden input
-      $(".zoomInput").val(size);               
+      $(".zoomInput").val(size);
     });
-    
+
     // when zoom out button is clicked
-    $('#out').click(function (){            
+    $('#out').click(function (){
       // scale down the size
-       size = size * 0.9;                   
+       size = size * 0.9;
        // change font to the new size value
-       $(".display2dArray").css("font-size", size);     
+       $(".display2dArray").css("font-size", size);
        // put new zoom value into hidden input
-       $(".zoomInput").val(size);               
+       $(".zoomInput").val(size);
     });
-    
+
     // when reset button is pressed
-    $('#reset').click(function (){            
+    $('#reset').click(function (){
       // change size to inititial size
-       size = iniitalSize;                  
+       size = iniitalSize;
        // change table font-size back to original
-       $(".display2dArray").css("font-size", size);     
+       $(".display2dArray").css("font-size", size);
        // put the original size back into the hidden zoom input field
-       $(".zoomInput").val(size);               
+       $(".zoomInput").val(size);
        // set clicked to false / unclicked / unlocked
-       clicked = 0;                     
+       clicked = 0;
        // remove textarea locked styling
-       $("textarea").removeClass("locked");         
+       $("textarea").removeClass("locked");
     });
-    
+
     // if a table cell is clicked
-    $("td").click(function() {              
+    $("td").click(function() {
       // if not locked
-      if (clicked === 0) {                 
+      if (clicked === 0) {
         // lock
-        clicked = 1;                    
+        clicked = 1;
         // add lock style to textarea
-        $("textarea").addClass("locked");           
+        $("textarea").addClass("locked");
         // change reset button to Reset/Unlock button
-        $("#reset").html("Reset/Unlock");           
-      } else {                      
+        $("#reset").html("Reset/Unlock");
+      } else {
         // unlock
-        clicked = 0;              
+        clicked = 0;
         // remove locked styling from textarea
-        $("textarea").removeClass("locked");        
+        $("textarea").removeClass("locked");
         // change reset button back to "Reset"
-        $("#reset").html("Reset");              
+        $("#reset").html("Reset");
       }
     });
-    
+
     // if you hover over a table cell
-    $("td").hover(function() {              
+    $("td").hover(function() {
       // if contents are not locked
-      if (clicked === 0) {                 
+      if (clicked === 0) {
         // save contents of cell being hovered over
         var contents = $(this).children().html();
         // insert contents into textarea in a way that preserves HTML markup
-        $("#cellContents").html(contents).val();      
+        $("#cellContents").html(contents).val();
       }
     });
-    
+
   });
-  
+
   $(".goShuffle").click(function(){
     $("#shuffleFile").submit();
   });

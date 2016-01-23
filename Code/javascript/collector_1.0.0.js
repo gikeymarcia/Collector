@@ -161,7 +161,7 @@ var COLLECTOR = {
                 keypress  = false;
 
             // show trial content
-            if (isNaN(trialTime) || trialTime > 0) {
+            if (!$.isNumeric(trialTime) || trialTime > 0) {
                 $("#content").removeClass("invisible");                     // unhide trial contents
                 COLLECTOR.startTime = Date.now();
                 $(':input:not(:radio,:checkbox):enabled:visible:first').focusWithoutScrolling();  // focus cursor on first input
@@ -170,14 +170,14 @@ var COLLECTOR = {
             }
 
             // start timers
-            if (!(isNaN(trialTime))) {                          // if time has a numeric value
+            if ($.isNumeric(trialTime)) {                          // if time has a numeric value
                 COLLECTOR.timer(trialTime, function() {             // start the timer
                     // submit the form when time is up
                     $("form").submit();                         // see common:init "intercept form submit"
                 }, false);                                      // run the timer (no minTime set)
                 $(":input").addClass("noEnter");                // disable enter from submitting the trial
                 $("textarea").removeClass("noEnter");           // allow textarea line returns
-                if(isNaN(minTime)) {
+                if(!$.isNumeric(minTime)) {
                     fsubmit.addClass("invisible");                  // hide submit button
                 }
             }
@@ -195,7 +195,7 @@ var COLLECTOR = {
             }
             focusCheck();
 
-            if (!(isNaN(minTime))) {
+            if ($.isNumeric(minTime)) {
                 fsubmit.prop("disabled", true);                 // disable submit button when minTime is set
                 $(":input").addClass("noEnter");                // disable enter from submitting the trial
                 $("textarea").removeClass("noEnter");               // allow line return in <textarea>
