@@ -13,7 +13,7 @@ $("#revealRC").click( function() {
 // When a button is clicked it checks if the user is right/wrong
 // either advance page or gives notice to read closely
 $(".MCbutton").click( function() {
-    if (this.id == "correct") {
+    if (this.id === "correct") {
         $("#RT").val( COLLECTOR.getRT() );
         $("form").submit();
     }
