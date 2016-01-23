@@ -5,7 +5,7 @@
 
 /**
  * Stores and manipulates all information about the current Experiment.
- * 
+ *
  * @todo add detailed description of how this class should be used
  * @todo add validate($pos = 'all') method
  */
@@ -74,6 +74,95 @@ class Experiment
     }
 
     /**
+     * Advances the position counter by one, if there are more trials.
+     *
+     * @return bool Returns true on success, or false if no more trials.
+     */
+    public function advance()
+    {
+        if (!$this->isDone()) {
+            ++$this->position;
+            $this->postNumber = 0;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Inserts the given trial array at the given position (defaults to the
+     * next position).
+     * Note: the given array is expected to be a valid trial array, but is not
+     * currently validated.
+     *
+     * @param array $trialArray The trial to insert.
+     * @param int   $offset     The number of trials ahead to add the trial.
+     *                          Negative offsets are not allowed. If the offset
+     *                          indicates a trial that does not exist the new
+     *                          trial is inserted at the end of the experiment.
+     *
+     * @throws \InvalidArgumentException Negative offsets are not allowed.
+     *
+     * @todo When Trial class is implemented the typehint should point to it.
+     */
+    public function insert(array $trialArray, $offset = 0)
+    {
+        if ($offset < 0) {
+            throw new \InvalidArgumentException('Negative offsets not allowed');
+        }
+
+        $pos = $this->position + $offset;
+
+        if (!isset($this->procedure[$pos])) {
+            array_push($this->procedure, $trialArray);
+        }
+
+        array_splice($this->procedure, $pos, 0, $trialArray);
+    }
+
+    /**
+     * Gets the trial number of the last time the current stimuli were used.
+     * If the $strict parameter is made true, the stimuli will only be matched
+     * if the trial type also matches.
+     *
+     * @param bool $strict Set true for matching of stimuli and trial types.
+     *
+     * @return int|bool The position of the trial or false if first use.
+     *
+     * @see Experiment::getTrial()
+     */
+    public function getLastUseOfStimulus($strict = false)
+    {
+        $current = $this->getTrial();
+        for ($i = $this->position - 1; $i > -1; --$i) {
+            $lastTrial = $this->getTrial($i);
+
+            if (($strict === false || $current['Procedure']['Trial Type'] === $lastTrial['Procedure']['Trial Type'])
+                && $current['Stimuli'] === $lastTrial['Stimuli']
+            ) {
+                return $i;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Gets the full response data from the last time the stimulus was used.
+     *
+     * @param bool $strict Set true for matching of stimuli and trial types.
+     *
+     * @return array|bool The array of data or false if first use.
+     */
+    public function getLastResponseOfStimulus($strict = false)
+    {
+        $lastUse = $this->getLastUseOfStimulus($strict);
+
+        return $lastUse ? $this->responses[$lastUse] : false;
+    }
+
+    /**
      * Gets procedure and stimuli data for given procedure row and post trial.
      *
      * @param int $pos  The position of the trial (defaults to current position).
@@ -88,13 +177,26 @@ class Experiment
     {
         $procedure = $this->getTrialProcedure($pos, $post);
 
-        return ['Stimuli' => $this->getTrialStimuli($procedure['Item']),
+        return ['Stimuli' => $this->getStimulus($procedure['Item']),
                 'Procedure' => $procedure, ];
     }
 
     /**
+     * Returns the trial information for the given trial offset and post number.
+     *
+     * @param int $offset The offset from the current position to the desired trial.
+     * @param int $post   The post number to use for the retrieved trial.
+     *
+     * @return array The trial at the indicated offset.
+     */
+    public function getTrialRelative($offset = 0, $post = null)
+    {
+        return $this->getTrial($this->position + $offset, $post);
+    }
+
+    /**
      * Gets procedure columns for single trial.
-     * Optionally specify specific position and post trial number. Post trial 
+     * Optionally specify specific position and post trial number. Post trial
      * columns are transformed into their unposted form (e.g. 'Text' instead of
      * 'Post 1 Text').
      *
@@ -171,7 +273,7 @@ class Experiment
     /**
      * Get stimuli for given item(s).
      *
-     * @param int|string $item Typically, contents of "Item" column in the 
+     * @param int|string $item Typically, contents of "Item" column in the
      *                         procedure file.
      *
      * @return array The stimuli, with column values imploded with | if multiple
@@ -180,7 +282,7 @@ class Experiment
      * @uses Experiment::getTrialProcedure()
      * @uses Experiment::getTrial()
      */
-    public function getTrialStimuli($item)
+    public function getStimulus($item)
     {
         $stimRows = $stimCols = array();
 
@@ -212,13 +314,13 @@ class Experiment
     }
 
     /**
-     * Saves array of data into (optionally) specified trial's response array. 
+     * Saves array of data into (optionally) specified trial's response array.
      * "Post" prefixes are appended appropriately.
      *
      * @param array $data The 1-D array of responses to save, typically $_POST with custom scoring
      * @param int   $pos  The position of the trial (defaults to current position).
      * @param int   $post The post trial number (defaults to current post).
-     * 
+     *
      * @todo recordResponses should probably be a method of a Trial class
      */
     public function recordResponses(array $data, $pos = null, $post = null)
@@ -277,12 +379,12 @@ class Experiment
     }
 
     /**
-     * Gets all levels of post trials with valid trial types for the desired row 
+     * Gets all levels of post trials with valid trial types for the desired row
      * in the procedure.
      *
      * @param int $pos [Optional] The position to extract Post Trials from
      *
-     * @return array Integers specifying which post trials are valid, including 
+     * @return array Integers specifying which post trials are valid, including
      *               0 for non-post trials.
      */
     public function getValidPostTrials($pos = null)
@@ -313,7 +415,7 @@ class Experiment
 
     /**
      * Gets the next trial, whether its the next post trial or the first trial
-     * of the next row. 
+     * of the next row.
      * Returns false if no trials are remaining.
      *
      * @param int $pos  The position of the trial (defaults to current position).
@@ -447,17 +549,17 @@ class Experiment
     }
 
     /**
-     * Converts 2-D associative array into a 1-D array for extract(). 
-     * Array keys are converted to strings suitable for variables. For 
-     * overlapping column names (e.g. "Cue" in both the Procedure and the 
-     * Stimuli files, or "Cue" in the Stimulli file and "Post 1 Cue" in the 
-     * Procedure file) only the first value will be kept and a warning will be 
+     * Converts 2-D associative array into a 1-D array for extract().
+     * Array keys are converted to strings suitable for variables. For
+     * overlapping column names (e.g. "Cue" in both the Procedure and the
+     * Stimuli files, or "Cue" in the Stimulli file and "Post 1 Cue" in the
+     * Procedure file) only the first value will be kept and a warning will be
      * triggered.
      *
      * @param array $pos Position of the trial to be extract()ed (default: current)
      *
      * @return array Converted array: columns to lowercase, spaces to underscores
-     * 
+     *
      * @todo prepareAliases should probably be a method of a Trial class
      */
     public function prepareAliases($pos = null)
@@ -515,13 +617,13 @@ class Experiment
 
         $data['Cond'] = $this->condition;
         $data['Proc'] = $procRow;
-        $data['Stim'] = $this->getTrialStimuli($procRow['Item']);
+        $data['Stim'] = $this->getStimulus($procRow['Item']);
         foreach ($this->getValidPostTrials() as $postNum) {
             if ($postNum === 0) {
                 continue;
             }  // already grabbed those items
             if (isset($procRow["Post $postNum Item"])) {
-                $data["StimPost$postNum"] = $this->getTrialStimuli($procRow["Post $postNum Item"]);
+                $data["StimPost$postNum"] = $this->getStimulus($procRow["Post $postNum Item"]);
             }
         }
         $data['Resp'] = $this->responses[$pos];
