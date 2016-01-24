@@ -160,8 +160,6 @@ var COLLECTOR = {
             if (windowSize <= contentSize) {
                 $("body").css("justify-content","flex-start");
             }
-            var msg = "window size is: " + windowSize + ", content size is: " + contentSize;
-            alert(msg);
 
         }
     },
