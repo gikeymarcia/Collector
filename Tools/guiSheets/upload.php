@@ -1,3 +1,4 @@
+<?php adminOnly(); ?>
 <form action="stimList.php" method="post">
 <button class="collectorButton">Return to stimuli</button>
 </form>

@@ -1,5 +1,5 @@
 <?php 
-
+    adminOnly();
 	require('guiFunctions.php'); //for use of recurse_copy
 
 	#create a new study

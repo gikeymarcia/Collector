@@ -1,3 +1,4 @@
+<?php adminOnly(); ?>
 <style>
 	.stimDiv {
 		position:relative;

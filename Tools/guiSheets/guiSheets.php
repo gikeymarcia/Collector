@@ -1,5 +1,5 @@
 <?php
-	
+	adminOnly();
 	if(isset($_POST['currentGuiSheetPage'])){
 		$_SESSION['currentGuiSheetPage']=$_POST['currentGuiSheetPage'];
 	}

@@ -1,3 +1,4 @@
+<?php adminOnly(); ?>
 <style>
 .instrucChosen {
 width: 30px;
