@@ -36,3 +36,4 @@ phpdoc.xml
 Data/**/*
 !Data/*
 !Data/GetData/**/*
+Experiments/Common/Password.php
