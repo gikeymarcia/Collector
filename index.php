@@ -1,7 +1,7 @@
 <?php
 /*  Collector
     A program for running experiments on the web
-    Copyright 2012-2015 Mikey Garcia & Nate Kornell
+    Copyright 2012-2016 Mikey Garcia & Nate Kornell
 
 
     This program is free software: you can redistribute it and/or modify
