@@ -1,0 +1,11 @@
+{
+    "force_experiment": "",
+    "experimenter_email": "youremail@yourdomain.com",
+    "check_all_files": true,
+    "check_current_files": true,
+    "debug_name": "",
+    "debug_time": 1,
+    "trial_diagnostics": false,
+    "stop_at_login": false,
+    "stop_for_errors": true
+}

@@ -1,0 +1,16 @@
+Item,Trial Type,Max Time,Procedure Notes,Shuffle 1,Settings
+8,MultipleChoicePic,User,ala kornell and bjork 2008,#,buttons: $answer
+9,MultipleChoicePic,User,ala kornell and bjork 2008,#,buttons: $answer
+10,MultipleChoicePic,User,ala kornell and bjork 2008,#,buttons: $answer
+"8,9,10",MultipleChoicePic,User,,#,buttons: $answer | shuffle | share A | perRow: 3
+"9,8,10",MultipleChoicePic,User,,#,buttons: $answer | shuffle | share A | perColumn: 3
+"10,8,9",MultipleChoicePic,User,,#,buttons: $answer | shuffle | share A | perRow: 2
+8,MultipleChoicePic,User,,#,shuffle buttons: $answer[8::10] | shuffle buttons: $answer[2::7] | perRow: 3 | share B
+9,MultipleChoicePic,User,,#,shuffle buttons: $answer[8::10] | shuffle buttons: $answer[2::7] | perRow: 3 | share B | vertical
+10,MultipleChoicePic,User,,#,shuffle buttons: $answer[8::10] | shuffle buttons: $answer[2::7] | perRow: 3 | share B | horizontal
+8,MultipleChoicePic,User,,#,buttons: $cue[2::6] | buttons: $stimuli Notes[2::6]
+9,MultipleChoicePic,User,,#,buttons: first; second; third; $answer[8]; $answer[9]; $answer[10]; duplicate; duplicate; duplicate; duplicate 2; duplicate 2; duplicate 2 | perColumn: 3
+10,MultipleChoicePic,User,,#,
+8,MultipleChoicePic,User,ala kornell and bjork 2008,#,share A
+9,MultipleChoicePic,User,ala kornell and bjork 2008,#,share B
+10,MultipleChoicePic,User,ala kornell and bjork 2008,#,share C

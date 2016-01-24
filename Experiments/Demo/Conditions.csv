@@ -1,0 +1,16 @@
+Description,Notes,Stimuli 1,Procedure 1
+How to use Collector,Walks through the basics files controlling Collector,LearningStimFiles.csv,LearningProcedureFiles.csv
+All study; The most simple case,Most simple example of using Collector to show stimuli in predefined order,WordPairHigh.csv,studyNoShuffle.csv
+Study and test trials,Showing how `Trial Type` influences presentation of the stimuli,WordPairHigh.csv,studyTestNoShuffle.csv
+Shuffle `Stimuli` file only,"Notice how shuffling stimuli will randomize which 'Item' corresponds to a particular stimuli but the shuffling only happens once so if I call [2,3,4] as `Study` then [2,3,4] as `Test` I will see the same ordering of stimuli [2,3,4] twice in a row",WordPairHighShuffle.csv,studyTestNoShuffle.csv
+Shuffle `Procedure` file only,"By shuffling procedure [2,3,4] for `Study` and `Test` independently I ensure there are 3 items studied followed by testing each of the 3 items.  The order of the items shown during study and test are independently shuffled without any constraints",WordPairHigh.csv,studyTestBlockShuffle.csv
+Using `Shuffle` to give stimuli structure,"When stimuli are shuffled by type (i.e., high and low associates) I can ""sample"" from each pool.  Thinking of shuffling in this way will be useful for many different experimental applications.",WordPairMixed.csv,studyTestHiLo.csv
+Simultaneous Stimuli and Procedure shuffling,Combining structured Stimuli shuffle + Procedure shuffle I've created a condition in which I study 1 high associate 3 times and 1 low associate 3 times.  Followng the randomized study phase I test each of the 2 studied items.  Choice of specific high and low associate items is randomly assigned for each participant and the ordering of items within the study and test phase are also randomized per participant.,WordPairMixed.csv,studyTestHiLo-Shuffle.csv
+Timing options: `Max Time` and `MinTime`,"Timing is very flexible and the `Max Time` column can be `User`, `Computer`, or set to the specific number of seconds desired for the trial.  `Min Time` sets the minimum number of seconds before a trial can be submitted.  When `Min Time` is set for a trial that is `Computer` or specific # then the computer timing is treated as a maximum time.",WordPairMixed.csv,Timings.csv
+Demo of all the trial types,Putting all of the pieces together to build something more complex,FullStim.csv      ,Demo.csv
+Multiple choice test,several MC trials in a row,FullStim.csv,TestMC.csv
+Examples of all presentations,user controlled so I can edit css,FullStim.csv,All Trials.csv
+Second-level shuffling (see Stimuli),This trial is an example of how second order shuffling works.  Look at the Stimuli file and run the experiment to see the output.,TestStimShuffle.csv,TestOrderShuffle.csv
+Using Post Trial types,hope this isn't a pain to debug,TestStimShuffle.csv,PostTrials.csv
+Creating a multisession experiment (see Procedure),*newfile* is the flag to denote where one session ends and the next begins,FullStim.csv      ,MultiSession.csv
+Surveys Demo,Simply recreates the BasicInfo and FinalQuestions of Colelctor 1.0,SurveyDemoStim.csv,SurveyDemoProc.csv

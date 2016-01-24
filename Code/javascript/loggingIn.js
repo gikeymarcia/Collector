@@ -1,14 +1,30 @@
 var nonce, password, hash;
 
+// from stack overflow: http://stackoverflow.com/a/6524584/1310505
+$.fn.pressEnter = function(fn) {  
+    return this.each(function() {  
+        $(this).bind('enterPress', fn);
+        $(this).keyup(function(e){
+            if(e.keyCode == 13)
+            {
+              $(this).trigger("enterPress");
+            }
+        })
+    });  
+ };
+
+function SaltHashSubmit() {
+    var password = $("#pass").val();            // save value of typed password
+    var hash = CryptoJS.SHA256(nonce+password); // combine password and hidden characters then scramble
+    $("#realInput").val(hash);                  // set scrambled value
+    $("form").submit();                         // send scrambled response
+}
+
 $(window).ready(function() {
     nonce = $("#nonce").html();     // grab hidden characters that will be mixed with password
     $("#realInput").val("");        // empty out the hidden input field
     $("input:first").focus();       // focus on the password textbox
     
-    $("#fauxSubmit").click( function() {            // when the submit button is clicked (it is a fake button)
-        var password = $("#pass").val();            // save value of typed password
-        var hash = CryptoJS.SHA256(nonce+password); // combine password and hidden characters then scramble
-        $("#realInput").val(hash);                  // set scrambled value
-        $("form").submit();                         // send scrambled response
-    });
+    $("#fauxSubmit").click(SaltHashSubmit);
+    $("#pass").pressEnter(SaltHashSubmit);
 });

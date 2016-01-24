@@ -1,0 +1,17 @@
+Item,Trial Type,Max Time,Min Time,Post 1 Trial Type,Post 1 Max Time,Procedure Notes,Shuffle 1
+2,WordPair,User,-,No,-,low assoc,block1
+6,WordPair,User,-,No,-,hi assoc,block1
+2,WordPair,Computer,-,No,-,low assoc,compBlock
+6,WordPair,Computer,-,No,-,hi assoc,compBlock
+2,WordPair,7,-,No,-,low assoc,custom time
+6,WordPair,14,-,No,-,hi assoc,custom time
+2,CuedRecall,Computer,-,No,-,low assoc,x
+6,CuedRecall,15,-,Feedback,user,hi assoc,x
+2,WordPair,User,2,No,-,low assoc,block1
+6,WordPair,User,2,No,-,hi assoc,block1
+2,WordPair,Computer,2,No,-,low assoc,compBlock
+6,WordPair,Computer,2,No,-,hi assoc,compBlock
+2,WordPair,7,2,No,-,low assoc,custom time
+6,WordPair,14,2,No,-,hi assoc,custom time
+2,CuedRecall,Computer,2,No,-,low assoc,x
+6,CuedRecall,15,2,Feedback,user,hi assoc,x

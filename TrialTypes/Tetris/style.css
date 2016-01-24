@@ -1,0 +1,112 @@
+.stepout-clock {
+  position:fixed;
+  top: 20px;
+  right: 20px;
+  padding: 8px;
+  font-size: 1.1em;
+  color: #fff;
+  background-color: #0055A6;
+  text-align:center;
+}
+  .stepout-clock span {
+    margin-bottom: 20px;
+  }
+  .stepout-clock h3 {
+    color:#fff;
+  }
+
+.tetris-wrap {
+  width:550px;
+  margin:0 auto;
+}
+.tetris-controls {
+  margin: 0 auto 2em auto;
+  width: 400px;
+  border: 3px solid #00A5E5;
+}
+.tetris-wrap h3 {
+  padding:1em 0;
+}
+.tetris-controls p {
+  margin: 0 0 .2em 0;
+  text-align: left;
+}
+.tetris {
+  display:none;
+  margin: 50px 0;
+}
+
+/* $GRIDS
+ ---------------------------------------------------------------------------- */
+.grid {
+  margin: 0 0 0 -18px;
+}
+.grid-gutterless {
+  margin-left: 0;
+}
+.grid-gutterless > .grid-item {
+  padding-left: 0;
+}
+.grid-item {
+  display: inline-block;
+  padding-left: 18px;
+  vertical-align: top;
+  width:100%;
+}
+.grid-item > div {
+  margin: 0 0 18px;
+}
+.grid-1-10 {
+  width: 10%;
+}
+.grid-1-8 {
+  width: 12.5%;
+}
+.grid-1-5, .grid-2-10 {
+  width: 20%;
+}
+.grid-1-4, .grid-2-8 {
+    width: 25%;
+}
+.grid-3-10 {
+  width: 30%;
+}
+.grid-1-3, .grid-2-6 {
+  width: 33.333%
+}
+.grid-3-8 {
+  width: 37.5%;
+}
+.grid-2-5, .grid-4-10 {
+  width: 40%;
+}
+.grid-1-2, .grid-2-4, .grid-3-6, .grid-4-8, .grid-5-10 {
+    width: 50%;
+}
+.grid-3-5, .grid-6-10 {
+  width: 60%;
+}
+.grid-5-8 {
+  width: 62.5%;
+}
+.grid-2-3, .grid-4-6 {
+  width: 66.666%;
+}
+.grid-7-10 {
+  width: 70%;
+}
+.grid-3-4, .grid-6-8 {
+    width: 75%;
+}
+.grid-4-5, .grid-8-10 {
+  width: 80%;
+}
+.grid-7-8 {
+  width: 87.5%;
+}
+.grid-9-10 {
+  width: 90%;
+}
+.grid-1-1 {
+  margin-left:0px;
+}

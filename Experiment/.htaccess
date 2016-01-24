@@ -1,9 +1,0 @@
-# Allow access to all files
-Order Allow,Deny
-Allow from all
-
-#Block access to Settings.php
-<Files Settings.php>
-    Order Deny,Allow
-    Deny from all
-</Files>

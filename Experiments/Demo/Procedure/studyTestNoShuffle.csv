@@ -1,0 +1,7 @@
+Item,Trial Type,Max Time,Post 1 Trial Type,Post 1 Max Time,Procedure Notes,Shuffle 1
+2,WordPair,User,No,-,Showing 3 trials in order,abc#
+3,WordPair,User,No,-,Showing 3 trials in order,abc#
+4,WordPair,User,No,-,Showing 3 trials in order,abc#
+2,CuedRecall,User,No,-,Showing 3 trials in order,abc#
+3,CuedRecall,User,Feedback,User,Showing 3 trials in order,abc#
+4,CuedRecall,User,No,-,Showing 3 trials in order,abc#

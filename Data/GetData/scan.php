@@ -2,9 +2,9 @@
     ini_set('auto_detect_line_endings', true);              // fixes problems reading files saved on mac
     require 'getdataFunctions.php';
     
-    if( $_CONFIG->password === '' ) exit( 'GetData has not been enabled. Please enter a password in the Settings file in your experiment folder.' );
+    if( $_SETTINGS->password === '' ) exit( 'GetData has not been enabled. Please enter a password in the Settings file in your experiment folder.' );
     
-    $_PATH->loadDefault('Current Data', $_CONFIG->experiment_name . '-Data');
+    $_PATH->setDefault('Current Data', $_SETTINGS->experiment_name . '-Data');
     
     // filter user input before using
     $POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
@@ -94,8 +94,7 @@
         $outputColumns += $firstRow;                                                    // we only care about the keys, so the contents don't matter
         $name       = $firstRow['Username'];
         $exp        = $firstRow['ExperimentName'];
-        $condNum    = $firstRow['Condition Number'];
-        $condName   = $firstRow['Condition Description'];
+        $condName   = $firstRow['Description'];
         $session    = $firstRow['Session'];
         $id         = $firstRow['ID'];
         $date       = $firstRow['Date'];
@@ -130,7 +129,7 @@
     foreach( $extraFileMeta as $category => $fileMeta ) {
         if( !isset( $fileMeta['files'] ) ) { continue; }
         foreach( $fileMeta['files'] as $fileName ) {
-            $data = GetFromFile( "{$path}/{$fileName}", false );
+            $data = getFromFile( "{$path}/{$fileName}", false );
             $d = getFirstLine( "{$path}/{$fileName}", $testHeader, true );
             if( $d === false ) { continue; }
             $file = fopen( "{$path}/{$fileName}", "r" );

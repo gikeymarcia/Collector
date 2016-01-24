@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+  <parser>
+    <target>../phpdoc/Collector/output</target>
+    <markers>
+        <item>TODO</item>
+        <item>FIXME</item>
+    </markers>
+  </parser>
+  <transformer>
+    <target>./Documentation/API</target>
+  </transformer>
+  <transformations>
+    <template name="clean"/>
+    <!-- template name="responsive-twig"/ -->
+  </transformations>
+  <files>
+    <directory>./Code/classes</directory>
+    <!-- directory>./Code/phpbrowscap</directory -->
+    <file>./Code/customFunctions.php</file>
+    <file>./Code/shuffleFunctions.php</file>
+    <!-- <file>./Tools/toolsFunctions.php</file> -->
+    <!-- <file>./Tools/loginFunctions.php</file> -->
+  </files>
+</phpdoc>

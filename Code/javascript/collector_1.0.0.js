@@ -121,7 +121,6 @@ var COLLECTOR = {
 
             // these happen immediately on load
             $(':input:not(:radio):enabled:visible:first').focusWithoutScrolling();          // focus cursor on first input
-            $("#loadingForm").submit();                         // submit form to advance page
 
             $("form").submit( function(event){
                 $("#content").addClass("invisible");            // hide content
@@ -151,39 +150,19 @@ var COLLECTOR = {
             $(document).ready(function () {
                 $("form").attr('autocomplete', 'off');
             }) 
-        }
-    },
 
-    instructions: {
-        init: function() {
-            var fails = 0;
+            var contentSize = 0;
+            $("body").children().each(function (){
+                contentSize += $(this).height();
+            });
+            var windowSize  = $(window).height();
 
-            // reveal readcheck questions
-            $("#revealRC").click( function() {
-                $(".instructions").slideToggle(400);            // hide instructions
-                $(".readcheck").slideToggle(400);               // show questions
-                if (fails > 0) {                                // if you've missed the question before
-                    $(".alert").slideToggle();                      // hide the alert
-                    $("#content").removeClass("redOutline");        // remove the red outline
-                }
-            });
-            
-            // When a button is clicked it checks if the user is right/wrong
-            // either advance page or gives notice to read closely
-            $(".MCbutton").click( function() {
-                if (this.id == "correct") {
-                    $("#RT").val( COLLECTOR.getRT() );
-                    $("form").submit();
-                }
-                else {
-                    $(".instructions").slideToggle(400);        // show instructions text
-                    $(".readcheck").slideToggle(400);           // hide multiple choice questions
-                    fails++;                                    // add to fails counter
-                    $("#Fails").val(fails);                     // set value of fails
-                    $(".alert").slideDown();                    // show alert that the user is wrong
-                    $("#content").addClass("redOutline");       // add a red outline to the form
-                }
-            });
+            if (windowSize <= contentSize) {
+                $("body").css("justify-content","flex-start");
+            }
+            var msg = "window size is: " + windowSize + ", content size is: " + contentSize;
+            alert(msg);
+
         }
     },
 
@@ -195,7 +174,7 @@ var COLLECTOR = {
                 keypress  = false;
 
             // show trial content
-            if (isNaN(trialTime) || trialTime > 0) {
+            if (!$.isNumeric(trialTime) || trialTime > 0) {
                 $("#content").removeClass("invisible");                     // unhide trial contents
                 COLLECTOR.startTime = Date.now();
                 $(':input:not(:radio,:checkbox):enabled:visible:first').focusWithoutScrolling();  // focus cursor on first input
@@ -204,14 +183,14 @@ var COLLECTOR = {
             }
 
             // start timers
-            if (!(isNaN(trialTime))) {                          // if time has a numeric value
+            if ($.isNumeric(trialTime)) {                          // if time has a numeric value
                 COLLECTOR.timer(trialTime, function() {             // start the timer
                     // submit the form when time is up
                     $("form").submit();                         // see common:init "intercept form submit"
                 }, false);                                      // run the timer (no minTime set)
                 $(":input").addClass("noEnter");                // disable enter from submitting the trial
                 $("textarea").removeClass("noEnter");           // allow textarea line returns
-                if(isNaN(minTime)) {
+                if(!$.isNumeric(minTime)) {
                     fsubmit.addClass("invisible");                  // hide submit button
                 }
             }
@@ -225,11 +204,11 @@ var COLLECTOR = {
                 }
                 focusProp = Math.round((focusCount/focusChecks)*1000) / 1000;
                 $("#Focus").val(focusProp);
-                COLLECTOR.timer(.2, focusCheck);
+                setTimeout(focusCheck, 200)
             }
             focusCheck();
 
-            if (!(isNaN(minTime))) {
+            if ($.isNumeric(minTime)) {
                 fsubmit.prop("disabled", true);                 // disable submit button when minTime is set
                 $(":input").addClass("noEnter");                // disable enter from submitting the trial
                 $("textarea").removeClass("noEnter");               // allow line return in <textarea>
@@ -282,11 +261,6 @@ var COLLECTOR = {
             });
         },
 
-        passage: function() {
-            // make sure trial is starting at the top of the page
-            $("body").scrollTop(0);
-        },
-
         tetris: function() {
             // get trial time from page and run timer
             COLLECTOR.timer(parseFloat($("#maxTime").html() )-5, function () {
@@ -313,22 +287,6 @@ var COLLECTOR = {
             });
         }
     },
-
-    finalQuestions: {
-        init: function() {
-            // slider for Likert questions
-            $("#slider").slider({
-                value:1,
-                min:  1,
-                max:  7,
-                step: 1,
-                slide: function(event, ui) {
-                    $("#amount").val(ui.value);
-                }
-            });
-            $("#amount").val( $("#slider").slider("value") );
-        }
-    }
 };
 
 UTIL = {

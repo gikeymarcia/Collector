@@ -1,0 +1,16 @@
+Item,Trial Type,Max Time,Post 1 Trial Type,Post 1 Max Time,Text,Procedure Notes,Shuffle 1,Settings
+2,Cue,User,no,User,,study trials,# set,
+2,WordPair,User,JOL,User,,study trials,# set,
+2,Likert,User,No,User,"How good of a cue is ""$cue"" for the answer ""$answer""? | So bad | So-so | So good!",,# set, -2::2(.5)
+14,Audio,User,No,User,,study trials,# set,
+4,CopyWordPair,User,No,User,,study trials,# set,
+4,CopyWordPairDelayed,User,No,User,,study trials,# set,
+11,Passage,User,No,User,,study trials,# set,
+10,CuePic,User,Feedback,User,,study trials,# set,
+10,CuedRecallPic,User,No,User,,inputs,# set,
+10,MultipleChoicePic,User,No,User,,inputs,# set,buttons: $answer[2::10] | shuffle | perRow: 3
+3,CuedRecall,User,Feedback,User,,inputs,# set,
+3,TwoLetterStem,User,No,User,,inputs,# set,
+2::7,FreeRecallVDR,user,Feedback,user,What is the second word of each word pair? | $cue : $answer <br>,,# set,
+0,FreeRecall,User,No,User,Write down everything you can remember that has happened so far in this experiment.,,# set,
+0,Instruct,User,No,User,<h4>Get Ready to Continue</h4><p>In this next section you will be doing a variety of tasks.  Some will be confusing but please stick with them.  There will be a pay off in the end</p>,,# set,

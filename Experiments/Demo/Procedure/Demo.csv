@@ -1,0 +1,17 @@
+Item,Trial Type,Max Time,Min Time,Post 1 Trial Type,Post 1 Max Time,Text,Procedure Notes,Settings,Shuffle 1
+2,WordPair,User,3,No,User,,study trials,,# nope
+3,WordPair,Computer,-,JOL,User,,study trials,,# nope
+4,WordPair,7,3,No,User,,study trials,,# nope
+5,CuedRecall,Computer,-,Feedback,User,,inputs,,# nope
+6,CopyWordPair,8,-,No,User,,inputs,,# nope
+5,JOL,User,4,No,User,,inputs,,# nope
+11,Passage,User,-,No,User,,new trials,,# nope
+0,Tetris,20,-,N/A,User,,,,# nope
+0,FreeRecall,15,3,N/A,User,Write down everything you can remember that has happened so far in this experiment.,,,# nope
+8,CuePic,User,-,JOL,User,,whatever I want,,# nope
+9,CuedRecallPic,Computer,-,Feedback,User,,whatever I want,,# nope
+10,MultipleChoicePic,Computer,-,JOL,User,,whatever I want,,# nope
+14,Audio,User,2,No,User,,whatever I want,,# nope
+2::7,FreeRecallVDR,user,-,feedback,User,What is the second word of each word pair? | $cue : $answer <br>,,,# nope
+2,Likert,user,-,no,user,How good is this word pair? <br> $cue : $answer|Very bad|Very good,,"1,1,1,1,4::7,a::c",# nope
+0,Likert,user,-,no,user,How good is your memory?|Horrible|Decent|Fantastic,," -2::2(.5), 6::10(2), 3::1",# nope
