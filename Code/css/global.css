@@ -507,7 +507,9 @@ body > div > form {       /*Has the ID of 'content'*/
   visibility: hidden!important;
 }
 
-
+.pre_var_dump {
+    white-space: pre-wrap;
+}
 
 
 /*  $NO-JS

@@ -1036,7 +1036,7 @@ function readable(array $displayArray, $name = 'Untitled array')
  */
 function pre_var_dump($input, $label = '')
 {
-    echo '<pre>';
+    echo '<pre class="pre_var_dump">';
     if ($label !== '') {
         echo "<b>$label</b><br>";
     }

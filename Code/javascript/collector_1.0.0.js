@@ -150,6 +150,19 @@ var COLLECTOR = {
             $(document).ready(function () {
                 $("form").attr('autocomplete', 'off');
             }) 
+
+            var contentSize = 0;
+            $("body").children().each(function (){
+                contentSize += $(this).height();
+            });
+            var windowSize  = $(window).height();
+
+            if (windowSize <= contentSize) {
+                $("body").css("justify-content","flex-start");
+            }
+            var msg = "window size is: " + windowSize + ", content size is: " + contentSize;
+            alert(msg);
+
         }
     },
 
