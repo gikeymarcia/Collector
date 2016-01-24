@@ -21,9 +21,7 @@
         ### cleaning up response and answer (for later comparisons)
         $response = $_POST['Response'];
         $response = trim(strtolower($response));
-        $correctAns = explode('|', $answer);                             // if there is a range of answers, just use the first one for scoring
-        $correctAns = array_shift($correctAns);
-        $correctAns = trim(strtolower($correctAns));
+        $correctAns = trim(strtolower($answer));
         $Acc = null;
 
         #### Calculating and saving accuracy for trials with user input
