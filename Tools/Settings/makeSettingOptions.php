@@ -9,13 +9,13 @@ function setting_string(Settings $settingClass, $name, $label, $tips = null)
 
     if(isset($tips[$name])) {
         $clean = htmlentities($tips[$name]);
-        $title = 'title="' . $clean . '"';
+        $title = 'data-title="' . $clean . '"';
     } else {
         $title = "";
     }
     echo
         "<label class='stringSetting'>
-            <span $title>$label</span>
+            <span $title class='tooltip'>$label</span>
             <input form='toMod' type='textbox' name='$name'
             value='$current'/>
         </label>";
@@ -28,15 +28,15 @@ function setting_bool(Settings $settingClass, $name, $label, $tips = null)
 
     if(isset($tips[$name])) {
         $clean = htmlentities($tips[$name]);
-        $title = 'title="' . $clean . '"';
+        $title = 'data-title="' . $clean . '"';
     } else {
         $title = "";
     }
 
     echo 
     "<div class='boolSetting'>
-        <span $title>$label</span>
-        <label>On <input type='radio' name='{$name}' value='true'  form='toMod' $tChecked></label>
+        <span $title class='tooltip'>$label</span>
+        <label>On<input type='radio' name='{$name}' value='true'  form='toMod' $tChecked></label>
         <label>Off<input type='radio' name='{$name}' value='false' form='toMod' $fChecked></label>
     </div>";
 }

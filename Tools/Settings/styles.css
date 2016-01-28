@@ -17,6 +17,7 @@ h4 {
   padding: 1em;
   border-style: outset;
   min-width: 800px;
+  overflow: visible;
 }
 .settings input[type=textbox] {
   width: 500px;
@@ -58,6 +59,12 @@ h4 {
 .subgroup h4 {
   margin-bottom: .5em;
 }
+.boolSetting input {
+    margin: .3em 0em .4em .3em;
+}
+.boolSetting label {
+    margin-right: 2em;
+}
 #saveSettings {
   background-color: #0f9;
   padding: .5em 2em;
@@ -73,4 +80,35 @@ h4 {
 .type {
   margin-bottom: .7em;
   font-weight: 700;
+}
+
+/*Making a CSS3 styles tooltip for the pop-up*/
+.tooltip{
+    display: inline;
+    position: relative;
+}
+.tooltip:hover:after{
+    background: #333;
+    background: rgba(0,0,0,.85);
+    border-radius: 5px;
+    bottom: 26px;
+    color: #fff;
+    content: attr(data-title);
+    left: 20%;
+    padding: 5px 15px;
+    position: absolute;
+    z-index: 98;
+    width: 220px;
+    overflow: visible;
+}
+.tooltip:hover:before{
+    border: solid;
+    border-color: #333 transparent;
+    border-width: 6px 6px 0 6px;
+    bottom: 20px;
+    content: "";
+    left: 50%;
+    position: absolute;
+    z-index: 99;
+    overflow: visible;
 }
