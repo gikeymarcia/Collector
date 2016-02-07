@@ -56,8 +56,9 @@ h4 {
     margin-left: 1em;
     margin-top: .8em;
   }
-.subgroup h4 {
+.subgroup > h4 {
   margin-bottom: .5em;
+  cursor: pointer;
 }
 .boolSetting input {
     margin: .3em 0em .4em .3em;
@@ -66,20 +67,27 @@ h4 {
     margin-right: 2em;
 }
 #saveSettings {
-  background-color: #0f9;
-  padding: .5em 2em;
+  background-color: #fff;
+  padding: .15em 1em;
+  color: #069;
   border-style: none;
-  border-radius: 3px;
+  border-radius: 5px;
   margin-left: 1em;
+  border: 3px solid #069;
+  font-size: 1.2em;
 }
 #saveSettings:hover {
-  background-color: #ffd200;
+  background-color: #069;
+  color: #fff;
   cursor: pointer;
 }
 /*Used for toggling visibility of Experiment/Common settings*/
 .type {
   margin-bottom: .7em;
-  font-weight: 700;
+  cursor: pointer;
+}
+.type:hover, .subgroup > h4:hover {
+  background-color: #d9fff0;
 }
 
 /*Making a CSS3 styles tooltip for the pop-up*/
@@ -88,18 +96,18 @@ h4 {
     position: relative;
 }
 .tooltip:hover:after{
-    background: #333;
-    background: rgba(0,0,0,.85);
-    border-radius: 5px;
-    bottom: 26px;
-    color: #fff;
-    content: attr(data-title);
-    left: 20%;
-    padding: 5px 15px;
-    position: absolute;
-    z-index: 98;
-    width: 220px;
-    overflow: visible;
+  background: #333;
+  background: rgba(0,0,0,.85);
+  border-radius: 5px;
+  bottom: 26px;
+  color: #fff;
+  content: attr(data-title);
+  left: 20%;
+  padding: 5px 15px;
+  position: absolute;
+  z-index: 98;
+  width: 220px;
+  overflow: visible;
 }
 .tooltip:hover:before{
     border: solid;
