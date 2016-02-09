@@ -51,13 +51,14 @@ if (isset($validStates[$_SESSION['state']])) {
 /*
  *  Redirect if multisession
  */
-if (!empty($_SESSION['next'])) {
-    $next = $_SESSION['next'];
-    $username = urlencode($_SESSION['Username']);
-    $nextLink = "http://{$_SETTINGS->next_experiment}/login.php?Username={$username}&Condition=Auto";
-    header("Location: {$nextLink}");
-    exit;
-}
+### TO-DO Mkae this junk work!
+// if (!empty($_SESSION['next'])) {
+//     $next = $_SESSION['next'];
+//     $username = urlencode($_SESSION['Username']);
+//     $nextLink = "http://{$_SETTINGS->next_experiment}/login.php?Username={$username}&Condition=Auto";
+//     header("Location: {$nextLink}");
+//     exit;
+// }
 
 /*
  * Display
