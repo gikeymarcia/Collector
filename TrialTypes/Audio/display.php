@@ -2,10 +2,11 @@
     if (empty($text)) {
         $text = "Listen carefully.";
     }
+    $mediaPath = $_PATH->get("Media");
 ?>
 
 <div class="textcenter">
-  <audio src="<?= "{$_PATH->common}/{$cue}" ?>" autoplay>
+  <audio src="<?= "{$mediaPath}/{$cue}" ?>" autoplay>
     <p>Your browser does not support the audio element.</p>
   </audio>
 </div>

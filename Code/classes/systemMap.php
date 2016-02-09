@@ -40,12 +40,8 @@ return array(
                 'Dir Name' => 'Ineligibility Dir',
             ),
 
-            'Images' => array(
-                'Dir Name' => 'Images',
-            ),
-
-            'Audio' => array(
-                'Dir Name' => 'Audio',
+            'Media' => array(
+                'Dir Name' => 'Media',
             ),
 
             'TrialTypes' => array(

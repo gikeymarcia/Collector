@@ -1138,7 +1138,7 @@ function show($string, $noTags = false)
 
     // navigate path to Experiment folder (unless linking to external file)
     if (filter_var($string, FILTER_VALIDATE_URL) === false) {
-        $filename = $_PATH->get('Common').'/'.$string;
+        $filename = $_PATH->get('Media').'/'.$string;
         if (fileExists($filename)) {
             $filename = fileExists($filename);
         }
