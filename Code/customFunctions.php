@@ -1142,6 +1142,8 @@ function show($string, $noTags = false)
         if (fileExists($filename)) {
             $filename = fileExists($filename);
         }
+    } else {
+        $filename = $string;
     }
 
     // determine whether to add tags to the string
