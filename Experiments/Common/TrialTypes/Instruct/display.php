@@ -14,6 +14,16 @@
     ){
         $text = $cue;
     }
+
+    if (!empty($font_size) AND is_numeric($font_size)) {
+        $size = $font_size.'%';
+        $style = "<style type='text/css' media='screen'>
+            body {
+                font-size:{$size};
+            }
+        </style>Test!";
+        echo $style;
+    }
 ?>
 <div><?php echo $text; ?></div>
 
