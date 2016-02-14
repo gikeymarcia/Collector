@@ -1,4 +1,5 @@
 Item,Trial Type,Max Time,Post 1 Trial Type,Post 1 Max Time,Text,Procedure Notes,Shuffle 1,Settings
+0,attentionCheck,user,no,User,,,# set,
 2,Cue,User,no,User,,study trials,# set,
 2,WordPair,User,JOL,User,,study trials,# set,
 2,Likert,User,No,User,"How good of a cue is ""$cue"" for the answer ""$answer""? | So bad | So-so | So good!",,# set, -2::2(.5)

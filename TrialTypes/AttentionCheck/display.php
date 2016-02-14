@@ -39,3 +39,5 @@ array_splice($alternatives, $answerPos, 0, $correct);
     <?php endforeach; ?>
   </ul>
 </div>
+
+<input type="hidden" name="Fails" id="Fails" value="0">
