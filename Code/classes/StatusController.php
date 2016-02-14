@@ -181,7 +181,7 @@ class StatusController
      * 
      * @todo writeEnd() is copied from done.php --- not functional yet!
      */
-    public function writeEnd($startTime)
+    public function writeEnd($startTime, $state = "not given")
     {
         $duration = time() - $startTime;
         $durationFormatted = durationFormatted($duration);
@@ -193,6 +193,7 @@ class StatusController
             'Duration' => $duration,
             'Duration_Formatted' => $durationFormatted,
             'Session' => $_SESSION['Session'],
+            'State' => $state,
         );
         foreach ($this->condition as $key => $value) {
             $data["Cond_$key"] = $value;

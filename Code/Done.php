@@ -24,7 +24,7 @@ if (isset($bounceTo)) {
 $validStates = array('break' => 0, 'done' => 0);
 if (isset($validStates[$_SESSION['state']])) {
     $status = unserialize($_SESSION['Status']);
-    $status->writeEnd($_SESSION['Start Time']);
+    $status->writeEnd($_SESSION['Start Time'], $_SESSION['state']);
 
     // preparing $_SESSION for the next run
     if ($_SESSION['state'] == 'break') {
