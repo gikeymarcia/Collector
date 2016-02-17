@@ -80,7 +80,7 @@ $show = getFromFile("MediaScanner/tempStim.csv");
     <h2>Here is what we found in your Media folder</h2>
     <?php display2dArray($show); ?>
     <div id="dl">
-        <a href="MediaScanner/download.php" target="_blank"
+        <a href="MediaScanner/download.php" target="_self"
         >Click here to downoad the file.</a>
     </div>
 </div>
