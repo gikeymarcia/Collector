@@ -1,0 +1,122 @@
+h4 {
+  display: block;
+  text-align: left;
+}
+.expSelect h3 {
+  margin-right: .8em;
+}
+.expSelect * {
+  float: left;
+}
+/*General settings for Experiment/Common divs*/
+.settings {
+  text-align: left;
+  margin-top: .7em;
+  line-height: 1.5em;
+  border-radius: 5px;
+  padding: 1em;
+  border-style: outset;
+  min-width: 800px;
+  overflow: visible;
+}
+.settings input[type=textbox] {
+  width: 500px;
+  padding: 0px 0px 0px .25em;
+  vertical-align: bottom;
+}
+/*Making setting names the same size*/
+.boolSetting span, .stringSetting span {
+  display: inline-block;
+  width: 200px;
+  cursor: default;
+  padding-top: 5px;
+}
+/*Styling Boolean settings*/
+.boolSetting label {
+  margin-right: 1em;
+}
+.boolSetting > label:hover, .boolSetting > label > input:hover {
+  cursor: pointer;
+}
+
+/*Shared styles for each option*/
+.boolSetting, .stringSetting {
+  height: 2.5em;
+  display: block;
+}
+.exp {
+  background-color: white;
+  border-bottom: 5px #444 double;
+}
+.common {
+  background-color: white;
+  margin-bottom: 70px;
+}
+  .subgroup {
+    margin-left: 1em;
+    margin-top: .8em;
+  }
+.subgroup > h4 {
+  margin-bottom: .5em;
+  cursor: pointer;
+}
+.boolSetting input {
+    margin: .3em 0em .4em .3em;
+}
+.boolSetting label {
+    margin-right: 2em;
+}
+#saveSettings {
+  background-color: #fff;
+  padding: .15em 1em;
+  color: #069;
+  border-style: none;
+  border-radius: 5px;
+  margin-left: 1em;
+  border: 3px solid #069;
+  font-size: 1.2em;
+}
+#saveSettings:hover {
+  background-color: #069;
+  color: #fff;
+  cursor: pointer;
+}
+/*Used for toggling visibility of Experiment/Common settings*/
+.type {
+  margin-bottom: .7em;
+  cursor: pointer;
+}
+.type:hover, .subgroup > h4:hover {
+  background-color: #d9fff0;
+}
+
+/*Making a CSS3 styles tooltip for the pop-up*/
+.tooltip{
+    display: inline;
+    position: relative;
+}
+.tooltip:hover:after{
+  background: #333;
+  background: rgba(0,0,0,.85);
+  border-radius: 5px;
+  bottom: 26px;
+  color: #fff;
+  content: attr(data-title);
+  left: 20%;
+  padding: 5px 15px;
+  position: absolute;
+  z-index: 98;
+  width: 220px;
+  overflow: visible;
+}
+.tooltip:hover:before{
+    border: solid;
+    border-color: #333 transparent;
+    border-width: 6px 6px 0 6px;
+    bottom: 20px;
+    content: "";
+    left: 50%;
+    position: absolute;
+    z-index: 99;
+    overflow: visible;
+}
