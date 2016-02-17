@@ -33,7 +33,7 @@ function scandir_recursive($dir, $max_depth = 25) {
     return $output;
 }
 
-$types = array("jpg","jpeg","png","gif","wav","mp3","mp4");
+$types = array("jpg","jpeg","png","gif","bmp","wav","mp3","mp4");
 $media_dir = $_PATH->get("Media");
 $max_depth = 50;
 
