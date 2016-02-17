@@ -21,7 +21,7 @@ function scandir_recursive($dir, $max_depth = 25) {
         $relative = $dir . $slash . $path;
         if (is_dir($relative)) {
             $next = scandir_recursive($relative, ($max_depth-1));
-            if ($next !== null) {
+            if ($next !== false) {
                 foreach ($next as $suffix) {
                     $output[] = $suffix;
                 }
