@@ -1,9 +1,17 @@
-Cue,Answer,Shuffle 1,Shuffle 2,Shuffle 3,Shuffle 4
-Dog,Spoo,,city,alive,all
-B,Banana,,city,not alive,all
-,,,farm,alive,all
-,,,farm,not alive,all
-,,1,city,alive,all
-,,1,city,not alive,all
-,,1,farm,alive,all
-,,1,farm,not alive,all
+Cue,Answer,Shuffle 1,Shuffle 2
+A,Anteater,Mammal,Animal
+B,Buffalo,Mammal,Animal
+C,Cat,Mammal,Animal
+D,Dog,Mammal,Animal
+E,Eel,Fish,Animal
+F,Flounder,Fish,Animal
+G,Guppie,Fish,Animal
+H,Halibut,Fish,Animal
+I,Ice Cream Forever,Main Dish,Food
+J,Jambalaya,Main Dish,Food
+K,KFC,Main Dish,Food
+L,Lasagna,Main Dish,Food
+M,Mashed Potatoes,Side Dish,Food
+N,Noodles (small),Side Dish,Food
+O,Olives,Side Dish,Food
+P,Peanuts,Side Dish,Food
