@@ -22,6 +22,7 @@ if (($cue != '') && (trim($text) == '')) {
     $text = $cue;
 }
 
+
 if (!empty($font_size) AND is_numeric($font_size)) {
     $size = $font_size.'%';
     $style = "<style type='text/css' media='screen'>
