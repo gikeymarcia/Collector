@@ -29,7 +29,7 @@ return array(
     'Experiments' => array(
         'Dir Name' => 'Experiments',
 
-        'Common' => array(
+        '_Common' => array(
             'Dir Name' => 'Common',
 
             'Common Settings.json' => 'Common Settings',
