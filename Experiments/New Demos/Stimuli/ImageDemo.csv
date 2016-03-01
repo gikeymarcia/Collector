@@ -1,10 +1,11 @@
-Cue,Answer,Shuffle 1
-Allison.jpg,Allison,Collector-ites
-Mikey.jpg,Mikey,Collector-ites
-Tyson.jpg,Tyson,Collector-ites
-emanuel.jpg,Emanuel,Collector-ites
-ClaudeMonet.jpg,Claude Monet,Artists
-LivingClassic.jpg,Living Classic,Artists
-MC_Esher.jpg,MC Esher,Artists
-MonaLisa.jpg,MonaLisa,Artists
-PabloPicasso.jpg,PabloPicasso,Artists
+Cue,Answer,Shuffle 1,Shuffle 2
+Allison.jpg,Allison,Collector-ites,Grouped
+Mikey.jpg,Mikey,Collector-ites,Grouped
+Tyson.jpg,Tyson,Collector-ites,Grouped
+emanuel.jpg,Emanuel,Collector-ites,Grouped
+Elena.jpg,Elena,Collector-ites,Grouped
+ClaudeMonet.jpg,Claude Monet,Artists,Grouped
+LivingClassic.jpg,Living Classic,Artists,Grouped
+MC_Esher.jpg,MC Esher,Artists,Grouped
+MonaLisa.jpg,MonaLisa,Artists,Grouped
+PabloPicasso.jpg,PabloPicasso,Artists,Grouped
