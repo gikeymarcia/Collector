@@ -1,0 +1,10 @@
+Question Name,Question,Type,Answers,Values,Required,Shuffle 1
+radio1,Were you paying attention?,radio,"Yes, Somewhat, No",,No,off
+,,page break,,,,
+short1,Do the cars get damaged?,shortAnswer,,,No,qq
+,,page break,,,,
+text1,How many cars were in each video?,text,,,No,qq
+,,page break,,,,
+number1,Approximately how fast do the cars smash each other? (mph),number,,,,
+,,page break,,,,
+radio2,Is there broken glass?,dropdown,"Yes, No",,No,off

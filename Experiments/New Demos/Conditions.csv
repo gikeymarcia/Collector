@@ -1,2 +1,3 @@
 Description,Notes,Stimuli 1,Procedure 1
-New Experiment,You can put more detailed notes in this field,Stimuli.csv,Procedure.csv
+Loftus Condition 1,"""Hit"" Condition",LoftusStimuli.csv,LoftusProcedure.csv
+Loftus Condition 2,"""Smash"" Condition",LoftusStimuli2.csv,LoftusProcedure.csv
