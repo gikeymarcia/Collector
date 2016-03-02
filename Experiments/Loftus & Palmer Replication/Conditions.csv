@@ -1,0 +1,3 @@
+Description,Notes,Stimuli 1,Procedure 1
+Condition 1,"""Hit"" Condition. Adapted from Loftus, E. F., & Palmer, J. C. (1974). Reconstruction of automobile destruction: An example of the interaction between language and memory. Journal of Verbal Learning and Verbal Behavior, 13(5), 585-589.",LoftusStimuli.csv,LoftusProcedure.csv
+Condition 2,"""Smash"" Condition.  (Loftus & Palmer, 1974)",LoftusStimuli2.csv,LoftusProcedure.csv
