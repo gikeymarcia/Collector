@@ -32,9 +32,7 @@
         if (isset($_POST[$var])) {
             $found = true;
             $value = $_POST[$var];
-            if ($value != $yourSettings->$var) {
-                $yourSettings->set($var, $value);
-            }
+            $yourSettings->set($var, $value);
         }
     }
 

@@ -306,8 +306,10 @@ class Settings
         // only allow bools to replace bools
         if (is_bool($current)) {
             // toggling the posted strings of true/false to boolean true/false
-            if ($val === 'true' || $val === "false") {
+            if ($val === 'true' || $val === 'false') {
                 $val = ($val === 'true') ? true : false;
+                $source['data'][$key] = $val;
+            } elseif ($val === true || $val === false) {
                 $source['data'][$key] = $val;
             } else {
                 trigger_error("Your setting '{$key}' should be a boolean but it is, {$val}, a ({$type}):", E_WARNING);
