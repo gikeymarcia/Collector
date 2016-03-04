@@ -34,7 +34,7 @@
 $_dataController = isset($_dataController) ? $_dataController : '';
 $_dataAction = isset($_dataAction) ? $_dataAction : '';
 ?>
-<body id="flexBody" data-controller="<?= $_dataController ?>" data-action="<?= $_dataAction ?>"><div>
+<body id="flexBody" data-controller="<?= $_dataController ?>" data-action="<?= $_dataAction ?>">
   <!-- redirect if Javascript is disabled -->
   <noscript>
     <meta http-equiv="refresh" content="0;url=<?= $_PATH->get('No JS', 'url') ?>" />

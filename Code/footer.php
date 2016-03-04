@@ -1,5 +1,3 @@
-</div>
-
 <!-- Base scripts -->
 <script>
   if (typeof jQuery === "undefined") {

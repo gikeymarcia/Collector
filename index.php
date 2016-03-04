@@ -35,23 +35,24 @@ require $_PATH->get('Header');
 <style>
   .inlineUL { display: inline-block; margin: auto; text-align: left; }
 </style>
+<div class="collectorRoot">
+    <h1>Collector</h1>
+    <h2>A program for running experiments on the web</h2>
 
-<h1>Collector</h1>
-<h2>A program for running experiments on the web</h2>
+    <p>Welcome to the Collector. If you would like to begin an experiment,
+       click on one of the links below.
+    </p>
 
-<p>Welcome to the Collector. If you would like to begin an experiment,
-   click on one of the links below.
-</p>
+    <ul class="inlineUL">
+      <?php foreach ($experiments as $name => $path): ?>
+      <li><a href='<?= $path ?>'><?= $name ?></a></li>
+      <?php endforeach; ?>
+    </ul>
 
-<ul class="inlineUL">
-  <?php foreach ($experiments as $name => $path): ?>
-  <li><a href='<?= $path ?>'><?= $name ?></a></li>
-  <?php endforeach; ?>
-</ul>
-
-<p>Otherwise, you can access one of the other tools 
-   <a href="<?= $_PATH->get('Tools') ?>">here</a>.
-</p>
+    <p>Otherwise, you can access one of the other tools 
+       <a href="<?= $_PATH->get('Tools') ?>">here</a>.
+    </p>
+</div>
 
 <?php
 require $_PATH->get('Footer');
