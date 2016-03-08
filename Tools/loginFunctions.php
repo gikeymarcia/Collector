@@ -54,14 +54,14 @@ function loginState($Password)
     // not logged in
     if (!isset($_SESSION['admin']['status'])
     ) {
-        $_SESSION['admin']['challenge'] = makeNonce();
+        // $_SESSION['admin']['challenge'] = makeNonce();
 
         return 'newChallenger';
     }
 
     // wrong password
     if ($_SESSION['admin']['status'] === 'failed') {
-        $_SESSION['admin']['challenge'] = makeNonce();
+        // $_SESSION['admin']['challenge'] = makeNonce();
 
         return 'wrongPass';
     }
@@ -72,14 +72,14 @@ function loginState($Password)
         
         // check expiration
         if ($age > $LoginExpiration) {
-            $_SESSION['admin']['challenge'] = makeNonce();
+            // $_SESSION['admin']['challenge'] = makeNonce();
 
             return 'expired';
         } else {
             return 'loggedIn';
         }
     } else {
-        $_SESSION['admin']['challenge'] = makeNonce();
+        // $_SESSION['admin']['challenge'] = makeNonce();
         
         return 'newChallenger';
     }
@@ -95,7 +95,9 @@ function loginState($Password)
  */
 function loginPrompt($state)
 {
-    $salt = ($state != 'noPass') ? $_SESSION['admin']['challenge'] : makeNonce();
+    // $salt = ($state != 'noPass') ? $_SESSION['admin']['challenge'] : makeNonce();
+    $salt = $_SESSION['admin']['challenge'];
+
 
     $expired = '<h3>Your session has expired and you must login again to continue</h3>';
     $wrong = '<p class="wrong">Thank you Mario! But our princess is in another castle... I mean, wrong password</p>';
@@ -137,6 +139,7 @@ function loginPrompt($state)
     }
     echo '</div>';
     echo "<div id='salt'><b>salt=</b>$salt</div>";
+    pre_var_dump($_SESSION['admin']);
 }
 
 /**
