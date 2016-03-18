@@ -4,11 +4,11 @@ return function($trialValues) {
     if (!isset($trialValues['Cue'])) {
         $errors[] = "Your 'Audio' trial tyle needs a 'Cue' value.";
     }
-    // if (show($trialValues['Cue']) == $trialValues['Cue']) {
-    //     $errors[] = "Your 'Audio' trial type's 'Cue' value does not point to a " .
-    //                 "filename with an extension. For example,'Mikey.jpg'. Your " .
-    //                 "'Cue' is: {$trialValues['Cue']}";
-    // }
+    if (show($trialValues['Cue']) == $trialValues['Cue']) {
+        $errors[] = "Your 'Audio' trial type's 'Cue' value does not point to a " .
+                    "filename with an extension. For example,'Mikey.jpg'. Your " .
+                    "'Cue' is: {$trialValues['Cue']}";
+    }
     return $errors;
 };
 
