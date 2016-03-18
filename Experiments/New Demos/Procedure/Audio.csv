@@ -1,0 +1,4 @@
+Item,Trial Type,Max Time,Text,Procedure Notes,Shuffle 1
+2,Audio,user,,Simplest Case,# fixed order
+3,Audio,User,Your text can be shown here,Custom Text,# fixed order
+4,Audio,User,"<div>You can use the text column to insert HTML.</div><ul><li>There are no limits to how you use HTML</li><li>MDN- Mozilla Developer Network is a great resource to learn HTML</li><li>With minimal investment you can learn how to make lists like I am doing here</li><li>Hint: search MDN for ul, ol, and li HTML elements</li></ul>",Custom Text with HTML,# fixed order
