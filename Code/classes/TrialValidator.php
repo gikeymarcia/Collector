@@ -86,7 +86,6 @@ class TrialValidator
                     $this->validateTrial($trialValues, $pos, $postN);
                 }
             }
-        }
     }
 
     /**
