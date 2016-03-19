@@ -1,2 +1,3 @@
 Description,Notes,Stimuli 1,Procedure 1
-Audio Trial Type Demo,Shows how to use an audio trial type.,AudioDemo.csv,Audio.csv
+Audio Trial Type,How to use the Audio trial type.,AudioDemo.csv,Audio.csv
+CaptionedPic Trial Type,How to use CaptionedPic trial type.,ImageDemo.csv,CaptionedPic.csv
