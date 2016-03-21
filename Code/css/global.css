@@ -606,6 +606,14 @@ input[type="submit"].button-trial-advance {
   margin: 3% 7%; 
 }
 
+/*Done.php*/
+#currentExpLink {
+    text-align: right;
+}
+#currentExpLink a {
+    text-decoration: none;
+    color: grey;
+}
 
 /* format diagnostics */
 .diagnostics {

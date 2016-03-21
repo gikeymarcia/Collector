@@ -88,7 +88,7 @@ require $_PATH->get('Header');
   <?php if ($_SETTINGS->verification !== ''): ?>
   <h3>Your verification code is: <?= $verification_code ?></h3>
   <?php endif; ?>
-  <div class="textcenter"><a href="<?php echo $_PATH->get("Current Experiment"); ?>" title="">login</a></div>
+  <div id="currentExpLink"><a href="<?php echo $_PATH->get("Current Experiment"); ?>" title="">return to login</a></div>
 </form>
 
 <?php
