@@ -53,3 +53,31 @@
   <button class="collectorButton collectorAdvance" id="FormSubmitButton">Next</button>
 </div>
 <?php endif; ?>
+
+<script type="text/javascript">
+trialBegin = function() {
+    // get trial time from page and run timer
+    COLLECTOR.timer(parseFloat($("#maxTime").html() )-5, function () {
+        // hide game and show get ready prompt for 5 secs
+        $(".stepout-clock").hide();
+        $(".tetris-wrap")
+            .removeClass("tetris-wrap")
+            .html("<div class='action-bg textcenter fullPad'>" +
+                      "<h1 class='pad'>Get ready to continue in ... </h1>" +
+                      "<h1 id=getready></h1>" + 
+                  "</div>");
+        COLLECTOR.timer(5, function() {
+            $('form').submit();
+        }, $("#getready"));
+    }, $(".countdown"));
+
+    // reveal on clicking start
+    $("#reveal").click(function() {
+        $("#reveal").hide();
+        $(".tetris").slideDown(400, function() {
+            var off = $(".tetris").offset();
+            $("html, body").animate({scrollTop: off.top}, 500);
+        });
+    });
+}
+</script>
