@@ -1,6 +1,10 @@
 <?php
     $text = (empty($text)) ? "Listen carefully." : $text;
-    $current = $_PATH->get('Trial Types', 'url').'/DigitSpanCommon';
+    $direction = (strtolower($settings) === 'reverse' || strtolower($settings) === 'backwards')
+               ? -1
+               : 1;
+
+    $current = $_PATH->get('Trial Types', 'url').'/DigitSpan';
 
     $cues = [];
     for ($i = 1; $i < 10; ++$i) {
@@ -60,4 +64,49 @@
     var player = new Track(trackcues.shift());
     digitTracks.push(player);
   }
+</script>
+
+<script>
+  /**
+   * Scoring method for this task.
+   * @param  {string} sequence The presented sequence.
+   * @param  {string} response The user's response sequence.
+   * @return {number}          Returns 1 for a match, else false.
+   */
+  Record.score = function(sequence, response) {
+    <?php if ($direction === 1): ?>  
+    return (sequence === response) ? 1 : 0;
+
+    <?php else: ?>
+    return (sequence === response.split("").reverse().join("")) ? 1 : 0;
+
+    <?php endif; ?>
+  }
+  
+
+
+  /* Functional area
+   ***************************************************************************/
+  $(document).ready(function () {
+    $("#inputdiv").removeClass('hidden').hide();
+
+    var task = new Task(digitTracks);
+
+    // Rebind the advance button to trigger DigitSpan advance instead of Collector advance    
+    $("#advanceButton").click(function () {
+      $("#inputdiv").hide();
+      task.recordResponse('inputbox');
+      task.run();
+    });
+
+    // rebind the enter key to click the advance button
+    $("#inputbox").keydown(function (e) {
+      if (e.which == 13) {
+        e.preventDefault();
+        $("#advanceButton").click();
+      }
+    });
+
+    task.run();
+  });
 </script>
