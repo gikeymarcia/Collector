@@ -1,0 +1,1 @@
+This is not a trial type --- it is the folder for the files common to DigitSpanForward and DigitSpanReverse. It will not work correctly on its own.

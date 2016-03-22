@@ -1,5 +1,5 @@
 <?php
-    include dirname(__DIR__)."/DigitSpanCommon/display.php";
+    include dirname(__DIR__)."/DigitSpanCommon/main.php";
     $text = (empty($text)) ? "Listen carefully." : $text;
 ?>
 
