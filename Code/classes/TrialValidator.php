@@ -80,12 +80,14 @@ class TrialValidator
         $procedure = $this->procedure->getUnshuffled();
 
         foreach ($procedure as $pos => $row) {
+            foreach ($postTrials as $postN) {
                 $trialValues = $this->getTrialValues($row, $postN);
 
                 if ($trialValues !== false) {
                     $this->validateTrial($trialValues, $pos, $postN);
                 }
             }
+        }
     }
 
     /**
