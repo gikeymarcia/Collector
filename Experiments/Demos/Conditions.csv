@@ -2,4 +2,3 @@ Description,Notes,Stimuli 1,Procedure 1
 Audio Trial Type,How to use the Audio trial type.,AudioDemo.csv,Audio.csv
 CaptionedPic Trial Type,How to use CaptionedPic trial type.,ImageDemo.csv,CaptionedPic.csv
 DigitSpan Trial Types,How to use the forward and backward DigitSpan trials,DigitSpanDemo.csv,DigitSpan.csv
-Copy Trial Type,How to use the Copy Pic trial type.,CopyPicStim.csv,CopyPic.csv
