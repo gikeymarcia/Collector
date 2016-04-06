@@ -3,6 +3,25 @@ Survey
 The Cue for this trial should be a filename
 of a file located in Common/Surveys/
 
+4/6/16
+Notes added by Derek:
+
+All Surveys are stored in Experiments/_Common/Surveys
+For formatting of surveys, look at the sample surveys. DEMOGRAPHICS and DIAGNOSTICS are found in the Sample Surveys. DEMOGRAPHICS and DIAGNOSTICS should go at the END of your experiment.
+
+FIRST - go to your STIMULI FILE and then add a new row. For example, if you'd like to add demographics and diagnostics do it like this
+
+     Cue            Answer      Shuffle 1 
+2  demographics.csv  off           off
+
+SECOND - go to your PROCEDURE FILE and it should look like this
+   Item	  TrialType  Timing    Post 1 Trial
+2   2       Survey     user        user
+
+THIRD - That's it!
+____________________________________________
+
+
 Each survey file is like another stimuli file.
 Inside, there should be the following columns:
 
