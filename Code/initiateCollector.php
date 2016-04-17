@@ -4,7 +4,7 @@ require __DIR__ . '/classes/Autoloader.php';
 $autoloader = new Collector\Autoloader();
 $autoloader->register();
 $autoloader->add('Collector', __DIR__.'/classes');
-$autoloader->add('adamblake', __DIR__.'/vendor/adamblake');
+$autoloader->add('adamblake\Parse', __DIR__.'/vendor/adamblake/Parse');
 $autoloader->add('phpbrowscap', __DIR__.'/vendor/phpbrowscap');
 
 // start session
