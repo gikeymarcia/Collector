@@ -45,9 +45,6 @@
   <h3 class="countdown"></h3>
 </div>
 
-<!-- used to set timer -->
-<div id="maxTime" class="hidden"><?= trim($max_time) ?></div>
-
 <?php else: ?>
 <div class="textcenter">
   <button class="collectorButton collectorAdvance" id="FormSubmitButton">Next</button>
@@ -57,7 +54,8 @@
 <script type="text/javascript">
 trialBegin = function() {
     // get trial time from page and run timer
-    COLLECTOR.timer(parseFloat($("#maxTime").html() )-5, function () {
+    var tetris_max_time = parseFloat($("#maxTime").html());
+    COLLECTOR.timer(tetris_max_time - 5, function () {
         // hide game and show get ready prompt for 5 secs
         $(".stepout-clock").hide();
         $(".tetris-wrap")
@@ -70,14 +68,14 @@ trialBegin = function() {
             $('form').submit();
         }, $("#getready"));
     }, $(".countdown"));
-
-    // reveal on clicking start
-    $("#reveal").click(function() {
-        $("#reveal").hide();
-        $(".tetris").slideDown(400, function() {
-            var off = $(".tetris").offset();
-            $("html, body").animate({scrollTop: off.top}, 500);
-        });
-    });
 }
+
+// reveal on clicking start
+$("#reveal").click(function() {
+    $("#reveal").hide();
+    $(".tetris").slideDown(400, function() {
+        var off = $(".tetris").offset();
+        $("html, body").animate({scrollTop: off.top}, 500);
+    });
+});
 </script>

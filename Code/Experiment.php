@@ -206,8 +206,8 @@ $maxTime = 'user';
 endif; ?>
 
 <!-- hidden field that JQuery/JavaScript uses to check the timing to $postTo -->
-<div id="maxTime" class="hidden"> <?= $max_time; ?> </div>
-<div id="minTime" class="hidden"> <?= $min_time; ?> </div>
+<div id="maxTime" class="hidden"><?= $max_time; ?></div>
+<div id="minTime" class="hidden"><?= $min_time; ?></div>
    
 <?php
 /*
