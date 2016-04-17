@@ -133,14 +133,14 @@ $expandOutput = true;
 
 $settings = explode('|', $settings);
 foreach ($settings as $setting) {
-    if ($test = removeLabel($setting, 'input')) {
+    if ($test = Collector\Helpers::removeLabel($setting, 'input')) {
         $test = strtolower($test);
         if (($test === 'one') or ($test === 'many') or (is_numeric($test))) {
             $input = $test;
         } else {
             exit('Error: invalid "input" setting for trial type "'.$trialType.'", on trial '.$currentPos);
         }
-    } elseif ($test = removeLabel($setting, 'expandOutput')) {
+    } elseif ($test = Collector\Helpers::removeLabel($setting, 'expandOutput')) {
         $test = strtolower($test);
         if (($test === 'no') or ($test === 'false')) {
             $expandOutput = false;

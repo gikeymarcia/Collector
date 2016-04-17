@@ -49,7 +49,7 @@
                 max:  thisMax,
                 step: 1,
                 slide: function(event, ui) {
-                    $(ui.handle).show().closest(".sliderArea").find("input").val(ui.value);
+                    $(ui.handle).Helpers::show().closest(".sliderArea").find("input").val(ui.value);
                 }
             }).find(".ui-slider-handle").hide();
         });
@@ -58,7 +58,7 @@
     }
     
     foreach ($surveyRows as $row) {
-        $ans = rangeToArray($row['Answers']);
+        $ans = Collector\Helpers::rangeToArray($row['Answers']);
         $thisMin = null;
         $thisMax = null;
         foreach ($ans as $a) {
@@ -79,9 +79,9 @@
         if (isset($row['Settings'])) {
             $settings = explode('|', $row['Settings']);
             foreach ($settings as $setting) {
-                $left  = removeLabel($setting, 'leftDescription');
+                $left  = Collector\Helpers::removeLabel($setting, 'leftDescription');
                 if ($left  !== false) $leftDesc  = $left;
-                $right = removeLabel($setting, 'rightDescription');
+                $right = Collector\Helpers::removeLabel($setting, 'rightDescription');
                 if ($right !== false) $rightDesc = $right;
             }
         }

@@ -2,7 +2,7 @@
   
 <!-- show the image -->
 <div class="pic">
-  <?= show($cue) ?>
+  <?= Collector\Helpers::show($cue) ?>
 </div>
   
 <!-- show the caption -->

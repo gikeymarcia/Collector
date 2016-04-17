@@ -512,7 +512,7 @@ class Pathfinder
     /**
      * Gets all paths that do not contain a wild card or a default value.
      * Use this to get a list of all non-variable paths. You can then run
-     * fileExists() on them, as a diagnostic check that all typical files exist.
+     * Helpers::fileExists() on them, as a diagnostic check that all typical files exist.
      *
      * @return array The array of standard paths.
      */

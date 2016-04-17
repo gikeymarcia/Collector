@@ -20,7 +20,7 @@
     
     
     // scan the TrialType folder, and take the name of any file ending in .php as a trial type
-    $trialTypes = array_keys(getAllTrialTypeFiles());
+    $trialTypes = array_keys(Collector\Helpers::getAllTrialTypeFiles());
     
     
     // the scopes 'Experiment' and 'Condition' will later cause data in these files to be distributed among all related files in that category
@@ -129,7 +129,7 @@
     foreach( $extraFileMeta as $category => $fileMeta ) {
         if( !isset( $fileMeta['files'] ) ) { continue; }
         foreach( $fileMeta['files'] as $fileName ) {
-            $data = getFromFile( "{$path}/{$fileName}", false );
+            $data = Collector\Helpers::getFromFile( "{$path}/{$fileName}", false );
             $d = getFirstLine( "{$path}/{$fileName}", $testHeader, true );
             if( $d === false ) { continue; }
             $file = fopen( "{$path}/{$fileName}", "r" );

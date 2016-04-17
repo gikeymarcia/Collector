@@ -87,8 +87,8 @@
                 $qName = $surveyRow['Question Name'];
                 if (!isset($data[$qName])) continue; // somehow, this question isn't in the data
                 $resp = $data[$qName];
-                $answers = rangeToArray($surveyRow['Answers']);
-                $values  = rangeToArray($surveyRow['Values']);
+                $answers = Collector\Helpers::rangeToArray($surveyRow['Answers']);
+                $values  = Collector\Helpers::rangeToArray($surveyRow['Values']);
                 foreach ($values as $val) {
                     if (!is_numeric($val)) continue 2; // cant use this row, values arent numeric
                 }

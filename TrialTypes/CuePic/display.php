@@ -3,7 +3,7 @@
 </div>
 
 <div class="study textcenter">
-  <?= show($cue) ?>
+  <?= Collector\Helpers::show($cue) ?>
 </div>
 
 <div class="textcenter">

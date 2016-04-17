@@ -28,7 +28,7 @@
         }
         
         $surveyCompletePath = $surveyDir . '/' . $surveyFile;
-        $surveyActualPath = fileExists($surveyCompletePath, false, 0);
+        $surveyActualPath = Collector\Helpers::fileExists($surveyCompletePath, false, 0);
         
         if ($surveyActualPath === false) {
             $err = 'Survey trial type needs a cue for a valid survey file, '
@@ -53,7 +53,7 @@
         $errors = array();
         
         # 1. check that survey has actual data inside
-        // some error should be moved to getFromFile()
+        // some error should be moved to Collector\Helpers::getFromFile()
         // it should make sure we find at least 1 row of
         // data underneath the headers
         if (!is_array($survey) || count($survey) < 1) {
@@ -155,8 +155,8 @@
             
             foreach ($survey as $i => $row) {
                 // delimit cell contents with "|" rather than ",", since answers can be text descriptions
-                $rowAnswers = rangeToArray($row['Answers'], '|');
-                $rowValues  = rangeToArray($row['Values'],  '|');
+                $rowAnswers = Collector\Helpers::rangeToArray($row['Answers'], '|');
+                $rowValues  = Collector\Helpers::rangeToArray($row['Values'],  '|');
                 
                 if (count($rowAnswers) !== count($rowValues)) {
                     $problemRows [] = $i;
@@ -221,8 +221,8 @@
         
         // load the survey
         $surveyCompletePath = $surveyDir . '/' . $surveyFile;
-        $surveyActualPath = fileExists($surveyCompletePath, false, 0);
-        $survey = getFromFile($surveyActualPath, false);
+        $surveyActualPath = Collector\Helpers::fileExists($surveyCompletePath, false, 0);
+        $survey = Collector\Helpers::getFromFile($surveyActualPath, false);
         
         // check the contents of the survey file
         $surveyErrors = checkSurveyContents($survey, $surveyFile, $trialDir);
@@ -259,7 +259,7 @@
             if (!is_dir("$typesDir/$entry")) continue;
             $type = cleanSurveyType($entry);
             foreach ($fileTypes as $filename) {
-                $filePath = fileExists("$typesDir/$entry/$filename.php", false, 0);
+                $filePath = Collector\Helpers::fileExists("$typesDir/$entry/$filename.php", false, 0);
                 if ($filePath !== false) $types[$type][$filename] = $filePath;
             }
         }

@@ -61,5 +61,5 @@ function recordTrial(array $extraData = array(), $pos = null)
     }
 
     // record line into output CSV
-    arrayToLine($data, $_PATH->get('Experiment Output'));
+    Collector\Helpers::arrayToLine($data, $_PATH->get('Experiment Output'));
 }

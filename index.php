@@ -24,7 +24,7 @@ $_SETTINGS->upToDate($_PATH);
 
 // get possible experiments to choose from
 $experiments = array();
-foreach (getCollectorExperiments() as $expName) {
+foreach (Collector\Helpers::getCollectorExperiments() as $expName) {
     $experiments[$expName] = $_PATH->get('Experiments')."/$expName";
 }
 

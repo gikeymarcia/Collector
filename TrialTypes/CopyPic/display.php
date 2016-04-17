@@ -17,12 +17,12 @@ if ($text === '') {
 
 <!-- show the image -->
 <div class="pic">
-  <?= show($cue) ?>
+  <?= Collector\Helpers::show($cue) ?>
 </div>
 
 <!-- show the answer -->
 <div class="textcenter"><h2><?= $text ?></h2></div>
-<h1 class="textcenter"><?= show($answer) ?></h1>
+<h1 class="textcenter"><?= Collector\Helpers::show($answer) ?></h1>
 
 <!-- copy the answer -->
 <div class="textcenter pad">

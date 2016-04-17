@@ -71,11 +71,11 @@
     $i = 0;
     
     while (isset($surveyRows[$i])) {
-        $currentAnswersCount = count(rangeToArray($surveyRows[$i]['Answers']));
+        $currentAnswersCount = count(Collector\Helpers::rangeToArray($surveyRows[$i]['Answers']));
         $currentLikertRows = array();
         
         while (isset($surveyRows[$i]) 
-            && count(rangeToArray($surveyRows[$i]['Answers'])) === $currentAnswersCount
+            && count(Collector\Helpers::rangeToArray($surveyRows[$i]['Answers'])) === $currentAnswersCount
         ) {
             $currentLikertRows[] = $surveyRows[$i];
             ++$i;
@@ -84,7 +84,7 @@
         echo '<div class="LikertTable">';
         foreach ($currentLikertRows as $likertRow) {
             $currentAnswers = $likertRow['Answers'];
-            $currentAnswers = rangeToArray($currentAnswers);
+            $currentAnswers = Collector\Helpers::rangeToArray($currentAnswers);
             $name = $likertRow['Question Name'];
             echo '<div class="LikertRow">'
                .     '<div>' . $likertRow['Question'] . '</div>';

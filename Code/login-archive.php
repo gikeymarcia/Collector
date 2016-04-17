@@ -13,7 +13,7 @@
     
     #### Find all of the columns that hold trial types (including 'Post# Trial Type's)
     // $trialTypeColumns = array();                                                                // Each position will have the column name of a trial type column
-    // $proc = GetFromFile($_FILES->proc_files.'/' . $_SESSION['Condition']['Procedure'], false); // load procedure file without padding
+    // $proc = Collector\Helpers::getFromFile($_FILES->proc_files.'/' . $_SESSION['Condition']['Procedure'], false); // load procedure file without padding
     // foreach ($proc[0] as $col => $val) {                                    // check all column names
     //     if (substr($col, -10) == 'Trial Type') {                           // if ends with 'trial type'
     //         if ($col == 'Trial Type') {                                        // and is trial type
@@ -76,14 +76,14 @@
     //     }
         
     //     foreach ($stimuliFiles as $fileName) {
-    //         $temp = GetFromFile($fileName);
+    //         $temp = Collector\Helpers::getFromFile($fileName);
     //         foreach ($temp as $i => $row) {
     //             if ($i < 2) { continue; }                   // skip padding rows
-    //             if (show($row['Cue'], true, true) !== $row['Cue']) {
-    //                 // show() detects a file extension like .png, and will use FileExists to check that it exists
+    //             if (Collector\Helpers::show($row['Cue'], true, true) !== $row['Cue']) {
+    //                 // Collector\Helpers::show() detects a file extension like .png, and will use Collector\Helpers::fileExists to check that it exists
     //                 // but it will always return a string, for cases where you are showing regular text
-    //                 // using FileExists, we can see if a cue detected as an image by show() is a file that actually exists
-    //                 if (FileExists('../Experiment/' . $row['Cue']) === false ) {
+    //                 // using Collector\Helpers::fileExists, we can see if a cue detected as an image by Collector\Helpers::show() is a file that actually exists
+    //                 if (Collector\Helpers::fileExists('../Experiment/' . $row['Cue']) === false ) {
     //                     $errors['Count']++;
     //                     $errors['Details'][] = 'Image or audio file "../Experiment/' . $row['Cue'] . '" not found for row '
     //                                          . $i . ' in Stimuli File "' . basename($fileName) . '".';
@@ -96,7 +96,7 @@
     
     
     // #### Check that we can find files for all trials in use (also finds custom scoring files)
-    // $procedure  = GetFromFile($_FILES->proc_files.'/' . $_SESSION['Condition']['Procedure']);
+    // $procedure  = Collector\Helpers::getFromFile($_FILES->proc_files.'/' . $_SESSION['Condition']['Procedure']);
     // $trialTypes = array();                                                  // we will make a list of all found trial types, and what level they will be used at
     // $notTrials  = array('off'   => true,                                    // if the 'Trial Type' value is one of these then it isn't a trial
     //                     'no'    => true,
@@ -110,7 +110,7 @@
     //         if (isset($notTrials[$thisTrialType])) {                        // skip turned off trials (off, no, n/a, '')
     //             continue;
     //         }
-    //         $trialFiles = getTrialTypeFiles($thisTrialType);
+    //         $trialFiles = Collector\Helpers::getTrialTypeFiles($thisTrialType);
     //         $trialTypes[$thisTrialType]['files'] = $trialFiles;
     //         $trialTypes[$thisTrialType]['levels'][$postNumber] = true;      // make note what levels each trial type are used at (e.g., Study is a regular AND a Post 1 trial)
     //         if ($trialFiles === false) {
@@ -137,7 +137,7 @@
     ###############################################################################
     // Setting up all the ['Response'] keys that will be needed during the experiment
     // Also checks scoring files if that trial type lists some required columns
-    // $proc = GetFromFile($_FILES->proc_files.'/' . $_SESSION['Condition']['Procedure'], false); // load procedure file without padding
+    // $proc = Collector\Helpers::getFromFile($_FILES->proc_files.'/' . $_SESSION['Condition']['Procedure'], false); // load procedure file without padding
     // $allColumnsNeeded = array();
     // $allColumnsOutput = array();
     // foreach ($trialTypes as $type => $info) {
@@ -180,16 +180,16 @@
     #### Create $_SESSION['Trials'] 
     #### Load all Stimuli and Procedure info for this participant's condition then combine to create the experiment
     // load stimuli for this condition then block shuffle
-    // $cleanStimuli = GetFromFile($_FILES->stim_files.'/' . $_SESSION['Condition']['Stimuli']);
+    // $cleanStimuli = Collector\Helpers::getFromFile($_FILES->stim_files.'/' . $_SESSION['Condition']['Stimuli']);
     // $stimuli = multiLevelShuffle($cleanStimuli);
     // $stimuli = shuffle2dArray($stimuli, $_SETTINGS->stop_at_login);
     // $_SESSION['Stimuli'] = $stimuli;
     
     // load and block shuffle procedure for this condition
-    // $cleanProcedure = GetFromFile($_FILES->proc_files.'/' . $_SESSION['Condition']['Procedure']);
+    // $cleanProcedure = Collector\Helpers::getFromFile($_FILES->proc_files.'/' . $_SESSION['Condition']['Procedure']);
     
-    // $addColumns = array('Text');
-    // foreach ($addColumns as $add) {
+    // $Helpers::addColumns = array('Text');
+    // foreach ($Helpers::addColumns as $add) {
     //     foreach ($trialTypeColumns as $number => $colName) {                                // check all trial type levels we found
     //         if ($number == 0) {
     //             $prefix = '';
@@ -197,7 +197,7 @@
     //             $prefix = 'Post' . ' ' . $number . ' ';
     //         }
     //         $column = $prefix . $add;
-    //         addColumn($cleanProcedure, $column);                // this will only add columns if they don't already exist; nothing is overwritten
+    //         Collector\Helpers::addColumn($cleanProcedure, $column);                // this will only add columns if they don't already exist; nothing is overwritten
     //     }
     // }
     
@@ -211,7 +211,7 @@
     // $procedureLength = count($procedure);
     // for ($count=2; $count<$procedureLength; $count++) {
     //     // $Trials[$count-1] = makeTrial($procedure[$count]['Item']);
-    //     $items = rangeToArray($procedure[$count]['Item']);
+    //     $items = Collector\Helpers::rangeToArray($procedure[$count]['Item']);
     //     $stim = array();
     //     foreach ($items as $item) {
     //         if (isset($stimuli[$item]) and is_array($stimuli[$item])) {
@@ -283,29 +283,29 @@
     
     
     if ($_SETTINGS->stop_at_login == true) {             // if things are going wrong this info will help you figure out when the program broke
-        // Readable($_SESSION['Condition'],    'Condition information');
-        // Readable($stimuli,                  'Stimuli file in use ('   . $_FILES->stim_files.'/' . $_SESSION['Condition']['Stimuli']   . ')');
-        // Readable($procedure,                'Procedure file in use (' . $_FILES->proc_files.'/' . $_SESSION['Condition']['Procedure'] . ')');
-        // Readable($trialTypeColumns,         'Levels of trial types being used');
-        // Readable($trialTypes,  'All info about trial types used in experiment');
-        // Readable($_SESSION['Trials'],       '$_SESSION["Trials"] array');
+        // Collector\Helpers::readable($_SESSION['Condition'],    'Condition information');
+        // Collector\Helpers::readable($stimuli,                  'Stimuli file in use ('   . $_FILES->stim_files.'/' . $_SESSION['Condition']['Stimuli']   . ')');
+        // Collector\Helpers::readable($procedure,                'Procedure file in use (' . $_FILES->proc_files.'/' . $_SESSION['Condition']['Procedure'] . ')');
+        // Collector\Helpers::readable($trialTypeColumns,         'Levels of trial types being used');
+        // Collector\Helpers::readable($trialTypes,  'All info about trial types used in experiment');
+        // Collector\Helpers::readable($_SESSION['Trials'],       '$_SESSION["Trials"] array');
         // // for checking that shuffling is working as planned
         // echo '<h1> Stimuli before/after</h1>';
         // echo '<div class="before">';
-        //           display2darray($cleanStimuli);
+        //           Collector\Helpers::display2dArray($cleanStimuli);
         // echo '</div>';
         // echo '<div class="after">';
-        //           display2darray($stimuli);
+        //           Collector\Helpers::display2dArray($stimuli);
         // echo '</div>';
         
         // echo '<div class="sectionBreak">';
         // echo '<h1>Procedure before/after</h1>';
         // echo '</div>';
         // echo '<div class="before">';
-        //           display2darray($cleanProcedure);
+        //           Collector\Helpers::display2dArray($cleanProcedure);
         // echo '</div>';
         // echo '<div class="after">';
-        //           display2darray($procedure);
+        //           Collector\Helpers::display2dArray($procedure);
         // echo '</div>';
 
         // echo '<form action ="' . $link . '" method="get">'

@@ -66,7 +66,7 @@ class TrialValidator
         $this->procedure = $procedure;
         $this->errObj = $errObj;
 
-        $this->trialTypes = getAllTrialTypeFiles();
+        $this->trialTypes = Helpers::getAllTrialTypeFiles();
 
         $this->validateAllTrials();
 
@@ -247,7 +247,7 @@ class TrialValidator
 
         // time to search for stimuli
         // use item to determine rows in the stim file to use
-        $items = rangeToArray($procCols['Item']);
+        $items = Helpers::rangeToArray($procCols['Item']);
         $theseStim = array();
 
         // check that stim actually exists, because they might use "" or "0"

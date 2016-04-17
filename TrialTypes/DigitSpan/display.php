@@ -40,7 +40,7 @@
    */
   function showInput() 
   {
-    $("#inputdiv").show();
+    $("#inputdiv").Helpers::show();
     $("input[name=Response]").focus();
   }
 

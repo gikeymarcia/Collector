@@ -40,7 +40,7 @@
     
     echo '<div>';
     foreach ($surveyRows as $row) {
-        $ans = '<option>' . implode('</option><option>', rangeToArray($row['Answers'])) . '</option>';
+        $ans = '<option>' . implode('</option><option>', Collector\Helpers::rangeToArray($row['Answers'])) . '</option>';
         echo "<label>"
            .     "<div>{$row['Question']}</div>"
            .     "<div>"

@@ -51,7 +51,7 @@ if (!isset($settings) || $settings === '') {
     $settings = '1::7';
 }
 
-$likertOptions = rangeToArray($settings);
+$likertOptions = Collector\Helpers::rangeToArray($settings);
 
 $texts = explode('|', $text);
 $question = array_shift($texts);

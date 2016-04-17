@@ -18,7 +18,7 @@ require $_PATH->get('Shuffle Functions');
 $_SESSION['Current Collector'] = $_PATH->get('root', 'url');
 $currentExp = filter_input(INPUT_GET, 'CurrentExp', FILTER_SANITIZE_STRING);
 $current = ($currentExp === null) ? '' : $currentExp;
-if (!in_array($current, getCollectorExperiments())) {
+if (!in_array($current, Collector\Helpers::getCollectorExperiments())) {
     // requested experiment does not exist: send back to index
     header('Location: '.$_PATH->get('root'));
     exit;

@@ -11,11 +11,11 @@ if ($firstTrialType === 'cuepic'
     || $firstTrialType === 'multiplechoicepic'
 ): ?>
     <!-- show the image -->
-    <div class="pic"><?= show($cue) ?> </div>
+    <div class="pic"><?= Collector\Helpers::show($cue) ?> </div>
 
     <!-- show the answer -->
     <div class="textcenter"><h3><?= $text ?> </h3></div>
-    <h2 class="textcenter"> <?= show($answer) ?> </h2>
+    <h2 class="textcenter"> <?= Collector\Helpers::show($answer) ?> </h2>
 
 <?php 
 

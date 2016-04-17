@@ -7,7 +7,7 @@
 require 'initiateCollector.php';
 require $_PATH->get('Experiment Require');
 
-// check that the state is set    
+// check that the state is set
 if (empty($_SESSION['state'])) {
     // get out if you're not supposed to be here
     $root = $_PATH->get('root');
@@ -15,7 +15,7 @@ if (empty($_SESSION['state'])) {
     exit;
 }
 
-// this only happens once, so that refreshing the page doesn't do anything, and 
+// this only happens once, so that refreshing the page doesn't do anything, and
 // recording a new line of data is the only way to update the timestamp
 if (!isset($_SESSION['Timestamp'])) {
     $_SESSION['Timestamp'] = microtime(true);
@@ -65,7 +65,7 @@ extract($trialValues, EXTR_SKIP);
  */
 $trial_type = strtolower($trial_type);
 
-$trialFiles = getTrialTypeFiles($trial_type);
+$trialFiles = Collector\Helpers::getTrialTypeFiles($trial_type);
 if (isset($trialFiles['script'])) {
     $addedScripts = array($trialFiles['script']);
 }
@@ -174,11 +174,11 @@ require $_PATH->get('Header');
 if ($trialFiles['display']): ?>
 <form class="experimentForm <?= $formClass; ?> invisible" action="<?= $postTo; ?>" method="post" id="content" autocomplete="off">
   <?php include $trialFiles['display'] ?>
-  
+
   <?php if ($_SESSION['Debug']) : ?>
   <button type="submit" style="position: absolute; top: 50px; right: 50px;"onclick="$('form').submit()">Debug Submit!</button>
   <?php endif; ?>
-  
+
   <input id="RT"       name="RT"      type="hidden"  value="-1"/>
   <input id="RTfirst"  name="RTfirst" type="hidden"  value="-1"/>
   <input id="RTlast"   name="RTlast"  type="hidden"  value="-1"/>
@@ -208,7 +208,7 @@ endif; ?>
 <!-- hidden field that JQuery/JavaScript uses to check the timing to $postTo -->
 <div id="maxTime" class="hidden"><?= $max_time; ?></div>
 <div id="minTime" class="hidden"><?= $min_time; ?></div>
-   
+
 <?php
 /*
  *  Diagnostics

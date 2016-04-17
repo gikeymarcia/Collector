@@ -35,7 +35,7 @@
     $getConditions  = isset( $POST['Conditions'] )     ? $POST['Conditions']  : array();
     $getTrialTypes  = isset( $POST['TrialTypes'] )     ? $POST['TrialTypes']  : array();
     $getTimings     = isset( $POST['Max Time'] )       ? $POST['Max Time']    : array('numeric', 'nonnumeric');
-    $getTrials      = isset($POST['Trials']) ? array_flip( RangeToArray( $POST['Trials'] ) ) : false;
+    $getTrials      = isset($POST['Trials']) ? array_flip( Collector\Helpers::rangeToArray( $POST['Trials'] ) ) : false;
     
     // $completion = $POST['Completion'];
     
@@ -65,17 +65,17 @@
     
     $rowFilters = array();
     if(isset( $POST['TrialTypes'] ))   { $rowFilters['Procedure*Trial Type']   = array_flip( $POST['TrialTypes'] ); }
-    if( $POST['Trials'] !== '' )       { $rowFilters['Trial']                  = array_flip( RangeToArray( $POST['Trials'] ) ); }
+    if( $POST['Trials'] !== '' )       { $rowFilters['Trial']                  = array_flip( Collector\Helpers::rangeToArray( $POST['Trials'] ) ); }
     
     $getTimings = array_flip($getTimings);      // we will need to do special checks for this filter
     
     
-    $allColumns = addPrefixToArray( $expPrefix, $outputColumns )
-                + addPrefixToArray( $demographicsPrefix, $demographicsColumns )
-                + addPrefixToArray( $finalQuestionsPrefix, $finalQuestionsColumns ) 
-                + addPrefixToArray( $statusBeginPrefix, $statusBeginColumns ) 
-                + addPrefixToArray( $statusEndPrefix, $statusEndColumns ) 
-                + addPrefixToArray( $instructionsPrefix, $instructionsColumns );
+    $allColumns = Collector\Helpers::addPrefixToArray( $expPrefix, $outputColumns )
+                + Collector\Helpers::addPrefixToArray( $demographicsPrefix, $demographicsColumns )
+                + Collector\Helpers::addPrefixToArray( $finalQuestionsPrefix, $finalQuestionsColumns ) 
+                + Collector\Helpers::addPrefixToArray( $statusBeginPrefix, $statusBeginColumns ) 
+                + Collector\Helpers::addPrefixToArray( $statusEndPrefix, $statusEndColumns ) 
+                + Collector\Helpers::addPrefixToArray( $instructionsPrefix, $instructionsColumns );
     
     $ext = $POST['File_Type'];
     if( $ext === 'browser' ) {
@@ -132,14 +132,14 @@
                                     $col = implode( '|', $col );
                                 }
                                 unset( $col );
-                                $output += addPrefixToArray( $fileMeta['Prefix'], $temp );
+                                $output += Collector\Helpers::addPrefixToArray( $fileMeta['Prefix'], $temp );
                             } else {
-                                $output += addPrefixToArray( $fileMeta['Prefix'], $IDs[$id][$category] );
+                                $output += Collector\Helpers::addPrefixToArray( $fileMeta['Prefix'], $IDs[$id][$category] );
                             }
                         }
                         
                         if( !$getExp ) {
-                            arrayToEcho( sortArrayLikeArray($output, $allColumns), $ext );
+                            arrayToEcho( Collector\Helpers::sortArrayLikeArray($output, $allColumns), $ext );
                         } else {
                             $first = getFirstLine( "{$path}/{$fileName}", $testHeader );
                             foreach( $fileFilters as $column => $allowed ) {
@@ -153,7 +153,7 @@
                                 foreach( $rowFilters as $column => $allowed ) {
                                     if( !isset( $allowed[ $row[$column] ] ) ) { continue; }
                                 }
-                                arrayToEcho( sortArrayLikeArray($output + addPrefixToArray( $expPrefix, $row ), $allColumns), $ext );
+                                arrayToEcho( Collector\Helpers::sortArrayLikeArray($output + Collector\Helpers::addPrefixToArray( $expPrefix, $row ), $allColumns), $ext );
                             }
                             fclose($file);
                         }

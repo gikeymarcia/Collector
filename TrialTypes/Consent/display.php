@@ -4,7 +4,7 @@ if (($cue != '') && (trim($text) == '')) {
 }
 
 $fileDir = $_PATH->get('Common');
-$filePath = fileExists("$fileDir/$text");
+$filePath = Collector\Helpers::fileExists("$fileDir/$text");
 
 if ($filePath !== false && strpos($text, '..') === false) {
     $pathinfo = pathinfo($filePath);

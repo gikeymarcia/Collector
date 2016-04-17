@@ -67,7 +67,7 @@ foreach ($results as $readyPath) {
     fputcsv($temp, array($readyPath, $info['filename']));
 }
 fclose($temp);
-$show = getFromFile("MediaScanner/tempStim.csv");
+$show = Collector\Helpers::getFromFile("MediaScanner/tempStim.csv");
 
 
 
@@ -78,7 +78,7 @@ $show = getFromFile("MediaScanner/tempStim.csv");
 
 <div class="toolWidth">
     <h2>Here is what we found in your Media folder</h2>
-    <?php display2dArray($show); ?>
+    <?php Collector\Helpers::display2dArray($show); ?>
     <div id="dl">
         <a href="MediaScanner/download.php" target="_self"
         >Click here to downoad the file.</a>
@@ -86,8 +86,8 @@ $show = getFromFile("MediaScanner/tempStim.csv");
 </div>
 
 <style type="text/css" media="screen">
-    .display2dArray td       { max-width:30em; }
-    .display2dArray {
+    .Helpers::display2dArray td       { max-width:30em; }
+    .Helpers::display2dArray {
         font-size: 16pt;
         background-color: #dee7ec;
         padding-bottom: 2em;    

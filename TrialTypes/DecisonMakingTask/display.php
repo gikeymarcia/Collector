@@ -11,7 +11,7 @@ $options = array('A', 'B');
   </tr>
   <tr class="displayRow">
     <td class="imgHolder" colspan="<?= count($options) ?>">
-      <?= show($cue) ?>
+      <?= Collector\Helpers::show($cue) ?>
     </td>
     <td class="tankHolder" rowspan="2">
       <div class="currentTank dmtTank">

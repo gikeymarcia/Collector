@@ -4,7 +4,7 @@ adminOnly();
 
 // make a temporary pathfinder to get us to the right settings
 $tempPath = new Collector\Pathfinder($_DATA['path']);
-$exps = array_flip(getCollectorExperiments());
+$exps = array_flip(Collector\Helpers::getCollectorExperiments());
 
 // change experiment if one is selected
 if (isset($_GET['Exp'])

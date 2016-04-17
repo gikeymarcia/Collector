@@ -289,7 +289,7 @@ class Experiment
         $stimRows = $stimCols = array();
 
         // populate rows from the stimuli array
-        foreach (rangeToArray($item) as $item) {
+        foreach (Helpers::rangeToArray($item) as $item) {
             if (isset($this->stimuli[$item - 2])) {
                 $stimRows[] = $this->stimuli[$item - 2];
             }
@@ -486,8 +486,8 @@ class Experiment
         if ($nextTrial !== false) {
             $precache = '<div class="precachenext">';
             foreach (array_values($nextTrial['Stimuli']) as $val) {
-                if (show($val) !== $val) {
-                    $precache .= show($val);
+                if (Helpers::show($val) !== $val) {
+                    $precache .= Helpers::show($val);
                 }
             }
             $precache .= '</div>';
@@ -513,7 +513,7 @@ class Experiment
         $currentTrial = $this->getTrial($pos, $post);
 
         // clean the arrays used so that they output strings, not code
-        $clean_cond = arrayCleaner($this->condition);
+        $clean_cond = Helpers::arrayCleaner($this->condition);
         $stimfiles = $procfiles = [];
         foreach ($clean_cond as $key => $val) {
             if (strpos($key, 'Stimuli') === 0) {
@@ -524,8 +524,8 @@ class Experiment
             }
         }
 
-        $clean_proc = arrayCleaner($currentTrial['Procedure']);
-        $clean_stim = arrayCleaner($currentTrial['Stimuli']);
+        $clean_proc = Helpers::arrayCleaner($currentTrial['Procedure']);
+        $clean_stim = Helpers::arrayCleaner($currentTrial['Stimuli']);
         echo '<div class=diagnostics>'
             .'<h2>Diagnostic information</h2>'
             .'<ul>'
@@ -539,14 +539,14 @@ class Experiment
             .'<li> Trial max time: '.$clean_proc['Max Time']
             .'</ul>'
             .'<ul>'
-            .'<li> Cue: '.show($clean_stim['Cue'])
-            .'<li> Answer: '.show($clean_stim['Answer'])
+            .'<li> Cue: '.Helpers::show($clean_stim['Cue'])
+            .'<li> Answer: '.Helpers::show($clean_stim['Answer'])
             .'</ul>';
         $trial = ['Stimuli' => $clean_stim, 'Procedure' => $clean_proc];
-        readable($trial, 'Information loaded about the current trial');
-        readable($this->stimuli,      'Information loaded about the stimuli');
-        readable($this->procedure,    'Information loaded about the procedure');
-        readable($this->responses,    'Information loaded about the responses');
+        Helpers::readable($trial, 'Information loaded about the current trial');
+        Helpers::readable($this->stimuli,      'Information loaded about the stimuli');
+        Helpers::readable($this->procedure,    'Information loaded about the procedure');
+        Helpers::readable($this->responses,    'Information loaded about the responses');
         echo '</div>';
     }
 

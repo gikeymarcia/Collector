@@ -10,7 +10,7 @@
 </div>
 
 <div class="textcenter" style="font-size:<?= $font_size ?>">
-  <?= show($cue) ?>
+  <?= Collector\Helpers::show($cue) ?>
 </div>
 
 <div class="textcenter">

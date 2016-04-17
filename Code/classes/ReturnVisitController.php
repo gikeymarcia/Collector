@@ -102,7 +102,7 @@ class ReturnVisitController
      */
     public function isReturning()
     {
-        if (fileExists($this->sessionStoragePath) !== false) {
+        if (Helpers::fileExists($this->sessionStoragePath) !== false) {
             $this->loadPriorSession();
 
             return true;
@@ -214,7 +214,7 @@ class ReturnVisitController
         if ($now < $minRet) {
             $early = true;
             $dif = $minRet - $now;
-            $remaining = durationFormatted($dif);
+            $remaining = Helpers::formatDuration($dif);
             $this->earlyMsg = 'You are too eary to participate in this part. You'
                     ."can return in $remaining to start this next part.";
         }

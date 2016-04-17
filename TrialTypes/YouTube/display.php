@@ -1,7 +1,7 @@
-<?php 
+<?php
 /***************************************************************************
  * README
- * 
+ *
  * How to use:
  * In the Settings column, separate parameters by pipe |
  * Parameters;
@@ -32,7 +32,7 @@ $parameters = array(
  */
 function isValidYouTube($string)
 {
-    if (isLocal($string)) {
+    if (Collector\Helpers::isLocal($string)) {
         return false;
     }
     if (false !== stripos($string, 'youtube')) {
@@ -55,8 +55,8 @@ $submitOnDone = true;
 $preventEarlySubmit = true;
 $settings = explode('|', $settings);
 foreach ($settings as $setting) {
-    $settingSubmit = removeLabel($setting, 'submitOnDone');
-    $settingPrevent = removeLabel($setting, 'preventEarlySubmit');
+    $settingSubmit = Collector\Helpers::removeLabel($setting, 'submitOnDone');
+    $settingPrevent = Collector\Helpers::removeLabel($setting, 'preventEarlySubmit');
     if ($settingSubmit === 'false') {
         $submitOnDone = false;
     }
@@ -66,7 +66,7 @@ foreach ($settings as $setting) {
 }
 
 // get video ID
-$videoId = youtubeUrlCleaner($cue, true);
+$videoId = Collector\Helpers::youtubeUrlCleaner($cue, true);
 
 // get start and end time from stim file columns
 if (!isset($startTime) || !is_numeric($startTime)) {
@@ -95,11 +95,11 @@ $parameters['end'] = $endTime;
   var player;
   var submitOnDone       = <?= $submitOnDone       ? 'true' : 'false' ?>;
   var preventEarlySubmit = <?= $preventEarlySubmit ? 'true' : 'false' ?>;
-  
+
   if (preventEarlySubmit) {
       $("#FormSubmitButton").addClass("invisible");
   }
-  
+
   function onYouTubeIframeAPIReady() {
     player = new YT.Player("player", {
       height  : "315",
@@ -115,7 +115,7 @@ $parameters['end'] = $endTime;
       }
     });
   }
-  
+
   function onPlayerStateChange(e) {
     if (e.data === YT.PlayerState.ENDED) {
       if (submitOnDone) {

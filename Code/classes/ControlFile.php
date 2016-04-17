@@ -91,7 +91,7 @@ abstract class ControlFile
         foreach ($this->files as $file) {
             $fullPath = $this->dir.'/'.trim($file);
             $this->exists($fullPath);
-            $data = getFromFile($fullPath, false);
+            $data = Helpers::getFromFile($fullPath, false);
             $this->stitch($data);
             foreach (array_keys($data) as $i) {
                 $this->rowOrigins[] = $file.'?'.$i;
@@ -196,7 +196,7 @@ abstract class ControlFile
      */
     protected function exists($path)
     {
-        if (!fileExists($path)) {
+        if (!Helpers::fileExists($path)) {
             // stop the show with an error
             $this->errorObj->add('Could not find the following file specified '
                 ."by your Conditions file: <br><b>{$path}</b>", true);
@@ -261,7 +261,7 @@ abstract class ControlFile
      * Sets the value for ControlFile::stitched.
      *
      * @param array $data The data to set (should be formatted as a 2-D array
-     *                    like getFromFile() would produce).
+     *                    like Helpers::getFromFile() would produce).
      */
     public function setData($data)
     {

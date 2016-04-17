@@ -1,8 +1,8 @@
 <?php
 // if not set then set to 0, 
 // otherwise convert formatted times like "5d:10h:15m:8s" to seconds
-$min_time = empty($min_time) ? 0 : durationInSeconds($min_time);
-$max_time = empty($max_time) ? 0 : durationInSeconds($max_time);
+$min_time = empty($min_time) ? 0 : Collector\Helpers::durationInSeconds($min_time);
+$max_time = empty($max_time) ? 0 : Collector\Helpers::durationInSeconds($max_time);
 
 // declare when people are allowed to return to the study
 $_SESSION['Min Return'] = time() + $min_time;

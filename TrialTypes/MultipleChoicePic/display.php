@@ -64,40 +64,40 @@ foreach ($settings as $setting) {
     $theseAreButtons = false;
     $shuffleThese = false;
 
-    if (removeLabel($setting, 'button') !== false) {
+    if (Collector\Helpers::removeLabel($setting, 'button') !== false) {
         $theseAreButtons = true;
-    } elseif (removeLabel($setting, 'perRow') !== false) {
-        $test = removeLabel($setting, 'perRow');
+    } elseif (Collector\Helpers::removeLabel($setting, 'perRow') !== false) {
+        $test = Collector\Helpers::removeLabel($setting, 'perRow');
         if (is_numeric($test)) {
             $perRow = (int) $test;
             $limitPerRow = true;
         }
-    } elseif (removeLabel($setting, 'perColumn') !== false) {
-        $test = removeLabel($setting, 'perColumn');
+    } elseif (Collector\Helpers::removeLabel($setting, 'perColumn') !== false) {
+        $test = Collector\Helpers::removeLabel($setting, 'perColumn');
         if (is_numeric($test)) {
             $perCol = (int) $test;
             $limitPerRow = false;
         }
-    } elseif (removeLabel($setting, 'horizontal') !== false) {
+    } elseif (Collector\Helpers::removeLabel($setting, 'horizontal') !== false) {
         $horizontal = true;
-    } elseif (removeLabel($setting, 'vertical') !== false) {
+    } elseif (Collector\Helpers::removeLabel($setting, 'vertical') !== false) {
         $horizontal = false;
-    } elseif (removeLabel($setting, 'shuffle') !== false) {
-        $unlabeled = removeLabel($setting, 'shuffle');
-        if (removeLabel($unlabeled, 'button') !== false) {
+    } elseif (Collector\Helpers::removeLabel($setting, 'shuffle') !== false) {
+        $unlabeled = Collector\Helpers::removeLabel($setting, 'shuffle');
+        if (Collector\Helpers::removeLabel($unlabeled, 'button') !== false) {
             $setting = $unlabeled;
             $theseAreButtons = true;
         } else {
             shuffle($buttons);
         }
-    } elseif (removeLabel($setting, 'share') !== false) {
-        $share = removeLabel($setting, 'share');
+    } elseif (Collector\Helpers::removeLabel($setting, 'share') !== false) {
+        $share = Collector\Helpers::removeLabel($setting, 'share');
     } else {
         $theseAreButtons = true;
     }
 
     if ($theseAreButtons) {
-        $theseButtons = trimExplode(';', removeLabel($setting, 'button'));
+        $theseButtons = trimExplode(';', Collector\Helpers::removeLabel($setting, 'button'));
         $newButtons = array();
         foreach ($theseButtons as $thisButton) {
             if ($thisButton === '') {
@@ -114,7 +114,7 @@ foreach ($settings as $setting) {
                 }
                 $col = strtolower(trim($col));
                 if (isset($stimCols[$col])) {
-                    $index = rangeToArray($index);
+                    $index = Collector\Helpers::rangeToArray($index);
                     foreach ($index as $i) {
                         $newButtons[] = $_EXPT->stimuli[$i][$stimCols[$col]];
                     }
@@ -198,7 +198,7 @@ $tdWidth = 78 / count($buttonGrid[0]);
 </style>
 
 <!-- show the image -->
-<div class="pic"><?= show($cues[0]) ?></div>
+<div class="pic"><?= Collector\Helpers::show($cues[0]) ?></div>
 
 <!-- optional text -->
 <div><?= isset($text) ? $text : '' ?></div>

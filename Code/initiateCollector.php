@@ -14,9 +14,6 @@ error_reporting(E_ALL);
 // load file locations
 $_PATH = new Collector\Pathfinder($_SESSION['Pathfinder']);
 
-// load custom functions and parse
-require $_PATH->get('Custom Functions');
-
 // check if they switched Collectors
 // (e.g., went from 'MG/Collector/Code/Done.php' to 'TK/Collector/Code/Done.php')
 $currentCollector = $_PATH->get('root', 'url');

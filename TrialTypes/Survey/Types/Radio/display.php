@@ -46,7 +46,7 @@
     
     foreach ($surveyRows as $row) {
         echo '<div>';
-        $options = rangeToArray($row['Answers']);
+        $options = Collector\Helpers::rangeToArray($row['Answers']);
         $qName = $row['Question Name'];
         echo     "<div>{$row['Question']}</div>";
         

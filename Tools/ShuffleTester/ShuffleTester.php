@@ -6,7 +6,7 @@ adminOnly();
 require_once $_PATH->get('Shuffle Functions');
 
 // find all available experiments
-$experiments = array_flip(getCollectorExperiments());
+$experiments = array_flip(Collector\Helpers::getCollectorExperiments());
 
 // save selected experimet if available and valid
 $exp = filter_input(INPUT_GET, 'exp', FILTER_SANITIZE_STRING);
@@ -26,7 +26,7 @@ if (!empty($_DATA['exp'])) {
         $searching = scandir("{$_root}/Experiments/$exp/$type/");
         foreach ($searching as $item => $path) {
             // remove files that aren't .csv
-            if (!instring('.csv', $path, true)) {
+            if (!Helpers::inString('.csv', $path, true)) {
                 unset($searching[$item]);
             }
             $ShuffleFolders[$type] = $searching;
@@ -124,10 +124,10 @@ $val = ($zoom !== null) ? $zoom : 'default';
 <?php
 // if a shuffle file has been choosen and it is a csv file
 if (($_DATA['loc'] !== '') && ($_DATA['exp'] !== '')
-    && inString('.csv', $_DATA['loc']) === true
+    && Collector\Helpers::inString('.csv', $_DATA['loc']) === true
 ) {
     // grab file to shuffle
-    $before = getFromFile($_DATA['loc']);
+    $before = Collector\Helpers::getFromFile($_DATA['loc']);
 
     // start a timer
     $shufflestart = microtime(true);
@@ -150,13 +150,13 @@ if (($_DATA['loc'] !== '') && ($_DATA['exp'] !== '')
 <div class="before">
   <div id="RF">
     <h2>Before</h2>
-    <?= display2dArray($before) ?>
+    <?= Collector\Helpers::display2dArray($before) ?>
   </div>
 </div>
 <!-- version after shuffling -->
 <div class="after">
   <h2>After</h2>
-  <?= display2dArray($after) ?>
+  <?= Collector\Helpers::display2dArray($after) ?>
 </div>
 
     <?php
@@ -184,7 +184,7 @@ if (($_DATA['loc'] !== '') && ($_DATA['exp'] !== '')
 
 <script type="text/javascript">
   // default table font size
-  var iniitalSize = parseFloat( $(".display2dArray").css("font-size") );
+  var iniitalSize = parseFloat( $(".Helpers::display2dArray").css("font-size") );
   var size = iniitalSize;
 
   // custom zoom value
@@ -194,7 +194,7 @@ if (($_DATA['loc'] !== '') && ($_DATA['exp'] !== '')
   var clicked = 0;
 
   // change table zoom to custom zoom
-  $(".display2dArray").css("font-size", zoom);
+  $(".Helpers::display2dArray").css("font-size", zoom);
 
   // if a custom zoom is set use it as starting point for zoom in/out calls
   if ($.isNumeric(zoom)) {
@@ -207,7 +207,7 @@ if (($_DATA['loc'] !== '') && ($_DATA['exp'] !== '')
       // scale up the size
       size = size * 1.1;
       // change font to new size value
-      $(".display2dArray").css("font-size", size);
+      $(".Helpers::display2dArray").css("font-size", size);
       // put new zoom value into hidden input
       $(".zoomInput").val(size);
     });
@@ -217,7 +217,7 @@ if (($_DATA['loc'] !== '') && ($_DATA['exp'] !== '')
       // scale down the size
        size = size * 0.9;
        // change font to the new size value
-       $(".display2dArray").css("font-size", size);
+       $(".Helpers::display2dArray").css("font-size", size);
        // put new zoom value into hidden input
        $(".zoomInput").val(size);
     });
@@ -227,7 +227,7 @@ if (($_DATA['loc'] !== '') && ($_DATA['exp'] !== '')
       // change size to inititial size
        size = iniitalSize;
        // change table font-size back to original
-       $(".display2dArray").css("font-size", size);
+       $(".Helpers::display2dArray").css("font-size", size);
        // put the original size back into the hidden zoom input field
        $(".zoomInput").val(size);
        // set clicked to false / unclicked / unlocked

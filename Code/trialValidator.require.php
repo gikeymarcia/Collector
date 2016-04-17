@@ -6,8 +6,8 @@ $doTrialValidation = true;
 clearstatcache();
 
 $allExpFiles = array_merge(
-    scanDirRecursively($_PATH->get('Current Experiment')),
-    scanDirRecursively($_PATH->get('Common'))
+    Collector\Helpers::scanDirRecursively($_PATH->get('Current Experiment')),
+    Collector\Helpers::scanDirRecursively($_PATH->get('Common'))
 );
 
 $fileModTimes = array();
