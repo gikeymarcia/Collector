@@ -1,38 +1,23 @@
 <?php
-/**
- * Autoloader function for Collector.
- * 
- * @param string $className The class to load.
- */
-function autoClassLoader($className)
-{
-    $root = '';
-    $ancestors = 0;
-    while (!is_dir("{$root}Code/classes") && ($ancestors < 3)) {
-        $root .= '../';
-        ++$ancestors;
-    }
-    $loc = "{$root}Code/classes/$className.php";
-    if (is_file($loc)) {
-        require $loc;
-    } else {
-        var_dump(scandir(dirName($loc)));
-        echo "Object $className could not be found";
-    }
-}
-spl_autoload_register('autoClassLoader');
+// configure and register autoloader
+require __DIR__ . '/classes/Autoloader.php';
+$autoloader = new Collector\Autoloader();
+$autoloader->register();
+$autoloader->add('Collector', __DIR__.'/classes');
+$autoloader->add('adamblake', __DIR__.'/vendor/adamblake');
+$autoloader->add('phpbrowscap', __DIR__.'/vendor/phpbrowscap');
 
-// start the session and error reporting
+// start session
 session_start();
 error_reporting(E_ALL);
 
 // load file locations
-$_PATH = new Pathfinder($_SESSION['Pathfinder']);
+$_PATH = new Collector\Pathfinder($_SESSION['Pathfinder']);
 
 // load custom functions and parse
 require $_PATH->get('Custom Functions');
 
-// check if they switched Collectors 
+// check if they switched Collectors
 // (e.g., went from 'MG/Collector/Code/Done.php' to 'TK/Collector/Code/Done.php')
 $currentCollector = $_PATH->get('root', 'url');
 if (!isset($_SESSION['Current Collector'])
@@ -40,7 +25,7 @@ if (!isset($_SESSION['Current Collector'])
 ) {
     $_SESSION = array();
     $_SESSION['Current Collector'] = $currentCollector;
-    $_PATH = new Pathfinder($_SESSION['Pathfinder']);
+    $_PATH = new Collector\Pathfinder($_SESSION['Pathfinder']);
 
     // if inside Code/ redirect to index
     if ($_PATH->inDir('Code') && !$_PATH->atLocation('Login')) {
@@ -55,7 +40,7 @@ if (isset($_SESSION['settings'])) {
     $_SETTINGS = &$_SESSION['settings'];
     $_SETTINGS->upToDate($_PATH);
 } else {
-    $_SESSION['settings'] = new Settings(
+    $_SESSION['settings'] = new Collector\Settings(
         $_PATH->get('Common Settings'),
         $_PATH->get('Experiment Settings'),
         $_PATH->get('Password')

@@ -3,7 +3,7 @@
 adminOnly();
 
 // make a temporary pathfinder to get us to the right settings
-$tempPath = new Pathfinder($_DATA['path']);
+$tempPath = new Collector\Pathfinder($_DATA['path']);
 $exps = array_flip(getCollectorExperiments());
 
 // change experiment if one is selected
@@ -19,7 +19,7 @@ if (!empty($_DATA['exp'])) {
 }
 
 // make a new instance of the settings class
-$yourSettings = new Settings(
+$yourSettings = new Collector\Settings(
     $tempPath->get("Common Settings"),
     $tempPath->get("Experiment Settings"),
     $tempPath->get("Password")

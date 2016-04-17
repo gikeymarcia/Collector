@@ -3,6 +3,8 @@
  * Settings class.
  */
 
+namespace Collector;
+
 /**
  * Controls the getting, setting, and writing of settings.
  */
@@ -70,7 +72,7 @@ class Settings
     );
 
     /**
-     * Information about the loaded experiment settings file: last modification 
+     * Information about the loaded experiment settings file: last modification
      * time ('mod'), the path to the file ('loc'), and its ('data').
      *
      * @var array
@@ -104,7 +106,7 @@ class Settings
 
     /**
      * Constructor.
-     * 
+     *
      * @param string $commonLoc The path to the common settings file.
      * @param string $expLoc    The path to the experiment specific settings file.
      * @param string $passLoc   The path to the password.
@@ -122,7 +124,7 @@ class Settings
      * Attempts to retrieve the requested settings key from a prioritized list
      * of locations, returning the first found instance. Triggers an error if
      * the setting cannot be found.
-     * 
+     *
      * @param string $var The setting to retrieve.
      *
      * @return mixed The value of the key.
@@ -164,7 +166,7 @@ class Settings
      * Magic setter.
      * All values set on the fly are added to the temp property (which has the
      * highest priority when __get is called).
-     * 
+     *
      * @param string $var The name of the property to set.
      * @param mixed  $val The value to set to the property.
      */
@@ -200,7 +202,7 @@ class Settings
 
     /**
      * Sets a new password to the password file.
-     * 
+     *
      * @param string $input The password to store.
      */
     public function setPassword($input = null)
@@ -220,7 +222,7 @@ class Settings
 
     /**
      * Retrieves the stored password.
-     * 
+     *
      * @return string|null The password if it could be found, else null.
      */
     protected function getPassword()
@@ -273,7 +275,7 @@ class Settings
 
     /**
      * Checks the current PHP version to see if JSON pretty print is possible.
-     * 
+     *
      * @return bool True if pretty print is possible, else false.
      */
     protected function canPrettyPrint()
@@ -286,7 +288,7 @@ class Settings
      * If this setting should be used only temporarily then simply set it as a
      * property of the settings instance you are working with. New values set
      * using Settings::set() will persist.
-     * 
+     *
      * @param string $var The settings key to set.
      * @param mixed  $val The value to set to the property.
      */
@@ -314,7 +316,7 @@ class Settings
             } else {
                 trigger_error("Your setting '{$key}' should be a boolean but it is, {$val}, a ({$type}):", E_WARNING);
             }
-        
+
         // save number values as numbers
         } elseif (is_numeric($val)) {
             $int = (int)$val;

@@ -3,6 +3,8 @@
  * Experiment class.
  */
 
+namespace Collector;
+
 /**
  * Stores and manipulates all information about the current Experiment.
  *

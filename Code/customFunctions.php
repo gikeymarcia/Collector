@@ -12,15 +12,15 @@
  * Load settings from common settings, as well as current Experiment folder.
  * The common settings are loaded first and then the Experiment settings are
  * loaded, overwriting any collisions.
- * 
+ *
  * @global Pathfinder $_PATH Pathfinder object currently in use.
- * 
+ *
  * @param string $currentExp (Optional) Load settings for the given experiment.
- * 
+ *
  * @return stdClass Object with a property for each setting.
- * 
+ *
  * @global Pathfinder $_PATH Pathfinder object currently in use.
- * 
+ *
  * @return array Indexed array of the valid experiments.
  */
 function getCollectorExperiments()
@@ -58,12 +58,12 @@ function issetCollectorExperiment($name)
 
 /**
  * Determines if the given experiment name is a valid experiment directory.
- * Checks if the given experiment directory existsand if it has the required 
- * directory tree: index file, settings file, conditions file, stimuli 
+ * Checks if the given experiment directory existsand if it has the required
+ * directory tree: index file, settings file, conditions file, stimuli
  * directory, and procedure directory.
  *
  * @global Pathfinder $_PATH Pathfinder object currently in use.
- * 
+ *
  * @param string $expName The name of subdirectory to check in the Experiments folder.
  *
  * @return bool
@@ -123,7 +123,7 @@ function addColumn(array &$array, $column, $value = '')
 
 /**
  * Writes and array to a line of a CSV file.
- * 
+ *
  * All strings in the array have whitespace converted to single spaces, and then
  * the encoding of the string is converted to the given encoding.
  *
@@ -351,7 +351,7 @@ function trimArrayRecursive($input)
  * @param string $encoding The encoding to convert to.
  *
  * @return mixed The input value(s) converted to the new encoding.
- * 
+ *
  * @todo there are multiple convert encoding functions in customFuncs -- should we consolidate them?
  */
 function convertArrayEncodingRecursive($input, $encoding)
@@ -439,7 +439,7 @@ function createAliases(array $array, $overwrite = false)
  *                           cleaned. Leave empty to clean entire trial.
  *
  * @return array
- * 
+ *
  * @deprecated Trials are now created differently. This function will be removed.
  */
 function cleanTrial(array $trial, $selections = '')
@@ -471,8 +471,8 @@ function cleanTrial(array $trial, $selections = '')
  * Sets all array values to null while preserving the keys.
  *
  * @param array $array The array to erase (by-reference).
- * 
- * @deprecated This function primarly supports the now deprecated function 
+ *
+ * @deprecated This function primarly supports the now deprecated function
  *             'cleanTrial'. This function will be removed
  * @see cleanTrial()
  */
@@ -487,7 +487,7 @@ function eraseArrayValues(array &$array)
  * @staticvar bool $doInit Keeps track of whether the function has been called.
  *
  * @param array $array       The array to display.
- * @param bool  $nonArrayCol Indicates whether or not to include scalar values 
+ * @param bool  $nonArrayCol Indicates whether or not to include scalar values
  *                           in the resultant table, or only to create the table
  *                           from the arrays present.
  *
@@ -665,7 +665,7 @@ function durationInSeconds($duration = '')
  *
  * @return array The extracted trial.
  *
- * @deprecated Trials are no longer created in a way that this function is 
+ * @deprecated Trials are no longer created in a way that this function is
  *             necessary. This function will be removed.
  */
 function ExtractTrial(array $procedureRow, $postNumber)
@@ -761,13 +761,13 @@ function getFromFile($filename, $padding = true, $delimiter = ',')
 
 /**
  * Finds the location of a trial type's files.
- * 
+ *
  * @global Pathfinder $_PATH    The Pathfinder currently in use.
- * 
+ *
  * @staticvar array $trialTypes Caches the results of the function.
- * 
+ *
  * @param string $trialTypeName The name of the trial type
- * 
+ *
  * @return bool|array An array of file paths if the type was found, or false.
  */
 function getTrialTypeFiles($trialTypeName)
@@ -826,7 +826,7 @@ function getTrialTypeFiles($trialTypeName)
  * Finds all trial types and their files.
  *
  * @global Pathfinder $_PATH The Pathfinder currently in use.
- * 
+ *
  * @return array Associative array of $trialtype => $arrayOfFiles.
  */
 function getAllTrialTypeFiles()
@@ -899,7 +899,7 @@ function isBlankLine(array $array)
  * @return array
  *
  * @see getFromFile()
- * @deprecated This function is now handled within a different class and is no 
+ * @deprecated This function is now handled within a different class and is no
  *             longer used in Collector. This function will be removed.
  */
 function keyCheck(array $array, $key, array $errorArray, $searched)
@@ -952,7 +952,7 @@ function placeData(array $input, array $target, $prefix = '')
  * @param string $rangeIndicator A string that symbolizes a continuous range.
  *
  * @return array The range of values.
- * 
+ *
  * @todo is there any way rangeToArray can be refactored/cleaned-up?
  */
 function rangeToArray($string, $separator = ',', $rangeIndicator = '::')
@@ -1029,10 +1029,10 @@ function readable(array $displayArray, $name = 'Untitled array')
 /**
  * Var_dump's the input value inside of pre tags.
  * Used to debug code and inspect arrays
- * 
+ *
  * @param mixed  $input
  * @param string $label
- * 
+ *
  */
 function pre_var_dump($input, $label = '')
 {
@@ -1050,7 +1050,7 @@ function pre_var_dump($input, $label = '')
  * @param string $input       The string to strip the label from.
  * @param string $label       The label to strip.
  * @param bool   $extendLabel Checks if the label is followed by certain.
- *                            characters removes them as well. Set false for 
+ *                            characters removes them as well. Set false for
  *                            strict matching to $label.
  *
  * @return mixed The string with the label removed, true if the string only
@@ -1128,7 +1128,7 @@ function scanDirRecursively($dir)
  * generates tags if so. Otherwise the string is simply returned as is.
  *
  * @param string $string The string to check.
- * @param bool   $noTags Omit tags even if the file is an image or audio file. 
+ * @param bool   $noTags Omit tags even if the file is an image or audio file.
  *
  * @return string The original string, or the string within appropriate tags.
  */
@@ -1205,9 +1205,9 @@ function show($string, $endOnly = true)
  * Determines if the given path points to an image file.
  * Accepted image types are GIF, JPEG, PNG, and BMP. These are the most widely
  * accepted image types across browsers.
- * 
+ *
  * @param string $path The path to the file to check.
- * 
+ *
  * @return bool True if the path points to an image, else false.
  */
 function isImage($path)
@@ -1220,9 +1220,9 @@ function isImage($path)
 
 /**
  * Determines if the given path points to an audio file.
- * 
+ *
  * @param string $path The path to the file to check.
- * 
+ *
  * @return bool True if the path points to an audio file, else false.
  */
 function isAudio($path)
@@ -1235,9 +1235,9 @@ function isAudio($path)
 
 /**
  * Determines a file's mime type using finfo or mime_content_type.
- * 
+ *
  * @param string $path The path to the file to check.
- * 
+ *
  * @return string|bool The mime type of the file (e.g. "audio/mpeg3"), or false.
  */
 function getMimeType($path)
@@ -1262,7 +1262,7 @@ function getMimeType($path)
  * @param string|int $key   The key to sort by.
  *
  * @return array The sorted array.
- * 
+ *
  * @deprecated This function is no longer used anywhere in Collector. This
  *             function will be removed.
  */
@@ -1286,7 +1286,7 @@ function cleanPath ($path) {
     // will convert all possible separators to standard '/'
     $cleanSeparators = strtr($path, '\\', '/');
     $pathComponents  = explode('/', $path);
-    
+
     // Now lets clean up the path components a little bit.
     // First, create an array to populate with the indices
     // of actual directories, as opposed to '.' and '..'
@@ -1349,9 +1349,9 @@ function find_in_dir($dir, $target, $findAltExt = true, $findDir = 1) {
     // this function is expecting valid file paths
     // so, if you need to trim or remove bad characters,
     // do that before sending them to this function
-    
+
     $findDir = (int) $findDir; // 0: no, 1: yes, 2: only
-    
+
     // efficiency checks
     if (!is_dir($dir) AND $dir !== '') {
         return false; // come on now...
@@ -1371,7 +1371,7 @@ function find_in_dir($dir, $target, $findAltExt = true, $findDir = 1) {
             return false;
         }
     }
-    
+
     // we need to search the directory, so lets check for
     // existence and permissions (which might be denied for '/home/')
     if (!is_readable($dir)) {
@@ -1401,7 +1401,7 @@ function find_in_dir($dir, $target, $findAltExt = true, $findDir = 1) {
         // else, we can't scan, so we must give up
         return false;
     }
-    
+
     $scandir = scandir($dir);
     $lowerTarget = strtolower($target);
     foreach ($scandir as $entry) {
@@ -1415,7 +1415,7 @@ function find_in_dir($dir, $target, $findAltExt = true, $findDir = 1) {
             }
         }
     }
-    
+
     // still haven't found it yet, try alt extensions
     if ($findAltExt) {
         if (strpos($lowerTarget, '.') !== false) {
@@ -1436,7 +1436,7 @@ function find_in_dir($dir, $target, $findAltExt = true, $findDir = 1) {
             }
         }
     }
-    
+
     // failed to find match, return false
     return false;
 }
@@ -1476,12 +1476,12 @@ function fileExists ($path, $findAltExt = true, $findDir = 1) {
     // This function is expecting valid path names.
     // So, if you need to trim or remove bad characters,
     // do that before sending them to this function
-    
+
     // guard against bad input (such as a null path)
     $findDir = (int) $findDir; // 0: no, 1: yes, 2: only
     $path    = (string) $path;
     if ($path === '') { return false; }
-    
+
     // efficiency checks
     if (is_file($path)) {
         if ($findDir < 2) {
@@ -1497,7 +1497,7 @@ function fileExists ($path, $findAltExt = true, $findDir = 1) {
             return false;
         }
     }
-    
+
     // -convert Windows directory separators '\' to standard '/'
     // -remove unneeded path elements, such as '.' or 'dir/../'
     // -remove trailing slash
@@ -1506,7 +1506,7 @@ function fileExists ($path, $findAltExt = true, $findDir = 1) {
     //  each path components (e.g., 'one' and 'two' from 'one\two')
     $path = cleanPath($path);
     $path = explode('/', $path);
-    
+
     // if they only supplied a single component, there is the unlikely
     // case that they are searching for the root directory
     // Let's check for that, before assuming that they are looking for
@@ -1526,11 +1526,11 @@ function fileExists ($path, $findAltExt = true, $findDir = 1) {
             return find_in_dir('.', $path[0], $findAltExt, $findDir);
         }
     }
-    
+
     // we are going to search for the final component a bit differently,
     // since it can be either a directory or a file, so lets pull that off
     $finalComponent = array_pop($path);
-    
+
     // now we need to find the directory portion of the path
     // if is_dir() cannot find it, then we will start pulling off
     // components from the end of the path until we get a directory
@@ -1553,7 +1553,7 @@ function fileExists ($path, $findAltExt = true, $findDir = 1) {
         }
     }
     $dirsNotFound = array_reverse($dirsNotFound); // correct order of dirs
-    
+
     // if $path is empty, not even the first dir could be identified
     // so, we will assume its a relative path
     // otherwise, we are going to use what we could
@@ -1562,7 +1562,7 @@ function fileExists ($path, $findAltExt = true, $findDir = 1) {
     } else {
         $baseDir = implode('/', $path);
     }
-    
+
     // now lets do a case-insensitive search for the rest of the dirs
     foreach ($dirsNotFound as $targetDir) {
         // use find_in_dir, but only search for dirs
@@ -1570,7 +1570,7 @@ function fileExists ($path, $findAltExt = true, $findDir = 1) {
         if ($search === false) { return false; }
         $baseDir .= '/' . $search;
     }
-    
+
     // Huzzah! At this point, we should have found our directory,
     // and we just need to search for the final component
     $finalSearch = find_in_dir($baseDir, $finalComponent, $findAltExt, $findDir);
@@ -1593,13 +1593,13 @@ function fileExists ($path, $findAltExt = true, $findDir = 1) {
  * strictly as to whether it is a file or a directory with the $findDir
  * argument. That is, if the parameter is set to only search for directories,
  * a path will only be returned if it points to a directory, not a file.
- * 
+ *
  * @param string $filename The path to check.
  * @param bool   $altExt   Allows alternate extensions to be searched.
  * @param int    $findDir  Indicates whether (0) only files should be searched,
  *                         (1) both files and directories should be searched, or
  *                         (2) only directories should be searched.
- * 
+ *
  * @return string|bool The path to the file, or false if one was not found.
  */
 function fileExistsAlt($filename, $altExt = true, $findDir = 1)
@@ -1630,11 +1630,11 @@ function fileExistsAlt($filename, $altExt = true, $findDir = 1)
  * Determines if any files in the directory of the given path match the filename
  * of the given path, regardless of extension.
  * For a path like "path/to/some/file.php", the first file found that matches
- * the path regardless of the extension will be returned, like 
- * "path/to/some/file.txt". 
- * 
+ * the path regardless of the extension will be returned, like
+ * "path/to/some/file.txt".
+ *
  * @param string $path The path to check.
- * 
+ *
  * @return string|bool The file with the alternative extension, else false.
  */
 function altFileExists($path)
@@ -1714,15 +1714,13 @@ function sortArrayLikeArray(array $array, array $template)
 
 /**
  * Retrieves user-agent information.
- * 
+ *
  * @return array The array of user-agent information.
- * 
+ *
  * @see phpbrowscap\Browscap->getBrowser()
  */
 function getUserAgentInfo()
 {
-    require_once 'phpbrowscap/Browscap.php';
-
     // phpbrowscap requires a cache; create cache dir if it doesn't exist
     if (!file_exists('phpbrowscap/cache')) {
         mkdir('phpbrowscap/cache', 0777, true);
@@ -1808,7 +1806,7 @@ function stripUrlScheme($url)
  * @param string $path The path to check.
  *
  * @return bool True if the file is local.
- * 
+ *
  * @todo isLocal only checks if the file is a URL or not, not whether it acually exists locally.
  */
 function isLocal($path)

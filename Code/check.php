@@ -4,12 +4,12 @@ if (!isset($_SESSION)) {
 
     // load file locations
     require $_root.'/Code/Pathfinder.class.php';
-    $_PATH = new Pathfinder();
+    $_PATH = new Collector\Pathfinder();
 
     require $_PATH->get('Parse');
 
     // load configs
-    $_SETTINGS = Parse::fromConfig($_PATH->get('Config'), true);
+    $_SETTINGS = adamblake\Parse::fromConfig($_PATH->get('Config'), true);
 
     // load custom functions
     require $_PATH->get('Custom Functions');
@@ -200,7 +200,7 @@ if (isset($toCheck)) {
 //             // log and break at the first IP rejection
 //             if ($ip === $rejected['ip address']) {
 //                 $noGo[] = 'Sorry, you are not allowed to login to this experiment more than once.';
-//                 break;     
+//                 break;
 //             }
 //         }
 //     }

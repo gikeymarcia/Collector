@@ -32,7 +32,7 @@ if (is_file($trialValidationTimeFile)) {
 // if we need to validate, use the validation class
 // if successful, record the mod times of the current scan
 if ($doTrialValidation) {
-    $trialValidator = new TrialValidator($stimuli, $procedure, $errors);
+    $trialValidator = new Collector\TrialValidator($stimuli, $procedure, $errors);
 
     if ($trialValidator->isValid()) {
         $dir = dirname($trialValidationTimeFile);

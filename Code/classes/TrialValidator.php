@@ -3,6 +3,8 @@
  * TrialValidator class.
  */
 
+namespace Collector;
+
 /**
  * Handles validation for trials, including global and custom validation.
  */
@@ -211,7 +213,7 @@ class TrialValidator
         // get columns for this post trial
         // if post level is 0, skip all columns starting with "Post "
         // else, make sure that the column starts with "Post X "
-        // if we are getting post columns, trim out the post part 
+        // if we are getting post columns, trim out the post part
         // e.g., "Post 1 Trial Type" becomes "Trial Type"
         if ($post === 0) {
             foreach ($procRow as $col => $val) {

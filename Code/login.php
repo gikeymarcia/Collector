@@ -9,7 +9,7 @@ $_SESSION = array();
 $_SESSION['state'] = 'init';
 
 // initiate the object that finds files for us
-$_PATH = new Pathfinder($_SESSION['Pathfinder']);
+$_PATH = new Collector\Pathfinder($_SESSION['Pathfinder']);
 
 // load shuffle functions we will use later
 require $_PATH->get('Shuffle Functions');
@@ -26,7 +26,7 @@ if (!in_array($current, getCollectorExperiments())) {
 
 // tell pathfinder the current experiment and load common/experiment settings
 $_PATH->setDefault('Current Experiment', $current);
-$_SESSION['settings'] = new Settings(
+$_SESSION['settings'] = new Collector\Settings(
     $_PATH->get('Common Settings'),
     $_PATH->get('Experiment Settings'),
     $_PATH->get('Password')
@@ -37,25 +37,25 @@ $_SETTINGS = &$_SESSION['settings'];
  * Login objects
  */
 // error handler
-$errors = new ErrorController();
+$errors = new Collector\ErrorController();
 
 // user validator
 $username = filter_input(INPUT_GET, 'Username', FILTER_SANITIZE_EMAIL);
-$user = new User($username, $errors);
+$user = new Collector\User($username, $errors);
 $user->feedPathfinder($_PATH);
 
 // debug handler
-$debug = new DebugController(
+$debug = new Collector\DebugController(
     $user->getUsername(),
     $_SETTINGS->debug_name,
     $_SETTINGS->debug_mode
 );
 // @todo change feedPathfinder to return a value that Pathfinder will accept
-$debug->feedPathfinder($_PATH); // changes data directory if debug mode is on 
+$debug->feedPathfinder($_PATH); // changes data directory if debug mode is on
 $debug->toSession(); // sets $_SESSION['Debug'] to a bool
 
 // condition controller
-$cond = new ConditionController(
+$cond = new Collector\ConditionController(
     $_PATH->get('Conditions'),
     $_PATH->get('Counter'),
     $errors,
@@ -72,7 +72,7 @@ if ($_SETTINGS->check_elig == true) {
 /*
  * Returning participants
  */
-$revisit = new ReturnVisitController(
+$revisit = new Collector\ReturnVisitController(
     $_PATH->get('Session Storage'),
     $_PATH->get('Done'),
     $_PATH->get('Experiment Page')
@@ -105,18 +105,18 @@ if ($returning !== null) {
 $cond->assignCondition();
 $_PATH->setDefault('Condition Index', $cond->getAssignedIndex());
 
-$procedure = new Procedure(
+$procedure = new Collector\Procedure(
     $_PATH->get('Procedure Dir'),
     $cond->allProc(),
     $errors
 );
-$stimuli = new Stimuli(
+$stimuli = new Collector\Stimuli(
     $_PATH->get('Stimuli Dir'),
     $cond->allStim(),
     $errors
 );
 
-$status = new StatusController();
+$status = new Collector\StatusController();
 $status->updateUser(
     $user->getUsername(),
     $user->getID(),
@@ -149,7 +149,7 @@ $_SESSION['Session'] = $user->getSession();
 $_SESSION['Start Time'] = time();
 
 // access stimuli, procedure, and condition arrays using $_EXPT->[name]
-$_EXPT = new Experiment(
+$_EXPT = new Collector\Experiment(
             $stimuli->getShuffled(),
             $procedure->getShuffled(),
             $cond->get()

@@ -19,7 +19,7 @@
 require 'Code/initiateCollector.php';
 
 $_SESSION = array();
-$_PATH = new Pathfinder($_SESSION['Pathfinder']);
+$_PATH = new Collector\Pathfinder($_SESSION['Pathfinder']);
 $_SETTINGS->upToDate($_PATH);
 
 // get possible experiments to choose from
@@ -49,7 +49,7 @@ require $_PATH->get('Header');
       <?php endforeach; ?>
     </ul>
 
-    <p>Otherwise, you can access one of the other tools 
+    <p>Otherwise, you can access one of the other tools
        <a href="<?= $_PATH->get('Tools') ?>">here</a>.
     </p>
 </div>

@@ -3,11 +3,13 @@
  * Parse class.
  */
 
+namespace adamblake;
+
 //use Symfony\Component\Yaml\Yaml;
 
 /**
  * Collection of static functions for parsing files.
- * 
+ *
  * @author Adam Blake <adamblake@g.ucla.edu>
  * @copyright Adam B. Blake 2014
  */
@@ -183,28 +185,28 @@ class Parse
     }
 
     /**
-     * Wrapper for file_get_contents that throws Exceptions, rather than 
+     * Wrapper for file_get_contents that throws Exceptions, rather than
      * returning false and throwing a warning.
-     * 
+     *
      * @param string   $filename         Name of the file to read.
-     * @param bool     $use_include_path [optional] As of PHP 5 the 
+     * @param bool     $use_include_path [optional] As of PHP 5 the
      *                                   FILE_USE_INCLUDE_PATH constant can be used to trigger include path search.
      * @param resource $context          [optional] A valid context resource created with
-     *                                   stream_context_create. If you don't need to use a custom context, you 
+     *                                   stream_context_create. If you don't need to use a custom context, you
      *                                   can skip this parameter by NULL.
-     * @param int      $offset           [optional] The offset where the reading starts on the 
-     *                                   original stream. Seeking (offset) is not supported with remote files. 
-     *                                   Attempting to seek on non-local files may work with small offsets, but 
+     * @param int      $offset           [optional] The offset where the reading starts on the
+     *                                   original stream. Seeking (offset) is not supported with remote files.
+     *                                   Attempting to seek on non-local files may work with small offsets, but
      *                                   this is unpredictable because it works on the buffered stream.
      * @param int      $maxlen           [optional] Maximum length of data read. The default is
-     *                                   to read until end of file is reached. Note that this parameter is 
+     *                                   to read until end of file is reached. Note that this parameter is
      *                                   applied to the stream processed by the filters.
      *
      * @return string The read data.
      *
-     * @throws \Exception Throws an exception when file_get_contents cannot open 
+     * @throws \Exception Throws an exception when file_get_contents cannot open
      *                    the file.
-     * 
+     *
      * @todo something seems to be wrong with the call_user_func_array in combination with the file_get_contents: returns empty string
      */
     public static function fget_contents($filename, $use_include_path = false,

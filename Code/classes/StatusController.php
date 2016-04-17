@@ -3,6 +3,8 @@
  * StatusController class.
  */
 
+namespace Collector;
+
 /**
  *  Writes status begin/end messages.
  *  Logic: upon __construct() grabs browser info
@@ -178,7 +180,7 @@ class StatusController
      * Writes a status end message.
      *
      * @param int $startTime The number of seconds from the UNIX epoch
-     * 
+     *
      * @todo writeEnd() is copied from done.php --- not functional yet!
      */
     public function writeEnd($startTime, $state = "not given")

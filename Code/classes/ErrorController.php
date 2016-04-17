@@ -3,6 +3,8 @@
  * ErrorController class.
  */
 
+namespace Collector;
+
 /**
  * Used to keep track of error messages during the login process.
  */
@@ -28,7 +30,7 @@ class ErrorController
      * @param string $errMsg      Details of specific error.
      * @param bool   $showStopper Set to 'true' to immediately print the error
      *                            and stop the program.
-     * 
+     *
      * @todo should showstopper actually push to an error page that dumps all errors?
      */
     public function add($errMsg, $showStopper = false)
@@ -45,7 +47,7 @@ class ErrorController
 
     /**
      * Prints all errors to the page.
-     * 
+     *
      * @todo if we change errors to go to an error page, styles should be in a css file for that page
      */
     public function printErrors()
