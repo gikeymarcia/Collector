@@ -84,9 +84,18 @@
             
             foreach ($survey as $surveyRow) {
                 if ($surveyRow[$col] === '') continue; // this row not used for this scale
+                $type = cleanSurveyType($surveyRow['Type']);
+                
                 $qName = $surveyRow['Question Name'];
-                if (!isset($data[$qName])) continue; // somehow, this question isn't in the data
-                $resp = $data[$qName];
+                
+                if (isset($allSurveyTypes[$type]['getResponses'])) {
+                    $rowResponses = $allSurveyTypes[$type]['getResponses']($surveyRow);
+                } elseif (isset($data[$qName])) {
+                    $rowResponses = array($data[$qName]);
+                } else {
+                    continue; // somehow, this question isn't in the data
+                }
+                
                 $answers = surveyRangeToArray($surveyRow['Answers']);
                 if ($surveyRow['Values'] === '') {
                     $values = $answers;
@@ -99,28 +108,31 @@
                 }
                 if (count($answers) !== count($values)) continue; // cant convert answer to value directly
                 $answerValues = array_combine($answers, $values);
-                if (!isset($answerValues[$resp])) continue; // this response isn't one of the listed answers
                 
-                // by this point, we should be good to go. the response exists, matches an answer, and the answer has a value
-                if ($surveyRow[$col][0] === 'r' || $surveyRow[$col][0] === 'R') {
-                    // reverse score this item
-                    $answerIndices   = array_flip($answers);
-                    $answerIndex     = $answerIndices[$resp];
-                    $reversedAnswers = array_reverse($answers);
-                    $reverseResp     = $reversedAnswers[$answerIndex];
-                    $respFactor      = substr($surveyRow[$col], 1);
-                    $respFactor      = ($respFactor === false) ? 1.0 : $respFactor; // can happen if the column entry is just 'r'
-                    $respValue       = $answerValues[$reverseResp];
-                } else {
-                    $respFactor      = $surveyRow[$col];
-                    $respValue       = $answerValues[$resp];
+                foreach ($rowResponses as $resp) {
+                    if (!isset($answerValues[$resp])) continue; // this response isn't one of the listed answers
+                    
+                    // by this point, we should be good to go. the response exists, matches an answer, and the answer has a value
+                    if ($surveyRow[$col][0] === 'r' || $surveyRow[$col][0] === 'R') {
+                        // reverse score this item
+                        $answerIndices   = array_flip($answers);
+                        $answerIndex     = $answerIndices[$resp];
+                        $reversedAnswers = array_reverse($answers);
+                        $reverseResp     = $reversedAnswers[$answerIndex];
+                        $respFactor      = substr($surveyRow[$col], 1);
+                        $respFactor      = ($respFactor === false) ? 1.0 : $respFactor; // can happen if the column entry is just 'r'
+                        $respValue       = $answerValues[$reverseResp];
+                    } else {
+                        $respFactor      = $surveyRow[$col];
+                        $respValue       = $answerValues[$resp];
+                    }
+                    
+                    if (!is_numeric($respFactor)) continue; // a factor of 'string' means nothing
+                    
+                    // question: if the factor is 0, should this row be skipped? For now, its left in, but it will affect averages
+                    $respFactor   = (float) $respFactor;
+                    $respValues[] = $respValue * $respFactor;
                 }
-                
-                if (!is_numeric($respFactor)) continue; // a factor of 'string' means nothing
-                
-                // question: if the factor is 0, should this row be skipped? For now, its left in, but it will affect averages
-                $respFactor   = (float) $respFactor;
-                $respValues[] = $respValue * $respFactor;
             }
             
             if (count($respValues) === 0) {
@@ -136,7 +148,6 @@
             
             
             $data["Score_$scoreName"] = $computedScore;
-            var_dump($scoreName, $computedScore);
         }
     }
     
