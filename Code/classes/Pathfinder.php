@@ -320,7 +320,7 @@ class Pathfinder
     public function getURL()
     {
         $port = $_SERVER['SERVER_PORT'];
-        $https = $_SERVER['HTTPS'];
+        $https = isset($_SERVER['HTTPS']) ? $_SERVER['HTTPS'] : null;
         $domain = $_SERVER['HTTP_HOST'];
         $resource = $_SERVER['REQUEST_URI'];
 
