@@ -59,8 +59,8 @@
     }
     
     # SURVEY SCORING
-    // required columns: Answers, Values
-    if (isset($survey[0]['Answers'], $survey[0]['Values'])) {
+    // required columns: Answers
+    if (isset($survey[0]['Answers'])) {
         $scoreCols = array();
         foreach (array_keys($survey[0]) as $surveyCol) {
             if (strtolower(substr($surveyCol, 0, 5)) === 'score') {
@@ -87,8 +87,13 @@
                 $qName = $surveyRow['Question Name'];
                 if (!isset($data[$qName])) continue; // somehow, this question isn't in the data
                 $resp = $data[$qName];
-                $answers = rangeToArray($surveyRow['Answers']);
-                $values  = rangeToArray($surveyRow['Values']);
+                $answers = surveyRangeToArray($surveyRow['Answers']);
+                if ($surveyRow['Values'] === '') {
+                    $values = $answers;
+                } else {
+                    $values = surveyRangeToArray($surveyRow['Values']);
+                }
+                
                 foreach ($values as $val) {
                     if (!is_numeric($val)) continue 2; // cant use this row, values arent numeric
                 }
@@ -118,16 +123,20 @@
                 $respValues[] = $respValue * $respFactor;
             }
             
-            if (count($respValues === 0)) $data["Score_$scoreName"] = 'no data'; // no data found for this scale
-            
-            // if you want to add more scoring types, put the code here, as an elseif
-            if ($score['Type'] === 'average') {
-                $computedScore = array_sum($respValues) / count($respValues);
+            if (count($respValues) === 0) {
+                $computedScore = 'no data'; // no data found for this scale
             } else {
-                $computedScore = array_sum($respValues);
+                // if you want to add more scoring types, put the code here, as an elseif
+                if ($score['Type'] === 'average') {
+                    $computedScore = array_sum($respValues) / count($respValues);
+                } else {
+                    $computedScore = array_sum($respValues);
+                }
             }
             
+            
             $data["Score_$scoreName"] = $computedScore;
+            var_dump($scoreName, $computedScore);
         }
     }
     

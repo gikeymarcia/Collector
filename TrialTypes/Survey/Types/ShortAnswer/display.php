@@ -20,8 +20,10 @@
     }
     
     foreach ($surveyRows as $row) {
+        $qName = htmlspecialchars($row['Question Name'], ENT_QUOTES);
+        $required = isRespRequired($row) ? 'required' : '';
         echo '<div>';
         echo     "<div>{$row['Question']}</div>";
-        echo     "<textarea name='{$row['Question Name']}' rows='3' required></textarea>";
+        echo     "<textarea name='$qName' rows='3' $required></textarea>";
         echo '</div>';
     }
