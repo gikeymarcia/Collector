@@ -319,10 +319,10 @@ class Pathfinder
      */
     public function getURL()
     {
-        $port = filter_input(INPUT_SERVER, 'SERVER_PORT', FILTER_SANITIZE_NUMBER_INT);
-        $https = filter_input(INPUT_SERVER, 'HTTPS', FILTER_SANITIZE_STRING);
-        $domain = filter_input(INPUT_SERVER, 'HTTP_HOST', FILTER_SANITIZE_URL);
-        $resource = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_URL);
+        $port = $_SERVER['SERVER_PORT'];
+        $https = $_SERVER['HTTPS'];
+        $domain = $_SERVER['HTTP_HOST'];
+        $resource = $_SERVER['REQUEST_URI'];
 
         // from http://stackoverflow.com/q/4503135
         if ($port === 443 || ($https !== null && $https !== 'off')) {
