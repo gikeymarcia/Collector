@@ -46,14 +46,17 @@
     
     foreach ($surveyRows as $row) {
         echo '<div>';
-        $options = rangeToArray($row['Answers']);
-        $qName = $row['Question Name'];
+        $options = surveyRangeToArray($row['Answers']);
+        $qName = htmlspecialchars($row['Question Name'], ENT_QUOTES);
+        $required = isRespRequired($row) ? 'required' : '';
+        
         echo     "<div>{$row['Question']}</div>";
         
         echo     '<div class="respArea">';
         foreach ($options as $opt) {
+            $val = htmlspecialchars($opt, ENT_QUOTES);
             echo     "<label>"
-               .         "<span><input type='radio' name='$qName' required></span>"
+               .         "<span><input type='radio' name='$qName' value='$val' $required></span>"
                .         "<span>$opt</span>"
                .     "</label>";
         }

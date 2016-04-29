@@ -40,15 +40,17 @@
     
     foreach ($surveyRows as $row) {
     echo '<div>';
-        $ans = '<option>' . implode('</option><option>', rangeToArray($row['Answers'])) . '</option>';
-        echo "<label>"
-           .     "<div>{$row['Question']}</div>"
-           .     "<div>"
-           .         "<select name='{$row['Question Name']}' required>"
-           .             "<option selected hidden></option>"
-           .             $ans
-           .         "</select>"
-           .     "</div>"
-           . "</label>";
+    $qName = htmlspecialchars($row['Question Name'], ENT_QUOTES);
+    $ans = '<option>' . implode('</option><option>', surveyRangeToArray($row['Answers'])) . '</option>';
+    $required = isRespRequired($row) ? 'required' : '';
+    echo "<label>"
+       .     "<div>{$row['Question']}</div>"
+       .     "<div>"
+       .         "<select name='$qName' $required>"
+       .             "<option selected hidden></option>"
+       .             $ans
+       .         "</select>"
+       .     "</div>"
+       . "</label>";
     echo '</div>';
     }

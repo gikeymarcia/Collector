@@ -77,7 +77,7 @@ if (!isset($endTime)   || !is_numeric($endTime)) {
 }
 
 $parameters['start'] = $startTime;
-$parameters['end'] = $endtime;
+$parameters['end'] = $endTime;
 
 ?>
 
