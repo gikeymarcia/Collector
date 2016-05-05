@@ -6,3 +6,6 @@ CopyPic Trial Type,How to use Copy Pic trial type.,CopyPicStim.csv,CopyPic.csv
 Youtube Trial Type,How to use the Youtube trial type.,YoutubeDemo.csv,YoutubeProc.csv
 Likert Trial Type,How to use the Likert trial type. ,LikertDemo.csv,Likert.csv
 Survey Trial Type,How to use the Survey Trial type,Survey.csv,Survey.csv
+Instruct,How to Use Instruct Trial Type,Word Pairs.csv,InstructProc.csv
+Cue,How to use Cue Trial Type,CueStim.csv,CueProc.csv
+Multiple Choice,How to use multiple choice,MultipleChoiceStim.csv,MultipleChoiceProc.csv
