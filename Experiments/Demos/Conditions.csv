@@ -7,3 +7,4 @@ Youtube Trial Type,How to use the Youtube trial type.,YoutubeDemo.csv,YoutubePro
 Likert Trial Type,How to use the Likert trial type. ,LikertDemo.csv,Likert.csv
 Survey Trial Type,How to use the Survey Trial type,Survey.csv,Survey.csv
 CuedRecall Trial Type,How to use Cue,CuedRecallStim.csv,CuedRecallProc.csv
+FreeRecall Trial Type,How to use Free Recall Trial type,FreeRecallStim.csv,FreeRecallProc.csv

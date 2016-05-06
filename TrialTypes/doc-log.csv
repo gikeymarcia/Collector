@@ -5,7 +5,7 @@ Instruct,,,1
 WordPair,,,1
 CopyWordPair,,,2
 CuePic,,,2
-FreeRecall,,,2
+FreeRecall,x,,2
 MultipleChoice,,,3
 Passage,,,3
 CuedRecallPic,,,4
