@@ -8,3 +8,6 @@ Likert Trial Type,How to use the Likert trial type. ,LikertDemo.csv,Likert.csv
 Survey Trial Type,How to use the Survey Trial type,Survey.csv,Survey.csv
 CuedRecall Trial Type,How to use Cue,CuedRecallStim.csv,CuedRecallProc.csv
 FreeRecall Trial Type,How to use Free Recall Trial type,FreeRecallStim.csv,FreeRecallProc.csv
+Instruct,How to Use Instruct Trial Type,Word Pairs.csv,InstructProc.csv
+Cue,How to use Cue Trial Type,CueStim.csv,CueProc.csv
+Multiple Choice,How to use multiple choice,MultipleChoiceStim.csv,MultipleChoiceProc.csv
