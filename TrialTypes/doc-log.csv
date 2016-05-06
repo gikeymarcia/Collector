@@ -1,6 +1,6 @@
 Trail Type,Demo,Wait?,Priority
 Cue,,,1
-CuedRecall,,,1
+CuedRecall,x,,1
 Instruct,,,1
 WordPair,,,1
 CopyWordPair,,,2
