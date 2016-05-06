@@ -9,5 +9,8 @@ Survey Trial Type,How to use the Survey Trial type,Survey.csv,Survey.csv
 CuedRecall Trial Type,How to use Cue,CuedRecallStim.csv,CuedRecallProc.csv
 FreeRecall Trial Type,How to use Free Recall Trial type,FreeRecallStim.csv,FreeRecallProc.csv
 Instruct,How to Use Instruct Trial Type,Word Pairs.csv,InstructProc.csv
+Copy Word Pair Trial Type,How to use the Copy Word Pair Trial type,CopyWordPairStim.csv,CopyWordPairProc.csv
+Copy Word Pair Delayed Trial Type,How to use the Copy Word Pair Delayed Trial type,CopyWordPairDelayedStim.csv,CopyWordPairDelayedProc.csv
+Cue Pic Trial Type,How to use the Cue Pic Trial Type,CuePicStim.csv,CuePicProc.csv
 Cue,How to use Cue Trial Type,CueStim.csv,CueProc.csv
 Multiple Choice,How to use multiple choice,MultipleChoiceStim.csv,MultipleChoiceProc.csv
