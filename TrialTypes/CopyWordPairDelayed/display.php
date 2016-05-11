@@ -27,9 +27,9 @@
 
 
 <script>
- $(window).load(function() {
-   COLLECTOR.timer( 3, function() {
-     $(".study-right").first().html( "<?= $answer; ?>" );
-   });
- });
+trialBegin = function() {
+    COLLECTOR.timer( 3, function() {
+        $(".study-right").first().html( "<?= $answer; ?>" );
+    });
+});
 </script>
