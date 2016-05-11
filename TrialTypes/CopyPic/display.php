@@ -10,7 +10,7 @@
 
 // picture trial version of feedback
 if ($text === '') {
-    $text = 'The correct answer was:';
+    $text = 'The correct answer is:';
 }
 
 ?>
@@ -21,8 +21,10 @@ if ($text === '') {
 </div>
 
 <!-- show the answer -->
-<div class="textcenter"><h2><?= $text ?></h2></div>
-<h1 class="textcenter"><?= show($answer) ?></h1>
+
+<div class="textcenter"><?= show($answer) ?></h2>
+<h5 class="textcenter"><h5><?= $text ?></h2></div>
+
 
 <!-- copy the answer -->
 <div class="textcenter pad">
