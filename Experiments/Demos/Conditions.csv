@@ -6,7 +6,7 @@ CopyWordPair,How to use the Copy Word Pair Trial type,CopyWordPairStim.csv,CopyW
 CopyWordPairDelayed,How to use the Copy Word Pair Delayed Trial type,CopyWordPairDelayedStim.csv,CopyWordPairDelayedProc.csv
 Cue,How to use Cue Trial Type,CueStim.csv,CueProc.csv
 CuedRecall,How to use Cue,CuedRecallStim.csv,CuedRecallProc.csv
-CuePic,How to use the Cue Pic Trial Type,CuePicStim.csv,CuePicProc.csv
+CuePic,How to use the Cue Pic Trial Type,CopyPicStim.csv,CuePic.csv
 DigitSpan,How to use the forward and backward DigitSpan trials,DigitSpanDemo.csv,DigitSpan.csv
 FreeRecall,How to use Free Recall Trial type,FreeRecallStim.csv,FreeRecallProc.csv
 Instruct,How to Use Instruct Trial Type,Word Pairs.csv,InstructProc.csv
