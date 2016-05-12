@@ -27,9 +27,9 @@
 
 
 <script>
-trialBegin = function() {
-    COLLECTOR.timer( 3, function() {
+trialBegin = function () {
+    COLLECTOR.timer(3, function() {
         $(".study-right").first().html( "<?= $answer; ?>" );
     });
-});
+};
 </script>
