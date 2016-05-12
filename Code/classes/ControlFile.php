@@ -195,20 +195,18 @@ abstract class ControlFile
      */
     protected function checkPath($path)
     {
-        if (file_exists($path)) {
+        if (is_file($path)) {
             return $path;
         } else {
             $case_correct_path = fileExists($path);
             if ($case_correct_path === false) {
                 // stop the show with an error
                 $this->errorObj->add('Could not find the following file specified '
-                    ."by your Conditions file: <br><b>{$path}</b>", true);                
+                    ."by your Conditions file: <br><b>{$path}</b>", true);
             } else {
                 return $case_correct_path;
             }
         }
-
-        return true;
     }
 
     /**

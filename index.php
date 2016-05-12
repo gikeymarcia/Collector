@@ -18,7 +18,7 @@
  */
 require 'Code/initiateCollector.php';
 
-$_SESSION = array();
+// $_SESSION = array();
 $_PATH = new Pathfinder($_SESSION['Pathfinder']);
 $_SETTINGS->upToDate($_PATH);
 
