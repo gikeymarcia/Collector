@@ -9,3 +9,5 @@ Survey Trial Type,How to use the Survey Trial type,Survey.csv,Survey.csv
 Instruct,How to Use Instruct Trial Type,Word Pairs.csv,InstructProc.csv
 Cue,How to use Cue Trial Type,CueStim.csv,CueProc.csv
 Multiple Choice,How to use multiple choice,MultipleChoiceStim.csv,MultipleChoiceProc.csv
+FontSize,How to use font size,FontSizeStim.csv,FontSizeProc.csv
+MultipleChoicePic,How to use multiple choice with pictures,MultipleChoicePicStim.csv,MultipleChoicePicProc.csv
