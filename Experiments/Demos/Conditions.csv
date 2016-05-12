@@ -13,6 +13,8 @@ FreeRecall,How to use Free Recall Trial type,FreeRecallStim.csv,FreeRecallProc.c
 Instruct,How to Use Instruct Trial Type,Word Pairs.csv,InstructProc.csv
 Likert,How to use the Likert trial type. ,LikertDemo.csv,Likert.csv
 Multiple Choice,How to use multiple choice,MultipleChoiceStim.csv,MultipleChoiceProc.csv
+FontSize,How to use font size,FontSizeStim.csv,FontSizeProc.csv
+MultipleChoicePic,How to use multiple choice with pictures,MultipleChoicePicStim.csv,MultipleChoicePicProc.csv
 Survey,How to use the Survey Trial type,Survey.csv,Survey.csv
 Youtube,How to use the Youtube trial type.,YoutubeDemo.csv,YoutubeProc.csv
 CuedRecallPic,How to use the Cued Recall Pic Trial Type.,CuedRecallPicStim.csv,CuedRecallPicProc.csv

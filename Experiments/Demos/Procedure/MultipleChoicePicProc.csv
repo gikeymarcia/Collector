@@ -1,0 +1,7 @@
+Item,Trial Type,Max Time,Min Time,Text,Procedure Notes,Settings
+2,MultipleChoicePic,user,,,Show one answer,buttons: $answer
+3,MultipleChoicePic,user,,,Show one answer,buttons: $answer
+4,MultipleChoicePic,user,,,Show one answer,buttons: $answer
+"2,3,4",MultipleChoicePic,user,,,"Show three buttons, 3 per Row",buttons: $answer|shuffle|share A|perRow: 3
+"4,2,3",MultipleChoicePic,user,,,"Show three buttons, 3 per Column and in the same order as the previous question",buttons: $answer|shuffle|share A|perColumn: 3
+8,MultipleChoicePic,user,,,Have several options show up for potential answers.,shuffle buttons: $answer[8::10] | shuffle buttons: $answer[2::7] | perRow: 3 | share B

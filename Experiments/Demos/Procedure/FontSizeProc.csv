@@ -1,0 +1,4 @@
+Item,Trial Type,Max Time,Min Time,Text,Procedure Notes,Shuffle 1,Font Size
+0,FontSize,user,,"<font size = ""2""> You can have a font size too small</font>",Show small font size,# fixed order,2
+0,FontSize,user,,"<font size = ""10""> You can have a font size too large</font>",Show normal font size,# fixed order,10
+0,FontSize,user,,"<font size = ""4"">You can have a font size just right</font>",Show large font size,# fixed order,4
