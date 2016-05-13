@@ -1,5 +1,5 @@
 Item,Trial Type,Max Time,Text,Procedure Notes,Settings,Shuffle 1
 ,Instruct,user,"<h2>Get Ready</h2><p>Clicking the button below will start the task. You might want to include some instructions here. While the task is running, do not use the back or refresh page buttons. The task completes when both trials are missed at a level (i.e. level 2: correct, correct: will proceed; level 3: correct, incorrect: will proceed; level 4: incorrect, incorrect: task finishes).",,,
-,DigitSpan,User,,Forward digit span.,,
+,DigitSpan,User,,Forward digit span.,forwards,
 ,Instruct,user,"<h2>Get Ready</h2><p>Clicking the button below will start the task. Again, some instructions might be helpful here. This time the digits must be recalled in reverse for the level to mark as correct. This is achieved by putting ""reverse"" or ""backwards"" in the Settings column for the trial in the Procedure file.",,,
-,DigitSpan,,,Reverse digit span.,reverse,
+,DigitSpan,,,Reverse digit span.,backwards,

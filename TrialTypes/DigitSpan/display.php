@@ -10,8 +10,7 @@ if (empty($_EXPT->get('text'))) {
     $_EXPT->update('text', "Listen carefully.");
 }
 
-$direction = ($_trialSettings->forward OR $_trialSettings->backwards)
-		   ? -1 : 1;
+$direction = $_trialSettings->backwards ? -1 : 1;
 
 $current = $_PATH->get('Trial Types', 'url').'/DigitSpan';
 
