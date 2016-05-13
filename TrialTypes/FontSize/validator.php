@@ -1,8 +1,10 @@
-<?php return function($trial) {
-    $var = $trial->get('Font Size');
-    $trialtype = $trial->get('trial type');
-    if (empty($var)) {
-        return "The {$trialtype} requires a 'Font Size' column with a value "
-        . "such as: '32px', '120%', '2em', or '16pt'";
+<?php 
+
+return function($trial) {
+    $_trialSettings = new TrialSettings($trial->get('settings');
+    $errors = array();
+    $fontsize = $_trialSettings->fontsize;
+    if (empty($fontsize)) {
+        $errors[] = 'You need a Settings column with a value such as: "fontsize = 32px", "fontsize = 120%", "fontsize = 2em", or "fontsize = 16pt"';
     }
 };
