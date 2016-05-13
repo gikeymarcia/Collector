@@ -171,44 +171,44 @@
     */
 
     //check the settings column, if vertical, then output that way
-    if ($settings === "vertical"){
+    if ($_trialSettings->output === "vertical"){
         //run through each item in survey
-    foreach ($survey as $surveyRowIndex => $surveyRow) {
-        //grab the type of survey
-        $type = cleanSurveyType($surveyRow['Type']);
-        //grab the question name
-        $qName = $surveyRow['Question Name'];
+        foreach ($survey as $surveyRowIndex => $surveyRow) {
+            //grab the type of survey
+            $type = cleanSurveyType($surveyRow['Type']);
+            //grab the question name
+            $qName = $surveyRow['Question Name'];
+            
+            if (isset($allSurveyTypes[$type]['getResponses'])) {
+                $rowResponses = $allSurveyTypes[$type]['getResponses']($surveyRow);
+            } elseif (isset($data[$qName])) {
+                $rowResponses = array($data[$qName]);
+            } else {
+                continue; // somehow, this question isn't in the data
+            }
+            //for reach row response
+            foreach ($rowResponses as $resp) {
+                //declare extradata array
+                $extraData = array();
+                $extraData['Resp_Response'] = $resp; //the response column
+                $extraData['Resp_Survey_Index'] = $surveyRowIndex+1; //index of survey
+                
+                //add extra data columns
+                foreach ($surveyRow as $col => $val) {
+                    $extraData['Survey_' . $col] = $val; 
+                }
+                
+                //add response columns
+                foreach ($scores as $col => $score) {
+                    $extraData['Resp_' . $col] = $score;
+                }
+                
+                //record the trials
+                recordTrial($extraData);
+            }
+        }
         
-        if (isset($allSurveyTypes[$type]['getResponses'])) {
-            $rowResponses = $allSurveyTypes[$type]['getResponses']($surveyRow);
-        } elseif (isset($data[$qName])) {
-            $rowResponses = array($data[$qName]);
-        } else {
-            continue; // somehow, this question isn't in the data
-        }
-        //for reach row response
-        foreach ($rowResponses as $resp) {
-            //declare extradata array
-            $extraData = array();
-            $extraData['Resp_Response'] = $resp; //the response column
-            $extraData['Resp_Survey_Index'] = $surveyRowIndex+1; //index of survey
-            
-            //add extra data columns
-            foreach ($surveyRow as $col => $val) {
-                $extraData['Survey_' . $col] = $val; 
-            }
-            
-            //add response columns
-            foreach ($scores as $col => $score) {
-                $extraData['Resp_' . $col] = $score;
-            }
-            
-            //record the trials
-            recordTrial($extraData);
-        }
+        $data = $commonData; 
     }
     
-    
-    $data = $commonData; 
-}
     unset($_SESSION['CurrentSurvey']);
