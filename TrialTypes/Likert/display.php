@@ -47,11 +47,13 @@
 //         the step size for multiple ranges, please enter the step size
 //         after each range, like "1::3#.1, a::g # 2, 7::9 #.5"
 
-if (empty($_EXPT->get('settings'))) {
-    $_EXPT->update('settings', '1::7');
+if ($_trialSettings->likert) {
+    $likert = $_trialSettings->likert;
+} else {
+    $likert = '1::7';
 }
 
-$likertOptions = Collector\Helpers::rangeToArray($_EXPT->get('settings'));
+$likertOptions = Collector\Helpers::rangeToArray($likert);
 
 $texts = explode('|', $_EXPT->get('text'));
 $question = array_shift($texts);
@@ -125,6 +127,10 @@ $determineClass = function ($texts, $i) {
     vertical-align:bottom;
     width:<?= $optionWidth ?>%;
   }
+  .likertOption input {
+    margin: 3px;
+    padding: 2px;
+  }
 </style>
 
 <div class="likertArea">
@@ -142,10 +148,7 @@ $determineClass = function ($texts, $i) {
 
   <div class="likertOptions">
     <?php foreach ($likertOptions as $option): ?>
-    <label class="likertOption">
-      <?= $option ?>
-      <br><input type="radio" name="Response" value="<?= $option ?>">
-    </label>
+    <label class="likertOption"><?= $option ?><br><input type="radio" name="Response" value="<?= $option ?>"></label>
     <?php endforeach ?>
   </div>
 </div>
