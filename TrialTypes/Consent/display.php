@@ -76,7 +76,7 @@ if ($filePath !== false && strpos($consent, '..') === false) {
 </div>
 
 <script>
-  $(window).load(function() {
+trialBegin = function () {
     $(":submit").blur();
-  });
+};
 </script>

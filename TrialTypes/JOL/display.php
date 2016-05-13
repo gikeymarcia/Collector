@@ -1,4 +1,11 @@
 <?php
+/**
+ * JOL trial type inputs
+ * 
+ *     Column        Values
+ *     text          question|description
+ */
+
 if (empty($_EXPT->get('text'))) {
     $_EXPT->update('text', 'How likely are you to correctly recall this item on'
         . 'a later test?|Type your response on a scale from 0-100.');

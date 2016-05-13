@@ -1,12 +1,17 @@
 <?php
+/**
+ * Digit Span settings
+ * 
+ * Change the contents of your settings column to 'reverse' or 'backwards'
+ * to change to reverse digitspan
+ *
+ */
 if (empty($_EXPT->get('text'))) {
     $_EXPT->update('text', "Listen carefully.");
 }
-$settings = $_EXPT->get('settings');
 
-$direction = (strtolower($settings) === 'reverse' || strtolower($settings) === 'backwards')
-           ? -1
-           : 1;
+$direction = ($_trialSettings->forward OR $_trialSettings->backwards)
+		   ? -1 : 1;
 
 $current = $_PATH->get('Trial Types', 'url').'/DigitSpan';
 

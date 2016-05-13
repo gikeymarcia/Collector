@@ -1,6 +1,6 @@
 <?php
 /**
- * PicFeedbackCopy.
+ * CopyPic.
  * 
  * Show the correct answer with picture above and force participants to copy the
  * answer before continuing.

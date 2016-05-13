@@ -1,7 +1,14 @@
 <?php 
-    if (empty($font_size)) {
-        trigger_error("Your 'Font Size' column needs a value.", E_USER_ERROR);
-    }
+/**
+ * Font Size trial type can take multiple types of fontsize values
+ * in its settings column
+ * 
+ *     Settings          Value
+ *     fontsize          20px
+ *     fontsize          110%
+ *     fontsize          2em
+ *     fontsize          16pt
+ */
 ?>
 
 
@@ -9,7 +16,7 @@
   <?= $_EXPT->get('text'); ?>
 </div>
 
-<div class="textcenter" style="font-size:<?= $font_size ?>">
+<div class="textcenter" style="font-size:<?= $_trialSettings->fontsize ?>;">
   <?= Collector\Helpers::show($_EXPT->get('cue')) ?>
 </div>
 
