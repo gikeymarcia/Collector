@@ -309,9 +309,10 @@ abstract class ControlFile
                 // if it isn't one of the above columns then include it
                 $subset[] = $key;
             }
+            $keys = $subset;
         }
 
-        return $subset;
+        return $keys;
     }
 
     /**
