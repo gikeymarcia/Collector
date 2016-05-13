@@ -29,6 +29,7 @@ Class TrialSettings {
                 $getValuesAsArray = false;
             }
             if ($key === '') continue; // cant have empty key, makes no sense
+            if (isset($settings[$key])) continue; // dont overwrite
             
             if (!isset($splitSetting[1])) {
                 if ($getValuesAsArray) {
