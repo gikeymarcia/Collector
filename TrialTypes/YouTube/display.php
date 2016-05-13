@@ -4,6 +4,8 @@
  *
  * How to use:
  * In the Settings column, separate parameters by pipe |
+ *   e.g.: submitOnDone = false | preventEarlySubmit = false
+ *   or  : submitOnDone = true  | preventEarlySubmit = true
  * Parameters;
  *     submitOnDone
  *         set to false to prevent auto-submission upon video completion
@@ -26,17 +28,9 @@ $parameters = array(
 // extract submitOnDone and preventEarlySubmit settings from $settings
 $submitOnDone = true;
 $preventEarlySubmit = true;
-$settings = explode('|', $_EXPT->get('settings'));
-foreach ($settings as $setting) {
-    $settingSubmit = Collector\Helpers::removeLabel($setting, 'submitOnDone');
-    $settingPrevent = Collector\Helpers::removeLabel($setting, 'preventEarlySubmit');
-    if ($settingSubmit === 'false') {
-        $submitOnDone = false;
-    }
-    if ($settingPrevent === 'false') {
-        $preventEarlySubmit = false;
-    }
-}
+
+if ($_trialSettings->submitOnDone       === 'false') $submitOnDone       = false;
+if ($_trialSettings->preventEarlySubmit === 'false') $preventEarlySubmit = false;
 
 // get video ID
 $videoId = Collector\Helpers::youtubeUrlCleaner($_EXPT->get('cue'), true);
