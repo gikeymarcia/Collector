@@ -1,5 +1,7 @@
 <?php
-$rounds = is_numeric($_EXPT->get('settings')) ? $_EXPT->get('settings') : 150;
+// determine the # of rounds by entering "rounds = 100" in your settings column
+$default = 150;
+$rounds  = is_numeric($_trialSettings->rounds) ? $_trialSettings->rounds : $default;
 $options = array('A', 'B');
 ?>
 
@@ -38,9 +40,9 @@ $options = array('A', 'B');
     
     
 <script>
-  COLLECTOR.experiment.<?= $_TRIAL->get('trial type') ?> = function() {
+trialBegin = function () {
     $(":focus").blur();
     DMT.rounds = <?= $rounds ?>;
     DMT.begin();
-  };
+};
 </script>
