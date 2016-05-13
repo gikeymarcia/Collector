@@ -57,6 +57,9 @@ if ($_EXPT->isComplete()) {
 /*
  *  PREPARE TRIAL FOR DISPLAY
  */
+$_trialSettings = new TrialSettings(empty($procedure['Settings']) ? '' : $procedure['Settings']);
+if (!empty($stimuli['Settings'])) $_trialSettings->addSettings($stimuli['Settings']);
+
 // get the related files for the trial
 $addedScripts = array_filter(array($_TRIAL->getRelatedFile('script')));
 $addedStyles = array_filter(array($_TRIAL->getRelatedFile('style')));
