@@ -596,15 +596,6 @@ input[type="submit"].button-trial-advance {
 .pic {
   padding: 1em;
 }
-.mcPicTable td {
-  min-width: 170px;
-  text-align: center;
-  vertical-align: middle; 
-}
-
-.mcPicTable .collectorButton { 
-  margin: 3% 7%; 
-}
 
 /*Done.php*/
 #currentExpLink {

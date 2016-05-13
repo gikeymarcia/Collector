@@ -1,8 +1,9 @@
 <?php
+$cues = explode('|', $cue);
 
 $save = false;
-if ($_trialSettings->saveButtons) {
-    $save = (string) $_trialSettings->saveButtons;
+if ($_trialSettings->save) {
+    $save = (string) $_trialSettings->save;
 }
 
 if ($save AND isset($_SESSION['Saved Buttons'][$save])) {
@@ -16,7 +17,7 @@ if ($save AND isset($_SESSION['Saved Buttons'][$save])) {
         $stimCols[$colCode] = $col;
     }
     
-    $settings = explode('|', $procedure['Settings']);
+    $settings = explode('|', $settings);
     
     // in string like "buttons=one;two | shuffle buttons=three;four | buttons=dont know | share A"
     // find all settings starting with "buttons" and "shuffle buttons"
@@ -26,7 +27,7 @@ if ($save AND isset($_SESSION['Saved Buttons'][$save])) {
         
         $key = strtolower(trim($setting[0]));
         if ($key === 'buttons' || $key === 'shuffle buttons') {
-            $thesebuttonsRaw = explode(';', $settings[1]);
+            $thesebuttonsRaw = explode(';', $setting[1]);
             $theseButtons = array();
             
             foreach ($thesebuttonsRaw as $buttonRaw) {
@@ -55,23 +56,25 @@ if ($save AND isset($_SESSION['Saved Buttons'][$save])) {
                     if (!isset($stimCols[$colCode])) {
                         trigger_error("$err '$colCode' not an existing stimuli column.", E_USER_WARNING);
                         continue;
+                    } else {
+                        $col = $stimCols[$colCode];
                     }
                     
                     // get values from that stimuli column
                     if ($customRange) {
                         // if defined with a custom range, like $answer[2::8], look in general stimuli
-                        $range = rangeToArray(substr($buttonRaw, strpos($buttonRaw, '[') - 1, -1));
+                        $range = rangeToArray(substr($buttonRaw, strpos($buttonRaw, '[') + 1, -1));
                         foreach ($range as $buttonItemRaw) {
                             $buttonItem = $buttonItemRaw - 2;
                             if (isset($_EXPT->stimuli[$buttonItem])) {
-                                $theseButtons[] = $_EXPT->stimuli[$buttonItem];
+                                $theseButtons[] = $_EXPT->stimuli[$buttonItem][$col];
                             } else {
                                 trigger_error("$err '$buttonItemRaw' not an existing stimuli row.", E_USER_WARNING);
                             }
                         }
                     } else {
                         // if defined without custom range, like $answer, use the $answer of this trial
-                        $theseButtons = explode('|', $stimuli[$stimCols[$colCode]]);
+                        $theseButtons = explode('|', $stimuli[$col]);
                     }
                 } else {
                     // statically defined button
@@ -104,6 +107,11 @@ if (is_numeric($_trialSettings->columns)) {
 } elseif (is_numeric($_trialSettings->rows)) {
     $rows    = (int) $_trialSettings->rows;
     $columns = ceil(count($buttons) / $rows);
+} else {
+    $countButtons = count($buttons);
+    $columns = ($countButtons % 3 === 0) ? 3 : 4;
+    $columns = min($countButtons, $columns);
+    $rows    = ceil(count($buttons) / $columns);
 }
 
 $buttonGrid = array();
@@ -131,8 +139,8 @@ foreach ($buttons as $i => $button) {
 <style type="text/css">
   #content { width: 100%; padding: 0; }
   
-  .mcPicTable { width: 700px; margin: auto; }
-  .mcPicTable td { padding: 2px 4px; vertical-align: top; text-align: center; }
+  .mcPicTable { max-width: 850px; margin: auto; }
+  .mcPicTable td { padding: 10px 16px; vertical-align: top; text-align: center; }
 </style>
 
 <!-- show the image -->
