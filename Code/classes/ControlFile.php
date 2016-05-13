@@ -289,30 +289,29 @@ abstract class ControlFile
     /**
      * Gets the list of the keys used in the stitched ControlFile data.
      *
-     * @param bool $noShuffles Set true to remove shuffle related keys.
+     * @param bool $overlapExcluder Set true to remove coulmns we don't check for overlap.
      *
-     * @return array All the keys (e.g., array(0=> 'item', 1=>'trial type')).
+     * @return array of All the keys (e.g., array(0=> 'item', 1=>'trial type')).
      */
-    public function getKeys($noShuffles = false)
+    public function getKeys($overlapExcluder = false)
     {
         $keys = array_keys($this->data[0]);
 
         // filter out the shuffle columns if requested
-        if ($noShuffles === true) {
+        if ($overlapExcluder === true) {
             $subset = array();
             foreach ($keys as $key) {
-                // if it isn't one of the shuffle columns then include it
-                if (substr($key, 0, 8) !== 'Shuffle '
-                    && substr($key, 0, 10) !== 'AdvShuffle'
-                ) {
-                    $subset[] = $key;
-                }
-            }
+                // Keys can overlap if they're shuffles or the Settings column
+                if (substr($key, 0, 8)  == 'Shuffle ')   { continue; }
+                if (substr($key, 0, 10) == 'AdvShuffle') { continue; }
+                if (strtolower($key)    == 'settings')   { continue; }
 
-            $keys = $subset;
+                // if it isn't one of the above columns then include it
+                $subset[] = $key;
+            }
         }
 
-        return $keys;
+        return $subset;
     }
 
     /**
