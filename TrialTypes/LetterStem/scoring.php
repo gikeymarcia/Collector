@@ -1,4 +1,6 @@
 <?php
+$stemLength = 2; // default value
+if (is_numeric($_trialSettings->stem)) $stemLength = (int) $_trialSettings->stem;
 
 // to make sure that everything is recorded, just throw all of POST into
 // $data, which will eventually be recorded into the output file.
@@ -11,7 +13,7 @@ $data = $_POST;
 
 $answerClean = trim(strtolower($_EXPT->get('answer')));
 $response = filter_input(INPUT_POST, 'Response', FILTER_SANITIZE_STRING);
-$responseClean = substr($answerClean, 0, 2).trim(strtolower($response));
+$responseClean = substr($answerClean, 0, $stemLength).trim(strtolower($response));
 $Acc1 = null;
 $Acc2 = null;
 

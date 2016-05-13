@@ -1,3 +1,7 @@
+<?php
+    $stemLength = 2; // default value
+    if (is_numeric($_trialSettings->stem)) $stemLength = (int) $_trialSettings->stem;
+?>
 <style>
   /*sets size of the trial content window*/
   #content {
@@ -19,7 +23,7 @@
   <span class="study-left"> <?= $_EXPT->get('cue') ?> </span>
   <span class="study-divider"> : </span>
   <span class="study-right">
-    <?= substr($_EXPT->get('answer'), 0, 2) ?><input name="Response" type="text" value="" class="collectorInput">
+    <?= substr($_EXPT->get('answer'), 0, $stemLength) ?><input name="Response" type="text" value="" class="collectorInput">
   </span>
 </div>
   
