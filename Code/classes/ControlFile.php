@@ -60,7 +60,7 @@ abstract class ControlFile
     protected $errorObj;
 
     /**
-     * Reads in control files and combines them into one array with
+     * Reads in control files and combines them into one array with 
      * consistent keys stored in ControlFile::stitched.
      *
      * @param string          $dir       The directory of the files to use.
@@ -79,7 +79,7 @@ abstract class ControlFile
     /**
      * Takes an array of .csv filenames and combines them all together and then
      * stores them to ControlFile::stitched.
-     *
+     * 
      * A record of the stitched rows' original files and row number is logged in
      * ControlFile::rowOrigins. For every newly stitched row, an index with
      * value "{$filename}?{$rownumber}" is appended to ControlFile::rowOrigins.
@@ -154,7 +154,7 @@ abstract class ControlFile
 
     /**
      * Makes a given array ($newData) match the keys used in ControlFile::stitched.
-     * If $newData has keys that don't exist in ControlFile::stitched then they
+     * If $newData has keys that don't exist in ControlFile::stitched then they 
      * are added to the stitched array.
      *
      * @param array $newData The array being conformed.
@@ -215,7 +215,7 @@ abstract class ControlFile
      * Ensures that a ControlFile file has has all the required columns.
      *
      * @param array $cols The required columns.
-     *
+     * 
      * @todo will allow a stitched array from a file that does not have the required columns as long as it is paired with a file that does have them
      */
     protected function requiredColumns(array $cols)
@@ -243,7 +243,7 @@ abstract class ControlFile
     }
 
     /**
-     * Returns the specific shuffled version that was created last time
+     * Returns the specific shuffled version that was created last time 
      * ControlFile::shuffle() was run.
      *
      * @return array The previously shuffled data.
@@ -266,8 +266,8 @@ abstract class ControlFile
     /**
      * Sets the value for ControlFile::stitched.
      *
-     * @param array $data The data to set (should be formatted as a 2-D array
-     *                    like Helpers::getFromFile() would produce).
+     * @param array $data The data to set (should be formatted as a 2-D array 
+     *                    like getFromFile() would produce).
      */
     public function setData($data)
     {
@@ -276,9 +276,9 @@ abstract class ControlFile
 
     /**
      * Alias for ControlFile::manual().
-     *
+     * 
      * @param array $data The data to set.
-     *
+     * 
      * @see ControlFile::manual()
      */
     public function setUnshuffled($data)
@@ -316,7 +316,7 @@ abstract class ControlFile
     }
 
     /**
-     * Checks if a set of given keys overlaps with the keys of the current
+     * Checks if a set of given keys overlaps with the keys of the current 
      * ControlFile object. If an overlap is found, an error is added to the
      * ErrorController.
      *
@@ -347,7 +347,7 @@ abstract class ControlFile
      *
      * @param int $i Index of item for which to retrieve row origin.
      *
-     * @return array|bool Associative array with keys 'filename' and 'row', or
+     * @return array|bool Associative array with keys 'filename' and 'row', or 
      *                    false if the method fails.
      */
     public function getRowOrigin($i)
