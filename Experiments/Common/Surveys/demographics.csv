@@ -1,8 +1,0 @@
-Question Name,Question,Type,Answers,Values
-Gender,Gender,Radio,"Male,Female,Other",
-Age,Age,Number,,
-Education,Education,DropdownSpaced,"Some high school, High school graduate, Some college\, no degree, Associate's degree, Bachelor's degree, Graduate degree (Master's\, Doctorate\, etc.)",
-Race,Race,DropdownSpaced,"American Indian/Alaskan Native, Asian/Pacific Islander, Black, White, Other/Unknown",
-English_Fluency,Do you speak English fluently?,Radio,"Yes,No",
-English_Age,At what age did you start learning English?,Number,,
-Country,What is your country of residence?,Text,,

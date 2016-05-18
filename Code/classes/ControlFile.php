@@ -88,7 +88,7 @@ abstract class ControlFile
     {
         foreach ($this->files as $file) {
             $fullPath = $this->dir.'/'.trim($file);
-            $this->exists($fullPath);
+            $fullPath = $this->checkPath($fullPath);
             $data = getFromFile($fullPath, false);
             $this->stitch($data);
             foreach (array_keys($data) as $i) {
@@ -185,22 +185,28 @@ abstract class ControlFile
     }
 
     /**
-     * Checks if a file exists. The experiment will be halted entirely if the
-     * file does not exist.
+     * Checks, case insensitively, if a path to a file exists. The experiment will be halted
+     * entirely if the file does not exist. If the file can be found its path will be returned
+     * with correct casing.
      *
      * @param string $path path to get to the file being checked
      *
-     * @return bool True if the path points at a file.
+     * @return string Case-correct path to file
      */
-    protected function exists($path)
+    protected function checkPath($path)
     {
-        if (!fileExists($path)) {
-            // stop the show with an error
-            $this->errorObj->add('Could not find the following file specified '
-                ."by your Conditions file: <br><b>{$path}</b>", true);
+        if (is_file($path)) {
+            return $path;
+        } else {
+            $case_correct_path = fileExists($path);
+            if ($case_correct_path === false) {
+                // stop the show with an error
+                $this->errorObj->add('Could not find the following file specified '
+                    ."by your Conditions file: <br><b>{$path}</b>", true);
+            } else {
+                return $case_correct_path;
+            }
         }
-
-        return true;
     }
 
     /**

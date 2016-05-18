@@ -116,7 +116,7 @@ foreach ($settings as $setting) {
                 if (isset($stimCols[$col])) {
                     $index = rangeToArray($index);
                     foreach ($index as $i) {
-                        $newButtons[] = $_EXPT->stimuli[$i][$stimCols[$col]];
+                        $newButtons[] = $_EXPT->stimuli[$i - 2][$stimCols[$col]];
                     }
                 } else {
                     $newButtons[] = $thisButton;// so we can see which button is being outputted as $bad button [2o3nri...

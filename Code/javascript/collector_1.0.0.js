@@ -161,6 +161,41 @@ var COLLECTOR = {
                 $("body").css("justify-content","flex-start");
             }
 
+            // prevent the backspace key from navigating back.
+            // http://stackoverflow.com/questions/1495219/how-can-i-prevent-the-backspace-key-from-navigating-back
+            // known issue: in chrome, if you open the dropdown menu of a select input, and then press backspace,
+            // it doesn't propagate to either the select or the document, so it cant be caught and prevented
+            $(document).bind('keydown', function (event) {
+                if (event.keyCode === 8) {
+                    var doPrevent,
+                        d    = event.srcElement || event.target,
+                        tag  = d.tagName.toUpperCase(),
+                        type = d.type && d.type.toUpperCase();
+                    
+                    if (tag === 'TEXTAREA' ||
+                       (tag === 'INPUT'
+                        && (type === 'DATE'
+                         || type === 'DATETIME'
+                         || type === 'DATETIME-LOCAL'
+                         || type === 'EMAIL'
+                         || type === 'MONTH'
+                         || type === 'NUMBER'
+                         || type === 'PASSWORD'
+                         || type === 'SEARCH'
+                         || type === 'TEL'
+                         || type === 'TEXT'
+                         || type === 'TIME'
+                         || type === 'WEEK'
+                         || type === 'URL')
+                       )
+                    ) {
+                        doPrevent = d.readOnly || d.disabled;
+                    } else {
+                        doPrevent = true;
+                    }
+                    if (doPrevent) event.preventDefault();
+                }
+            });
         }
     },
 
@@ -240,50 +275,12 @@ var COLLECTOR = {
                 }
             });
 
-            // prevent the backspace key from navigating back.
-            // http://stackoverflow.com/questions/1495219/how-can-i-prevent-the-backspace-key-from-navigating-back
-            $(document).unbind('keydown').bind('keydown', function (event) {
-                var doPrevent = false;
-                if (event.keyCode === 8) {
-                    var d = event.srcElement || event.target;
-                    if ((d.tagName.toUpperCase() === "INPUT" && d.type.toUpperCase() === "TEXT")
-                        || (d.tagName.toUpperCase() === "TEXTAREA")) {
-                        doPrevent = d.readOnly || d.disabled;
-                    } else {
-                        doPrevent = true;
-                    }
-                }
-                if (doPrevent) {
-                    event.preventDefault();
-                }
-            });
+            // if this trial has a function that should run on start
+            // then run that function here (@ trial start)
+            if (typeof trialBegin == 'function') {
+                trialBegin();
+            }
         },
-
-        tetris: function() {
-            // get trial time from page and run timer
-            COLLECTOR.timer(parseFloat($("#maxTime").html() )-5, function () {
-                // hide game and show get ready prompt for 5 secs
-                $(".stepout-clock").hide();
-                $(".tetris-wrap")
-                    .removeClass("tetris-wrap")
-                    .html("<div class='action-bg textcenter fullPad'>" +
-                              "<h1 class='pad'>Get ready to continue in ... </h1>" +
-                              "<h1 id=getready></h1>" + 
-                          "</div>");
-                COLLECTOR.timer(5, function() {
-                    $('form').submit();
-                }, $("#getready"));
-            }, $(".countdown"));
-
-            // reveal on clicking start
-            $("#reveal").click(function() {
-                $("#reveal").hide();
-                $(".tetris").slideDown(400, function() {
-                    var off = $(".tetris").offset();
-                    $("html, body").animate({scrollTop: off.top}, 500);
-                });
-            });
-        }
     },
 };
 

@@ -40,10 +40,12 @@
     
     echo '<div>';
     foreach ($surveyRows as $row) {
+        $qName = htmlspecialchars($row['Question Name'], ENT_QUOTES);
+        $required = isRespRequired($row) ? 'required' : '';
         echo "<label>"
            .     "<div>{$row['Question']}</div>"
            .     "<div>"
-           .         "<input type='datetime' name='{$row['Question Name']}' required>"
+           .         "<input type='datetime' name='$qName' $required>"
            .     "</div>"
            . "</label>";
     }

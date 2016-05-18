@@ -1,9 +1,0 @@
-Cue,Answer,Shuffle 1,Shuffle 2,Shuffle 3,Shuffle 4
-Dog,Spoo,,city,alive,all
-B,Banana,,city,not alive,all
-,,,farm,alive,all
-,,,farm,not alive,all
-,,1,city,alive,all
-,,1,city,not alive,all
-,,1,farm,alive,all
-,,1,farm,not alive,all

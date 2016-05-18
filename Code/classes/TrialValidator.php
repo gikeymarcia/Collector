@@ -251,7 +251,8 @@ class TrialValidator
         // check that stim actually exists, because they might use "" or "0"
         // for trials without stimuli, like instruct
         foreach ($items as $i) {
-            if (!isset($stimuli[$i]) || $stimuli[$i] === 0) {
+            $i -= 2;
+            if (!isset($stimuli[$i])) {
                 continue;
             } else {
                 $theseStim[] = $stimuli[$i];

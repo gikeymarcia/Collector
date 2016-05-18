@@ -23,6 +23,10 @@
   <link rel="stylesheet" href="<?= $_PATH->get('Jquery UI Custom CSS', 'url') ?>">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
+  <!-- JS Tools -->
+  <script src="<?= $_PATH->get('Jquery UI Custom', 'url') ?>"></script>
+  <script src="<?= $_PATH->get('Collector JS', 'url') ?>"></script>
+
   <!-- Additional styles -->
   <?php if (isset($addedStyles)): foreach ($addedStyles as $additionalStyle): ?>
   <link rel='stylesheet' href='<?= $additionalStyle ?>'>
@@ -34,7 +38,7 @@
 $_dataController = isset($_dataController) ? $_dataController : '';
 $_dataAction = isset($_dataAction) ? $_dataAction : '';
 ?>
-<body id="flexBody" data-controller="<?= $_dataController ?>" data-action="<?= $_dataAction ?>"><div>
+<body id="flexBody" data-controller="<?= $_dataController ?>" data-action="<?= $_dataAction ?>">
   <!-- redirect if Javascript is disabled -->
   <noscript>
     <meta http-equiv="refresh" content="0;url=<?= $_PATH->get('No JS', 'url') ?>" />

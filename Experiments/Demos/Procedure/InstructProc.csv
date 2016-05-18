@@ -1,0 +1,3 @@
+Item,Trial Type,Max Time,Text,Procedure Notes,Shuffle 1
+0,Instruct,user,This is how you show instructions.,Show instructions.,
+1,Instruct,user,Show a paragraph break using HTML paragraph tags: <p>&ltp&gt First Paragraph &lt/p&gt</p> <p>&ltp&gt Second Paragraph &lt/p&gt</p>,Show new paragraph.,

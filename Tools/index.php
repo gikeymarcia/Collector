@@ -1,40 +1,19 @@
 <?php
 
-session_start();
 ob_start();
 
 // set the root for initial file locations (used in other tools scripts)
 $_root = '..';
 
-/**
- * Class autoloader.
- *
- * @param string $className The class to load.
- */
-function autoClassLoader($className)
-{
-    $root = '';
-    $ancestors = 0;
-    while (!is_dir("{$root}Code/classes") and ($ancestors < 3)) {
-        $root .= '../';
-        ++$ancestors;
-    }
-    $loc = "{$root}Code/classes/$className.php";
-    if (is_file($loc)) {
-        require $loc;
-    } else {
-        var_dump(scandir(dirName($loc)));
-        echo "Object $className is not found";
-    }
-}
-spl_autoload_register('autoClassLoader');
+require_once $_root."/Code/initiateCollector.php";
+
 
 // load file locations
 $_PATH = new Pathfinder();
 
 // load custom functions
-require $_PATH->get('Custom Functions');
 require 'loginFunctions.php';
+
 
 // load configs
 $_SETTINGS = new Settings (
@@ -48,6 +27,7 @@ if (!isset($_SESSION['admin'])) {
     $_SESSION['admin'] = array();
 }
 $admin = &$_SESSION['admin'];
+$admin['challenge'] = makeNonce();
 
 
 /*
