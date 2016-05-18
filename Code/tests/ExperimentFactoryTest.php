@@ -4,6 +4,11 @@ namespace Collector;
 
 class ExperimentFactoryTest extends \PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        $_PATH = new Pathfinder();
+    }
+    
     protected function getProperty(&$object, $propName)
     {
         $reflection = new \ReflectionClass(get_class($object));

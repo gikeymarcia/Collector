@@ -106,43 +106,6 @@ abstract class Trial extends MiniDb
     /* Overrides
      **************************************************************************/
     /**
-     * Overrides MiniDB::update to force stimulus injection when updating 'item'.
-     *
-     * @param string $name  The key to add or update.
-     * @param mixed  $value The value to assign to the key.
-     * 
-     * @return bool Returns true if a key was updated, else false if a key was 
-     *              added.
-     */
-//    public function update($name, $value)
-//    {
-//        $result = parent::update($name, $value);
-//        if (strtolower($name) === 'item') {
-//            $this->injectStimulus();
-//        }
-//
-//        return $result;
-//    }
-    
-    /**
-     * Overrides MiniDB::add to force stimulus injection when adding 'item'.
-     * 
-     * @param string $name  The key to add.
-     * @param mixed  $value The value to assign to the key.
-     *
-     * @return bool Returns true if the key is added, else false.
-     */
-//    public function add($name, $value = null)
-//    {
-//        $result = parent::add($name, $value);
-//        if (strtolower($name) === 'item' && isset($value)) {
-//            $this->injectStimulus();
-//        }
-//
-//        return $result;
-//    }
-    
-    /**
      * Overrides MiniDB::get to also check the Trial's stimuli for a key.
      * 
      * @param string $name The key for the value to retrieve.
@@ -151,8 +114,12 @@ abstract class Trial extends MiniDb
      */
     public function get($name)
     {
-        $val = parent::get($name);
-        if (!isset($val) || strtolower($name) === 'item') {
+        $parVal = parent::get($name);
+        $val = (strtolower($name) === 'item' && is_numeric($parVal)) 
+             ? $this->expt->getStimulus($parVal)
+             : $parVal;
+        
+        if (!isset($val)) {
             $val = $this->getFromStimuli($name);
         }
         
@@ -256,7 +223,6 @@ abstract class Trial extends MiniDb
     public function setExperiment(Experiment $expt)
     {
         $this->expt = $expt;
-//        $this->injectStimulus();
     }
 
     /**
@@ -268,22 +234,4 @@ abstract class Trial extends MiniDb
     {
         return $this->complete;
     }
-
-    /**
-     * Injects the array of stimulus data into the item key if applicable. If
-     * the item key refers to multiple stimuli (e.g. 3::5) an array of these
-     * arrays is injected. Stimuli for survey trial types are not updated (as
-     * they should point to the survey file, not a line in the Stimuli file).
-     */
-//    public function injectStimulus()
-//    {
-//        $item = isset($this->data['item']) ? $this->data['item'] : null;
-//        var_dump($item);
-//        if (!empty($item) && (is_string($item) || is_numeric($item))
-//            && $this->data['trial type'] !== 'survey'
-//        ) {
-//            $stimarr = $this->expt->getStimuli($item);
-//            $this->data['item'] = count($stimarr) === 1 ? $stimarr[0] : $stimarr;
-//        }
-//    }
 }

@@ -437,7 +437,8 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetStimuliSubset()
     {
-        $stim = $this->obj->getStimuli("1-2");
+        // stimuli are 2-indexed to match Excel rows: 3-4 should return 1-2
+        $stim = $this->obj->getStimuli("3-4");
         $this->assertNotContains('a', $stim);
         $this->assertContains('b', $stim);
         $this->assertContains('c', $stim);
@@ -449,9 +450,9 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
     public function testGetStimulus()
     {
         $stim = array(
-            $this->obj->getStimulus(0),
-            $this->obj->getStimulus(1),
             $this->obj->getStimulus(2),
+            $this->obj->getStimulus(3),
+            $this->obj->getStimulus(4),
         );
         
         $this->assertContains('a', $stim);
@@ -784,7 +785,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadValidator()
     {
-        $expt = new Experiment(array(), array(), __DIR__.'/validatordir1');
+        $expt = new Experiment(array(), array(), __DIR__.'/validators/validatordir1');
         $this->assertInstanceOf('Collector\Validator', $expt->getValidator('testtrialtype1'));
     }
     
@@ -817,17 +818,14 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidate()
     {
-        $validator = new Validator(function($trial) {
-            return $trial->get('trial 0') === 0 ? true : "Failed!";
-        });
+        $validator = new Validator(__DIR__ . '/validators/passCheck.php');
         $this->obj->addValidator('a', $validator);
-        
         $this->obj->update('trial type', 'a');
-        $this->assertNotEmpty($this->obj->validate());
-        $this->assertEquals('Failed!', $this->obj->validate()[0]['message']);
         
-        $this->obj->update('trial 0', 0);
-        $trial = $this->obj->getTrial();
+        $result = $this->obj->validate();
+        $this->assertEquals('Failed!', $result[0]['message']);
+        
+        $this->obj->update('key1', 1);
         $this->assertEmpty($this->obj->validate());
     }
     

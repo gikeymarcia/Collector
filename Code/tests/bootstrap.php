@@ -1,6 +1,7 @@
 <?php
 $classes = array(
     'Autoloader',
+    'Pathfinder',
     'Helpers',
     'MiniDb',
     'Experiment',

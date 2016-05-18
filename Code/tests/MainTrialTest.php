@@ -42,20 +42,19 @@ class MainTrialTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidate()
     {
-        $validator = new Validator(function (Trial $trial) {
-            return ($trial->get('valkey', true) === 'any') ? true : "Failed!";
-        });
+        $validator = new Validator(__DIR__ . '/validators/passCheck.php');
         $this->obj->getExperiment()->addValidator('a', $validator);
-
         $this->obj->update('trial type', 'a');
-        $this->assertNotEmpty($this->obj->validate()); // valkey not in Main
+        
+        $this->assertNotEmpty($this->obj->validate()); // key1 not in Main
 
-        $this->obj->update('valkey', 'any');
-        $this->assertEmpty($this->obj->validate()); // valkey in Main
+        $this->obj->update('key1', 1);
+        $this->assertEmpty($this->obj->validate()); // key1 in Main
 
         $this->obj->advance();
         $this->obj->update('trial type', 'a');
-        $results = $this->obj->validate(); // should pass-fail-pass: 1 error
+        // should pass-fail-pass: last has no trial type
+        $results = $this->obj->validate();
         $this->assertCount(1, $results);
     }
 

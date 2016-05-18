@@ -52,7 +52,11 @@ class ExperimentFactory
         
         // update 'item' keys with stimuli information and add related files for
         $expt->apply(function($trial) {
-//            $trial->injectStimulus();
+            
+            // @todo this Helper function is depended on Pathfinder. Should 
+            // probably just rewrite function to use the $validatorDirs passed
+            // to this factory function? Or accept Pathfinder instead of 
+            // validatorDirs
             $relatedFiles = Helpers::getTrialTypeFiles(
                 strtolower($trial->get('trial type'))
             );

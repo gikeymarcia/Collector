@@ -18,9 +18,9 @@ class TrialTest extends \PHPUnit_Framework_TestCase
         $expt = $this->obj->getExperiment();
         $this->assertNull($expt);
         
-        $expt = new Experiment();
-        $this->obj->setExperiment($expt);
-        $this->assertSame($expt, $this->obj->getExperiment());
+        $expt2 = new Experiment();
+        $this->obj->setExperiment($expt2);
+        $this->assertSame($expt2, $this->obj->getExperiment());
     }
 
     /**
@@ -33,24 +33,22 @@ class TrialTest extends \PHPUnit_Framework_TestCase
 
     /**
      *  @covers Collector\Trial::update
-     *  @covers Collector\Trial::injectStimulus
      */
     public function testInjectStimulus()
     {
         $stim = array(1 => array('cue' => 'cue1'), 2 => array('cue' => 'cue2'));
         $this->obj->setExperiment(new Experiment(array(), $stim));
         
-        $this->obj->update('item', '1');
+        $this->obj->update('item', '3');
         $this->assertEquals(array('cue' => 'cue1'), $this->obj->get('item'));
         
-        $this->obj->update('item', '2');
+        $this->obj->update('item', '4');
         $this->assertEquals(array('cue' => 'cue2'), $this->obj->get('item'));
     }
 
     /**
      * @covers Collector\Trial::add
      * @covers Collector\Trial::update
-     * @covers Collector\Trial::injectStimulus
      */
     public function testInjectStimulusSurvey()
     {
@@ -66,7 +64,7 @@ class TrialTest extends \PHPUnit_Framework_TestCase
     {
         $stim = array(1 => array('cue' => 'cue1'), 2 => array('cue' => 'cue2'));
         $this->obj->setExperiment(new Experiment(array(), $stim));
-        $this->obj->add('item', 1);
+        $this->obj->add('item', 3);
         $this->assertEquals('cue1', $this->obj->getFromStimuli('Cue'));
     }
     

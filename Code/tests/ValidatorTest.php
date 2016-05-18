@@ -11,17 +11,11 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->trial = new MainTrial(array('key1' => 'set'));
-        $this->passCheck = function (Trial $trial) {
-            if (!$trial->get('key1')) {
-                return 'Failed!';
-            }
-        };
-        $this->failCheck = function (Trial $trial) {
-            if (!$trial->get('key2')) {
-                return 'Failed!';
-            }
-        };
+        $expt = new Experiment();
+        $this->trial = $expt->addTrial(new MainTrial(array('key1' => 'set')));
+        $this->passCheck = __DIR__ . './validators/passCheck.php';
+        $this->failCheck = __DIR__ . './validators/failCheck.php';
+        $this->invalid = __DIR__ . './validators/invalidValidator.php';
         $this->obj = new Validator($this->passCheck);
     }
     
@@ -55,7 +49,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testBadValidatorError()
     {
-        $obj = new Validator(function($trial) { return 0; });
+        $obj = new Validator($this->invalid);
         $this->expectException('\Exception');
         $this->expectExceptionMessage('Validator check functions must return '
             . 'true or null for valid trials, and must return an error message '

@@ -42,15 +42,13 @@ class PostTrialTest extends \PHPUnit_Framework_TestCase
      */    
     public function testValidate()
     {
-        $validator = new Validator(function (Trial $trial) {
-            return ($trial->get('post trial') === 'any') ? true : "Failed!";
-        });
+        $validator = new Validator(__DIR__ . '/validators/passCheck.php');
         $this->obj->getExperiment()->addValidator('a', $validator);
 
         $this->obj->update('trial type', 'a');
         $this->assertNotEmpty($this->obj->validate());
         
-        $this->obj->update('post trial', 'any');
+        $this->obj->update('key1', 'any');
         $this->assertEmpty($this->obj->validate());
     }
 
