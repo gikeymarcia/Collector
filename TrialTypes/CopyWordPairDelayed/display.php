@@ -25,10 +25,11 @@
   <button class="collectorButton collectorAdvance" id="FormSubmitButton">Submit</button>
 </div>
 
+
 <script>
   COLLECTOR.experiment.delaycopy = function() {
     COLLECTOR.timer( 3, function() {
       $(".study-right").first().html( "<?= $_EXPT->get('answer'); ?>" );
     });
-  };
+};
 </script>

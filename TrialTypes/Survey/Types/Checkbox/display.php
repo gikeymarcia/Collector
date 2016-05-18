@@ -46,14 +46,16 @@
     
     foreach ($surveyRows as $row) {
         echo '<div>';
-        $options = Collector\Helpers::rangeToArray($row['Answers']);
-        $qName = $row['Question Name'];
+        $options = surveyRangeToArray($row['Answers']);
+        $qName = htmlspecialchars($row['Question Name'], ENT_QUOTES);
         echo     "<div>{$row['Question']}</div>";
         
         echo     '<div class="respArea">';
         foreach ($options as $opt) {
+            $val = htmlspecialchars($opt, ENT_QUOTES);
+            $optName = $qName . '_' . $val;
             echo     "<label>"
-               .         "<span><input type='checkbox' name='$qName'></span>"
+               .         "<span><input type='checkbox' name='$optName' value='$val'></span>"
                .         "<span>$opt</span>"
                .     "</label>";
         }

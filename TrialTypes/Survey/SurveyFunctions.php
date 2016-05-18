@@ -151,16 +151,17 @@
         }
         
         # 5. if Answers and Values exist, make sure they have the same number of entries
-        if (isset($survey['Answers'], $survey['Values'])) {
+        if (isset($survey[0]['Answers'], $survey[0]['Values'])) {
             $problemRows = array();
             
             foreach ($survey as $i => $row) {
+                if ($row['Values'] === '') continue;
                 // delimit cell contents with "|" rather than ",", since answers can be text descriptions
                 $rowAnswers = Collector\Helpers::rangeToArray($row['Answers'], '|');
                 $rowValues  = Collector\Helpers::rangeToArray($row['Values'],  '|');
                 
                 if (count($rowAnswers) !== count($rowValues)) {
-                    $problemRows [] = $i;
+                    $problemRows[] = $i;
                 }
             }
             
@@ -170,7 +171,7 @@
                      . 'same number of entries. These entries are defined by having a range '
                      . 'defined with 2 end points connected by "::", and discrete entries '
                      . 'separated by "|". For example, if the "Answers" column contained "1::3|5::7", '
-                     . 'then the program would understand that the answers are [1, 2, 3, 5, 6, 7]. '
+                     . 'then the program would understand that the answers are "1, 2, 3, 5, 6, 7". '
                      . 'The "Answers" column and the "Values" column must have the same number '
                      . 'of entries defined this way, so that they can be matched up properly during '
                      . 'the data recording. Please correct the following rows: ';
@@ -263,6 +264,26 @@
                 $filePath = Collector\Helpers::fileExists("$typesDir/$entry/$filename.php", false, 0);
                 if ($filePath !== false) $types[$type][$filename] = $filePath;
             }
+            $filePath = fileExists("$typesDir/$entry/getResponses.php", false, 0);
+            if ($filePath !== false) $types[$type]['getResponses'] = require $filePath;
         }
         return $types;
+    }
+    
+    function isRespRequired($row) {
+        if (isset($row['Required'])) {
+            $key = strtolower($row['Required']);
+        } else {
+            $key = '';
+        }
+        
+        if ($key === 'no' || $key === 'off' || $key === '0') {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    
+    function surveyRangeToArray($range) {
+        return rangeToArray($range, '|');
     }

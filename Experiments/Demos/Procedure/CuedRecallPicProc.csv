@@ -1,0 +1,7 @@
+Item,Trial Type,Max Time,Min Time,Text,Procedure Notes,Shuffle 1
+2,CuePic,user,,Claude Monet,Notes,# fixed order
+2,CuedRecallPic,user,,Recall.,Notes,# fixed order
+3,CuePic,user,,Leonardo Da Vinci,Notes,# fixed order
+3,CuedRecallPic,user,,Recall.,Notes,# fixed order
+4,CuePic,user,,Pablo Picasso.,Notes,# fixed order
+4,CuedRecallPic,user,,Recall.,Notes,# fixed order

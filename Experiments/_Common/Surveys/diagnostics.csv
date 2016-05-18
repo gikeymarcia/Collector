@@ -1,8 +1,8 @@
 Question Name,Question,Type,Answers,Values,Settings,Score: Exclusion
-Exp_Go_Smoothly,"Did the experiment go smoothly or were there problems? (Note: Your compensation will not depend on your answer below, so please be honest.)!!!",radio,"It went smoothly.,There were minor problems.,There were significant problems. I don't think my responses should be included in the data.","0,1,2,3",,1
-Participated_Before,Have you participated in this experiment (or another experiment using the same learning materials) before?,radio,"No\, this is my first time.,Yes\, I've done it before","0,1",,1
+Exp_Go_Smoothly,"Did the experiment go smoothly or were there problems? (Note: Your compensation will not depend on your answer below, so please be honest.)!!!",radio,It went smoothly.|There were minor problems.|There were significant problems. I don't think my responses should be included in the data.,0|1|2,,1
+Participated_Before,Have you participated in this experiment (or another experiment using the same learning materials) before?,radio,"No, this is my first time.|Yes, I've done it before",0|1,,1
 Distracted,Were you doing anything else while this experiment was going on?  You will get credit no matter how you respond here.,ShortAnswer,,,,
-Problems,Which of the following problems did you have?,Checkbox,"Sometimes a page wouldn't load and I would have to reload the page,Sometimes the page loaded but there was nothing there,During the experiment I experienced problems with my internet connection,Everything ran smoothly","1,1,1,0",,1
+Problems,Which of the following problems did you have?,Checkbox,Sometimes a page wouldn't load and I would have to reload the page|Sometimes the page loaded but there was nothing there|During the experiment I experienced problems with my internet connection|Everything ran smoothly,1|1|1|0,,1
 ,,page break,,,,
 Like_Experiment,How much fun was this experiment?,Slider,1::7,1::7,leftDescription=Very fun|rightDescription=The most fun ever!,
 ,,page break,,,,

@@ -71,11 +71,11 @@
     $i = 0;
     
     while (isset($surveyRows[$i])) {
-        $currentAnswersCount = count(Collector\Helpers::rangeToArray($surveyRows[$i]['Answers']));
+        $currentAnswersCount = count(surveyRangeToArray($surveyRows[$i]['Answers']));
         $currentLikertRows = array();
         
         while (isset($surveyRows[$i]) 
-            && count(Collector\Helpers::rangeToArray($surveyRows[$i]['Answers'])) === $currentAnswersCount
+            && count(surveyRangeToArray($surveyRows[$i]['Answers'])) === $currentAnswersCount
         ) {
             $currentLikertRows[] = $surveyRows[$i];
             ++$i;
@@ -84,13 +84,15 @@
         echo '<div class="LikertTable">';
         foreach ($currentLikertRows as $likertRow) {
             $currentAnswers = $likertRow['Answers'];
-            $currentAnswers = Collector\Helpers::rangeToArray($currentAnswers);
-            $name = $likertRow['Question Name'];
+            $currentAnswers = surveyRangeToArray($currentAnswers);
+            $name = htmlspecialchars($likertRow['Question Name'], ENT_QUOTES);
+            $required = isRespRequired($likertRow) ? 'required' : '';
             echo '<div class="LikertRow">'
                .     '<div>' . $likertRow['Question'] . '</div>';
             foreach ($currentAnswers as $currAns) {
+                $val = htmlspecialchars($currAns, ENT_QUOTES);
                 echo "<label>"
-                   .     "<input name='$name' type='radio' value='$currAns' required>"
+                   .     "<input name='$name' type='radio' value='$val' $required>"
                    .     "<span>$currAns</span>"
                    . "</label>";
             }

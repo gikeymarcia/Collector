@@ -1,0 +1,6 @@
+Item,Trial Type,Max Time,Min Time,Text,Procedure Notes,Shuffle 1
+2,Cue,user,,This is how you show a cue.,Show cue.,
+3,Cue,user,,Let's show another!,Show cue.,
+4,Cue,3,,Here is one that will show for 3 seconds,Show cue.,
+5,Cue,,3,Here is that must be seen for 3 seconds,Show cue.,
+6,Cue,6,3,Here is one that will show for between 3 and 6 seconds,,

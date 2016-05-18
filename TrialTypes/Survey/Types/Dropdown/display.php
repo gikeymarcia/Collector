@@ -40,11 +40,13 @@
     
     echo '<div>';
     foreach ($surveyRows as $row) {
-        $ans = '<option>' . implode('</option><option>', Collector\Helpers::rangeToArray($row['Answers'])) . '</option>';
+        $ans = '<option>' . implode('</option><option>', surveyRangeToArray($row['Answers'])) . '</option>';
+        $qName = htmlspecialchars($row['Question Name'], ENT_QUOTES);
+        $required = isRespRequired($row) ? 'required' : '';
         echo "<label>"
            .     "<div>{$row['Question']}</div>"
            .     "<div>"
-           .         "<select name='{$row['Question Name']}' required>"
+           .         "<select name='$qName' $required>"
            .             "<option selected hidden></option>"
            .             $ans
            .         "</select>"

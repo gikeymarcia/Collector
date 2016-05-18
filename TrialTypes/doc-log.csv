@@ -1,0 +1,31 @@
+Trail Type,Demo,Wait?,Priority
+WordPair,,,1
+NewSession,,,2
+Passage,,,3
+CuedRecallPic,,,4
+JOL,,,4
+MultipleChoicePic,,,4
+FontSize,,,5
+Audio,x,,
+CaptionedPic,x,,
+CopyPic,x,,
+CopyWordPair,x,,
+CopyWordPairDelayed,x,,
+Cue,x,,
+CuedRecall,x,,
+CuePic,x,,
+DigitSpan,x,,
+FreeRecall,x,,
+Instruct,x,,
+Likert,x,,
+MultipleChoice,x,,
+Survey,x,,
+Youtube,x,,
+Attention Check,,Yes,
+Consent,,Yes,
+DecisionMakingTask,,Yes,
+Feedback,,Yes,
+FreeRecallVDR,,Yes,
+Tetris,,Yes,
+TwoLetterStem,,Yes,
+Video,,,

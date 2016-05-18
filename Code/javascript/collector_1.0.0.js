@@ -161,6 +161,41 @@ var COLLECTOR = {
                 $("body").css("justify-content","flex-start");
             }
 
+            // prevent the backspace key from navigating back.
+            // http://stackoverflow.com/questions/1495219/how-can-i-prevent-the-backspace-key-from-navigating-back
+            // known issue: in chrome, if you open the dropdown menu of a select input, and then press backspace,
+            // it doesn't propagate to either the select or the document, so it cant be caught and prevented
+            $(document).bind('keydown', function (event) {
+                if (event.keyCode === 8) {
+                    var doPrevent,
+                        d    = event.srcElement || event.target,
+                        tag  = d.tagName.toUpperCase(),
+                        type = d.type && d.type.toUpperCase();
+                    
+                    if (tag === 'TEXTAREA' ||
+                       (tag === 'INPUT'
+                        && (type === 'DATE'
+                         || type === 'DATETIME'
+                         || type === 'DATETIME-LOCAL'
+                         || type === 'EMAIL'
+                         || type === 'MONTH'
+                         || type === 'NUMBER'
+                         || type === 'PASSWORD'
+                         || type === 'SEARCH'
+                         || type === 'TEL'
+                         || type === 'TEXT'
+                         || type === 'TIME'
+                         || type === 'WEEK'
+                         || type === 'URL')
+                       )
+                    ) {
+                        doPrevent = d.readOnly || d.disabled;
+                    } else {
+                        doPrevent = true;
+                    }
+                    if (doPrevent) event.preventDefault();
+                }
+            });
         }
     },
 
@@ -237,24 +272,6 @@ var COLLECTOR = {
                         keypress = true;
                     }
                     $("#RTlast").val( COLLECTOR.getRT() );      // update 'RTlast' time
-                }
-            });
-
-            // prevent the backspace key from navigating back.
-            // http://stackoverflow.com/questions/1495219/how-can-i-prevent-the-backspace-key-from-navigating-back
-            $(document).unbind('keydown').bind('keydown', function (event) {
-                var doPrevent = false;
-                if (event.keyCode === 8) {
-                    var d = event.srcElement || event.target;
-                    if ((d.tagName.toUpperCase() === "INPUT" && d.type.toUpperCase() === "TEXT")
-                        || (d.tagName.toUpperCase() === "TEXTAREA")) {
-                        doPrevent = d.readOnly || d.disabled;
-                    } else {
-                        doPrevent = true;
-                    }
-                }
-                if (doPrevent) {
-                    event.preventDefault();
                 }
             });
 

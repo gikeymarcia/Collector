@@ -1,0 +1,3 @@
+ Item,Trial Type,Max Time,Text,Settings,Shuffle 1
+0,FreeRecall,user,"This allows the user to enter a long text answer to your question, or a free response answer. <p> For example, you could have your participants type all the words they remember from the study phase. Or you could have a question where the participant is asked to describe what they've been told, or what they've seen or how they're feeling. This is the perfect tool for those questions. </p> <p> What do you think about that? </p>",,
+0,FreeRecall,2,The user has 2 seconds to type in as fast as possible. How fast can you type?,,

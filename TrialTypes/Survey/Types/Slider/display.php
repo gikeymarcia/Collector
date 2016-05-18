@@ -58,7 +58,10 @@
     }
     
     foreach ($surveyRows as $row) {
-        $ans = Collector\Helpers::rangeToArray($row['Answers']);
+        $qName = htmlspecialchars($row['Question Name'], ENT_QUOTES);
+        $required = isRespRequired($row) ? 'required' : '';
+        
+        $ans = surveyRangeToArray($row['Answers']);
         $thisMin = null;
         $thisMax = null;
         foreach ($ans as $a) {
@@ -93,7 +96,7 @@
            .         "<div>" . $leftDesc  . "</div>"
            .         "<div>" . $rightDesc . "</div>"
            .     "</div>";
-        echo     "<input type='text' required title='Please select a location on this slider.'>";
+        echo     "<input name='$qName' type='text' $required title='Please select a location on this slider.'>";
         echo     "<div class='inputSlider' data-min='$thisMin' data-max='$thisMax'></div>";
         echo '</div>';
     }
