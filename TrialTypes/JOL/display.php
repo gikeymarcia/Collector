@@ -1,9 +1,9 @@
 <?php
-if (!isset($text) || $text === '') {
-    $text = 'How likely are you to correctly recall this item on a later '
-        .'test?|Type your response on a scale from 0-100.';
+if (empty($_EXPT->get('text'))) {
+    $_EXPT->update('text', 'How likely are you to correctly recall this item on'
+        . 'a later test?|Type your response on a scale from 0-100.');
 }
-$texts = explode('|', $text);
+$texts = explode('|', $_EXPT->get('text'));
 $mainText = array_shift($texts);
 ?>
 

@@ -9,7 +9,7 @@
 // type would have the value "Hello".
 $data = $_POST;
 
-$answerClean = trim(strtolower($answer));
+$answerClean = trim(strtolower($_EXPT->get('answer')));
 $response = filter_input(INPUT_POST, 'Response', FILTER_SANITIZE_STRING);
 $responseClean = substr($answerClean, 0, 2).trim(strtolower($response));
 $Acc1 = null;

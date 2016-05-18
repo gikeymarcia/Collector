@@ -1,5 +1,5 @@
 <?php
-    /**
+/**
      * This is an example of a trial type in the Experiment/ folder overwriting
      * the trial type found in the Code/ folder.  Any changes to this Instruct
      * will be used throughout the program, so if you make any modifications,
@@ -8,25 +8,24 @@
      * your changes.
      */
     
-    // use the `Cue` if a valid one is called and there is no `Text` set in the procedure
-    if (($cue != '')
-        AND (trim($text) == '')
-    ){
-        $text = $cue;
-    }
+// use the `Cue` if a valid one is called and there is no `Text` set in the procedure
+$cue = $_EXPT->get('cue');    
+$text = $_EXPT->get('text');
+$fontSize = $_EXPT->get('font size');
 
-    if (!empty($font_size) AND is_numeric($font_size)) {
-        $size = $font_size.'%';
-        $style = "<style type='text/css' media='screen'>
-            body {
-                font-size:{$size};
-            }
-        </style>Test!";
-        echo $style;
-    }
-?>
-<div><?php echo $text; ?></div>
+if (!empty($cue) && empty(trim($text))) {
+    $text = $cue;
+}
 
+if (!empty($fontSize) && is_numeric($fontSize)): ?>
+<style type='text/css' media='screen'>
+    body {
+      font-size:<?= $fontSize ?>%;
+    }
+</style>
+<?php endif; ?>
+
+<div> <?= $text ?> </div>
 <div class="textright">
-    <button class="collectorButton collectorAdvance" id="FormSubmitButton">Next</button>
+  <button class="collectorButton collectorAdvance" id="FormSubmitButton">Next</button>
 </div>

@@ -1,13 +1,17 @@
 <?php
+/**
+ * Helper class of static functions.
+ */
 
 namespace Collector;
 
 use phpbrowscap\Browscap;
 
 /**
- * Description of Helpers
- *
- * @author Adam Blake <adamblake@g.ucla.edu>
+ * A set of static helper functions that can be used in the Collector. Over time
+ * these functions may be refactored into classes according to their functions.
+ * This may cause existing code to break and thus will only be implemented on
+ * major releases (e.g. 1.0 to 2.0 and not 1.1 to 1.2).
  */
 class Helpers
 {
@@ -892,15 +896,13 @@ class Helpers
      */
     public static function readable(array $displayArray, $name = 'Untitled array')
     {
-        // convert to string to prevent parsing code
-        $clean_displayArray = self::arrayCleaner($displayArray);
         // echo HTML
         echo '<div>'
               .'<div class="button collapsibleTitle">'
               .'<h3>'.$name.'</h3>'
               .'<p>(Click to Open/Close)</p>'
               .'</div>'
-              .'<pre>', print_r($clean_displayArray, true), '</pre>'
+              .'<pre>', print_r($displayArray, true), '</pre>'
            .'</div>';
     }
 
@@ -1002,8 +1004,12 @@ class Helpers
 
     /**
      * Determine if the string refers to an audio or image file and generate tags.
-     * @param string $string
-     * @return string
+     * 
+     * @param string $string  The string to process.
+     * @param bool   $endOnly If TRUE, only the last 5 characters of the string
+     *                        are checked for an extension.
+     * 
+     * @return string The processed string with HTML tags if appropriate.
      */
     public static function show($string, $endOnly = true)
     {
@@ -1102,16 +1108,21 @@ class Helpers
         return $pathComponents;
     }
     /**
-     * searches a given directory for a target file or directory
-     * @param string $dir The dir to search inside
-     * @param string $target The file or directory to find
-     * @param bool $findAltExt whether or not to ignore file extensions
-     * @param int $findDir Set 0 to only find files
-     *                     Set 1 to find files and directories
-     *                     Set 2 to only find directories
-     * @return string|bool
+     * Searches a given directory for a target file or directory.
+     * 
+     * @param string $dir        The directory to search inside.
+     * @param string $target     The file or directory to look for.
+     * @param bool   $findAltExt If TRUE, files with the same name but different
+     *                           extensions will be matched.
+     * @param int    $findDir    Set 0 to only find files, 1 to find files and 
+     *                           directories, or 2 to only find directories.
+     * 
+     * @return string|bool Returns the path to the file if it was found, else 
+     *                     false.
      */
-    public static function findInDir($dir, $target, $findAltExt = true, $findDir = 1) {
+    public static function findInDir($dir, $target, $findAltExt = true, 
+        $findDir = 1
+    ) {
         // this public static function is expecting valid file paths
         // so, if you need to trim or remove bad characters,
         // do that before sending them to this public static function
@@ -1231,12 +1242,14 @@ class Helpers
      * ($findDir = 0), files and directories ($findDir = 1), or only
      * directories ($findDir = 2)
      *
-     * @param string $path The file to search for.
-     * @param bool $findAltExtensions Set false for strict extension checking.
-     * @param int  $findDir Set 0 to only return paths to actual files,
-     *                      Set 1 to return paths to both files and directories
-     *                      Set 2 to only return paths to directories
-     * @return string|bool
+     * @param string $path     The file to search for.
+     * @param bool $findAltExt Set false for strict extension checking.
+     * @param int  $findDir    Set 0 to only return paths to actual files, 1 to 
+     *                         return paths to both files and directories, or 2
+     *                         to only return paths to directories
+     * 
+     * @return string|bool Returns the path to the file if it was found, else 
+     *                     false.
      */
     public static function fileExists ($path, $findAltExt = true, $findDir = 1) {
         // This public static function is expecting valid path names.

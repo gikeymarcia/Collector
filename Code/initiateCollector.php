@@ -1,5 +1,7 @@
 <?php
+
 // configure and register autoloader
+require __DIR__ . '/vendor/Kint/Kint.class.php';
 require __DIR__ . '/classes/Autoloader.php';
 $autoloader = new Collector\Autoloader();
 $autoloader->register();
@@ -48,10 +50,13 @@ if (isset($_SESSION['settings'])) {
 if ($_SETTINGS->password === null) {
     $noPass = true;
     require $_PATH->get("Set Password");
-    if ($noPass === true) exit;
+    if ($noPass === true) {
+        exit;
+    }
 }
 
 // if experiment has been loaded (after login) set the variable
 if (isset($_SESSION['_EXPT'])) {
-    $_EXPT = &$_SESSION['_EXPT'];
+    $_EXPT = $_SESSION['_EXPT'];
+    $_TRIAL = $_EXPT->getTrial();
 }

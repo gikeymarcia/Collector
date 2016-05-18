@@ -47,13 +47,13 @@
 //         the step size for multiple ranges, please enter the step size
 //         after each range, like "1::3#.1, a::g # 2, 7::9 #.5"
 
-if (!isset($settings) || $settings === '') {
-    $settings = '1::7';
+if (empty($_EXPT->get('settings'))) {
+    $_EXPT->update('settings', '1::7');
 }
 
-$likertOptions = Collector\Helpers::rangeToArray($settings);
+$likertOptions = Collector\Helpers::rangeToArray($_EXPT->get('settings'));
 
-$texts = explode('|', $text);
+$texts = explode('|', $_EXPT->get('text'));
 $question = array_shift($texts);
 $labelWidth = floor(1000 / max(1, count($texts))) / 10;
 $optionWidth = floor(1000 / count($likertOptions)) / 10;

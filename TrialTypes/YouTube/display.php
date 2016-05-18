@@ -23,37 +23,10 @@ $parameters = array(
  // 'end'            => see line 71  // end time in seconds
 );
 
-/**
- * Determines if the video is a valid YouTube link.
- *
- * @param string $string The path to check.
- *
- * @return bool True if the link is valid, else false.
- */
-function isValidYouTube($string)
-{
-    if (Collector\Helpers::isLocal($string)) {
-        return false;
-    }
-    if (false !== stripos($string, 'youtube')) {
-        return true;
-    }
-    if (false !== stripos($string, 'youtu.be')) {
-        return true;
-    }
-
-    return false;
-}
-
-if (!isValidYouTube($cue)) {
-    throw new InvalidArgumentException('The given video source is not '
-        .'supported. The cue should be a YouTube URL.');
-}
-
 // extract submitOnDone and preventEarlySubmit settings from $settings
 $submitOnDone = true;
 $preventEarlySubmit = true;
-$settings = explode('|', $settings);
+$settings = explode('|', $_EXPT->get('settings'));
 foreach ($settings as $setting) {
     $settingSubmit = Collector\Helpers::removeLabel($setting, 'submitOnDone');
     $settingPrevent = Collector\Helpers::removeLabel($setting, 'preventEarlySubmit');
@@ -66,7 +39,7 @@ foreach ($settings as $setting) {
 }
 
 // get video ID
-$videoId = Collector\Helpers::youtubeUrlCleaner($cue, true);
+$videoId = Collector\Helpers::youtubeUrlCleaner($_EXPT->get('cue'), true);
 
 // get start and end time from stim file columns
 if (!isset($startTime) || !is_numeric($startTime)) {
@@ -86,7 +59,7 @@ $parameters['end'] = $endTime;
 </div>
 
 <!-- include form to collect RT and advance page -->
-<div><?= $text ?></div>
+<div><?= $_EXPT->get('text') ?></div>
 <div class="textcenter">
   <button class="collectorButton collectorAdvance" id="FormSubmitButton">Next</button>
 </div>

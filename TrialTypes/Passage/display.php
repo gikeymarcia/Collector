@@ -1,8 +1,8 @@
 <!-- Show contents of "Text" column above passage -->
-<div><?= $text ?></div>
+<div><?= $_EXPT->get('text') ?></div>
 
 <!-- Show the "Cue" contents and use the "Passage" style defined below -->
-<div class="passage"><?= $cue ?></div>
+<div class="passage"><?= $_EXPT->get('cue') ?></div>
 <h3 class="textcenter">End of Passage</h3>
 
 <!-- include form to collect RT and advance page -->

@@ -1,9 +1,9 @@
 <div>
-  <?= $text; ?>
+  <?= $_EXPT->get('text'); ?>
 </div>
 
 <div class="study textcenter">
-  <?= Collector\Helpers::show($cue) ?>
+  <?= Collector\Helpers::show($_EXPT->get('cue')) ?>
 </div>
 
 <div class="textcenter">

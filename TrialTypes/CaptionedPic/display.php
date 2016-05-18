@@ -1,18 +1,15 @@
-<div><?= $text; ?></div>
+<div> <?= $_EXPT->get('text') ?> </div>
   
 <!-- show the image -->
-<div class="pic">
-  <?= Collector\Helpers::show($cue) ?>
-</div>
+<div class="pic"> <?= Collector\Helpers::show($_EXPT->get('cue')) ?> </div>
   
 <!-- show the caption -->
-<h2 class="textcenter"><?= $answer ?></h2>
+<h2 class="textcenter"> <?= $_EXPT->get('answer') ?> </h2>
 
 <!-- response and RT form -->
 <div class="textcenter">
-    <button class="collectorButton collectorAdvance" id="FormSubmitButton" autofocus>Next</button>
+  <button class="collectorButton collectorAdvance" id="FormSubmitButton" autofocus>Next</button>
 </div>
-
 
 <script type="text/javascript">
 // This script measures the width of the image you use

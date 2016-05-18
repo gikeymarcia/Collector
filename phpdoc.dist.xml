@@ -8,16 +8,15 @@
     </markers>
   </parser>
   <transformer>
-    <target>./Documentation/API</target>
+    <target>./Documentation/PHPDoc</target>
   </transformer>
   <transformations>
     <template name="clean"/>
     <!-- template name="responsive-twig"/ -->
   </transformations>
   <files>
-    <directory>./Code/classes</directory>
-    <!-- directory>./Code/phpbrowscap</directory -->
-    <file>./Code/customFunctions.php</file>
+    <ignore>*test*</ignore>
+    <directory>Code/classes</directory>
     <file>./Code/shuffleFunctions.php</file>
     <!-- <file>./Tools/toolsFunctions.php</file> -->
     <!-- <file>./Tools/loginFunctions.php</file> -->

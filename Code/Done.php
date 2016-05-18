@@ -30,7 +30,7 @@ if (isset($validStates[$_SESSION['state']])) {
     if ($_SESSION['state'] == 'break') {
         //        $_SESSION['state'] = 'return';
         // increment counter so next session will begin after the NewSession
-        ++$_EXPT->position;
+        $_EXPT->advance();
         // increment session # so next login will labeled as the next session
         ++$_SESSION['Session'];
         // generate a new ID (for next login)

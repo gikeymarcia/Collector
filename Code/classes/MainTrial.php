@@ -1,0 +1,337 @@
+<?php
+/**
+ * MainTrial class.
+ */
+
+namespace Collector;
+
+/**
+ * MainTrials are the bread and butter of Experiments. MainTrials always belong
+ * to an Experiment can contain multiple PostTrials. Note that though MainTrials
+ * have access to the basic MiniDb functions (add, get, update, export) they
+ * have been overridden and may behave differently than expected.
+ */
+class MainTrial extends Trial
+{
+    /**
+     * The offset of this Trial in the Experiment trial array.
+     * @var int
+     */
+    public $position;
+
+    /**
+     * The array of PostTrials for this MainTrial.
+     * @var array
+     */
+    protected $postTrials;
+
+    /**
+     * The current position in the post trial queue.
+     * @var type
+     */
+    protected $postPosition;
+
+    /**
+     * Constructor.
+     *
+     * @param array      $data The trial information from the Procedure file.
+     * @param Experiment $expt The Experiment that this Trial belongs to.
+     */
+    public function __construct(array $data = array(), Experiment $expt = null)
+    {
+        // initialize properties
+        $this->position = null;
+        $this->postPosition = 0;
+        $this->postTrials = array();
+
+        // construct the trial
+        parent::__construct($data, $expt);
+    }
+
+    /* Implements
+     **************************************************************************/
+    /**
+     * Marks the Trial (and all PostTrials) as complete and seals the Response.
+     */
+    public function markComplete()
+    {
+        $this->postPosition = null;
+        $this->complete = true;
+        $this->response->seal();
+        foreach ($this->postTrials as $post) {
+            $post->markComplete();
+        }
+    }
+
+    /**
+     * Validates the MainTrial and related PostTrials using the Validator 
+     * registered for their trial types, if the Validators exist.
+     * 
+     * @return array Returns an indexed array of the errors found when running
+     *               validation and the information about the Trial with errors.
+     */
+    public function validate()
+    {
+        $errors = array();
+        $validator = $this->expt->getValidator($this->data['trial type']);
+        if (isset($validator)) {
+            $result = $validator->validate($this);
+            foreach ($result as $error) {
+                $errors[] = $error;
+            }
+        }
+        
+        foreach ($this->postTrials as $post) {
+            $result = $post->validate();
+            foreach ($result as $error) {
+                $errors[] = $error;
+            }
+        }
+        
+        return $errors;
+    }
+    
+    /**
+     * Updates the named key in the relatedFiles MiniDb for the current Trial 
+     * with the path to the given related file (like 'script.php').
+     * 
+     * @param string $name The name of the related file being added.
+     * @param string $path The full path of the related file.
+     * 
+     * @return bool Returns true if the key is added, else false.
+     */
+    public function addRelatedFile($name, $path)
+    {
+        return $this->postPosition === 0 
+            ? $this->relatedFiles->update($name, $path)
+            : $this->getPostTrial()->addRelatedFile($name, $path);
+    }
+    
+    /**
+     * Gets the named path from the relatedFiles MiniDb for the current Trial.
+     * 
+     * @param string $name The name of the related file to get the path for.
+     * 
+     * @return mixed Returns the stored value if the key exists, else null.
+     */
+    public function getRelatedFile($name)
+    {
+        return $this->postPosition === 0
+            ? $this->relatedFiles->get($name)
+            : $this->getPostTrial()->getRelatedFile($name);
+    }
+    
+    /* Overrides
+     **************************************************************************/
+    /**
+     * Adds a key to the current trial (determined by the postPosition) if the
+     * key does not already exist. If strict is passed as true, the add function
+     * is strictly called on this MainTrial.
+     *
+     * @param string $name   The key to add.
+     * @param mixed  $value  The value to assign to the key.
+     * @param bool   $strict Set to true to restrict the addition only to the
+     *                       current MainTrial.
+     *
+     * @return bool Returns true if the key is added, else false.
+     */
+    public function add($name, $value = null, $strict = false)
+    {
+        if ($strict || ($this->postPosition === 0)) {
+            return parent::add($name, $value);
+        }
+
+        $post = $this->getPostTrial();
+
+        return isset($post) ? $post->add($name, $value)
+                            : parent::add($name, $value);
+    }
+
+    /**
+     * Gets the value of the key for the current trial (determined by the
+     * postPosition). If no value exists at the given key, the MainTrial and
+     * then the Response are checked for the key. If strict is passed as true,
+     * the get function is strictly called on this MainTrial.
+     *
+     * @param string $name   The key to retrieve the value for.
+     * @param bool   $strict Set to true to restrict the search only to the
+     *                       current MainTrial.
+     *
+     * @return mixed Returns the stored value if the key exists, else null.
+     */
+    public function get($name, $strict = false)
+    {
+        $val = parent::get($name);
+        if ($strict) {
+            return $val;
+        }
+
+        if (($this->postPosition > 0) && (null !== $this->getPostTrial())) {
+            $postval = $this->getPostTrial()->get($name, true);
+            $val = isset($postval) ? $postval : $val;
+        }
+
+        return isset($val) ? $val : $this->response->get($name);
+    }
+
+    /**
+     * Updates the value at the given key in the current trial (determined by
+     * the postPosition), adding it if it does not yet exist.
+     *
+     * @param string $name  The key to add or update.
+     * @param mixed  $value The value to assign to the key.
+     */
+    public function update($name, $value)
+    {
+        return ($this->postPosition > 0) && (null !== $this->getPostTrial())
+            ? $this->getPostTrial()->update($name, $value)
+            : parent::update($name, $value);
+    }
+
+    /**
+     * Exports the full trial information (including PostTrials).
+     *
+     * @param string $format The format of the exported data: PHP array or JSON.
+     *
+     * @return mixed The formatted trial information.
+     */
+    public function export($format = 'array')
+    {
+        $data['main'] = $this->data;
+        $data['main']['response'] = $this->response->export();
+        foreach ($this->postTrials as $i => $post) {
+            $num = $i;
+            $data["post {$num}"] = $post->export();
+        }
+
+        return $this->formatArray($data, $format);
+    }
+
+    /* Class specific
+     **************************************************************************/
+    /**
+     * Advances the Trial to the next PostTrial if applicable or marks it
+     * complete if no more PostTrials exist.
+     */
+    public function advance()
+    {
+        if (!empty($this->postTrials) && $this->postPosition !== null
+            && $this->postPosition < count($this->postTrials)
+        ) {
+            if ($this->postPosition !== 0) {
+                $this->postTrials[$this->postPosition]->markComplete();
+            }
+            ++$this->postPosition;
+        } else {
+            // no post trials to run, all done
+            $this->markComplete();
+        }
+    }
+
+    /**
+     * Creates a post trial from the trial data and adds it to this MainTrial.
+     *
+     * @param array $data The trial data to construct the PostTrial from.
+     */
+    public function addPostTrial(array $data = array())
+    {
+        $post = new PostTrial($this, $data);
+        $post->position = count($this->postTrials) + 1;
+        $this->postTrials[$post->position] = $post;
+
+        return $this;
+    }
+
+    /**
+     * Gets the PostTrial at the given 1-indexed position in this Trial (the
+     * 0 position returns this MainTrial).
+     *
+     * @param int $pos The 1-indexed position to retrieve the PostTrial from.
+     *
+     * @return PostTrial|null Returns the PostTrial at the given location if the
+     *                        offset exists, this MainTrial if 0, else null.
+     */
+    public function getPostTrialAbsolute($pos)
+    {
+        if ($pos === 0) {
+            return $this;
+        }
+
+        return isset($this->postTrials[$pos]) ? $this->postTrials[$pos] : null;
+    }
+
+    /**
+     * Gets the PostTrial at the given relative position in this Trial.
+     *
+     * @param int $pos The relative position to retrieve the PostTrial from.
+     *
+     * @return PostTrial Returns the PostTrial at the relative location.
+     */
+    public function getPostTrial($pos = 0)
+    {
+        return !$this->complete
+            ? $this->getPostTrialAbsolute($this->postPosition + $pos)
+            : null;
+    }
+
+    /**
+     * Gets the current Trial within this Trial (i.e. if on a PostTrial, get the
+     * PostTrial, otherwise return a reference to this MainTrial).
+     *
+     * @return MainTrial|PostTrial The reference to the current Trial.
+     */
+    public function getCurrent()
+    {
+        return $this->getPostTrial();
+    }
+
+    /**
+     * Alias for cloning the object.
+     *
+     * @return MainTrial Returns this object with positions and response reset.
+     */
+    public function copy()
+    {
+        return clone $this;
+    }
+    
+    /**
+     * Applies a function to this trial and all of the related PostTrials. The
+     * callable function must accept a Trial as it's first parameter: each trial
+     * will be injected via this parameter.
+     * 
+     * @param Closure $function The function to run with each Trial. The
+     *                          function must accept a Trial as the first
+     *                          parameter.
+     * @param array   $args     Any arguments to pass to the function after the
+     *                          Trial is injected.
+     */
+    public function apply(\Closure $function, array $args = array())
+    {
+        $params = array_values($args);
+        
+        // apply to MainTrial
+        array_unshift($params, $this);
+        call_user_func_array($function, $params);
+        
+        // apply to PostTrials
+        foreach ($this->postTrials as $trial) {
+            $params[0] = $trial;
+            call_user_func_array($function, $params);
+        }
+    }
+
+    /**
+     * The Experiment::duplicate method clones trials completely. After cloning
+     * this magic method resets the responses array.
+     *
+     * @return MainTrial Returns this object with positions and response reset.
+     */
+    public function __clone()
+    {
+        $this->complete = false;
+        $this->position = null;
+        $this->postPosition = 0;
+        $this->response = new Response();
+    }
+}

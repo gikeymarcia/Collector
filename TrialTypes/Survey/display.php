@@ -1,7 +1,7 @@
 </form>
 <?php
     if (is_numeric($item)) {
-        $surveyFile = $cue;
+        $surveyFile = $_EXPT->get('cue');
     } else {
         $surveyFile = $item;
     }
@@ -78,9 +78,8 @@
         $surveyRows = array($survey[$surveyIndex]);
         ++$surveyIndex;
         
-        while (
-            isset($survey[$surveyIndex])
-         && cleanSurveyType($survey[$surveyIndex]['Type']) === $type
+        while (isset($survey[$surveyIndex])
+            && cleanSurveyType($survey[$surveyIndex]['Type']) === $type
         ) {
             $surveyRows[] = $survey[$surveyIndex];
             ++$surveyIndex;

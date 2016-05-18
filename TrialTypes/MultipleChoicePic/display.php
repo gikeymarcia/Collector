@@ -46,17 +46,17 @@ if (isset($_SESSION['MCbutton']) === false) {
 $perRow = $perCol = $MCitemsPerRow;
 
 // get cues and answers
-$cues = trimExplode('|', $cue);
-$answers = trimExplode('|', $answer);
+$cues = trimExplode('|', $_EXPT->get('cue'));
+$answers = trimExplode('|', $_EXPT->get('answer'));
 
 $buttons = array();
 $limitPerRow = true;
 $horizontal = true;
 $share = false;
 
-$settings = trimExplode('|', $settings);
+$settings = trimExplode('|', $_EXPT->get('settings'));
 $stimCols = array();
-foreach ($currentTrial['Stimuli'] as $column => $notImportant) {
+foreach ($_TRIAL['Stimuli'] as $column => $notImportant) {
     $stimCols[strtolower($column)] = $column;
 }
 
@@ -138,7 +138,7 @@ if ($buttons === array()) {
 }
 $buttons_unique = array_unique($buttons);
 
-if (!isset($currentTrial['Response']['Buttons'])) {
+if (!isset($_TRIAL['Response']['Buttons'])) {
     if ($share !== false) {
         if (!isset($_SESSION['Share'][$share]['Buttons'])) {
             $_SESSION['Share'][$share]['Buttons'] = $buttons_unique;
@@ -146,9 +146,9 @@ if (!isset($currentTrial['Response']['Buttons'])) {
             $buttons_unique = $_SESSION['Share'][$share]['Buttons'];
         }
     }
-    $currentTrial['Response']['Buttons'] = implode('|', $buttons_unique);
+    $_TRIAL['Response']['Buttons'] = implode('|', $buttons_unique);
 } else {
-    $buttons_unique = explode('|', $currentTrial['Response']['Buttons']);
+    $buttons_unique = explode('|', $_TRIAL['Response']['Buttons']);
 }
 
 $buttonGrid = array();
@@ -201,7 +201,7 @@ $tdWidth = 78 / count($buttonGrid[0]);
 <div class="pic"><?= Collector\Helpers::show($cues[0]) ?></div>
 
 <!-- optional text -->
-<div><?= isset($text) ? $text : '' ?></div>
+<div><?= $_EXPT->get('text') ?></div>
 
 <!-- button grid -->
 <table class="mcPicTable">

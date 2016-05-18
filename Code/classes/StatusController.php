@@ -179,7 +179,8 @@ class StatusController
     /**
      * Writes a status end message.
      *
-     * @param int $startTime The number of seconds from the UNIX epoch
+     * @param int    $startTime The number of seconds from the UNIX epoch.
+     * @param string $state     The state of the experiment.
      *
      * @todo writeEnd() is copied from done.php --- not functional yet!
      */

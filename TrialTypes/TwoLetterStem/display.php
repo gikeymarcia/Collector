@@ -12,14 +12,14 @@
 </style>
 
 <!-- optional text -->
-<div><?= $text ?></div>
+<div> <?= $_EXPT->get('text') ?> </div>
 
 <!-- stimulus -->
 <div class="study test-cue">
-  <span class="study-left"><?= $cue ?></span>
-  <span class="study-divider">   :    </span>
+  <span class="study-left"> <?= $_EXPT->get('cue') ?> </span>
+  <span class="study-divider"> : </span>
   <span class="study-right">
-    <?= substr($answer, 0, 2) ?><input name="Response" type="text" value="" class="collectorInput">
+    <?= substr($_EXPT->get('answer'), 0, 2) ?><input name="Response" type="text" value="" class="collectorInput">
   </span>
 </div>
   

@@ -1,15 +1,13 @@
-<?php
-return function($trialValues) {
-    $errors = array();
-    if (!isset($trialValues['Cue'])) {
-        $errors[] = "Your 'Audio' trial tyle needs a 'Cue' value.";
+<?php return function($trial) {
+    $item = $trial->get('cue');
+    $cue = isset($item) ? $item : null;
+    $trialtype = $trial->get('trial type');
+    
+    if (!$item) {
+        return "{$trialtype} trials require a 'Cue' value.";
     }
-    if (Collector\Helpers::show($trialValues['Cue']) == $trialValues['Cue']) {
-        $errors[] = "Your 'Audio' trial type's 'Cue' value does not point to a " .
-                    "filename with an extension. For example,'Mikey.jpg'. Your " .
-                    "'Cue' is: {$trialValues['Cue']}";
+    
+    if (Collector\Helpers::show($cue) === $cue) {
+        return "The 'Cue' for {$trialtype} trials must point to a picture file.";
     }
-    return $errors;
 };
-
-?>

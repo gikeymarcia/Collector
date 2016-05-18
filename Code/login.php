@@ -105,17 +105,7 @@ if ($returning !== null) {
 $cond->assignCondition();
 $_PATH->setDefault('Condition Index', $cond->getAssignedIndex());
 
-$procedure = new Collector\Procedure(
-    $_PATH->get('Procedure Dir'),
-    $cond->allProc(),
-    $errors
-);
-$stimuli = new Collector\Stimuli(
-    $_PATH->get('Stimuli Dir'),
-    $cond->allStim(),
-    $errors
-);
-
+// retrieve and store status information
 $status = new Collector\StatusController();
 $status->updateUser(
     $user->getUsername(),
@@ -131,43 +121,69 @@ $status->setPaths(
     $_PATH->get('Status End Data')
 );
 $status->writeBegin();
-$_SESSION['Status'] = serialize($status);
 
-// check if procedure and stimuli files have unique column names
+// load and prepare procedure and stimuli
+$procedure = new Collector\Procedure(
+    $_PATH->get('Procedure Dir'),
+    $cond->allProc(),
+    $errors
+);
+$stimuli = new Collector\Stimuli(
+    $_PATH->get('Stimuli Dir'),
+    $cond->allStim(),
+    $errors
+);
 $procedure->checkOverlap($stimuli->getKeys(true));
-
 $procedure->shuffle();
 $stimuli->shuffle();
 
-#### Trial Validation
-require $_PATH->get('Trial Validator Require');
+/*
+ *  Create the Experiment Object
+ */
+$_EXPT = Collector\ExperimentFactory::create(
+    $cond->get(),
+    $procedure->getShuffled(),
+    $stimuli->getShuffled(),
+    array($_PATH->get('Custom Trial Types'), $_PATH->get('Trial Types'))
+);
+$validationErrors = $_EXPT->validate();
+if (!empty($validationErrors)) {
+    foreach ($validationErrors as $error) {
+        $errors->add($error['message'] . " Error found in MainTrial " . 
+            $error['info']['position'] . " at post position " . 
+            $error['info']['postPosition'] . ". (positions are 0-indexed)");
+    }
+}
 
-######## Feed stuff to login #######
+/*
+ * Stop on errors
+ */
+if ($errors->arePresent() || !empty($validationErrors)) {
+    require $_PATH->get('Header');
+    echo "
+      <div style='max-width:600px;'>
+        <p>{$errors}<br>
+        <p class='textcenter'>
+          Oops, something has gone wrong. Email the experimenter at <b>$_SETTINGS->experimenter_email</b>
+          <br><br>
+          <button class='collectorButton' onClick='window.location.reload(true);'>Refresh</button>
+          <button class='collectorButton' onClick='window.location.href=\"{$_PATH->get('Current Experiment')}\";'>Back to Login</button>
+      </div>";
+    ddd($_EXPT);
+    require $_PATH->get('Footer');
+    exit;
+}
+
+/*
+ * Populate Session and start experiment
+ */
 $_SESSION['Username'] = $user->getUsername();
 $_SESSION['ID'] = $user->getID();
 $_SESSION['Session'] = $user->getSession();
 $_SESSION['Start Time'] = time();
-
-// access stimuli, procedure, and condition arrays using $_EXPT->[name]
-$_EXPT = new Collector\Experiment(
-            $stimuli->getShuffled(),
-            $procedure->getShuffled(),
-            $cond->get()
-        );
+$_SESSION['Status'] = serialize($status);
 $_SESSION['_EXPT'] = $_EXPT;
-
-####################################
-
-if ($errors->arePresent()) {
-    echo $errors;
-    echo "<div>
-            Oops, something has gone wrong. Email the experimenter at <b>$_SETTINGS->experimenter_email</b><br>
-            <button type='button' onClick='window.location.reload(true);'>Click here to refresh</button>
-          </div>";
-    exit;
-}
-
 $_SESSION['state'] = 'exp';
-$experiment = $_PATH->get('Experiment Page');
-header("Location: $experiment");
+
+header("Location: " . $_PATH->get('Experiment Page'));
 exit;

@@ -6,11 +6,11 @@
 
 
 <div>
-  <?= $text; ?>
+  <?= $_EXPT->get('text'); ?>
 </div>
 
 <div class="textcenter" style="font-size:<?= $font_size ?>">
-  <?= Collector\Helpers::show($cue) ?>
+  <?= Collector\Helpers::show($_EXPT->get('cue')) ?>
 </div>
 
 <div class="textcenter">

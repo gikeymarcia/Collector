@@ -23,7 +23,7 @@
     
     # CUSTOM TYPE SCORING, let each survey type have access to its data
     if (is_numeric($item)) {
-        $surveyFile = $cue;
+        $surveyFile = $_EXPT->get('cue');
     } else {
         $surveyFile = $item;
     }

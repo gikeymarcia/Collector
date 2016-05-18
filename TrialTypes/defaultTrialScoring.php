@@ -21,7 +21,7 @@
         ### cleaning up response and answer (for later comparisons)
         $response = $_POST['Response'];
         $response = trim(strtolower($response));
-        $correctAns = trim(strtolower($answer));
+        $correctAns = trim(strtolower($_EXPT->get('answer')));
         $Acc = null;
 
         #### Calculating and saving accuracy for trials with user input

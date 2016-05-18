@@ -9,20 +9,19 @@
 */
 
 // picture trial version of feedback
-if ($text === '') {
-    $text = 'The correct answer was:';
+if (empty($_EXPT->get('text'))) {
+    $_EXPT->update('text', 'The correct answer was:');
 }
-
 ?>
 
 <!-- show the image -->
 <div class="pic">
-  <?= Collector\Helpers::show($cue) ?>
+  <?= Collector\Helpers::show($_EXPT->get('cue')) ?>
 </div>
 
 <!-- show the answer -->
-<div class="textcenter"><h2><?= $text ?></h2></div>
-<h1 class="textcenter"><?= Collector\Helpers::show($answer) ?></h1>
+<div class="textcenter"><h2><?= $_EXPT->get('text') ?></h2></div>
+<h1 class="textcenter"><?= Collector\Helpers::show($_EXPT->get('answer')) ?></h1>
 
 <!-- copy the answer -->
 <div class="textcenter pad">

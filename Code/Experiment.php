@@ -25,110 +25,6 @@ if (!isset($_SESSION['Timestamp'])) {
 // blocked by previously sent content
 ob_start();
 
-// setting up easier to use and read aliases(shortcuts) of $_SESSION data
-$condition = &$_EXPT->condition;
-$currentPos = &$_EXPT->position;
-$currentPost = &$_EXPT->postNumber;
-
-if ($_EXPT->isDone()) {
-    gotoDone();
-}
-
-if (!isset($_EXPT->responses[$currentPos])) {
-    $_EXPT->responses[$currentPos] = array();
-}
-
-/*
- *  CREATE CURRENT TRIAL
- */
-// also create aliases to proc and stim data
-$currentTrial = $_EXPT->getTrial();
-$procedure = $currentTrial['Procedure'];
-$stimuli = $currentTrial['Stimuli'];
-
-/*
- *  CREATE ALIASES
- */
-$trialValues = $_EXPT->prepareAliases();
-
-// do not overwrite with aliases, in case they have a "condition" column
-extract($trialValues, EXTR_SKIP);
-
-// from this point on, we should use variables that have at least
-// one capital letter in them, so that we can be guaranteed not
-// to overwrite any aliases set for this trial. All aliases
-// will be lowered and spaces replaced with underscores
-// e.g., column "Trial Type" is now $trial_type, so dont override the $trial_type variable
-
-/*
- *  GET TRIAL TYPE FILES
- */
-$trial_type = strtolower($trial_type);
-
-$trialFiles = Collector\Helpers::getTrialTypeFiles($trial_type);
-if (isset($trialFiles['script'])) {
-    $addedScripts = array($trialFiles['script']);
-}
-if (isset($trialFiles['style'])) {
-    $addedStyles = array($trialFiles['style']);
-}
-
-if (isset($trialFiles['helper'])) {
-    include $trialFiles['helper'];
-}
-
-/*
- *  TEXT REPLACEMENT
- */
-// update $text containing $columnNames with values from files
-if (isset($text)) {
-    $textSearch = array();
-    $textReplace = array();
-    foreach ($trialValues as $trialCol => $trialVal) {
-        $textSearch[] = '$'.$trialCol;
-        $textReplace[] = $trialVal;
-    }
-    $text = str_replace($textSearch, $textReplace, $text);
-} else {
-    $text = '';
-}
-unset($trialCol, $trialVal);
-
-/*
- *  TIMING
- */
-// override time in debug mode, use standard timing if no debug time is set
-if ($_SESSION['Debug'] == true && $_SETTINGS->debug_time != '') {
-    $max_time = $_SETTINGS->debug_time;
-}
-
-if (!isset($min_time)) {
-    $min_time = 'not set';
-}
-if (!isset($defaultMaxTime)) {
-    $defaultMaxTime = null;
-}
-
-// set class for input form (shows or hides 'submit' button)
-$max_time = strtolower($max_time);
-if ($max_time === 'computer' || $max_time === 'default') {
-    $max_time = is_numeric($defaultMaxTime) ? $defaultMaxTime : 'user';
-}
-if (!is_numeric($max_time)) {
-    $max_time = 'user';
-}
-$formClass = ($max_time === 'user') ? 'UserTiming' : 'ComputerTiming';
-
-/*
- *  PREPARE TO DISPLAY
- */
-$postTo = $_PATH->get('Experiment Page');
-$trialFail = false; // used to show diagnostic information when a trial fails
-
-$title = 'Experiment';
-$_dataController = 'experiment';
-$_dataAction = $trial_type;
-
 /*
  * RECORD DATA
  *
@@ -138,42 +34,98 @@ $_dataAction = $trial_type;
  * be written using the recordTrial() function.
  */
 if ($_POST !== array()) {
-    require $trialFiles['scoring'];
-
-    if (!isset($data)) {
-        $data = $_POST;
-    }
-    $_EXPT->recordResponses($data);
-
-    $nextTrialIndex = $_EXPT->getNextTrialIndex();
-    if ($nextTrialIndex === false || $nextTrialIndex[0] > $currentPos) {
-        recordTrial();
-    }
-
-    // go to the next trial or end experiment
-    $nextTrial = $_EXPT->getNextTrialIndex();
-    if ($nextTrial !== false) {
-        $_EXPT->position = $nextTrial[0];
-        $_EXPT->postNumber = $nextTrial[1];
-        header('Location: '.$_PATH->get('Experiment Page'));
+    // score data
+    require $_TRIAL->getRelatedFile('scoring');
+    $data = isset($data) ? $data : $_POST;
+    
+    // record data and advance to next PostTrial if applicable
+    $_EXPT->record($data);
+    if (($_EXPT->advance()) === 0) {
+        // still need to complete this file, don't write to file yet
+        header('Location: ' . $_PATH->get('Experiment Page'));
         exit;
     }
-
-    ++$_EXPT->position;
-    if ($_EXPT->isDone()) {
-        gotoDone();
-    }
+    recordTrial($_TRIAL);
+    
+    // update current trial reference
+    $_TRIAL = $_EXPT->getTrial();
 }
+
+// Now that data is recorded, see if we are finished
+if ($_EXPT->isComplete()) {
+    gotoDone();
+}
+
+/*
+ *  PREPARE TRIAL FOR DISPLAY
+ */
+// get the related files for the trial
+$addedScripts = array_filter(array($_TRIAL->getRelatedFile('script')));
+$addedStyles = array_filter(array($_TRIAL->getRelatedFile('style')));
+
+$helper = $_TRIAL->getRelatedFile('helper');
+if (!empty($helper)) {
+    require $helper;
+}
+
+// update $text containing $columnNames by passing them to $_EXPT->get()
+$text = $_EXPT->get('text');
+if (!empty($text)) {
+    $regexp = array(
+        '/\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)/', // normal variables: $variable
+        '/\$\{.*\}/', // non-normal variables: ${weird column & name}
+    );
+    $text = preg_replace_callback($regexp,
+        function($matches) use ($_EXPT) { return $_EXPT->get($matches[1]); },
+        $text
+    );
+} else {
+    $text = '';
+}
+$_EXPT->update('text', $text);
+unset($text);
+
+// override time in debug mode, use standard timing if no debug time is set
+if ($_SESSION['Debug'] == true && $_SETTINGS->debug_time != '') {
+    $_EXPT->update('max time', $_SETTINGS->debug_time);
+}
+
+if ($_EXPT->get('min time') === null) {
+    $_EXPT->update('min time', 'not set');
+}
+if (!isset($defaultMaxTime)) {
+    $defaultMaxTime = null;
+}
+
+// set class for input form (shows or hides 'submit' button)
+$maxTime = strtolower($_EXPT->get('max time'));
+if ($maxTime === 'computer' || $maxTime === 'default') {
+    $maxTime = is_numeric($defaultMaxTime) ? $defaultMaxTime : 'user';
+}
+if (!is_numeric($maxTime)) {
+    $maxTime = 'user';
+}
+$formClass = ($maxTime === 'user') ? 'UserTiming' : 'ComputerTiming';
+$_EXPT->update('max time', $maxTime);
+unset($maxTime);
 
 /*
  *  DISPLAY
  */
+$postTo = $_PATH->get('Experiment Page');
+$trialFail = false; // used to show diagnostic information when a trial fails
+
+$title = 'Experiment';
+$_dataController = 'experiment';
+$_dataAction = $_TRIAL->get('trial type');
+
 require $_PATH->get('Header');
 
 // actually include the trial type display file here
-if ($trialFiles['display']): ?>
+$display = $_TRIAL->getRelatedFile('display');
+if ($display): ?>
 <form class="experimentForm <?= $formClass; ?> invisible" action="<?= $postTo; ?>" method="post" id="content" autocomplete="off">
-  <?php include $trialFiles['display'] ?>
+  <?php include $display ?>
 
   <?php if ($_SESSION['Debug']) : ?>
   <button type="submit" style="position: absolute; top: 50px; right: 50px;"onclick="$('form').submit()">Debug Submit!</button>
@@ -186,7 +138,7 @@ if ($trialFiles['display']): ?>
 </form>
 
 <?php else: ?>
-<h2>Could not find the following trial type: <strong><?= $trial_type; ?></strong></h2>
+<h2>Could not find the following trial type: <strong><?= $_TRIAL->get('trial type') ?></strong></h2>
 <p>Check your procedure file to make sure everything is in order. All information about this trial is displayed below.</p>
 
 <!-- default trial is always user timing so you can click 'Done' and progress through the experiment -->
@@ -202,26 +154,37 @@ if ($trialFiles['display']): ?>
 
 <?php
 $trialFail = true;
-$maxTime = 'user';
 endif; ?>
 
 <!-- hidden field that JQuery/JavaScript uses to check the timing to $postTo -->
-<div id="maxTime" class="hidden"><?= $max_time; ?></div>
-<div id="minTime" class="hidden"><?= $min_time; ?></div>
+<div id="maxTime" class="hidden"><?= $_EXPT->get('max time'); ?></div>
+<div id="minTime" class="hidden"><?= $_EXPT->get('min time'); ?></div>
 
 <?php
-/*
- *  Diagnostics
- */
+// Diagnostics
 if (($_SETTINGS->trial_diagnostics == true) || ($trialFail == true)) {
-    $_EXPT->showTrialDiagnostics();
+    d($_TRIAL->getDebugInfo());
 }
+?>
 
-/*
- *  PRECACHE
- */
-echo $_EXPT->getPrecache();
+<!-- pre-cache to start loading next trial resources -->
+<div class="precachenext">
+<?php
+if ($_EXPT->getTrial(1) !== null) {
+    $item = $_EXPT->getTrial(1)->get('item');
+    if (is_array($item) && !empty($item)) {
+        foreach (array_values($_EXPT->getTrial(1)->get('item')) as $val) {
+            if (Collector\Helpers::show($val) !== $val) {
+                echo show($val); 
+            }
+        }
+    }
+}
+?>
+</div>
 
+<?php
+// get footer and flush data to screen
 require $_PATH->get('Footer');
 
 ob_end_flush();

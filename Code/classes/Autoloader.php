@@ -1,9 +1,23 @@
 <?php
+/**
+ * Autoloader class.
+ */
 
 namespace Collector;
 
 /**
- * Description of Autoloader
+ * PSR-4 compliant Autoloader.
+ * 
+ * A fully qualified class name has the following form:
+ * \<NamespaceName>(\<SubNamespaceNames>)*\<ClassName>
+ * See more information here: http://www.php-fig.org/psr/psr-4/
+ * 
+ * Example usage:
+ * ```php
+ * $loader = new Autoloader();
+ * $loader->register();
+ * $loader->add('Some\Namespace', 'path/to/somenamespace/root');
+ * ```
  */
 class Autoloader {
     /**
