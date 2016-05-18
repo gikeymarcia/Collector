@@ -438,6 +438,7 @@ body {              /*Has the ID of 'flexBody'*/
   justify-content: center;
   min-height: 100%;
   width: 100%;
+  height: 100%;
   box-sizing: content-box;
 }
 /*Used on the index.php page where people can select experiments*/
