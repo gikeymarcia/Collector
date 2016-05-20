@@ -61,5 +61,5 @@ if ($_SETTINGS->password === null) {
 // if experiment has been loaded (after login) set the variable
 if (isset($_SESSION['_EXPT'])) {
     $_EXPT = $_SESSION['_EXPT'];
-    $_TRIAL = $_EXPT->getTrial();
+    $_TRIAL = $_EXPT->getCurrent();
 }
