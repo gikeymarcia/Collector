@@ -20,7 +20,7 @@ $currentExp = filter_input(INPUT_GET, 'CurrentExp', FILTER_SANITIZE_STRING);
 $current = ($currentExp === null) ? '' : $currentExp;
 if (!in_array($current, Collector\Helpers::getCollectorExperiments())) {
     // requested experiment does not exist: send back to index
-    header('Location: '.$_PATH->get('root'));
+    header('Location: ' . $_PATH->get('root'));
     exit;
 }
 
@@ -141,10 +141,7 @@ $stimuli->shuffle();
  *  Create the Experiment Object
  */
 $_EXPT = Collector\ExperimentFactory::create(
-    $cond->get(),
-    $procedure->getShuffled(),
-    $stimuli->getShuffled(),
-    array($_PATH->get('Custom Trial Types'), $_PATH->get('Trial Types'))
+    $cond->get(), $procedure->getShuffled(), $stimuli->getShuffled(), $_PATH
 );
 $validationErrors = $_EXPT->validate();
 if (!empty($validationErrors)) {
@@ -169,7 +166,7 @@ if ($errors->arePresent() || !empty($validationErrors)) {
           <button class='collectorButton' onClick='window.location.reload(true);'>Refresh</button>
           <button class='collectorButton' onClick='window.location.href=\"{$_PATH->get('Current Experiment')}\";'>Back to Login</button>
       </div>";
-    ddd($_EXPT);
+    d($_EXPT);
     require $_PATH->get('Footer');
     exit;
 }

@@ -28,6 +28,7 @@ if (!empty($fontSize) && is_numeric($fontSize)): ?>
 <style type='text/css' media='screen'>
     body { font-size:<?= $fontSize ?>%; }
 </style>
+<?php endif; ?>
 
 <div class=""><?= $_EXPT->get('text') ?></div>
 <div class="textright">

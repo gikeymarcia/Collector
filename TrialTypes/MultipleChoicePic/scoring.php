@@ -12,7 +12,7 @@ if ($response !== null) {
 
     // if there is a range of answers, just use the first one for scoring
     $answers = explode('|', $_EXPT->get('answer'));
-    $correctAns = trim(strtolower(array_shift($_EXPT->get('answer')s)));
+    $correctAns = trim(strtolower(array_shift($_EXPT->get('answer'))));
 
     // determine text similarity (accuracy) and store as $Acc
     $Acc = null;

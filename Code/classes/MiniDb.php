@@ -114,7 +114,9 @@ class MiniDb
     {
         switch (strtolower($format)) {
             case 'json':
-                return json_encode($array, JSON_PRETTY_PRINT);
+                return (version_compare(PHP_VERSION, '5.4.0') >= 0) 
+                    ? json_encode($array, JSON_PRETTY_PRINT)
+                    : json_encode($array);
             default:
                 return $array;
         }

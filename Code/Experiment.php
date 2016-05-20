@@ -40,15 +40,13 @@ if ($_POST !== array()) {
     
     // record data and advance to next PostTrial if applicable
     $_EXPT->record($data);
-    if (($_EXPT->advance()) === 0) {
-        // still need to complete this file, don't write to file yet
-        header('Location: ' . $_PATH->get('Experiment Page'));
-        exit;
+    if (($_EXPT->advance()) === 1) {
+        recordTrial($_TRIAL);
     }
-    recordTrial($_TRIAL);
     
-    // update current trial reference
-    $_TRIAL = $_EXPT->getTrial();
+    // still need to complete this file, don't write to file yet
+    header('Location: ' . $_PATH->get('Experiment Page'));
+    exit;
 }
 
 // Now that data is recorded, see if we are finished

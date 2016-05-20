@@ -72,7 +72,7 @@ class PostTrial extends Trial
      * 
      * @return bool Returns true if the key is added, else false.
      */
-    public function addRelatedFile($name, $path)
+    public function setRelatedFile($name, $path)
     {
         return $this->relatedFiles->update($name, $path);
     }
@@ -102,7 +102,7 @@ class PostTrial extends Trial
      *
      * @return mixed Returns the stored value if the key exists, else null.
      */
-    public function get($name, $strict = false)
+    public function get($name, $strict = true)
     {
         $val = parent::get($name);
         if ($strict) {
@@ -141,5 +141,20 @@ class PostTrial extends Trial
     public function getMainTrial()
     {
         return $this->main;
+    }
+    
+    
+    
+    /**
+     * The Experiment::duplicate method clones trials completely. After cloning
+     * this magic method resets the responses array.
+     *
+     * @return MainTrial Returns this object with positions and response reset.
+     */
+    public function __clone()
+    {
+        $this->complete = false;
+        $this->position = null;
+        $this->response = new Response();
     }
 }

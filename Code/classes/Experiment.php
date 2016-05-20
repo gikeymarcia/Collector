@@ -114,7 +114,7 @@ class Experiment extends MiniDb implements \Countable
      *
      * @uses Experiment::getCurrent() Uses getCurrent() to get the current Trial.
      */
-    public function get($name, $strict = false)
+    public function get($name, $strict = true)
     {
         $trial = $this->getCurrent();
 
@@ -435,9 +435,14 @@ class Experiment extends MiniDb implements \Countable
     {
         if (is_array($trial)) {
             $trial = new MainTrial($trial);
-        } else {
+        } else if (is_object($trial) && get_class($trial) === "Collector\MainTrial") {
             $trial = $trial->copy();
+        } else {
+            throw new \InvalidArgumentException('Add trial functions require '
+                . 'that the to-be-added trial information is an array or '
+                . 'already constructed MainTrial ');
         }
+        
         $trial->setExperiment($this);
 
         array_splice($this->trials, is_null($pos)
@@ -612,8 +617,9 @@ class Experiment extends MiniDb implements \Countable
     /**
      * Gets a clone of the full MainTrial at the given offset(relative to current).
      *
-     * @param int $pos The position of the MainTrial to copy, relative to the
-     *                 current position.
+     * @param int $pos   The position of the MainTrial to copy, relative to the
+     *                   current position.
+     * 
      * @return MainTrial The cloned MainTrial.
      */
     public function copy($pos = 0)
@@ -624,10 +630,10 @@ class Experiment extends MiniDb implements \Countable
     /**
      * Converts a string in selective range syntax to an array of the digits.
      * Syntax: separate terms with commas (',') or semicolons (';'), and
-     * indicate ranges with double colons ('::') or dashes ('-'). Example:
+     * indicate ranges with double colons ('::'). Example:
      * ```php
-     * Experiment::stringToRange('4; 6, 8::9,11-13');
-     * // returns [4, 6, 8, 9, 11, 12, 13]
+     * Experiment::stringToRange('4; 6, 8::9,11::13');
+     * // returns array(4, 6, 8, 9, 11, 12, 13)
      * ```
      *
      * @param string $string The string in range syntax to convert.
@@ -636,7 +642,7 @@ class Experiment extends MiniDb implements \Countable
      */
     public static function stringToRange($string)
     {
-        $csv = str_replace('-', '::', str_replace(';', ',', str_replace(' ', '', $string)));
+        $csv = str_replace(';', ',', str_replace(' ', '', $string));
         $arr = explode(',', $csv);
         $out = array();
         foreach ($arr as $val) {
@@ -646,7 +652,26 @@ class Experiment extends MiniDb implements \Countable
             }
             $out = array_merge($out, is_array($val) ? $val : array($val));
         }
+        
+        foreach ($out as $i => $string) {
+            if (!is_numeric($string)) {
+                unset($out[$i]);
+            }
+        }
 
         return $out;
+    }
+    
+    /**
+     * Determines if a string can be converted to a range using
+     * Experiment::stringToRange().
+     * 
+     * @param string $string The string to check.
+     * 
+     * @return bool True if the string can be converted to a range, else false.
+     */
+    public static function isValidStringToRange($string)
+    {
+        return is_numeric(str_replace(array(' ', ',', ';', '::'), '', $string));
     }
 }

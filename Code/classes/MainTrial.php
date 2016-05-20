@@ -100,11 +100,11 @@ class MainTrial extends Trial
      * 
      * @return bool Returns true if the key is added, else false.
      */
-    public function addRelatedFile($name, $path)
+    public function setRelatedFile($name, $path)
     {
         return $this->postPosition === 0 
             ? $this->relatedFiles->update($name, $path)
-            : $this->getPostTrial()->addRelatedFile($name, $path);
+            : $this->getPostTrial()->setRelatedFile($name, $path);
     }
     
     /**
@@ -159,7 +159,7 @@ class MainTrial extends Trial
      *
      * @return mixed Returns the stored value if the key exists, else null.
      */
-    public function get($name, $strict = false)
+    public function get($name, $strict = true)
     {
         $val = parent::get($name);
         if ($strict) {
@@ -286,16 +286,6 @@ class MainTrial extends Trial
     }
 
     /**
-     * Alias for cloning the object.
-     *
-     * @return MainTrial Returns this object with positions and response reset.
-     */
-    public function copy()
-    {
-        return clone $this;
-    }
-    
-    /**
      * Applies a function to this trial and all of the related PostTrials. The
      * callable function must accept a Trial as it's first parameter: each trial
      * will be injected via this parameter.
@@ -333,5 +323,10 @@ class MainTrial extends Trial
         $this->position = null;
         $this->postPosition = 0;
         $this->response = new Response();
+        
+        foreach ($this->postTrials as $pos => $trial) {
+            $this->postTrials[$pos] = clone $trial;
+            $this->postTrials[$pos]->position = $pos;
+        }
     }
 }

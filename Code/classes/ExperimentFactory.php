@@ -39,29 +39,30 @@ class ExperimentFactory
         array $condition = array(),
         array $procedure = array(),
         array $stimuli = array(),
-        $validatorDir = ''
+        Pathfinder $pathfinder = null
     ) {
-        $expt = new Experiment($condition, $stimuli, $validatorDir);
+        $validatorDirs = array($pathfinder->get('Custom Trial Types'), 
+                               $pathfinder->get('Trial Types'));
+        
+        $expt = new Experiment($condition, $stimuli, $validatorDirs);
         foreach ($procedure as $row) {
+            // organize and clean up the row data
             $data = self::separatePostTrials($row);
+            self::removeOffPostTrials($data);
+            
+            // create the trial
             $trial = $expt->addTrialAbsolute($data['main']);
             foreach ($data['post'] as $post) {
                 $trial->addPostTrial($post);
             }
         }
         
-        // update 'item' keys with stimuli information and add related files for
-        $expt->apply(function($trial) {
-            
-            // @todo this Helper function is depended on Pathfinder. Should 
-            // probably just rewrite function to use the $validatorDirs passed
-            // to this factory function? Or accept Pathfinder instead of 
-            // validatorDirs
-            $relatedFiles = Helpers::getTrialTypeFiles(
-                strtolower($trial->get('trial type'))
-            );
+        // add related files
+        $allRelated = Helpers::getAllTrialTypeFiles();
+        $expt->apply(function($trial) use ($allRelated) {
+            $relatedFiles = $allRelated[strtolower($trial->get('trial type'))];
             foreach ($relatedFiles as $name => $path) {
-                $trial->addRelatedFile($name, $path);
+                $trial->setRelatedFile($name, $path);
             }
         });
             
@@ -83,8 +84,11 @@ class ExperimentFactory
         $data = array('main' => array(), 'post' => array());
 
         foreach($procData as $key => $val) {
-            if (strncasecmp($key, "Post ", 5) === 0) {
-                $data['post'][trim(substr($key, 0, 7))][trim(substr($key, 7))] = $val;
+            $key = strtolower($key);
+            if (strncmp($key, "post ", 5) === 0) {
+                $postNum = trim(substr($key, 0, 7));
+                $postKey = trim(substr($key, 7));
+                $data['post'][$postNum][$postKey] = $val;
                 continue;
             }
 
@@ -94,5 +98,23 @@ class ExperimentFactory
         ksort($data['post']);
 
         return $data;
+    }
+    
+    /**
+     * Removes any post trial arrays from the procedure data that have trial
+     * types "off" or "no" or empty values.
+     * 
+     * @param array $procData The procedure data to filter.
+     */
+    private static function removeOffPostTrials(array &$procData)
+    {
+        foreach ($procData['post'] as $num => $post) {
+            $lowerKeys = array_change_key_case($post, CASE_LOWER);
+            if (in_array($lowerKeys['trial type'], array('off', 'no'))
+                || empty($lowerKeys['trial type'])
+            ) {
+                unset($procData['post'][$num]);
+            }
+        }
     }
 }

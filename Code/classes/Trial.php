@@ -92,7 +92,7 @@ abstract class Trial extends MiniDb
      * 
      * @return bool Should return true if the key is added, else false.
      */
-    abstract public function addRelatedFile($name, $path);
+    abstract public function setRelatedFile($name, $path);
     
     /**
      * Should gets the named path from the relatedFiles MiniDb.
@@ -102,7 +102,7 @@ abstract class Trial extends MiniDb
      * @return mixed Should return the stored value if the key exists, else null.
      */
     abstract public function getRelatedFile($name);
-
+    
     /* Overrides
      **************************************************************************/
     /**
@@ -114,16 +114,17 @@ abstract class Trial extends MiniDb
      */
     public function get($name)
     {
-        $parVal = parent::get($name);
-        $val = (strtolower($name) === 'item' && is_numeric($parVal)) 
-             ? $this->expt->getStimulus($parVal)
-             : $parVal;
+        $val = parent::get($name);
         
-        if (!isset($val)) {
-            $val = $this->getFromStimuli($name);
+        if (strtolower($name) === 'item') {
+            if (is_numeric($val)) {
+                $val = $this->expt->getStimulus($val);
+            } else if (Experiment::isValidStringToRange($val)) {
+                $val = $this->expt->getStimuli($val);
+            }
         }
         
-        return $val;
+        return $val !== null ? $val : $this->getFromStimuli($name);
     }
 
     /* Class specific
@@ -233,5 +234,15 @@ abstract class Trial extends MiniDb
     public function isComplete()
     {
         return $this->complete;
+    }
+    
+    /**
+     * Alias for cloning the object.
+     *
+     * @return Trial Returns this object with positions and response reset.
+     */
+    public function copy()
+    {
+        return clone $this;
     }
 }
