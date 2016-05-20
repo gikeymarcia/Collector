@@ -11,6 +11,7 @@ $autoloader->add('phpbrowscap', __DIR__.'/vendor/phpbrowscap');
 
 // start session
 session_start();
+// ddd($_SESSION);
 error_reporting(E_ALL);
 
 // load file locations
@@ -35,7 +36,9 @@ if (!isset($_SESSION['Current Collector'])
 unset($currentCollector);
 
 // load settings
-if (isset($_SESSION['settings'])) {
+if (isset($_SESSION['settings'])
+    AND is_object($_SESSION['settings'])
+) {
     $_SETTINGS = &$_SESSION['settings'];
     $_SETTINGS->upToDate($_PATH);
 } else {
