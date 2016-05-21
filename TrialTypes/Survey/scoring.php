@@ -171,7 +171,7 @@
     */
 
     //check the settings column, if vertical, then output that way
-    if ($_trialSettings->output === "vertical"){
+    if ($_TRIAL->settings->output === "vertical"){
         //run through each item in survey
         foreach ($survey as $surveyRowIndex => $surveyRow) {
             //grab the type of survey

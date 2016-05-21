@@ -16,7 +16,7 @@
   <?= $_EXPT->get('text'); ?>
 </div>
 
-<div class="textcenter" style="font-size:<?= $_trialSettings->fontsize ?>;">
+<div class="textcenter" style="font-size:<?= $_TRIAL->settings->fontsize ?>;">
   <?= Collector\Helpers::show($_EXPT->get('cue')) ?>
 </div>
 

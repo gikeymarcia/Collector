@@ -47,8 +47,8 @@
 //         the step size for multiple ranges, please enter the step size
 //         after each range, like "1::3#.1, a::g # 2, 7::9 #.5"
 
-if ($_trialSettings->likert) {
-    $likert = $_trialSettings->likert;
+if ($_TRIAL->settings->likert) {
+    $likert = $_TRIAL->settings->likert;
 } else {
     $likert = '1::7';
 }

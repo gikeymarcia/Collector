@@ -13,6 +13,12 @@ namespace Collector;
 abstract class Trial extends MiniDb
 {
     /**
+     * The TrialSettings object for this Trial.
+     * @var TrialSettings
+     */
+    public $settings;
+    
+    /**
      * The Experiment that this Trial belongs to.
      * @var Experiment
      */
@@ -60,11 +66,20 @@ abstract class Trial extends MiniDb
         // add all keys from data with non-empty values
         $cleanData = array();
         foreach ($data as $key => $val) {
+            if (strtolower($key) === 'settings') {
+                $this->settings = new TrialSettings($val);
+                continue;
+            }
+            
             if (!empty($val)) {
                 $cleanData[$key] = $val;
             }
         }
         parent::__construct($cleanData);
+        
+        if (!isset($this->settings)) {
+            $this->settings = new TrialSettings('');
+        }
     }
 
     /* Abstracts

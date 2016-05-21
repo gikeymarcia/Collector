@@ -1,7 +1,7 @@
 <?php
 // determine the # of rounds by entering "rounds = 100" in your settings column
 $default = 150;
-$rounds  = is_numeric($_trialSettings->rounds) ? $_trialSettings->rounds : $default;
+$rounds  = is_numeric($_TRIAL->settings->rounds) ? $_TRIAL->settings->rounds : $default;
 $options = array('A', 'B');
 ?>
 

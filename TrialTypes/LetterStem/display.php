@@ -1,6 +1,6 @@
 <?php
     $stemLength = 2; // default value
-    if (is_numeric($_trialSettings->stem)) $stemLength = (int) $_trialSettings->stem;
+    if (is_numeric($_TRIAL->settings->stem)) $stemLength = (int) $_TRIAL->settings->stem;
 ?>
 <style>
   /*sets size of the trial content window*/

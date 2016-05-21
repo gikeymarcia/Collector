@@ -1,6 +1,6 @@
 <?php
 $stemLength = 2; // default value
-if (is_numeric($_trialSettings->stem)) $stemLength = (int) $_trialSettings->stem;
+if (is_numeric($_TRIAL->settings->stem)) $stemLength = (int) $_TRIAL->settings->stem;
 
 // to make sure that everything is recorded, just throw all of POST into
 // $data, which will eventually be recorded into the output file.

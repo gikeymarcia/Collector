@@ -2,8 +2,8 @@
 $cues = explode('|', $cue);
 
 $save = false;
-if ($_trialSettings->save) {
-    $save = (string) $_trialSettings->save;
+if ($_TRIAL->settings->save) {
+    $save = (string) $_TRIAL->settings->save;
 }
 
 if ($save AND isset($_SESSION['Saved Buttons'][$save])) {
@@ -95,17 +95,17 @@ if ($save AND isset($_SESSION['Saved Buttons'][$save])) {
 
 $_EXPT->responses[$currentPos]['Buttons'] = implode('|', $buttons);
 
-if ($_trialSettings->vertical) {
+if ($_TRIAL->settings->vertical) {
     $buttonsHorizontal = false;
 } else {
     $buttonsHorizontal = true;
 }
 
-if (is_numeric($_trialSettings->columns)) {
-    $columns = (int) $_trialSettings->columns;
+if (is_numeric($_TRIAL->settings->columns)) {
+    $columns = (int) $_TRIAL->settings->columns;
     $rows    = ceil(count($buttons) / $columns);
-} elseif (is_numeric($_trialSettings->rows)) {
-    $rows    = (int) $_trialSettings->rows;
+} elseif (is_numeric($_TRIAL->settings->rows)) {
+    $rows    = (int) $_TRIAL->settings->rows;
     $columns = ceil(count($buttons) / $rows);
 } else {
     $countButtons = count($buttons);

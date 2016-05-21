@@ -17,7 +17,7 @@ class Experiment extends MiniDb implements \Countable
      * @var int
      */
     public $position;
-
+    
     /**
      * The Condition information for this Experiment.
      * @var array
@@ -83,6 +83,18 @@ class Experiment extends MiniDb implements \Countable
         $this->validators = array();
         
         parent::__construct();
+    }
+    
+    /**
+     * Runs code to prime the trials in the experiment.
+     */
+    public function warm()
+    {
+        $this->apply(function($trial) {
+            $trial->settings->addSettings($this->getFromStimuli('settings'));
+            
+            // other warm up code here...
+        });
     }
 
     /**
@@ -392,6 +404,22 @@ class Experiment extends MiniDb implements \Countable
     }
     
     /**
+     * Retrieves the value at the given key in the stimuli array for the current
+     * Trial.
+     * 
+     * @param string $name The name of the variable to retrieve.
+     * 
+     * @return mixed The value for the named variable in the current Trial's
+     *               stimuli array.
+     */
+    public function getFromStimuli($name)
+    {
+        $trial = $this->getCurrent();
+
+        return isset($trial) ? $trial->getFromStimuli($name) : null;
+    }
+    
+    /**
      * Gets the condition information for this Experiment.
      * 
      * @return array Returns the array of condition information for this object.
@@ -626,7 +654,7 @@ class Experiment extends MiniDb implements \Countable
     {
         return $this->getTrial($pos)->copy();
     }
-
+    
     /**
      * Converts a string in selective range syntax to an array of the digits.
      * Syntax: separate terms with commas (',') or semicolons (';'), and

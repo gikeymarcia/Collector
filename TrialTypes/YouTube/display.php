@@ -29,8 +29,8 @@ $parameters = array(
 $submitOnDone = true;
 $preventEarlySubmit = true;
 
-if ($_trialSettings->submitOnDone       === 'false') $submitOnDone       = false;
-if ($_trialSettings->preventEarlySubmit === 'false') $preventEarlySubmit = false;
+if ($_TRIAL->settings->submitOnDone       === 'false') $submitOnDone       = false;
+if ($_TRIAL->settings->preventEarlySubmit === 'false') $preventEarlySubmit = false;
 
 // get video ID
 $videoId = Collector\Helpers::youtubeUrlCleaner($_EXPT->get('cue'), true);

@@ -18,9 +18,9 @@
  */
 
 // reading and saving settings
-$question     = $_trialSettings->question;
-$correct      = $_trialSettings->correct;
-$alternatives = $_trialSettings->alternatives;
+$question     = $_TRIAL->settings->question;
+$correct      = $_TRIAL->settings->correct;
+$alternatives = $_TRIAL->settings->alternatives;
 
 // using default text if none is provided
 $text = isset($text) ? $text : "See <code>/TrialTypes/AttentionCheck/display.php</code> for ".
