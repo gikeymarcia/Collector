@@ -1,19 +1,58 @@
 <?php
-Class TrialSettings {
+/**
+ * TrialSettings class.
+ */
+
+namespace Collector;
+
+/**
+ * @todo add description for TrialSettings
+ */
+class TrialSettings
+{
+    /**
+     * The raw settings string that this object was constructed with along with
+     * any other strings added via addSettings (these get separated by "|").
+     * 
+     * @var string
+     */
     public $rawSettings;
+    
+    /**
+     * The settings for the trial.
+     * 
+     * @var array
+     */
     public $settings;
     
+    /**
+     * Constructor.
+     * 
+     * @param string $settings A string that can be parsed by parseSettings.
+     */
     public function __construct($settings) {
         $this->rawSettings = $settings;
         $this->parseSettings();
     }
     
+    /**
+     * Retrieves the property if it exists.
+     * 
+     * @param string $property The name of the property to get.
+     * 
+     * @return mixed Returns the property if it exists, else false.
+     */
     public function __get($property) {
         $property = strtolower($property);
-        if (!isset($this->settings[$property])) return false;
-        return $this->settings[$property];
+        
+        return isset($this->settings[$property]) 
+            ? $this->settings[$property]
+            : false;
     }
     
+    /**
+     * Parses the raw settings string.
+     */
     protected function parseSettings() {
         $settings = array();
         $rawSettings = $this->rawSettings;
@@ -28,9 +67,17 @@ Class TrialSettings {
             } else {
                 $getValuesAsArray = false;
             }
-            if ($key === '') continue; // cant have empty key, makes no sense
-            if (isset($settings[$key])) continue; // dont overwrite
             
+            if ($key === '') {
+                // can't have empty key, makes no sense
+                continue;
+            }
+            
+            if (isset($settings[$key])) {
+                // dont overwrite
+                continue;
+            }
+                
             if (!isset($splitSetting[1])) {
                 if ($getValuesAsArray) {
                     $settings[$key] = array();
@@ -55,16 +102,36 @@ Class TrialSettings {
         $this->settings = $settings;
     }
     
-    public function addSettings($newSettings) {
+    /**
+     * Adds more settings to this object's rawSettings property, separating the
+     * new from the old with a "|".
+     * 
+     * @param string $newSettings Parseable ettings string to add to this object.
+     */
+    public function addSettings($newSettings)
+    {
         $this->rawSettings .= '|' . $newSettings;
         $this->parseSettings();
     }
     
-    public function __toString() {
+    /**
+     * Returns the rawSettings property with the object is cast to string.
+     * 
+     * @return string The rawSettings property containing the original settings
+     *                string and any added via addSettings().
+     */
+    public function __toString()
+    {
         return $this->rawSettings;
     }
     
-    public function getAllSettings() {
+    /**
+     * Gets all of the settings that have been added to this object.
+     * 
+     * @return array Returns an associative array of all the settings.
+     */
+    public function getAllSettings()
+    {
         return $this->settings;
     }
 }
