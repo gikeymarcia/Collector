@@ -65,13 +65,13 @@ class PostTrialTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers Collector\PostTrial::get
      */
-    public function testGet()
+    public function testGetLoose()
     {
         $this->obj->record(array('response'=> 3));
-        $this->assertEquals(1, $this->obj->get('trial 1'));
-        $this->assertEquals(2, $this->obj->get('post trial 1'));
-        $this->assertEquals(3, $this->obj->get('response'));
-        $this->assertNull($this->obj->get('not here'));
+        $this->assertEquals(1, $this->obj->get('trial 1', false));
+        $this->assertEquals(2, $this->obj->get('post trial 1', false));
+        $this->assertEquals(3, $this->obj->get('response', false));
+        $this->assertNull($this->obj->get('not here', false));
     }
 
     /**

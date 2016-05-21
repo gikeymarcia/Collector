@@ -7,6 +7,7 @@ $classes = array(
     'Experiment',
     'ExperimentFactory',
     'Response',
+    'TrialSettings',
     'Trial',
     'MainTrial',
     'PostTrial',

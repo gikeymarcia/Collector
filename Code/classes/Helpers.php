@@ -689,9 +689,10 @@ class Helpers
      *
      * @return bool|array An array of file paths if the type was found, or false.
      */
-    public static function getTrialTypeFiles($trialTypeName)
+    public static function getTrialTypeFiles($trialTypeName, Pathfinder $pathfinder = null)
     {
         global $_PATH;
+        $pathfinder = isset($pathfinder) ? $pathfinder : $_PATH;
 
         // convert user inputs to lowercase; e.g. 'Likert' === 'likert'
         $trialType = strtolower(trim($trialTypeName));
@@ -707,8 +708,8 @@ class Helpers
         // we will search the Experiment/ folder first, so that if we find
         // the trial type, we won't have to look in the Code/ folder
         // this way, the Experiment/ trial types will overwrite the Code/ types
-        $customDisplay = $_PATH->get('custom trial display', 'relative', $trialType);
-        $normalDisplay = $_PATH->get('trial display',        'relative', $trialType);
+        $customDisplay = $pathfinder->get('custom trial display', 'relative', $trialType);
+        $normalDisplay = $pathfinder->get('trial display',        'relative', $trialType);
 
         if (self::fileExists($customDisplay)) {
             $pre = 'custom trial ';
@@ -723,7 +724,7 @@ class Helpers
         $foundFiles = array();
 
         foreach ($files as $file) {
-            $path = $_PATH->get($pre.$file, 'relative', $trialType);
+            $path = $pathfinder->get($pre.$file, 'relative', $trialType);
             $existingPath = self::fileExists($path);
             if ($existingPath !== false) {
                 $foundFiles[$file] = $existingPath;
@@ -731,11 +732,11 @@ class Helpers
         }
 
         if (!isset($foundFiles['scoring'])) {
-            $foundFiles['scoring'] = $_PATH->get('default scoring');
+            $foundFiles['scoring'] = $pathfinder->get('default scoring');
         }
 
         if (!isset($foundFiles['helper'])) {
-            $foundFiles['helper'] = $_PATH->get('default helper');
+            $foundFiles['helper'] = $pathfinder->get('default helper');
         }
 
         return $foundFiles;
@@ -748,11 +749,15 @@ class Helpers
      *
      * @return array Associative array of $trialtype => $arrayOfFiles.
      */
-    public static function getAllTrialTypeFiles()
+    public static function getAllTrialTypeFiles(Pathfinder $pathfinder = null)
     {
         global $_PATH;
+        $paths = isset($pathfinder) ? $pathfinder : $_PATH;
+        if (!isset($paths)) { return null; }
+        
         $trialTypes = array();
-        $trialTypeDirs = array($_PATH->get('Custom Trial Types'), $_PATH->get('Trial Types'));
+        $trialTypeDirs = array($paths->get('Custom Trial Types'), $paths->get('Trial Types'));
+        
         foreach ($trialTypeDirs as $dir) {
             $dirScan = scandir($dir);
             foreach ($dirScan as $entry) {
@@ -763,14 +768,12 @@ class Helpers
                     continue;
                 }
 
-                $files = self::getTrialTypeFiles($type);
-                if ($files !== false) {
-                    $trialTypes[strtolower($entry)] = $files;
-                }
+                $files = self::getTrialTypeFiles($type, $paths);
+                $trialTypes[strtolower($entry)] = $files ? $files : null;
             }
         }
 
-        return $trialTypes;
+        return array_filter($trialTypes);
     }
 
     /**

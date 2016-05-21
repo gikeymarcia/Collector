@@ -188,13 +188,13 @@ class MainTrialTest extends \PHPUnit_Framework_TestCase
      * @covers Collector\MainTrial::get
      * @covers Collector\Trial::record
      */
-    public function testGet()
+    public function testGetLoose()
     {
         $this->obj->record(array('input'=> 3));
 
-        $this->assertEquals(1, $this->obj->get('trial 1'));
-        $this->assertNull($this->obj->get('post trial 1'));
-        $this->assertEquals(3, $this->obj->get('input'));
+        $this->assertEquals(1, $this->obj->get('trial 1', false));
+        $this->assertNull($this->obj->get('post trial 1', false));
+        $this->assertEquals(3, $this->obj->get('input', false));
     }
 
     /**
@@ -214,14 +214,14 @@ class MainTrialTest extends \PHPUnit_Framework_TestCase
      * @covers Collector\MainTrial::get
      * @covers Collector\PostTrial::get
      */
-    public function testGetWhenInPost()
+    public function testGetWhenInPostLoose()
     {
         $this->obj->advance();
         $this->obj->record(array('input'=> 3));
 
-        $this->assertEquals(1, $this->obj->get('trial 1'));
-        $this->assertEquals(2, $this->obj->get('post trial 1'));
-        $this->assertEquals(3, $this->obj->get('input'));
+        $this->assertEquals(1, $this->obj->get('trial 1', false));
+        $this->assertEquals(2, $this->obj->get('post trial 1', false));
+        $this->assertEquals(3, $this->obj->get('input', false));
     }
 
     /**

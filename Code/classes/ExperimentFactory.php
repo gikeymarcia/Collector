@@ -41,8 +41,10 @@ class ExperimentFactory
         array $stimuli = array(),
         Pathfinder $pathfinder = null
     ) {
-        $validatorDirs = array($pathfinder->get('Custom Trial Types'), 
-                               $pathfinder->get('Trial Types'));
+        $validatorDirs = isset($pathfinder)
+                       ? array($pathfinder->get('Custom Trial Types'), 
+                               $pathfinder->get('Trial Types'))
+                       : null;
         
         $expt = new Experiment($condition, $stimuli, $validatorDirs);
         foreach ($procedure as $row) {
@@ -57,14 +59,10 @@ class ExperimentFactory
             }
         }
         
-        // add related files
-        $allRelated = Helpers::getAllTrialTypeFiles();
-        $expt->apply(function($trial) use ($allRelated) {
-            $relatedFiles = $allRelated[strtolower($trial->get('trial type'))];
-            foreach ($relatedFiles as $name => $path) {
-                $trial->setRelatedFile($name, $path);
-            }
-        });
+        $expt->warm();
+        if (isset($pathfinder)) {
+            self::addRelatedFiles($expt, $pathfinder);
+        }
             
         return $expt;
     }
@@ -110,11 +108,44 @@ class ExperimentFactory
     {
         foreach ($procData['post'] as $num => $post) {
             $lowerKeys = array_change_key_case($post, CASE_LOWER);
-            if (in_array($lowerKeys['trial type'], array('off', 'no'))
-                || empty($lowerKeys['trial type'])
+            if (array_key_exists('trial type', $lowerKeys)
+                && (in_array($lowerKeys['trial type'], array('off', 'no'))
+                    || empty($lowerKeys['trial type']))
             ) {
                 unset($procData['post'][$num]);
             }
         }
+    }
+    
+    /**
+     * Adds related files to the Trials in the Experiment (e.g. 'display.php').
+     * 
+     * @param Experiment $expt       The Experiment to add related files to.
+     * @param Pathfinder $pathfinder The Pathfinder that will find the files.
+     */
+    private static function addRelatedFiles(Experiment &$expt, Pathfinder $pathfinder)
+    {
+        $allRelated = Helpers::getAllTrialTypeFiles($pathfinder);
+        $expt->apply(function($trial) use ($allRelated) {
+            $type = $trial->get('trial type');
+            $class = (new \ReflectionClass($trial))->getShortName();
+            $position = ($class === 'PostTrial')
+                      ? $trial->getMainTrial()->position ." (post: {$trial->position})"
+                      : $trial->position;
+                
+            $relatedFiles = $allRelated[strtolower($type)];
+            if (empty($relatedFiles)) {
+                throw new \Exception('Could not retrieve related files for '
+                    . "Trial of type {$class} with trial type '{$type}' at "
+                    . "position {$position} in the Experiment (0-indexed). This"
+                    . " usually happens when the trial type is not defined in "
+                    . "Procedure, when the trial type does not exist, or when "
+                    . "an invalid Pathfinder is specified.");
+            }
+            
+            foreach ($relatedFiles as $name => $path) {
+                $trial->setRelatedFile($name, $path);
+            }
+        });
     }
 }

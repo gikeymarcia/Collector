@@ -408,7 +408,8 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $this->obj->advance();
 
         $this->obj->record(array('stuff' => 1));
-        $this->assertEquals(1, $this->obj->get('stuff'));
+        $this->assertNull($this->obj->get('stuff', true));
+        $this->assertEquals(1, $this->obj->get('stuff', false));
         $this->assertNull($this->obj->get('things'));
     }
     
@@ -438,7 +439,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
     public function testGetStimuliSubset()
     {
         // stimuli are 2-indexed to match Excel rows: 3-4 should return 1-2
-        $stim = $this->obj->getStimuli("3-4");
+        $stim = $this->obj->getStimuli("3::4");
         $this->assertNotContains('a', $stim);
         $this->assertContains('b', $stim);
         $this->assertContains('c', $stim);
@@ -841,7 +842,5 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(1,2), Experiment::stringToRange('1;2'));
         $this->assertEquals(array(1,2,3), Experiment::stringToRange('1::3'));
         $this->assertEquals(array(1,2,3,4), Experiment::stringToRange('1::3, 4'));
-        $this->assertEquals(array(1,2,3,5), Experiment::stringToRange('1-3; 5'));
-        $this->assertEquals(array(1,2,3,4,5), Experiment::stringToRange('1::2;3,4-5'));
     }
 }
