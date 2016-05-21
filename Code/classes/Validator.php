@@ -23,12 +23,17 @@ class Validator {
     /**
      * Constructor.
      * 
-     * @param Closure $pathToCheck [Optional] The check to initialize the object with.
+     * @param string|array $pathToCheck [Optional] The path(s) to the validator
+     *                                  scripts to initialize the object with.
      */
     public function __construct($pathToCheck = null)
     {
         $this->checks = array();
-        if ($pathToCheck !== null) {
+        if (!empty($pathToCheck) && is_array($pathToCheck)) {
+            foreach($pathToCheck as $path) {
+                $this->addCheck($path);
+            }
+        } else if (!empty($pathToCheck)) {
             $this->addCheck($pathToCheck);
         }
     }

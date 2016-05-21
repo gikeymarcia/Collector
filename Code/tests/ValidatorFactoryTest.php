@@ -11,8 +11,8 @@ class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->dir1 = __DIR__.'/validators/validatordir1';
-        $this->dir2 = __DIR__.'/validators/validatordir2';
+        $this->dirOne = __DIR__.'/validators/validatordir1';
+        $this->dirTwo = __DIR__.'/validators/validatordir2';
     }
     
     protected function getProperty(&$object, $propName)
@@ -25,78 +25,29 @@ class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @covers Collector\ValidatorFactory::createFromDir
-     */
-    public function testCreateFromDir()
-    {
-        $validators = ValidatorFactory::createFromDir($this->dir1);
-        foreach (array('testtrialtype1', 'testtrialtype2') as $trialtype) {
-            $this->assertArrayHasKey($trialtype, $validators);
-            $this->assertInstanceOf('Collector\Validator', $validators[$trialtype]);
-        }
-    }
-    
-    /**
-     * @covers Collector\ValidatorFactory::createFromDirs
-     */
-    public function testCreateFromDirsLoose()
-    {
-        $validators = ValidatorFactory::createFromDirs(
-                array($this->dir1, $this->dir2),
-                true
-        );
-        
-        foreach ($validators as $validator) {
-            $this->assertInstanceOf('Collector\Validator', $validator);
-        }
-        $this->assertCount(2, $this->getProperty($validators['testtrialtype1'], 'checks'));
-        $this->assertCount(2, $this->getProperty($validators['testtrialtype2'], 'checks'));
-        $this->assertCount(1, $this->getProperty($validators['testtrialtype3'], 'checks'));
-    }
-    
-    /**
-     * @covers Collector\ValidatorFactory::createFromDirs
-     */
-    public function testCreateFromDirsStrict()
-    {
-        $validators = ValidatorFactory::createFromDirs(
-                array($this->dir1, $this->dir2),
-                false
-        );
-        
-        foreach ($validators as $validator) {
-            $this->assertInstanceOf('Collector\Validator', $validator);
-        }
-        $this->assertCount(1, $this->getProperty($validators['testtrialtype1'], 'checks'));
-        $this->assertCount(1, $this->getProperty($validators['testtrialtype2'], 'checks'));
-        $this->assertCount(1, $this->getProperty($validators['testtrialtype3'], 'checks'));
-    }
-    
-    /**
-     * @covers Collector\ValidatorFactory::createSpecificFromDir
-     * @covers Collector\ValidatorFactory::filterSpecific
+     * @covers Collector\ValidatorFactory::createSpecific
+     * @covers Collector\ValidatorFactory::filter
      */
     public function testCreateSpecificFromDirSingle()
     {
-        $validator1 = ValidatorFactory::createSpecificFromDir('dne',
-                $this->dir1);
+        $validator1 = ValidatorFactory::createSpecific('dne', $this->dirOne);
         $this->assertNull($validator1);
         
-        $validator2 = ValidatorFactory::createSpecificFromDir('testtrialtype1',
-                $this->dir1);
+        $validator2 = ValidatorFactory::createSpecific('testtrialtype1',
+                $this->dirOne);
         $this->assertInstanceOf('Collector\Validator', $validator2);
     }
     
     /**
-     * @covers Collector\ValidatorFactory::createSpecificFromDir
+     * @covers Collector\ValidatorFactory::createSpecific
      * @covers Collector\ValidatorFactory::createFromDirs
-     * @covers Collector\ValidatorFactory::filterSpecific
+     * @covers Collector\ValidatorFactory::filter
      */
     public function testCreateSpecificFromDirMultiple()
     {
-        $validators = ValidatorFactory::createSpecificFromDir(
+        $validators = ValidatorFactory::createSpecific(
             array('testtrialtype1', 'dne', 'testtrialtype2'),
-            $this->dir1
+            $this->dirOne
         );
         $this->assertNull($validators['dne']);
         $this->assertInstanceOf('Collector\Validator', $validators['testtrialtype1']);
@@ -104,32 +55,32 @@ class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @covers Collector\ValidatorFactory::createSpecificFromDirs
+     * @covers Collector\ValidatorFactory::createSpecificFromMultipleDirs
      * @covers Collector\ValidatorFactory::createFromDirs
-     * @covers Collector\ValidatorFactory::filterSpecific
+     * @covers Collector\ValidatorFactory::filter
      */
     public function testCreateSpecificFromDirsSingle()
     {
-        $validator1 = ValidatorFactory::createSpecificFromDirs('dne', 
-                array($this->dir1, $this->dir2)
+        $validator1 = ValidatorFactory::createSpecific('dne', 
+                array($this->dirOne, $this->dirTwo)
         );
         $this->assertNull($validator1);
         
-        $validator2 = ValidatorFactory::createSpecificFromDirs('testtrialtype3', 
-                array($this->dir1, $this->dir2)
+        $validator2 = ValidatorFactory::createSpecific('testtrialtype3', 
+                array($this->dirOne, $this->dirTwo)
         );
         $this->assertInstanceOf('Collector\Validator', $validator2);
     }
     
     /**
-     * @covers Collector\ValidatorFactory::createSpecificFromDirs
-     * @covers Collector\ValidatorFactory::filterSpecific
+     * @covers Collector\ValidatorFactory::createSpecificFromMultipleDirs
+     * @covers Collector\ValidatorFactory::filter
      */
     public function testCreateSpecificFromDirsMultipleStrict()
     {
-        $validators = ValidatorFactory::createSpecificFromDirs(
+        $validators = ValidatorFactory::createSpecific(
             array('testtrialtype1', 'dne', 'testtrialtype2'),
-            array($this->dir1, $this->dir2)
+            array($this->dirOne, $this->dirTwo)
         );
         $this->assertNull($validators['dne']);
         $this->assertCount(1, $this->getProperty($validators['testtrialtype1'], 'checks'));
@@ -137,13 +88,13 @@ class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @covers Collector\ValidatorFactory::createSpecificFromDirs
+     * @covers Collector\ValidatorFactory::createSpecificFromMultipleDirs
      */
     public function testCreateSpecificFromDirsMultipleLoose()
     {
-        $validators = ValidatorFactory::createSpecificFromDirs(
+        $validators = ValidatorFactory::createSpecific(
             array('testtrialtype1', 'dne', 'testtrialtype3'),
-            array($this->dir1, $this->dir2),
+            array($this->dirOne, $this->dirTwo),
             true
         );
         $this->assertNull($validators['dne']);
@@ -156,10 +107,10 @@ class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPaths()
     {
-        $basepath = str_replace('\\', '/', $this->dir1);
+        $basepath = str_replace('\\', '/', $this->dirOne);
         $expected = array(
-            $basepath.'/testtrialtype1/validator.php',
-            $basepath.'/testtrialtype2/validator.php',
+            'testtrialtype1' => $basepath.'/testtrialtype1/validator.php',
+            'testtrialtype2' => $basepath.'/testtrialtype2/validator.php',
         );
         $this->assertEquals($expected, ValidatorFactory::getPaths($basepath));
     }
@@ -196,8 +147,10 @@ class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testMergeGroupLoose()
     {
-        $group1 = ValidatorFactory::createFromDir($this->dir1);
-        $group2 = ValidatorFactory::createFromDir($this->dir2);
+        $group1 = ValidatorFactory::createSpecific(
+            array('testtrialtype1', 'testtrialtype2'), $this->dirOne);
+        $group2 = ValidatorFactory::createSpecific(
+            array('testtrialtype1', 'testtrialtype2', 'testtrialtype3'), $this->dirTwo);
         $validators = ValidatorFactory::mergeGroup($group1, $group2, true);
         
         $this->assertCount(3, $validators);
@@ -214,8 +167,10 @@ class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testMergeGroupStrict()
     {
-        $group1 = ValidatorFactory::createFromDir($this->dir1);
-        $group2 = ValidatorFactory::createFromDir($this->dir2);
+        $group1 = ValidatorFactory::createSpecific(
+            array('testtrialtype1', 'testtrialtype2'), $this->dirOne);
+        $group2 = ValidatorFactory::createSpecific(
+            array('testtrialtype1', 'testtrialtype2', 'testtrialtype3'), $this->dirTwo);
         $validators = ValidatorFactory::mergeGroup($group1, $group2, false);
         
         $this->assertCount(3, $validators);

@@ -11,7 +11,7 @@
     
     $message = "The {$trialtype} trial type requires the following column(s): ";
     foreach ($errors as $error) {
-        $message .= $col . ', ';
+        $message .= $error . ', ';
     }
     
     return rtrim($message, ', ');

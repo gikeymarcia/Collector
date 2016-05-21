@@ -615,9 +615,7 @@ class Experiment extends MiniDb implements \Countable
     protected function loadValidator($trialtype)
     {
         $this->validators[$trialtype] = !empty($this->validatorDirs)
-            ? is_array($this->validatorDirs)
-                ? ValidatorFactory::createSpecificFromDirs($trialtype, $this->validatorDirs)
-                : ValidatorFactory::createSpecificFromDir($trialtype, $this->validatorDirs)
+            ? ValidatorFactory::createSpecific($trialtype, $this->validatorDirs, false)
             : null;
     }
     
