@@ -1,7 +1,6 @@
 <?php
 
 // configure and register autoloader
-require __DIR__ . '/vendor/Kint/Kint.class.php';
 require __DIR__ . '/classes/Autoloader.php';
 $autoloader = new Collector\Autoloader();
 $autoloader->register();
@@ -11,7 +10,6 @@ $autoloader->add('phpbrowscap', __DIR__.'/vendor/phpbrowscap');
 
 // start session
 session_start();
-// ddd($_SESSION);
 error_reporting(E_ALL);
 
 // load file locations
@@ -36,9 +34,7 @@ if (!isset($_SESSION['Current Collector'])
 unset($currentCollector);
 
 // load settings
-if (isset($_SESSION['settings'])
-    AND is_object($_SESSION['settings'])
-) {
+if (isset($_SESSION['settings']) && is_object($_SESSION['settings'])) {
     $_SETTINGS = &$_SESSION['settings'];
     $_SETTINGS->upToDate($_PATH);
 } else {
@@ -48,6 +44,11 @@ if (isset($_SESSION['settings'])
         $_PATH->get('Password')
     );
     $_SETTINGS = &$_SESSION['settings'];
+}
+
+// load Kint in debug mode
+if ($_SETTINGS->debug_mode) {
+    require __DIR__ . '/vendor/Kint/Kint.class.php';
 }
 
 if ($_SETTINGS->password === null) {
