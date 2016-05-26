@@ -34,7 +34,9 @@ if (!isset($_SESSION['Current Collector'])
 unset($currentCollector);
 
 // load settings
-if (isset($_SESSION['settings']) && is_object($_SESSION['settings'])) {
+if (isset($_SESSION['settings']) 
+    && (get_class($_SESSION['settings']) == "Collector\Settings")
+) {
     $_SETTINGS = &$_SESSION['settings'];
     $_SETTINGS->upToDate($_PATH);
 } else {
@@ -60,7 +62,9 @@ if ($_SETTINGS->password === null) {
 }
 
 // if experiment has been loaded (after login) set the variable
-if (isset($_SESSION['_EXPT'])) {
+if (isset($_SESSION['_EXPT'])
+    && (get_class($_SESSION['_EXPT']) == "Collector\Experiment")
+) {
     $_EXPT = $_SESSION['_EXPT'];
     $_TRIAL = $_EXPT->getCurrent();
 }
