@@ -16,18 +16,20 @@ class ExperimentFactory
 {
     /**
      * Creates a new Experiment instance with the given condition, procedure,
-     * stimuli, and validator directory arrays.
+     * stimuli, and validator directory arrays. Procedure and stimuli arrays 
+     * should be pre-stitched and pre-shuffled.
      * 
      * This static factory function differs from normal instantiation of an
      * Experiment because it accepts a procedure array which is processed for
      * post trial information and then looped through to add new Trials to the
      * Experiment.
      * 
-     * @param array $condition   The array of condition information.
-     * @param array $procedure   The array of procedure information (shuffled).
-     * @param array $stimuli     The array of stimuli information (shuffled).
-     * @param type $validatorDir The array of directories that have trial types
-     *                           with validators functions.
+     * @param array      $condition  The array of condition information.
+     * @param array      $procedure  The array of procedure information.
+     * @param array      $stimuli    The array of stimuli information.
+     * @param Pathfinder $pathfinder The Experiment's Pathfinder, which should
+     *                               be able to find various related files like
+     *                               trial types, validators, displays, etc.
      * 
      * @return Experiment Returns a fully-instantiated Experiment class.
      * 

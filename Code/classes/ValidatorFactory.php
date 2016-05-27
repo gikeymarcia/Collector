@@ -105,6 +105,17 @@ class ValidatorFactory {
         return $files;
     }
     
+    /**
+     * Gets the paths to validators in multiple directories.
+     * 
+     * @param array $directories The directories to search.
+     * 
+     * @return array Returns an array of the paths to all of the validators
+     *               found in the given directories. Validators are indexed by
+     *               trial type.
+     * 
+     * @uses getPaths Uses getPaths method on each of the given directories.
+     */
     public static function getPathsMultiple(array $directories)
     {
         $paths = array();

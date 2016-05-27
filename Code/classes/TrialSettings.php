@@ -6,7 +6,10 @@
 namespace Collector;
 
 /**
- * @todo add description for TrialSettings
+ * A class for converting the settings columns of procedure and stimuli files
+ * into an easy to use object. In the Collector, this class is used in
+ * conjuction with Trials (Main and Post) and can be accessed with something 
+ * like $trial->settings->{settingsMethodHere}.
  * 
  * All settings must be of the format [key] = [value]. Settings must be
  * separated by the "|" character (e.g. "setting1=a|setting2=b"). A setting

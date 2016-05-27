@@ -685,7 +685,8 @@ class Helpers
      *
      * @staticvar array $trialTypes Caches the results of the public static function.
      *
-     * @param string $trialTypeName The name of the trial type
+     * @param string     $trialTypeName The name of the trial type
+     * @param Pathfinder $pathfinder    [Optional] The pathfinder to use.
      *
      * @return bool|array An array of file paths if the type was found, or false.
      */
@@ -746,6 +747,8 @@ class Helpers
      * Finds all trial types and their files.
      *
      * @global Pathfinder $_PATH The Pathfinder currently in use.
+     * 
+     * @param Pathfinder $pathfinder [Optional] The pathfinder to use.
      *
      * @return array Associative array of $trialtype => $arrayOfFiles.
      */

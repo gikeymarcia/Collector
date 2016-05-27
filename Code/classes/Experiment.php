@@ -460,7 +460,7 @@ class Experiment extends MiniDb implements \Countable
             $offset += $this->position; 
         }
         
-        return $this->deleteTrialsAbsolute($offsets);
+        $this->deleteTrialsAbsolute($offsets);
     }
 
     /**
