@@ -220,6 +220,29 @@ class MainTrial extends Trial implements \Countable
 
         return $this->formatArray($data, $format);
     }
+    
+    /**
+     * Checks to see if this MainTrial has been marked complete, if not it
+     * checks to see if the MainTrial is complete before marking it complete.
+     * 
+     * @return bool Returns true if the MainTrial is complete, else false.
+     */
+    public function isComplete()
+    {
+        if ($this->complete === true) {
+            return true;
+        }
+        
+        foreach ($this->postTrials as $trial) {
+            if (!$trial->isComplete()) {
+                return false;
+            }
+        }
+        
+        $this->markComplete();
+        
+        return true;
+    }
 
     /* Class specific
      **************************************************************************/
@@ -298,6 +321,113 @@ class MainTrial extends Trial implements \Countable
     {
         return $this->getPostTrial();
     }
+    
+    /**
+     * Deletes the PostTrial at the given position in this MainTrial.
+     * 
+     * This function will fail when trying to delete previous trials.
+     * 
+     * @param int $position The absolute position of the PostTrial to delete.
+     * 
+     * @return boolean|int Returns FALSE if the position to delete is less than
+     *                     the current position, 0 if the position to delete
+     *                     does not exist, TRUE if the position was deleted, or
+     *                     FALSE if the delete failed.
+     */
+    public function deletePostTrialAbsolute($position)
+    {
+        if ($position < $this->postPosition || $position === 0) {
+            return false;
+        }
+        
+        if (!isset($this->postTrials[$position])) {
+            $result = 0;
+        }
+        
+        unset($this->postTrials[$position]);
+        if (isset($this->postTrials[$position])) {
+            $result = false;
+        }
+        
+        // reindex the post trials array starting at 1
+        if (!empty($this->postTrials)) {
+            $this->updatePositions();
+            $this->postTrials = array_combine(
+                range(1, count($this->postTrials)),
+                array_values($this->postTrials)
+            );
+            ksort($this->postTrials);
+        }
+        
+        return isset($result) ? $result : true;        
+    }
+    
+    /**
+     * Deletes the PostTrial at the given offset from the current position in 
+     * this MainTrial.
+     * 
+     * This function will fail when trying to delete previous trials.
+     * 
+     * @param int $offset The relative offset of the PostTrial to delete.
+     * 
+     * @return boolean|int Returns FALSE if the position to delete is less than
+     *                     the current position, 0 if the position to delete
+     *                     does not exist, TRUE if the position was deleted, or
+     *                     FALSE if the delete failed.
+     */
+    public function deletePostTrial($offset = 0)
+    {
+        return $this->deletePostTrialAbsolute($this->postPosition + $offset);
+    }
+    
+    /**
+     * Deletes the PostTrials at the given positions in this MainTrial.
+     * 
+     * This function will fail to delete previous trials.
+     * 
+     * @param array|string $positions The absolute positions of the MainTrials 
+     *                                to delete as indicated by an array of the 
+     *                                positions or a valid stringToArray string.
+     */
+    public function deletePostTrialsAbsolute($positions)
+    {
+        if (!is_array($positions)) {
+            $positions = Experiment::stringToRange($positions);
+        }
+        
+        // must start deleting from smallest value and update as we go
+        sort($positions);
+        $offset = 0;
+        foreach ($positions as $pos) {
+            $result = $this->deletePostTrialAbsolute($pos - $offset);
+            if ($result !== false) {
+                ++$offset;
+            }
+        }
+    }
+
+    /**
+     * Deletes the PostTrials at the given offsets from the current position in
+     * this MainTrial.
+     * 
+     * This function will fail to delete previous trials.
+     * 
+     * @param array|string $offsets The absolute positions of the PostTrials to
+     *                              delete as indicated by an array of the 
+     *                              offsets or a valid stringToArray string.
+     */    
+    public function deletePostTrials($offsets)
+    {
+        if (!is_array($offsets)) {
+            $offsets = Experiment::stringToRange($offsets);
+        }
+        
+        foreach ($offsets as &$offset) {
+            $offset += $this->postPosition; 
+        }
+        
+        $this->deletePostTrialsAbsolute($offsets);
+    }
 
     /**
      * Applies a function to this trial and all of the related PostTrials. The
@@ -341,6 +471,17 @@ class MainTrial extends Trial implements \Countable
         foreach ($this->postTrials as $pos => $trial) {
             $this->postTrials[$pos] = clone $trial;
             $this->postTrials[$pos]->position = $pos;
+        }
+    }
+    
+    /**
+     * Updates the positions of the post trials.
+     */
+    protected function updatePositions()
+    {
+        $i = 1;
+        foreach ($this->postTrials as $post) {
+            $post->position = $i++;
         }
     }
 }

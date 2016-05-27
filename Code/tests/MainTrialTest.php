@@ -6,10 +6,10 @@ class MainTrialTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->obj = (new Experiment())
-            ->addTrialAbsolute(array("trial 1" => 1))
-            ->addPostTrial(array("post trial 1" => 2))
-            ->addPostTrial(array("post trial 2" => 3));
+        $expt = new Experiment();
+        $this->obj = $expt->addTrialAbsolute(array("trial 1" => 1))
+                          ->addPostTrial(array("post trial 1" => 2))
+                          ->addPostTrial(array("post trial 2" => 3));
 
         $this->exported = array(
             'main' => array('trial 1' => 1, 'response' => array()),
@@ -149,7 +149,9 @@ class MainTrialTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertTrue($this->obj->add('new information', 1));
         $this->assertFalse($this->obj->add('new information', 1));
-        $this->assertEquals(1, $this->obj->export()['main']['new information']);
+        
+        $result = $this->obj->export();
+        $this->assertEquals(1, $result['main']['new information']);
     }
 
     /**
@@ -159,7 +161,9 @@ class MainTrialTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertTrue($this->obj->add('new information', 1, true));
         $this->assertFalse($this->obj->add('new information', 1, true));
-        $this->assertEquals(1, $this->obj->export()['main']['new information']);
+        
+        $result = $this->obj->export();
+        $this->assertEquals(1, $result['main']['new information']);
     }
 
     /**
@@ -170,7 +174,9 @@ class MainTrialTest extends \PHPUnit_Framework_TestCase
         $this->obj->advance();
         $this->assertTrue($this->obj->add('new information', 1));
         $this->assertFalse($this->obj->add('new information', 1));
-        $this->assertEquals(1, $this->obj->export()['post 1']['new information']);
+        
+        $result = $this->obj->export();
+        $this->assertEquals(1, $result['post 1']['new information']);
     }
 
     /**
@@ -181,7 +187,9 @@ class MainTrialTest extends \PHPUnit_Framework_TestCase
         $this->obj->advance();
         $this->assertTrue($this->obj->add('new information', 1, true));
         $this->assertFalse($this->obj->add('new information', 1, true));
-        $this->assertEquals(1, $this->obj->export()['main']['new information']);
+        
+        $result = $this->obj->export();
+        $this->assertEquals(1, $result['main']['new information']);
     }
 
     /**
@@ -298,5 +306,108 @@ class MainTrialTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($clone->position);
         $this->assertEquals($clone, $clone->getPostTrial());
         $this->assertEquals($clone->getResponse(), new Response());
+    }
+    
+    /**
+     * @covers Collector\MainTrial::deletePostTrialAbsolute
+     */
+    public function testDeletePostTrialAbsoluteRemovesTrial()
+    {
+        $precount = count($this->obj);
+        $this->obj->deletePostTrialAbsolute(1);
+        $this->assertCount($precount - 1, $this->obj);
+    }
+    
+    /**
+     * @covers Collector\MainTrial::deletePostTrialAbsolute
+     */
+    public function testDeletePostTrialAbsoluteRenumbersTrials()
+    {
+        $this->obj->deletePostTrialAbsolute(1);
+        $this->assertEquals(1, $this->obj->getPostTrial(1)->position);
+    }
+    
+    /**
+     * @covers Collector\MainTrial::deletePostTrialAbsolute
+     */
+    public function testDeletePostTrialAbsoluteRemovesCorrectTrial()
+    {
+        $deleted = $this->obj->getPostTrialAbsolute(1);
+        $this->assertTrue($this->obj->deletePostTrialAbsolute(1));
+        $this->assertNotSame($deleted, $this->obj->getPostTrialAbsolute(1));
+    }
+    
+    /**
+     * @covers Collector\MainTrial::deletePostTrial
+     */
+    public function testDeletePostTrialFuture()
+    {
+        $deleted = $this->obj->getPostTrial(1);
+        $this->obj->deletePostTrial(1);
+        $this->assertNotSame($deleted, $this->obj->getPostTrial(1));
+    }
+    
+    /**
+     * @covers Collector\MainTrial::deletePostTrialAbsolute
+     * @covers Collector\MainTrial::deletePostTrial
+     */
+    public function testDeletePostTrialPreviousFails()
+    {
+        $notDeleted = $this->obj->getPostTrialAbsolute(1);
+        $this->obj->advance();
+        $this->obj->advance();
+        $this->assertFalse($this->obj->deletePostTrial(-1));
+        $this->assertSame($notDeleted, $this->obj->getPostTrial(-1));
+    }
+    
+    /**
+     * @covers Collector\MainTrial::deletePostTrialAbsolute
+     * @covers Collector\MainTrial::deletePostTrial
+     */
+    public function testDeletePostTrialMainFails()
+    {
+        $notDeleted = $this->obj;
+        $this->assertFalse($this->obj->deletePostTrial(0));
+        $this->assertSame($notDeleted, $this->obj->getPostTrial());
+    }
+    
+    /**
+     * @covers Collector\MainTrial::deletePostTrialsAbsolute
+     * @covers Collector\MainTrial::deletePostTrials
+     */
+    public function testDeletePostTrialsAbsolute()
+    {
+        $this->obj->addPostTrial(array("post trial 3" => 4));
+        $trialThree = $this->obj->getPostTrialAbsolute(3);
+        $precount = count($this->obj);
+        $this->obj->deletePostTrialsAbsolute('1::2');
+        $this->assertCount($precount - 2, $this->obj);
+        $this->assertSame($trialThree, $this->obj->getPostTrial(1));
+    }
+    
+    /**
+     * @covers Collector\MainTrial::deletePostTrialsAbsolute
+     * @covers Collector\MainTrial::deletePostTrials
+     */
+    public function testDeletePostTrials()
+    {
+        $this->obj->addPostTrial(array("post trial 3" => 4));
+        $trialThree = $this->obj->getPostTrialAbsolute(3);
+        $precount = count($this->obj);
+        $this->obj->deletePostTrials('1::2');
+        $this->assertCount($precount - 2, $this->obj);
+        $this->assertSame($trialThree, $this->obj->getPostTrial(1));
+    }
+
+    /**
+     * @covers Collector\MainTrial::deletePostTrialAbsolute
+     * @covers Collector\MainTrial::deletePostTrial
+     * @covers Collector\MainTrial::deletePostTrialsAbsolute
+     * @covers Collector\MainTrial::deletePostTrials
+     */    
+    public function testDeleteFuturePostTrialUpdatesIsComplete()
+    {
+        $this->obj->deletePostTrials("1::2");
+        $this->assertTrue($this->obj->isComplete());
     }
 }
