@@ -361,6 +361,107 @@ class Experiment extends MiniDb implements \Countable
         
         return $trials;
     }
+    
+    /**
+     * Deletes the MainTrial at the given position in the Experiment.
+     * 
+     * This function will fail when trying to delete previous trials.
+     * 
+     * @param int $position The absolute position of the MainTrial to delete.
+     * 
+     * @return boolean|int Returns FALSE if the position to delete is less than
+     *                     the current position, 0 if the position to delete
+     *                     does not exist, TRUE if the position was deleted, or
+     *                     FALSE if the delete failed.
+     */
+    public function deleteTrialAbsolute($position)
+    {
+        if ($position < $this->position) {
+            return false;
+        }
+        
+        if (!isset($this->trials[$position])) {
+            $result = 0;
+        }
+        
+        unset($this->trials[$position]);
+        if (isset($this->trials[$position])) {
+            $result = false;
+        }
+        
+        $this->updatePositions();
+        $this->trials = array_values($this->trials);
+        ksort($this->trials);
+        
+        return isset($result) ? $result : true;        
+    }
+    
+    /**
+     * Deletes the MainTrial at the given offset from the current position in 
+     * the Experiment.
+     * 
+     * This function will fail when trying to delete previous trials.
+     * 
+     * @param int $offset The relative offset of the MainTrial to delete.
+     * 
+     * @return boolean|int Returns FALSE if the position to delete is less than
+     *                     the current position, 0 if the position to delete
+     *                     does not exist, TRUE if the position was deleted, or
+     *                     FALSE if the delete failed.
+     */
+    public function deleteTrial($offset = 0)
+    {
+        return $this->deleteTrialAbsolute($this->position + $offset);
+    }
+    
+    /**
+     * Deletes the MainTrials at the given positions in the Experiment.
+     * 
+     * This function will fail to delete previous trials.
+     * 
+     * @param array|string $positions The absolute positions of the MainTrials 
+     *                                to delete as indicated by an array of the 
+     *                                positions or a valid stringToArray string.
+     */
+    public function deleteTrialsAbsolute($positions)
+    {
+        if (!is_array($positions)) {
+            $positions = Experiment::stringToRange($positions);
+        }
+        
+        // must start deleting from smallest value and update as we go
+        sort($positions);
+        $offset = 0;
+        foreach ($positions as $pos) {
+            $result = $this->deleteTrialAbsolute($pos - $offset);
+            if ($result !== false) {
+                ++$offset;
+            }
+        }
+    }
+
+    /**
+     * Deletes the MainTrials at the given offsets from the current position in
+     * the Experiment.
+     * 
+     * This function will fail to delete previous trials.
+     * 
+     * @param array|string $offsets The absolute positions of the MainTrials to
+     *                              delete as indicated by an array of the 
+     *                              offsets or a valid stringToArray string.
+     */    
+    public function deleteTrials($offsets)
+    {
+        if (!is_array($offsets)) {
+            $offsets = Experiment::stringToRange($offsets);
+        }
+        
+        foreach ($offsets as &$offset) {
+            $offset += $this->position; 
+        }
+        
+        return $this->deleteTrialsAbsolute($offsets);
+    }
 
     /**
      * Gets the stimuli or subset of the stimuli for this Experiment.

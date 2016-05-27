@@ -831,6 +831,103 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
+     * @covers Collector\Experiment::deleteTrialAbsolute
+     */
+    public function testDeleteTrialAbsoluteRemovesTrial()
+    {
+        $precount = count($this->obj);
+        $this->obj->deleteTrialAbsolute(0);
+        $this->assertCount($precount - 1, $this->obj);
+    }
+    
+    /**
+     * @covers Collector\Experiment::deleteTrialAbsolute
+     */
+    public function testDeleteTrialAbsoluteRenumbersTrials()
+    {
+        $this->obj->deleteTrialAbsolute(0);
+        $this->assertEquals(0, $this->obj->getTrial()->position);
+        $this->assertEquals(1, $this->obj->getTrial(1)->position);
+        $this->assertEquals(2, $this->obj->getTrial(2)->position);
+    }
+    
+    /**
+     * @covers Collector\Experiment::deleteTrialAbsolute
+     */
+    public function testDeleteTrialAbsoluteRemovesCorrectTrial()
+    {
+        $deletedThree = $this->obj->getTrialAbsolute(3);
+        $deletedZero = $this->obj->getTrial();
+        
+        $this->assertTrue($this->obj->deleteTrialAbsolute(3));
+        $this->assertTrue($this->obj->deleteTrialAbsolute(0));
+        
+        $this->assertNotSame($deletedZero, $this->obj->getTrialAbsolute(0));
+        $this->assertNotSame($deletedThree, $this->obj->getTrialAbsolute(2));
+    }
+    
+    /**
+     * @covers Collector\Experiment::deleteTrial
+     */
+    public function testDeleteTrialFuture()
+    {
+        $deleted = $this->obj->getTrial(1);
+        $this->obj->deleteTrial(1);
+        $this->assertNotSame($deleted, $this->obj->getTrial(1));
+    }
+    
+    /**
+     * @covers Collector\Experiment::deleteTrialAbsolute
+     * @covers Collector\Experiment::deleteTrial
+     */
+    public function testDeleteTrialPreviousFails()
+    {
+        $notDeleted = $this->obj->getTrial();
+        $this->obj->skip();
+        $this->assertFalse($this->obj->deleteTrial(-1));
+        $this->assertSame($notDeleted, $this->obj->getTrial(-1));
+    }
+    
+    /**
+     * @covers Collector\Experiment::deleteTrialsAbsolute
+     * @covers Collector\Experiment::deleteTrials
+     */
+    public function testDeleteTrialsAbsolute()
+    {
+        $trialThree = $this->obj->getTrialAbsolute(3);
+        $precount = count($this->obj);
+        $this->obj->deleteTrialsAbsolute('1::2');
+        $this->assertCount($precount - 2, $this->obj);
+        $this->assertSame($trialThree, $this->obj->getTrial(1));
+    }
+    
+    /**
+     * @covers Collector\Experiment::deleteTrialsAbsolute
+     * @covers Collector\Experiment::deleteTrials
+     */
+    public function testDeleteTrials()
+    {
+        $trialThree = $this->obj->getTrialAbsolute(3);
+        $precount = count($this->obj);
+        $this->obj->deleteTrials('1::2');
+        $this->assertCount($precount - 2, $this->obj);
+        $this->assertSame($trialThree, $this->obj->getTrial(1));
+    }
+
+    /**
+     * @covers Collector\Experiment::deleteTrialAbsolute
+     * @covers Collector\Experiment::deleteTrial
+     * @covers Collector\Experiment::deleteTrialsAbsolute
+     * @covers Collector\Experiment::deleteTrials
+     */    
+    public function testDeleteFutureTrialUpdatesIsComplete()
+    {
+        $this->obj->deleteTrials("1::3");
+        $this->obj->getTrial()->markComplete();
+        $this->assertTrue($this->obj->isComplete());
+    }
+    
+    /**
      * @covers Collector\Experiment::stringToRange
      */
     public function testStringToRange()
