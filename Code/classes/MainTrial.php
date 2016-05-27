@@ -11,7 +11,7 @@ namespace Collector;
  * have access to the basic MiniDb functions (add, get, update, export) they
  * have been overridden and may behave differently than expected.
  */
-class MainTrial extends Trial
+class MainTrial extends Trial implements \Countable
 {
     /**
      * The offset of this Trial in the Experiment trial array.
@@ -119,6 +119,20 @@ class MainTrial extends Trial
         return $this->postPosition === 0
             ? $this->relatedFiles->get($name)
             : $this->getPostTrial()->getRelatedFile($name);
+    }
+    
+    /**
+     * Returns the number of Trials in the PostTrials property, including this
+     * trial (i.e. a MainTrial with 2 PostTrials has a count of 3). 
+     * 
+     * This is also the implementation of the count function and will be called
+     * when count is called on the MainTrial like count($trial).
+     *
+     * @return int The number of Trials in this MainTrial including itself.
+     */
+    public function count()
+    {
+        return count($this->postTrials);
     }
     
     /* Overrides
