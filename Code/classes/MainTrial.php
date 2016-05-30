@@ -132,7 +132,7 @@ class MainTrial extends Trial implements \Countable
      */
     public function count()
     {
-        return count($this->postTrials);
+        return count($this->postTrials) + 1;
     }
     
     /* Overrides

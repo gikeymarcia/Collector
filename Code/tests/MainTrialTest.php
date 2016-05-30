@@ -19,6 +19,14 @@ class MainTrialTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers Collector\MainTrial::count
+     */
+    public function testCount()
+    {
+        $this->assertCount(3, $this->obj);
+    }
+    
+    /**
      * @covers Collector\MainTrial::export
      * @covers Collector\PostTrial::export
      */
