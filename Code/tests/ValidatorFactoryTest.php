@@ -40,7 +40,6 @@ class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
     
     /**
      * @covers Collector\ValidatorFactory::createSpecific
-     * @covers Collector\ValidatorFactory::createFromDirs
      * @covers Collector\ValidatorFactory::filter
      */
     public function testCreateSpecificFromDirMultiple()
@@ -55,8 +54,7 @@ class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @covers Collector\ValidatorFactory::createSpecificFromMultipleDirs
-     * @covers Collector\ValidatorFactory::createFromDirs
+     * @covers Collector\ValidatorFactory::createSpecific
      * @covers Collector\ValidatorFactory::filter
      */
     public function testCreateSpecificFromDirsSingle()
@@ -73,7 +71,7 @@ class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @covers Collector\ValidatorFactory::createSpecificFromMultipleDirs
+     * @covers Collector\ValidatorFactory::createSpecific
      * @covers Collector\ValidatorFactory::filter
      */
     public function testCreateSpecificFromDirsMultipleStrict()
@@ -142,7 +140,7 @@ class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Collector\ValidatorFactory::createFromDir
+     * @covers Collector\ValidatorFactory::createSpecific
      * @covers Collector\ValidatorFactory::mergeGroup
      */
     public function testMergeGroupLoose()
