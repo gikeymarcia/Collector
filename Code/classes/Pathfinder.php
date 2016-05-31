@@ -449,6 +449,25 @@ class Pathfinder
 
         return $path;
     }
+    
+    /**
+     * Sets a new path in the path list or replaces the existing path.
+     * 
+     * The name string is converted to lowercase and spaces are replaced with
+     * underscores.
+     * 
+     * @param string $name The name of the path to set.
+     * @param string $path The path to set, absolute or relative to the root.
+     */
+    public function set($name, $path)
+    {
+        $key = str_replace(' ', '_', trim(strtolower($name)));
+        $val = str_replace('\\', '/', trim($path));
+        if (strpos($val, $this->rootPath['absolute']) === 0) {
+            $val = substr($val, strlen($this->rootPath['absolute']));
+        }
+        $this->pathList[$key] = ltrim($val, '/');
+    }
 
     /**
      * Modifies a string using the passed variables.
