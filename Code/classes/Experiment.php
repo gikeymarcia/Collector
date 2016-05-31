@@ -269,6 +269,87 @@ class Experiment extends MiniDb implements \Countable
     }
 
     /**
+     * Gets the Trial that occurs directly after the current Trial.
+     * 
+     * @param int $offset The absolute offset of the Trial to retrieve, e.g. if 
+     *                    at PostTrial 1 of a MainTrial with 2 PostTrials, 
+     *                    getNext(1) would return PostTrial 2 and getNext(2)
+     *                    would return the next MainTrial.
+     * 
+     * @return MainTrial|PostTrial|null Returns the MainTrial or PostTrial at 
+     *                                  the given absolute offset if it exists,
+     *                                  else null.
+     */
+    public function getNext($offset = 1)
+    {
+        // get current Main and adjust offset back to it
+        $current = $this->getCurrent();
+        if (get_class($current) !== 'Collector\MainTrial') {
+            $offset += $current->position;
+            $current = $this->getTrial();
+        }
+        
+        while ($offset > -1) {
+            if ($offset < count($current)) {
+                // offset is post within current main
+                return $current->getPostTrialAbsolute($offset);
+            }
+            
+            // offset is outside of current main
+            $offset -= count($current);
+            $current = $this->getTrial(1);
+            if ($current === null) {
+                return null;
+            }
+        }
+    }
+    
+    /**
+     * Gets the Trial at the position directly before the current Trial, i.e.
+     * the last PostTrial or MainTrial in the line-up.
+     * 
+     * Note this function will not honor skips. That is, if you skipped a Trial,
+     * this function will not recognize that and will return the last Trial that
+     * would have occurred had you not skipped.
+     * 
+     * @param int $offset The absolute offset of a previous Trial to receive
+     *                    (offset should be a positive number), e.g. if at
+     *                    PostTrial 1 of a MainTrial with 2 PostTrials, and the
+     *                    previous MainTrial had 2 PostTrials, getPrev(1) would
+     *                    return the current MainTrial and getPrev(2) would 
+     *                    return PostTrial 2 of the previous MainTrial.
+     * 
+     * @return MainTrial|PostTrial|null Returns the MainTrial or PostTrial at
+     *                                  the given absolute offset if it exists,
+     *                                  else null.
+     */
+    public function getPrev($offset = 1)
+    {
+        $current = $this->getCurrent();
+        if (get_class($current) !== 'Collector\MainTrial'
+            && ($current->position - $offset) > -1
+        ) {
+            // offset is reachable in current MainTrial
+            return $current->getMainTrial()->getPostTrial(-1 * $offset);
+        }
+
+        // offset is in a prior MainTrial, move offset to beginning of this Main
+        $offset -= $current->position;
+        
+        // go back until offset becomes negative or 0 (just past requested)
+        while ($offset > 0) {
+            $current = $this->getTrial(-1);
+            if ($current === null) {
+                return null;
+            }
+            $offset -= count($current);
+        }
+        
+        // requested is now the inverse of the offset
+        return $current->getPostTrialAbsolute(-1 * $offset);
+    }
+
+    /**
      * Gets the MainTrial at the given relative position.
      *
      * @param int $offset The relative offset of the MainTrial to retrieve.

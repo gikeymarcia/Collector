@@ -10,7 +10,8 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $this->testTrial = new MainTrial(array('trial 0' => 0), null);
         $this->testTrial->addPostTrial(array("post trial 0-1" => 0))
                         ->addPostTrial(array("post trial 0-2" => 0));
-        foreach(range(0, 3) as $i) {
+        
+        for ($i = 0; $i < 4; ++$i) {
             $this->obj->addTrialAbsolute()->addPostTrial()->addPostTrial();
         }
     }
@@ -278,9 +279,10 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
      */
     public function testExport()
     {
-        $this->assertEmpty($this->obj->export()['Condition']);
-        $this->assertEquals(array('a', 'b', 'c'), $this->obj->export()['Stimuli']);
-        $this->assertEquals($this->testTrial->export(), $this->obj->export()['Trials'][0]);
+        $result = $this->obj->export();
+        $this->assertEmpty($result['Condition']);
+        $this->assertEquals(array('a', 'b', 'c'), $result['Stimuli']);
+        $this->assertEquals($this->testTrial->export(), $result['Trials'][0]);
     }
 
     /**
@@ -294,7 +296,8 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->obj->add('new info 1', 1));
         $this->assertFalse($this->obj->add('new info 2', 3));
 
-        $actual = $this->obj->export()['Trials'][0]['main'];
+        $result = $this->obj->export();
+        $actual = $result['Trials'][0]['main'];
         $this->assertNull($actual['new info 1']);
         $this->assertEquals(2, $actual['new info 2']);
     }
@@ -312,7 +315,8 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->obj->add('new info 1', 1));
         $this->assertFalse($this->obj->add('new info 2', 3));
 
-        $actual = $this->obj->export()['Trials'][0]['post 1'];
+        $result = $this->obj->export();
+        $actual = $result['Trials'][0]['post 1'];
         $this->assertNull($actual['new info 1']);
         $this->assertEquals(2, $actual['new info 2']);
     }
@@ -759,7 +763,8 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         });
         $this->obj->addValidator('a', $validator);
         
-        $test = $this->getProperty($this->obj, 'validators')['a'];
+        $result = $this->getProperty($this->obj, 'validators'); 
+        $test = $result['a'];
         $this->assertEquals($validator, $test);
         
         $this->obj->addValidator('a', $validator, true);
@@ -939,5 +944,41 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(1,2), Experiment::stringToRange('1;2'));
         $this->assertEquals(array(1,2,3), Experiment::stringToRange('1::3'));
         $this->assertEquals(array(1,2,3,4), Experiment::stringToRange('1::3, 4'));
+    }
+    
+    /**
+     * @covers Collector\Experiment::getNext
+     */
+    public function testGetNext()
+    {
+        $onePostOne = $this->obj->getNext();
+        $alsoOnePostOne = $this->obj->getNext(1);
+        $two = $this->obj->getNext(3);
+        
+        $this->obj->advance();
+        $this->assertSame($onePostOne, $alsoOnePostOne);
+        $this->assertSame($onePostOne, $this->obj->getCurrent());
+        
+        $this->obj->advance();
+        $this->obj->advance();
+        $this->assertSame($two, $this->obj->getCurrent());
+    }
+    
+    /**
+     * @covers Collector\Experiment::getPrev
+     */
+    public function testGetPrev()
+    {
+        $this->obj->advance();
+        $onePostOne = $this->obj->getCurrent();
+        
+        $this->obj->advance();
+        $this->obj->advance();
+        $two = $this->obj->getCurrent();
+        
+        $this->obj->advance();
+        $this->assertSame($two, $this->obj->getPrev());
+        $this->assertSame($two, $this->obj->getPrev(1));
+        $this->assertSame($onePostOne, $this->obj->getPrev(3));
     }
 }
