@@ -38,13 +38,7 @@ class ExperimentFactoryTest extends \PHPUnit_Framework_TestCase
         
         $this->assertEquals($expected['condition'], $expt->getCondition());
         $this->assertEquals($expected['stimuli'], $expt->getStimuli());
-        $this->assertEquals(
-            array(
-                $expected['pathfinder']->get('Custom Trial Types'),
-                $expected['pathfinder']->get('Trial Types'),
-            ),
-            $this->getProperty($expt, 'validatorDirs')
-        );
+        $this->assertEquals($expected['pathfinder'], $expt->getPathfinder());
         $this->assertCount(1, $expt);
     }
     

@@ -47,7 +47,7 @@ class Experiment extends MiniDb implements \Countable
      * The directory or directories where the Validators can be found.
      * @var array|string
      */
-    protected $validatorDirs;
+    protected $pathfinder;
 
     /* Implements
      **************************************************************************/
@@ -71,15 +71,16 @@ class Experiment extends MiniDb implements \Countable
      * @param array        $condition     The condition information.
      * @param array        $stimuli       The stimuli to use.
      * @param array|string $validatorDirs The paths to the trial types folders.
+     * @param Pathfinder   $pathfinder    The Experiment's Pathfinder.
      */
     public function __construct(array $condition = array(),
-        array $stimuli = array(), $validatorDirs = ''
+        array $stimuli = array(), Pathfinder $pathfinder = null
     ) {
         $this->trials = array();
         $this->stimuli = $stimuli;
         $this->condition = $condition;
         $this->position = 0;
-        $this->validatorDirs = $validatorDirs;
+        $this->pathfinder = $pathfinder;
         $this->validators = array();
         
         parent::__construct();
@@ -95,6 +96,8 @@ class Experiment extends MiniDb implements \Countable
             
             // other warm up code here...
         });
+        
+        return $this;
     }
 
     /**
@@ -612,6 +615,25 @@ class Experiment extends MiniDb implements \Countable
     }
 
     /**
+     * Gets the Experiment's Pathfinder object.
+     * 
+     * @return Pathfinder Returns the Experiment's Pathfinder object.
+     */
+    public function getPathfinder()
+    {
+        return $this->pathfinder;
+    }
+    
+    /**
+     * Sets the Experiment's Pathfinder object.
+     * @param Pathfinder $pathfinder The new Pathfinder object to use.
+     */
+    public function setPathfinder(Pathfinder $pathfinder)
+    {
+        $this->pathfinder = $pathfinder;
+    }
+    
+    /**
      * Inserts a MainTrial at the specified position. If no position is given,
      * the trial is inserted at the end. The position numbers for all trials are
      * updated after this function is called. Note: the position is 0-indexed
@@ -796,8 +818,13 @@ class Experiment extends MiniDb implements \Countable
      */
     protected function loadValidator($trialtype)
     {
-        $this->validators[$trialtype] = !empty($this->validatorDirs)
-            ? ValidatorFactory::createSpecific($trialtype, $this->validatorDirs, false)
+        $this->validators[$trialtype] = isset($this->pathfinder)
+            ? ValidatorFactory::createSpecific(
+                $trialtype,
+                array($this->pathfinder->get('Custom Trial Types'),
+                      $this->pathfinder->get('Trial Types')
+                ),
+                false)
             : null;
     }
     

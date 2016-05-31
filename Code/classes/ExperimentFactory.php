@@ -43,12 +43,7 @@ class ExperimentFactory
         array $stimuli = array(),
         Pathfinder $pathfinder = null
     ) {
-        $validatorDirs = isset($pathfinder)
-                       ? array($pathfinder->get('Custom Trial Types'), 
-                               $pathfinder->get('Trial Types'))
-                       : null;
-        
-        $expt = new Experiment($condition, $stimuli, $validatorDirs);
+        $expt = new Experiment($condition, $stimuli, $pathfinder);
         foreach ($procedure as $row) {
             // organize and clean up the row data
             $data = self::separatePostTrials($row);

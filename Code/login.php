@@ -142,9 +142,9 @@ $stimuli->shuffle();
  */
 $_EXPT = Collector\ExperimentFactory::create(
     $cond->get(), $procedure->getShuffled(), $stimuli->getShuffled(), $_PATH
-);
-$_EXPT->warm();
+)->warm();
 
+// validate and show errors
 $validationErrors = $_EXPT->validate();
 if (!empty($validationErrors)) {
     foreach ($validationErrors as $error) {

@@ -791,7 +791,11 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadValidator()
     {
-        $expt = new Experiment(array(), array(), __DIR__.'/validators/validatordir1');
+        $pathfinder = new Pathfinder();
+        $path = __DIR__.'/validators/validatordir1';
+        $pathfinder->set('custom trial types', __DIR__.'/validators/validatordir1');
+        
+        $expt = new Experiment(array(), array(), $pathfinder);
         $this->assertInstanceOf('Collector\Validator', $expt->getValidator('testtrialtype1'));
     }
     
