@@ -472,7 +472,7 @@ class Helpers
         $columns = self::getColumnsFrom2d($arrayNoScalars);
 
         // write table header
-        echo '<table class="self::display2dArray"><thead><tr><th></th><th><div>',
+        echo '<table class="display2dArray"><thead><tr><th></th><th><div>',
             implode('</div></th><th><div>', $columns),
             '</div></th></tr></thead><tbody>';
 
@@ -496,14 +496,14 @@ class Helpers
     {
         echo '
           <style>
-            .self::display2dArray          { border-collapse:collapse; }
-            .self::display2dArray td,
-            .self::display2dArray th       { border:1px solid #000;
+            .display2dArray          { border-collapse:collapse; }
+            .display2dArray td,
+            .display2dArray th       { border:1px solid #000;
                                        vertical-align:middle; text-align:center;
                                        padding:2px 6px; overflow:hidden; }
-            .self::display2dArray td       { max-width:200px; }
-            .self::display2dArray th       { max-width:100px; white-space: normal; }
-            .self::display2dArray td > div { max-height:1.5em; overflow:hidden; }
+            .display2dArray td       { max-width:200px; }
+            .display2dArray th       { max-width:100px; white-space: normal; }
+            .display2dArray td > div { max-height:1.5em; overflow:hidden; }
           </style>
         ';
     }

@@ -26,7 +26,7 @@ if (!empty($_DATA['exp'])) {
         $searching = scandir("{$_root}/Experiments/$exp/$type/");
         foreach ($searching as $item => $path) {
             // remove files that aren't .csv
-            if (!Helpers::inString('.csv', $path, true)) {
+            if (!Collector\Helpers::inString('.csv', $path, true)) {
                 unset($searching[$item]);
             }
             $ShuffleFolders[$type] = $searching;
@@ -184,7 +184,7 @@ if (($_DATA['loc'] !== '') && ($_DATA['exp'] !== '')
 
 <script type="text/javascript">
   // default table font size
-  var iniitalSize = parseFloat( $(".Helpers::display2dArray").css("font-size") );
+  var iniitalSize = parseFloat( $(".display2dArray").css("font-size") );
   var size = iniitalSize;
 
   // custom zoom value
@@ -194,7 +194,7 @@ if (($_DATA['loc'] !== '') && ($_DATA['exp'] !== '')
   var clicked = 0;
 
   // change table zoom to custom zoom
-  $(".Helpers::display2dArray").css("font-size", zoom);
+  $(".display2dArray").css("font-size", zoom);
 
   // if a custom zoom is set use it as starting point for zoom in/out calls
   if ($.isNumeric(zoom)) {
@@ -207,7 +207,7 @@ if (($_DATA['loc'] !== '') && ($_DATA['exp'] !== '')
       // scale up the size
       size = size * 1.1;
       // change font to new size value
-      $(".Helpers::display2dArray").css("font-size", size);
+      $(".display2dArray").css("font-size", size);
       // put new zoom value into hidden input
       $(".zoomInput").val(size);
     });
@@ -217,7 +217,7 @@ if (($_DATA['loc'] !== '') && ($_DATA['exp'] !== '')
       // scale down the size
        size = size * 0.9;
        // change font to the new size value
-       $(".Helpers::display2dArray").css("font-size", size);
+       $(".display2dArray").css("font-size", size);
        // put new zoom value into hidden input
        $(".zoomInput").val(size);
     });
@@ -227,7 +227,7 @@ if (($_DATA['loc'] !== '') && ($_DATA['exp'] !== '')
       // change size to inititial size
        size = iniitalSize;
        // change table font-size back to original
-       $(".Helpers::display2dArray").css("font-size", size);
+       $(".display2dArray").css("font-size", size);
        // put the original size back into the hidden zoom input field
        $(".zoomInput").val(size);
        // set clicked to false / unclicked / unlocked

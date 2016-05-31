@@ -159,6 +159,7 @@ return array(
             'DebugController.php' => 'Debug Class',
             'ErrorController' => 'Errors Class',
             'Parse.php' => 'Parse',
+            'Helpers.php' => 'Helpers',
             'Pathfinder.php' => 'Pathfinder',
             'Procedure.php' => 'Procedure Class',
             'ReturnVisitController.php' => 'Return Class',

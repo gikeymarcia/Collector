@@ -68,12 +68,6 @@ foreach ($results as $readyPath) {
 }
 fclose($temp);
 $show = Collector\Helpers::getFromFile("MediaScanner/tempStim.csv");
-
-
-
-
-
-
 ?>
 
 <div class="toolWidth">
@@ -86,8 +80,8 @@ $show = Collector\Helpers::getFromFile("MediaScanner/tempStim.csv");
 </div>
 
 <style type="text/css" media="screen">
-    .Helpers::display2dArray td       { max-width:30em; }
-    .Helpers::display2dArray {
+    .display2dArray td       { max-width:30em; }
+    .display2dArray {
         font-size: 16pt;
         background-color: #dee7ec;
         padding-bottom: 2em;    
