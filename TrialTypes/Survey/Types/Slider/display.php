@@ -49,7 +49,7 @@
                 max:  thisMax,
                 step: 1,
                 slide: function(event, ui) {
-                    $(ui.handle).Helpers::show().closest(".sliderArea").find("input").val(ui.value);
+                    $(ui.handle).show().closest(".sliderArea").find("input").val(ui.value);
                 }
             }).find(".ui-slider-handle").hide();
         });
@@ -96,7 +96,7 @@
            .         "<div>" . $leftDesc  . "</div>"
            .         "<div>" . $rightDesc . "</div>"
            .     "</div>";
-        echo     "<input name='$qName' type='text' $required title='Please select a location on this slider.'>";
+        echo     "<input name='$qName' type='text' $required title='Please select a location on this slider.' tabindex='-1'>";
         echo     "<div class='inputSlider' data-min='$thisMin' data-max='$thisMax'></div>";
         echo '</div>';
     }

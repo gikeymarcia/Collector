@@ -1,12 +1,14 @@
 </form>
 <?php
-    if (is_numeric($item)) {
+    $item = $_EXPT->get('item');
+    
+    if (is_array($item)) {
         $surveyFile = $_EXPT->get('cue');
     } else {
         $surveyFile = $item;
     }
     
-    $trialTypeDir = dirname($trialFiles['display']);
+    $trialTypeDir = dirname($_TRIAL->getRelatedFile('display'));
     $surveyDir = $_PATH->get('Common') . '/Surveys';
     
     require $_PATH->get('Shuffle Functions');
