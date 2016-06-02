@@ -229,8 +229,8 @@ class MainTrial extends Trial implements \Countable
      */
     public function isComplete()
     {
-        if ($this->complete === true) {
-            return true;
+        if ($this->complete === false) {
+            return false;
         }
         
         foreach ($this->postTrials as $trial) {
