@@ -22,7 +22,7 @@
  */
 	  
 	// now lets get a list of possible experiments to edit
-	$branches = getCollectorExperiments();
+	$branches = Collector\Helpers::getCollectorExperiments();
 	$title = 'Collector GUI';
 	//$key=array_search('New Experiment',$branches);
 	//unset($branches[$key]);
