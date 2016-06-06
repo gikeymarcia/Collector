@@ -264,7 +264,7 @@
                 $filePath = Collector\Helpers::fileExists("$typesDir/$entry/$filename.php", false, 0);
                 if ($filePath !== false) $types[$type][$filename] = $filePath;
             }
-            $filePath = fileExists("$typesDir/$entry/getResponses.php", false, 0);
+            $filePath = Collector\Helpers::fileExists("$typesDir/$entry/getResponses.php", false, 0);
             if ($filePath !== false) $types[$type]['getResponses'] = require $filePath;
         }
         return $types;
@@ -285,5 +285,5 @@
     }
     
     function surveyRangeToArray($range) {
-        return rangeToArray($range, '|');
+        return Collector\Helpers::rangeToArray($range, '|');
     }
