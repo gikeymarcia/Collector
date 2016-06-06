@@ -31,10 +31,7 @@ if (isset($validStates[$_SESSION['state']])) {
         $_SIDE->getAll(true)
     );
     
-    Collector\Helpers::arrayToLine(
-        $sideData,
-        $_PATH->get('SideData Data')
-    );
+    arrayToLine($sideData, $_PATH->get('SideData Data'));
 
     // preparing $_SESSION for the next run
     if ($_SESSION['state'] == 'break') {

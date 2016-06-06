@@ -21,7 +21,7 @@
     
     $dataScan = getDataScan($_PATH);
     
-    $trialTypes = array_keys(Collector\Helpers::getAllTrialTypeFiles());
+    $trialTypes = array_keys(getAllTrialTypeFiles());
     
     $massChecker2 = '<input type="checkbox" class="massCheckbox" data-nest="2">';
     $massChecker3 = '<input type="checkbox" class="massCheckbox" data-nest="3">';

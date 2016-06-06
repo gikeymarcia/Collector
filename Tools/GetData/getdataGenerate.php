@@ -11,7 +11,7 @@
     if (!isset($_POST['trialTypes'])) $_POST['trialTypes'] = array();
     
     
-    $skipTrialTypes = Collector\Helpers::getAllTrialTypeFiles();
+    $skipTrialTypes = getAllTrialTypeFiles();
     foreach ($_POST['trialTypes'] as $type) {
         unset($skipTrialTypes[$type]);
     }

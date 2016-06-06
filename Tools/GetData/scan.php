@@ -1,7 +1,7 @@
 <?php
 adminOnly();
 
-function getDataScan(Collector\Pathfinder $_path) {
+function getDataScan(Pathfinder $_path) {
     // Plan:
     // scan Data/ for all data folders
     // scan those folders for output and Debug/output folders
