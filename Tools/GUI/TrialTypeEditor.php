@@ -220,8 +220,12 @@
   $_DATA['trialTypeEditor']['currentTrialTypeFilename']=$_DATA['trialTypeEditor']['currentTrialTypeName'].".txt";
      
   // list of trial types the user can edit
-  $trialTypesList = scandir("GUI/newTrialTypes");
-  $trialTypesList = array_slice($trialTypesList,2);
+  if (!is_dir("GUI/newTrialTypes")) {
+      $trialTypesList = array();
+  } else {
+      $trialTypesList = scandir("GUI/newTrialTypes");
+      $trialTypesList = array_slice($trialTypesList,2);
+  }
   ?>
 
 <form method="post">

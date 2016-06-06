@@ -24,7 +24,7 @@ adminOnly();
     // start the session, load our custom functions, and create $_PATH
     //require '../Code/initiateCollector.php';
     $title = 'Collector GUI';
-    $branches = getCollectorExperiments();
+    $branches = Collector\Helpers::getCollectorExperiments();
   
   	unset ($_DATA['guiSheets']['csvSelected']);
   
