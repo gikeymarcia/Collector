@@ -26,7 +26,7 @@
     $massChecker2 = '<input type="checkbox" class="massCheckbox" data-nest="2">';
     $massChecker3 = '<input type="checkbox" class="massCheckbox" data-nest="3">';
     
-    $expander = '<button type="button" class="expander">+/-</button>';
+    $expander = '<button type="button" class="expander">&#11014;</button>';
     $expanderCont = '<span class="expanderContainer">' . $expander . '</span>';
 ?>
 <link rel="stylesheet" type="text/css" href="<?= $admin['tool'] . '/GetDataStyle.css' ?>">
@@ -228,12 +228,14 @@
             ));
             content.hide(timing);
             title.parent(".blockContainer").addClass("collapsed");
+            $(this).html("&#11015;");
         } else {
             content.show(timing);
             setTimeout(function() {
                 title.width("auto");
             }, timing+50);
             title.parent(".blockContainer").removeClass("collapsed");
+            $(this).html("&#11014;");
         }
     });
     

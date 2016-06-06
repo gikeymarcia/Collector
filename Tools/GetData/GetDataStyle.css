@@ -46,7 +46,7 @@
 .blockRow { text-align: center; }
 .blockRow > div { display: inline-block; text-align: left; }
 
-.expander { line-height: .85em; font-size: 85%; padding: 1px; }
+.expander { line-height: .9em; font-size: 85%; padding: 1px 3px; color: #333; }
 .expanderContainer { display: inline-block; width: 52px; text-align: center; }
 
 /* http://stackoverflow.com/questions/826782/css-rule-to-disable-text-selection-highlighting */
