@@ -1,0 +1,61 @@
+#GetDataForm {
+    width: 95%;
+    padding: 10px 5px 0;
+}
+
+#GetDataDownloadButton { font-size: 140%; margin: auto; }
+
+.radioTable { display: table; }
+.radioTable > label { display: table-row; }
+.radioTable > label:hover { background-color: #69FFC3; }
+.radioTable > label > span { display: table-cell; }
+
+.SelectedLabel { background-color: #69FFC3; }
+
+.questionField { margin: 20px auto; }
+
+#GetDataForm h1 { padding: 0; margin: 0;}
+
+#RowFilters {  }
+
+#GetDataTable {
+    border-collapse: collapse;
+}
+#GetDataTable td, #GetDataTable th {
+    border: 1px solid #AAA;
+}
+
+/* http://stackoverflow.com/questions/306924/checkbox-size-in-html-css */
+.massCheckbox {
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(2); /* IE */
+  -moz-transform: scale(2); /* FF */
+  -webkit-transform: scale(2); /* Safari and Chrome */
+  -o-transform: scale(2); /* Opera */
+  transform: scale(2);
+  margin: 7px;
+}
+
+.massLabel { padding: 2px; display: inline-block; }
+.massLabel:hover { background-color: #69FFC3; }
+
+.inputBlock { display: inline-block; vertical-align: top; }
+.blockContainer { margin: 40px 5px 0; vertical-align: top; background-color: #cee5f2; padding: 5px 8px; border: 1px solid black; }
+.blockContainer.collapsed { border-bottom-color: #9bc; }
+
+.blockRow { text-align: center; }
+.blockRow > div { display: inline-block; text-align: left; }
+
+.expander { line-height: .85em; font-size: 85%; padding: 1px; }
+.expanderContainer { display: inline-block; width: 52px; text-align: center; }
+
+/* http://stackoverflow.com/questions/826782/css-rule-to-disable-text-selection-highlighting */
+#GetDataForm, label {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select: none;           /* Non-prefixed version, currently
+                                  not supported by any browser */
+}
