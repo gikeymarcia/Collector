@@ -18,7 +18,7 @@
 function findSetting(array &$settings, $target, $removeFound = true)
 {
     foreach ($settings as $key => $setting) {
-        $test = Collector\Helpers::removeLabel($setting, $target);
+        $test = removeLabel($setting, $target);
         if ($test !== false) {
             if ($removeFound) {
                 unset($settings[$key]);
@@ -214,7 +214,7 @@ function shuffle2dArray(array $array, $debug = false)
                 echo 'Shuffle Column: '.$header.'<br>';
                 echo '<div style="display: inline-block">';
                 echo 'Before shuffle:<br>';
-                Collector\Helpers::display2dArray($shuffled);
+                display2dArray($shuffled);
                 echo '</div>';
             }
 
@@ -231,7 +231,7 @@ function shuffle2dArray(array $array, $debug = false)
             if ($debug) {
                 echo '<div style="display: inline-block">';
                 echo 'After shuffle:<br>';
-                Collector\Helpers::display2dArray($shuffled);
+                display2dArray($shuffled);
                 echo '</div>';
                 echo '</div>';
             }
@@ -253,11 +253,11 @@ function shuffle2dArray(array $array, $debug = false)
         echo '<div style="white-space: nowrap">';
         echo '<div style="display: inline-block">';
         echo 'Before all advanced shuffles:<br>';
-        Collector\Helpers::display2dArray($startCopy);
+        display2dArray($startCopy);
         echo '</div>';
         echo '<div style="display: inline-block">';
         echo 'After advanced shuffles:<br>';
-        Collector\Helpers::display2dArray($array);
+        display2dArray($array);
         echo '</div>';
         echo '</div>';
     }
@@ -494,13 +494,13 @@ function sideShuffle(&$array, $shuffle)
  *   - use 'off' in whichever case you'd like (e.g., 'Off', 'OFF', etc.)
  *   - include a hashtag/pound sign in the shuffle column (e.g., '#Group1').
  *
- * @param array $input  2-D data read from a .csv table using Collector\Helpers::getFromFile().
+ * @param array $input  2-D data read from a .csv table using getFromFile().
  * @param int   $levels Indicates which level the function is currently 
  *                      shuffling (do not adjust --- this is for the function).
  *
  * @return array The shuffled array.
  *
- * @see Collector\Helpers::getFromFile()
+ * @see getFromFile()
  */
 function multiLevelShuffle($input, $levels = 0)
 {

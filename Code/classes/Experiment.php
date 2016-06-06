@@ -74,7 +74,7 @@ class Experiment extends MiniDb implements \Countable
      * @param Pathfinder   $pathfinder    The Experiment's Pathfinder.
      */
     public function __construct(array $condition = array(),
-        array $stimuli = array(), Pathfinder $pathfinder = null
+        array $stimuli = array(), \Pathfinder $pathfinder = null
     ) {
         $this->trials = array();
         $this->stimuli = $stimuli;

@@ -4,7 +4,7 @@ if (!isset($_SESSION)) {
 
     // load file locations
     require $_root.'/Code/Pathfinder.class.php';
-    $_PATH = new Collector\Pathfinder();
+    $_PATH = new Pathfinder();
 
     require $_PATH->get('Parse');
 
@@ -136,9 +136,9 @@ function logIP()
  */
 foreach ($files as $file) {
     // set correct delimiter and skip IP log file
-    if (Collector\Helpers::inString('.txt', $file)) {
+    if (inString('.txt', $file)) {
         $delimiter = "\t";
-    } elseif (Collector\Helpers::inString('.csv', $file)) {
+    } elseif (inString('.csv', $file)) {
         $delimiter = ',';
     } else {
         continue;
@@ -150,7 +150,7 @@ foreach ($files as $file) {
     }
 
     // read a file presumably containing workers
-    $current = Collector\Helpers::getFromFile($folder.$file, false, $delimiter);
+    $current = getFromFile($folder.$file, false, $delimiter);
 
     // skip files without a 'WorkerID' column and keep track skipped files
     if (!isset($current[0]['WorkerId'])) {
@@ -195,7 +195,7 @@ if (isset($toCheck)) {
 
 //    // check if this person has already been rejected
 //     if (isset($_SESSION) && file_exists($ipPath)) {
-//         $badIPs = Collector\Helpers::getFromFile($ipPath, false);
+//         $badIPs = getFromFile($ipPath, false);
 //         foreach ($badIPs as $rejected) {
 //             // log and break at the first IP rejection
 //             if ($ip === $rejected['ip address']) {
@@ -254,9 +254,9 @@ if ((count($noGo) == 0) && (isset($toCheck)) && (!isset($_SESSION))) {
 }
 // show all users to people who want to login
 if (!isset($_SESSION)) {
-    Collector\Helpers::readable($files, 'Files in directory');
-    Collector\Helpers::readable($uniques, 'Previous iteration workers');
-    Collector\Helpers::readable($skipped, 'Files skipped because there is no "WorkerID" column');
+    readable($files, 'Files in directory');
+    readable($uniques, 'Previous iteration workers');
+    readable($skipped, 'Files skipped because there is no "WorkerID" column');
 }
 
 if (!isset($_SESSION)) {

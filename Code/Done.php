@@ -44,7 +44,7 @@ if (isset($validStates[$_SESSION['state']])) {
         // increment session # so next login will labeled as the next session
         ++$_SESSION['Session'];
         // generate a new ID (for next login)
-        $_SESSION['ID'] = Collector\Helpers::randString();
+        $_SESSION['ID'] = randString();
     }
 
     // encode the entire $_SESSION array as a json string

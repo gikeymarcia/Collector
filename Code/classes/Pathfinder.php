@@ -3,10 +3,10 @@
  * Pathfinder class.
  */
 
-namespace Collector;
+// namespace Collector;
 
 /**
- * Provides access to a system map.
+* Provides access to a system map.
  *
  * Goals:
  * - provide a way to use system map, so that you can ask for
@@ -531,7 +531,7 @@ class Pathfinder
     /**
      * Gets all paths that do not contain a wild card or a default value.
      * Use this to get a list of all non-variable paths. You can then run
-     * Helpers::fileExists() on them, as a diagnostic check that all typical files exist.
+     * fileExists() on them, as a diagnostic check that all typical files exist.
      *
      * @return array The array of standard paths.
      */

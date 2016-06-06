@@ -91,7 +91,7 @@ abstract class ControlFile
         foreach ($this->files as $file) {
             $fullPath = $this->dir.'/'.trim($file);
             $fullPath = $this->checkPath($fullPath);
-            $data = Helpers::getFromFile($fullPath, false);
+            $data = getFromFile($fullPath, false);
             $this->stitch($data);
             foreach (array_keys($data) as $i) {
                 $this->rowOrigins[] = $file.'?'.$i;
@@ -200,7 +200,7 @@ abstract class ControlFile
         if (is_file($path)) {
             return $path;
         } else {
-            $case_correct_path = Helpers::fileExists($path);
+            $case_correct_path = fileExists($path);
             if ($case_correct_path === false) {
                 // stop the show with an error
                 $this->errorObj->add('Could not find the following file specified '

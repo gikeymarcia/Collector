@@ -53,7 +53,7 @@ if ($_TRIAL->settings->likert) {
     $likert = '1::7';
 }
 
-$likertOptions = Collector\Helpers::rangeToArray($likert);
+$likertOptions = rangeToArray($likert);
 
 $texts = explode('|', $_EXPT->get('text'));
 $question = array_shift($texts);

@@ -245,7 +245,7 @@ class Settings
      *
      * @param Pathfinder $paths The current experiment's Pathfinder.
      */
-    public function upToDate(Pathfinder $paths)
+    public function upToDate(\Pathfinder $paths)
     {
         $commonLoc = $paths->get('Common Settings');
         $commonMod = (file_exists($commonLoc)) ? date('U', filemtime($commonLoc)) : 0;

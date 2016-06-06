@@ -19,12 +19,12 @@
 require 'Code/initiateCollector.php';
 
 $_SESSION = array();
-$_PATH = new Collector\Pathfinder($_SESSION['Pathfinder']);
+$_PATH = new Pathfinder($_SESSION['Pathfinder']);
 $_SETTINGS->upToDate($_PATH);
 
 // get possible experiments to choose from
 $experiments = array();
-foreach (Collector\Helpers::getCollectorExperiments() as $expName) {
+foreach (getCollectorExperiments() as $expName) {
     $experiments[$expName] = $_PATH->get('Experiments')."/$expName";
 }
 

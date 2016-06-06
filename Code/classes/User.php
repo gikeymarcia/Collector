@@ -129,7 +129,7 @@ class User
         if (!isset($_SESSION['ID'])) {
             // an ID is not yet set
             $getId = filter_input(INPUT_GET, 'ID', FILTER_SANITIZE_STRING);
-            $this->id = ($getId !== null) ? $getId : Helpers::randString($idLength);
+            $this->id = ($getId !== null) ? $getId : randString($idLength);
         } else {
             // ID is already set, store it here
             $this->id = $_SESSION['ID'];
@@ -240,7 +240,7 @@ class User
      *
      * @param Pathfinder $pathfinder The Pathfinder to update.
      */
-    public function feedPathfinder(Pathfinder $pathfinder)
+    public function feedPathfinder(\Pathfinder $pathfinder)
     {
         $pathfinder->setDefault('Username', $this->getUsername());
         $pathfinder->setDefault('Output',   $this->getOutputFile());

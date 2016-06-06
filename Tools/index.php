@@ -9,7 +9,7 @@ require_once $_root."/Code/initiateCollector.php";
 
 
 // load file locations
-$_PATH = new Collector\Pathfinder();
+$_PATH = new Pathfinder();
 
 // load custom functions
 require 'loginFunctions.php';

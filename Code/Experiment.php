@@ -177,7 +177,7 @@ if ($_EXPT->getTrial(1) !== null) {
     $item = $_EXPT->getTrial(1)->get('item');
     if (is_array($item) && !empty($item)) {
         foreach (array_values($_EXPT->getTrial(1)->get('item')) as $val) {
-            if (Collector\Helpers::show($val) !== $val) {
+            if (show($val) !== $val) {
                 echo show($val); 
             }
         }

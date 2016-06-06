@@ -33,7 +33,7 @@ if ($_TRIAL->settings->submitOnDone       === 'false') $submitOnDone       = fal
 if ($_TRIAL->settings->preventEarlySubmit === 'false') $preventEarlySubmit = false;
 
 // get video ID
-$videoId = Collector\Helpers::youtubeUrlCleaner($_EXPT->get('cue'), true);
+$videoId = youtubeUrlCleaner($_EXPT->get('cue'), true);
 
 // get start and end time from stim file columns
 if (!isset($startTime) || !is_numeric($startTime)) {

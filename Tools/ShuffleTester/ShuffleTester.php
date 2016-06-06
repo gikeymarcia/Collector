@@ -6,7 +6,7 @@ adminOnly();
 require_once $_PATH->get('Shuffle Functions');
 
 // find all available experiments
-$experiments = array_flip(Collector\Helpers::getCollectorExperiments());
+$experiments = array_flip(getCollectorExperiments());
 
 // save selected experimet if available and valid
 $exp = filter_input(INPUT_GET, 'exp', FILTER_SANITIZE_STRING);
@@ -26,7 +26,7 @@ if (!empty($_DATA['exp'])) {
         $searching = scandir("{$_root}/Experiments/$exp/$type/");
         foreach ($searching as $item => $path) {
             // remove files that aren't .csv
-            if (!Collector\Helpers::inString('.csv', $path, true)) {
+            if (!inString('.csv', $path, true)) {
                 unset($searching[$item]);
             }
             $ShuffleFolders[$type] = $searching;
@@ -124,10 +124,10 @@ $val = ($zoom !== null) ? $zoom : 'default';
 <?php
 // if a shuffle file has been choosen and it is a csv file
 if (($_DATA['loc'] !== '') && ($_DATA['exp'] !== '')
-    && Collector\Helpers::inString('.csv', $_DATA['loc']) === true
+    && inString('.csv', $_DATA['loc']) === true
 ) {
     // grab file to shuffle
-    $before = Collector\Helpers::getFromFile($_DATA['loc']);
+    $before = getFromFile($_DATA['loc']);
 
     // start a timer
     $shufflestart = microtime(true);
@@ -150,13 +150,13 @@ if (($_DATA['loc'] !== '') && ($_DATA['exp'] !== '')
 <div class="before">
   <div id="RF">
     <h2>Before</h2>
-    <?= Collector\Helpers::display2dArray($before) ?>
+    <?= display2dArray($before) ?>
   </div>
 </div>
 <!-- version after shuffling -->
 <div class="after">
   <h2>After</h2>
-  <?= Collector\Helpers::display2dArray($after) ?>
+  <?= display2dArray($after) ?>
 </div>
 
     <?php

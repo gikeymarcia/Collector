@@ -6,7 +6,7 @@ if (!empty($cue) && empty(trim($_EXPT->get('text')))) {
 
 $consent = $_EXPT->get('text');
 $fileDir = $_PATH->get('Common');
-$filePath = Collector\Helpers::fileExists("{$fileDir}/{$consent}");
+$filePath = fileExists("{$fileDir}/{$consent}");
 
 if ($filePath !== false && strpos($consent, '..') === false) {
     $pathinfo = pathinfo($filePath);

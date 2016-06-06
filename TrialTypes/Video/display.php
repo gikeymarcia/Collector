@@ -10,15 +10,15 @@
  * YouTube rather than your server.
  **/
 $cue = $_EXPT->get('cue');
-if (!Helpers::isLocal($cue)) {
+if (!isLocal($cue)) {
     // video is not a local file
     if (false !== strpos($cue, 'youtube') || false !== strpos($cue, 'youtu.be')) {
         // YouTube URL
-        $vidSource = Collector\Helpers::youtubeUrlCleaner($cue);
+        $vidSource = youtubeUrlCleaner($cue);
         $parameters = 'autoplay=1&modestbranding=1&controls=0&rel=0&showinfo=0&iv_load_policy=3';
     } elseif (strpos($cue, 'vimeo')) {
         // Vimeo URL
-        $vidSource = Collector\Helpers::vimeoUrlCleaner($cue);
+        $vidSource = vimeoUrlCleaner($cue);
         $parameters = 'autoplay=1&badge=0&byline=0&portrait=0&title=0';
     } else {
         // Unsupported URL
