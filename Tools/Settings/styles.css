@@ -120,3 +120,11 @@ h4 {
     z-index: 99;
     overflow: visible;
 }
+
+.expander {
+    margin-left: 1em;
+    border: none;
+    background-color: #EEE;
+    padding: 3px 10px;
+    border-radius: 3px;
+}
