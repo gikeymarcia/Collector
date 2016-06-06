@@ -71,6 +71,9 @@ class Autoloader {
             // determine if the namespace is set and try to load the file
             if (isset($this->namespaces[$namespace])) {
                 return $this->requireFile($this->namespaces[$namespace].$class.'.php');
+            } else {
+                return $this->requireFile(__DIR__."/{$fullClass}.php");
+
             }
         }
 
@@ -91,7 +94,7 @@ class Autoloader {
 
             return true;
         }
-
+        
         return false;
     }
 }

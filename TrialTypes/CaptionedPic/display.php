@@ -1,7 +1,7 @@
 <div> <?= $_EXPT->get('text') ?> </div>
   
 <!-- show the image -->
-<div class="pic"> <?= Collector\Helpers::show($_EXPT->get('cue')) ?> </div>
+<div class="pic"> <?= show($_EXPT->get('cue')) ?> </div>
   
 <!-- show the caption -->
 <h2 class="textcenter"> <?= $_EXPT->get('answer') ?> </h2>

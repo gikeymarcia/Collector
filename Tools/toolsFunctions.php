@@ -27,7 +27,7 @@ function getTools($dir = '.')
     // filter out invalid tools
     $tools = array();
     foreach ($potentialTools as $check) {
-        if (Collector\Helpers::fileExists($check.'/'.$check.'.php', false, 0)) {
+        if (fileExists($check.'/'.$check.'.php', false, 0)) {
             // use name as the key and file location as value
             $tools[$check] = $check.'/'.$check.'.php';
         }

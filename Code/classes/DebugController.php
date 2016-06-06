@@ -130,7 +130,7 @@ class DebugController
      *
      * @param Pathfinder $pathfinder The Pathfinder for the experiment.
      */
-    public function feedPathfinder(Pathfinder $pathfinder)
+    public function feedPathfinder(\Pathfinder $pathfinder)
     {
         if (!$this->isOn()) {
             $pathfinder->setDefault('Data Sub Dir', '');

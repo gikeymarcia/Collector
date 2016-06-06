@@ -82,9 +82,9 @@
         if (isset($row['Settings'])) {
             $settings = explode('|', $row['Settings']);
             foreach ($settings as $setting) {
-                $left  = Collector\Helpers::removeLabel($setting, 'leftDescription');
+                $left  = removeLabel($setting, 'leftDescription');
                 if ($left  !== false) $leftDesc  = $left;
-                $right = Collector\Helpers::removeLabel($setting, 'rightDescription');
+                $right = removeLabel($setting, 'rightDescription');
                 if ($right !== false) $rightDesc = $right;
             }
         }

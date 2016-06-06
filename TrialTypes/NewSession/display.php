@@ -3,8 +3,8 @@
 // otherwise convert formatted times like "5d:10h:15m:8s" to seconds
 $minTime = $_EXPT->get('min time');
 $maxTime = $_EXPT->get('max time');
-$min_time = empty($minTime) ? 0 : Collector\Helpers::durationInSeconds($minTime);
-$max_time = empty($maxTime) ? 0 : Collector\Helpers::durationInSeconds($maxTime);
+$min_time = empty($minTime) ? 0 : durationInSeconds($minTime);
+$max_time = empty($maxTime) ? 0 : durationInSeconds($maxTime);
 
 // declare when people are allowed to return to the study
 $_SESSION['Min Return'] = time() + $min_time;

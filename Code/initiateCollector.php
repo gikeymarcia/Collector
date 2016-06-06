@@ -13,7 +13,8 @@ session_start();
 error_reporting(E_ALL);
 
 // load file locations
-$_PATH = new Collector\Pathfinder($_SESSION['Pathfinder']);
+$_PATH = new Pathfinder($_SESSION['Pathfinder']);
+require_once $_PATH->get('Helpers');
 
 // check if they switched Collectors
 // (e.g., went from 'MG/Collector/Code/Done.php' to 'TK/Collector/Code/Done.php')
@@ -23,7 +24,7 @@ if (!isset($_SESSION['Current Collector'])
 ) {
     $_SESSION = array();
     $_SESSION['Current Collector'] = $currentCollector;
-    $_PATH = new Collector\Pathfinder($_SESSION['Pathfinder']);
+    $_PATH = new Pathfinder($_SESSION['Pathfinder']);
 
     // if inside Code/ redirect to index
     if ($_PATH->inDir('Code') && !$_PATH->atLocation('Login')) {

@@ -3,7 +3,7 @@
 </div>
 
 <div class="study textcenter">
-  <?= Collector\Helpers::show($_EXPT->get('cue')) ?>
+  <?= show($_EXPT->get('cue')) ?>
 </div>
 
 <div class="textcenter">

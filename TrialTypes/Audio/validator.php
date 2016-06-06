@@ -6,7 +6,7 @@
         return "{$trialtype} trials require a 'Cue' value.";
     }
     
-    if (Collector\Helpers::show($cue) === $cue) {
+    if (show($cue) === $cue) {
         return "The 'Cue' for {$trialtype} trials must point to an audio file.";
     }
 };

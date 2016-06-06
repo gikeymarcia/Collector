@@ -50,11 +50,11 @@ class ConditionController
     protected $showFlagged;
 
     /**
-     * Full array of Conditions.csv as loaded by Helpers::getFromFile().
+     * Full array of Conditions.csv as loaded by getFromFile().
      *
      * @var array
      *
-     * @see Helpers::getFromFile()
+     * @see getFromFile()
      */
     protected $ConditionsCSV;
 
@@ -92,7 +92,7 @@ class ConditionController
      * @param ErrorController $errorHandler  Object that logs errors.
      * @param bool            $showFlagged   Inital value for the showFlagged property.
      *
-     * @see Helpers::getFromFile()
+     * @see getFromFile()
      */
     public function __construct($conditionsLoc, $logLocation,
         ErrorController $errorHandler, $showFlagged = false
@@ -105,7 +105,7 @@ class ConditionController
 
         // load the Conditions.csv information and check columns
         $this->conditionsFileExists();
-        $this->ConditionsCSV = Helpers::getFromFile($this->location, false);
+        $this->ConditionsCSV = getFromFile($this->location, false);
         $this->requiredColumns();
     }
 
@@ -253,7 +253,7 @@ class ConditionController
     /**
      * Overrides the current condition information with the desired information,
      * then logs the time it was overridden. Must be formatted as a
-     * Conditions.csv read in as a Helpers::getFromFile() array,
+     * Conditions.csv read in as a getFromFile() array,
      * e.g., array('Number' => 1, 'Stimuli' => 'something.csv', ...).
      *
      * @param array $array The condition information to use.
@@ -309,7 +309,7 @@ class ConditionController
      */
     protected function conditionsFileExists()
     {
-        if (!Helpers::fileExists($this->location)) {
+        if (!fileExists($this->location)) {
             $msg = "Cannot find Conditions.csv at $this->location";
             $this->errObj->add($msg, true);
         }
@@ -617,7 +617,7 @@ class ConditionController
                             ."at least one of the $fileTypes filenames contains "
                             ."'..', which is not allowed. Please remove this "
                             .'part from the entry.');
-                    } elseif (!Helpers::fileExists("$paths[$fileTypes]/$file")) {
+                    } elseif (!fileExists("$paths[$fileTypes]/$file")) {
                         $this->errObj->add("In the Conditions file, on row $row, "
                             ."the filename contains a $fileTypes file \"$file\" "
                             ."which does not exist in the $fileTypes folder. "

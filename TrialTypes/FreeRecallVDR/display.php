@@ -21,7 +21,7 @@ $input = 'one';
 
 $settings = explode('|', $_EXPT->get('settings'));
 foreach ($settings as $setting) {
-    $test = Collector\Helpers::removeLabel($setting, 'input');
+    $test = removeLabel($setting, 'input');
     if ($test !== false) {
         $input = strtolower($test);
         if (($test !== 'one') && ($test !== 'many') && !is_numeric($test)) {

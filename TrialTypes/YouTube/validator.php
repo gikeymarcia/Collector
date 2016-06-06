@@ -1,7 +1,7 @@
 <?php return function($trial) {
     $string = $trial->get('cue');
     
-    if (!Collector\Helpers::isLocal($string)
+    if (!isLocal($string)
         && (stripos($string, 'youtube') !== false || stripos($string, 'youtu.be') !== false)
     ) {
         return true;

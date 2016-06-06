@@ -130,7 +130,7 @@ $expandOutput = true;
 
 $settings = explode('|', $_EXPT->get('settings'));
 foreach ($settings as $setting) {
-    if ($test = Collector\Helpers::removeLabel($setting, 'input')) {
+    if ($test = removeLabel($setting, 'input')) {
         $test = strtolower($test);
         if (($test === 'one') or ($test === 'many') or (is_numeric($test))) {
             $input = $test;
@@ -138,7 +138,7 @@ foreach ($settings as $setting) {
             exit('Error: invalid "input" setting for trial type "'
                 . $_EXPT->get('trial type').'", on trial ' . $_EXPT->position);
         }
-    } elseif ($test = Collector\Helpers::removeLabel($setting, 'expandOutput')) {
+    } elseif ($test = removeLabel($setting, 'expandOutput')) {
         $test = strtolower($test);
         if (($test === 'no') or ($test === 'false')) {
             $expandOutput = false;

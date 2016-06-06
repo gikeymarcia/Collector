@@ -16,12 +16,12 @@ if (empty($_EXPT->get('text'))) {
 
 <!-- show the image -->
 <div class="pic">
-  <?= Collector\Helpers::show($_EXPT->get('cue')) ?>
+  <?= show($_EXPT->get('cue')) ?>
 </div>
 
 <!-- show the answer -->
 <div class="textcenter"><h2><?= $_EXPT->get('text') ?></h2></div>
-<h1 class="textcenter"><?= Collector\Helpers::show($_EXPT->get('answer')) ?></h1>
+<h1 class="textcenter"><?= show($_EXPT->get('answer')) ?></h1>
 
 <!-- copy the answer -->
 <div class="textcenter pad">
