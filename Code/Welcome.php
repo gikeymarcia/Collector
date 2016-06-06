@@ -1,7 +1,7 @@
 <?php
 /*  Collector
     A program for running experiments on the web
-    Copyright 2012-2015 Mikey Garcia & Nate Kornell
+    Copyright 2012-2016 Mikey Garcia & Nate Kornell
 
 
     This program is free software: you can redistribute it and/or modify
@@ -40,9 +40,9 @@ $_SETTINGS->upToDate($_PATH);
 /*
  * Login objects
  */
-$errors = new ErrorController();
+$errors = new Collector\ErrorController();
 
-$cond = new ConditionController(
+$cond = new Collector\ConditionController(
     $_PATH->get('Conditions'),
     $_PATH->get('Counter'),
     $errors,
@@ -123,37 +123,37 @@ if ($_SETTINGS->show_condition_selector == true && !$isReturningUser) {
       autocomplete="off"       class="index" >
   <h1 class="textcenter"><?= $_SETTINGS->welcome ?></h1>
   <?= $_SETTINGS->exp_description ?>
-    
+
   <section id="indexLogin" class="flexVert">
     <div class="textcenter flexChild">
       <?= $loginText ?>
     </div>
-  
+
     <div class="flexChild">
       <input name="Username" type="text" value="" class="collectorInput" placeholder="<?= $_SETTINGS->ask_for_login ?>">
 
       <!-- Condition selector -->
       <select name="Condition" class="<?= $selectClass ?>">
         <option default selected value="Auto">Auto</option>
-        
+
         <?php foreach ($options as $o): ?>
         <option value="<?= $o['value'] ?>" title="<?= $o['title'] ?>" style="<?= $o['style'] ?>">
             <?= $o['name'] ?>
         </option>
-        <?php endforeach; ?>  
-      
+        <?php endforeach; ?>
+
       </select>
-      
+
       <!-- Submit button -->
       <?php if ($isReturningUser): ?>
       <input type="hidden" name="returning" value="1">
       <?php endif; ?>
       <input type="hidden" name="CurrentExp" value="<?= $currentExp ?>">
       <button class="collectorButton" type="submit">Login</button>
-      
+
     </div>
   </section>
 </form>
 
-<?php 
+<?php
 require $_PATH->get('Footer');

@@ -1,0 +1,6 @@
+Item,Trial Type,Max Time,Text,Settings,Procedure Notes,Shuffle 1
+2,Instruct,user,You will be asked a question with the Copy Word Pair Delayed Trial Type. ,,Basic instructions.,# fixed order
+2,CopyWordPairDelayed,user,Copy the following pair.,,Display pair.,# fixed order
+3,CopyWordPairDelayed,user,Copy the following pair.,,Display pair.,# fixed order
+4,CopyWordPairDelayed,user,Copy the following pair.,,Display pair.,# fixed order
+5,Instruct,user,Thank you for using the Copy Word Pair Delayed Trial Type!,,End.,# fixed order

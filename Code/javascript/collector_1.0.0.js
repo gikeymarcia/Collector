@@ -4,7 +4,7 @@
  *  by Adam Blake - adamblake@g.ucla.edu
  *
  *  Collector is program for running experiments on the web
- *  Copyright 2012-2013 Mikey Garcia & Nate Kornell
+ *  Copyright 2012-2016 Mikey Garcia & Nate Kornell
  *
  *
  *  Notes on this file:
@@ -150,6 +150,52 @@ var COLLECTOR = {
             $(document).ready(function () {
                 $("form").attr('autocomplete', 'off');
             }) 
+
+            var contentSize = 0;
+            $("body").children().each(function (){
+                contentSize += $(this).height();
+            });
+            var windowSize  = $(window).height();
+
+            if (windowSize <= contentSize) {
+                $("body").css("justify-content","flex-start");
+            }
+
+            // prevent the backspace key from navigating back.
+            // http://stackoverflow.com/questions/1495219/how-can-i-prevent-the-backspace-key-from-navigating-back
+            // known issue: in chrome, if you open the dropdown menu of a select input, and then press backspace,
+            // it doesn't propagate to either the select or the document, so it cant be caught and prevented
+            $(document).bind('keydown', function (event) {
+                if (event.keyCode === 8) {
+                    var doPrevent,
+                        d    = event.srcElement || event.target,
+                        tag  = d.tagName.toUpperCase(),
+                        type = d.type && d.type.toUpperCase();
+                    
+                    if (tag === 'TEXTAREA' ||
+                       (tag === 'INPUT'
+                        && (type === 'DATE'
+                         || type === 'DATETIME'
+                         || type === 'DATETIME-LOCAL'
+                         || type === 'EMAIL'
+                         || type === 'MONTH'
+                         || type === 'NUMBER'
+                         || type === 'PASSWORD'
+                         || type === 'SEARCH'
+                         || type === 'TEL'
+                         || type === 'TEXT'
+                         || type === 'TIME'
+                         || type === 'WEEK'
+                         || type === 'URL')
+                       )
+                    ) {
+                        doPrevent = d.readOnly || d.disabled;
+                    } else {
+                        doPrevent = true;
+                    }
+                    if (doPrevent) event.preventDefault();
+                }
+            });
         }
     },
 
@@ -161,7 +207,7 @@ var COLLECTOR = {
                 keypress  = false;
 
             // show trial content
-            if (isNaN(trialTime) || trialTime > 0) {
+            if (!$.isNumeric(trialTime) || trialTime > 0) {
                 $("#content").removeClass("invisible");                     // unhide trial contents
                 COLLECTOR.startTime = Date.now();
                 $(':input:not(:radio,:checkbox):enabled:visible:first').focusWithoutScrolling();  // focus cursor on first input
@@ -170,14 +216,14 @@ var COLLECTOR = {
             }
 
             // start timers
-            if (!(isNaN(trialTime))) {                          // if time has a numeric value
+            if ($.isNumeric(trialTime)) {                          // if time has a numeric value
                 COLLECTOR.timer(trialTime, function() {             // start the timer
                     // submit the form when time is up
                     $("form").submit();                         // see common:init "intercept form submit"
                 }, false);                                      // run the timer (no minTime set)
                 $(":input").addClass("noEnter");                // disable enter from submitting the trial
                 $("textarea").removeClass("noEnter");           // allow textarea line returns
-                if(isNaN(minTime)) {
+                if(!$.isNumeric(minTime)) {
                     fsubmit.addClass("invisible");                  // hide submit button
                 }
             }
@@ -195,7 +241,7 @@ var COLLECTOR = {
             }
             focusCheck();
 
-            if (!(isNaN(minTime))) {
+            if ($.isNumeric(minTime)) {
                 fsubmit.prop("disabled", true);                 // disable submit button when minTime is set
                 $(":input").addClass("noEnter");                // disable enter from submitting the trial
                 $("textarea").removeClass("noEnter");               // allow line return in <textarea>
@@ -229,50 +275,12 @@ var COLLECTOR = {
                 }
             });
 
-            // prevent the backspace key from navigating back.
-            // http://stackoverflow.com/questions/1495219/how-can-i-prevent-the-backspace-key-from-navigating-back
-            $(document).unbind('keydown').bind('keydown', function (event) {
-                var doPrevent = false;
-                if (event.keyCode === 8) {
-                    var d = event.srcElement || event.target;
-                    if ((d.tagName.toUpperCase() === "INPUT" && d.type.toUpperCase() === "TEXT")
-                        || (d.tagName.toUpperCase() === "TEXTAREA")) {
-                        doPrevent = d.readOnly || d.disabled;
-                    } else {
-                        doPrevent = true;
-                    }
-                }
-                if (doPrevent) {
-                    event.preventDefault();
-                }
-            });
+            // if this trial has a function that should run on start
+            // then run that function here (@ trial start)
+            if (typeof trialBegin == 'function') {
+                trialBegin();
+            }
         },
-
-        tetris: function() {
-            // get trial time from page and run timer
-            COLLECTOR.timer(parseFloat($("#maxTime").html() )-5, function () {
-                // hide game and show get ready prompt for 5 secs
-                $(".stepout-clock").hide();
-                $(".tetris-wrap")
-                    .removeClass("tetris-wrap")
-                    .html("<div class='action-bg textcenter fullPad'>" +
-                              "<h1 class='pad'>Get ready to continue in ... </h1>" +
-                              "<h1 id=getready></h1>" + 
-                          "</div>");
-                COLLECTOR.timer(5, function() {
-                    $('form').submit();
-                }, $("#getready"));
-            }, $(".countdown"));
-
-            // reveal on clicking start
-            $("#reveal").click(function() {
-                $("#reveal").hide();
-                $(".tetris").slideDown(400, function() {
-                    var off = $(".tetris").offset();
-                    $("html, body").animate({scrollTop: off.top}, 500);
-                });
-            });
-        }
     },
 };
 

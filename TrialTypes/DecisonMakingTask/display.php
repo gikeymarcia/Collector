@@ -1,17 +1,19 @@
 <?php
-$rounds = is_numeric($settings) ? $settings : 150;
+// determine the # of rounds by entering "rounds = 100" in your settings column
+$default = 150;
+$rounds  = is_numeric($_TRIAL->settings->rounds) ? $_TRIAL->settings->rounds : $default;
 $options = array('A', 'B');
 ?>
 
 <table class="dmtTable">
   <tr class="textRow">
-    <td colspan="<?= count($options) ?>"><?= $text ?></td>
+    <td colspan="<?= count($options) ?>"><?= $_EXPT->get('text') ?></td>
     <td><div>Current</div><div class="currentPoints">&nbsp;</div></td>
     <td><div>Cumulative</div><div class="cumulativePoints">&nbsp;</div></td>
   </tr>
   <tr class="displayRow">
     <td class="imgHolder" colspan="<?= count($options) ?>">
-      <?= show($cue) ?>
+      <?= Collector\Helpers::show($_EXPT->get('cue')) ?>
     </td>
     <td class="tankHolder" rowspan="2">
       <div class="currentTank dmtTank">
@@ -38,9 +40,9 @@ $options = array('A', 'B');
     
     
 <script>
-  COLLECTOR.experiment.<?= $trialType ?> = function() {
+trialBegin = function () {
     $(":focus").blur();
     DMT.rounds = <?= $rounds ?>;
     DMT.begin();
-  };
+};
 </script>

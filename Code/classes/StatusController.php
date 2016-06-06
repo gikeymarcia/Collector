@@ -3,6 +3,8 @@
  * StatusController class.
  */
 
+namespace Collector;
+
 /**
  *  Writes status begin/end messages.
  *  Logic: upon __construct() grabs browser info
@@ -107,7 +109,7 @@ class StatusController
      */
     public function updateBrowser()
     {
-        $userAgent = getUserAgentInfo();
+        $userAgent = Helpers::getUserAgentInfo();
         $this->browser = $userAgent->Parent;
         $this->deviceType = $userAgent->Device_Type;
         $this->OS = $userAgent->Platform;
@@ -133,7 +135,7 @@ class StatusController
      * Sets all important information about the user's condition.
      *
      * @param array $conditionRow Associative array of condition information
-     *                            formatted as a getFromFile() read of the Conditions.csv file.
+     *                            formatted as a Helpers::getFromFile() read of the Conditions.csv file.
      */
     public function setConditionInfo($conditionRow)
     {
@@ -171,32 +173,34 @@ class StatusController
         foreach ($this->condition as $key => $value) {
             $data["Cond_$key"] = $value;
         }
-        arrayToLine($data, $this->beginPath);
+        Helpers::arrayToLine($data, $this->beginPath);
     }
 
     /**
      * Writes a status end message.
      *
-     * @param int $startTime The number of seconds from the UNIX epoch
-     * 
+     * @param int    $startTime The number of seconds from the UNIX epoch.
+     * @param string $state     The state of the experiment.
+     *
      * @todo writeEnd() is copied from done.php --- not functional yet!
      */
-    public function writeEnd($startTime)
+    public function writeEnd($startTime, $state = "not given")
     {
         $duration = time() - $startTime;
-        $durationFormatted = durationFormatted($duration);
+        $formattedDuration = Helpers::formatDuration($duration);
 
         $data = array(
             'Username' => $this->username,
             'ID' => $this->id,
             'Date' => date('c'),
             'Duration' => $duration,
-            'Duration_Formatted' => $durationFormatted,
+            'Duration_Formatted' => $formattedDuration,
             'Session' => $_SESSION['Session'],
+            'State' => $state,
         );
         foreach ($this->condition as $key => $value) {
             $data["Cond_$key"] = $value;
         }
-        arrayToLine($data, $this->endPath);
+        Helpers::arrayToLine($data, $this->endPath);
     }
 }

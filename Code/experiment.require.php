@@ -9,7 +9,7 @@ function gotoDone()
     global $_PATH;
 
     $_SESSION['state'] = 'done';
-    header('Location: '.$_PATH->get('Done'));
+    header('Location: ' . $_PATH->get('Done'));
     exit;
 }
 
@@ -20,15 +20,10 @@ function gotoDone()
  *                         using the keys as columns.
  * @param int   $pos       [Optional] The trial to record.
  */
-function recordTrial(array $extraData = array(), $pos = null)
+function recordTrial(Collector\Trial $trial, array $extraData = array(), $pos = null)
 {
-    global $_EXPT;
     global $_PATH;
-
-    if ($pos === null) {
-        $pos = $_EXPT->position;
-    }
-
+    
     // calculate time difference from current to last trial
     $oldTime = $_SESSION['Timestamp'];
     $_SESSION['Timestamp'] = microtime(true);
@@ -40,26 +35,24 @@ function recordTrial(array $extraData = array(), $pos = null)
         'ID' => $_SESSION['ID'],
         'ExperimentName' => $_PATH->getDefault('Current Experiment'),
         'Session' => $_SESSION['Session'],
-        'Trial' => $pos,
+        'Trial' => $trial->position,
         'Date' => date('c'),
         'TimeDif' => $timeDif,
     );
 
-    $trialData = $_EXPT->getTrialRecord($pos);
-
-    foreach ($trialData as $category => $values) {
-        foreach ($values as $col => $val) {
-            $data[$category.'_'.$col] = $val;
+    foreach ($trial->export() as $name => $trialPart) {
+        $data = Collector\Helpers::placeData($trialPart, $data, "$name * ");
+    }
+    foreach ($data as $key => $val) {
+        if (is_array($val)) {
+            $data = Collector\Helpers::placeData($val, $data, "$key * ");
+            unset($data[$key]);
         }
     }
-
-    if (!is_array($extraData)) {
-        $extraData = array('Extra Data' => (string) $extraData);
+    if (!empty($extraData)) {
+        $data = Collector\Helpers::placeData($extraData, $data, 'extra * ');
     }
-    foreach ($extraData as $header => $datum) {
-        $data[$header] = $datum;
-    }
-
+    
     // record line into output CSV
-    arrayToLine($data, $_PATH->get('Experiment Output'));
+    Collector\Helpers::arrayToLine($data, $_PATH->get('Experiment Output'));
 }

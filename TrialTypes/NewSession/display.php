@@ -1,8 +1,10 @@
 <?php
 // if not set then set to 0, 
 // otherwise convert formatted times like "5d:10h:15m:8s" to seconds
-$min_time = empty($min_time) ? 0 : durationInSeconds($min_time);
-$max_time = empty($max_time) ? 0 : durationInSeconds($max_time);
+$minTime = $_EXPT->get('min time');
+$maxTime = $_EXPT->get('max time');
+$min_time = empty($minTime) ? 0 : Collector\Helpers::durationInSeconds($minTime);
+$max_time = empty($maxTime) ? 0 : Collector\Helpers::durationInSeconds($maxTime);
 
 // declare when people are allowed to return to the study
 $_SESSION['Min Return'] = time() + $min_time;
@@ -25,7 +27,7 @@ $data = array();
 $data['Time'] = $date;
 $data['Min Return'] = $_SESSION['Min Return'];
 $data['Max Return'] = $_SESSION['Max Return'];
-$_EXPT->recordResponses($data);
+$_EXPT->record($data);
 
 // update state as coming from a newsession and then send to done.php
 $_SESSION['state'] = 'break';

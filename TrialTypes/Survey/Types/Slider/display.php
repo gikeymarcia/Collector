@@ -58,7 +58,10 @@
     }
     
     foreach ($surveyRows as $row) {
-        $ans = rangeToArray($row['Answers']);
+        $qName = htmlspecialchars($row['Question Name'], ENT_QUOTES);
+        $required = isRespRequired($row) ? 'required' : '';
+        
+        $ans = surveyRangeToArray($row['Answers']);
         $thisMin = null;
         $thisMax = null;
         foreach ($ans as $a) {
@@ -79,9 +82,9 @@
         if (isset($row['Settings'])) {
             $settings = explode('|', $row['Settings']);
             foreach ($settings as $setting) {
-                $left  = removeLabel($setting, 'leftDescription');
+                $left  = Collector\Helpers::removeLabel($setting, 'leftDescription');
                 if ($left  !== false) $leftDesc  = $left;
-                $right = removeLabel($setting, 'rightDescription');
+                $right = Collector\Helpers::removeLabel($setting, 'rightDescription');
                 if ($right !== false) $rightDesc = $right;
             }
         }
@@ -93,7 +96,7 @@
            .         "<div>" . $leftDesc  . "</div>"
            .         "<div>" . $rightDesc . "</div>"
            .     "</div>";
-        echo     "<input type='text' required title='Please select a location on this slider.'>";
+        echo     "<input name='$qName' type='text' $required title='Please select a location on this slider.' tabindex='-1'>";
         echo     "<div class='inputSlider' data-min='$thisMin' data-max='$thisMax'></div>";
         echo '</div>';
     }

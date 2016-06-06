@@ -1,14 +1,4 @@
 <?php
-
-// to make sure that everything is recorded, just throw all of POST into
-// $data, which will eventually be recorded into the output file.
-// To create new columns, simply assign the new data you want to record
-// to a new key in $data.
-// For example,    $data[ 'New Column' ] = "Hello";    would make a new
-// column titled "New Column" in the output, and every row for this trial
-// type would have the value "Hello".
-$data = $_POST;
-
 function DamLevLimit($str1, $str2, $limit)
 {
     $str1 = trim(strtolower($str1));
@@ -79,13 +69,20 @@ function DamLevLimit($str1, $str2, $limit)
     return $score[strlen($str1) + 1][strlen($str2) + 1];
 }
 
+// to make sure that everything is recorded, just throw all of POST into
+// $data, which will eventually be recorded into the output file.
+// To create new columns, simply assign the new data you want to record
+// to a new key in $data.
+// For example,    $data[ 'New Column' ] = "Hello";    would make a new
+// column titled "New Column" in the output, and every row for this trial
+// type would have the value "Hello".
 $data = $_POST;
 
-$answers = explode('|', $answer);
+$answers = explode('|', $_EXPT->get('answer'));
 
 $unacceptable = array();
-if (isset($currentTrial['Stimuli']['Unacceptable Answers'])) {
-    $unaccAns = explode('|', $currentTrial['Stimuli']['Unacceptable Answers']);
+if (isset($_EXPT->get('Unacceptable Answers'))) {
+    $unaccAns = explode('|', $_EXPT->get('Unacceptable Answers'));
     foreach ($unaccAns as $unacc) {
         $temp = explode(',', $unacc);
         foreach ($temp as &$t) {
@@ -101,8 +98,8 @@ if (isset($currentTrial['Stimuli']['Unacceptable Answers'])) {
 }
 
 $leniency = array();
-if (isset($currentTrial['Stimuli']['Leniency'])) {
-    $leniency = explode('|', $currentTrial['Stimuli']['Leniency']);
+if (!empty($_EXPT->get('Leniency'))) {
+    $leniency = explode('|', $_EXPT->get('Leniency'));
     foreach ($leniency as &$len) {
         $len = (int) $len;
     }
@@ -114,8 +111,8 @@ if (isset($currentTrial['Stimuli']['Leniency'])) {
 }
 
 $value = array();
-if (isset($currentTrial['Stimuli']['Value'])) {
-    $value = explode('|', $currentTrial['Stimuli']['Value']);
+if (isset($_EXPT->get('Value'))) {
+    $value = explode('|', $_EXPT->get('Value'));
     foreach ($value as &$val) {
         $val = (float) $val;
     }
@@ -131,16 +128,17 @@ $answerCount = count($answers);
 $input = 'one';
 $expandOutput = true;
 
-$settings = explode('|', $settings);
+$settings = explode('|', $_EXPT->get('settings'));
 foreach ($settings as $setting) {
-    if ($test = removeLabel($setting, 'input')) {
+    if ($test = Collector\Helpers::removeLabel($setting, 'input')) {
         $test = strtolower($test);
         if (($test === 'one') or ($test === 'many') or (is_numeric($test))) {
             $input = $test;
         } else {
-            exit('Error: invalid "input" setting for trial type "'.$trialType.'", on trial '.$currentPos);
+            exit('Error: invalid "input" setting for trial type "'
+                . $_EXPT->get('trial type').'", on trial ' . $_EXPT->position);
         }
-    } elseif ($test = removeLabel($setting, 'expandOutput')) {
+    } elseif ($test = Collector\Helpers::removeLabel($setting, 'expandOutput')) {
         $test = strtolower($test);
         if (($test === 'no') or ($test === 'false')) {
             $expandOutput = false;
@@ -272,11 +270,11 @@ $data['Accuracy'] = $data['lenientAcc'] / $answerCount;
 $data['unmatchedResp'] = implode('|', $unmatchedResp);
 $data['Errors'] = implode('|', $differences);  //and we can see how far off they were (so if we set leniency = 2, we can still which were 0, 1, or 2 off)
 
-$_EXPT->recordResponses($data);
+$_EXPT->record($data);
 
 if ($expandOutput) {
     $stimInfo = array();
-    foreach ($currentTrial['Stimuli'] as $header => $contents) {
+    foreach ($_EXPT->get('item') as $header => $contents) {
         $stimInfo[$header] = explode('|', $contents);
     }
 

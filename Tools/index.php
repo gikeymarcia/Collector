@@ -1,42 +1,22 @@
 <?php
 
-session_start();
+ob_start();
 
 // set the root for initial file locations (used in other tools scripts)
 $_root = '..';
 
-/**
- * Class autoloader.
- *
- * @param string $className The class to load.
- */
-function autoClassLoader($className)
-{
-    $root = '';
-    $ancestors = 0;
-    while (!is_dir("{$root}Code/classes") and ($ancestors < 3)) {
-        $root .= '../';
-        ++$ancestors;
-    }
-    $loc = "{$root}Code/classes/$className.php";
-    if (is_file($loc)) {
-        require $loc;
-    } else {
-        var_dump(scandir(dirName($loc)));
-        echo "Object $className is not found";
-    }
-}
-spl_autoload_register('autoClassLoader');
+require_once $_root."/Code/initiateCollector.php";
+
 
 // load file locations
-$_PATH = new Pathfinder();
+$_PATH = new Collector\Pathfinder();
 
 // load custom functions
-require $_PATH->get('Custom Functions');
 require 'loginFunctions.php';
 
+
 // load configs
-$_SETTINGS = new Settings (
+$_SETTINGS = new Collector\Settings (
     $_PATH->get("Common Settings"),
     $_PATH->get("Experiment Settings"),
     $_PATH->get("Password")
@@ -47,6 +27,7 @@ if (!isset($_SESSION['admin'])) {
     $_SESSION['admin'] = array();
 }
 $admin = &$_SESSION['admin'];
+$admin['challenge'] = makeNonce();
 
 
 /*
@@ -59,13 +40,13 @@ $tools = getTools();
 $userChoice = filter_input(INPUT_POST, 'tool', FILTER_SANITIZE_STRING);
 if ($userChoice !== null) {
     // if the tool being asked for exists save it
-    if (isset($tools[$userChoice])) {          
+    if (isset($tools[$userChoice])) {
         $admin['tool'] = $userChoice;
         $admin['heading'] = $userChoice;
     }
-    
+
     // go back to root of current folder (tools home)
-    header('Location: ./');                     
+    header('Location: ./');
 }
 
 if (!isset($admin['tool'])) {
@@ -79,10 +60,10 @@ if (!isset($admin['tool'])) {
 <head>
   <meta charset="utf-8">
   <title>Collector Tools -- <?= $admin['heading'] ?></title>
-    
+
   <!-- Icons -->
   <link rel="icon" href="../Code/icon.png" type="image/png">
-  
+
   <!-- Base stylesheets -->
   <?= $_PATH->getStylesheetTag('Global CSS') ?>
   <?= $_PATH->getStylesheetTag('Tools CSS') ?>
@@ -93,7 +74,7 @@ if (!isset($admin['tool'])) {
       height: auto;
     }
   </style>
-  
+
   <!-- Base scripts -->
   <?= $_PATH->getScriptTag('Jquery') ?>
   <?= $_PATH->getScriptTag('Sha256 JS') ?>
@@ -113,7 +94,7 @@ if ($state !== 'loggedIn') {
     exit;
 }
 ?>
-    
+
 <!-- welcome bar at the top -->
 <div id="nav">
   <h1><?= $admin['heading'] ?></h1>
@@ -121,40 +102,42 @@ if ($state !== 'loggedIn') {
 
   <div>
     <!-- tool selector dropdown -->
-    <select name="tool" form="toolSelector" class="toolSelect collectorInput">
+    <select name="tool" form="toolForm" class="toolSelect collectorInput" id="selectTool">
       <option value="" selected="true">Choose a tool</option>
-      <?php foreach ($tools as $tool => $location): ?>
-      <option value='<?= $tool ?>' class='go'><b><?= $tool ?></b></option>
+      <?php foreach ($tools as $tool => $location):
+        $selectedTool = ($tool == $admin['tool']) ? " selected" : "";
+      ?>
+      <option value='<?= $tool ?>' <?= $selectedTool ?> ><b><?= $tool ?></b></option>
       <?php endforeach; ?>
     </select>
 
-    <button type="submit" form="toolSelector" class="collectorButton">Go!</button>
+    <button type="submit" form="toolForm" class="collectorButton">Go!</button>
   </div>
 </div>
 
-<!-- current tool -->    
-<?php   
+<!-- current tool -->
+<?php
 // require the selected tool
 if (isset($admin['tool'])) {
     // key within session where data can be stored
-    $dataHolderKey = $admin['tool'].'Data';       
+    $dataHolderKey = $admin['tool'].'Data';
 
     // if we haven't made a data holder yet, make it
-    if (!isset($admin[$dataHolderKey])) {           
-        $admin[$dataHolderKey] = array();          
+    if (!isset($admin[$dataHolderKey])) {
+        $admin[$dataHolderKey] = array();
     }
 
     // make alias for each tool to access its session data
-    $_DATA = &$admin[$dataHolderKey];               
+    $_DATA = &$admin[$dataHolderKey];
     require_once $tools[$admin['tool']];
 }
 ?>
 
 <!-- form submission -->
-<form id="toolSelector" action="" method="post"></form>
+<form id="toolForm" action="" method="post"></form>
 <script type="text/javascript">
-  $(".go").click(function(){
-    $("#toolSelector").submit();
+  $("#selectTool").change(function(){
+    $("#toolForm").submit();
   });
 </script>
 

@@ -1,0 +1,7 @@
+Item,Trial Type,Max Time,Min Time,Text,Procedure Notes,Shuffle 1
+2,CuedRecall,user,,"This is useful for testing words or pairs already studied. Ideally, the participant would have seen these pairs, and now must recall the second word in the pair.",User determines how long spent on the cue/recall,# fixed order
+3,CuedRecall,3,,,User only has 3 seconds to enter the recalled word,# fixed order
+4,CuedRecall,,4,,User must spend 4 seconds or more entering recalled word,# fixed order
+5,CuedRecall,,,,,# fixed order
+6,CuedRecall,6,3,,User has to spend 3 seconds minimum and 6 seconds maximum on the cue/recall,# fixed order
+7,CuedRecall,,,,,# fixed order

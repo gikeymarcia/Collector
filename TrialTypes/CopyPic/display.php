@@ -1,6 +1,6 @@
 <?php
 /**
- * PicFeedbackCopy.
+ * CopyPic.
  * 
  * Show the correct answer with picture above and force participants to copy the
  * answer before continuing.
@@ -8,23 +8,20 @@
  * @author Paulo Carvalho
 */
 
-// $firstTrialType = trim(strtolower($currentTrial['Procedure']['Trial Type']));
-
 // picture trial version of feedback
-if ($text === '') {
-    $text = 'The correct answer was:';
+if (empty($_EXPT->get('text'))) {
+    $_EXPT->update('text', 'The correct answer was:');
 }
-
 ?>
 
 <!-- show the image -->
 <div class="pic">
-  <?= show($cue) ?>
+  <?= Collector\Helpers::show($_EXPT->get('cue')) ?>
 </div>
 
 <!-- show the answer -->
-<div class="textcenter"><h2><?= $text ?></h2></div>
-<h1 class="textcenter"><?= show($answer) ?></h1>
+<div class="textcenter"><h2><?= $_EXPT->get('text') ?></h2></div>
+<h1 class="textcenter"><?= Collector\Helpers::show($_EXPT->get('answer')) ?></h1>
 
 <!-- copy the answer -->
 <div class="textcenter pad">
@@ -44,5 +41,12 @@ $("#FormSubmitButton").click(function(e){
     alert('You MUST copy the answer to continue');
     return false;
   }
+});
+
+// This script measures the width of the image you use
+// and changes the trial type width to fit the image size
+$("img").load(function(){       // when the image loads
+    var imgW = $("img").width();    // save it's width
+    $("form").width(imgW);          // resize the form to be same as img
 });
 </script>

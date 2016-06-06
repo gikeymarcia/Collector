@@ -3,529 +3,910 @@
  * Experiment class.
  */
 
+namespace Collector;
+
 /**
- * Stores and manipulates all information about the current Experiment.
- * 
- * @todo add detailed description of how this class should be used
- * @todo add validate($pos = 'all') method
+ * The Experiment class is the primary access point for running experiments. It
+ * has "magic" functions add, get, update, and record which will automatically
+ * determine which MainTrial or PostTrial to work with.
  */
-class Experiment
+class Experiment extends MiniDb implements \Countable
 {
     /**
-     * The position of the current trial.
-     *
+     * The current position of the Experiment (current offset of trials array).
      * @var int
      */
     public $position;
-
+    
     /**
-     * The current Post Trial position.
-     *
-     * @var int
-     */
-    public $postNumber;
-
-    /**
-     * All the (shuffled) stimuli array for the Experiment.
-     *
+     * The Condition information for this Experiment.
      * @var array
      */
-    public $stimuli;
+    protected $condition;
 
     /**
-     * The (shuffled) procedure array for the Experiment.
-     *
+     * The shuffled stimuli information for this Experiment.
      * @var array
      */
-    public $procedure;
+    protected $stimuli;
 
     /**
-     * Indexed array of recorded responses (corresponds to position).
-     *
+     * The Trials that were built for this Experiment.
      * @var array
      */
-    public $responses;
-
+    protected $trials;
+    
     /**
-     * The condition information for the Experiment.
-     *
+     * The Validators that should be used for each trial type. Stored in a
+     * trialType => validator array.
      * @var array
      */
-    public $condition;
+    protected $validators;
+    
+    /**
+     * The directory or directories where the Validators can be found.
+     * @var array|string
+     */
+    protected $pathfinder;
 
+    /* Implements
+     **************************************************************************/
+    /**
+     * Returns the number of MainTrials in this Experiment. This is also the
+     * implementation of the count function and will be called when count is
+     * called on the Experiment like count($experiment).
+     *
+     * @return int The number of MainTrials in the Experiment.
+     */
+    public function count()
+    {
+        return count($this->trials);
+    }
+
+    /* Overrides
+     **************************************************************************/
     /**
      * Constructor.
-     *
-     * @param array $stimuli       The stimuli to use in the Experiment.
-     * @param array $procedure     The procedure to follow for the Experiment.
-     * @param array $conditionInfo The condition information for the Experiment.
-     * @param array $responses     The responses associated with each trial.
-     *                             (Generally this will be left as an empty array.)
-     */
-    public function __construct(array $stimuli, array $procedure,
-        array $conditionInfo, array $responses = array()
-    ) {
-        $this->condition = $conditionInfo;
-        $this->stimuli = $stimuli;
-        $this->procedure = $procedure;
-        $this->responses = $responses;
-        $this->position = 0;
-        $this->postNumber = 0;
-    }
-
-    /**
-     * Gets procedure and stimuli data for given procedure row and post trial.
-     *
-     * @param int $pos  The position of the trial (defaults to current position).
-     * @param int $post The post trial number (defaults to current post).
-     *
-     * @return array Associative array of the "Stimuli" and "Procedure".
-     *
-     * @uses Experiment::getTrialProcedure()
-     * @uses Experiment::getTrialStimuli()
-     */
-    public function getTrial($pos = null, $post = null)
-    {
-        $procedure = $this->getTrialProcedure($pos, $post);
-
-        return ['Stimuli' => $this->getTrialStimuli($procedure['Item']),
-                'Procedure' => $procedure, ];
-    }
-
-    /**
-     * Gets procedure columns for single trial.
-     * Optionally specify specific position and post trial number. Post trial 
-     * columns are transformed into their unposted form (e.g. 'Text' instead of
-     * 'Post 1 Text').
-     *
-     * @param int $pos  The position of the trial (defaults to current position).
-     * @param int $post The post trial number (defaults to current post).
-     *
-     * @return array The array of procedure items for the trial.
-     */
-    public function getTrialProcedure($pos = null, $post = null)
-    {
-        if ($pos  === null) {
-            $pos = $this->position;
-        }
-        if ($post === null) {
-            $post = $this->postNumber;
-        }
-
-        $procRow = $this->procedure[$pos];
-        $procCols = ($post === 0)
-                  ? $this->extractProcColsForTrial($procRow)
-                  : $this->extractProcColsForPostTrial($procRow, $post);
-
-        // if a post trial item is not set, use the original trial's item
-        if (!isset($procCols['Item'])) {
-            $procCols['Item'] = $procRow['Item'];
-        }
-
-        return $procCols;
-    }
-
-    /**
-     * Gets all items from a Procedure Row array, excluding Post Trial items.
-     *
-     * @param array $array The array to process.
-     *
-     * @return array The stripped array.
-     */
-    private function extractProcColsForTrial(array $array)
-    {
-        $output = [];
-        foreach ($array as $col => $val) {
-            if (substr($col, 0, 5) !== 'Post ') {
-                $output[$col] = $val;
-            }
-        }
-
-        return $output;
-    }
-
-    /**
-     * Gets all items from a procedure row with the given post trial number.
-     *
-     * @param array $array The array to process.
-     * @param int   $post  The post trial to extract.
-     *
-     * @return array The stripped array.
-     */
-    private function extractProcColsForPostTrial(array $array, $post)
-    {
-        $colPre = "Post $post ";
-        $colPreLen = strlen($colPre);
-
-        $output = [];
-        foreach ($array as $col => $val) {
-            if (substr($col, 0, $colPreLen) === $colPre) {
-                $colClean = trim(substr($col, $colPreLen));
-                $output[$colClean] = $val;
-            }
-        }
-
-        return $output;
-    }
-
-    /**
-     * Get stimuli for given item(s).
-     *
-     * @param int|string $item Typically, contents of "Item" column in the 
-     *                         procedure file.
-     *
-     * @return array The stimuli, with column values imploded with | if multiple
-     *               items are specified.
-     *
-     * @uses Experiment::getTrialProcedure()
-     * @uses Experiment::getTrial()
-     */
-    public function getTrialStimuli($item)
-    {
-        $stimRows = $stimCols = array();
-
-        // populate rows from the stimuli array
-        foreach (rangeToArray($item) as $item) {
-            if (isset($this->stimuli[$item - 2])) {
-                $stimRows[] = $this->stimuli[$item - 2];
-            }
-        }
-
-        // if no item then populate with placeholder values in each column (".")
-        if ($stimRows === array()) {
-            foreach ($this->stimuli[0] as $col => $val) {
-                $stimRows[0][$col] = '.';
-            }
-        }
-
-        // combine rows
-        foreach ($stimRows as $row) {
-            foreach ($row as $col => $val) {
-                $stimCols[$col][] = $val;
-            }
-        }
-        foreach ($stimCols as $col => $val) {
-            $stimCols[$col] = implode('|', $val);
-        }
-
-        return $stimCols;
-    }
-
-    /**
-     * Saves array of data into (optionally) specified trial's response array. 
-     * "Post" prefixes are appended appropriately.
-     *
-     * @param array $data The 1-D array of responses to save, typically $_POST with custom scoring
-     * @param int   $pos  The position of the trial (defaults to current position).
-     * @param int   $post The post trial number (defaults to current post).
      * 
-     * @todo recordResponses should probably be a method of a Trial class
+     * @param array        $condition     The condition information.
+     * @param array        $stimuli       The stimuli to use.
+     * @param array|string $validatorDirs The paths to the trial types folders.
+     * @param Pathfinder   $pathfinder    The Experiment's Pathfinder.
      */
-    public function recordResponses(array $data, $pos = null, $post = null)
+    public function __construct(array $condition = array(),
+        array $stimuli = array(), Pathfinder $pathfinder = null
+    ) {
+        $this->trials = array();
+        $this->stimuli = $stimuli;
+        $this->condition = $condition;
+        $this->position = 0;
+        $this->pathfinder = $pathfinder;
+        $this->validators = array();
+        
+        parent::__construct();
+    }
+    
+    /**
+     * Runs code to prime the trials in the experiment.
+     */
+    public function warm()
     {
-        if ($pos  === null) {
-            $pos = $this->position;
-        }
-        if ($post === null) {
-            $post = $this->postNumber;
+        $this->apply(function($trial) {
+            $trial->settings->addSettings($this->getFromStimuli('settings'));
+            
+            // other warm up code here...
+        });
+        
+        return $this;
+    }
+
+    /**
+     * Adds a key to the current Trial if the key does not already exist.
+     *
+     * @param string $name  The key to add.
+     * @param mixed  $value The value to assign to the key.
+     *
+     * @return bool|null Returns true if the key is added, false if it already
+     *                   exists, and null on failure.
+     *
+     * @uses Experiment::getCurrent() Uses getCurrent() to get the current Trial.
+     */
+    public function add($name, $value = null)
+    {
+        $trial = $this->getCurrent();
+
+        return isset($trial) ? $trial->add($name, $value) : null;
+    }
+
+    /**
+     * Gets the value at the given key in the current Trial.
+     *
+     * @param string $name   The key to retrieve the value for.
+     * @param bool   $strict Set to true to restrict the search only to the
+     *                       current MainTrial.
+     *
+     * @return mixed Returns the stored value if the key exists, else null.
+     *
+     * @uses Experiment::getCurrent() Uses getCurrent() to get the current Trial.
+     */
+    public function get($name, $strict = true)
+    {
+        $trial = $this->getCurrent();
+
+        return isset($trial) ? $trial->get($name, $strict) : null;
+    }
+
+    /**
+     * Updates the value at the given key in the current Trial, adding it if it
+     * does not yet exist.
+     *
+     * @param string $name  The key to add or update.
+     * @param mixed  $value The value to assign to the key.
+     *
+     * @return int|null Returns 1 if a key was updated, 0 if a key was added, or
+     *                  null on failure.
+     */
+    public function update($name, $value)
+    {
+        $trial = $this->getCurrent();
+
+        return isset($trial) ? $trial->update($name, $value) : null;
+    }
+
+    /**
+     * Exports all Experiment data.
+     *
+     * @param string $format The format of the exported data: array or JSON.
+     *
+     * @return array Returns the formatted array.
+     */
+    public function export($format = 'array')
+    {
+        $trials = array();
+        foreach ($this->trials as $trial) {
+            $trials[] = $trial->export();
         }
 
-        if (!isset($this->responses[$pos])) {
-            $this->responses[$pos] = array();
-        }
+        $data = array(
+            'Condition' => $this->condition,
+            'Stimuli' => $this->stimuli,
+            'Trials' => $trials,
+        );
 
-        if ($post == 0) {
-            foreach ($data as $col => $val) {
-                $this->responses[$pos][$col] = $val;
+        return $this->formatArray($data, $format);
+    }
+
+    /* Class specific
+     **************************************************************************/
+    /**
+     * Advances the Experiment to the next Trial, first attempting to advance
+     * to the next PostTrial via the MainTrial, then by advancing the Experiment
+     * position if the MainTrial and all PostTrials are complete.
+     * 
+     * @return int Returns 1 if advancing caused us to move to a new MainTrial,
+     *             else 0.
+     */
+    public function advance()
+    {
+        $trial = $this->getTrial();
+        $trial->advance();
+        if ($trial->isComplete()) {
+            $this->position = $this->isComplete() ? $this->position : $this->position + 1;
+            
+            return 1;
+        }
+        
+        return 0;
+    }
+
+    /**
+     * Marks the current MainTrial (including PostTrials) as complete and
+     * advances the Experiment position.
+     * 
+     * @param int $num The number of MainTrials to skip (including the current).
+     */
+    public function skip($num = 1)
+    {
+        for ($num; $num > 0; --$num) {
+            $this->getTrial()->markComplete();
+            if ($this->position >= count($this) - 1) {
+                return;
             }
+            ++$this->position;
+        }
+    }
+    
+    /**
+     * Determines whether there are more Trials to run in the Experiment.
+     * 
+     * @return bool Returns TRUE if the Experiment is complete, else FALSE.
+     */
+    public function isComplete()
+    {
+        return ($this->position === count($this->trials) - 1)
+            ? $this->getTrial()->isComplete()
+            : ($this->position >= count($this->trials));
+    }
+
+    /**
+     * Records a response to the current trial.
+     *
+     * @param array $data      The associative array of data to record.
+     * @param bool  $overwrite Indicates whether existing data should be updated
+     *                         or if values should only be added.
+     *
+     * @return bool Returns true if the data was recorded, else false.
+     */
+    public function record(array $data, $overwrite = true)
+    {
+        $trial = $this->getCurrent();
+
+        return isset($trial) ? $trial->record($data, $overwrite) : false;
+    }
+
+    /**
+     * Retrieves the given key from the current Trial's Response object. If no
+     * key is given, the full Response is returned.
+     *
+     * @param string $name The key to retrieve the response value from.
+     *
+     * @return mixed Returns the value of the specified key, if it exists, or
+     *               the full Response if no name is specified.
+     */
+    public function getResponse($name = null)
+    {
+        $trial = $this->getCurrent();
+
+        return isset($trial) ? $trial->getResponse($name) : null;
+    }
+    
+    /**
+     * Gets the current Trial (i.e. if on a PostTrial, get the PostTrial,
+     * otherwise return a reference to the MainTrial).
+     *
+     * @return MainTrial|PostTrial The reference to the current Trial.
+     */
+    public function getCurrent()
+    {
+        return $this->getTrial()->getCurrent();
+    }
+
+    /**
+     * Gets the Trial that occurs directly after the current Trial.
+     * 
+     * @param int $offset The absolute offset of the Trial to retrieve, e.g. if 
+     *                    at PostTrial 1 of a MainTrial with 2 PostTrials, 
+     *                    getNext(1) would return PostTrial 2 and getNext(2)
+     *                    would return the next MainTrial.
+     * 
+     * @return MainTrial|PostTrial|null Returns the MainTrial or PostTrial at 
+     *                                  the given absolute offset if it exists,
+     *                                  else null.
+     */
+    public function getNext($offset = 1)
+    {
+        // get current Main and adjust offset back to it
+        $current = $this->getCurrent();
+        if (get_class($current) !== 'Collector\MainTrial') {
+            $offset += $current->position;
+            $current = $this->getTrial();
+        }
+        
+        while ($offset > -1) {
+            if ($offset < count($current)) {
+                // offset is post within current main
+                return $current->getPostTrialAbsolute($offset);
+            }
+            
+            // offset is outside of current main
+            $offset -= count($current);
+            $current = $this->getTrial(1);
+            if ($current === null) {
+                return null;
+            }
+        }
+    }
+    
+    /**
+     * Gets the Trial at the position directly before the current Trial, i.e.
+     * the last PostTrial or MainTrial in the line-up.
+     * 
+     * Note this function will not honor skips. That is, if you skipped a Trial,
+     * this function will not recognize that and will return the last Trial that
+     * would have occurred had you not skipped.
+     * 
+     * @param int $offset The absolute offset of a previous Trial to receive
+     *                    (offset should be a positive number), e.g. if at
+     *                    PostTrial 1 of a MainTrial with 2 PostTrials, and the
+     *                    previous MainTrial had 2 PostTrials, getPrev(1) would
+     *                    return the current MainTrial and getPrev(2) would 
+     *                    return PostTrial 2 of the previous MainTrial.
+     * 
+     * @return MainTrial|PostTrial|null Returns the MainTrial or PostTrial at
+     *                                  the given absolute offset if it exists,
+     *                                  else null.
+     */
+    public function getPrev($offset = 1)
+    {
+        $current = $this->getCurrent();
+        if (get_class($current) !== 'Collector\MainTrial'
+            && ($current->position - $offset) > -1
+        ) {
+            // offset is reachable in current MainTrial
+            return $current->getMainTrial()->getPostTrial(-1 * $offset);
+        }
+
+        // offset is in a prior MainTrial, move offset to beginning of this Main
+        $offset -= $current->position;
+        
+        // go back until offset becomes negative or 0 (just past requested)
+        while ($offset > 0) {
+            $current = $this->getTrial(-1);
+            if ($current === null) {
+                return null;
+            }
+            $offset -= count($current);
+        }
+        
+        // requested is now the inverse of the offset
+        return $current->getPostTrialAbsolute(-1 * $offset);
+    }
+
+    /**
+     * Gets the MainTrial at the given relative position.
+     *
+     * @param int $offset The relative offset of the MainTrial to retrieve.
+     *
+     * @return MainTrial Returns the MainTrial at the given relative offset.
+     */
+    public function getTrial($offset = 0)
+    {
+        return $this->getTrialAbsolute($this->position + $offset);
+    }
+
+    /**
+     * Gets the trial at the given 0-indexed position.
+     *
+     * @param int $pos The 0-indexed position of the trial to retrieve.
+     *
+     * @return MainTrial|null Returns the MainTrial at the given 0-indexed
+     *                        position if it exists, else null.
+     */
+    public function getTrialAbsolute($pos)
+    {
+        return isset($this->trials[$pos]) ? $this->trials[$pos] : null;
+    }
+    
+    /**
+     * Gets the trials at the relative offsets from the current position.
+     * 
+     * An array of the offsets should be passed, or 'all' or a string that can
+     * be converted using Experiment::stringToRange.
+     * 
+     * @param array|string $offsets The array of offsets for the Trials to
+     *                              retrieve. If 'all' is given, all of the
+     *                              Trials are returned. If any other string is
+     *                              given, the method converts it to a range
+     *                              array using Experiment::stringToRange.
+     * 
+     * @return array The array of Trials with the relative offsets as keys.
+     * 
+     * @uses stringToRange Uses stringToRange to convert strings to offset range
+     *                     arrays.
+     */
+    public function getTrials($offsets)
+    {
+        if (!is_array($offsets)) {
+            if (trim(strtolower($offsets)) === 'all') {
+                return $this->getTrialsAbsolute($offsets);
+            }
+            
+            $offsets = Experiment::stringToRange($offsets);
+        }
+        
+        foreach ($offsets as &$offset) {
+            $offset += $this->position; 
+        }
+        
+        return $this->getTrialsAbsolute($offsets);
+    }
+    
+    /**
+     * Gets the trials at the absolute positions in the current Experiment.
+     * 
+     * An array of the offsets should be passed, or 'all' or a string that can
+     * be converted using Experiment::stringToRange.
+     * 
+     * @param array|string $positions The array of positions for the Trials to
+     *                                retrieve. If 'all' is given, all of the
+     *                                Trials are returned. If any other string
+     *                                is given, the method converts it to a
+     *                                range array using stringToRange.
+     * 
+     * @return array The array of Trials with the positions as keys.
+     * 
+     * @uses stringToRange Uses stringToRange to convert strings to offset range
+     *                     arrays.
+     */
+    public function getTrialsAbsolute($positions)
+    {
+         if (!is_array($positions)) {
+            if (trim(strtolower($positions)) === 'all') {
+                return $this->trials;
+            }
+            
+            $positions = Experiment::stringToRange($positions);
+        }
+        
+        $trials = array();
+        foreach ($positions as $pos) {
+            $trials[$pos] = $this->getTrialAbsolute($pos);
+        }
+        
+        return $trials;
+    }
+    
+    /**
+     * Deletes the MainTrial at the given position in the Experiment.
+     * 
+     * This function will fail when trying to delete previous trials.
+     * 
+     * @param int $position The absolute position of the MainTrial to delete.
+     * 
+     * @return boolean|int Returns FALSE if the position to delete is less than
+     *                     the current position, 0 if the position to delete
+     *                     does not exist, TRUE if the position was deleted, or
+     *                     FALSE if the delete failed.
+     */
+    public function deleteTrialAbsolute($position)
+    {
+        if ($position < $this->position) {
+            return false;
+        }
+        
+        if (!isset($this->trials[$position])) {
+            $result = 0;
+        }
+        
+        unset($this->trials[$position]);
+        if (isset($this->trials[$position])) {
+            $result = false;
+        }
+        
+        $this->updatePositions();
+        $this->trials = array_values($this->trials);
+        ksort($this->trials);
+        
+        return isset($result) ? $result : true;        
+    }
+    
+    /**
+     * Deletes the MainTrial at the given offset from the current position in 
+     * the Experiment.
+     * 
+     * This function will fail when trying to delete previous trials.
+     * 
+     * @param int $offset The relative offset of the MainTrial to delete.
+     * 
+     * @return boolean|int Returns FALSE if the position to delete is less than
+     *                     the current position, 0 if the position to delete
+     *                     does not exist, TRUE if the position was deleted, or
+     *                     FALSE if the delete failed.
+     */
+    public function deleteTrial($offset = 0)
+    {
+        return $this->deleteTrialAbsolute($this->position + $offset);
+    }
+    
+    /**
+     * Deletes the MainTrials at the given positions in the Experiment.
+     * 
+     * This function will fail to delete previous trials.
+     * 
+     * @param array|string $positions The absolute positions of the MainTrials 
+     *                                to delete as indicated by an array of the 
+     *                                positions or a valid stringToArray string.
+     */
+    public function deleteTrialsAbsolute($positions)
+    {
+        if (!is_array($positions)) {
+            $positions = Experiment::stringToRange($positions);
+        }
+        
+        // must start deleting from smallest value and update as we go
+        sort($positions);
+        $offset = 0;
+        foreach ($positions as $pos) {
+            $result = $this->deleteTrialAbsolute($pos - $offset);
+            if ($result !== false) {
+                ++$offset;
+            }
+        }
+    }
+
+    /**
+     * Deletes the MainTrials at the given offsets from the current position in
+     * the Experiment.
+     * 
+     * This function will fail to delete previous trials.
+     * 
+     * @param array|string $offsets The absolute positions of the MainTrials to
+     *                              delete as indicated by an array of the 
+     *                              offsets or a valid stringToArray string.
+     */    
+    public function deleteTrials($offsets)
+    {
+        if (!is_array($offsets)) {
+            $offsets = Experiment::stringToRange($offsets);
+        }
+        
+        foreach ($offsets as &$offset) {
+            $offset += $this->position; 
+        }
+        
+        $this->deleteTrialsAbsolute($offsets);
+    }
+
+    /**
+     * Gets the stimuli or subset of the stimuli for this Experiment.
+     *
+     * Output can be restricted to a specific offset or set of offsets using
+     * range syntax (e.g. '1, 3, 4::5'). If subset is 'all' or blank, all
+     * stimuli are returned.
+     *
+     * @param int|string $subset The offset or range syntax indicating offsets.
+     *
+     * @return array The array of requested stimuli.
+     */
+    public function getStimuli($subset = 'all')
+    {
+        if ($subset !== 'all' && !empty($subset)) {
+            $items = array();
+            foreach (Experiment::stringToRange($subset) as $pos) {
+                $items[] = $this->getStimulus($pos);
+            }
+            
+            return $items;
+        }
+
+        return $this->stimuli;
+    }
+
+    /**
+     * Gets the stimulus information from the offset in Experiment::stimuli.
+     *
+     * @param int $pos The offset of Experiment::stimuli to retrieve.
+     *
+     * @return array|null The stimulus information if it exists, else null.
+     */
+    public function getStimulus($pos)
+    {
+        if ($pos !== null && isset($this->stimuli[$pos - 2])) {
+            return $this->stimuli[$pos - 2];
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Retrieves the value at the given key in the stimuli array for the current
+     * Trial.
+     * 
+     * @param string $name The name of the variable to retrieve.
+     * 
+     * @return mixed The value for the named variable in the current Trial's
+     *               stimuli array.
+     */
+    public function getFromStimuli($name)
+    {
+        $trial = $this->getCurrent();
+
+        return isset($trial) ? $trial->getFromStimuli($name) : null;
+    }
+    
+    /**
+     * Gets the condition information for this Experiment.
+     * 
+     * @return array Returns the array of condition information for this object.
+     */
+    public function getCondition()
+    {
+        return $this->condition;
+    }
+
+    /**
+     * Gets the Experiment's Pathfinder object.
+     * 
+     * @return Pathfinder Returns the Experiment's Pathfinder object.
+     */
+    public function getPathfinder()
+    {
+        return $this->pathfinder;
+    }
+    
+    /**
+     * Sets the Experiment's Pathfinder object.
+     * @param Pathfinder $pathfinder The new Pathfinder object to use.
+     */
+    public function setPathfinder(Pathfinder $pathfinder)
+    {
+        $this->pathfinder = $pathfinder;
+    }
+    
+    /**
+     * Inserts a MainTrial at the specified position. If no position is given,
+     * the trial is inserted at the end. The position numbers for all trials are
+     * updated after this function is called. Note: the position is 0-indexed
+     * and the CSV rows on the procedure sheet start at 2.
+     *
+     * Sample usage:
+     * ```php
+     * // get the position you want to insert at
+     * $pos = $expt->next('trialtype', 'study')->position;
+     *
+     * // create a new trial from previous
+     * $dup = $expt->duplicate($expt->getTrial(-1));
+     *
+     * // insert duplicate at position and then at end
+     * $expt->insertTrial($dup, $pos);
+     * $expt->insertTrial($dup);
+     * ```
+     *
+     * @param MainTrial|array $trial The MainTrial or the data to construct the
+     *                               MainTrial with.
+     * @param int             $pos   The 0-indexed position at which to insert. 
+     *                               If null is given (default) the trial will 
+     *                               be added at the end of the Experiment. If a 
+     *                               negative offset is given, the insertion is 
+     *                               made at that position relative to the end 
+     *                               of the Experiment.
+     *
+     * @return MainTrial Returns the inserted trial.
+     */
+    public function addTrialAbsolute($trial = array(), $pos = null)
+    {
+        if (is_array($trial)) {
+            $trial = new MainTrial($trial);
+        } else if (is_object($trial) && get_class($trial) === "Collector\MainTrial") {
+            $trial = $trial->copy();
         } else {
-            foreach ($data as $col => $val) {
-                $this->responses[$pos]["Post1_{$col}"] = $val;
-            }
+            throw new \InvalidArgumentException('Add trial functions require '
+                . 'that the to-be-added trial information is an array or '
+                . 'already constructed MainTrial ');
         }
+        
+        $trial->setExperiment($this);
+
+        array_splice($this->trials, is_null($pos)
+            ? count($this->trials)
+            : $pos, 0, array($trial)
+        );
+        $this->updatePositions();
+
+        return $trial;
     }
 
     /**
-     * Finds next post trial after current (or given) trial, or returns false if row
-     * has no more valid trials.
+     * Inserts an array of MainTrials at the specified position. If no position
+     * is given, the trial is inserted at the end. The position numbers for all
+     * trials are updated after this function is called. Note: the position is
+     * 0-indexed and the CSV rows on the procedure sheet start at 2.
      *
-     * @param int $pos  The position of the trial (defaults to current position).
-     * @param int $post The post trial number (defaults to current post).
-     *
-     * @return int|bool The position of the next valid post trial level, or false
-     *
-     * @see getValidPostTrials()
+     * @param array $array The array of data arrays to create the MainTrials from.
+     * @param int  $pos    The 0-indexed position at which to insert.
      */
-    public function getNextPostLevel($pos = null, $post = null)
+    public function addTrialsAbsolute(array $array, $pos = null)
     {
-        if ($pos  === null) {
-            $pos = $this->position;
+        foreach ($array as $i => $data) {
+            $this->addTrialAbsolute($data, is_null($pos) ? $pos : ($i + $pos));
         }
-        if ($post === null) {
-            $post = $this->postNumber;
-        }
-
-        $validPosts = $this->getValidPostTrials($pos);
-
-        foreach ($validPosts as $validPostLevel) {
-            if ($validPostLevel > $post) {
-                return $validPostLevel;
-            }
-        }
-
-        return false;
     }
-
+    
     /**
-     * Gets all levels of post trials with valid trial types for the desired row 
-     * in the procedure.
-     *
-     * @param int $pos [Optional] The position to extract Post Trials from
-     *
-     * @return array Integers specifying which post trials are valid, including 
-     *               0 for non-post trials.
+     * Adds a Trial or trial information array at the given relative offset.
+     * 
+     * @param MainTrial|array $trial  The MainTrial or array to create a 
+     *                                MainTrial from.
+     * @param int             $offset The offset to insert the trial at.
+     * 
+     * @return MainTrial Returns the MainTrial that was added.
      */
-    public function getValidPostTrials($pos = null)
+    public function addTrial($trial = array(), $offset = 1)
     {
-        if ($pos === null) {
-            $pos = $this->position;
-        }
-        $procRow = $this->procedure[$pos];
-
-        $notTrials = array('off', 'no', '', 'n/a');
-        $validPosts = array();
-        $type = $procRow['Trial Type'];
-        if (!in_array($type, $notTrials)) {
-            $validPosts[] = 0;
-        }
-
-        $i = 1;
-        while (isset($procRow["Post $i Trial Type"])) {
-            $nextType = strtolower($procRow["Post $i Trial Type"]);
-            if (!in_array($nextType, $notTrials)) {
-                $validPosts[] = $i;
-            }
+        return $this->addTrialAbsolute($trial, $this->position + $offset);
+    }
+    
+    /**
+     * Adds multiple MainTrials from an array at the given relative offset. The
+     * array can consist of any combination of MainTrials or trial information
+     * arrays that MainTrials can be created from.
+     * 
+     * @param array $trials The trials to insert.
+     * @param int   $offset The offset at which to insert the trials.
+     */
+    public function addTrials(array $trials, $offset = 1)
+    {
+        $this->addTrialsAbsolute($trials, $this->position + $offset);
+    }
+    
+    /**
+     * Updates the position properties of all the trials. This function is
+     * called each time a trial is added or removed.
+     */
+    protected function updatePositions()
+    {
+        $i = 0;
+        foreach ($this->trials as $trial) {
+            $trial->position = $i;
             ++$i;
         }
-
-        return $validPosts;
     }
-
+    
     /**
-     * Gets the next trial, whether its the next post trial or the first trial
-     * of the next row. 
-     * Returns false if no trials are remaining.
-     *
-     * @param int $pos  The position of the trial (defaults to current position).
-     * @param int $post The post trial number (defaults to current post).
-     *
-     * @return array|bool Array as returned by getTrial(), or false
-     *
-     * @uses Experiment::getTrial()
-     * @uses Experiment::getNextTrialIndex()
-     */
-    public function getNextTrial($pos = null, $post = null)
-    {
-        $nextIndex = $this->getNextTrialIndex($pos, $post);
-
-        return ($nextIndex === false)
-            ? false
-            : $this->getTrial($nextIndex[0], $nextIndex[1]);
-    }
-
-    /**
-     * Gets the proc row index and post trial number of the next trial.
-     *
-     * @param int $pos  The position of the trial (defaults to current position).
-     * @param int $post The post trial number (defaults to current post).
-     *
-     * @return array|bool, Array with position and post-trial indices, or false
-     */
-    public function getNextTrialIndex($pos = null, $post = null)
-    {
-        if ($pos  === null) {
-            $pos = $this->position;
-        }
-        if ($post === null) {
-            $post = $this->postNumber;
-        }
-
-        $nextPost = $this->getNextPostLevel($pos, $post);
-
-        if ($nextPost === false) {
-            $nextPos = $pos + 1;
-            $nextPost = 0;
-        } else {
-            $nextPos = $pos;   // same proc row, different post trial
-        }
-
-        return (isset($this->procedure[$nextPos]))
-            ? array($nextPos, $nextPost)
-            : false;
-    }
-
-    /**
-     * Adds images from next trial to a hidden div.
-     *
-     * @param int $pos  [Optional] The position of the trial prior to the trial
-     *                  that is being precached (default: current trial).
-     * @param int $post [Optional] The post position of the trial prior to the
-     *                  trial that is being precached (default: current post).
-     *
-     * @return string|bool The precache or false if next trial does not exist
-     *
-     * @uses Experiment::getNextTrial()
-     */
-    public function getPrecache($pos = null, $post = null)
-    {
-        $nextTrial = $this->getNextTrial($pos, $post);
-        if ($nextTrial !== false) {
-            $precache = '<div class="precachenext">';
-            foreach (array_values($nextTrial['Stimuli']) as $val) {
-                if (show($val) !== $val) {
-                    $precache .= show($val);
-                }
-            }
-            $precache .= '</div>';
-        }
-
-        return ($nextTrial !== false) ? $precache : false;
-    }
-
-    /**
-     * Shows all available info for trial, helpful if trial fails.
-     *
-     * @param int $pos  The position of the trial (defaults to current position).
-     * @param int $post The post trial number (defaults to current post).
-     */
-    public function showTrialDiagnostics($pos = null, $post = null)
-    {
-        if ($pos  === null) {
-            $pos = $this->position;
-        }
-        if ($post === null) {
-            $post = $this->postNumber;
-        }
-        $currentTrial = $this->getTrial($pos, $post);
-
-        // clean the arrays used so that they output strings, not code
-        $clean_cond = arrayCleaner($this->condition);
-        $stimfiles = $procfiles = [];
-        foreach ($clean_cond as $key => $val) {
-            if (strpos($key, 'Stimuli') === 0) {
-                $stimfiles[] = $val;
-            }
-            if (strpos($key, 'Procedure') === 0) {
-                $procfiles[] = $val;
-            }
-        }
-
-        $clean_proc = arrayCleaner($currentTrial['Procedure']);
-        $clean_stim = arrayCleaner($currentTrial['Stimuli']);
-        echo '<div class=diagnostics>'
-            .'<h2>Diagnostic information</h2>'
-            .'<ul>'
-            .'<li> Condition Stimuli File: '.implode(', ', $stimfiles)
-            .'<li> Condition Procedure File: '.implode(', ', $procfiles)
-            .'<li> Condition description: '.$clean_cond['Description']
-            .'</ul>'
-            .'<ul>'
-            .'<li> Trial Number: '.$pos
-            .'<li> Trial Type: '.$clean_proc['Trial Type']
-            .'<li> Trial max time: '.$clean_proc['Max Time']
-            .'</ul>'
-            .'<ul>'
-            .'<li> Cue: '.show($clean_stim['Cue'])
-            .'<li> Answer: '.show($clean_stim['Answer'])
-            .'</ul>';
-        $trial = ['Stimuli' => $clean_stim, 'Procedure' => $clean_proc];
-        readable($trial, 'Information loaded about the current trial');
-        readable($this->stimuli,      'Information loaded about the stimuli');
-        readable($this->procedure,    'Information loaded about the procedure');
-        readable($this->responses,    'Information loaded about the responses');
-        echo '</div>';
-    }
-
-    /**
-     * Converts 2-D associative array into a 1-D array for extract(). 
-     * Array keys are converted to strings suitable for variables. For 
-     * overlapping column names (e.g. "Cue" in both the Procedure and the 
-     * Stimuli files, or "Cue" in the Stimulli file and "Post 1 Cue" in the 
-     * Procedure file) only the first value will be kept and a warning will be 
-     * triggered.
-     *
-     * @param array $pos Position of the trial to be extract()ed (default: current)
-     *
-     * @return array Converted array: columns to lowercase, spaces to underscores
+     * Execute an anonymous function on every trial in the experiment. The
+     * function must accept a Trial as the first argument.
      * 
-     * @todo prepareAliases should probably be a method of a Trial class
+     * @param \Closure $function The function to apply on each trial.
+     * @param array    $args     The arguments to use in the function call.
      */
-    public function prepareAliases($pos = null)
+    public function apply(\Closure $function, array $args = array())
     {
-        $trialValues = array();
-
-        foreach ($this->getTrial($pos) as $name => $row) {
-            foreach ($row as $col => $val) {
-                $aliasCol = str_replace(' ', '_', strtolower($col));
-
-                // temp hack until we work out how to handle shuffle cols
-                if (stripos($aliasCol, 'shuffle') !== false) {
-                    continue;
-                }
-
-                // trigger warning warning if already set and skip it
-                if (isset($trialValues[$aliasCol])) {
-                    $err = "Overlap with aliases: $aliasCol is already defined, "
-                            ."$col from $name not used";
-                    trigger_error($err, E_USER_WARNING);
-                    continue;
-                }
-
-                $trialValues[$aliasCol] = $val;
+        foreach ($this->trials as $maintrial) {
+            $maintrial->apply($function, $args);
+       } 
+    }
+    
+    /**
+     * Validates a Trial using the Validator registered for its trial type, if
+     * the Validator exists.
+     * 
+     * @return array Returns an indexed array of the errors found when running
+     *               validation and information about the Trials with errors.
+     */
+    public function validate()
+    {
+        $errors = array();
+        foreach ($this->trials as $trial) {
+            $result = $trial->validate();
+            foreach ($result as $error) {
+                $errors[] = $error;
             }
         }
-
-        return $trialValues;
+        
+        return $errors;
+    }
+    
+    /**
+     * Adds a validator to be used by the Experiment. The trial type it should
+     * be used for must be specified.
+     * 
+     * @param string    $trialtype The trial type to use the Validator for.
+     * @param Validator $validator The Validator to add.
+     * @param bool      $merge     Indicates whether the new Validator should
+     *                             replace any existing (FALSE) or merge with
+     *                             them (TRUE).
+     */
+    public function addValidator($trialtype, Validator $validator, $merge = false)
+    {
+        if (!array_key_exists($trialtype, $this->validators)) {
+            $this->validators[$trialtype] = $validator;
+        } else if ($merge) {
+            $this->validators[$trialtype]->merge($validator);
+        }
+    }
+    
+    /**
+     * Retrieves the Validator for the given trial type, if one exists.
+     * 
+     * @param string $trialtype The trial type to retrieve the Validator for.
+     * 
+     * @return Validator|null The Validator for the given trial type, else null.
+     */
+    public function getValidator($trialtype)
+    {
+        if (!isset($this->validators[$trialtype])) {
+            $this->loadValidator($trialtype);
+        }
+        
+        return $this->validators[$trialtype];
+    }
+    
+    /**
+     * Loads a Validator if it is not present in the validators array.
+     * 
+     * @param string $trialtype The trial type to load the Validator for.
+     */
+    protected function loadValidator($trialtype)
+    {
+        $this->validators[$trialtype] = isset($this->pathfinder)
+            ? ValidatorFactory::createSpecific(
+                $trialtype,
+                array($this->pathfinder->get('Custom Trial Types'),
+                      $this->pathfinder->get('Trial Types')
+                ),
+                false)
+            : null;
+    }
+    
+    /**
+     * Sets an array of Validators to the validators property. By default the
+     * old Validators are replaced, but the merge argument can be used to 
+     * combine the groups.
+     * 
+     * @param array $validators The Validators to set.
+     * @param bool $merge       Indicates whether the new Validator should
+     *                          replace any existing (FALSE) or merge with
+     *                          them (TRUE).
+     */
+    public function setValidators(array $validators, $merge = false)
+    {
+        if (!$merge) {
+            $this->validators = $validators;
+        } else {
+            $this->validators = ValidatorFactory::mergeGroup(
+                $this->validators, $validators
+            );
+        }
     }
 
     /**
-     * Determines if the experiment is done or not.
+     * Gets a clone of the full MainTrial at the given offset(relative to current).
      *
-     * @return bool True if complete, false if at least one more trial exists.
+     * @param int $pos   The position of the MainTrial to copy, relative to the
+     *                   current position.
+     * 
+     * @return MainTrial The cloned MainTrial.
      */
-    public function isDone()
+    public function copy($pos = 0)
     {
-        return isset($this->procedure[$this->position]) ? false : true;
+        return $this->getTrial($pos)->copy();
     }
-
+    
     /**
-     * Retrieves and organizes data from a specific trial.
+     * Converts a string in selective range syntax to an array of the digits.
+     * Syntax: separate terms with commas (',') or semicolons (';'), and
+     * indicate ranges with double colons ('::'). Example:
+     * ```php
+     * Experiment::stringToRange('4; 6, 8::9,11::13');
+     * // returns array(4, 6, 8, 9, 11, 12, 13)
+     * ```
      *
-     * @param int $pos The position of the trial (defaults to current position).
+     * @param string $string The string in range syntax to convert.
      *
-     * @return array Associative array of the data.
+     * @return array The array of the digits indicated by the string.
      */
-    public function getTrialRecord($pos = null)
+    public static function stringToRange($string)
     {
-        if ($pos === null) {
-            $pos = $this->position;
+        $csv = str_replace(';', ',', str_replace(' ', '', $string));
+        $arr = explode(',', $csv);
+        $out = array();
+        foreach ($arr as $val) {
+            $pos = strpos($val, '::');
+            if ($pos !== false) {
+                $val = range(substr($val, 0, $pos), substr($val, $pos + 2));
+            }
+            $out = array_merge($out, is_array($val) ? $val : array($val));
         }
-        $data = array();
-        $procRow = $this->procedure[$pos];
-
-        $data['Cond'] = $this->condition;
-        $data['Proc'] = $procRow;
-        $data['Stim'] = $this->getTrialStimuli($procRow['Item']);
-        foreach ($this->getValidPostTrials() as $postNum) {
-            if ($postNum === 0) {
-                continue;
-            }  // already grabbed those items
-            if (isset($procRow["Post $postNum Item"])) {
-                $data["StimPost$postNum"] = $this->getTrialStimuli($procRow["Post $postNum Item"]);
+        
+        foreach ($out as $i => $string) {
+            if (!is_numeric($string)) {
+                unset($out[$i]);
             }
         }
-        $data['Resp'] = $this->responses[$pos];
 
-        return $data;
+        return $out;
+    }
+    
+    /**
+     * Determines if a string can be converted to a range using
+     * Experiment::stringToRange().
+     * 
+     * @param string $string The string to check.
+     * 
+     * @return bool True if the string can be converted to a range, else false.
+     */
+    public static function isValidStringToRange($string)
+    {
+        return is_numeric(str_replace(array(' ', ',', ';', '::'), '', $string));
     }
 }

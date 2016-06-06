@@ -440,18 +440,18 @@ body {              /*Has the ID of 'flexBody'*/
   width: 100%;
   box-sizing: content-box;
 }
-
-body > div {
+/*Used on the index.php page where people can select experiments*/
+.collectorRoot {
   max-width: 100%;
   max-height: 100%;
   width: 100%;
   text-align: center;
 }
 
-body > div > form {       /*Has the ID of 'content'*/
+body > form {       /*Has the ID of 'content'*/
   flex: 0 0 auto;
   align-self: center;
-  padding: 25px;
+  padding: 25px 0px 0px 0px ;
   margin: 0 auto;
   width: 700px;         max-width: 100%;
   height: auto;         max-height: 100%;
@@ -507,7 +507,9 @@ body > div > form {       /*Has the ID of 'content'*/
   visibility: hidden!important;
 }
 
-
+.pre_var_dump {
+    white-space: pre-wrap;
+}
 
 
 /*  $NO-JS
@@ -594,16 +596,15 @@ input[type="submit"].button-trial-advance {
 .pic {
   padding: 1em;
 }
-.mcPicTable td {
-  min-width: 170px;
-  text-align: center;
-  vertical-align: middle; 
-}
 
-.mcPicTable .collectorButton { 
-  margin: 3% 7%; 
+/*Done.php*/
+#currentExpLink {
+    text-align: right;
 }
-
+#currentExpLink a {
+    text-decoration: none;
+    color: grey;
+}
 
 /* format diagnostics */
 .diagnostics {

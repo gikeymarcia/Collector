@@ -1,7 +1,7 @@
 <?php
 /*  Collector
     A program for running experiments on the web
-    Copyright 2012-2015 Mikey Garcia & Nate Kornell
+    Copyright 2012-2016 Mikey Garcia & Nate Kornell
  */
 require 'initiateCollector.php';
 
@@ -24,17 +24,17 @@ if (isset($bounceTo)) {
 $validStates = array('break' => 0, 'done' => 0);
 if (isset($validStates[$_SESSION['state']])) {
     $status = unserialize($_SESSION['Status']);
-    $status->writeEnd($_SESSION['Start Time']);
+    $status->writeEnd($_SESSION['Start Time'], $_SESSION['state']);
 
     // preparing $_SESSION for the next run
     if ($_SESSION['state'] == 'break') {
         //        $_SESSION['state'] = 'return';
         // increment counter so next session will begin after the NewSession
-        ++$_EXPT->position;
+        $_EXPT->advance();
         // increment session # so next login will labeled as the next session
         ++$_SESSION['Session'];
         // generate a new ID (for next login)
-        $_SESSION['ID'] = randString();
+        $_SESSION['ID'] = Collector\Helpers::randString();
     }
 
     // encode the entire $_SESSION array as a json string
@@ -51,13 +51,14 @@ if (isset($validStates[$_SESSION['state']])) {
 /*
  *  Redirect if multisession
  */
-if (!empty($_SESSION['next'])) {
-    $next = $_SESSION['next'];
-    $username = urlencode($_SESSION['Username']);
-    $nextLink = "http://{$_SETTINGS->next_experiment}/login.php?Username={$username}&Condition=Auto";
-    header("Location: {$nextLink}");
-    exit;
-}
+### TO-DO Mkae this junk work!
+// if (!empty($_SESSION['next'])) {
+//     $next = $_SESSION['next'];
+//     $username = urlencode($_SESSION['Username']);
+//     $nextLink = "http://{$_SETTINGS->next_experiment}/login.php?Username={$username}&Condition=Auto";
+//     header("Location: {$nextLink}");
+//     exit;
+// }
 
 /*
  * Display
@@ -87,6 +88,7 @@ require $_PATH->get('Header');
   <?php if ($_SETTINGS->verification !== ''): ?>
   <h3>Your verification code is: <?= $verification_code ?></h3>
   <?php endif; ?>
+  <div id="currentExpLink"><a href="<?php echo $_PATH->get("Current Experiment"); ?>" title="">return to login</a></div>
 </form>
 
 <?php

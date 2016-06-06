@@ -1,0 +1,5 @@
+Item,Trial Type,Max Time,Min Time,Text,Settings
+0,FontSize,user,,font size set to 20px,fontsize = 20px
+0,FontSize,user,,font size set to 110%,fontsize = 110%
+0,FontSize,user,,font size set to 2em,fontsize = 2em
+0,FontSize,user,,font size set to 16pt,fontsize = 16pt

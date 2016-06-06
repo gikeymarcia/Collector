@@ -9,15 +9,16 @@
  * try using the YouTube trial type instead, and load your videos to
  * YouTube rather than your server.
  **/
-if (!isLocal($cue)) {
+$cue = $_EXPT->get('cue');
+if (!Helpers::isLocal($cue)) {
     // video is not a local file
     if (false !== strpos($cue, 'youtube') || false !== strpos($cue, 'youtu.be')) {
         // YouTube URL
-        $vidSource = youtubeUrlCleaner($cue);
+        $vidSource = Collector\Helpers::youtubeUrlCleaner($cue);
         $parameters = 'autoplay=1&modestbranding=1&controls=0&rel=0&showinfo=0&iv_load_policy=3';
     } elseif (strpos($cue, 'vimeo')) {
         // Vimeo URL
-        $vidSource = vimeoUrlCleaner($cue);
+        $vidSource = Collector\Helpers::vimeoUrlCleaner($cue);
         $parameters = 'autoplay=1&badge=0&byline=0&portrait=0&title=0';
     } else {
         // Unsupported URL
@@ -39,7 +40,7 @@ if (!isLocal($cue)) {
 </div>
 
 <!-- include form to collect RT and advance page -->
-<div><?= $text ?></div>
+<div><?= $_EXPT->get('text') ?></div>
 <div class="textcenter">
   <button class="collectorButton collectorAdvance" id="FormSubmitButton">Next</button>
 </div>

@@ -4,12 +4,12 @@ if (!isset($_SESSION)) {
 
     // load file locations
     require $_root.'/Code/Pathfinder.class.php';
-    $_PATH = new Pathfinder();
+    $_PATH = new Collector\Pathfinder();
 
     require $_PATH->get('Parse');
 
     // load configs
-    $_SETTINGS = Parse::fromConfig($_PATH->get('Config'), true);
+    $_SETTINGS = adamblake\Parse::fromConfig($_PATH->get('Config'), true);
 
     // load custom functions
     require $_PATH->get('Custom Functions');
@@ -136,9 +136,9 @@ function logIP()
  */
 foreach ($files as $file) {
     // set correct delimiter and skip IP log file
-    if (inString('.txt', $file)) {
+    if (Collector\Helpers::inString('.txt', $file)) {
         $delimiter = "\t";
-    } elseif (inString('.csv', $file)) {
+    } elseif (Collector\Helpers::inString('.csv', $file)) {
         $delimiter = ',';
     } else {
         continue;
@@ -150,7 +150,7 @@ foreach ($files as $file) {
     }
 
     // read a file presumably containing workers
-    $current = getFromFile($folder.$file, false, $delimiter);
+    $current = Collector\Helpers::getFromFile($folder.$file, false, $delimiter);
 
     // skip files without a 'WorkerID' column and keep track skipped files
     if (!isset($current[0]['WorkerId'])) {
@@ -195,12 +195,12 @@ if (isset($toCheck)) {
 
 //    // check if this person has already been rejected
 //     if (isset($_SESSION) && file_exists($ipPath)) {
-//         $badIPs = getFromFile($ipPath, false);
+//         $badIPs = Collector\Helpers::getFromFile($ipPath, false);
 //         foreach ($badIPs as $rejected) {
 //             // log and break at the first IP rejection
 //             if ($ip === $rejected['ip address']) {
 //                 $noGo[] = 'Sorry, you are not allowed to login to this experiment more than once.';
-//                 break;     
+//                 break;
 //             }
 //         }
 //     }
@@ -254,9 +254,9 @@ if ((count($noGo) == 0) && (isset($toCheck)) && (!isset($_SESSION))) {
 }
 // show all users to people who want to login
 if (!isset($_SESSION)) {
-    Readable($files, 'Files in directory');
-    Readable($uniques, 'Previous iteration workers');
-    Readable($skipped, 'Files skipped because there is no "WorkerID" column');
+    Collector\Helpers::readable($files, 'Files in directory');
+    Collector\Helpers::readable($uniques, 'Previous iteration workers');
+    Collector\Helpers::readable($skipped, 'Files skipped because there is no "WorkerID" column');
 }
 
 if (!isset($_SESSION)) {

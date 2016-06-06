@@ -1,38 +1,21 @@
 <?php
-/**
- * Autoloader function for Collector.
- * 
- * @param string $className The class to load.
- */
-function autoClassLoader($className)
-{
-    $root = '';
-    $ancestors = 0;
-    while (!is_dir("{$root}Code/classes") && ($ancestors < 3)) {
-        $root .= '../';
-        ++$ancestors;
-    }
-    $loc = "{$root}Code/classes/$className.php";
-    if (is_file($loc)) {
-        require $loc;
-    } else {
-        var_dump(scandir(dirName($loc)));
-        echo "Object $className could not be found";
-    }
-}
-spl_autoload_register('autoClassLoader');
 
-// start the session and error reporting
+// configure and register autoloader
+require __DIR__ . '/classes/Autoloader.php';
+$autoloader = new Collector\Autoloader();
+$autoloader->register();
+$autoloader->add('Collector', __DIR__.'/classes');
+$autoloader->add('adamblake\Parse', __DIR__.'/vendor/adamblake/Parse');
+$autoloader->add('phpbrowscap', __DIR__.'/vendor/phpbrowscap');
+
+// start session
 session_start();
 error_reporting(E_ALL);
 
 // load file locations
-$_PATH = new Pathfinder($_SESSION['Pathfinder']);
+$_PATH = new Collector\Pathfinder($_SESSION['Pathfinder']);
 
-// load custom functions and parse
-require $_PATH->get('Custom Functions');
-
-// check if they switched Collectors 
+// check if they switched Collectors
 // (e.g., went from 'MG/Collector/Code/Done.php' to 'TK/Collector/Code/Done.php')
 $currentCollector = $_PATH->get('root', 'url');
 if (!isset($_SESSION['Current Collector'])
@@ -40,7 +23,7 @@ if (!isset($_SESSION['Current Collector'])
 ) {
     $_SESSION = array();
     $_SESSION['Current Collector'] = $currentCollector;
-    $_PATH = new Pathfinder($_SESSION['Pathfinder']);
+    $_PATH = new Collector\Pathfinder($_SESSION['Pathfinder']);
 
     // if inside Code/ redirect to index
     if ($_PATH->inDir('Code') && !$_PATH->atLocation('Login')) {
@@ -51,11 +34,13 @@ if (!isset($_SESSION['Current Collector'])
 unset($currentCollector);
 
 // load settings
-if (isset($_SESSION['settings'])) {
+if (isset($_SESSION['settings']) 
+    && (get_class($_SESSION['settings']) == "Collector\Settings")
+) {
     $_SETTINGS = &$_SESSION['settings'];
     $_SETTINGS->upToDate($_PATH);
 } else {
-    $_SESSION['settings'] = new Settings(
+    $_SESSION['settings'] = new Collector\Settings(
         $_PATH->get('Common Settings'),
         $_PATH->get('Experiment Settings'),
         $_PATH->get('Password')
@@ -63,7 +48,23 @@ if (isset($_SESSION['settings'])) {
     $_SETTINGS = &$_SESSION['settings'];
 }
 
+// load Kint in debug mode
+if ($_SETTINGS->debug_mode) {
+    require __DIR__ . '/vendor/Kint/Kint.class.php';
+}
+
+if ($_SETTINGS->password === null) {
+    $noPass = true;
+    require $_PATH->get("Set Password");
+    if ($noPass === true) {
+        exit;
+    }
+}
+
 // if experiment has been loaded (after login) set the variable
-if (isset($_SESSION['_EXPT'])) {
-    $_EXPT = &$_SESSION['_EXPT'];
+if (isset($_SESSION['_EXPT'])
+    && (get_class($_SESSION['_EXPT']) == "Collector\Experiment")
+) {
+    $_EXPT = $_SESSION['_EXPT'];
+    $_TRIAL = $_EXPT->getCurrent();
 }

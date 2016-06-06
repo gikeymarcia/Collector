@@ -3,6 +3,8 @@
  * ControlFile class.
  */
 
+namespace Collector;
+
 /**
  * Handles the reading and stitching together of control files.
  * Both the Stimuli & Procedure classes will extend this object
@@ -88,8 +90,8 @@ abstract class ControlFile
     {
         foreach ($this->files as $file) {
             $fullPath = $this->dir.'/'.trim($file);
-            $this->exists($fullPath);
-            $data = getFromFile($fullPath, false);
+            $fullPath = $this->checkPath($fullPath);
+            $data = Helpers::getFromFile($fullPath, false);
             $this->stitch($data);
             foreach (array_keys($data) as $i) {
                 $this->rowOrigins[] = $file.'?'.$i;
@@ -185,22 +187,28 @@ abstract class ControlFile
     }
 
     /**
-     * Checks if a file exists. The experiment will be halted entirely if the
-     * file does not exist.
+     * Checks, case insensitively, if a path to a file exists. The experiment will be halted
+     * entirely if the file does not exist. If the file can be found its path will be returned
+     * with correct casing.
      *
      * @param string $path path to get to the file being checked
      *
-     * @return bool True if the path points at a file.
+     * @return string Case-correct path to file
      */
-    protected function exists($path)
+    protected function checkPath($path)
     {
-        if (!fileExists($path)) {
-            // stop the show with an error
-            $this->errorObj->add('Could not find the following file specified '
-                ."by your Conditions file: <br><b>{$path}</b>", true);
+        if (is_file($path)) {
+            return $path;
+        } else {
+            $case_correct_path = Helpers::fileExists($path);
+            if ($case_correct_path === false) {
+                // stop the show with an error
+                $this->errorObj->add('Could not find the following file specified '
+                    ."by your Conditions file: <br><b>{$path}</b>", true);
+            } else {
+                return $case_correct_path;
+            }
         }
-
-        return true;
     }
 
     /**
@@ -281,26 +289,26 @@ abstract class ControlFile
     /**
      * Gets the list of the keys used in the stitched ControlFile data.
      *
-     * @param bool $noShuffles Set true to remove shuffle related keys.
+     * @param bool $overlapExcluder Set true to remove coulmns we don't check for overlap.
      *
-     * @return array All the keys (e.g., array(0=> 'item', 1=>'trial type')).
+     * @return array of All the keys (e.g., array(0=> 'item', 1=>'trial type')).
      */
-    public function getKeys($noShuffles = false)
+    public function getKeys($overlapExcluder = false)
     {
         $keys = array_keys($this->data[0]);
 
         // filter out the shuffle columns if requested
-        if ($noShuffles === true) {
+        if ($overlapExcluder === true) {
             $subset = array();
             foreach ($keys as $key) {
-                // if it isn't one of the shuffle columns then include it
-                if (substr($key, 0, 8) !== 'Shuffle '
-                    && substr($key, 0, 10) !== 'AdvShuffle'
-                ) {
-                    $subset[] = $key;
-                }
-            }
+                // Keys can overlap if they're shuffles or the Settings column
+                if (substr($key, 0, 8)  == 'Shuffle ')   { continue; }
+                if (substr($key, 0, 10) == 'AdvShuffle') { continue; }
+                if (strtolower($key)    == 'settings')   { continue; }
 
+                // if it isn't one of the above columns then include it
+                $subset[] = $key;
+            }
             $keys = $subset;
         }
 

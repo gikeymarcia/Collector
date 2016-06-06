@@ -1,11 +1,12 @@
 <?php
     function checkSurveyFilename($surveyFile, $surveyDir) {
+        global $_EXPT;
         $errors = array();
         
         if (strtolower(substr($surveyFile, 0, 4)) === 'http') {
             $err = 'For the survey trial type, the "Cue" column must be the name of a local file. '
                  . 'It cannot start with "http". '
-                 . '"' . $cue . '" is invalid.';
+                 . '"' . $_EXPT->get('cue') . '" is invalid.';
             
             $errors[] = $err;
         }
@@ -13,7 +14,7 @@
         if (strtolower(substr($surveyFile, -4)) !== '.csv') {
             $err = 'For the survey trial type, the "Cue" column must be the name of a local file, '
                  . 'ending with the extension ".csv". '
-                 . '"' . $cue . '" is invalid.';
+                 . '"' . $_EXPT->get('cue') . '" is invalid.';
             
             $errors[] = $err;
         }
@@ -22,13 +23,13 @@
             $err = 'For the survey trial type, the "Cue" column must be the name of a local file, '
                  . 'inside the "Surveys" folder of the "Experiments/Common" folder. '
                  . 'The cue cannot contain "..". '
-                 . '"' . $cue . '" is invalid.';
+                 . '"' . $_EXPT->get('cue') . '" is invalid.';
             
             $errors[] = $err;
         }
         
         $surveyCompletePath = $surveyDir . '/' . $surveyFile;
-        $surveyActualPath = fileExists($surveyCompletePath, false, 0);
+        $surveyActualPath = Collector\Helpers::fileExists($surveyCompletePath, false, 0);
         
         if ($surveyActualPath === false) {
             $err = 'Survey trial type needs a cue for a valid survey file, '
@@ -53,7 +54,7 @@
         $errors = array();
         
         # 1. check that survey has actual data inside
-        // some error should be moved to getFromFile()
+        // some error should be moved to Collector\Helpers::getFromFile()
         // it should make sure we find at least 1 row of
         // data underneath the headers
         if (!is_array($survey) || count($survey) < 1) {
@@ -150,16 +151,17 @@
         }
         
         # 5. if Answers and Values exist, make sure they have the same number of entries
-        if (isset($survey['Answers'], $survey['Values'])) {
+        if (isset($survey[0]['Answers'], $survey[0]['Values'])) {
             $problemRows = array();
             
             foreach ($survey as $i => $row) {
+                if ($row['Values'] === '') continue;
                 // delimit cell contents with "|" rather than ",", since answers can be text descriptions
-                $rowAnswers = rangeToArray($row['Answers'], '|');
-                $rowValues  = rangeToArray($row['Values'],  '|');
+                $rowAnswers = Collector\Helpers::rangeToArray($row['Answers'], '|');
+                $rowValues  = Collector\Helpers::rangeToArray($row['Values'],  '|');
                 
                 if (count($rowAnswers) !== count($rowValues)) {
-                    $problemRows [] = $i;
+                    $problemRows[] = $i;
                 }
             }
             
@@ -169,7 +171,7 @@
                      . 'same number of entries. These entries are defined by having a range '
                      . 'defined with 2 end points connected by "::", and discrete entries '
                      . 'separated by "|". For example, if the "Answers" column contained "1::3|5::7", '
-                     . 'then the program would understand that the answers are [1, 2, 3, 5, 6, 7]. '
+                     . 'then the program would understand that the answers are "1, 2, 3, 5, 6, 7". '
                      . 'The "Answers" column and the "Values" column must have the same number '
                      . 'of entries defined this way, so that they can be matched up properly during '
                      . 'the data recording. Please correct the following rows: ';
@@ -221,8 +223,8 @@
         
         // load the survey
         $surveyCompletePath = $surveyDir . '/' . $surveyFile;
-        $surveyActualPath = fileExists($surveyCompletePath, false, 0);
-        $survey = getFromFile($surveyActualPath, false);
+        $surveyActualPath = Collector\Helpers::fileExists($surveyCompletePath, false, 0);
+        $survey = Collector\Helpers::getFromFile($surveyActualPath, false);
         
         // check the contents of the survey file
         $surveyErrors = checkSurveyContents($survey, $surveyFile, $trialDir);
@@ -259,9 +261,29 @@
             if (!is_dir("$typesDir/$entry")) continue;
             $type = cleanSurveyType($entry);
             foreach ($fileTypes as $filename) {
-                $filePath = fileExists("$typesDir/$entry/$filename.php", false, 0);
+                $filePath = Collector\Helpers::fileExists("$typesDir/$entry/$filename.php", false, 0);
                 if ($filePath !== false) $types[$type][$filename] = $filePath;
             }
+            $filePath = Collector\Helpers::fileExists("$typesDir/$entry/getResponses.php", false, 0);
+            if ($filePath !== false) $types[$type]['getResponses'] = require $filePath;
         }
         return $types;
+    }
+    
+    function isRespRequired($row) {
+        if (isset($row['Required'])) {
+            $key = strtolower($row['Required']);
+        } else {
+            $key = '';
+        }
+        
+        if ($key === 'no' || $key === 'off' || $key === '0') {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    
+    function surveyRangeToArray($range) {
+        return Collector\Helpers::rangeToArray($range, '|');
     }

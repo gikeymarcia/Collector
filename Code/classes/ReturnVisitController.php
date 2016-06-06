@@ -3,9 +3,11 @@
  * ReturnVisitController class.
  */
 
+namespace Collector;
+
 /**
  * Controls logging into new sessions of existing experiments.
- * 
+ *
  * Logic flow:
  * <ol>
  *   <li>__construct(): Grab Username and JSON path</li>
@@ -100,7 +102,7 @@ class ReturnVisitController
      */
     public function isReturning()
     {
-        if (fileExists($this->sessionStoragePath) !== false) {
+        if (Helpers::fileExists($this->sessionStoragePath) !== false) {
             $this->loadPriorSession();
 
             return true;
@@ -185,9 +187,9 @@ class ReturnVisitController
     }
     /**
      * Checks if this participate is ready to login to the next session.
-     * Return time is based on the 'Min Time' and 'Max Time' cells from the 
-     * `NewSession` line of the procedure. In the case that it is not time to 
-     * return then it sets the time until return (earlyMsg) or a sorry message 
+     * Return time is based on the 'Min Time' and 'Max Time' cells from the
+     * `NewSession` line of the procedure. In the case that it is not time to
+     * return then it sets the time until return (earlyMsg) or a sorry message
      * for when over max time (lateMsg).
      *
      * @return bool True if it is time to start the next session, else false.
@@ -212,7 +214,7 @@ class ReturnVisitController
         if ($now < $minRet) {
             $early = true;
             $dif = $minRet - $now;
-            $remaining = durationFormatted($dif);
+            $remaining = Helpers::formatDuration($dif);
             $this->earlyMsg = 'You are too eary to participate in this part. You'
                     ."can return in $remaining to start this next part.";
         }
@@ -222,8 +224,8 @@ class ReturnVisitController
 
     /**
      * Shows either the late or early return time error message.
-     * Each var is initiated with each class instance but the value is only 
-     * modified if $this->timeToReturn() finds it is too early or too late to 
+     * Each var is initiated with each class instance but the value is only
+     * modified if $this->timeToReturn() finds it is too early or too late to
      * come back.
      *
      * @uses ReturnVisitController::earlyMsg Displays this value if it is set.
@@ -243,7 +245,7 @@ class ReturnVisitController
     /**
      * Returns an array of information about this class. Array is optionally
      * converted to an HTML formatted string.
-     * 
+     *
      * @param bool $asString Set true to convert to an HTML formatted string.
      */
     public function debug($asString = true)

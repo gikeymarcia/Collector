@@ -3,6 +3,8 @@
  * Stimuli class.
  */
 
+namespace Collector;
+
 /**
  * Controls the error checking for stimuli files.
  *

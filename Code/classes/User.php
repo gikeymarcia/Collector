@@ -3,6 +3,8 @@
  * User class.
  */
 
+namespace Collector;
+
 /**
  * Handles the setting, getting, and validating of username given to Collector.
  * Also handles setting of user ID.
@@ -79,7 +81,7 @@ class User
 
     /**
      * Checks if username is valid and then sets User::valid to true or false.
-     * 
+     *
      * @uses User::valid Sets the valid state depending on if the checks pass.
      */
     protected function validateUsername()
@@ -89,7 +91,7 @@ class User
 
     /**
      * Checks that the username is longer than three characters.
-     * 
+     *
      * @uses User::errObj
      */
     protected function isValidNameLength()
@@ -127,7 +129,7 @@ class User
         if (!isset($_SESSION['ID'])) {
             // an ID is not yet set
             $getId = filter_input(INPUT_GET, 'ID', FILTER_SANITIZE_STRING);
-            $this->id = ($getId !== null) ? $getId : randString($idLength);
+            $this->id = ($getId !== null) ? $getId : Helpers::randString($idLength);
         } else {
             // ID is already set, store it here
             $this->id = $_SESSION['ID'];

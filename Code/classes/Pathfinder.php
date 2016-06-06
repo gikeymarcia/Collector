@@ -3,9 +3,11 @@
  * Pathfinder class.
  */
 
+namespace Collector;
+
 /**
  * Provides access to a system map.
- * 
+ *
  * Goals:
  * - provide a way to use system map, so that you can ask for
  *   each file or directory simply by a label
@@ -14,7 +16,7 @@
  *   purpose, and files can be moved/renamed without trouble
  *
  * Requirements:
- * - this class is expecting to be able to require the 
+ * - this class is expecting to be able to require the
  *   systemMap.php file from the already existing include
  *   paths. So, keep systemMap.php in the same directory
  * - this class is also expecting the label "Pathfinder"
@@ -26,16 +28,16 @@
  *   structure, this class will flip that array, so that
  *   the labels each become a key in an associative array,
  *   pointing to the path they came from
- * - So, if there was something like 
+ * - So, if there was something like
  *   'dir => array( 'file.php' => 'Test' ), then this class
  *   will create $_pathList['Test'] = 'dir/file.php'
  *
  * - to get that path, you can either access it directly,
  *   by using $_PATH->test, or by using the get() function,
  *   $_PATH->get('Test').
- * - when accessing directly, the name must be in all 
+ * - when accessing directly, the name must be in all
  *   lowercase, and the spaces should be replaced with
- *   underscores. So, 'Custom Functions' would be 
+ *   underscores. So, 'Custom Functions' would be
  *   accessed as $_PATH->custom_functions
  * - if you use the get() function, casing doesn't matter,
  *   and you can still use the original spaces.
@@ -67,7 +69,7 @@
  *   you to pass part of the path along with your get() function
  *   call, as the third parameter
  * - this would be used with something like a trial type name,
- *   which can vary, but ultimately points to the same 
+ *   which can vary, but ultimately points to the same
  *   directory structure.
  *   in the example 'test' => 'dir/{var}/subdir/file.php', using
  *   $_PATH->get('test', 'relative', 'instruct') from inside Code/
@@ -81,7 +83,7 @@
  * - the second kind of variable is the $default setting, which is
  *   used along with a default label wrapped in curly braces,
  *   'test' => 'dir/{Username}/output.csv'
- * - in this case, you would first load a default value for 
+ * - in this case, you would first load a default value for
  *   'Username', by using the setDefault() function, like so:
  *   $_PATH->setDefault('Username', 'participant001');
  * - then, when you call $_PATH->get('test'), you would receive
@@ -101,7 +103,7 @@
  * - this way, if you need to wipe the session, but for some reason want
  *   to keep using the same defaults, you can simply call this function
  *   after the session wipe. Although, if you are looking for security,
- *   you should probably just recreate the $_PATH variable with the 
+ *   you should probably just recreate the $_PATH variable with the
  *   wiped session, to start completely fresh
  *
  * - you can also check the default value, using getDefault()
@@ -130,7 +132,7 @@ class Pathfinder
      * The directory name.
      *
      * @var string
-     * 
+     *
      * @todo what is $dirName used for? update property docblock
      */
     private $dirName = 'dir name';
@@ -139,7 +141,7 @@ class Pathfinder
      * The variable name.
      *
      * @var string
-     * 
+     *
      * @todo what is $varName used for? update property docblock
      */
     private $varName = 'var';
@@ -246,7 +248,7 @@ class Pathfinder
     }
 
     /**
-     * Adds a key => value pair to an array, throwing an exception if the key 
+     * Adds a key => value pair to an array, throwing an exception if the key
      * already exists.
      *
      * @param array $array    The array (by-reference) to modify.
@@ -319,10 +321,10 @@ class Pathfinder
      */
     public function getURL()
     {
-        $port = filter_input(INPUT_SERVER, 'SERVER_PORT', FILTER_SANITIZE_NUMBER_INT);
-        $https = filter_input(INPUT_SERVER, 'HTTPS', FILTER_SANITIZE_STRING);
-        $domain = filter_input(INPUT_SERVER, 'HTTP_HOST', FILTER_SANITIZE_URL);
-        $resource = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_URL);
+        $port = $_SERVER['SERVER_PORT'];
+        $https = isset($_SERVER['HTTPS']) ? $_SERVER['HTTPS'] : null;
+        $domain = $_SERVER['HTTP_HOST'];
+        $resource = $_SERVER['REQUEST_URI'];
 
         // from http://stackoverflow.com/q/4503135
         if ($port === 443 || ($https !== null && $https !== 'off')) {
@@ -447,6 +449,25 @@ class Pathfinder
 
         return $path;
     }
+    
+    /**
+     * Sets a new path in the path list or replaces the existing path.
+     * 
+     * The name string is converted to lowercase and spaces are replaced with
+     * underscores.
+     * 
+     * @param string $name The name of the path to set.
+     * @param string $path The path to set, absolute or relative to the root.
+     */
+    public function set($name, $path)
+    {
+        $key = str_replace(' ', '_', trim(strtolower($name)));
+        $val = str_replace('\\', '/', trim($path));
+        if (strpos($val, $this->rootPath['absolute']) === 0) {
+            $val = substr($val, strlen($this->rootPath['absolute']));
+        }
+        $this->pathList[$key] = ltrim($val, '/');
+    }
 
     /**
      * Modifies a string using the passed variables.
@@ -509,8 +530,8 @@ class Pathfinder
 
     /**
      * Gets all paths that do not contain a wild card or a default value.
-     * Use this to get a list of all non-variable paths. You can then run 
-     * fileExists() on them, as a diagnostic check that all typical files exist.
+     * Use this to get a list of all non-variable paths. You can then run
+     * Helpers::fileExists() on them, as a diagnostic check that all typical files exist.
      *
      * @return array The array of standard paths.
      */
@@ -528,10 +549,10 @@ class Pathfinder
 
     /**
      * Replaces a path component default with a new value.
-     * Can either pass an associative array to set multiple defaults at once, 
+     * Can either pass an associative array to set multiple defaults at once,
      * or a single key and value as separate parameters.
      *
-     * @param array|string $arrayOrKey The array of keys => values to set, or a 
+     * @param array|string $arrayOrKey The array of keys => values to set, or a
      *                                 single key to set.
      * @param string       $value      The value to set if a single key is passed.
      */

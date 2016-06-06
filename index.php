@@ -1,7 +1,7 @@
 <?php
 /*  Collector
     A program for running experiments on the web
-    Copyright 2012-2015 Mikey Garcia & Nate Kornell
+    Copyright 2012-2016 Mikey Garcia & Nate Kornell
 
 
     This program is free software: you can redistribute it and/or modify
@@ -19,12 +19,12 @@
 require 'Code/initiateCollector.php';
 
 $_SESSION = array();
-$_PATH = new Pathfinder($_SESSION['Pathfinder']);
+$_PATH = new Collector\Pathfinder($_SESSION['Pathfinder']);
 $_SETTINGS->upToDate($_PATH);
 
 // get possible experiments to choose from
 $experiments = array();
-foreach (getCollectorExperiments() as $expName) {
+foreach (Collector\Helpers::getCollectorExperiments() as $expName) {
     $experiments[$expName] = $_PATH->get('Experiments')."/$expName";
 }
 
@@ -35,23 +35,24 @@ require $_PATH->get('Header');
 <style>
   .inlineUL { display: inline-block; margin: auto; text-align: left; }
 </style>
+<div class="collectorRoot">
+    <h1>Collector</h1>
+    <h2>A program for running experiments on the web</h2>
 
-<h1>Collector</h1>
-<h2>A program for running experiments on the web</h2>
+    <p>Welcome to the Collector. If you would like to begin an experiment,
+       click on one of the links below.
+    </p>
 
-<p>Welcome to the Collector. If you would like to begin an experiment,
-   click on one of the links below.
-</p>
+    <ul class="inlineUL">
+      <?php foreach ($experiments as $name => $path): ?>
+      <li><a href='<?= $path ?>'><?= $name ?></a></li>
+      <?php endforeach; ?>
+    </ul>
 
-<ul class="inlineUL">
-  <?php foreach ($experiments as $name => $path): ?>
-  <li><a href='<?= $path ?>'><?= $name ?></a></li>
-  <?php endforeach; ?>
-</ul>
-
-<p>Otherwise, you can access one of the other tools 
-   <a href="<?= $_PATH->get('Tools') ?>">here</a>.
-</p>
+    <p>Otherwise, you can access one of the other tools
+       <a href="<?= $_PATH->get('Tools') ?>">here</a>.
+    </p>
+</div>
 
 <?php
 require $_PATH->get('Footer');

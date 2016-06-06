@@ -1,13 +1,18 @@
-<?php
-
-return function ($trialValues) {
-    $errors = array();
+<?php return function($trial) {
+    $trialtype = $trial->get('trial type');
+    
     $requiredColumns = array('Cue', 'Answer');
-    foreach ($requiredColumns as $reqCol) {
-        if (!isset($trialValues[$reqCol])) {
-            $errors[] = "this trial type requires a column that is missing: '<b>$reqCol</b>'";
+    foreach ($requiredColumns as $col) {
+        $var = $trial->get($col);
+        if (!isset($var)) {
+            $errors[] = $col;
         }
     }
-
-    return $errors;
+    
+    $message = "The {$trialtype} trial type requires the following column(s): ";
+    foreach ($errors as $error) {
+        $message .= $error . ', ';
+    }
+    
+    return rtrim($message, ', ');
 };

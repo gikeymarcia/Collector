@@ -29,7 +29,7 @@ return array(
     'Experiments' => array(
         'Dir Name' => 'Experiments',
 
-        'Common' => array(
+        '_Common' => array(
             'Dir Name' => 'Common',
 
             'Common Settings.json' => 'Common Settings',
@@ -40,12 +40,8 @@ return array(
                 'Dir Name' => 'Ineligibility Dir',
             ),
 
-            'Images' => array(
-                'Dir Name' => 'Images',
-            ),
-
-            'Audio' => array(
-                'Dir Name' => 'Audio',
+            'Media' => array(
+                'Dir Name' => 'Media',
             ),
 
             'TrialTypes' => array(
@@ -124,6 +120,8 @@ return array(
 
         'nojs.php' => 'No JS',
 
+        'setPassword.php' => 'Set Password',
+
         'shuffleFunctions.php' => 'Shuffle Functions',
 
         'systemMap.php' => 'system map',
@@ -161,6 +159,7 @@ return array(
             'DebugController.php' => 'Debug Class',
             'ErrorController' => 'Errors Class',
             'Parse.php' => 'Parse',
+            'Helpers.php' => 'Helpers',
             'Pathfinder.php' => 'Pathfinder',
             'Procedure.php' => 'Procedure Class',
             'ReturnVisitController.php' => 'Return Class',

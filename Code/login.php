@@ -9,7 +9,7 @@ $_SESSION = array();
 $_SESSION['state'] = 'init';
 
 // initiate the object that finds files for us
-$_PATH = new Pathfinder($_SESSION['Pathfinder']);
+$_PATH = new Collector\Pathfinder($_SESSION['Pathfinder']);
 
 // load shuffle functions we will use later
 require $_PATH->get('Shuffle Functions');
@@ -18,15 +18,15 @@ require $_PATH->get('Shuffle Functions');
 $_SESSION['Current Collector'] = $_PATH->get('root', 'url');
 $currentExp = filter_input(INPUT_GET, 'CurrentExp', FILTER_SANITIZE_STRING);
 $current = ($currentExp === null) ? '' : $currentExp;
-if (!in_array($current, getCollectorExperiments())) {
+if (!in_array($current, Collector\Helpers::getCollectorExperiments())) {
     // requested experiment does not exist: send back to index
-    header('Location: '.$_PATH->get('root'));
+    header('Location: ' . $_PATH->get('root'));
     exit;
 }
 
 // tell pathfinder the current experiment and load common/experiment settings
 $_PATH->setDefault('Current Experiment', $current);
-$_SESSION['settings'] = new Settings(
+$_SESSION['settings'] = new Collector\Settings(
     $_PATH->get('Common Settings'),
     $_PATH->get('Experiment Settings'),
     $_PATH->get('Password')
@@ -37,25 +37,25 @@ $_SETTINGS = &$_SESSION['settings'];
  * Login objects
  */
 // error handler
-$errors = new ErrorController();
+$errors = new Collector\ErrorController();
 
 // user validator
 $username = filter_input(INPUT_GET, 'Username', FILTER_SANITIZE_EMAIL);
-$user = new User($username, $errors);
+$user = new Collector\User($username, $errors);
 $user->feedPathfinder($_PATH);
 
 // debug handler
-$debug = new DebugController(
+$debug = new Collector\DebugController(
     $user->getUsername(),
     $_SETTINGS->debug_name,
     $_SETTINGS->debug_mode
 );
 // @todo change feedPathfinder to return a value that Pathfinder will accept
-$debug->feedPathfinder($_PATH); // changes data directory if debug mode is on 
+$debug->feedPathfinder($_PATH); // changes data directory if debug mode is on
 $debug->toSession(); // sets $_SESSION['Debug'] to a bool
 
 // condition controller
-$cond = new ConditionController(
+$cond = new Collector\ConditionController(
     $_PATH->get('Conditions'),
     $_PATH->get('Counter'),
     $errors,
@@ -72,7 +72,7 @@ if ($_SETTINGS->check_elig == true) {
 /*
  * Returning participants
  */
-$revisit = new ReturnVisitController(
+$revisit = new Collector\ReturnVisitController(
     $_PATH->get('Session Storage'),
     $_PATH->get('Done'),
     $_PATH->get('Experiment Page')
@@ -105,18 +105,8 @@ if ($returning !== null) {
 $cond->assignCondition();
 $_PATH->setDefault('Condition Index', $cond->getAssignedIndex());
 
-$procedure = new Procedure(
-    $_PATH->get('Procedure Dir'),
-    $cond->allProc(),
-    $errors
-);
-$stimuli = new Stimuli(
-    $_PATH->get('Stimuli Dir'),
-    $cond->allStim(),
-    $errors
-);
-
-$status = new StatusController();
+// retrieve and store status information
+$status = new Collector\StatusController();
 $status->updateUser(
     $user->getUsername(),
     $user->getID(),
@@ -131,43 +121,68 @@ $status->setPaths(
     $_PATH->get('Status End Data')
 );
 $status->writeBegin();
-$_SESSION['Status'] = serialize($status);
 
-// check if procedure and stimuli files have unique column names
+// load and prepare procedure and stimuli
+$procedure = new Collector\Procedure(
+    $_PATH->get('Procedure Dir'),
+    $cond->allProc(),
+    $errors
+);
+$stimuli = new Collector\Stimuli(
+    $_PATH->get('Stimuli Dir'),
+    $cond->allStim(),
+    $errors
+);
 $procedure->checkOverlap($stimuli->getKeys(true));
-
 $procedure->shuffle();
 $stimuli->shuffle();
 
-#### Trial Validation
-require $_PATH->get('Trial Validator Require');
+/*
+ *  Create the Experiment Object
+ */
+$_EXPT = Collector\ExperimentFactory::create(
+    $cond->get(), $procedure->getShuffled(), $stimuli->getShuffled(), $_PATH
+)->warm();
 
-######## Feed stuff to login #######
+// validate and show errors
+$validationErrors = $_EXPT->validate();
+if (!empty($validationErrors)) {
+    foreach ($validationErrors as $error) {
+        $errors->add($error['message'] . " Error found in MainTrial " . 
+            $error['info']['position'] . " at post position " . 
+            $error['info']['postPosition'] . ". (positions are 0-indexed)");
+    }
+}
+
+/*
+ * Stop on errors
+ */
+if ($errors->arePresent() || !empty($validationErrors)) {
+    require $_PATH->get('Header');
+    echo "
+      <div style='max-width:600px;'>
+        <p>{$errors}<br>
+        <p class='textcenter'>
+          Oops, something has gone wrong. Email the experimenter at <b>$_SETTINGS->experimenter_email</b>
+          <br><br>
+          <button class='collectorButton' onClick='window.location.reload(true);'>Refresh</button>
+          <button class='collectorButton' onClick='window.location.href=\"{$_PATH->get('Current Experiment')}\";'>Back to Login</button>
+      </div>";
+    d($_EXPT);
+    require $_PATH->get('Footer');
+    exit;
+}
+
+/*
+ * Populate Session and start experiment
+ */
 $_SESSION['Username'] = $user->getUsername();
 $_SESSION['ID'] = $user->getID();
 $_SESSION['Session'] = $user->getSession();
 $_SESSION['Start Time'] = time();
-
-// access stimuli, procedure, and condition arrays using $_EXPT->[name]
-$_EXPT = new Experiment(
-            $stimuli->getShuffled(),
-            $procedure->getShuffled(),
-            $cond->get()
-        );
+$_SESSION['Status'] = serialize($status);
 $_SESSION['_EXPT'] = $_EXPT;
-
-####################################
-
-if ($errors->arePresent()) {
-    echo $errors;
-    echo "<div>
-            Oops, something has gone wrong. Email the experimenter at <b>$_SETTINGS->experimenter_email</b><br>
-            <button type='button' onClick='window.location.reload(true);'>Click here to refresh</button>
-          </div>";
-    exit;
-}
-
 $_SESSION['state'] = 'exp';
-$experiment = $_PATH->get('Experiment Page');
-header("Location: $experiment");
+
+header("Location: " . $_PATH->get('Experiment Page'));
 exit;

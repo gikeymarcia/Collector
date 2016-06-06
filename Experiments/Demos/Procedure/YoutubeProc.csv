@@ -1,0 +1,6 @@
+ Item,Trial Type,Max Time,Text,Settings,Shuffle 1
+0,Instruct,user,This is the start of a new experiment demo-ing the Youtube Trial type,,off
+2,Youtube,user,Please watch the video carefully. ,submitOnDone = false | preventEarlySubmit = false|,off
+3,Youtube,user,,submitOnDone = false | preventEarlySubmit = false|,off
+4,Youtube,user,,submitOnDone = false | preventEarlySubmit = false|,off
+5,Youtube,user,,submitOnDone = false | preventEarlySubmit = false|,

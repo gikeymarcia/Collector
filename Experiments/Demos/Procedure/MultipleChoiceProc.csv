@@ -1,0 +1,4 @@
+Item,Trial Type,Max Time,Min Time,Text,Procedure Notes,Shuffle 1
+2,MultipleChoice,user,,Make a choice! |First|Second|Third,Show three options,# fixed order
+2,MultipleChoice,user,,<p> You can even have multiple paragraphs as a question! This is the first. </p>  <p> And this is the second. </p> |1|2|3,Show multiple paragraphs.,
+2,MultipleChoice,user,3,Here is a choice where there is a minimum time. |A|B|C,Show minimum time. ,

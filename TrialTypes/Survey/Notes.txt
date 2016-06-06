@@ -3,6 +3,22 @@ Survey
 The Cue for this trial should be a filename
 of a file located in Common/Surveys/
 
+All Surveys are stored in Experiments/_Common/Surveys
+For formatting of surveys, look at the sample surveys. DEMOGRAPHICS and DIAGNOSTICS are found in the Sample Surveys.
+
+FIRST - go to your STIMULI FILE and then add a new row. For example, if you'd like to add demographics and diagnostics do it like this
+
+     Cue            Answer      Shuffle 1 
+2  demographics.csv  off           off
+
+SECOND - go to your PROCEDURE FILE and it should look like this
+   Item	  TrialType  Timing    Post 1 Trial
+2   2       Survey     user        user
+
+THIRD - That's it!
+____________________________________________
+
+
 Each survey file is like another stimuli file.
 Inside, there should be the following columns:
 
@@ -18,24 +34,25 @@ Type
 Answers
     For survey types with limited answers, such as likert 
     or dropdown responses, the options are defined in this
-    column. Ranges can be defined, with "," as the separator
-    and "::" as the connector, so something like "1::4,10"
+    column. Ranges can be defined, with "|" as the separator
+    and "::" as the connector, so something like "1::4|10"
     will create the answers (1, 2, 3, 4, 10). You can also 
-    use non-numeric answers, such as "Not at all, Slightly,
-    Greatly, Completely". If you need to use a comma inside
-    an answer, place a "\" character before it, like so:
-    "Yes\, I agree, No\, I don't agree".
-Values
+    use non-numeric answers, such as "Not at all | Slightly,
+    Greatly | Completely".
+Values (Optional)
     These can be used with scoring column to determine the
     numeric value of each of the answers. For example, you
     could set the Answers to "Not at all, Slightly, Greatly,
-    Completely", and code these as (0, 1, 2, 3), so that
+    Completely", and code these as "0, 1, 2, 3", so that
     scores can be calculated by summing/averaging these
     responses. You can re-use values, but there must be an
-    equal number of values and answers (so, [0, 0, 1, 1] is
-    fine, but [0, 1] with 4 answers would not work). If there
+    equal number of values and answers (so, "0, 0, 1, 1" is
+    fine, but "0, 1" with 4 answers would not work). If there
     aren't the same number of values and answers, an error
     message will be displayed.
+    If you don't create this column, or you leave a row
+    blank under this column, the actual answer will be used
+    directly, assuming it is numeric.
     The actual answer will still be recorded as raw data.
 Required (Optional)
     Questions can be marked as required or not, and
