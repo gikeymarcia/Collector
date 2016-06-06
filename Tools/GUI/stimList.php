@@ -1,4 +1,3 @@
-<?php adminOnly(); ?>
 <style>
 	.stimDiv {
 		position:relative;
@@ -37,7 +36,7 @@
 <?php
 
 /*
-	GUI
+	GUI - Anthony Haffey
 
 	Collector
     A program for running experiments on the web
@@ -61,12 +60,16 @@
   require '../../Code/initiateCollector.php';
 	$title = 'Collector GUI';
   require $_PATH->get('Header'); 
+  require_once("../loginFunctions.php");
+  adminOnly();
+  require("guiCss.php");
+ 
  
 	// need to match 
 	$acceptedFileTypes = array("jpg","png","jpeg","gif","mp4"); //this is copied in the upload file - may want to reduce this to a session variable.
-    	
-	?>
-
+    ?>  
+    
+  
 <form action="stimList.php" method="post">
 	<div id="stimDivArea" class="stimDiv"></div>
 </form>
@@ -119,6 +122,33 @@
 	$stimNoJson = json_encode($stimNo);
 	$spaceUsed=$spaceUsed/1000000;
 	echo round($spaceUsed,2)."MB/100MB available";
+  
+  if(isset($_SESSION['guiSheets']['uploadAlerts'])){
+    foreach($_SESSION['guiSheets']['uploadAlerts'] as $uploadAlert){  
+    
+    
+      if(strpos($uploadAlert,"has been uploaded")!==false| 
+         strpos($uploadAlert,"File is an image")!==false){ //if a succesfull alert
+      ?>
+
+      <div class="alert alert-success fade in">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Success!</strong> <?=$uploadAlert; ?>
+      </div>  
+
+      <?php                
+      } 
+      else //if a unsuccesfull alert
+    { ?>
+      <div class="alert alert-warning fade in">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Warning!</strong> <?=$uploadAlert; ?>
+      </div>
+    <?php }
+    }
+  }
+  unset($_SESSION['guiSheets']['uploadAlerts']);
+  
 ?>
 
 <!DOCTYPE html>
@@ -127,7 +157,7 @@
 				<form action="upload.php" method="post" enctype="multipart/form-data">
 					Select files to upload:
 					<input type="file" name="fileToUpload[]" id="fileToUpload" multiple>
-					<input type="submit" class="collectorButton" value="Upload files" name="submit">
+					<input type="submit" id="uploadFilesButton" class="collectorButton" value="Upload files" name="submit" style="display:none">
 				</form>
 			</div>
 		</body>		
@@ -137,8 +167,17 @@
 
 var stimNo = <?= $stimNoJson ?>;
 
+window.setInterval(function(){
+  if(fileToUpload.value!=""){
+    $('#uploadFilesButton').show();
+  }  
+  if(fileToUpload.value==""){
+    $('#uploadFilesButton').hide();
+  }
+}, 1000);
+
 function displayStim(x){
-	xSplit=x.split(','); //to separate the filename and the span id
+  xSplit=x.split(','); //to separate the filename and the span id
 	y=xSplit[0].replace(/ /g,"%20");
 	stimDivArea.innerHTML="<div class='stimCenter'><embed src="+"'../../Experiments/Common/"+y+"' width='100%'" + ">" + "<br><button class='collectorButton' type='submit'  name='delete' id='deleteButton' value="+y+" style='display:none'>No Text Needed</button><input type='button' onclick='confirmDelete()' class='collectorButton' value='Delete?'></div>";
 	//now highlight/bold text for selected image

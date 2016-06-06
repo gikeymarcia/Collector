@@ -24,7 +24,6 @@
 	// now lets get a list of possible experiments to edit
 	$branches = getCollectorExperiments();
 	$title = 'Collector GUI';
-	require $_PATH->get('Header');
 	//$key=array_search('New Experiment',$branches);
 	//unset($branches[$key]);
 	
