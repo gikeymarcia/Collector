@@ -124,8 +124,6 @@ return array(
 
         'shuffleFunctions.php' => 'Shuffle Functions',
 
-        'systemMap.php' => 'system map',
-
         'css' => array(
             'Dir Name' => 'CSS Dir',
 
@@ -163,8 +161,10 @@ return array(
             'Pathfinder.php' => 'Pathfinder',
             'Procedure.php' => 'Procedure Class',
             'ReturnVisitController.php' => 'Return Class',
+            'SideData.php' => 'SideData Class',
             'StatusController.php' => 'Status Class',
             'Stimuli.php' => 'Stimuli Class',
+            'systemMap.php' => 'system map',
             'TrialValidator.php' => 'Trial Validator Class',
             'User.php' => 'Users Class',
         ),
@@ -198,6 +198,7 @@ return array(
             'InstructionsData.csv' => 'Instructions Data',
             'Status_Begin.csv' => 'Status Begin Data',
             'Status_End.csv' => 'Status End Data',
+            'SideData.csv' => 'SideData Data',
 
             'Counter' => array(
                 'Dir Name' => 'Counter Dir',

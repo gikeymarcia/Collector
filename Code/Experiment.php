@@ -38,6 +38,11 @@ if ($_POST !== array()) {
     require $_TRIAL->getRelatedFile('scoring');
     $data = isset($data) ? $data : $_POST;
     
+    if (isset($sideData)) {
+        if(empty($sidedata_label)) $sidedata_label = $trial_type;
+        $_SIDE->add($sideData, $sidedata_label);
+    }
+    
     // record data and advance to next PostTrial if applicable
     $_EXPT->record($data);
     if (($_EXPT->advance()) === 1) {

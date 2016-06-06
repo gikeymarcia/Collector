@@ -68,3 +68,7 @@ if (isset($_SESSION['_EXPT'])
     $_EXPT = $_SESSION['_EXPT'];
     $_TRIAL = $_EXPT->getCurrent();
 }
+// alias SideData as well
+if (isset($_SESSION['_SIDE'])) {
+    $_SIDE = $_SESSION['_SIDE'];
+}

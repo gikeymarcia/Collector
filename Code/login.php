@@ -137,6 +137,8 @@ $procedure->checkOverlap($stimuli->getKeys(true));
 $procedure->shuffle();
 $stimuli->shuffle();
 
+$_SIDE = new Collector\SideData();
+
 /*
  *  Create the Experiment Object
  */
@@ -182,6 +184,7 @@ $_SESSION['Session'] = $user->getSession();
 $_SESSION['Start Time'] = time();
 $_SESSION['Status'] = serialize($status);
 $_SESSION['_EXPT'] = $_EXPT;
+$_SESSION['_SIDE'] = $_SIDE;
 $_SESSION['state'] = 'exp';
 
 header("Location: " . $_PATH->get('Experiment Page'));
