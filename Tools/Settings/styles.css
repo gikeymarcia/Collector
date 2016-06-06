@@ -128,3 +128,6 @@ h4 {
     padding: 3px 10px;
     border-radius: 3px;
 }
+.expander:focus {
+    outline: none;
+}
