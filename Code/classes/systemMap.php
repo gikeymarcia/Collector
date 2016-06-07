@@ -176,7 +176,7 @@ return array(
 
             'jquery.js' => 'Jquery',
             'jquery-ui-1.10.4.custom.min.js' => 'Jquery UI Custom',
-            'jquery-ui-1.11.4.min.js' => 'Jquery UI',
+            'jquery-1.12.4.min.js' => 'Jquery UI',
 
             'loggingIn.js' => 'Login JS',
             'sha256.js' => 'Sha256 JS',
