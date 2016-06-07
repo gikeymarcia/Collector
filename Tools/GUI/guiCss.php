@@ -1,11 +1,9 @@
 <?php 
-
+  adminOnly();
   // these alerts are largely based on code found on http://www.w3schools.com/bootstrap/bootstrap_alerts.asp
 
 ?>
 
-<html lang="en">
-<head>
 <style>
 .alert-success{
   position:fixed; left:0px; right:0px  
@@ -15,10 +13,8 @@
 }
 </style>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-</head>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
 <!-- exemplar alerts
     <div class="alert alert-success fade in">
@@ -38,4 +34,3 @@
       <strong>Danger!</strong> This alert box could indicate a dangerous or potentially negative action.
     </div>
 !-->
-</html>

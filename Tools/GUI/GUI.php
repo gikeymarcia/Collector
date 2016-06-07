@@ -36,7 +36,7 @@
       
   );
   
-  $illegalInputs=array('<?','{','}','/') ; // need to also exclude \
+  $illegalInputs=array('<?','{','}','/','\\') ; // need to also exclude \
     
     
   if(isset($_POST['currentGuiSheetPage'])){
@@ -71,15 +71,15 @@
   }
 
 	
-	if(!isset($_DATA['guiSheets']['currentGuiSheetPage'])){
-		require('indexGui.php');
-		$_DATA['guiSheets']['currentGuiSheetPage']='indexGui';
-	}
+  if(!isset($_DATA['guiSheets']['currentGuiSheetPage'])){
+    require('indexGui.php');
+    $_DATA['guiSheets']['currentGuiSheetPage']='indexGui';
+  }
   
 	
-	else {
-		require(($_DATA['guiSheets']['currentGuiSheetPage']).".php");
-	}
+  else {
+    require(($_DATA['guiSheets']['currentGuiSheetPage']).".php");
+  }
 
   
   
