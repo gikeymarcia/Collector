@@ -41,7 +41,7 @@ class ExperimentFactory
         array $condition = array(),
         array $procedure = array(),
         array $stimuli = array(),
-        Pathfinder $pathfinder = null
+        \Pathfinder $pathfinder = null
     ) {
         $expt = new Experiment($condition, $stimuli, $pathfinder);
         foreach ($procedure as $row) {
@@ -120,9 +120,9 @@ class ExperimentFactory
      * @param Experiment $expt       The Experiment to add related files to.
      * @param Pathfinder $pathfinder The Pathfinder that will find the files.
      */
-    private static function addRelatedFiles(Experiment &$expt, Pathfinder $pathfinder)
+    private static function addRelatedFiles(Experiment &$expt, \Pathfinder $pathfinder)
     {
-        $allRelated = Helpers::getAllTrialTypeFiles($pathfinder);
+        $allRelated = getAllTrialTypeFiles($pathfinder);
         $expt->apply(function($trial) use ($allRelated) {
             $type = $trial->get('trial type');
             $class = (new \ReflectionClass($trial))->getShortName();

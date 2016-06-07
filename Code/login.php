@@ -9,7 +9,7 @@ $_SESSION = array();
 $_SESSION['state'] = 'init';
 
 // initiate the object that finds files for us
-$_PATH = new Collector\Pathfinder($_SESSION['Pathfinder']);
+$_PATH = $_SESSION['_PATH'] = new Pathfinder();
 
 // load shuffle functions we will use later
 require $_PATH->get('Shuffle Functions');
@@ -18,7 +18,7 @@ require $_PATH->get('Shuffle Functions');
 $_SESSION['Current Collector'] = $_PATH->get('root', 'url');
 $currentExp = filter_input(INPUT_GET, 'CurrentExp', FILTER_SANITIZE_STRING);
 $current = ($currentExp === null) ? '' : $currentExp;
-if (!in_array($current, Collector\Helpers::getCollectorExperiments())) {
+if (!in_array($current, getCollectorExperiments())) {
     // requested experiment does not exist: send back to index
     header('Location: ' . $_PATH->get('root'));
     exit;
@@ -137,6 +137,8 @@ $procedure->checkOverlap($stimuli->getKeys(true));
 $procedure->shuffle();
 $stimuli->shuffle();
 
+$_SIDE = new Collector\SideData();
+
 /*
  *  Create the Experiment Object
  */
@@ -182,6 +184,7 @@ $_SESSION['Session'] = $user->getSession();
 $_SESSION['Start Time'] = time();
 $_SESSION['Status'] = serialize($status);
 $_SESSION['_EXPT'] = $_EXPT;
+$_SESSION['_SIDE'] = $_SIDE;
 $_SESSION['state'] = 'exp';
 
 header("Location: " . $_PATH->get('Experiment Page'));

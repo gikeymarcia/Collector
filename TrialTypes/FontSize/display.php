@@ -17,7 +17,7 @@
 </div>
 
 <div class="textcenter" style="font-size:<?= $_TRIAL->settings->fontsize ?>;">
-  <?= Collector\Helpers::show($_EXPT->get('cue')) ?>
+  <?= show($_EXPT->get('cue')) ?>
 </div>
 
 <div class="textcenter">

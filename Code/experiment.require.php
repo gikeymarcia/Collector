@@ -41,18 +41,18 @@ function recordTrial(Collector\Trial $trial, array $extraData = array(), $pos = 
     );
 
     foreach ($trial->export() as $name => $trialPart) {
-        $data = Collector\Helpers::placeData($trialPart, $data, "$name * ");
+        $data = placeData($trialPart, $data, "$name * ");
     }
     foreach ($data as $key => $val) {
         if (is_array($val)) {
-            $data = Collector\Helpers::placeData($val, $data, "$key * ");
+            $data = placeData($val, $data, "$key * ");
             unset($data[$key]);
         }
     }
     if (!empty($extraData)) {
-        $data = Collector\Helpers::placeData($extraData, $data, 'extra * ');
+        $data = placeData($extraData, $data, 'extra * ');
     }
     
     // record line into output CSV
-    Collector\Helpers::arrayToLine($data, $_PATH->get('Experiment Output'));
+    arrayToLine($data, $_PATH->get('Experiment Output'));
 }

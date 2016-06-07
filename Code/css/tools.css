@@ -35,12 +35,12 @@
   font-size: 1.3em;
 }
 #nav {
-  width: 90%;
+  width: 100%;
   overflow: auto;
-  margin:5px auto;
+  margin:0px 0px 5px 0px;
   background-color: #DEE7EC;
-  border-radius: 8px;
-  padding: 20px 15px;
+  border-radius-bottom-right: 8px;
+  padding: 20px 0px 20px 0px;
   min-width: 700px;
 }
   #nav h1 {
@@ -48,6 +48,7 @@
     line-height: .8em;
     padding: 0px;
     font-size: 2em;
+    margin-left: 1em;
   }
   #nav div {
     float: right;
@@ -57,6 +58,7 @@
     float: right;
     font-size: 1.1em;
     padding-top: 5px;
+    margin-right: 1em;
   }
   #nav select {
   width: 300px;;

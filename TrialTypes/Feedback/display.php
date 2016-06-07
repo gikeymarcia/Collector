@@ -8,11 +8,11 @@ if (empty($_EXPT->get('text'))) {
 // picture trial version of feedback
 if (strrpos($mainTrialType, 'pic') === strlen($mainTrialType) - 3): ?>
     <!-- show the image -->
-    <div class="pic"><?= Collector\Helpers::show($cue) ?> </div>
+    <div class="pic"><?= show($cue) ?> </div>
 
     <!-- show the answer -->
     <div class="textcenter"><h3> <?= $_EXPT->get('text') ?> </h3></div>
-    <h2 class="textcenter"> <?= Collector\Helpers::show($_EXPT->get('answer')) ?> </h2>
+    <h2 class="textcenter"> <?= show($_EXPT->get('answer')) ?> </h2>
 
 <?php // text feeback trials 
 else: ?>

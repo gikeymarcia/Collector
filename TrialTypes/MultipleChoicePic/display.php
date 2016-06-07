@@ -144,7 +144,7 @@ foreach ($buttons as $i => $button) {
 </style>
 
 <!-- show the image -->
-<div class="pic"><?= Collector\Helpers::show($cues[0]) ?></div>
+<div class="pic"><?= show($cues[0]) ?></div>
 
 <!-- optional text -->
 <div><?= $_EXPT->get('text') ?></div>

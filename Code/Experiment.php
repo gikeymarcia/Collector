@@ -38,6 +38,11 @@ if ($_POST !== array()) {
     require $_TRIAL->getRelatedFile('scoring');
     $data = isset($data) ? $data : $_POST;
     
+    if (isset($sideData)) {
+        if(empty($sidedata_label)) $sidedata_label = $trial_type;
+        $_SIDE->add($sideData, $sidedata_label);
+    }
+    
     // record data and advance to next PostTrial if applicable
     $_EXPT->record($data);
     if (($_EXPT->advance()) === 1) {
@@ -172,7 +177,7 @@ if ($_EXPT->getTrial(1) !== null) {
     $item = $_EXPT->getTrial(1)->get('item');
     if (is_array($item) && !empty($item)) {
         foreach (array_values($_EXPT->getTrial(1)->get('item')) as $val) {
-            if (Collector\Helpers::show($val) !== $val) {
+            if (show($val) !== $val) {
                 echo show($val); 
             }
         }

@@ -1,7 +1,7 @@
 <?php
     $data = array();
     
-    $commonColumns = array('Resp_RT', 'Resp_RTfirst', 'Resp_RTlast', 'Resp_Focus');
+    $commonColumns = array('RT', 'RTfirst', 'RTlast', 'Focus');
     $commonData = array();
     foreach ($commonColumns as $col) {
         $commonData[$col] = $_POST[$col];
@@ -31,12 +31,15 @@
     //Survey doesn't include information from the procedure file.
     
     # CUSTOM TYPE SCORING, let each survey type have access to its data
-    if (is_numeric($item)) {
+    $item = $_EXPT->get('item');
+    
+    if (is_array($item)) {
         $surveyFile = $_EXPT->get('cue');
     } else {
         $surveyFile = $item;
     }
-    $trialTypeDir = dirname($trialFiles['display']);
+    
+    $trialTypeDir = dirname($_TRIAL->getRelatedFile('display'));
     $surveyDir    = $_PATH->get('Common') . '/Surveys';
     require "$trialTypeDir/SurveyFunctions.php";
     
@@ -162,6 +165,17 @@
             
             $data["Score_$scoreName"] = $computedScore;
         }
+    }
+    
+    // record survey data into side data
+    $sideData = $data;
+    
+    foreach ($commonColumns as $col) {
+        unset($sideData[$col]);
+    }
+    
+    if (empty($sidedata_label)) {
+        $sidedata_label = pathinfo($surveyFile, PATHINFO_FILENAME);
     }
     
 

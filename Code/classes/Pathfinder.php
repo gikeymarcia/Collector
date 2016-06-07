@@ -3,10 +3,10 @@
  * Pathfinder class.
  */
 
-namespace Collector;
+// namespace Collector;
 
 /**
- * Provides access to a system map.
+* Provides access to a system map.
  *
  * Goals:
  * - provide a way to use system map, so that you can ask for
@@ -159,7 +159,7 @@ class Pathfinder
      * @param array $defaultHolder An external array passed by-reference to hold
      *                             the default values.
      */
-    public function __construct(array &$defaultHolder = null)
+    public function __construct()
     {
         $map = $this->getFileMap();
         $path = $this->convertFileMapToPathList($map);
@@ -170,13 +170,14 @@ class Pathfinder
         }
 
         $this->setRootPaths();
-
-        // if $defaultHolder was passed, make sure it is an array then use it
-        if (func_num_args() > 0) {
-            $this->setDefaultsCopy($defaultHolder);
-        }
-
-        $this->updateHardcodedPaths();
+    }
+    
+    public function __get($path) {
+        return $this->get($path);
+    }
+    
+    public function __wakeup() {
+        $this->setRootPaths();
     }
 
     /**
@@ -290,6 +291,7 @@ class Pathfinder
     private function setRootPaths()
     {
         $i = 0;
+        $this->rootPath['relative'] = '';
         $test = $this->get('Pathfinder');
         $relRoot = '';
         $urlRoot = dirname($this->getURL().'a');
@@ -334,50 +336,6 @@ class Pathfinder
         }
 
         return $protocol.$domain.$resource;
-    }
-
-    /**
-     * Sets the array of defaults to a reference of some external array.
-     *
-     * @param mixed $copy The external array (other types will be converted).
-     */
-    public function setDefaultsCopy(&$copy)
-    {
-        $defaults = $this->defaults;
-
-        $this->defaults = &$copy;
-
-        if (!is_array($this->defaults)) {
-            $this->defaults = $defaults;
-        } else {
-            foreach ($defaults as $key => $value) {
-                $this->defaults[$key] = $value;
-            }
-        }
-    }
-
-    /**
-     * Updates all of the path names using the values from Pathfinder::_pathList.
-     *
-     * @throws Exception If the path names are not unique.
-     */
-    private function updateHardcodedPaths()
-    {
-        $path = $this->pathList;
-        foreach (array_keys($path) as $name) {
-            $name = $this->cleanPathfinderName($name);
-            unset($this->$name);    // clear everything, so we can write it anew
-        }
-        foreach (array_keys($path) as $name) {
-            $name = $this->cleanPathfinderName($name);
-            if (isset($this->$name)) {
-                throw new Exception(
-                    'Bad path name: "'.$name.'" unavailable. '.
-                    'Make sure names are unique, case-insensitive.'
-                );
-            }
-            $this->$name = $this->get($name);
-        }
     }
 
     /**
@@ -461,7 +419,7 @@ class Pathfinder
      */
     public function set($name, $path)
     {
-        $key = str_replace(' ', '_', trim(strtolower($name)));
+        $key = $this->cleanPathfinderName($name);
         $val = str_replace('\\', '/', trim($path));
         if (strpos($val, $this->rootPath['absolute']) === 0) {
             $val = substr($val, strlen($this->rootPath['absolute']));
@@ -529,25 +487,6 @@ class Pathfinder
     }
 
     /**
-     * Gets all paths that do not contain a wild card or a default value.
-     * Use this to get a list of all non-variable paths. You can then run
-     * Helpers::fileExists() on them, as a diagnostic check that all typical files exist.
-     *
-     * @return array The array of standard paths.
-     */
-    public function getStandardPaths()
-    {
-        $paths = array();
-        foreach ($this->pathList as $name => $path) {
-            if (strpos($path, '{') === false) {
-                $paths[$name] = $path;
-            }
-        }
-
-        return $paths;
-    }
-
-    /**
      * Replaces a path component default with a new value.
      * Can either pass an associative array to set multiple defaults at once,
      * or a single key and value as separate parameters.
@@ -567,8 +506,6 @@ class Pathfinder
         foreach ($newDefaults as $key => $value) {
             $this->defaults[$key] = $value;
         }
-
-        $this->updateHardcodedPaths();
     }
 
     /**
@@ -581,14 +518,6 @@ class Pathfinder
     public function getDefault($key)
     {
         return isset($this->defaults[$key]) ? $this->defaults[$key] : null;
-    }
-
-    /**
-     * Clears all the defaults that exist in the Pathfinder.
-     */
-    public function clearDefaults()
-    {
-        $this->defaults = array();
     }
 
     /**

@@ -791,7 +791,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadValidator()
     {
-        $pathfinder = new Pathfinder();
+        $pathfinder = new \Pathfinder();
         $path = __DIR__.'/validators/validatordir1';
         $pathfinder->set('custom trial types', __DIR__.'/validators/validatordir1');
         

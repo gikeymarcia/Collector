@@ -13,7 +13,10 @@ session_start();
 error_reporting(E_ALL);
 
 // load file locations
-$_PATH = new Collector\Pathfinder($_SESSION['Pathfinder']);
+if (!isset($_SESSION['_PATH'])) $_SESSION['_PATH'] = new Pathfinder();
+$_PATH = $_SESSION['_PATH'];
+
+require_once $_PATH->get('Helpers');
 
 // check if they switched Collectors
 // (e.g., went from 'MG/Collector/Code/Done.php' to 'TK/Collector/Code/Done.php')
@@ -23,7 +26,7 @@ if (!isset($_SESSION['Current Collector'])
 ) {
     $_SESSION = array();
     $_SESSION['Current Collector'] = $currentCollector;
-    $_PATH = new Collector\Pathfinder($_SESSION['Pathfinder']);
+    $_PATH = $_SESSION['_PATH'] = new Pathfinder();
 
     // if inside Code/ redirect to index
     if ($_PATH->inDir('Code') && !$_PATH->atLocation('Login')) {
@@ -67,4 +70,8 @@ if (isset($_SESSION['_EXPT'])
 ) {
     $_EXPT = $_SESSION['_EXPT'];
     $_TRIAL = $_EXPT->getCurrent();
+}
+// alias SideData as well
+if (isset($_SESSION['_SIDE'])) {
+    $_SIDE = $_SESSION['_SIDE'];
 }
