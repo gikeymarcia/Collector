@@ -211,7 +211,7 @@
   }      
   
   // extract table from csv file
-  $stimuli=Collector\Helpers::getFromFile("$thisDirInfo->studyDir/$studySheetsInfo->thisSheetFilename",false,',');
+  $stimuli=getFromFile("$thisDirInfo->studyDir/$studySheetsInfo->thisSheetFilename",false,',');
   $stimData = array(array_keys(reset($stimuli)));
   foreach ($stimuli as $row) {
     $stimData[] = array_values($row);
