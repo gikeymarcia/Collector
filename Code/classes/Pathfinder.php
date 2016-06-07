@@ -175,6 +175,10 @@ class Pathfinder
     public function __get($path) {
         return $this->get($path);
     }
+    
+    public function __wakeup() {
+        $this->setRootPaths();
+    }
 
     /**
      * Retrieves the system map from file.
@@ -287,6 +291,7 @@ class Pathfinder
     private function setRootPaths()
     {
         $i = 0;
+        $this->rootPath['relative'] = '';
         $test = $this->get('Pathfinder');
         $relRoot = '';
         $urlRoot = dirname($this->getURL().'a');

@@ -13,7 +13,9 @@ session_start();
 error_reporting(E_ALL);
 
 // load file locations
-$_PATH = $_SESSION['_PATH'] = new Pathfinder();
+if (!isset($_SESSION['_PATH'])) $_SESSION['_PATH'] = new Pathfinder();
+$_PATH = $_SESSION['_PATH'];
+
 require_once $_PATH->get('Helpers');
 
 // check if they switched Collectors
