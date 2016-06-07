@@ -3,7 +3,8 @@
 adminOnly();
 
 // make a temporary pathfinder to get us to the right settings
-$tempPath = new Pathfinder($_DATA['path']);
+unset($_PATH);
+$_PATH = $_DATA['_PATH'] = new Pathfinder();
 $exps = array_flip(getCollectorExperiments());
 
 // change experiment if one is selected
@@ -11,18 +12,18 @@ if (isset($_GET['Exp'])
     && isset($exps[$_GET['Exp']])
 ) {
     $_DATA['exp'] = $_GET['Exp'];
-    $tempPath->setDefault('Current Experiment', $_GET['Exp']);
+    $_PATH->setDefault('Current Experiment', $_GET['Exp']);
 }
 $_DATA['exp'] = (isset($_DATA['exp'])) ? $_DATA['exp'] : "";
 if (!empty($_DATA['exp'])) {
-    $tempPath->setDefault('Current Experiment', $_DATA['exp']);
+    $_PATH->setDefault('Current Experiment', $_DATA['exp']);
 }
 
 // make a new instance of the settings class
 $yourSettings = new Collector\Settings(
-    $tempPath->get("Common Settings"),
-    $tempPath->get("Experiment Settings"),
-    $tempPath->get("Password")
+    $_PATH->get("Common Settings"),
+    $_PATH->get("Experiment Settings"),
+    $_PATH->get("Password")
 );
 
 require 'saveSettings.php';

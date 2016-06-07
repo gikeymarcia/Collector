@@ -9,7 +9,7 @@ $_SESSION = array();
 $_SESSION['state'] = 'init';
 
 // initiate the object that finds files for us
-$_PATH = new Pathfinder($_SESSION['Pathfinder']);
+$_PATH = $_SESSION['_PATH'] = new Pathfinder();
 
 // load shuffle functions we will use later
 require $_PATH->get('Shuffle Functions');

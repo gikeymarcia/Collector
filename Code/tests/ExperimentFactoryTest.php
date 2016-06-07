@@ -6,7 +6,7 @@ class ExperimentFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->pathfinder = new Pathfinder();
+        $this->pathfinder = new \Pathfinder();
     }
     
     protected function getProperty(&$object, $propName)

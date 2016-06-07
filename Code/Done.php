@@ -72,6 +72,7 @@ if (isset($validStates[$_SESSION['state']])) {
  */
 $email = $_SETTINGS->experimenter_email;
 $currentExperiment = $_PATH->getDefault('Current Experiment');
+pre_var_dump($_PATH);
 $verification_code = "{$_SETTINGS->verification}-{$_SESSION['ID']}";
 $title = 'Done!';
 $mailto = "{$email}?Subject=Comments%20on%20{$currentExperiment}";
