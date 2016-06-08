@@ -96,7 +96,7 @@
            .         "<div>" . $leftDesc  . "</div>"
            .         "<div>" . $rightDesc . "</div>"
            .     "</div>";
-        echo     "<input name='$qName' type='text' $required title='Please select a location on this slider.'>";
+        echo     "<input name='$qName' type='text' $required title='Please select a location on this slider.' tabindex='-1'>";
         echo     "<div class='inputSlider' data-min='$thisMin' data-max='$thisMax'></div>";
         echo '</div>';
     }

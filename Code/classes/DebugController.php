@@ -3,6 +3,8 @@
  * DebugController class.
  */
 
+namespace Collector;
+
 /**
  * Handles validating debug users and storing debug data.
  */
@@ -53,7 +55,7 @@ class DebugController
     }
     /**
      * Determines if debug mode should be enabled.
-     * If any check returns true then debug mode is turned on and a boolean is 
+     * If any check returns true then debug mode is turned on and a boolean is
      * saved to $_SESSION['Debug'] which tells if debug is on/off.
      */
     public function debugCheck()
@@ -128,7 +130,7 @@ class DebugController
      *
      * @param Pathfinder $pathfinder The Pathfinder for the experiment.
      */
-    public function feedPathfinder(Pathfinder $pathfinder)
+    public function feedPathfinder(\Pathfinder $pathfinder)
     {
         if (!$this->isOn()) {
             $pathfinder->setDefault('Data Sub Dir', '');

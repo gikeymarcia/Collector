@@ -1,12 +1,12 @@
 <?php
     $data = array();
     
-    $commonColumns = array('Resp_RT', 'Resp_RTfirst', 'Resp_RTlast', 'Resp_Focus');
+    $commonColumns = array('RT', 'RTfirst', 'RTlast', 'Focus');
     $commonData = array();
     foreach ($commonColumns as $col) {
         $commonData[$col] = $_POST[$col];
     }
-    $_EXPT->recordResponses($commonData);
+    $_EXPT->record($commonData);
     
     # SAVE ALL DATA
     foreach ($_POST as $inpName => $resp) {
@@ -31,12 +31,15 @@
     //Survey doesn't include information from the procedure file.
     
     # CUSTOM TYPE SCORING, let each survey type have access to its data
-    if (is_numeric($item)) {
-        $surveyFile = $cue;
+    $item = $_EXPT->get('item');
+    
+    if (is_array($item)) {
+        $surveyFile = $_EXPT->get('cue');
     } else {
         $surveyFile = $item;
     }
-    $trialTypeDir = dirname($trialFiles['display']);
+    
+    $trialTypeDir = dirname($_TRIAL->getRelatedFile('display'));
     $surveyDir    = $_PATH->get('Common') . '/Surveys';
     require "$trialTypeDir/SurveyFunctions.php";
     
@@ -164,6 +167,17 @@
         }
     }
     
+    // record survey data into side data
+    $sideData = $data;
+    
+    foreach ($commonColumns as $col) {
+        unset($sideData[$col]);
+    }
+    
+    if (empty($sidedata_label)) {
+        $sidedata_label = pathinfo($surveyFile, PATHINFO_FILENAME);
+    }
+    
 
     /*
         This following section allows for writing of survey on multiple lines. It does this by 
@@ -171,44 +185,44 @@
     */
 
     //check the settings column, if vertical, then output that way
-    if ($settings === "vertical"){
+    if ($_TRIAL->settings->output === "vertical"){
         //run through each item in survey
-    foreach ($survey as $surveyRowIndex => $surveyRow) {
-        //grab the type of survey
-        $type = cleanSurveyType($surveyRow['Type']);
-        //grab the question name
-        $qName = $surveyRow['Question Name'];
+        foreach ($survey as $surveyRowIndex => $surveyRow) {
+            //grab the type of survey
+            $type = cleanSurveyType($surveyRow['Type']);
+            //grab the question name
+            $qName = $surveyRow['Question Name'];
+            
+            if (isset($allSurveyTypes[$type]['getResponses'])) {
+                $rowResponses = $allSurveyTypes[$type]['getResponses']($surveyRow);
+            } elseif (isset($data[$qName])) {
+                $rowResponses = array($data[$qName]);
+            } else {
+                continue; // somehow, this question isn't in the data
+            }
+            //for reach row response
+            foreach ($rowResponses as $resp) {
+                //declare extradata array
+                $extraData = array();
+                $extraData['Resp_Response'] = $resp; //the response column
+                $extraData['Resp_Survey_Index'] = $surveyRowIndex+1; //index of survey
+                
+                //add extra data columns
+                foreach ($surveyRow as $col => $val) {
+                    $extraData['Survey_' . $col] = $val; 
+                }
+                
+                //add response columns
+                foreach ($scores as $col => $score) {
+                    $extraData['Resp_' . $col] = $score;
+                }
+                
+                //record the trials
+                recordTrial($extraData);
+            }
+        }
         
-        if (isset($allSurveyTypes[$type]['getResponses'])) {
-            $rowResponses = $allSurveyTypes[$type]['getResponses']($surveyRow);
-        } elseif (isset($data[$qName])) {
-            $rowResponses = array($data[$qName]);
-        } else {
-            continue; // somehow, this question isn't in the data
-        }
-        //for reach row response
-        foreach ($rowResponses as $resp) {
-            //declare extradata array
-            $extraData = array();
-            $extraData['Resp_Response'] = $resp; //the response column
-            $extraData['Resp_Survey_Index'] = $surveyRowIndex+1; //index of survey
-            
-            //add extra data columns
-            foreach ($surveyRow as $col => $val) {
-                $extraData['Survey_' . $col] = $val; 
-            }
-            
-            //add response columns
-            foreach ($scores as $col => $score) {
-                $extraData['Resp_' . $col] = $score;
-            }
-            
-            //record the trials
-            recordTrial($extraData);
-        }
+        $data = $commonData; 
     }
     
-    
-    $data = $commonData; 
-}
     unset($_SESSION['CurrentSurvey']);

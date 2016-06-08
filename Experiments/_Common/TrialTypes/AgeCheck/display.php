@@ -16,16 +16,16 @@
      * and then in this trial, check if $responses["Gender"] is equal to "Male" or "Female".
      * * */
     
-    $currentPos;                   // the current trial in the experiment (i.e. row in the Procedure file). This variable is automatically defined for every trial, because of separate code found in Experiment.php, in the Code/ folder
-    $prevPos    = $currentPos - 1; // the position of the last trial, where we would ask a survey
-    $responses  = $_EXPT->responses[$prevPos]; // the responses on the last trial
+    // get the last trial, where we would ask a survey
+    $previousTrial = $_EXPT->getTrial(-1);
     
-    if (isset($responses['Age']) AND $responses['Age'] < 18) {
+    if ($previousTrial->getResponse('age') < 18) {
         // 1. do we have the response for their age?
         // 2. are they too young to participate?
         // if so, they they are ineligible
         // so, we are going to display the contents of the Text column,
         // which should be set to some polite message, in the Procedure file
+        $text = $_EXPT->get('text');
         echo $text;
         
         // if the Text column was blank, we are going to fill in some message, so that

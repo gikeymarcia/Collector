@@ -1,11 +1,17 @@
 Trail Type,Demo,Wait?,Priority
+Attention Check,,,1
 WordPair,,,1
 NewSession,,,2
-Passage,,,3
+Video,,,3
 CuedRecallPic,,,4
 JOL,,,4
 MultipleChoicePic,,,4
-FontSize,,,5
+Consent,,Yes,
+DecisionMakingTask,,Yes,
+Feedback,,Yes,
+FreeRecallVDR,,Yes,
+Tetris,,Yes,
+TwoLetterStem,,Yes,
 Audio,x,,
 CaptionedPic,x,,
 CopyPic,x,,
@@ -15,17 +21,11 @@ Cue,x,,
 CuedRecall,x,,
 CuePic,x,,
 DigitSpan,x,,
+FontSize,x,,
 FreeRecall,x,,
 Instruct,x,,
 Likert,x,,
 MultipleChoice,x,,
+Passage,x,,
 Survey,x,,
 Youtube,x,,
-Attention Check,,Yes,
-Consent,,Yes,
-DecisionMakingTask,,Yes,
-Feedback,,Yes,
-FreeRecallVDR,,Yes,
-Tetris,,Yes,
-TwoLetterStem,,Yes,
-Video,,,

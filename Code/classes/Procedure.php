@@ -3,6 +3,8 @@
  * Procedure class.
  */
 
+namespace Collector;
+
 /**
  *  Controls the error checking for procedure file.
  *

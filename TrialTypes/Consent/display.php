@@ -1,12 +1,14 @@
 <?php
-if (($cue != '') && (trim($text) == '')) {
-    $text = $cue;
+$cue = $_EXPT->get('cue');
+if (!empty($cue) && empty(trim($_EXPT->get('text')))) {
+    $_EXPT->update('text', $cue);
 }
 
+$consent = $_EXPT->get('text');
 $fileDir = $_PATH->get('Common');
-$filePath = fileExists("$fileDir/$text");
+$filePath = fileExists("{$fileDir}/{$consent}");
 
-if ($filePath !== false && strpos($text, '..') === false) {
+if ($filePath !== false && strpos($consent, '..') === false) {
     $pathinfo = pathinfo($filePath);
     $ext = '';
     if (isset($pathinfo['extension'])) {
@@ -22,13 +24,11 @@ if ($filePath !== false && strpos($text, '..') === false) {
         unset($consent);
         require $filePath; // this file should create the $consent variable
         if (!isset($consent)) {
-            $consent = $text;
+            $consent = $_EXPT->get('text');
         }
     } else {
         $consent = '<pre>'.file_get_contents($filePath).'</pre>';
     }
-} else {
-    $consent = $text;
 }
 ?>
 
@@ -76,7 +76,7 @@ if ($filePath !== false && strpos($text, '..') === false) {
 </div>
 
 <script>
-  $(window).load(function() {
+trialBegin = function () {
     $(":submit").blur();
-  });
+};
 </script>

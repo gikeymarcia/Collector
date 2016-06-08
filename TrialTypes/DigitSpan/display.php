@@ -1,21 +1,29 @@
 <?php
-    $text = (empty($text)) ? "Listen carefully." : $text;
-    $direction = (strtolower($settings) === 'reverse' || strtolower($settings) === 'backwards')
-               ? -1
-               : 1;
+/**
+ * Digit Span settings
+ * 
+ * Change the contents of your settings column to 'reverse' or 'backwards'
+ * to change to reverse digitspan
+ *
+ */
+if (empty($_EXPT->get('text'))) {
+    $_EXPT->update('text', "Listen carefully.");
+}
 
-    $current = $_PATH->get('Trial Types', 'url').'/DigitSpan';
+$direction = $_TRIAL->settings->backwards ? -1 : 1;
 
-    $cues = [];
-    for ($i = 1; $i < 10; ++$i) {
-        $cues[] = "${current}/audio/{$i}.wav";
-    }
-    $beepFile = "{$current}/audio/beep.wav";
+$current = $_PATH->get('Trial Types', 'url').'/DigitSpan';
+
+$cues = array();
+for ($i = 1; $i < 10; ++$i) {
+    $cues[] = "{$current}/audio/{$i}.wav";
+}
+$beepFile = "{$current}/audio/beep.wav";
 ?>
 
 <!-- Additional text to show above the trial -->
 <div class="textcenter">
-  <p><?= $text ?></p>
+  <p><?= $_EXPT->get('text') ?></p>
 </div>
 
 <!-- include form to collect RT and advance page -->
@@ -101,7 +109,7 @@
 
     // rebind the enter key to click the advance button
     $("#inputbox").keydown(function (e) {
-      if (e.which == 13) {
+      if (e.which === 13) {
         e.preventDefault();
         $("#advanceButton").click();
       }

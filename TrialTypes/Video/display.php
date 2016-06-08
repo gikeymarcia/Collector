@@ -9,6 +9,7 @@
  * try using the YouTube trial type instead, and load your videos to
  * YouTube rather than your server.
  **/
+$cue = $_EXPT->get('cue');
 if (!isLocal($cue)) {
     // video is not a local file
     if (false !== strpos($cue, 'youtube') || false !== strpos($cue, 'youtu.be')) {
@@ -39,7 +40,7 @@ if (!isLocal($cue)) {
 </div>
 
 <!-- include form to collect RT and advance page -->
-<div><?= $text ?></div>
+<div><?= $_EXPT->get('text') ?></div>
 <div class="textcenter">
   <button class="collectorButton collectorAdvance" id="FormSubmitButton">Next</button>
 </div>

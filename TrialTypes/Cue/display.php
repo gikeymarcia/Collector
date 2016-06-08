@@ -1,9 +1,9 @@
 <div>
-  <?= $text; ?>
+  <?= $_EXPT->get('text'); ?>
 </div>
 
 <div class="study textcenter">
-  <?= show($cue) ?>
+  <?= show($_EXPT->get('cue')) ?>
 </div>
 
 <div class="textcenter">

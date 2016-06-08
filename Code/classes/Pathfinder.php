@@ -3,9 +3,11 @@
  * Pathfinder class.
  */
 
+// namespace Collector;
+
 /**
- * Provides access to a system map.
- * 
+* Provides access to a system map.
+ *
  * Goals:
  * - provide a way to use system map, so that you can ask for
  *   each file or directory simply by a label
@@ -14,7 +16,7 @@
  *   purpose, and files can be moved/renamed without trouble
  *
  * Requirements:
- * - this class is expecting to be able to require the 
+ * - this class is expecting to be able to require the
  *   systemMap.php file from the already existing include
  *   paths. So, keep systemMap.php in the same directory
  * - this class is also expecting the label "Pathfinder"
@@ -26,16 +28,16 @@
  *   structure, this class will flip that array, so that
  *   the labels each become a key in an associative array,
  *   pointing to the path they came from
- * - So, if there was something like 
+ * - So, if there was something like
  *   'dir => array( 'file.php' => 'Test' ), then this class
  *   will create $_pathList['Test'] = 'dir/file.php'
  *
  * - to get that path, you can either access it directly,
  *   by using $_PATH->test, or by using the get() function,
  *   $_PATH->get('Test').
- * - when accessing directly, the name must be in all 
+ * - when accessing directly, the name must be in all
  *   lowercase, and the spaces should be replaced with
- *   underscores. So, 'Custom Functions' would be 
+ *   underscores. So, 'Custom Functions' would be
  *   accessed as $_PATH->custom_functions
  * - if you use the get() function, casing doesn't matter,
  *   and you can still use the original spaces.
@@ -67,7 +69,7 @@
  *   you to pass part of the path along with your get() function
  *   call, as the third parameter
  * - this would be used with something like a trial type name,
- *   which can vary, but ultimately points to the same 
+ *   which can vary, but ultimately points to the same
  *   directory structure.
  *   in the example 'test' => 'dir/{var}/subdir/file.php', using
  *   $_PATH->get('test', 'relative', 'instruct') from inside Code/
@@ -81,7 +83,7 @@
  * - the second kind of variable is the $default setting, which is
  *   used along with a default label wrapped in curly braces,
  *   'test' => 'dir/{Username}/output.csv'
- * - in this case, you would first load a default value for 
+ * - in this case, you would first load a default value for
  *   'Username', by using the setDefault() function, like so:
  *   $_PATH->setDefault('Username', 'participant001');
  * - then, when you call $_PATH->get('test'), you would receive
@@ -101,7 +103,7 @@
  * - this way, if you need to wipe the session, but for some reason want
  *   to keep using the same defaults, you can simply call this function
  *   after the session wipe. Although, if you are looking for security,
- *   you should probably just recreate the $_PATH variable with the 
+ *   you should probably just recreate the $_PATH variable with the
  *   wiped session, to start completely fresh
  *
  * - you can also check the default value, using getDefault()
@@ -130,7 +132,7 @@ class Pathfinder
      * The directory name.
      *
      * @var string
-     * 
+     *
      * @todo what is $dirName used for? update property docblock
      */
     private $dirName = 'dir name';
@@ -139,7 +141,7 @@ class Pathfinder
      * The variable name.
      *
      * @var string
-     * 
+     *
      * @todo what is $varName used for? update property docblock
      */
     private $varName = 'var';
@@ -157,7 +159,7 @@ class Pathfinder
      * @param array $defaultHolder An external array passed by-reference to hold
      *                             the default values.
      */
-    public function __construct(array &$defaultHolder = null)
+    public function __construct()
     {
         $map = $this->getFileMap();
         $path = $this->convertFileMapToPathList($map);
@@ -168,13 +170,14 @@ class Pathfinder
         }
 
         $this->setRootPaths();
-
-        // if $defaultHolder was passed, make sure it is an array then use it
-        if (func_num_args() > 0) {
-            $this->setDefaultsCopy($defaultHolder);
-        }
-
-        $this->updateHardcodedPaths();
+    }
+    
+    public function __get($path) {
+        return $this->get($path);
+    }
+    
+    public function __wakeup() {
+        $this->setRootPaths();
     }
 
     /**
@@ -246,7 +249,7 @@ class Pathfinder
     }
 
     /**
-     * Adds a key => value pair to an array, throwing an exception if the key 
+     * Adds a key => value pair to an array, throwing an exception if the key
      * already exists.
      *
      * @param array $array    The array (by-reference) to modify.
@@ -288,6 +291,7 @@ class Pathfinder
     private function setRootPaths()
     {
         $i = 0;
+        $this->rootPath['relative'] = '';
         $test = $this->get('Pathfinder');
         $relRoot = '';
         $urlRoot = dirname($this->getURL().'a');
@@ -332,50 +336,6 @@ class Pathfinder
         }
 
         return $protocol.$domain.$resource;
-    }
-
-    /**
-     * Sets the array of defaults to a reference of some external array.
-     *
-     * @param mixed $copy The external array (other types will be converted).
-     */
-    public function setDefaultsCopy(&$copy)
-    {
-        $defaults = $this->defaults;
-
-        $this->defaults = &$copy;
-
-        if (!is_array($this->defaults)) {
-            $this->defaults = $defaults;
-        } else {
-            foreach ($defaults as $key => $value) {
-                $this->defaults[$key] = $value;
-            }
-        }
-    }
-
-    /**
-     * Updates all of the path names using the values from Pathfinder::_pathList.
-     *
-     * @throws Exception If the path names are not unique.
-     */
-    private function updateHardcodedPaths()
-    {
-        $path = $this->pathList;
-        foreach (array_keys($path) as $name) {
-            $name = $this->cleanPathfinderName($name);
-            unset($this->$name);    // clear everything, so we can write it anew
-        }
-        foreach (array_keys($path) as $name) {
-            $name = $this->cleanPathfinderName($name);
-            if (isset($this->$name)) {
-                throw new Exception(
-                    'Bad path name: "'.$name.'" unavailable. '.
-                    'Make sure names are unique, case-insensitive.'
-                );
-            }
-            $this->$name = $this->get($name);
-        }
     }
 
     /**
@@ -447,6 +407,25 @@ class Pathfinder
 
         return $path;
     }
+    
+    /**
+     * Sets a new path in the path list or replaces the existing path.
+     * 
+     * The name string is converted to lowercase and spaces are replaced with
+     * underscores.
+     * 
+     * @param string $name The name of the path to set.
+     * @param string $path The path to set, absolute or relative to the root.
+     */
+    public function set($name, $path)
+    {
+        $key = $this->cleanPathfinderName($name);
+        $val = str_replace('\\', '/', trim($path));
+        if (strpos($val, $this->rootPath['absolute']) === 0) {
+            $val = substr($val, strlen($this->rootPath['absolute']));
+        }
+        $this->pathList[$key] = ltrim($val, '/');
+    }
 
     /**
      * Modifies a string using the passed variables.
@@ -508,30 +487,11 @@ class Pathfinder
     }
 
     /**
-     * Gets all paths that do not contain a wild card or a default value.
-     * Use this to get a list of all non-variable paths. You can then run 
-     * fileExists() on them, as a diagnostic check that all typical files exist.
-     *
-     * @return array The array of standard paths.
-     */
-    public function getStandardPaths()
-    {
-        $paths = array();
-        foreach ($this->pathList as $name => $path) {
-            if (strpos($path, '{') === false) {
-                $paths[$name] = $path;
-            }
-        }
-
-        return $paths;
-    }
-
-    /**
      * Replaces a path component default with a new value.
-     * Can either pass an associative array to set multiple defaults at once, 
+     * Can either pass an associative array to set multiple defaults at once,
      * or a single key and value as separate parameters.
      *
-     * @param array|string $arrayOrKey The array of keys => values to set, or a 
+     * @param array|string $arrayOrKey The array of keys => values to set, or a
      *                                 single key to set.
      * @param string       $value      The value to set if a single key is passed.
      */
@@ -546,8 +506,6 @@ class Pathfinder
         foreach ($newDefaults as $key => $value) {
             $this->defaults[$key] = $value;
         }
-
-        $this->updateHardcodedPaths();
     }
 
     /**
@@ -560,14 +518,6 @@ class Pathfinder
     public function getDefault($key)
     {
         return isset($this->defaults[$key]) ? $this->defaults[$key] : null;
-    }
-
-    /**
-     * Clears all the defaults that exist in the Pathfinder.
-     */
-    public function clearDefaults()
-    {
-        $this->defaults = array();
     }
 
     /**

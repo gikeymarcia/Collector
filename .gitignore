@@ -30,6 +30,11 @@ Icon?
 
 # PHPDocumentor
 phpdoc.xml
+Documentation/PHPDoc
+
+# PHPUnit
+phpunit.xml
+Code/tests/reports
 
 # Collector - Data
 !Data/

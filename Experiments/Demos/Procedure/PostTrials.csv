@@ -1,0 +1,4 @@
+Item,Trial Type,Max Time,Text,Post 1 Item,Post 1 Trial Type,Post 1 Text,Settings,Shuffle 1
+1,Cue,user,This is the MainTrial.,2,Cue,This is the PostTrial,,off
+2,Cue,user,This is the MainTrial.,,JOL,This is a JOL PostTrial,,off
+3,Cue,user,This is the MainTrial.,1,JOL,This is a JOL PostTrial,,off

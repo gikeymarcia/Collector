@@ -9,7 +9,7 @@ if (!isset($_SESSION)) {
     require $_PATH->get('Parse');
 
     // load configs
-    $_SETTINGS = Parse::fromConfig($_PATH->get('Config'), true);
+    $_SETTINGS = adamblake\Parse::fromConfig($_PATH->get('Config'), true);
 
     // load custom functions
     require $_PATH->get('Custom Functions');
@@ -200,7 +200,7 @@ if (isset($toCheck)) {
 //             // log and break at the first IP rejection
 //             if ($ip === $rejected['ip address']) {
 //                 $noGo[] = 'Sorry, you are not allowed to login to this experiment more than once.';
-//                 break;     
+//                 break;
 //             }
 //         }
 //     }
@@ -254,9 +254,9 @@ if ((count($noGo) == 0) && (isset($toCheck)) && (!isset($_SESSION))) {
 }
 // show all users to people who want to login
 if (!isset($_SESSION)) {
-    Readable($files, 'Files in directory');
-    Readable($uniques, 'Previous iteration workers');
-    Readable($skipped, 'Files skipped because there is no "WorkerID" column');
+    readable($files, 'Files in directory');
+    readable($uniques, 'Previous iteration workers');
+    readable($skipped, 'Files skipped because there is no "WorkerID" column');
 }
 
 if (!isset($_SESSION)) {

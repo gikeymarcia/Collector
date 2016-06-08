@@ -1,11 +1,12 @@
 <?php
     function checkSurveyFilename($surveyFile, $surveyDir) {
+        global $_EXPT;
         $errors = array();
         
         if (strtolower(substr($surveyFile, 0, 4)) === 'http') {
             $err = 'For the survey trial type, the "Cue" column must be the name of a local file. '
                  . 'It cannot start with "http". '
-                 . '"' . $cue . '" is invalid.';
+                 . '"' . $_EXPT->get('cue') . '" is invalid.';
             
             $errors[] = $err;
         }
@@ -13,7 +14,7 @@
         if (strtolower(substr($surveyFile, -4)) !== '.csv') {
             $err = 'For the survey trial type, the "Cue" column must be the name of a local file, '
                  . 'ending with the extension ".csv". '
-                 . '"' . $cue . '" is invalid.';
+                 . '"' . $_EXPT->get('cue') . '" is invalid.';
             
             $errors[] = $err;
         }
@@ -22,7 +23,7 @@
             $err = 'For the survey trial type, the "Cue" column must be the name of a local file, '
                  . 'inside the "Surveys" folder of the "Experiments/Common" folder. '
                  . 'The cue cannot contain "..". '
-                 . '"' . $cue . '" is invalid.';
+                 . '"' . $_EXPT->get('cue') . '" is invalid.';
             
             $errors[] = $err;
         }
@@ -156,8 +157,8 @@
             foreach ($survey as $i => $row) {
                 if ($row['Values'] === '') continue;
                 // delimit cell contents with "|" rather than ",", since answers can be text descriptions
-                $rowAnswers = surveyRangeToArray($row['Answers']);
-                $rowValues  = surveyRangeToArray($row['Values']);
+                $rowAnswers = rangeToArray($row['Answers'], '|');
+                $rowValues  = rangeToArray($row['Values'],  '|');
                 
                 if (count($rowAnswers) !== count($rowValues)) {
                     $problemRows[] = $i;

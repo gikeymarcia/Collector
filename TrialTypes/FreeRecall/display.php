@@ -1,5 +1,5 @@
 <div>
-  <div class="shim"><?= $text ?></div>
+  <div class="shim"><?= $_EXPT->get('text') ?></div>
   <textarea class="fr-textarea collectorInput" name="Response" wrap="physical" value=""></textarea>
 </div>
   

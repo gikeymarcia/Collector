@@ -1,9 +1,11 @@
-<?php 
+<?php
 /***************************************************************************
  * README
- * 
+ *
  * How to use:
  * In the Settings column, separate parameters by pipe |
+ *   e.g.: submitOnDone = false | preventEarlySubmit = false
+ *   or  : submitOnDone = true  | preventEarlySubmit = true
  * Parameters;
  *     submitOnDone
  *         set to false to prevent auto-submission upon video completion
@@ -23,50 +25,15 @@ $parameters = array(
  // 'end'            => see line 71  // end time in seconds
 );
 
-/**
- * Determines if the video is a valid YouTube link.
- *
- * @param string $string The path to check.
- *
- * @return bool True if the link is valid, else false.
- */
-function isValidYouTube($string)
-{
-    if (isLocal($string)) {
-        return false;
-    }
-    if (false !== stripos($string, 'youtube')) {
-        return true;
-    }
-    if (false !== stripos($string, 'youtu.be')) {
-        return true;
-    }
-
-    return false;
-}
-
-if (!isValidYouTube($cue)) {
-    throw new InvalidArgumentException('The given video source is not '
-        .'supported. The cue should be a YouTube URL.');
-}
-
 // extract submitOnDone and preventEarlySubmit settings from $settings
 $submitOnDone = true;
 $preventEarlySubmit = true;
-$settings = explode('|', $settings);
-foreach ($settings as $setting) {
-    $settingSubmit = removeLabel($setting, 'submitOnDone');
-    $settingPrevent = removeLabel($setting, 'preventEarlySubmit');
-    if ($settingSubmit === 'false') {
-        $submitOnDone = false;
-    }
-    if ($settingPrevent === 'false') {
-        $preventEarlySubmit = false;
-    }
-}
+
+if ($_TRIAL->settings->submitOnDone       === 'false') $submitOnDone       = false;
+if ($_TRIAL->settings->preventEarlySubmit === 'false') $preventEarlySubmit = false;
 
 // get video ID
-$videoId = youtubeUrlCleaner($cue, true);
+$videoId = youtubeUrlCleaner($_EXPT->get('cue'), true);
 
 // get start and end time from stim file columns
 if (!isset($startTime) || !is_numeric($startTime)) {
@@ -86,7 +53,7 @@ $parameters['end'] = $endTime;
 </div>
 
 <!-- include form to collect RT and advance page -->
-<div><?= $text ?></div>
+<div><?= $_EXPT->get('text') ?></div>
 <div class="textcenter">
   <button class="collectorButton collectorAdvance" id="FormSubmitButton">Next</button>
 </div>
@@ -95,11 +62,11 @@ $parameters['end'] = $endTime;
   var player;
   var submitOnDone       = <?= $submitOnDone       ? 'true' : 'false' ?>;
   var preventEarlySubmit = <?= $preventEarlySubmit ? 'true' : 'false' ?>;
-  
+
   if (preventEarlySubmit) {
       $("#FormSubmitButton").addClass("invisible");
   }
-  
+
   function onYouTubeIframeAPIReady() {
     player = new YT.Player("player", {
       height  : "315",
@@ -115,7 +82,7 @@ $parameters['end'] = $endTime;
       }
     });
   }
-  
+
   function onPlayerStateChange(e) {
     if (e.data === YT.PlayerState.ENDED) {
       if (submitOnDone) {

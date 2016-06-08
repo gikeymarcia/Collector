@@ -1,6 +1,6 @@
 <?php
 /**
- * PicFeedbackCopy.
+ * CopyPic.
  * 
  * Show the correct answer with picture above and force participants to copy the
  * answer before continuing.
@@ -9,22 +9,19 @@
 */
 
 // picture trial version of feedback
-if ($text === '') {
-    $text = 'The correct answer is:';
+if (empty($_EXPT->get('text'))) {
+    $_EXPT->update('text', 'The correct answer was:');
 }
-
 ?>
 
 <!-- show the image -->
 <div class="pic">
-  <?= show($cue) ?>
+  <?= show($_EXPT->get('cue')) ?>
 </div>
 
 <!-- show the answer -->
-
-<div class="textcenter"><?= show($answer) ?></h2>
-<h5 class="textcenter"><h5><?= $text ?></h2></div>
-
+<div class="textcenter"><h2><?= $_EXPT->get('text') ?></h2></div>
+<h1 class="textcenter"><?= show($_EXPT->get('answer')) ?></h1>
 
 <!-- copy the answer -->
 <div class="textcenter pad">

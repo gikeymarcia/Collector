@@ -26,7 +26,7 @@ if (!empty($_DATA['exp'])) {
         $searching = scandir("{$_root}/Experiments/$exp/$type/");
         foreach ($searching as $item => $path) {
             // remove files that aren't .csv
-            if (!instring('.csv', $path, true)) {
+            if (!inString('.csv', $path, true)) {
                 unset($searching[$item]);
             }
             $ShuffleFolders[$type] = $searching;

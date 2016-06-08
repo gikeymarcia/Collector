@@ -3,13 +3,15 @@
  * ConditionController class.
  */
 
+namespace Collector;
+
 /**
  * Controls the condition information.
- * 
+ *
  * Controls the selecting, assigning, and returning of condition information, as
- * well as manipulation of the login counter (becasue it is needed to condition 
- * cycle). Upon creation of a new instance of this object the Conditions.csv 
- * file is loaded. Once $this->assignCondition() has been run you can use the 
+ * well as manipulation of the login counter (becasue it is needed to condition
+ * cycle). Upon creation of a new instance of this object the Conditions.csv
+ * file is loaded. Once $this->assignCondition() has been run you can use the
  * following public methods to query information about the assigned conditions.
  *     - $this->stimuli()     : retrieves 'Stimuli' cell string
  *     - $this->procedure()   : retrieves 'Procedure' cell string
@@ -48,11 +50,11 @@ class ConditionController
     protected $showFlagged;
 
     /**
-     * Full array of Conditions.csv as loaded by GetFromFile().
+     * Full array of Conditions.csv as loaded by getFromFile().
      *
      * @var array
      *
-     * @see GetFromFile()
+     * @see getFromFile()
      */
     protected $ConditionsCSV;
 
@@ -79,9 +81,9 @@ class ConditionController
 
     /**
      * Constructor.
-     * 
+     *
      * Accepts the required locations to the Conditions and Log files as well as
-     * a boolean indicating whether flagged conditions should be shown. Then, 
+     * a boolean indicating whether flagged conditions should be shown. Then,
      * the Conditions.csv information is loaded and the required columns are
      * checked in the resultant array.
      *
@@ -89,7 +91,7 @@ class ConditionController
      * @param string          $logLocation   Relative path to the login counter file.
      * @param ErrorController $errorHandler  Object that logs errors.
      * @param bool            $showFlagged   Inital value for the showFlagged property.
-     * 
+     *
      * @see getFromFile()
      */
     public function __construct($conditionsLoc, $logLocation,
@@ -122,7 +124,7 @@ class ConditionController
 
     /**
      * Sets the selected condition.
-     * Sets the condition to the value specified. If the selected condition is 
+     * Sets the condition to the value specified. If the selected condition is
      * not numeric or 'Auto' an error will fire.
      *
      * @param int|string $userChoice The number of the condition or 'Auto'.
@@ -250,7 +252,7 @@ class ConditionController
 
     /**
      * Overrides the current condition information with the desired information,
-     * then logs the time it was overridden. Must be formatted as a 
+     * then logs the time it was overridden. Must be formatted as a
      * Conditions.csv read in as a getFromFile() array,
      * e.g., array('Number' => 1, 'Stimuli' => 'something.csv', ...).
      *
@@ -270,7 +272,7 @@ class ConditionController
 
     /**
      * Debug method that echoes out the data from this class.
-     * 
+     *
      * @param bool $asString Converts the info to an HTML formatted string.
      */
     public function getInfo($asString = true)
@@ -333,9 +335,9 @@ class ConditionController
      *
      * @param int  $num        [Optional] The number of a specific procedure.
      * @param bool $safeSearch Forces false instead of an error.
-     * 
+     *
      * @return bool Contents of the 'Stimuli' column or an error/false.
-     * 
+     *
      * @uses ConditionController::getFileString to do all the work.
      */
     public function stimuli($num = 1, $safeSearch = false)
@@ -349,9 +351,9 @@ class ConditionController
      *
      * @param int  $num        [Optional] The number of a specific procedure.
      * @param bool $safeSearch Forces false instead of an error.
-     * 
+     *
      * @return bool Contents of the 'Procedure' column or an error/false.
-     * 
+     *
      * @uses ConditionController::getFileString to do all the work.
      */
     public function procedure($num = 1, $safeSearch = false)
@@ -362,11 +364,11 @@ class ConditionController
     /**
      * Gets the control file string for the assigned condition, or false if it
      * has not been assigned, or an error if it does not exist.
-     * 
+     *
      * @param string $type       The type of file to retrieve (e.g. 'Stimuli').
      * @param int    $num        [Optional] The number of a specific procedure.
      * @param bool   $safeSearch Forces false instead of an error.
-     * 
+     *
      * @return bool Contents of the $type's column or an error/false.
      */
     protected function getFileString($type, $num, $safeSearch)
@@ -459,7 +461,7 @@ class ConditionController
      *
      * @return array All of the keys which contain the search string.
      *
-     * @uses ConditionController::ConditionsCSV Searches within the first line 
+     * @uses ConditionController::ConditionsCSV Searches within the first line
      *          of this CSV.
      */
     protected function colsContaining($needle)
@@ -482,7 +484,7 @@ class ConditionController
      *
      * @uses ConditionController::assignedCondition Checks this status before
      *          attempting to retrieve the description.
-     * @uses ConditionController::userCondition Retrieves the description from 
+     * @uses ConditionController::userCondition Retrieves the description from
      *          this array.
      */
     public function description()
@@ -499,7 +501,7 @@ class ConditionController
      *
      * @uses ConditionController::assignedCondition Checks this status before
      *          attempting to retrieve the notes.
-     * @uses ConditionController::userCondition Retrieves the notes from this 
+     * @uses ConditionController::userCondition Retrieves the notes from this
      *          array.
      */
     public function notes()
@@ -509,7 +511,7 @@ class ConditionController
         }
     }
     /**
-     * Gets the array of information for the assigned row, or false if the 
+     * Gets the array of information for the assigned row, or false if the
      * condition has not been assigned.
      *
      * @return array Associative array of column => value for the condition.
@@ -550,7 +552,7 @@ class ConditionController
     }
 
     /**
-     * Gets a modified version of the Conditions.csv file where Procedures and 
+     * Gets a modified version of the Conditions.csv file where Procedures and
      * Stimuli will be joined together by commas and flagged conditions are
      * excluded. Used in the Welcome.php script.
      */
@@ -576,7 +578,7 @@ class ConditionController
     }
 
     /**
-     * Checks the entire conditions file for bad rows. Used in the Welcome.php 
+     * Checks the entire conditions file for bad rows. Used in the Welcome.php
      * script.
      *
      * @param string $procDir The directory for the procedure files.

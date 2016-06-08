@@ -25,12 +25,19 @@ $validStates = array('break' => 0, 'done' => 0);
 if (isset($validStates[$_SESSION['state']])) {
     $status = unserialize($_SESSION['Status']);
     $status->writeEnd($_SESSION['Start Time'], $_SESSION['state']);
+    
+    $sideData = array_merge(
+        array('Username' => $_SESSION['Username'], 'ID' => $_SESSION['ID']),
+        $_SIDE->getAll(true)
+    );
+    
+    arrayToLine($sideData, $_PATH->get('SideData Data'));
 
     // preparing $_SESSION for the next run
     if ($_SESSION['state'] == 'break') {
         //        $_SESSION['state'] = 'return';
         // increment counter so next session will begin after the NewSession
-        ++$_EXPT->position;
+        $_EXPT->advance();
         // increment session # so next login will labeled as the next session
         ++$_SESSION['Session'];
         // generate a new ID (for next login)

@@ -3,7 +3,7 @@ adminOnly();
 $form = " form='toMod' ";
 
 // functions to make all the setting inputs
-function setting_string(Settings $settingClass, $name, $label, $tips = null)
+function setting_string(Collector\Settings $settingClass, $name, $label, $tips = null)
 {
     $current = $settingClass->$name;
 
@@ -20,7 +20,7 @@ function setting_string(Settings $settingClass, $name, $label, $tips = null)
             value='$current'/>
         </label>";
 }
-function setting_bool(Settings $settingClass, $name, $label, $tips = null)
+function setting_bool(Collector\Settings $settingClass, $name, $label, $tips = null)
 {
     $current = $settingClass->$name;
     $tChecked = ($current) ? ' checked="checked"' : '';
@@ -33,7 +33,7 @@ function setting_bool(Settings $settingClass, $name, $label, $tips = null)
         $title = "";
     }
 
-    echo 
+    echo
     "<div class='boolSetting'>
         <span $title class='tooltip'>$label</span>
         <label>On<input type='radio' name='{$name}' value='true'  form='toMod' $tChecked></label>

@@ -18,22 +18,19 @@
  */
 
 // use the `Cue` if a valid one is called and there is no `Text` set in the procedure
-if (($cue != '') && (trim($text) == '')) {
-    $text = $cue;
+$cue = $_EXPT->get('cue');
+if (!empty($cue) && empty(trim($_EXPT->get('text')))) {
+    $_EXPT->update('text', $cue);
 }
 
-if (!empty($font_size) AND is_numeric($font_size)) {
-    $size = $font_size.'%';
-    $style = "<style type='text/css' media='screen'>
-        body {
-            font-size:{$size};
-        }
-    </style>Test!";
-    echo $style;
-}
-?>
-<div class=""><?= $text; ?></div>
+$fontSize = $_EXPT->get('font size');
+if (!empty($fontSize) && is_numeric($fontSize)): ?>
+<style type='text/css' media='screen'>
+    body { font-size:<?= $fontSize ?>%; }
+</style>
+<?php endif; ?>
 
+<div class=""><?= $_EXPT->get('text') ?></div>
 <div class="textright">
   <button class="collectorButton collectorAdvance" id="FormSubmitButton">Next</button>
 </div>

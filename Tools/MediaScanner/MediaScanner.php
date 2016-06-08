@@ -68,12 +68,6 @@ foreach ($results as $readyPath) {
 }
 fclose($temp);
 $show = getFromFile("MediaScanner/tempStim.csv");
-
-
-
-
-
-
 ?>
 
 <div class="toolWidth">

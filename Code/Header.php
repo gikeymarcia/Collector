@@ -21,7 +21,7 @@
   <!-- Base styles -->
   <link rel="stylesheet" href="<?= $_PATH->get('Global CSS', 'url') ?>">
   <link rel="stylesheet" href="<?= $_PATH->get('Jquery UI Custom CSS', 'url') ?>">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
   <!-- JS Tools -->
   <script src="<?= $_PATH->get('Jquery UI Custom', 'url') ?>"></script>
