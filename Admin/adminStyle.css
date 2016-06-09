@@ -1,0 +1,29 @@
+body {
+    min-width: 700px;
+    justify-content: flex-start; 
+}
+/* nav bar */
+#ToolsNavBar {
+    width: 100%;
+    overflow: auto;
+    margin:0px 0px 5px 0px;
+    background-color: #DEE7EC;
+    padding: 20px 0px 20px 0px;
+}
+#ToolsNavBar h1 {
+    float: left;
+    padding: 0px;
+    font-size: 2em;
+    margin-left: 1em;
+}
+#ToolsNavBar a {
+    float: right;
+    font-size: 1.1em;
+    padding-top: 5px;
+    margin-right: 1em;
+}
+#ToolsNavBar select {
+    width: 300px;
+    float: right;
+    margin-right: 25px;
+}
