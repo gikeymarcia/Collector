@@ -28,5 +28,4 @@ writeToolsHtmlHead($_PATH, $tool);
 writeToolsNavBar($_PATH, $tool);
 
 
-
 unset($tool);
