@@ -1,10 +1,4 @@
 <?php
-// use a separate session for admin, so that it doesnt get mixed up with experiment data
-$sessDir = __DIR__ . '/sess';
-if (!is_dir($sessDir)) mkdir($sessDir, 0777, true);
-session_save_path($sessDir);
-unset($sessDir);
-
 require __DIR__ . '/../Code/initiateCollector.php';
 
 // check if login has expired
