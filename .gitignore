@@ -37,8 +37,11 @@ phpunit.xml
 Code/tests/reports
 
 # Collector - Data
-!Data/
-Data/**/*
-!Data/*
-!Data/GetData/**/*
+Data/
+!Data/index.php
+
+# Password
 Experiments/_Common/Password.php
+
+# Admin
+Admin/sess/
