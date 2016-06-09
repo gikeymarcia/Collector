@@ -73,7 +73,7 @@ $_DATA['name'] = empty($_DATA['name']) ? '' : $_DATA['name'];
 
     <!-- Create the menu and populate it with procedure and stimuli files -->
     <div>
-      <select form="shuffleFile" class="toolSelect collectorInput" name="shuffleFile">
+      <select form="shuffleFile" id="shuffleSelect" class="toolSelect collectorInput" name="shuffleFile">
       <?php foreach ($ShuffleFolders as $type => $files): ?>
         <optgroup label='<?= $type ?> Files'>
           <?php foreach ($files as $file):
@@ -269,7 +269,7 @@ if (($_DATA['loc'] !== '') && ($_DATA['exp'] !== '')
 
   });
 
-  $(".goShuffle").click(function(){
+  $("#shuffleSelect").change(function () {
     $("#shuffleFile").submit();
   });
 </script>
