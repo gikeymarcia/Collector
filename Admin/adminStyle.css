@@ -5,7 +5,6 @@ body {
 /* nav bar */
 #ToolsNavBar {
     width: 100%;
-    overflow: auto;
     margin:0px 0px 5px 0px;
     background-color: #DEE7EC;
     padding: 20px 0px 20px 0px;

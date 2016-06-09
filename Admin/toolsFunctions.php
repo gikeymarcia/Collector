@@ -8,6 +8,7 @@ function getTools() {
             || $tool === '..'
             || !is_dir("$toolsDir/$tool")
             || !is_file("$toolsDir/$tool/index.php")
+            || strtolower($tool) === 'sample'
         ) {
             unset($tools[$i]);
         }

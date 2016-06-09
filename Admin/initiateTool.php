@@ -20,12 +20,13 @@ $_PATH = $_DATA['_PATH'];
 
 
 #### Write wrapper HTML for tool
-writeToolsHtmlHead($_PATH, $tool);
-writeToolsNavBar($_PATH, $tool);
-
 ob_start(function($buffer) {
     return $buffer . '</body></html>';
 });
+
+writeToolsHtmlHead($_PATH, $tool);
+writeToolsNavBar($_PATH, $tool);
+
 
 
 unset($tool);
