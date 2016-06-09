@@ -5,7 +5,7 @@ if (!is_dir($sessDir)) mkdir($sessDir, 0777, true);
 session_save_path($sessDir);
 unset($sessDir);
 
-require '../Code/initiateCollector.php';
+require __DIR__ . '/../Code/initiateCollector.php';
 
 // check if login has expired
 if (isset($_SESSION['admin']['login'])) {
