@@ -17,5 +17,3 @@ $tools = getTools();
 foreach ($tools as $tool) {
     echo "<a href='Tools/$tool/'>$tool</a>";
 }
-
-require $_PATH->get('Footer');

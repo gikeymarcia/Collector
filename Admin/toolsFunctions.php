@@ -50,3 +50,65 @@ function determineCurrentTool() {
     
     return $tool;
 }
+
+function verifyLogin($password) {
+    if (isset($_SESSION['admin']['login'])) {
+        if (time() > $_SESSION['admin']['login']) {
+            unset($_SESSION['admin']['login']);
+        }
+    }
+
+    // check if we have logged in
+    if (!isset($_SESSION['admin']['login'])) {
+        // haven't logged in, run password script
+        require __DIR__ . '/LoginFunctions.php';
+        runLogin($password);
+    }
+}
+
+function writeToolsHtmlHead(Pathfinder $_PATH, $tool = null) {
+    if ($tool === null) $tool = determineCurrentTool();
+    
+    $title = $tool ? $tool : 'Collector - Admin Menu';
+    require $_PATH->get('Header');
+
+    $rootUrl = $_PATH->get('root', 'url');
+
+    $adminStyle = "$rootUrl/Admin/adminStyle.css";
+    echo "<link rel='stylesheet' href='$adminStyle'>";
+
+    $adminJS = "$rootUrl/Admin/adminScript.js";
+    echo "<script src='$adminJS'></script>";
+}
+
+function writeToolsNavBar(Pathfinder $_PATH, $tool = null) {
+    $tool      = ($tool !== null) ? $tool : determineCurrentTool();
+    $tools     = getTools();
+    $logoutUrl = $_PATH->get('root') . '/Admin/logout.php';
+    $title     = $tool ? $tool : 'Collector - Admin Menu';
+    
+    $options = '';
+    
+    if ($tool === false) {
+        $options .= '<option selected disabled hidden value="">Choose a tool</option>';
+    }
+    
+    $rootUrl = $_PATH->get('root', 'url');
+    
+    foreach ($tools as $toolOption) {
+        $selected = ($tool === $toolOption) ? 'selected' : '';
+        $path     = "$rootUrl/Admin/Tools/$toolOption";
+        
+        $options .= "<option $selected value='$path'>$toolOption</option>";
+    }
+    
+    ?>
+    <div id="ToolsNavBar">
+        <h1><?= $title ?></h1>
+        <a id="LogOut" href="<?= $logoutUrl ?>">Logout</a>
+        <select name="CollectorToolSelection" class="collectorInput" id="CollectorToolSelection">
+            <?= $options ?>
+        </select>
+    </div>
+    <?php
+}

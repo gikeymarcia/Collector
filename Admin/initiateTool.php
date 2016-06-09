@@ -2,24 +2,7 @@
 require __DIR__ . '/../Code/initiateCollector.php';
 require __DIR__ . '/toolsFunctions.php';
 
-ob_start(function($buffer) {
-    return $buffer . '</body></html>';
-});
-
-
-#### Verify Logged In
-// check if login has expired
-if (isset($_SESSION['admin']['login'])) {
-    if (time() > $_SESSION['admin']['login']) {
-        unset($_SESSION['admin']['login']);
-    }
-}
-
-// check if we have logged in
-if (!isset($_SESSION['admin']['login'])) {
-    // haven't logged in, run password script
-    require __DIR__ . '/Login/Control.php';
-}
+verifyLogin($_SETTINGS->password);
 
 
 #### Create Aliases
@@ -36,20 +19,13 @@ if (!isset($_DATA['_PATH'])) $_DATA['_PATH'] = new Pathfinder();
 $_PATH = $_DATA['_PATH'];
 
 
-#### Create Opening HTMl
-$title = $tool ? $tool : 'Collector - Admin Menu';
-require $_PATH->get('Header');
+#### Write wrapper HTML for tool
+writeToolsHtmlHead($_PATH, $tool);
+writeToolsNavBar($_PATH, $tool);
 
-$rootUrl = $_PATH->get('root', 'url');
-
-$adminStyle = "$rootUrl/Admin/adminStyle.css";
-echo "<link rel='stylesheet' href='$adminStyle'>";
-
-$adminJS = "$rootUrl/Admin/adminScript.js";
-echo "<script src='$adminJS'></script>";
-
-require __DIR__ . '/navBar.php';
+ob_start(function($buffer) {
+    return $buffer . '</body></html>';
+});
 
 
-#### cleanup
-unset($title, $adminStyle, $adminJS, $tool, $rootUrl);
+unset($tool);
