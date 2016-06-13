@@ -275,4 +275,12 @@
         
         startingLabel = null;
     });
+    
+    /* The default Collector script disables form submits after the first
+       submit, but we want to allow this to happen */
+    $("form").submit(function() {
+        setTimeout(function() {
+            $("form").data('submitted', false);
+        }, 50);
+    });
 </script>
