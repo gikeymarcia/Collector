@@ -1,7 +1,6 @@
 <?php
     adminOnly();
     ob_end_clean();
-    // ini_set('html_errors', false);
     
     $requiredInputs = array('u', 'c', 'format', 'files');
     foreach ($requiredInputs as $req) {
@@ -50,6 +49,8 @@
         <tbody>
 <?php
     } else {
+        ini_set('html_errors', false);
+        
         if ($_POST['format'] === 'csv') {
             $d = ',';
         } elseif ($_POST['format'] === 'txt') {
@@ -59,10 +60,10 @@
         $filename = 'Collector_GetData_' . implode('_', array_keys($dataFolders)) . '_' . date('y.m.d') . '.' . $_POST['format'];
         header("Cache-Control: public");
         header("Content-Description: File Transfer");
-        header("Content-Disposition: attachment; filename=".$fileName);
+        header("Content-Disposition: attachment; filename=".$filename);
         header("Content-Type: text/csv"); 
         header("Content-Transfer-Encoding: binary");
-        $outStream = fopen('php://output', 'w');
+        $outstream = fopen('php://output', 'w');
         fputcsv($outstream, $columns, $d);
     }
     
@@ -205,5 +206,5 @@
     if ($_POST['format'] === 'html') {
         echo '</tbody></table></body></html>';
     } else {
-        fclose($outStream);
+        fclose($outstream);
     }
