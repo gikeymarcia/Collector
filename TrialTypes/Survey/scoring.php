@@ -111,42 +111,45 @@
                     continue; // somehow, this question isn't in the data
                 }
                 
-                $answers = surveyRangeToArray($surveyRow['Answers']);
-                if ($surveyRow['Values'] === '') {
-                    $values = $answers;
+                $numericResponses = array();
+                
+                if ($surveyRow['Answers'] === '') {
+                    foreach ($rowResponses as $resp) {
+                        if (is_numeric($resp)) $numericResponses[] = $resp;
+                    }
+                    $respFactor = $surveyRow[$col];
                 } else {
-                    $values = surveyRangeToArray($surveyRow['Values']);
-                }
-                
-                foreach ($values as $val) {
-                    if (!is_numeric($val)) continue 2; // cant use this row, values arent numeric
-                }
-                if (count($answers) !== count($values)) continue; // cant convert answer to value directly
-                $answerValues = array_combine($answers, $values);
-                
-                foreach ($rowResponses as $resp) {
-                    if (!isset($answerValues[$resp])) continue; // this response isn't one of the listed answers
-                    
-                    // by this point, we should be good to go. the response exists, matches an answer, and the answer has a value
-                    if ($surveyRow[$col][0] === 'r' || $surveyRow[$col][0] === 'R') {
-                        // reverse score this item
-                        $answerIndices   = array_flip($answers);
-                        $answerIndex     = $answerIndices[$resp];
-                        $reversedAnswers = array_reverse($answers);
-                        $reverseResp     = $reversedAnswers[$answerIndex];
-                        $respFactor      = substr($surveyRow[$col], 1);
-                        $respFactor      = ($respFactor === false) ? 1.0 : $respFactor; // can happen if the column entry is just 'r'
-                        $respValue       = $answerValues[$reverseResp];
+                    $answers = surveyRangeToArray($surveyRow['Answers']);
+                    if ($surveyRow['Values'] === '') {
+                        $values = $answers;
                     } else {
-                        $respFactor      = $surveyRow[$col];
-                        $respValue       = $answerValues[$resp];
+                        $values = surveyRangeToArray($surveyRow['Values']);
                     }
                     
-                    if (!is_numeric($respFactor)) continue; // a factor of 'string' means nothing
+                    foreach ($values as $val) {
+                        if (!is_numeric($val)) continue 2; // cant use this row, values arent numeric
+                    }
+                    if (count($answers) !== count($values)) continue; // cant convert answer to value directly
                     
-                    // question: if the factor is 0, should this row be skipped? For now, its left in, but it will affect averages
-                    $respFactor   = (float) $respFactor;
-                    $respValues[] = $respValue * $respFactor;
+                    if ($surveyRow[$col][0] === 'r' || $surveyRow[$col][0] === 'R') {
+                        $answerValues = array_combine($answers, array_reverse($values));
+                        $respFactor   = substr($surveyRow[$col], 1);
+                    } else {
+                        $answerValues = array_combine($answers, $values);
+                        $respFactor   = $surveyRow[$col];
+                    }
+                    
+                    $answerValues = array_combine($answers, $values);
+                    
+                    foreach ($rowResponses as $resp) {
+                        if (isset($answerValues[$resp])) $numericResponses[] = $answerValues[$resp];
+                    }
+                }
+                    
+                if (!is_numeric($respFactor)) continue; // a factor of 'string' means nothing
+                
+                foreach ($numericResponses as $resp) {
+                    $respValues[] = $resp * $respFactor;
                 }
             }
             
