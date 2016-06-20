@@ -17,5 +17,5 @@ for ($i = 0; $i < $rounds; ++$i) {
         $extraData['DMT_'.$col] = $trialData[$col][$i];
     }
 
-    recordTrial($extraData, false, false);
+    recordTrial($_TRIAL, $extraData, false, false);
 }

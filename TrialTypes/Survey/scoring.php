@@ -221,7 +221,7 @@
                 }
                 
                 //record the trials
-                recordTrial($extraData);
+                recordTrial($_TRIAL, $extraData);
             }
         }
         
