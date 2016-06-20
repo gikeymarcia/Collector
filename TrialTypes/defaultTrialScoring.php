@@ -15,29 +15,20 @@
      *    is happening for a 'Post 1 Trial Type')
      */
 
-    #### Code that saves and scores information when user input is given
-    if (isset($_POST['Response'])) {                                        // if there is a response given then do scoring
+    // Calculate and save accuracy for trials with user input (i.e. trials with 
+    // a 'Response').
+    if (isset($data['Response'])) {
+        // determine text similarity and store to data['Accuracy']
+        // trim the strings and convert to lowercase before comparison
+        similar_text(
+            trim(strtolower($data['Response'])), 
+            trim(strtolower($_EXPT->get('answer'))),
+            $data['Accuracy']
+        );
 
-        ### cleaning up response and answer (for later comparisons)
-        $response = $_POST['Response'];
-        $response = trim(strtolower($response));
-        $correctAns = trim(strtolower($_EXPT->get('answer')));
-        $Acc = null;
+        // store strict score
+        $data['strictAcc'] = $data['Accuracy'] == 100 ? 1 : 0;
 
-        #### Calculating and saving accuracy for trials with user input
-        similar_text($response, $correctAns, $Acc);                   // determine text similarity and store as $Acc
-        $data['Accuracy'] = $Acc;
-
-        #### Scoring and saving scores
-        if ($Acc == 100) {                          // strict scoring
-            $data['strictAcc'] = 1;
-        } else {
-            $data['strictAcc'] = 0;
-        }
-
-        if ($Acc >= $_SETTINGS->lenient_criteria) {             // lenient scoring
-            $data['lenientAcc'] = 1;
-        } else {
-            $data['lenientAcc'] = 0;
-        }
+        // store lenient score
+        $data['lenientAcc'] = $data['Accuracy'] >= $_SETTINGS->lenient_criteria ? 1 : 0;
     }
