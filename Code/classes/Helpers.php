@@ -1596,3 +1596,44 @@ function isLocal($path)
 {
     return !filter_var($path, FILTER_VALIDATE_URL);
 }
+
+/**
+ * Randomly samples a number from the specified normal distribution.
+ * 
+ * @param float $mean      The mean of the normal distribution to sample from.
+ * @param float $sd        The standard deviation of the normal distribution to
+ *                         sample from.
+ * @param int   $precision The number of decimal places to round the returned
+ *                         value to. E.g. 1 returns a digit like "4.5". Defaults
+ *                         to 0 to return integers only.
+ * @param float $zCap      The absolute z-score at which to constrain sampling 
+ *                         within. E.g. 1 would constrain returned values to 
+ *                         those within 1 SD of the mean. Defaults to INF.
+ * 
+ * @return int|float       The random value.
+ */
+function rnorm($mean, $sd, $precision = 0, $zCap = null) {
+    $gaussRandom = function () use (&$gaussRandom) {
+        $u = 2 * mt_rand() / mt_getRandMax() - 1;
+        $v = 2 * mt_rand() / mt_getRandMax() - 1;
+        $r = $u * $u + $v * $v;
+
+        if ($r == 0 || $r >= 1) {
+            return $gaussRandom();
+        }
+
+        $c = sqrt(-2 * log($r) / $r);
+
+        return $u * $c;
+    };
+	
+    if (!is_numeric($zCap)) {
+        $zCap = INF;
+    }
+    $value = round($mean + $gaussRandom() * $sd, $precision);
+    while (abs(($value - $mean) / $sd) > abs($zCap)) {
+            $value = round($mean + $gaussRandom() * $sd, $precision);
+    }
+
+    return $value;
+}
