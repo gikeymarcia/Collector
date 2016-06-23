@@ -1596,3 +1596,42 @@ function isLocal($path)
 {
     return !filter_var($path, FILTER_VALIDATE_URL);
 }
+
+// Gregor Macgregor at http://stackoverflow.com/questions/25232975/php-filter-inputinput-server-request-method-returns-null
+/**
+ * Pulls a variable from a superglobal, using the provided filter
+ *
+ * Fixes issue where $_SERVER is not populated on fast-cgi servers
+ *
+ * @param int $type One of INPUT_GET, INPUT_POST, INPUT_COOKIE, INPUT_SERVER, or INPUT_ENV
+ * @param string $variable_name Name of a variable to get.
+ * @param $filter [Optional] The ID of the filter to apply, default FILTER_DEFAULT
+ * @param mixed $options [Optional] Associative array of options or bitwise disjunction of flags.
+ *                                  If filter accepts options, flags can be provided in "flags" field of array.
+ *
+ * @return mixed null if not found, else variable with provided filter
+ */
+function filter_input_fix ($type, $variable_name, $filter = FILTER_DEFAULT, $options = NULL )
+{
+    $checkTypes = array(
+        INPUT_GET,
+        INPUT_POST,
+        INPUT_COOKIE
+    );
+
+    if ($options === NULL) {
+        // No idea if this should be here or not
+        // Maybe someone could let me know if this should be removed?
+        $options = FILTER_NULL_ON_FAILURE;
+    }
+
+    if (in_array($type, $checkTypes) || filter_has_var($type, $variable_name)) {
+        return filter_input($type, $variable_name, $filter, $options);
+    } else if ($type == INPUT_SERVER && isset($_SERVER[$variable_name])) {
+        return filter_var($_SERVER[$variable_name], $filter, $options);
+    } else if ($type == INPUT_ENV && isset($_ENV[$variable_name])) {
+        return filter_var($_ENV[$variable_name], $filter, $options);
+    } else {
+        return NULL;
+    }
+}
