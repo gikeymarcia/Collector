@@ -155,7 +155,7 @@ endif; ?>
 <?php
 // Diagnostics
 if (($_SETTINGS->trial_diagnostics == true) || ($trialFail == true)) {
-    d($_TRIAL->getDebugInfo());
+    datadump($_TRIAL->getDebugInfo());
 }
 ?>
 

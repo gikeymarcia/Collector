@@ -1611,7 +1611,7 @@ function isLocal($path)
  *
  * @return mixed null if not found, else variable with provided filter
  */
-function filter_input_fix ($type, $variable_name, $filter = FILTER_DEFAULT, $options = NULL )
+function filter_input_fix($type, $variable_name, $filter = FILTER_DEFAULT, $options = NULL )
 {
     $checkTypes = array(
         INPUT_GET,
@@ -1634,4 +1634,14 @@ function filter_input_fix ($type, $variable_name, $filter = FILTER_DEFAULT, $opt
     } else {
         return NULL;
     }
+}
+
+/**
+ * prints information about a value
+ *
+ * @param mixed $data the data to be printed
+ */
+function datadump($data) {
+    require_once __DIR__ . '/vendor/kint/Kint.class.php';
+    d($data);
 }

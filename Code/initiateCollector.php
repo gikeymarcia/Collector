@@ -51,11 +51,6 @@ if (isset($_SESSION['settings'])
     $_SETTINGS = &$_SESSION['settings'];
 }
 
-// load Kint in debug mode
-if ($_SETTINGS->debug_mode) {
-    require __DIR__ . '/vendor/Kint/Kint.class.php';
-}
-
 if ($_SETTINGS->password === null) {
     $noPass = true;
     require $_PATH->get("Set Password");
