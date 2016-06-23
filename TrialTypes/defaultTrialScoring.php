@@ -6,29 +6,38 @@
     $data = $_POST;
     /*
      * Q: Why are we using $data instead of setting values directly into $_EXPT->responses?
-     * 
+     *
      * A: $data holds all scoring information and once scoring is complete $data is merged
      *    into $_EXPT->responses[$currentPos-1]
-     *    
-     *    This is done so when scoring a post trial all data will be prepended with the 
-     *    correct post# (e.g., $data['RT'] would be merged as $data['post#_RT] iF scoring 
+     *
+     *    This is done so when scoring a post trial all data will be prepended with the
+     *    correct post# (e.g., $data['RT'] would be merged as $data['post#_RT] iF scoring
      *    is happening for a 'Post 1 Trial Type')
      */
 
-    // Calculate and save accuracy for trials with user input (i.e. trials with 
-    // a 'Response').
-    if (isset($data['Response'])) {
-        // determine text similarity and store to data['Accuracy']
-        // trim the strings and convert to lowercase before comparison
-        similar_text(
-            trim(strtolower($data['Response'])), 
-            trim(strtolower($_EXPT->get('answer'))),
-            $data['Accuracy']
-        );
+    #### Code that saves and scores information when user input is given
+    if (isset($_POST['Response'])) {                                        // if there is a response given then do scoring
 
-        // store strict score
-        $data['strictAcc'] = $data['Accuracy'] == 100 ? 1 : 0;
+        ### cleaning up response and answer (for later comparisons)
+        $response = $_POST['Response'];
+        $response = trim(strtolower($response));
+        $correctAns = trim(strtolower($_EXPT->get('answer')));
+        $Acc = null;
 
-        // store lenient score
-        $data['lenientAcc'] = $data['Accuracy'] >= $_SETTINGS->lenient_criteria ? 1 : 0;
+        #### Calculating and saving accuracy for trials with user input
+        similar_text($response, $correctAns, $Acc);                         // determine text similarity and store as $Acc
+        $data['Accuracy'] = $Acc;
+
+        #### Scoring and saving scores
+        if ($Acc == 100) {                              // strict scoring
+            $data['strictAcc'] = 1;
+        } else {
+            $data['strictAcc'] = 0;
+        }
+
+        if ($Acc >= $_SETTINGS->lenient_criteria) {     // lenient scoring
+            $data['lenientAcc'] = 1;
+        } else {
+            $data['lenientAcc'] = 0;
+        }
     }
