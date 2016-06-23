@@ -27,6 +27,7 @@ class Autoloader {
      * @var array
      */
     protected $namespaces;
+    protected $loadedClasses = array();
 
     /**
      * Register the load method with the spl_autoloader stack.
@@ -63,6 +64,15 @@ class Autoloader {
      */
     public function load($fullClass)
     {
+        $className = pathinfo($fullClass, PATHINFO_FILENAME);
+        if (substr($className, -5) === 'class') {
+            $className = substr($className, 0, -5);
+        }
+        if (isset($this->loadedClasses[$className])) {
+            return false;
+        }
+        $this->loadedClasses[$className] = true;
+        
         $parts = explode('\\', $fullClass);
         while (null !== $next = array_pop($parts)) {
             $class = (isset($class)) ? $next.'/'.$class : $next;

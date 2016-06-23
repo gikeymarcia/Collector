@@ -170,7 +170,7 @@ if ($errors->arePresent() || !empty($validationErrors)) {
           <button class='collectorButton' onClick='window.location.reload(true);'>Refresh</button>
           <button class='collectorButton' onClick='window.location.href=\"{$_PATH->get('Current Experiment')}\";'>Back to Login</button>
       </div>";
-    d($_EXPT);
+    Collector\Datadump::display($_EXPT);
     require $_PATH->get('Footer');
     exit;
 }
