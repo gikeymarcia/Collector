@@ -273,9 +273,6 @@ class MainTrial extends Trial implements \Countable
     public function addPostTrial(array $data = array())
     {
         $post = new PostTrial($this, $data);
-        if (!isset($post->get('item'))) {
-            $post->update('item', $this->data['item']);
-        }
         $post->position = count($this->postTrials) + 1;
         $this->postTrials[$post->position] = $post;
 
