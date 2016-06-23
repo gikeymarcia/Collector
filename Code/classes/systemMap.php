@@ -123,6 +123,7 @@ return array(
         'setPassword.php' => 'Set Password',
 
         'shuffleFunctions.php' => 'Shuffle Functions',
+        'customFunctions.php' => 'Custom Functions',
 
         'css' => array(
             'Dir Name' => 'CSS Dir',
@@ -157,7 +158,6 @@ return array(
             'DebugController.php' => 'Debug Class',
             'ErrorController' => 'Errors Class',
             'Parse.php' => 'Parse',
-            'Helpers.php' => 'Helpers',
             'Pathfinder.php' => 'Pathfinder',
             'Procedure.php' => 'Procedure Class',
             'ReturnVisitController.php' => 'Return Class',
