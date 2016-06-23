@@ -633,8 +633,9 @@ class Experiment extends MiniDb implements \Countable
                 // non-normal variables: ${weird column & name}
                 '/\$\{.*\}/',
             );
+
             $val = preg_replace_callback($regexp,
-                function($ms) use ($this) { return $this->get($ms[1]); },
+                function($ms) { return $this->get($ms[1]); },
                 $val
             );
             
