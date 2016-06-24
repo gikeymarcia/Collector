@@ -64,7 +64,7 @@ function getDataScan(Pathfinder $_path) {
                 $headers = fgetcsv($sideDataFileResource);
                 
                 foreach ($headers as $header) {
-                    if ($header === 'Username' OR $header === 'ID') continue;
+                    // if ($header === 'Username' OR $header === 'ID') continue;
                     
                     $getDataScan['Columns']['Side'][$header] = true;
                 }

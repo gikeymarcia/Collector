@@ -42,6 +42,7 @@
                 <label> <span><input type="radio" name="format" value="csv" checked></span> <span>CSV: comma-separated spreadsheet</span> </label>
                 <label> <span><input type="radio" name="format" value="txt"></span> <span>TXT: tab-delimited text file</span> </label>
                 <label> <span><input type="radio" name="format" value="html"></span> <span>HTML: see a table in your browser (good for previewing data)</span> </label>
+                <label> <span><input type="radio" name="format" value="summary"></span> <span>Summary Statistics</span> </label>
             </div>
         </div>
 
@@ -91,7 +92,8 @@
                     foreach ($columns as $col) {
                         $col = htmlspecialchars($col, ENT_QUOTES);
                         $pre = $filePrefixes[$file];
-                        $checkbox = "<input type='checkbox' name='c[]' value='$pre$col' checked>";
+                        $name = $file . '_cols[]';
+                        $checkbox = "<input type='checkbox' name='$name' value='$pre$col' checked>";
                         echo "<label> <span>$checkbox</span> <span>$col</span> </label>\r\n";
                     }
                     echo '</div>';
@@ -156,7 +158,8 @@
     });
     
     $("input[name='format']").on("change", function() {
-        if ($(this).val() === 'html') {
+        var format = $(this).val();
+        if (format === 'html' || format === 'summary') {
             $("form").attr("target", "_blank");
         } else {
             $("form").attr("target", "_self");
