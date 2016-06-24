@@ -20,7 +20,7 @@ function gotoDone()
  *                         using the keys as columns.
  * @param int   $pos       [Optional] The trial to record.
  */
-function recordTrial(Collector\Trial $trial, array $extraData = array())
+function recordTrial(Collector\MainTrial $trial, array $extraData = array())
 {
     global $_PATH;
     

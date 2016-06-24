@@ -48,7 +48,7 @@ if ($_POST !== array()) {
     // record data and advance to next PostTrial if applicable
     $_EXPT->record($data);
     if (($_EXPT->advance()) === 1) {
-        recordTrial($_TRIAL);
+        recordTrial($_EXPT->getTrial(-1));
     }
     
     // still need to complete this file, don't write to file yet
