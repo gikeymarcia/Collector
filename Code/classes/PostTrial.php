@@ -105,6 +105,11 @@ class PostTrial extends Trial
     public function get($name, $strict = true)
     {
         $val = parent::get($name);
+        
+        if (!isset($val)) {
+            $val = $this->main->getFromStimuli($name);
+        }
+        
         if ($strict) {
             return $val;
         }
