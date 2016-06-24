@@ -1,7 +1,6 @@
 <?php
     adminOnly();
     ob_end_clean();
-    // ini_set('html_errors', false);
     
     $requiredInputs = array('u', 'format', 'files');
     foreach ($requiredInputs as $req) {

@@ -16,7 +16,7 @@ error_reporting(E_ALL);
 if (!isset($_SESSION['_PATH'])) $_SESSION['_PATH'] = new Pathfinder();
 $_PATH = $_SESSION['_PATH'];
 
-require_once $_PATH->get('Helpers');
+require_once $_PATH->get('Custom Functions');
 
 // check if they switched Collectors
 // (e.g., went from 'MG/Collector/Code/Done.php' to 'TK/Collector/Code/Done.php')
@@ -49,11 +49,6 @@ if (isset($_SESSION['settings'])
         $_PATH->get('Password')
     );
     $_SETTINGS = &$_SESSION['settings'];
-}
-
-// load Kint in debug mode
-if ($_SETTINGS->debug_mode) {
-    require __DIR__ . '/vendor/Kint/Kint.class.php';
 }
 
 if ($_SETTINGS->password === null) {

@@ -605,6 +605,45 @@ class Experiment extends MiniDb implements \Countable
     }
     
     /**
+     * Scans the given key (retrieved by the get method) for variables and
+     * replaces the variable with the appropriate value as stored in the 
+     * Experiment. 
+     * 
+     * Example:
+     * ```php
+     * $_EXPT->add('age', 26);
+     * $_EXPT->add('text', 'I am $age.');
+     * $_EXPT->updateVariables('text');
+     * 
+     * // returns 'I am 26.'
+     * $_EXPT->get('text');
+     * ```
+     * @param string $key    The key to update.
+     * @param bool   $strict Set to true to restrict the search only to the
+     *                       current MainTrial.
+     */
+    public function updateVariables($key, $strict = true)
+    {
+        $val = $this->get(trim($key), $strict);
+        if (!empty($val)) {
+            $regexp = array(
+                // normal variables: $variable
+                '/\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)/',
+                
+                // non-normal variables: ${weird column & name}
+                '/\$\{.*\}/',
+            );
+
+            $val = preg_replace_callback($regexp,
+                function($ms) { return $this->get($ms[1]); },
+                $val
+            );
+            
+            $this->update($key, $val);
+        }
+    }
+    
+    /**
      * Gets the condition information for this Experiment.
      * 
      * @return array Returns the array of condition information for this object.

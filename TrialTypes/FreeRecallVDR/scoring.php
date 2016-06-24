@@ -309,6 +309,6 @@ if ($expandOutput) {
             $extraData['Serial_strictVal'] = 0;
         }
 
-        recordTrial($extraData);
+        recordTrial($_TRIAL, $extraData);
     }
 }

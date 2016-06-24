@@ -6,12 +6,12 @@
     $data = $_POST;
     /*
      * Q: Why are we using $data instead of setting values directly into $_EXPT->responses?
-     * 
+     *
      * A: $data holds all scoring information and once scoring is complete $data is merged
      *    into $_EXPT->responses[$currentPos-1]
-     *    
-     *    This is done so when scoring a post trial all data will be prepended with the 
-     *    correct post# (e.g., $data['RT'] would be merged as $data['post#_RT] iF scoring 
+     *
+     *    This is done so when scoring a post trial all data will be prepended with the
+     *    correct post# (e.g., $data['RT'] would be merged as $data['post#_RT] iF scoring
      *    is happening for a 'Post 1 Trial Type')
      */
 
@@ -25,17 +25,17 @@
         $Acc = null;
 
         #### Calculating and saving accuracy for trials with user input
-        similar_text($response, $correctAns, $Acc);                   // determine text similarity and store as $Acc
+        similar_text($response, $correctAns, $Acc);                         // determine text similarity and store as $Acc
         $data['Accuracy'] = $Acc;
 
         #### Scoring and saving scores
-        if ($Acc == 100) {                          // strict scoring
+        if ($Acc == 100) {                              // strict scoring
             $data['strictAcc'] = 1;
         } else {
             $data['strictAcc'] = 0;
         }
 
-        if ($Acc >= $_SETTINGS->lenient_criteria) {             // lenient scoring
+        if ($Acc >= $_SETTINGS->lenient_criteria) {     // lenient scoring
             $data['lenientAcc'] = 1;
         } else {
             $data['lenientAcc'] = 0;

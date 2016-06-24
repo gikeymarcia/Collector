@@ -2,7 +2,6 @@
 $classes = array(
     'Autoloader',
     'Pathfinder',
-    'Helpers',
     'MiniDb',
     'Experiment',
     'ExperimentFactory',
@@ -17,3 +16,5 @@ $classes = array(
 foreach ($classes as $class) {
     require_once dirname(__DIR__) . '/classes/' . $class . '.php';
 }
+
+require_once dirname(__DIR__) . '/customFunctions.php';

@@ -1,6 +1,6 @@
 <?php
 // get previous page to simulate a back button
-$url = htmlspecialchars($_SERVER['HTTP_REFERER']);
+$url = htmlspecialchars(filter_input_fix(INPUT_SERVER, 'HTTP_REFERER'));
 ?>
 
 <!DOCTYPE html>

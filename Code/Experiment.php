@@ -39,14 +39,16 @@ if ($_POST !== array()) {
     $data = isset($data) ? $data : $_POST;
     
     if (isset($sideData)) {
-        if(empty($sidedata_label)) $sidedata_label = $trial_type;
+        if (empty($sidedata_label)) {
+            $sidedata_label = $trial_type;
+        }
         $_SIDE->add($sideData, $sidedata_label);
     }
     
     // record data and advance to next PostTrial if applicable
     $_EXPT->record($data);
     if (($_EXPT->advance()) === 1) {
-        recordTrial($_EXPT->getTrial());
+        recordTrial($_EXPT->getTrial(-1));
     }
     
     // still need to complete this file, don't write to file yet
@@ -71,22 +73,9 @@ if (!empty($helper)) {
     require $helper;
 }
 
-// update $text containing $columnNames by passing them to $_EXPT->get()
-$text = $_EXPT->get('text');
-if (!empty($text)) {
-    $regexp = array(
-        '/\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)/', // normal variables: $variable
-        '/\$\{.*\}/', // non-normal variables: ${weird column & name}
-    );
-    $text = preg_replace_callback($regexp,
-        function($matches) use ($_EXPT) { return $_EXPT->get($matches[1]); },
-        $text
-    );
-} else {
-    $text = '';
-}
-$_EXPT->update('text', $text);
-unset($text);
+// update the text string by looking for variables in it (e.g. $var) and getting
+// the values using $_EXPT->get()
+$_EXPT->updateVariables('text');
 
 // override time in debug mode, use standard timing if no debug time is set
 if ($_SESSION['Debug'] == true && $_SETTINGS->debug_time != '') {
@@ -166,7 +155,7 @@ endif; ?>
 <?php
 // Diagnostics
 if (($_SETTINGS->trial_diagnostics == true) || ($trialFail == true)) {
-    d($_TRIAL->getDebugInfo());
+    datadump($_TRIAL->getDebugInfo());
 }
 ?>
 
