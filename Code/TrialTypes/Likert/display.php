@@ -121,5 +121,5 @@ echo '</div>';
 </div>
 
 <div class="collector-form-element textcenter">
-    <button type="submit" class="collectorButton collectorAdvance">Submit</button>
+    <button type="submit" id="FormSubmitButton" class="collectorButton collectorAdvance">Submit</button>
 </div>
