@@ -25,12 +25,12 @@ $validStates = array('break' => 0, 'done' => 0);
 if (isset($validStates[$_SESSION['state']])) {
     $status = unserialize($_SESSION['Status']);
     $status->writeEnd($_SESSION['Start Time'], $_SESSION['state']);
-    
+
     $sideData = array_merge(
         array('Username' => $_SESSION['Username'], 'ID' => $_SESSION['ID']),
         $_SIDE->getAll(true)
     );
-    
+
     arrayToLine($sideData, $_PATH->get('SideData Data'));
 
     // preparing $_SESSION for the next run
@@ -78,7 +78,7 @@ $mailto = "{$email}?Subject=Comments%20on%20{$currentExperiment}";
 
 require $_PATH->get('Header');
 ?>
-    
+
 <style>
   #content {
     width: 500px;
@@ -87,11 +87,11 @@ require $_PATH->get('Header');
 </style>
 <form id="content">
   <h2>Thank you for your participation!</h2>
-  
-  <p>If you have any questions about the experiment please email 
+
+  <p>If you have any questions about the experiment please email
     <a href='mailto:<?= $mailto ?>' target='_top'> <?= $email ?> </a>
   </p>
-  
+
   <?php if ($_SETTINGS->verification !== ''): ?>
   <h3>Your verification code is: <?= $verification_code ?></h3>
   <?php endif; ?>

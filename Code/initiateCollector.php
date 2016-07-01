@@ -37,7 +37,7 @@ if (!isset($_SESSION['Current Collector'])
 unset($currentCollector);
 
 // load settings
-if (isset($_SESSION['settings']) 
+if (isset($_SESSION['settings'])
     && (get_class($_SESSION['settings']) == "Collector\Settings")
 ) {
     $_SETTINGS = &$_SESSION['settings'];

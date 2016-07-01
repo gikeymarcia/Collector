@@ -150,8 +150,8 @@ $_EXPT = Collector\ExperimentFactory::create(
 $validationErrors = $_EXPT->validate();
 if (!empty($validationErrors)) {
     foreach ($validationErrors as $error) {
-        $errors->add($error['message'] . " Error found in MainTrial " . 
-            $error['info']['position'] . " at post position " . 
+        $errors->add($error['message'] . " Error found in MainTrial " .
+            $error['info']['position'] . " at post position " .
             $error['info']['postPosition'] . ". (positions are 0-indexed)");
     }
 }

@@ -140,16 +140,16 @@ var COLLECTOR = {
                 $(".collapsibleTitle").parent().children().not(".collapsibleTitle").toggle(350);
                 window.scrollTo(0, 0);
             });
-            
+
             // forceNumeric
             $(".forceNumeric").forceNumeric();
             // stop forms from submitting more than once
             $("form").preventDoubleSubmission();
-            
+
             // ensures that all forms have autocomplete disabled
             $(document).ready(function () {
                 $("form").attr('autocomplete', 'off');
-            }) 
+            })
 
             var contentSize = 0;
             $("body").children().each(function (){
@@ -171,7 +171,7 @@ var COLLECTOR = {
                         d    = event.srcElement || event.target,
                         tag  = d.tagName.toUpperCase(),
                         type = d.type && d.type.toUpperCase();
-                    
+
                     if (tag === 'TEXTAREA' ||
                        (tag === 'INPUT'
                         && (type === 'DATE'
@@ -227,7 +227,7 @@ var COLLECTOR = {
                     fsubmit.addClass("invisible");                  // hide submit button
                 }
             }
-            
+
             // check for window focus every .2 seconds
             var focusChecks = 0, focusCount  = 0, focusProp;
             function focusCheck() {
@@ -309,18 +309,18 @@ UTIL = {
 
 jQuery.fn.focusWithoutScrolling = function() {
     if ($(this).length === 0) return this;
-    
+
     var parents = [], parentScrolls = [];
     var currentElement = $(this);
-    
+
     while (currentElement[0] !== document) {
         currentElement = currentElement.scrollParent();
         parents.push(currentElement);
         parentScrolls.push(currentElement.scrollTop());
     }
-    
+
     this.focus();
-    
+
     while (parents.length > 0) {
         currentElement = parents.pop();
         currentElement.scrollTop(parentScrolls.pop());
@@ -340,9 +340,9 @@ jQuery.fn.forceNumeric = function () {
     return this.each(function () {
         $(this).keydown(function (e) {
             var key = e.which || e.keyCode;
-            
+
             if (!e.shiftKey && !e.altKey && !e.ctrlKey &&
-             // numbers   
+             // numbers
                 key >= 48 && key <= 57 ||
              // Numeric keypad
                 key >= 96 && key <= 105 ||
@@ -358,7 +358,7 @@ jQuery.fn.forceNumeric = function () {
              // Del and Ins
                 key == 46 || key == 45)
                 return true;
-            
+
             return false;
         });
     });

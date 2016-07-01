@@ -7,11 +7,11 @@ namespace Collector;
 
 /**
  * PSR-4 compliant Autoloader.
- * 
+ *
  * A fully qualified class name has the following form:
  * \<NamespaceName>(\<SubNamespaceNames>)*\<ClassName>
  * See more information here: http://www.php-fig.org/psr/psr-4/
- * 
+ *
  * Example usage:
  * ```php
  * $loader = new Autoloader();
@@ -72,7 +72,7 @@ class Autoloader {
             return false;
         }
         $this->loadedClasses[$className] = true;
-        
+
         $parts = explode('\\', $fullClass);
         while (null !== $next = array_pop($parts)) {
             $class = (isset($class)) ? $next.'/'.$class : $next;
@@ -104,7 +104,7 @@ class Autoloader {
 
             return true;
         }
-        
+
         return false;
     }
 }
