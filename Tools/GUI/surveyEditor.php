@@ -276,6 +276,22 @@
   <div class="helpType_Col" id="helpType_QuestionName">
     Here is some more information about Question Names.
   </div>
+
+  <div class="helpType_Col" id="helpType_Type">
+    <?php
+      $surveyTypes=readCsv("GUI/surveyTypes.csv");
+      //var_dump($surveyTypes);
+      
+      $surveyTypeVector=[];
+      foreach($surveyTypes as $surveyType){
+        array_push($surveyTypeVector,$surveyType[0]);
+        echo "<h3 id='header$surveyType[0]' onclick='hideShow(\"detail$surveyType[0]\")'>$surveyType[0]</h3>";
+        echo "<div id='detail$surveyType[0]' style='display:none'>$surveyType[1]</div>";
+      }
+        $jsonSurveyVector=json_encode($surveyTypeVector);
+    ?>
+  </div>
+
   
   <div class="helpType_Col" id="helpTypeDefault">
     Select a cell to see more information about that column.
@@ -286,8 +302,17 @@
 
 <script type="text/javascript">
 
+function hideShow(x){
+  if($('#'+x).is(':visible')) {
+    $('#'+x).hide();
+  } else {
+    $('#'+x).show();
+  }
+}
+
 //importing json encoded lists from php
 listSheetsNames=<?=$jsonSheets?>;
+var surveyVector=<?=$jsonSurveyVector?>;
 
 //removing the current study's name from the list (because this list is to prevent duplication)
 // studyIndex=listStudyNames.indexOf(currSurveyName.value);
@@ -326,13 +351,16 @@ if (typeof sheetName !== 'undefined'){
   }  
 }
 
-var perVar = {};
+// var perVar = {}; - probably can delete
+
 function helperActivate(){
   theseCoordinates    = stimTable.getSelected();
   var column          = stimTable.getDataAtCell(0,theseCoordinates[1]);//stimTable.getDataAtCell(0,1);
   helpType.innerHTML  = column;
   
   var columnCodeName = column.replace(/ /g, '');
+  
+  var thisCellValue = stimTable.getDataAtCell(theseCoordinates[0],theseCoordinates[1]);
   
   $("#helperBar").find(".helpType_Col").hide();
 
@@ -341,6 +369,27 @@ function helperActivate(){
   } else {
     $("#helperBar").find("#helpTypeDefault").show();
   }
+  
+  // code for specific helper bars
+  if(columnCodeName=="Type"){
+    //compare if string is within string
+    for(i=0;i<surveyVector.length;i++){
+      //remove cases for comparisons
+      var surveyValue=surveyVector[i].toLowerCase();
+      if(surveyValue.indexOf(thisCellValue.toLowerCase())==-1){
+        $("#header"+surveyVector[i]).hide();
+      } else {
+        $("#header"+surveyVector[i]).show(); // show header
+      }
+      
+      // show details if only one item fits criterion
+      if(surveyValue.localeCompare(thisCellValue.toLowerCase())==0){ 
+        $("#detail"+surveyVector[i]).show();
+      } else {
+        $("#detail"+surveyVector[i]).hide();
+      }
+    }    
+  }  
 }
 
 
@@ -442,10 +491,9 @@ var stimTable;
             width: 1,
             height: 1,
       
-            afterChange: function(changes, source) {
-                updateDimensions(this); 
-                
-        
+      afterChange: function(changes, source) {
+        updateDimensions(this);
+  
         var middleColEmpty=0;
         var middleRowEmpty=0;
         var postEmptyCol=0; //identify if there is a used col after empty one
@@ -525,6 +573,7 @@ var stimTable;
           helperActivate();
       //         alert(stimTable.getDataAtCell(0,1));
       },
+
       
       rowHeaders: false,
       contextMenu: true,
