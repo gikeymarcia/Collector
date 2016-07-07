@@ -353,14 +353,10 @@ if (typeof sheetName !== 'undefined'){
 
 // var perVar = {}; - probably can delete
 
-function helperActivate(){
-  theseCoordinates    = stimTable.getSelected();
-  var column          = stimTable.getDataAtCell(0,theseCoordinates[1]);//stimTable.getDataAtCell(0,1);
-  helpType.innerHTML  = column;
+function helperActivate(columnName, cellValue){
+  $("#helpType").html(columnName);
   
-  var columnCodeName = column.replace(/ /g, '');
-  
-  var thisCellValue = stimTable.getDataAtCell(theseCoordinates[0],theseCoordinates[1]);
+  var columnCodeName = columnName.replace(/ /g, '');
   
   $("#helperBar").find(".helpType_Col").hide();
 
@@ -376,14 +372,14 @@ function helperActivate(){
     for(i=0;i<surveyVector.length;i++){
       //remove cases for comparisons
       var surveyValue=surveyVector[i].toLowerCase();
-      if(surveyValue.indexOf(thisCellValue.toLowerCase())==-1){
+      if(surveyValue.indexOf(cellValue.toLowerCase())==-1){
         $("#header"+surveyVector[i]).hide();
       } else {
         $("#header"+surveyVector[i]).show(); // show header
       }
       
       // show details if only one item fits criterion
-      if(surveyValue.localeCompare(thisCellValue.toLowerCase())==0){ 
+      if(surveyValue.localeCompare(cellValue.toLowerCase())==0){ 
         $("#detail"+surveyVector[i]).show();
       } else {
         $("#detail"+surveyVector[i]).hide();
@@ -570,7 +566,12 @@ var stimTable;
       },
       
       afterSelectionEnd: function(){
-          helperActivate();
+        var coords        = this.getSelected();
+        var column        = this.getDataAtCell(0,coords[1]);//stimTable.getDataAtCell(0,1); 
+        var thisCellValue = this.getDataAtCell(coords[0],coords[1]);
+        window['Current HoT Coordinates'] = coords;
+        
+        helperActivate(column, thisCellValue);
       //         alert(stimTable.getDataAtCell(0,1));
       },
 
@@ -678,6 +679,15 @@ $(window).bind('keydown', function(event) {
         }
     }
 });
+
+// during typing into HandsOnTable, update the helper bar
+$(document).on("input", ".handsontableInput", function() {
+    var coord  = window['Current HoT Coordinates'];
+    var y      = coord[1];
+    var column = stimTable.getDataAtCell(0, y);
+    helperActivate(column, this.value);
+});
+
 
 </script>
 
