@@ -61,6 +61,26 @@
     z-index:        3;
   }
   
+  .helpType_Col { display: none; }
+  #helpTypeDefault { display: block; }
+  
+  #helperBar {
+    display: inline-block;
+    width: 20%;
+    background-color: #EFE;
+    border: 2px solid #6D6;
+    border-radius: 8px;
+    box-sizing: border-box;
+    padding: 10px;
+    vertical-align: top;
+    margin-top: 60px;
+  }
+  
+  #TableForm {
+    display: inline-block;
+    width: 75%;
+    box-sizing: border-box;
+  }
 </style>
 
 <?php
@@ -177,17 +197,8 @@
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
-<!-- the helper bar !-->
-<div class="alert-success">
-  <input type="button" class="collectorButton" value="minimise"> 
-  <h1> Helper </h1>
-  <h2 id="helpType">Select Cell</h2>
-  <!-- more info here !-->  
 
-</div>
-
-
-<form action='index.php' method='post'>
+<form action='index.php' method='post' id="TableForm">
   <textarea id="currentGuiSheetPage" name="currentGuiSheetPage" style="display:none">surveyEditor</textarea>
   <h1>
     <?php 
@@ -251,6 +262,27 @@
   
 </form>
 
+<!-- the helper bar !-->
+<div id="helperBar">
+  <input type="button" class="collectorButton" value="minimise"> 
+  <h1> Helper </h1>
+  <h2 id="helpType">Select Cell</h2>
+  
+  <!-- Help Types -->
+  <div class="helpType_Col" id="helpType_Answers">
+    Here is some more information about Answers.
+  </div>
+  
+  <div class="helpType_Col" id="helpType_QuestionName">
+    Here is some more information about Question Names.
+  </div>
+  
+  <div class="helpType_Col" id="helpTypeDefault">
+    Select a cell to see more information about that column.
+  </div>
+  
+</div>
+
 
 <script type="text/javascript">
 
@@ -297,8 +329,18 @@ if (typeof sheetName !== 'undefined'){
 var perVar = {};
 function helperActivate(){
   theseCoordinates    = stimTable.getSelected();
-  helpType.innerHTML  = stimTable.getDataAtCell(0,theseCoordinates[1]);//stimTable.getDataAtCell(0,1);
+  var column          = stimTable.getDataAtCell(0,theseCoordinates[1]);//stimTable.getDataAtCell(0,1);
+  helpType.innerHTML  = column;
+  
+  var columnCodeName = column.replace(/ /g, '');
+  
+  $("#helperBar").find(".helpType_Col").hide();
 
+  if ($("#helperBar").find("#helpType_" + columnCodeName).length > 0) {
+    $("#helperBar").find("#helpType_" + columnCodeName).show();
+  } else {
+    $("#helperBar").find("#helpTypeDefault").show();
+  }
 }
 
 
