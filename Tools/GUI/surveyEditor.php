@@ -22,58 +22,10 @@
 
  */
 
-  // requiring files and calling in classes
-  $title = 'Collector GUI';
-  require_once ('guiFunctions.php');
-  require('guiClasses.php');
-  require("guiCss.php"); 
-  $thisDirInfo = new csvDirInfo(); // calling in class for directory information
-  $surveySheetsInfo = new surveySheetsInfo(); // calling in class for sheets information
-
-  //identifying (file) name of the study
-  if (isset($_POST['surveyPostName'])){
-    #$thisDirInfo->studyDir="../Experiments/".$_POST['PostName'];    
-    #$_DATA['guiSheets']['thisDir']=$thisDirInfo->studyDir;//redundant??
-    $_DATA['guiSheets']['surveyName']=$_POST['surveyPostName'];
-  } else {
-    if(isset($_DATA['guiSheets']['surveyName'])){
-      #$thisDirInfo->studyDir=$_DATA['guiSheets']['thisDir'];
-      $thisDirInfo->surveyName=$_DATA['guiSheets']['surveyName'];
-    }
-  }
-
-
-
-  
-  // List csv files in the directories
-  $surveySheetsInfo->surveySheets=getCsvsInDir('../Experiments/Common/Surveys');
-#  $studySheetsInfo->procSheets=getCsvsInDir($thisDirInfo->studyDir.'/Procedure/');
-
-  
-  
-  
-  //checking whether the post is legitimate
-  $legitPostNames=array
-    ( 'currentGuiSheetPage',
-      'currSurveyName',
-      'csvSelected',
-      'eventName',
-      'stimTableInput',
-      'newSheet',
-      'DeleteSheet',
-      'Save');
-  $illegalInputs=array('<?','{','}','/','\\'); // need to also exclude \
-  
-  //insert Tyson's illegal character thing here
-    //preg_replace('([^ \\-0-9A-Za-z])', '', $_POST['u']);
-  
-  checkPost($_POST,$legitPostNames,$illegalInputs); // defined in guiFunctions
-
-
   
 ?>
-
-<style>
+  
+  <style>
   body { 
     color: black; 
     background-color: white; 
@@ -85,11 +37,10 @@
   }
   form {
     text-align: center;
-    margin: 30px;
   }
   .tableArea {
-    display: inline-block;
-    width: 50%;
+    display: block;
+    width: 100%;
     box-sizing: border-box;
     padding: 10px 30px;
     vertical-align: top;
@@ -98,87 +49,62 @@
     border-radius: 5px;
     border-color: #E8E8E8  ;
   }
+  .alert-success{
+    position:       absolute; 
+    right:          10%;
+    width:          200px;
+    top:            10%;
+    bottom:         10%;
+    padding:        10px;
+    opacity:        .8;
+    border-radius:  10px;
+    z-index:        3;
+  }
+  
 </style>
-
 
 <?php
 
+  // requiring files and calling in classes
+  require_once ('guiFunctions.php');
+  require('guiClasses.php');
+  require("guiCss.php"); 
+  $surveySheetsInfo = new surveySheetsInfo(); // calling in class for sheets information
 
-  /*  
 
-
-  if(!file_exists("$thisDirInfo->studyDir/name.txt")){ //create name.txt for first run
-    file_put_contents("$thisDirInfo->studyDir/name.txt",$_DATA['guiSheets']['studyName']);
-  }	
-
-  */ 
- 
-  if(isset($_POST['sheetSelected'])){ //to allow reference to session if post doesn't exist (although may want to check if this can be tidier in future).
-    $_DATA['guiSheets']['csvSelected']=$_POST['csvSelected'];
-  }
-
-  //print_r($surveySheetsInfo);
-  //echo "<br>";
-  //print_r($_POST);
+  //checking whether the post is legitimate - this may change in Tyson's new Admins system
+  $legitPostNames=array
+    ( 'currentGuiSheetPage',
+      'currSurveyName',
+      'csvSelected',
+      'eventName',
+      'stimTableInput',
+      'newSheet',
+      'DeleteSheet',
+      'Save');
+  $illegalInputs=array('<?','{','}','/','\\'); // need to also exclude \
+  
+  //can this be improved with Tyson's illegal character thing here?:
+    //preg_replace('([^ \\-0-9A-Za-z])', '', $_POST['u']);
+  
+  checkPost($_POST,$legitPostNames,$illegalInputs); // defined in guiFunctions
 
   
-  //updating study name
-#  $thisDirInfo->studyName=file_get_contents("$thisDirInfo->studyDir/name.txt");
+  
+  /* * * * * * * * * *
+  * File organisation
+  * * * * * * * * * */
 
-  // get a list of all the filenames to allow checking for duplications
-  $surveys = getCsvsInDir("../Experiments/Common/Surveys");
-
-/*  
-  $listSurveyNames=array();
-  foreach($surveys as $survey){
-   // if(file_exists("../Experiments/$branch/name.txt")){
-      array_push($listStudyNames,file_get_contents("../Experiments/$branch/name.txt"));
-   //}
-  }
-  */
+  // List csv files in the directories
+  $surveySheetsInfo->surveySheets=getCsvsInDir($_PATH->get('Common')."/Surveys");
   
-  $listSurveyNamesJson=json_encode($surveys);
-  
-  
-  if(!isset($_DATA['guiSheets']['surveyName'])){ //i.e. if this page has just been opened
-    $surveySheetsInfo->thisSurveyName='[No survey Selected]';
-    $surveySheetsInfo->thisSurveyFilename='[No survey Selected]';
-    #$surveySheetsInfo->thisSheetFolder='';
-  } else { // checking whether browsing to "Conditions.csv";
-    /*
-    if(strcmp($_DATA['guiSheets']['csvSelected'],'Conditions.csv,')==0){
-      $studySheetsInfo->thisSheetName='Conditions';
-      $studySheetsInfo->thisSheetFolder='';
-      $studySheetsInfo->thisSheetFilename="$studySheetsInfo->thisSheetFolder/Conditions.csv";
-    }  else {
-      $studySheetsInfo->postSheetInfo($_DATA['guiSheets']['csvSelected']);  
-    } 
-    */    
+  // opening files - works
+  if (isset($_POST['openButton'])){  //wrong - surveyPostName is only for opening files
+    $surveySheetsInfo->thisSurveyFilename=$_POST['surveyPostName'];
+    $surveySheetsInfo->thisSurveyName=str_ireplace('.csv','',$surveySheetsInfo->thisSurveyFilename);
   }
   
-  
-  /*
-  if(isset($_POST['DeleteSheet'])){//something is being deleted	
-    unlink ("$thisDirInfo->studyDir/$studySheetsInfo->thisSheetFilename");
-    $studySheetsInfo->thisSheetName='Conditions';
-    $studySheetsInfo->thisSheetFolder='';
-    $studySheetsInfo->thisSheetFilename="$studySheetsInfo->thisSheetFolder/Conditions.csv";
-  }
-  */
-  
-  // updating study name - doesn't need a save to do this
-  if(isset($_POST['currSurveyName'])){
-    
-    /*
-    echo "<br>";
-    print_r($_POST['currSurveyName']);
-    echo "<br>";
-    */
- #   file_put_contents($thisDirInfo->studyDir.'/name.txt',$_POST['currSurveyName']);
-    $surveySheetsInfo->thisSurveyName=$_POST['currSurveyName']; #file_get_contents($thisDirInfo->studyDir.'/name.txt');
-  }
-  
-  
+  // creating new Survey - works  
   if(isset($_POST['newSurvey'])){  //code for creating a new CSV sheet
     $newName=0;
     $newNo=0;
@@ -192,82 +118,74 @@
     }
     $surveySheetsInfo->thisSurveyName="Survey$newNo";
     $surveySheetsInfo->thisSurveyFilename="$surveySheetsInfo->thisSurveyName.csv";
-    copy("../Experiments/Common/Surveys/test.csv","../Experiments/Common/Surveys/$surveySheetsInfo->thisSurveyFilename");
+    copy($_PATH->get('Common')."/Surveys/demoSurvey.csv",$_PATH->get('Common')."/Surveys/".$surveySheetsInfo->thisSurveyFilename);
   }
-
-  /* code for identifying filename */
   
-// extract table from csv file
-  if(isset($_POST['surveyPostName'])){  
-    $surveySheetsInfo->thisSurveyName=str_replace('.csv','',$_POST['surveyPostName']);
-    $surveySheetsInfo->thisSurveyFilename=$_POST['surveyPostName']; 
- }
-// print_r($_POST['surveyPostName']);
- 
-    
- 
- 
-  if (isset($_POST['Save'])){ //Saving whichever csv you are currently working on
+  //Saving - working
+  if (isset($_POST['Save'])){ 
     // renaming file if the user renamed it
-    
-//    echo (strcmp($_POST['currSurveyName'],$surveySheetsInfo->thisSurveyName));
-    if (strcmp($_POST['currSurveyName'],$surveySheetsInfo->thisSurveyName)!=0){
+    if (strcmp($_POST['currSurveyName'],$_DATA['guiSheets']['surveyName'])!=0){
       $illegalChars=array('  ',' ','.');
       foreach ($illegalChars as $illegalChar){
         $_POST['currSurveyName']=str_ireplace($illegalChar,'',$_POST['currSurveyName']);
       }
-      $newFile='../Experiments/Common/Surveys/'.$_POST['currSurveyName'].'.csv';
-      $originalFile='../Experiments/Common/Surveys/'.$surveySheetsInfo->thisSurveyFilename;
-      copy($originalFile,$newFile);
-      unlink($originalFile);
+      $newFile=$_PATH->get('Common')."/Surveys/".$_POST['currSurveyName'].'.csv';
+      $originalFile=$_PATH->get('Common')."/Surveys/".$_DATA['guiSheets']['surveyName'];
+     
+      if(file_exists($originalFile)){ // Will there ever be a case where there isn't an original file???
+        copy($originalFile,$newFile);
+        unlink($originalFile);        
+      }  
       $surveySheetsInfo->thisSurveyName=$_POST['currSurveyName'];
-      // do not change $studySheetsInfo->thisSheetFolder it's the same folder
       $surveySheetsInfo->thisSurveyFilename="$surveySheetsInfo->thisSurveyName.csv";        
     }
   
-    // converting raw table data into usable array
-    //removing symbols
-		$stimTableArray=json_decode($_POST['stimTableInput'], true);
+  	$stimTableArray=json_decode($_POST['stimTableInput'], true);    
+  	writeHoT($_PATH->get('Common')."/Surveys/".$surveySheetsInfo->thisSurveyFilename,$stimTableArray);
     
-    //echo "../Experiments/Common/Surveys/$surveySheetsInfo->thisSurveyFilename";
-    
-    
-    //echo "<br><br>".$surveySheetsInfo->thisSurveyFilename."<br><br>";
-    
-		writeHoT("../Experiments/Common/Surveys/$surveySheetsInfo->thisSurveyFilename",$stimTableArray);
   }      
   
+  // use demo survey if working from scratch 
+  if($surveySheetsInfo->thisSurveyFilename=="to be declared" ||  $surveySheetsInfo->thisSurveyFilename=='[No survey Selected]'){
+    $surveySheetsInfo->thisSurveyFilename=="newSurvey.csv";
+    $stimuli=getFromFile($_PATH->get('Common')."/Surveys/demoSurvey.csv",false,','); // this can be integrated with later code for tidying
+  } 
   
- 
- $stimuli=getFromFile("../Experiments/Common/Surveys/$surveySheetsInfo->thisSurveyFilename",false,',');
-  
-  //print_r($stimuli);
-  
-  $stimData = array(array_keys(reset($stimuli)));
+  else // load current survey
+  {
+    $stimuli=getFromFile($_PATH->get('Common')."/Surveys/$surveySheetsInfo->thisSurveyFilename",false,',');
+  }
+
+  //preparing Stim data
+  $stimData = array(array_keys(reset($stimuli)));   
   foreach ($stimuli as $row) {
     $stimData[] = array_values($row);
   }
   $stimData = json_encode($stimData);      
-  
-  /*
-  //list all csv files - should this be a function within $studySheetsInfo?
-  $studySheetsInfo->stimSheets=getCsvsInDir($thisDirInfo->studyDir.'/Stimuli/');
-  $studySheetsInfo->procSheets=getCsvsInDir($thisDirInfo->studyDir.'/Procedure/');
-  $sheetsList=array();
-  foreach($studySheetsInfo->stimSheets as $stimSheet){
-    array_push($sheetsList,$stimSheet);
-  }
-  foreach($studySheetsInfo->procSheets as $procSheet){
-    array_push($sheetsList,$procSheet);
-  }
-  */
-  $jsonSheets=json_encode($surveySheetsInfo->sheetsList);
-  
-  //consolidate session names as backups for post variables
-#  $_SESSION['eventName']=$studySheetsInfo->thisSheetName;
-#  $_SESSION['currSurveyName']=$thisDirInfo->studyName;
- 
+   
+  //Storing this page's filename in order to compare if user renames
+  $_DATA['guiSheets']['surveyName']=$surveySheetsInfo->thisSurveyFilename; //once page decided
+
+  // update list of files after all file processing
+  $surveySheetsInfo->surveySheets=getCsvsInDir($_PATH->get('Common')."/Surveys");
+  $jsonSheets=json_encode($surveySheetsInfo->sheetsList); 
 ?>
+
+
+<!-- Bootstrap alerts !-->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- the helper bar !-->
+<div class="alert-success">
+  <input type="button" class="collectorButton" value="minimise"> 
+  <h1> Helper </h1>
+  <h2 id="helpType">Select Cell</h2>
+  <!-- more info here !-->  
+
+</div>
+
 
 <form action='index.php' method='post'>
   <textarea id="currentGuiSheetPage" name="currentGuiSheetPage" style="display:none">surveyEditor</textarea>
@@ -294,13 +212,13 @@
     <?php    
 
       
-      foreach($surveys as $survey){
+      foreach($surveySheetsInfo->surveySheets as $survey){
         echo "<option name='surveyPostName' value='$survey'>$survey</option>";
       }
         
     ?>    
     </select>
-    <button type='submit' class='collectorButton' value='Select'>Open</button>
+    <button type='submit' name="openButton" class='collectorButton' value='Select'>Open</button>
   </span>
 
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
@@ -374,6 +292,13 @@ if (typeof sheetName !== 'undefined'){
     }
     //put in a check to see if there are any illegal symbols here in future version - this is currently being checked after saving  
   }  
+}
+
+var perVar = {};
+function helperActivate(){
+  theseCoordinates    = stimTable.getSelected();
+  helpType.innerHTML  = stimTable.getDataAtCell(0,theseCoordinates[1]);//stimTable.getDataAtCell(0,1);
+
 }
 
 
@@ -459,7 +384,7 @@ var stimTable;
         thisHeight = Math.min(thisHeight, 600);
         
         hot.updateSettings({
-            width:  1000, //thisWidth,
+            width:  thisWidth,
             height: thisHeight
         });
     }
@@ -476,7 +401,8 @@ var stimTable;
             height: 1,
       
             afterChange: function(changes, source) {
-                updateDimensions(this);  
+                updateDimensions(this); 
+                
         
         var middleColEmpty=0;
         var middleRowEmpty=0;
@@ -552,6 +478,12 @@ var stimTable;
       afterRemoveRow: function() {
           updateDimensionsDelayed(this);
       },
+      
+      afterSelectionEnd: function(){
+          helperActivate();
+      //         alert(stimTable.getDataAtCell(0,1));
+      },
+      
       rowHeaders: false,
       contextMenu: true,
       cells: function(row, col, prop) {
