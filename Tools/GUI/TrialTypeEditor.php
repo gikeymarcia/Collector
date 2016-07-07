@@ -29,12 +29,34 @@
     display: none;
   }
   
+  #controlPanel {
+    position:       fixed;
+    border:         2px solid black;
+    left:           73%;  
+    width:          25%;
+    top:            40%;
+    height:         500px;
+    padding:        10px;
+    opacity:        .9;
+    border-radius:  10px;
+    z-index:        5;
+  }
+    
+
+  
+  #controlPanelRibbon {
+    padding: 5px;
+    border-bottom: 1px solid gray;
+  }
+
+  #controlPanelItems > div {
+    display: none;
+    height: 400px;
+    border: 1px solid green;
+  }
+  
   #displayEditor{
     width:400px;
-    height:500px;
-    position:absolute;
-    left:620px;
-    top:300px;
     border:2px solid black;
     border-radius: 25px;
     padding:25px;
@@ -46,10 +68,7 @@
   
   #elementArray{
     width:400px;
-    height:500px;
     position:absolute;
-    left:1450px;
-    top:300px;
     border:2px solid black;
     border-radius: 25px;
     padding:50px;  
@@ -77,8 +96,6 @@
     width:400px;
     height:500px;
     position:absolute;
-    left:1040px;
-    top:300px;
     border:2px solid black;
     border-radius: 25px;
     padding:25px;
@@ -96,9 +113,9 @@
   
   #trialEditor{
     width:100%;
-    height:100%;
+    height:80%;
     position:absolute;
-    top:900px;
+    top:300px;
     left:0px;
     border:2px solid black;
     border-radius: 25px;
@@ -198,8 +215,8 @@
         if(strcmp($_DATA['trialTypeEditor']['currentTrialTypeName'],$trialTypeElementsPhp->trialTypeName)!=0){ //i.e. a new trialType name
           if(file_exists("GUI/newTrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName'].".txt")){
             unlink("GUI/newTrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName'].".txt"); //Delete original file here            
-            unlink("../Experiments/Common/TrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName']."/display.php"); //deleting php file
-            rmdir("../Experiments/Common/TrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName']); //deleting directory
+            unlink("../Experiments/_Common/TrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName']."/display.php"); //deleting php file
+            rmdir("../Experiments/_Common/TrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName']); //deleting directory
           }
           $_DATA['trialTypeEditor']['currentTrialTypeName']=$trialTypeElementsPhp->trialTypeName; //identify correct name here
         }  
@@ -285,7 +302,15 @@
     }
     echo "' onclick='clickElement($elementKey)'
              >".$element->stimulus."</div>";      
-  }    
+  } 
+  if(isset($_DATA['trialTypeEditor']['currentTrialTypeName'])){
+    if(file_exists("GUI/newTrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName'].".txt")){
+      $loadedContents=file_get_contents("GUI/newTrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName'].".txt");
+    } else {
+      $loadedContents='';
+    }
+  }
+  
 ?>
 </div>
 
@@ -297,135 +322,132 @@
  <!-- </span> !-->
 </div>
 
-<div id="displayEditor">
-  <h1>Display editor <br><span style="font-size:20px" id="currentStimType">No Element Selected</span></h1>
-  <table id="configurationSettings" style="display:none">
-    <tr title="we may allow editing of element names in a later release but without careful coding it can make code break easily"><td>Element Name</td><td><input type="text" id="elementNameValue" onkeyup="adjustElementName()" readonly style="background-color:#d3d3d3"></td><tr>
-    <div id="userInputSettings">
-      <tr title="If you want to refer to a stimulus list then write '[stimulus1]' or '[stimulus2]' etc."><td id="inputStimTypeCell">Input Type:</td>
-        <td id="inputStimSelectCell">
-          <select id="userInputTypeValue" onchange="adjustUserInputType()">
-            <option>Text</option>
-            <option>Button</option> <!-- we could with time offer:
-                                            different styles of these buttons
-                                            radio buttons
-                                            checklist buttons                                          
-                                            !-->
-          </select>
-        </td>
-      </tr>
+<!-- Bootstrap alerts !-->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- the helper bar !-->
+<div id="controlPanel" class="alert-success">
+  <div id="controlPanelRibbon">
+    <button type="button" class="collectorButton" value="#displayEditor">Display Editor</button>
+    <button type="button" class="collectorButton" value="#interactionEditor">Interaction Editor</button>
+    <button type="button" class="collectorButton" value="#elementArray">Element Array</button>
+    <button type="button" class="collectorButton" id="hideShowControl" onclick="hideShowControlPanel()">X</button>
+  </div>  
+  <div id="controlPanelItems">
+    <div id="displayEditor">
+      <h1>Display editor <br><span style="font-size:20px" id="currentStimType">No Element Selected</span></h1>
+      <table id="configurationSettings" style="display:none">
+        <tr title="we may allow editing of element names in a later release but without careful coding it can make code break easily"><td>Element Name</td><td><input type="text" id="elementNameValue" onkeyup="adjustElementName()" readonly style="background-color:#d3d3d3"></td><tr>
+        <div id="userInputSettings">
+          <tr title="If you want to refer to a stimulus list then write '[stimulus1]' or '[stimulus2]' etc."><td id="inputStimTypeCell">Input Type:</td>
+            <td id="inputStimSelectCell">
+              <select id="userInputTypeValue" onchange="adjustUserInputType()">
+                <option>Text</option>
+                <option>Button</option> 
+              </select>
+            </td>
+          </tr>
+        </div>
+        
+        <tr title="If you want to refer to a stimulus list then write '[stimulus1]' or '[stimulus2]' etc.">
+          <td>Stimulus:</td>
+          <td><input id="stimInputValue" type="text" onkeyup="adjustStimulus()"></td>
+        </tr>
+        <tr>
+          <td>Width:</td><td><input id="elementWidth" type="number" value="20" min="1" max="100" onchange="adjustWidth()">%</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Height:</td><td><input id="elementHeight" type="number" value="20" min="1" max="100" onchange="adjustHeight()">%</td>
+          <td></td>
+        </tr>
+        <tr title="this position is based on the left of the element">
+          <td>X-Position:</td>
+          <td><input id="xPosId" type="number" min="1" max="100" step="1" onchange="adjustXPos()">%</td>
+          <td></td>
+        </tr>
+        <tr title="this position is based on the top of the element">
+          <td>Y-Position:</td>
+          <td><input id="yPosId" type="number" min="1" max="100" step="1" onchange="adjustYPos()">%</td>
+          <td></td>
+        </tr>
+        <tr title="change this value to bring the element to forward or backward (to allow it to be on top of or behind other elements">
+          <td>Z-Position:</td>
+          <td><input id="zPosId" type="number" step="1" min="0" onchange="adjustZPos()"></td>
+        </tr>
+        <tr title="how long do you want until the element appears on screen?">
+          <td>onset time:</td>
+          <td><input id="onsetId" class="onsetOffset" type="time" value="00:00:00" step=".001" onchange="adjustOnsetTime()"></td>
+        </tr>
+        <tr title="if you want the element to disappear after a certain amount of time, change from 00:00">
+          <td>offset time:</td>
+          <td><input id="offsetId" class="onsetOffset" type="time" value="00:00:00" step=".001" onchange="adjustOffsetTime()"></td>
+        </tr>
+        <tr>
+          <td><input id="deleteButton" type="button" value="delete" class="collectorButton"></td>
+        </tr>       
+      </table>
+      
     </div>
-    
-    <tr title="If you want to refer to a stimulus list then write '[stimulus1]' or '[stimulus2]' etc.">
-      <td>Stimulus:</td>
-      <td><input id="stimInputValue" type="text" onkeyup="adjustStimulus()"></td>
-    </tr>
-    <tr>
-      <td>Width:</td><td><input id="elementWidth" type="number" value="20" min="1" max="100" onchange="adjustWidth()">%</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>Height:</td><td><input id="elementHeight" type="number" value="20" min="1" max="100" onchange="adjustHeight()">%</td>
-      <td></td>
-    </tr>
-    <tr title="this position is based on the left of the element">
-      <td>X-Position:</td>
-      <td><input id="xPosId" type="number" min="1" max="100" step="1" onchange="adjustXPos()">%</td>
-      <td></td>
-    </tr>
-    <tr title="this position is based on the top of the element">
-      <td>Y-Position:</td>
-      <td><input id="yPosId" type="number" min="1" max="100" step="1" onchange="adjustYPos()">%</td>
-      <td></td>
-    </tr>
-    <tr title="change this value to bring the element to forward or backward (to allow it to be on top of or behind other elements">
-      <td>Z-Position:</td>
-      <td><input id="zPosId" type="number" step="1" min="0" onchange="adjustZPos()"></td>
-    </tr>
-    <tr title="how long do you want until the element appears on screen?">
-      <td>onset time:</td>
-      <td><input id="onsetId" class="onsetOffset" type="time" value="00:00:00" step=".001" onchange="adjustOnsetTime()"></td>
-    </tr>
-    <tr title="if you want the element to disappear after a certain amount of time, change from 00:00">
-      <td>offset time:</td>
-      <td><input id="offsetId" class="onsetOffset" type="time" value="00:00:00" step=".001" onchange="adjustOffsetTime()"></td>
-    </tr>
-    <tr>
-      <td><input id="deleteButton" type="button" value="delete" class="collectorButton"></td>
-    </tr>       
-  </table>
-  
-</div>
 
-<div id="interactionEditor">
-  <h1> Interaction Editor </h1>
-   
-  <div id="interactionEditorConfiguration" style="display:none"> 
-    <table>
-      <tr title="What actions to other elements do you want when clicking on this element? E.G. hide'(element1)'">
-        <td>Click outcomes:</td>
-        <td>
-          <select id="clickOutcomesActionId" onchange="adjustClickOutcomes(); supportClickOutcomes()">
-            <option></option>
-            <option>show</option>
-            <option>hide</option>
-            <option title="if you want this element to be (part of) your response">response</option>
-          </select>
-          <select id="clickOutcomesElementId" onchange="adjustOutcomeElement()">
-            <option></option>
-          </select>
-          <input id="responseValueId" placeholder="[insert desired value here]" style="display:none" onkeyup="adjustClickOutcomes()">
-          <span id="respNoSpanId" title="If you want multiple elements to contribute to the response, order the responses in the order you want them in the output" style="display:none"> <br>Resp No <input id="responseNoId" type="number" min="0" value="1" style="width:50px" onchange="adjustResponseOrder(); adjustClickOutcomes() ">
-          </span>
-  <!--        <input id="clickOutcomesId" type="text" onkeyup="adjustClickOutcomes(); supportClickOutcomes()"> !-->
-        </td>
-      </tr>   
-      <tr>
-        <td> <input type="button" class="collectorButton" id="addDeleteFunctionButton0" value="Add Function" onclick="addDeleteFunction(0)"> </td>
-      </tr>
-      <tr>
-        <td>Proceed Click</td>
-        <td><input id="proceedId" title="if you want the trial to proceed when you click on this element, check this box" type="checkbox" onclick="adjustProceed()"></td>
-      </tr>
-    </table>
+    <div id="interactionEditor">
+      <h1> Interaction Editor </h1>
+       
+      <div id="interactionEditorConfiguration"> 
+        <table>
+          <tr title="What actions to other elements do you want when clicking on this element? E.G. hide'(element1)'">
+            <td>Click outcomes:</td>
+            <td>
+              <select id="clickOutcomesActionId" onchange="adjustClickOutcomes(); supportClickOutcomes()">
+                <option></option>
+                <option>show</option>
+                <option>hide</option>
+                <option title="if you want this element to be (part of) your response">response</option>
+              </select>
+              <select id="clickOutcomesElementId" onchange="adjustOutcomeElement()">
+                <option></option>
+              </select>
+              <input id="responseValueId" placeholder="[insert desired value here]" style="display:none" onkeyup="adjustClickOutcomes()">
+              <span id="respNoSpanId" title="If you want multiple elements to contribute to the response, order the responses in the order you want them in the output" style="display:none"> <br>Resp No <input id="responseNoId" type="number" min="0" value="1" style="width:50px" onchange="adjustResponseOrder(); adjustClickOutcomes() ">
+              </span>
+            </td>
+          </tr>   
+          <tr>
+            <td> <input type="button" class="collectorButton" id="addDeleteFunctionButton0" value="Add Function" onclick="addDeleteFunction(0)"> </td>
+          </tr>
+          <tr>
+            <td>Proceed Click</td>
+            <td><input id="proceedId" title="if you want the trial to proceed when you click on this element, check this box" type="checkbox" onclick="adjustProceed()"></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+
+    <div id="elementArray" name="elementArray"><?=$loadedContents?></div>
   </div>
-<!-- it may not be a good idea to allow users to suggest what functions they would like added.
-  <input type="button" class="collectorButton" id="showRequestOptionsId" value="New function">
-  <table id="newFunctionTable" style="display:none">
-    <tr>
-      <td> <textarea type="text" id="newFunctionId" name="newFunctionText" placeholder="brief description of function"></textarea></td>
-    </tr>
-    <tr>
-      <td> Tick here if you have checked that this function does not already exist: <input type="checkbox"> </td>
-    </tr>
-    <tr>
-      <td> <input type="button" id="requestButton" class="collectorButton" value="Currently requested functions"> </td>    
-    </tr>
-    <tr>
-      <td> <input type="button" id="requestAct" class="collectorButton" value="Request Feature!"> </td>
-    </tr>
-  </table>
-  !-->
+  <div style="position:absolute;top:800px;left:100px">responseInputs<br>
+    <textarea name="responseValues" id="responseValuesId"></textarea>
+  </div>
 </div>
-
-<?php
-
-  if(isset($_DATA['trialTypeEditor']['currentTrialTypeName'])){
-    if(file_exists("GUI/newTrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName'].".txt")){
-      $loadedContents=file_get_contents("GUI/newTrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName'].".txt");
-    } else {
-      $loadedContents='';
-    }
-  }
-  
-?>
-<div style="position:absolute;top:800px;left:100px">responseInputs<br>
-  <textarea name="responseValues" id="responseValuesId"></textarea>
-</div>
-<textarea id="elementArray" name="elementArray"><?=$loadedContents?></textarea>
-
 </form>
 <script>
+
+ $(document).ready(function() {
+  $("#controlPanelRibbon button").click(function() {
+    var targetElementID = this.value;
+    
+    $("#controlPanelItems > div").hide();
+    
+    $(targetElementID).show();
+  });
+});
+
+function hideShowControlPanel(){
+//  $("#controlPanelItems").hide();
+}
 
 function supportClickOutcomes(){
   console.dir ("test");
@@ -763,16 +785,25 @@ function adjustElementArray(x){
 function alertMouse(){
   if(inputElementType!="select"){
     elementNo++;
-    _mouseX=_mouseX-100; // this may need to be adjusted depending on the size of the element. Current size is 100px
-    _mouseY=_mouseY-300; // same as above
+    //_mouseX=_mouseX-100; // this may need to be adjusted depending on the size of the element. Current size is 100px
+    //_mouseY=_mouseY-300; // same as above
+    
+    /*
     if(_mouseX>400){ //replace with real value
       _mouseX=400;
     }
     if(_mouseY>400){ //replace with real value
       _mouseY=400;
     }
-    xPos=Math.round((_mouseX)/5);
-    yPos=Math.round((_mouseY)/5);
+    */
+    
+   
+    xPos=Math.round((_mouseX)); //    /5);
+    yPos=Math.round((_mouseY)); //  /5);
+    
+    
+    
+    
 //    spanArray[elementNo]={type:inputElementType};
       
     if(inputElementType=="input"){
@@ -834,7 +865,7 @@ function updateTrialTypeElements(){
     backupTrialTypeName=trialTypeName.value;    
   }
   trialTypeElements['trialTypeName']=trialTypeName.value;
-  document.getElementById("elementArray").value = JSON.stringify(trialTypeElements,  null, 2);
+  document.getElementById("elementArray").innerHTML = JSON.stringify(trialTypeElements,  null, 2);
   inputElementType="select";
   elementType("select");  
 }
@@ -1050,10 +1081,19 @@ function elementType(x){
   }  
 }
 
+
 function getPositions(ev) {
 if (ev == null) { ev = window.event }
-   _mouseX = ev.clientX;
-   _mouseY = ev.clientY;
+  var offset = $("#trialEditor").offset(); 
+  _mouseX = ev.pageX;
+  _mouseY = ev.pageY;
+  console.dir(_mouseX);
+  console.dir(_mouseY);
+  console.dir(offset);
+ 
+  _mouseX -= offset.left;
+  _mouseY -= offset.top;
+   
 }
 
 function mouseMovingFunctions(){
@@ -1088,10 +1128,7 @@ function mouseMovingFunctions(){
     } else {
         style.appendChild(document.createTextNode(css));
     }
-    document.getElementsByTagName('head')[0].appendChild(style);
-    
-    
-    
+    document.getElementsByTagName('head')[0].appendChild(style);    
   }
   
 
