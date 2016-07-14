@@ -26,7 +26,6 @@
 
   <!-- JS Tools -->
   <script src="<?= $_PATH->get('Jquery UI Custom', 'url') ?>"></script>
-  <script src="<?= $_PATH->get('Collector JS', 'url') ?>"></script>
 
   <!-- Additional styles -->
   <?php if (isset($addedStyles)): foreach ($addedStyles as $additionalStyle): ?>

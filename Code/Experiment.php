@@ -116,6 +116,11 @@ require $_PATH->get('Header');
 // actually include the trial type display file here
 $display = $_TRIAL->getRelatedFile('display');
 if ($display): ?>
+<script src="<?= $_PATH->get('Collector JS', 'url') ?>"></script>
+<script>
+    Collector.inputs.min = "<?= $_EXPT->get('min time') ?>";
+    Collector.inputs.max = "<?= $_EXPT->get('max time') ?>";
+</script>
 <form class="experimentForm <?= $formClass; ?> invisible" action="<?= $postTo; ?>" method="post" id="content" autocomplete="off">
   <?php include $display ?>
 

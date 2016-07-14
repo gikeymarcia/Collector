@@ -172,7 +172,7 @@ return array(
         'javascript' => array(
             'Dir Name' => 'JS Dir',
 
-            'collector_1.0.0.js' => 'Collector JS',
+            'Collector.js' => 'Collector JS',
 
             'jquery.js' => 'Jquery',
             'jquery-ui-1.10.4.custom.min.js' => 'Jquery UI Custom',
