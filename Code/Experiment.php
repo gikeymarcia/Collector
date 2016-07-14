@@ -37,20 +37,20 @@ if ($_POST !== array()) {
     // score data
     require $_TRIAL->getRelatedFile('scoring');
     $data = isset($data) ? $data : $_POST;
-    
+
     if (isset($sideData)) {
         if (empty($sidedata_label)) {
             $sidedata_label = $trial_type;
         }
         $_SIDE->add($sideData, $sidedata_label);
     }
-    
+
     // record data and advance to next PostTrial if applicable
     $_EXPT->record($data);
     if (($_EXPT->advance()) === 1) {
         recordTrial($_EXPT->getTrial(-1));
     }
-    
+
     // still need to complete this file, don't write to file yet
     header('Location: ' . $_PATH->get('Experiment Page'));
     exit;
@@ -82,25 +82,6 @@ if ($_SESSION['Debug'] == true && $_SETTINGS->debug_time != '') {
     $_EXPT->update('max time', $_SETTINGS->debug_time);
 }
 
-if ($_EXPT->get('min time') === null) {
-    $_EXPT->update('min time', 'not set');
-}
-if (!isset($defaultMaxTime)) {
-    $defaultMaxTime = null;
-}
-
-// set class for input form (shows or hides 'submit' button)
-$maxTime = strtolower($_EXPT->get('max time'));
-if ($maxTime === 'computer' || $maxTime === 'default') {
-    $maxTime = is_numeric($defaultMaxTime) ? $defaultMaxTime : 'user';
-}
-if (!is_numeric($maxTime)) {
-    $maxTime = 'user';
-}
-$formClass = ($maxTime === 'user') ? 'UserTiming' : 'ComputerTiming';
-$_EXPT->update('max time', $maxTime);
-unset($maxTime);
-
 /*
  *  DISPLAY
  */
@@ -128,11 +109,13 @@ if ($display): ?>
   <button type="submit" style="position: absolute; top: 50px; right: 50px;"onclick="$('form').submit()">Debug Submit!</button>
   <?php endif; ?>
 
-  <input id="RT"       name="RT"      type="hidden"  value="-1"/>
-  <input id="RTfirst"  name="RTfirst" type="hidden"  value="-1"/>
-  <input id="RTlast"   name="RTlast"  type="hidden"  value="-1"/>
-  <input id="Focus"    name="Focus"   type="hidden"  value="-1"/>
+  <input id="Duration"          name="Duration"          type="hidden"  value="-1"/>
+  <input id="First_Input_Time"  name="First_Input_Time"  type="hidden"  value="-1"/>
+  <input id="Last_Input_Time"   name="Last_Input_Time"   type="hidden"  value="-1"/>
+  <input id="Focus"             name="Focus"             type="hidden"  value="-1"/>
 </form>
+
+
 
 <?php else: ?>
 <h2>Could not find the following trial type: <strong><?= $_TRIAL->get('trial type') ?></strong></h2>
@@ -172,7 +155,7 @@ if ($_EXPT->getTrial(1) !== null) {
     if (is_array($item) && !empty($item)) {
         foreach (array_values($_EXPT->getTrial(1)->get('item')) as $val) {
             if (show($val) !== $val) {
-                echo show($val); 
+                echo show($val);
             }
         }
     }

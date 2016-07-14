@@ -1,27 +1,27 @@
 var Collector = {
     // empty object we will add .mintime .maxtime
     inputs: {},
-    
+
     // list of elements (filled by set_defaults() )
     el: null,
-    
+
     set_defaults: function () {
         this.el = {
             content:         $("#content"),
-            duration:        $("#RT"),
+            duration:        $("#Duration"),
             focus:           $("#Focus"),
-            first_timestamp: $("#RTfirst"),
-            last_timestamp:  $("#RTlast")
+            first_timestamp: $("#First_Input_Time"),
+            last_timestamp:  $("#Last_Input_Time")
         }
     },
-    
+
     ready_to_submit: true,
-    
+
     timestamp: null, // is set in control_timing(),
-    
+
     run: function(page) {
         var thisCollector = this;
-        
+
         $(document).ready(function(){
             thisCollector.set_defaults();                       // teeeamwork
             thisCollector.apply_force_numeric();                // tyson
@@ -32,7 +32,7 @@ var Collector = {
             thisCollector.prepare_form_submit();                // tyson
             thisCollector.start_checking_focus();               // mikey
         });
-        
+
         $(window).load( function() {
             thisCollector.control_timing(                    // teammmwork
                 thisCollector.inputs.min,
@@ -41,23 +41,23 @@ var Collector = {
             thisCollector.timestamp = Date.now();
             thisCollector.display_trial();                   // tyson
             thisCollector.focus_first_input();               // mikey
-            
+
             if (typeof thisCollector.start === "function") {
                 thisCollector.start();
             }
         });
     },
-    
+
     Timer: function(timeUp, callback) {
         this.callback = callback;
         this.timeUp = timeUp;
         this.start();
     },
-    
+
     prevent_autocomplete: function() {
         $("form").attr('autocomplete', 'off');
     },
-    
+
     fit_content: function() {
         var checkSize = function() {
             var window_size  = $(window).height();
@@ -69,22 +69,22 @@ var Collector = {
             $("body").css("justify-content",flex_prop);
         }
         checkSize();
-        
+
         $(window).resize( checkSize() );
     },
-    
+
     focus_first_input: function() {
         $(':input:not(:radio):enabled:visible:first').focusWithoutScrolling();
     },
-    
+
     start_checking_focus: function() {
         this.myFocusChecker = new Collector.FocusChecker();
     },
-    
+
     FocusChecker: function() {
         this.start();
     },
-    
+
     /*  Timer adherence behavior
      *  -n: prevent submit until min_time // also disable button
      *      ::re-enable after min_time
@@ -104,66 +104,66 @@ var Collector = {
      */
     control_timing: function(min, max) {
         var thisCollector = this;
-        
+
         max = $.isNumeric(max) ? parseFloat(max) : "user";
         min = $.isNumeric(min) ? parseFloat(min) : (min === '' ? null : 0);
-        
+
         // max time
         if (typeof max === "number") {
             this.ready_to_submit = false;
-            
+
             new this.Timer(max, function() {
                 thisCollector.ready_to_submit = true;
                 thisCollector.el.content.submit();
             });
-            
+
             if (min === null || min > max) {
                 this.getFormSubmits().hide();
             }
         }
-        
+
         // min time
         if (min === 0) {
             this.ready_to_submit = true;
         } else if (typeof min === "number") {
             this.ready_to_submit = false;
             this.getFormSubmits().prop("disabled", true);
-            
+
             new this.Timer(min, function() {
                 thisCollector.getFormSubmits().prop("disabled", false);
                 thisCollector.ready_to_submit = true;
             });
         }
     },
-    
+
     getFormSubmits: function(val) {
         return this.el.content.find(":submit");
     },
-    
+
     get_elapsed_time: function() {
         return Date.now() - this.timestamp;
     },
-    
+
     apply_force_numeric: function() {
         $(".forceNumeric").forceNumeric();
     },
-    
+
     prepare_to_catch_action_timestamps: function() {
         var thisCollector = this;
-        
+
         $(":input").on("keypress click", function() {
             var el_first_timestamp = thisCollector.el.first_timestamp;
             var el_last_timestamp  = thisCollector.el.last_timestamp;
             var timestamp          = thisCollector.get_elapsed_time();
-            
+
             if (el_first_timestamp.val() === '-1') {
                 el_first_timestamp.val(timestamp);
             }
-            
+
             el_last_timestamp.val(timestamp);
         });
     },
-    
+
     // prevent the backspace key from navigating back.
     // http://stackoverflow.com/questions/1495219/how-can-i-prevent-the-backspace-key-from-navigating-back
     // known issue: in chrome, if you open the dropdown menu of a select input, and then press backspace,
@@ -175,7 +175,7 @@ var Collector = {
                     d    = event.srcElement || event.target,
                     tag  = d.tagName.toUpperCase(),
                     type = d.type && d.type.toUpperCase();
-                    
+
                 if (tag === 'TEXTAREA' ||
                    (tag === 'INPUT'
                     && (type === 'DATE'
@@ -201,32 +201,32 @@ var Collector = {
             }
         });
     },
-    
+
     prepare_form_submit: function() {
         var thisCollector = this;
-        
+
         this.el.content.submit(function(e) {
             if (!thisCollector.ready_to_submit) {
                 e.preventDefault();
                 return false;
             }
-            
+
             thisCollector.el.content.hide();
-            
+
             thisCollector.el.duration.val(
                 thisCollector.get_elapsed_time()
             );
-            
+
             thisCollector.el.focus.val(
                 thisCollector.myFocusChecker.proportion
             );
-            
+
             if (typeof thisCollector.end === "function") {
                 thisCollector.end();
             }
-        }).preventDoubleSubmission();
+        });
     },
-    
+
     display_trial: function() {
         this.el.content.removeClass("invisible");
     }
@@ -239,10 +239,10 @@ Collector.Timer.prototype = {
         this.stopped = false;
         this.runTimer();
     },
-    
+
     runTimer: function() {
         if (this.stopped) { return; }
-        
+
         if (this.remaining() < 8) {
             while(true) {
                 if (this.remaining() <= 1) {
@@ -258,20 +258,20 @@ Collector.Timer.prototype = {
             setTimeout(function() { _this.runTimer() }, wait);
         }
     },
-    
+
     stop: function() {
         this.error = Date.now() - this.goal;
         this.stopped = true;
     },
-    
+
     remaining: function() {
         return (this.goal - Date.now());
     },
-    
+
     elapsed: function () {
         return (Date.now() - this.startTimestamp);
     },
-    
+
     show: function($showElement, waitTime) {
         if ((this.stopped) || (this.remaining() < 0)) { return; }
         if ($showElement.is('input')) {
@@ -283,7 +283,7 @@ Collector.Timer.prototype = {
         var waitTime = (typeof waitTime === 'undefined') ? 50 : waitTime;
         setTimeout(function() { _this.show($showElement) }, waitTime);
     },
-    
+
     formatTime: function(rawTime) {
         var formatted = Math.round(rawTime/100) / 10;
         if (Math.round(formatted) == formatted) {
@@ -296,7 +296,7 @@ Collector.FocusChecker.prototype = {
     checks: 0,
     passes: 0,
     proportion: null,
-    
+
     start: function() {
         var _this = this;
         setTimeout(function() { _this.start() }, 250);
@@ -312,18 +312,18 @@ Collector.run();
 
 jQuery.fn.focusWithoutScrolling = function() {
     if ($(this).length === 0) return this;
-    
+
     var parents = [], parentScrolls = [];
     var currentElement = $(this);
-    
+
     while (currentElement[0] !== document) {
         currentElement = currentElement.scrollParent();
         parents.push(currentElement);
         parentScrolls.push(currentElement.scrollTop());
     }
-    
+
     this.focus();
-    
+
     while (parents.length > 0) {
         currentElement = parents.pop();
         currentElement.scrollTop(parentScrolls.pop());
@@ -336,9 +336,9 @@ jQuery.fn.forceNumeric = function () {
     return this.each(function () {
         $(this).keydown(function (e) {
             var key = e.which || e.keyCode;
-            
+
             if (!e.shiftKey && !e.altKey && !e.ctrlKey &&
-             // numbers   
+             // numbers
                 key >= 48 && key <= 57 ||
              // Numeric keypad
                 key >= 96 && key <= 105 ||
@@ -354,28 +354,8 @@ jQuery.fn.forceNumeric = function () {
              // Del and Ins
                 key == 46 || key == 45)
                 return true;
-            
+
             return false;
         });
     });
-};
-
-// jQuery plugin to prevent double submission of forms
-// http://stackoverflow.com/questions/2830542/prevent-double-submission-of-forms-in-jquery
-jQuery.fn.preventDoubleSubmission = function() {
-  $(this).on('submit',function(e){
-    if (e.isDefaultPrevented()) return;
-    
-    var $form = $(this);
-
-    if ($form.data('submitted') === true) {
-      // Previously submitted - don't submit again
-      e.preventDefault();
-    } else {
-      // Mark it so that the next submit can be ignored
-      $form.data('submitted', true);
-    }
-  });
-  // Keep chainability
-  return this;
 };
