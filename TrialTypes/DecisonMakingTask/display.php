@@ -33,14 +33,14 @@ $options = array('A', 'B');
     <?php endforeach; ?>
   </tr>
 </table>
-    
+
 <div class="textcenter hidden">
   <input class="button button-trial-advance" id="FormSubmitButton" type="submit" value="Submit"   />
 </div>
-    
-    
+
+
 <script>
-trialBegin = function () {
+Collector.start = function () {
     $(":focus").blur();
     DMT.rounds = <?= $rounds ?>;
     DMT.begin();

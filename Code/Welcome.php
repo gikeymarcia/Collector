@@ -130,7 +130,7 @@ if ($_SETTINGS->show_condition_selector == true && !$isReturningUser) {
     </div>
 
     <div class="flexChild">
-      <input name="Username" type="text" value="" class="collectorInput" placeholder="<?= $_SETTINGS->ask_for_login ?>">
+      <input name="Username" type="text" value="" class="collectorInput" placeholder="<?= $_SETTINGS->ask_for_login ?>" autofocus>
 
       <!-- Condition selector -->
       <select name="Condition" class="<?= $selectClass ?>">

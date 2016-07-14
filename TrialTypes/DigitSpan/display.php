@@ -1,7 +1,7 @@
 <?php
 /**
  * Digit Span settings
- * 
+ *
  * Change the contents of your settings column to 'reverse' or 'backwards'
  * to change to reverse digitspan
  *
@@ -33,7 +33,7 @@ $beepFile = "{$current}/audio/beep.wav";
 </div>
 
 <!-- Javascript necessary for running the trial -->
-<script> 
+<script>
   /**
    * The paths to the audio files to use for the cues.
    * @type {array}
@@ -46,7 +46,7 @@ $beepFile = "{$current}/audio/beep.wav";
   /**
    * Unhides the div where the user inputs responses.
    */
-  function showInput() 
+  function showInput()
   {
     $("#inputdiv").show();
     $("input[name=Response]").focus();
@@ -82,7 +82,7 @@ $beepFile = "{$current}/audio/beep.wav";
    * @return {number}          Returns 1 for a match, else false.
    */
   Record.score = function(sequence, response) {
-    <?php if ($direction === 1): ?>  
+    <?php if ($direction === 1): ?>
     return (sequence === response) ? 1 : 0;
 
     <?php else: ?>
@@ -90,7 +90,7 @@ $beepFile = "{$current}/audio/beep.wav";
 
     <?php endif; ?>
   }
-  
+
 
 
   /* Functional area
@@ -100,7 +100,7 @@ $beepFile = "{$current}/audio/beep.wav";
 
     var task = new Task(digitTracks);
 
-    // Rebind the advance button to trigger DigitSpan advance instead of Collector advance    
+    // Rebind the advance button to trigger DigitSpan advance instead of Collector advance
     $("#advanceButton").click(function () {
       $("#inputdiv").hide();
       task.recordResponse('inputbox');

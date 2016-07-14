@@ -20,30 +20,30 @@ var Collector = {
     timestamp: null, // is set in control_timing(),
 
     run: function(page) {
-        var thisCollector = this;
+        var self = this;
 
         $(document).ready(function(){
-            thisCollector.set_defaults();                       // teeeamwork
-            thisCollector.apply_force_numeric();                // tyson
-            thisCollector.prevent_autocomplete();               // mikey
-            thisCollector.prevent_back_nav();                   // tyson
-            thisCollector.fit_content();                        // mikey
-            thisCollector.prepare_to_catch_action_timestamps(); // tyson
-            thisCollector.prepare_form_submit();                // tyson
-            thisCollector.start_checking_focus();               // mikey
+            self.set_defaults();                       // teeeamwork
+            self.apply_force_numeric();                // tyson
+            self.prevent_autocomplete();               // mikey
+            self.prevent_back_nav();                   // tyson
+            self.fit_content();                        // mikey
+            self.prepare_to_catch_action_timestamps(); // tyson
+            self.prepare_form_submit();                // tyson
+            self.start_checking_focus();               // mikey
         });
 
         $(window).load( function() {
-            thisCollector.control_timing(                    // teammmwork
-                thisCollector.inputs.min,
-                thisCollector.inputs.max
+            self.control_timing(                    // teammmwork
+                self.inputs.min,
+                self.inputs.max
             );
-            thisCollector.timestamp = Date.now();
-            thisCollector.display_trial();                   // tyson
-            thisCollector.focus_first_input();               // mikey
+            self.timestamp = Date.now();
+            self.display_trial();                   // tyson
+            self.focus_first_input();               // mikey
 
-            if (typeof thisCollector.start === "function") {
-                thisCollector.start();
+            if (typeof self.start === "function") {
+                self.start();
             }
         });
     },
@@ -51,7 +51,12 @@ var Collector = {
     Timer: function(timeUp, callback) {
         this.callback = callback;
         this.timeUp = timeUp;
+    },
+
+    setTimeout: function(timeUp, callback) {
+        var timer = new this.Timer(timeUp, callback);
         this.start();
+        return timer;
     },
 
     prevent_autocomplete: function() {
@@ -103,7 +108,7 @@ var Collector = {
      *  "" , 010, -t -x     // you may not submit (auto-submit @ 10s)
      */
     control_timing: function(min, max) {
-        var thisCollector = this;
+        var self = this;
 
         max = $.isNumeric(max) ? parseFloat(max) : "user";
         min = $.isNumeric(min) ? parseFloat(min) : (min === '' ? null : 0);
@@ -112,9 +117,9 @@ var Collector = {
         if (typeof max === "number") {
             this.ready_to_submit = false;
 
-            new this.Timer(max, function() {
-                thisCollector.ready_to_submit = true;
-                thisCollector.el.content.submit();
+            this.setTimeout(max, function() {
+                self.ready_to_submit = true;
+                self.el.content.submit();
             });
 
             if (min === null || min > max) {
@@ -129,9 +134,9 @@ var Collector = {
             this.ready_to_submit = false;
             this.getFormSubmits().prop("disabled", true);
 
-            new this.Timer(min, function() {
-                thisCollector.getFormSubmits().prop("disabled", false);
-                thisCollector.ready_to_submit = true;
+            this.setTimeout(min, function() {
+                self.getFormSubmits().prop("disabled", false);
+                self.ready_to_submit = true;
             });
         }
     },
@@ -149,12 +154,12 @@ var Collector = {
     },
 
     prepare_to_catch_action_timestamps: function() {
-        var thisCollector = this;
+        var self = this;
 
         $(":input").on("keypress click", function() {
-            var el_first_timestamp = thisCollector.el.first_timestamp;
-            var el_last_timestamp  = thisCollector.el.last_timestamp;
-            var timestamp          = thisCollector.get_elapsed_time();
+            var el_first_timestamp = self.el.first_timestamp;
+            var el_last_timestamp  = self.el.last_timestamp;
+            var timestamp          = self.get_elapsed_time();
 
             if (el_first_timestamp.val() === '-1') {
                 el_first_timestamp.val(timestamp);
@@ -203,26 +208,26 @@ var Collector = {
     },
 
     prepare_form_submit: function() {
-        var thisCollector = this;
+        var self = this;
 
         this.el.content.submit(function(e) {
-            if (!thisCollector.ready_to_submit) {
+            if (!self.ready_to_submit) {
                 e.preventDefault();
                 return false;
             }
 
-            thisCollector.el.content.hide();
+            self.el.content.hide();
 
-            thisCollector.el.duration.val(
-                thisCollector.get_elapsed_time()
+            self.el.duration.val(
+                self.get_elapsed_time()
             );
 
-            thisCollector.el.focus.val(
-                thisCollector.myFocusChecker.proportion
+            self.el.focus.val(
+                self.myFocusChecker.proportion
             );
 
-            if (typeof thisCollector.end === "function") {
-                thisCollector.end();
+            if (typeof self.end === "function") {
+                self.end();
             }
         });
     },

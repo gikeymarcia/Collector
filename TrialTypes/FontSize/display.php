@@ -1,8 +1,8 @@
-<?php 
+<?php
 /**
  * Font Size trial type can take multiple types of fontsize values
  * in its settings column
- * 
+ *
  *     Settings          Value
  *     fontsize          20px
  *     fontsize          110%

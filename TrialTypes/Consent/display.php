@@ -33,7 +33,7 @@ if ($filePath !== false && strpos($consent, '..') === false) {
 ?>
 
 <style>
-  body > form { 
+  body > form {
     width: 1000px;
   }
   object {
@@ -42,7 +42,7 @@ if ($filePath !== false && strpos($consent, '..') === false) {
   pre {
     font-family: inherit;
     font-size: 110%;
-    display: inline-block; 
+    display: inline-block;
     margin: 0 auto;
     text-align: left;
     min-width: 400px;
@@ -76,7 +76,7 @@ if ($filePath !== false && strpos($consent, '..') === false) {
 </div>
 
 <script>
-trialBegin = function () {
+Collector.start = function () {
     $(":submit").blur();
 };
 </script>
