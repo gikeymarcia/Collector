@@ -37,10 +37,8 @@
       $responseElements=$newTrialTypeInfo['responses'];      
     }
     */
-    $newTrialHtmlCode = '
+    $newTrialHtmlCode = '<div style="position: relative; width:800px; height:800px">
     <textarea id="response" name="Response" placeholder="your responses will go here!"></textarea>
-    
-    
     '; //declaring the $newTrialCode
     
         
@@ -56,28 +54,36 @@
       if(isset($newTrialTypeElement->responseValue)){
         $elementValue='data-value="'.$newTrialTypeElement->responseValue.'"';
       }
-      
-      /* no need for this if using jquery
-      if($newTrialTypeElement->clickOutcomesAction!=''){
-        $clickElement='onclick="'.$newTrialTypeElement->elementName.'Click()"';
+            
+      if(strPos($newTrialTypeElement->stimulus,"$")!==false){
+        /* good place for security checks for use of $? */
+        
+        $newTrialTypeElement->stimulus=str_replace('$','',$newTrialTypeElement->stimulus);
+        $newTrialTypeElement->stimulus='$_EXPT->get("'.$newTrialTypeElement->stimulus.'")';
+        $medStim = $newTrialTypeElement->stimulus;
+      } else {
+        
+        $medStim = "'" . $newTrialTypeElement->stimulus ."'";
       }
-      */
       
       if($newTrialTypeElement->trialElementType=="media"){
 
         if($newTrialTypeElement->mediaType=="Pic"){
-          $newTrialHtmlCode=$newTrialHtmlCode.'  
-          <img id ="'.$newTrialTypeElement->elementName.'"
-            src=<?= "../Experiments/Common/'.$newTrialTypeElement->stimulus.'" ?> 
-            ' .$elementValue. '            
-            style=" '.$initialDisplay.'
-            position:absolute;
-            width:'.$newTrialTypeElement->width.'%;
-            height:'.$newTrialTypeElement->height.'%;
-            left:'.$newTrialTypeElement->xPos.'%;
-            top:'.$newTrialTypeElement->yPosition.'%;
-            z-index:'.$newTrialTypeElement->zPosition.';
-          ">';
+          $mediaPath='$_PATH->get("Media")';
+          $medElementName=$newTrialTypeElement->elementName;
+          
+          $newTrialHtmlCode=$newTrialHtmlCode."  
+            <img id='$medElementName'
+              src='<?= $mediaPath.'/'. $medStim ?>' 
+             $elementValue             
+            style= '$initialDisplay
+                    position:absolute; 
+                    width:".$newTrialTypeElement->width."%;
+                    height:".$newTrialTypeElement->height."%;
+                    left:".$newTrialTypeElement->xPos."%;
+                    top:".$newTrialTypeElement->yPosition."%;
+                    z-index:".$newTrialTypeElement->zPosition.";
+          '>";
         }
         if($newTrialTypeElement->mediaType=="Video"){
           $newTrialHtmlCode=$newTrialHtmlCode.'  
@@ -92,13 +98,13 @@
             height="'.$newTrialTypeElement->height.'%" 
             frameborder="0"
             webkitallowfullscreen mozallowfullscreen allowfullscreen
-            src=<?= "../Experiments/Common/'.$newTrialTypeElement->stimulus.'"?>
+            src=<?= "../Experiments/_Common/'.$newTrialTypeElement->stimulus.'"?>
             >
           </iframe>';
         }
         if($newTrialTypeElement->mediaType=="Audio"){
           $newTrialHtmlCode=$newTrialHtmlCode.'  
-          <audio id ="'.$newTrialTypeElement->elementName.'" src="<?= "../Experiments/Common/'.$newTrialTypeElement->stimulus.'"?>" autoplay>
+          <audio id ="'.$newTrialTypeElement->elementName.'" src="<?= "../Experiments/_Common/'.$newTrialTypeElement->stimulus.'"?>" autoplay>
           </audio>';
         }            
       }
@@ -288,12 +294,12 @@
         </script>";
       
       $newTrialCode=$newTrialHtmlCode.$newTrialJSCode;
-      if (!file_exists("../Experiments/Common/TrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName'])){
+      if (!file_exists("../Experiments/_Common/TrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName'])){
         //nothing happens
       //} else {
-        mkdir("../Experiments/Common/TrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName'], 0700); 
+        mkdir("../Experiments/_Common/TrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName'], 0700); 
       }
-      file_put_contents("../Experiments/Common/TrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName']."/display.php",$newTrialCode);
+      file_put_contents("../Experiments/_Common/TrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName']."/display.php",$newTrialCode);
       
       ?>
       

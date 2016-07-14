@@ -30,11 +30,11 @@
   }
   
   #controlPanel {
-    position:       fixed;
+    position:       absolute;
     border:         2px solid black;
-    left:           73%;  
-    width:          25%;
-    top:            40%;
+    left:           810px;  
+    width:          500px;
+    top:            300px;
     height:         500px;
     padding:        10px;
     opacity:        .9;
@@ -52,7 +52,7 @@
   #controlPanelItems > div {
     display: none;
     height: 400px;
-    border: 1px solid green;
+    border: none;
   }
   
   #displayEditor{
@@ -61,13 +61,11 @@
     border-radius: 25px;
     padding:25px;
   }
-  
-  #displayEditor:hover{
-    border: 2px solid blue;
-  }
-  
   #elementArray{
     width:400px;
+    height: 800px;
+    top: 300px;
+    left: 1350px;
     position:absolute;
     border:2px solid black;
     border-radius: 25px;
@@ -80,18 +78,13 @@
     top:250px;
   }
   #keyboardResponses{
+    width:400px;
+    height:500px;
     position:absolute;
-    left:300px;
-    top:820px;
-    width:920px;
-    height:50px;
     padding:10px;
     border: 2px solid black;
     border-radius: 25px;
   }  
-  #keyboardResponses:hover{
-    border: 2px solid blue;
-  }
   #interactionEditor{
     width:400px;
     height:500px;
@@ -101,19 +94,11 @@
     padding:25px;
   }
   
-  #interactionEditor:hover{
-    border: 2px solid blue;
-  }
   
-  #loadDiv{
-    position:absolute;
-    top:265px;
-    left:1140px;
-  }
   
   #trialEditor{
-    width:100%;
-    height:80%;
+    width:800px;
+    height:800px;
     position:absolute;
     top:300px;
     left:0px;
@@ -163,8 +148,8 @@
   
   .mediaElement{
     color:blue;
-    width:100px;
-    height: 100px;
+    width:160px;
+    height: 160px;
     line-height:70px;
     border: 2px solid blue;
     border-radius: 10px;
@@ -173,8 +158,8 @@
 
   .mediaElementSelected{
     color:green;
-    width:100px;
-    height: 100px;
+    width:160px;
+    height: 160px;
     line-height:70px;
     border: 4px solid green;    
     border-radius: 10px;
@@ -201,7 +186,13 @@
 </style>
 
 <?php     
+  
+  /* * * * * * * *
+  * Configurations
+  * * * * * * * */
 
+  $elementScale=8; // as the interface for inserting elements if 800px x 800px, and we are scaling to a 100% height or width (800/100 = 8)
+  
   //sorting out whether we are working from scratch, have just saved a file, or are loading a file
   if(isset($_POST['loadButton'])){   //load first
     $file_contents=file_get_contents("GUI/newTrialTypes/".$_POST['trialTypeLoaded']);
@@ -215,8 +206,8 @@
         if(strcmp($_DATA['trialTypeEditor']['currentTrialTypeName'],$trialTypeElementsPhp->trialTypeName)!=0){ //i.e. a new trialType name
           if(file_exists("GUI/newTrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName'].".txt")){
             unlink("GUI/newTrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName'].".txt"); //Delete original file here            
-            unlink("../Experiments/_Common/TrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName']."/display.php"); //deleting php file
-            rmdir("../Experiments/_Common/TrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName']); //deleting directory
+            unlink($_PATH->get('Common')."/TrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName']."/display.php"); //deleting php file
+            rmdir($_PATH->get('Common')."/TrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName']); //deleting directory
           }
           $_DATA['trialTypeEditor']['currentTrialTypeName']=$trialTypeElementsPhp->trialTypeName; //identify correct name here
         }  
@@ -246,28 +237,11 @@
   ?>
 
 <form method="post">
-
   <textarea id="currentGuiSheetPage" name="currentGuiSheetPage" style="display:none">TrialTypeEditor</textarea>  
   <textarea id="trialTypeName" placeholder="[insert name of trial type here]" onkeyup="updateTrialTypeElements()"><?php     
     echo $_DATA['trialTypeEditor']['currentTrialTypeName'];
     ?></textarea>
-  <?php 
-    if(count($trialTypesList)>0){
-    ?>
-      <div id="loadDiv">  
-        <select id="trialTypeLoading" name="trialTypeLoaded">
-          <option>-select a trial type-</option>
-          <?php foreach($trialTypesList as $trialType){
-            echo "<option>$trialType</option>";
-          }
-          ?>
-        </select> 
-        <input type="button" id="loadButton" class="collectorButton" value="Load">
-        <input type="submit" id="loadButtonAction" name="loadButton" class="collectorButton" value="Load" style="display:none">
-      </div>
-    <?php
-    }
-  ?>
+  
   
 <div id="elementTypeList">
   <br>
@@ -277,32 +251,56 @@
     <input id="inputButton" type="button" class="elementButton" value="Input" onclick="elementType('input')">
     <input id="complexButton" type="button" class="elementButton" value="Complex" onclick="alert('This will include more code heavy elements, e.g. progress bars, and will be in a later release')">
     <input id="selectButton" type="button" class="elementButton" value="Select" onclick="elementType('select')">
+
   </span>
-  <span style="position:relative; left:500px">
-    <input type="button" class="collectorButton" value="Keyboard Responses" onclick="editKeyboardResponses()">
+  <span style="position:relative; left:420px">
+
     <input type="submit" class="collectorButton" id="saveButton" name="saveButton" value="Save">
+    <button type="button" class="collectorButton" onclick="saveTextAsFile()">download JSON</button>
+  <?php 
+    if(count($trialTypesList)>0){
+    ?>
+        <select id="trialTypeLoading" name="trialTypeLoaded">
+          <option>-select a trial type-</option>
+          <?php foreach($trialTypesList as $trialType){
+            echo "<option>$trialType</option>";
+          }
+          ?>
+        </select> 
+        <input type="button" id="loadButton" class="collectorButton" value="Load">
+        <input type="submit" id="loadButtonAction" name="loadButton" class="collectorButton" value="Load" style="display:none">
+    <?php
+    }
+  ?>  
+
+  
   </span>
 </div>
 
 <div id="trialEditor" onMouseMove="mouseMovingFunctions()" onclick="getPositions(); alertMouse()">
+
 <?php
+
   foreach($trialTypeElementsPhp->elements as $elementKey=>$element){
-    echo "<div id='element$elementKey' class='".$element->trialElementType."Element' 
-             style='position:absolute;
-              width:".(5*$element->width)."px;
-              height:".(5*$element->height)."px;
-              left:".(5*$element->xPos)."px;
-              top:".(5*$element->yPosition)."px;
-              ";
-    if (isset($element->textColor)){
-      echo "color:$element->textColor;
-            font-family:$element->textFont;
-            background-color:$element->textBack;
-            font-size:".(3*$element->textSize)."px;"; // look into this when I've finalised spacing for interfaces
+    if($element!=NULL){ //ideally I'll tidy it up so that there are no null elements 
+      echo "<div id='element$elementKey' class='".$element->trialElementType."Element' 
+               style='position:absolute;
+                width:".($elementScale*$element->width)."px;
+                height:".($elementScale*$element->height)."px;
+                left:".($elementScale*$element->xPos)."px;
+                top:".($elementScale*$element->yPosition)."px;
+                ";
+      if (isset($element->textColor)){
+        echo "color:$element->textColor;
+              font-family:$element->textFont;
+              background-color:$element->textBack;
+              font-size:".(3*$element->textSize)."px;"; // look into this when I've finalised spacing for interfaces
+      }
+      echo "' onclick='clickElement($elementKey)'
+               >".$element->stimulus."</div>";      
     }
-    echo "' onclick='clickElement($elementKey)'
-             >".$element->stimulus."</div>";      
-  } 
+  }
+  
   if(isset($_DATA['trialTypeEditor']['currentTrialTypeName'])){
     if(file_exists("GUI/newTrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName'].".txt")){
       $loadedContents=file_get_contents("GUI/newTrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName'].".txt");
@@ -312,14 +310,6 @@
   }
   
 ?>
-</div>
-
-<div id="keyboardResponses" style="display:none">
- <!-- keyboard responses? <input type="checkbox" onclick="displayHideKeyboard()">
-  <span id="keyboardOptions" style="display:none"> !-->
-  accepted keyboard response(s) <input id="acceptedKeyboardResponses" name="acceptedKeyboardResponses" onkeyup="adjustKeyboard()">
-  correct keyboard response(s) <input type="checkbox" id= "proceedKeyboardResponses" name="proceedKeyboardResponses" onchange="adjustKeyboard()">
- <!-- </span> !-->
 </div>
 
 <!-- Bootstrap alerts !-->
@@ -332,10 +322,18 @@
   <div id="controlPanelRibbon">
     <button type="button" class="collectorButton" value="#displayEditor">Display Editor</button>
     <button type="button" class="collectorButton" value="#interactionEditor">Interaction Editor</button>
-    <button type="button" class="collectorButton" value="#elementArray">Element Array</button>
-    <button type="button" class="collectorButton" id="hideShowControl" onclick="hideShowControlPanel()">X</button>
+    <button type="button" class="collectorButton" value="#keyboardResponses">Keyboard</button>
+    <button type="button" class="collectorButton" value="#responseInputs">Responses</button>
   </div>  
+  
+  
   <div id="controlPanelItems">
+  <div id = "responseInputs">
+    <h2> <b>Click Responses</b> that you have coded </h2>
+    <textarea name="responseValues" id="responseValuesId" style="display:none" readonly></textarea>
+    <div id="responseValuesTidyId"></div>
+  </div>
+
     <div id="displayEditor">
       <h1>Display editor <br><span style="font-size:20px" id="currentStimType">No Element Selected</span></h1>
       <table id="configurationSettings" style="display:none">
@@ -392,6 +390,12 @@
       
     </div>
 
+    <div id="keyboardResponses">
+      <h1>Keyboard responses</h1>
+        accepted keyboard response(s) <input id="acceptedKeyboardResponses" name="acceptedKeyboardResponses" onkeyup="adjustKeyboard()"><br>
+    </div>
+
+    
     <div id="interactionEditor">
       <h1> Interaction Editor </h1>
        
@@ -424,16 +428,54 @@
         </table>
       </div>
     </div>
+    
 
 
-    <div id="elementArray" name="elementArray"><?=$loadedContents?></div>
-  </div>
-  <div style="position:absolute;top:800px;left:100px">responseInputs<br>
-    <textarea name="responseValues" id="responseValuesId"></textarea>
-  </div>
+  </div>  
 </div>
+  <textarea id="elementArray" name="elementArray"><?=$loadedContents?></textarea>
+
 </form>
+
 <script>
+
+/* structuring code
+
+  have a file for function definitions
+    - try to pass in objects through functions rather than refer to global variables
+
+*/
+function saveTextAsFile() // solution by NatureShade at http://stackoverflow.com/questions/609530/download-textarea-contents-as-a-file-using-only-javascript-no-server-side 
+{
+    var textToWrite = JSON.stringify(trialTypeElements);//Your text input;
+    var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'});
+    var fileNameToSaveAs = "elementArray.json";//Your filename;
+
+    var downloadLink = document.createElement("a");
+    downloadLink.download = fileNameToSaveAs;
+    downloadLink.innerHTML = "Download File";
+    if (window.webkitURL != null)
+    {
+        // Chrome allows the link to be clicked
+        // without actually adding it to the DOM.
+        downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+    }
+    else
+    {
+        // Firefox requires the link to be added to the DOM
+        // before it can be clicked.
+        downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+        downloadLink.onclick = destroyClickedElement;
+        downloadLink.style.display = "none";
+        document.body.appendChild(downloadLink);
+    }
+
+    downloadLink.click();
+}
+
+
+
+var elementScale = 8;
 
  $(document).ready(function() {
   $("#controlPanelRibbon button").click(function() {
@@ -455,12 +497,7 @@ function supportClickOutcomes(){
 }; 
 
 var trialTypeElements = <?= $jsontrialTypeElements ?>;
-
-
 var inputElementType;
-
-// var spanArray = []; no longer needed
-
 var elementNo = Object.size(trialTypeElements['elements'])-1;
 
 
@@ -489,11 +526,6 @@ $(window).bind('keydown', function(event) {
         }
     }
 });
-/*
-function arrowMove(){
-  alert("hello");
-}
-*/
 
 $("#loadButton").on("click",function(){
   if(trialTypeLoading.value=="-select a trial type-"){
@@ -560,11 +592,12 @@ function adjustElementName(){
   updateTrialTypeElements();
 }
 
+
 function adjustHeight(){
   if(Number(yPosId.value) + Number(elementHeight.value) > 100){
     elementHeight.value = 100-yPosId.value; // temporary correction will still allow user to create something bigger than the screen
   }
-  newHeight = 5*elementHeight.value;
+  newHeight = elementScale*elementHeight.value;
   newHeight = newHeight +"px";
   document.getElementById("element"+currentElement).style.height = newHeight;
   trialTypeElements['elements'][currentElement]['height']=elementHeight.value;//update trialTypeElements
@@ -575,7 +608,7 @@ function adjustWidth(){
   if( Number(xPosId.value) + Number(elementWidth.value) > 100){
     elementWidth.value = 100-xPosId.value; // temporary correction will still allow user to create something bigger than the screen
   }
-  newWidth = 5*elementWidth.value;
+  newWidth = elementScale*elementWidth.value;
   newWidth = newWidth +"px";
   document.getElementById("element"+currentElement).style.width = newWidth;
   trialTypeElements['elements'][currentElement]['width']=elementWidth.value;//update trialTypeElements
@@ -586,7 +619,7 @@ function adjustXPos(){
   if( Number(xPosId.value) + Number(elementWidth.value) > 100){
     xPosId.value= 100- elementWidth.value; // temporary correction will still allow user to create something bigger than the screen
   }  
-  newXPos=(Number(xPosId.value)*5) +"px";
+  newXPos=(Number(xPosId.value)*elementScale) +"px";
   document.getElementById("element"+currentElement).style.left = newXPos; //-xPosId.value; // temporary correction will still allow user to create something bigger than the screen
   trialTypeElements['elements'][currentElement]['xPos']=xPosId.value;//update trialTypeElements
   updateTrialTypeElements();
@@ -596,7 +629,7 @@ function adjustYPos(){
   if( Number(yPosId.value) + Number(elementHeight.value) > 100){
     yPosId.value= 100- elementHeight.value; // temporary correction will still allow user to create something bigger than the screen
   }  
-  newYPos=(Number(yPosId.value)*5) +"px";
+  newYPos=(Number(yPosId.value)*elementScale) +"px";
   document.getElementById("element"+currentElement).style.top = newYPos; //-xPosId.value; // temporary correction will still allow user to create something bigger than the screen
   trialTypeElements['elements'][currentElement]['yPosition']=yPosId.value;//update trialTypeElements
   updateTrialTypeElements();
@@ -675,15 +708,38 @@ function adjustClickOutcomes(){
   currentResponseNo=responseNoId.value;
 
 }
-var responseArray=[];
-var tempStartArray=[];
+
+var responseArray=trialTypeElements['responses'];
+
 var noOfResponses = 0;
-function updateResponseValuesId(){
-  newRespElement=true;
+
+if(typeof(responseArray) != 'undefined'){
+  initiateResponseArray();
+  
+}
+
+function initiateResponseArray(){ // can this be integrated into code below to avoid duplication
+  responseValuesTidyId.innerHTML=""; // wipe the list  
   for(i=0; i<responseArray.length;i++){
     if(responseArray[i].indexOf(elementNameValue.value)!=-1){
       newRespElement=false;
     }
+    // could add code to tidy this list here
+    responseValuesTidyId.innerHTML+="Response "+i+":" +responseArray[i]+"<br>";
+  }
+  responseValuesId.value=JSON.stringify(responseArray);  
+}
+
+
+function updateResponseValuesId(){
+  newRespElement=true;
+  responseValuesTidyId.innerHTML=""; // wipe the list  
+  for(i=0; i<responseArray.length;i++){
+    if(responseArray[i].indexOf(elementNameValue.value)!=-1){
+      newRespElement=false;
+    }
+    // could add code to tidy this list here
+    responseValuesTidyId.innerHTML+="Response "+i+":" +responseArray[i]+"<br>";
   }
 
   if(newRespElement==true){
@@ -692,6 +748,7 @@ function updateResponseValuesId(){
     //will start as response zero
     
     if(typeof responseArray[0] != 'undefined' ){
+      var tempStartArray=responseArray[0]; // fill in temp array with new value.
       tempStartArray[responseArray[0].length]=elementNameValue.value;
     } else {
       tempStartArray[0]=elementNameValue.value;
@@ -701,6 +758,7 @@ function updateResponseValuesId(){
     updateTrialTypeElements();
   }
   responseValuesId.value=JSON.stringify(responseArray);
+  
   
   trialTypeElements['elements'][currentElement]['responseValue']=responseValueId.value;//update trialTypeElements
   trialTypeElements['elements'][currentElement]['responseNo']=responseNoId.value;//update trialTypeElements
@@ -718,7 +776,6 @@ function adjustResponseOrder(){
     responseArray[responseNoId.value]=[];
     newPos=0;
   }
-//  alert(newPos);
   
   //remove from original array
   
@@ -728,9 +785,7 @@ function adjustResponseOrder(){
     }
   }
   
-  responseArray[responseNoId.value][newPos]=elementNameValue.value;
-
-  
+  responseArray[responseNoId.value][newPos]=elementNameValue.value;  
   updateResponseValuesId();
   
 }
@@ -774,38 +829,12 @@ function adjustTextSize(){
 }
 
 
-
-/*
-function adjustElementArray(x){
-  alert(x);
-  
-}
-*/
-
-function alertMouse(){
+function alertMouse(){ // can I break this down into multiple functions
   if(inputElementType!="select"){
-    elementNo++;
-    //_mouseX=_mouseX-100; // this may need to be adjusted depending on the size of the element. Current size is 100px
-    //_mouseY=_mouseY-300; // same as above
+    elementNo++;   
+    xPos=Math.round((_mouseX)/elementScale);
+    yPos=Math.round((_mouseY)/elementScale);
     
-    /*
-    if(_mouseX>400){ //replace with real value
-      _mouseX=400;
-    }
-    if(_mouseY>400){ //replace with real value
-      _mouseY=400;
-    }
-    */
-    
-   
-    xPos=Math.round((_mouseX)); //    /5);
-    yPos=Math.round((_mouseY)); //  /5);
-    
-    
-    
-    
-//    spanArray[elementNo]={type:inputElementType};
-      
     if(inputElementType=="input"){
       
       document.getElementById("trialEditor").innerHTML=document.getElementById("trialEditor").innerHTML+"<input class='inputElement' type='text' id='element"+elementNo+"' style='position: absolute; width:80px; left:"+_mouseX+"px;top:"+_mouseY+"px' onclick='clickElement("+elementNo+")' name='"+inputElementType+"' readonly>";  
@@ -813,6 +842,8 @@ function alertMouse(){
     } else {
       document.getElementById("trialEditor").innerHTML=document.getElementById("trialEditor").innerHTML+"<span class='"+inputElementType+"Element' id='element"+elementNo+"' style='position: absolute; left:"+_mouseX+"px;top:"+_mouseY+"px; z-index:"+elementNo+"' onclick='clickElement("+elementNo+")' name='"+inputElementType+"'>"+inputElementType+"</span>";
     }
+    
+    //could take this object out - maybe
     trialTypeElements['elements'][elementNo] = {
       width:20, 
       height:20,
@@ -832,11 +863,18 @@ function alertMouse(){
         trialTypeElements['elements'][elementNo]['mediaType']="Pic";
       }
       if(inputElementType=="text" | inputElementType=="input"){
+        var elemIndex=trialTypeElements['elements'][elementNo]; // to allow more concise coding of the variables
+        elemIndex['textSize']    =    12;
+        elemIndex['textColor']   =    '';
+        elemIndex['textFont']    =    '';
+        elemIndex['textBack']    =    '';
+
+/*        
         trialTypeElements['elements'][elementNo]['textSize']=12;
         trialTypeElements['elements'][elementNo]['textColor']="";
         trialTypeElements['elements'][elementNo]['textFont']="";
         trialTypeElements['elements'][elementNo]['textBack']="";
-        
+ */       
       }
       if(inputElementType=="input"){
         trialTypeElements['elements'][elementNo]['userInputType']="text";
@@ -873,7 +911,6 @@ function updateTrialTypeElements(){
 function changeMediaType(){
   trialTypeElements['elements'][currentElement]['mediaType']=userInputTypeValue.value;
   updateTrialTypeElements();
-
   // code here to change image cue if we include media images
 }
 
@@ -896,6 +933,9 @@ function clickElement(x){
     $("#configurationSettings").hide();
     $("#interactionEditorConfiguration").hide();
     $("#userInputSettings").hide();
+    var targetElementID = "#displayEditor";
+    $("#controlPanelItems > div").hide();
+    $(targetElementID).show();
 
     loadConfigs(); // this loads the configurations for the editor
     
@@ -976,7 +1016,9 @@ function loadConfigs(){
     $("#clickOutcomesElementId").hide();
     $("#responseValueId").show();
     $("#respNoSpanId").show();
+    
     responseValueId.value=trialTypeElements['elements'][currentElement].responseValue;
+    responseNoId.value=trialTypeElements['elements'][currentElement].responseNo;
     updateResponseValuesId();
     
   } else {
@@ -1002,6 +1044,8 @@ function loadConfigs(){
 //  alert(document.getElementById('clickOutcomesElementId').value);  
 
 }
+
+
 
 function populateClickElements(){
   removeOptions(document.getElementById("clickOutcomesElementId"));   
@@ -1040,18 +1084,6 @@ function displayHideKeyboard(){
   }
 }
 
-function editKeyboardResponses(){
-  if(keyboardShow == false){
-    $("#keyboardResponses").show();
-    keyboardShow = true; 
-  } else {
-    $("#keyboardResponses").hide();
-    keyboardShow = false;
-  }
-}
-
-
-
 var inputButtonArray=["media","text","input","select"];
 
 elementType('select');
@@ -1071,7 +1103,8 @@ function elementType(x){
     $("#configurationSettings").hide();
     $("#userInputTypeValue").value="n/a";
 
-    currentStimType.innerHTML="No Element Selected ";
+    currentStimType.innerHTML="No Element Selected";
+//    interactionEditor.innerHTML="No Element Selected";
     // for all elements revert formatting to element
     for(i=0;i<=elementNo;i++){
         if (typeof trialTypeElements['elements'][i] != 'undefined') { //code to check whether the element exists or not
@@ -1087,9 +1120,11 @@ if (ev == null) { ev = window.event }
   var offset = $("#trialEditor").offset(); 
   _mouseX = ev.pageX;
   _mouseY = ev.pageY;
-  console.dir(_mouseX);
-  console.dir(_mouseY);
-  console.dir(offset);
+  
+  /* may use this later */
+  //console.dir(_mouseX);
+  //console.dir(_mouseY);
+  //console.dir(offset);
  
   _mouseX -= offset.left;
   _mouseY -= offset.top;
@@ -1144,9 +1179,6 @@ function mouseMovingFunctions(){
     }
     document.getElementsByTagName('head')[0].appendChild(style);
 
-
-
-
     var css = '.mediaElement:hover{ border-color: blue; background-color:transparent; color:blue }';
     style = document.createElement('style');
 
@@ -1167,14 +1199,8 @@ function mouseMovingFunctions(){
         style.appendChild(document.createTextNode(css));
     }
     document.getElementsByTagName('head')[0].appendChild(style);
-
   }
 }
-
-$("#requestButton").on("click", function() {
-  //$("#stimListDiv").show();
-  var myWindow = window.open("GUI/requestFunction.php", "", "width=800, height=600");
-});
 
 var showHideRequestInput=false;
 $("#showRequestOptionsId").on("click", function(){
@@ -1186,29 +1212,6 @@ $("#showRequestOptionsId").on("click", function(){
     $("#newFunctionTable").hide();
   }
 });
-/*
-
-  <!--
-  .inputElement:hover{
-    background-color:#000099;
-  }
-  !-->
-    <!--
-  .textElement:hover{
-    color:#003300;
-    outline-style: dotted;
-    outline-color: #00ff00;
-  }
-  !-->
-  
-  */
-
-// create hover class depending on whether select is on or not
-/*
-  .element:hover{
-    border: 2px solid red;
-  }
-*/
 
   
   
