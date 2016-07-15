@@ -10,26 +10,6 @@ var Collector = {
         last_timestamp:  "#Last_Input_Time",
     },
 
-    el: function(element_name) {
-        return $(this.element_selectors[element_name]);
-    },
-
-    ready_to_submit: function() {
-        for (var prop in this.submit_conditions) {
-            if (!this.submit_conditions[prop]) return false;
-        }
-
-        return true;
-    },
-
-    set_submit_condition: function(name, val) {
-        this.submit_conditions[name] = val;
-        this.getFormSubmits().prop("disabled", !this.ready_to_submit());
-    },
-
-    submit_conditions: {},
-
-    timestamp: null, // is set in control_timing(),
 
     run: function() {
         var self = this;
@@ -59,47 +39,68 @@ var Collector = {
         });
     },
 
-    Timer: function(timeUp, callback) {
-        this.callback = callback;
-        this.timeUp = timeUp;
+    // these functions control when submission of a trial is enabled/disabled
+    submit: function() {
+        this.submit_conditions = {}; // wipe out all submit conditions, force submit
+        this.el('content').submit();
     },
 
-    setTimeout: function(timeUp, callback) {
-        var timer = new this.Timer(timeUp, callback);
-        timer.start();
-        return timer;
+    submit_conditions: {},
+
+    set_submit_condition: function(name, val) {
+        this.submit_conditions[name] = val;
+        this.get_form_submits().prop("disabled", !this.ready_to_submit());
     },
 
-    prevent_autocomplete: function() {
-        $("form").attr('autocomplete', 'off');
-    },
-
-    fit_content: function() {
-        var checkSize = function() {
-            var window_size  = $(window).height();
-            var content_size = 0;
-            $("body").children().each(function (){
-                content_size += $(this).height();
-            });
-            var flex_prop = (window_size <= content_size) ? 'flex-start' : 'center ';
-            $("body").css("justify-content",flex_prop);
+    ready_to_submit: function() {
+        for (var prop in this.submit_conditions) {
+            if (!this.submit_conditions[prop]) return false;
         }
-        checkSize();
 
-        $(window).resize( checkSize() );
+        return true;
     },
 
-    focus_first_input: function() {
-        $(':input:not(:radio):enabled:visible:first').focusWithoutScrolling();
+    prepare_form_submit: function() {
+        var self = this;
+
+        this.el('content').submit(function(e) {
+            if (!self.ready_to_submit()) {
+                e.preventDefault();
+                return false;
+            }
+
+            self.el('content').hide();
+
+            self.el('duration').val(
+                self.get_elapsed_time()
+            );
+
+            self.el('focus').val(
+                self.myFocusChecker.proportion
+            );
+
+            if (typeof self.end === "function") {
+                self.end();
+            }
+        });
     },
 
-    start_checking_focus: function() {
-        this.myFocusChecker = new Collector.FocusChecker();
+    prepare_to_catch_action_timestamps: function() {
+        var self = this;
+
+        $(":input").on("keypress click", function() {
+            var el_first_timestamp = self.el('first_timestamp');
+            var el_last_timestamp  = self.el('last_timestamp');
+            var timestamp          = self.get_elapsed_time();
+
+            if (el_first_timestamp.val() === '-1') {
+                el_first_timestamp.val(timestamp);
+            }
+
+            el_last_timestamp.val(timestamp);
+        });
     },
 
-    FocusChecker: function() {
-        this.start();
-    },
 
     /*  Timer adherence behavior
      *  -n: prevent submit until min_time // also disable button
@@ -131,7 +132,7 @@ var Collector = {
             });
 
             if (min === null || min >= max) {
-                this.getFormSubmits().hide();
+                this.get_form_submits().hide();
                 this.set_submit_condition("Collector Timer", false);
             }
         }
@@ -146,37 +147,46 @@ var Collector = {
         }
     },
 
-    submit: function() {
-        this.submit_conditions = {}; // wipe out all submit conditions, force submit
-        this.el('content').submit();
-    },
-
-    getFormSubmits: function(val) {
-        return this.el('content').find(":submit");
-    },
+    timestamp: null, // is set in control_timing(),
 
     get_elapsed_time: function() {
         return Date.now() - this.timestamp;
     },
 
-    apply_force_numeric: function() {
-        $(".forceNumeric").forceNumeric();
+    // Collector.el("property name") will return the jQuery object
+    // as specified in Collector.element_selectors
+    el: function(element_name) {
+        return $(this.element_selectors[element_name]);
     },
 
-    prepare_to_catch_action_timestamps: function() {
-        var self = this;
+    get_form_submits: function(val) {
+        return this.el('content').find(":submit");
+    },
 
-        $(":input").on("keypress click", function() {
-            var el_first_timestamp = self.el('first_timestamp');
-            var el_last_timestamp  = self.el('last_timestamp');
-            var timestamp          = self.get_elapsed_time();
 
-            if (el_first_timestamp.val() === '-1') {
-                el_first_timestamp.val(timestamp);
-            }
+    /* * * * Utility Functions * * * *
+     * They do what their method names suggest * */
+    display_trial: function() {
+        this.el('content').removeClass("invisible");
+    },
 
-            el_last_timestamp.val(timestamp);
-        });
+    fit_content: function() {
+        var checkSize = function() {
+            var window_size  = $(window).height();
+            var content_size = 0;
+            $("body").children().each(function (){
+                content_size += $(this).height();
+            });
+            var flex_prop = (window_size <= content_size) ? 'flex-start' : 'center ';
+            $("body").css("justify-content",flex_prop);
+        }
+        checkSize();
+
+        $(window).resize( checkSize() );
+    },
+
+    focus_first_input: function() {
+        $(':input:not(:radio):enabled:visible:first').focusWithoutScrolling();
     },
 
     // prevent the backspace key from navigating back.
@@ -217,33 +227,33 @@ var Collector = {
         });
     },
 
-    prepare_form_submit: function() {
-        var self = this;
-
-        this.el('content').submit(function(e) {
-            if (!self.ready_to_submit()) {
-                e.preventDefault();
-                return false;
-            }
-
-            self.el('content').hide();
-
-            self.el('duration').val(
-                self.get_elapsed_time()
-            );
-
-            self.el('focus').val(
-                self.myFocusChecker.proportion
-            );
-
-            if (typeof self.end === "function") {
-                self.end();
-            }
-        });
+    prevent_autocomplete: function() {
+        $("form").attr('autocomplete', 'off');
     },
 
-    display_trial: function() {
-        this.el('content').removeClass("invisible");
+    apply_force_numeric: function() {
+        $(".forceNumeric").forceNumeric();
+    },
+
+
+    setTimeout: function(timeUp, callback) {
+        var timer = new this.Timer(timeUp, callback);
+        timer.start();
+        return timer;
+    },
+
+    Timer: function(timeUp, callback) {
+        this.callback = callback;
+        this.timeUp = timeUp;
+    },
+
+
+    start_checking_focus: function() {
+        this.myFocusChecker = new Collector.FocusChecker();
+    },
+
+    FocusChecker: function() {
+        this.start();
     }
 }
 

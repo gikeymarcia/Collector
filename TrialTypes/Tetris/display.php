@@ -74,7 +74,7 @@ Collector.start() = function() {
                           "<h1 id=getready></h1>" +
                       "</div>"
             );
-            Collector.Timer.show( $("#getready") );
+            Collector.max_timer.show( $("#getready") );
         });
         gameTimer.show( $(".countdown") );
     }
