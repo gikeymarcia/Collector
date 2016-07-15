@@ -1,46 +1,57 @@
 var Collector = {
-    // empty object we will add .mintime .maxtime
+    // inputs will hold min and max time
     inputs: {},
 
-    // list of elements (filled by set_defaults() )
-    el: null,
-
-    set_defaults: function () {
-        this.el = {
-            content:         $("#content"),
-            duration:        $("#Duration"),
-            focus:           $("#Focus"),
-            first_timestamp: $("#First_Input_Time"),
-            last_timestamp:  $("#Last_Input_Time")
-        }
+    element_selectors: {
+        content:         "#content",  
+        duration:        "#Duration",
+        focus:           "#Focus",
+        first_timestamp: "#First_Input_Time",
+        last_timestamp:  "#Last_Input_Time",
     },
-
-    ready_to_submit: true,
+    
+    el: function(element_name) {
+        return $(this.element_selectors[element_name]);
+    },
+    
+    ready_to_submit: function() {
+        for (var prop in this.submit_conditions) {
+            if (!this.submit_conditions[prop]) return false;
+        }
+        
+        return true;
+    },
+    
+    set_submit_condition: function(name, val) {
+        this.submit_conditions[name] = val;
+        this.getFormSubmits().prop("disabled", !this.ready_to_submit());
+    },
+    
+    submit_conditions: {},
 
     timestamp: null, // is set in control_timing(),
 
-    run: function(page) {
+    run: function() {
         var self = this;
 
-        $(document).ready(function(){
-            self.set_defaults();                       // teeeamwork
-            self.apply_force_numeric();                // tyson
-            self.prevent_autocomplete();               // mikey
-            self.prevent_back_nav();                   // tyson
-            self.fit_content();                        // mikey
-            self.prepare_to_catch_action_timestamps(); // tyson
-            self.prepare_form_submit();                // tyson
-            self.start_checking_focus();               // mikey
+        $(document).ready(function() {
+            self.apply_force_numeric();
+            self.prevent_autocomplete();
+            self.prevent_back_nav();
+            self.fit_content();
+            self.prepare_to_catch_action_timestamps();
+            self.prepare_form_submit();
+            self.start_checking_focus();
         });
 
-        $(window).load( function() {
-            self.control_timing(                    // teammmwork
+        $(window).load(function() {
+            self.control_timing(
                 self.inputs.min,
                 self.inputs.max
             );
             self.timestamp = Date.now();
-            self.display_trial();                   // tyson
-            self.focus_first_input();               // mikey
+            self.display_trial();
+            self.focus_first_input();
 
             if (typeof self.start === "function") {
                 self.start();
@@ -55,7 +66,7 @@ var Collector = {
 
     setTimeout: function(timeUp, callback) {
         var timer = new this.Timer(timeUp, callback);
-        this.start();
+        timer.start();
         return timer;
     },
 
@@ -115,34 +126,33 @@ var Collector = {
 
         // max time
         if (typeof max === "number") {
-            this.ready_to_submit = false;
-
-            this.setTimeout(max, function() {
-                self.ready_to_submit = true;
-                self.el.content.submit();
+            this.max_timer = this.setTimeout(max, function() {
+                self.submit();
             });
 
-            if (min === null || min > max) {
+            if (min === null || min >= max) {
                 this.getFormSubmits().hide();
+                this.set_submit_condition("Collector Timer", false);
             }
         }
 
         // min time
-        if (min === 0) {
-            this.ready_to_submit = true;
-        } else if (typeof min === "number") {
-            this.ready_to_submit = false;
-            this.getFormSubmits().prop("disabled", true);
+        if (min > 0) {
+            this.set_submit_condition("Collector Timer", false);
 
-            this.setTimeout(min, function() {
-                self.getFormSubmits().prop("disabled", false);
-                self.ready_to_submit = true;
+            this.min_timer = this.setTimeout(min, function() {
+                self.set_submit_condition("Collector Timer", true);
             });
         }
     },
+    
+    submit: function() {
+        this.submit_conditions = {}; // wipe out all submit conditions, force submit
+        this.el('content').submit();
+    },
 
     getFormSubmits: function(val) {
-        return this.el.content.find(":submit");
+        return this.el('content').find(":submit");
     },
 
     get_elapsed_time: function() {
@@ -157,8 +167,8 @@ var Collector = {
         var self = this;
 
         $(":input").on("keypress click", function() {
-            var el_first_timestamp = self.el.first_timestamp;
-            var el_last_timestamp  = self.el.last_timestamp;
+            var el_first_timestamp = self.el('first_timestamp');
+            var el_last_timestamp  = self.el('last_timestamp');
             var timestamp          = self.get_elapsed_time();
 
             if (el_first_timestamp.val() === '-1') {
@@ -210,19 +220,19 @@ var Collector = {
     prepare_form_submit: function() {
         var self = this;
 
-        this.el.content.submit(function(e) {
-            if (!self.ready_to_submit) {
+        this.el('content').submit(function(e) {
+            if (!self.ready_to_submit()) {
                 e.preventDefault();
                 return false;
             }
 
-            self.el.content.hide();
+            self.el('content').hide();
 
-            self.el.duration.val(
+            self.el('duration').val(
                 self.get_elapsed_time()
             );
 
-            self.el.focus.val(
+            self.el('focus').val(
                 self.myFocusChecker.proportion
             );
 
@@ -233,7 +243,7 @@ var Collector = {
     },
 
     display_trial: function() {
-        this.el.content.removeClass("invisible");
+        this.el('content').removeClass("invisible");
     }
 }
 
