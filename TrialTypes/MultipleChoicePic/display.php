@@ -164,33 +164,29 @@ foreach ($buttons as $i => $button) {
 <button class="hidden" id="FormSubmitButton">Submit</button>
 
 <script>
-  // updates the response value when a MC button is pressed
-  $(".TestMC").click(function() {
-    var clicked = $(this).html();
-    var form = $("form");
+
+// updates the response value when a MC button is pressed
+$(".TestMC").click(function() {
+    if (typeof Collector.min_timer !== "undefined"
+        && $("#Response").val() == ""
+    ) {
+        var oldCallback = Collector.min_timer.callback;
+        Collector.min_timer.callback = function () {
+            oldCallback();
+            $("form").submit();
+        }
+    }
 
     // record which button was clicked
-    $("#Response").prop("value",clicked);
+    var selection = $(this).html();
+    $("#Response").val(selection);
 
+    // remove highlighting from all buttons
+    $(".TestMC").removeClass("collectorButtonActive");
 
-    // if UserTiming, submit, but only highlight choice otherwise
-    if (form.hasClass("UserTiming") && !form.hasClass("WaitingForMinTime")) {
-      form.submit();// see common:init "intercept FormSubmitButton"
-    } else {
-      // set first keypress times
-      if (typeof keypress !== 'undefined') {
-        $("#RTfirst").val( COLLECTOR.getRT() );
-        keypress = true;
-      }
+    // add highlighting to clicked button
+    $(this).addClass("collectorButtonActive");
 
-      // update 'RTlast' time
-      $("#RTlast").val( COLLECTOR.getRT() );
-
-      // remove highlighting from all buttons
-      $(".TestMC").removeClass("collectorButtonActive");
-
-      // add highlighting to clicked button
-      $(this).addClass("collectorButtonActive");
-    }
+    $("form").submit();
   });
 </script>
