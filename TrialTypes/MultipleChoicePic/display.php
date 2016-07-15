@@ -164,29 +164,28 @@ foreach ($buttons as $i => $button) {
 <button class="hidden" id="FormSubmitButton">Submit</button>
 
 <script>
-
-// updates the response value when a MC button is pressed
-$(".TestMC").click(function() {
-    if (typeof Collector.min_timer !== "undefined"
-        && $("#Response").val() == ""
-    ) {
-        var oldCallback = Collector.min_timer.callback;
-        Collector.min_timer.callback = function () {
-            oldCallback();
-            $("form").submit();
-        }
+// if we have a min timer, alter it's functionality
+// when timer is up, submit automatically if a response has already been made
+if (typeof Collector.min_timer !== "undefined") {
+    var min_time_func = Collector.min_timer.callback; // save default behavior
+    
+    // replace min timer function with modified function
+    Collector.min_timer.callback = function() {
+        min_time_func(); // execute default behavior first
+        submitIfResponseExists();
     }
+}
 
-    // record which button was clicked
-    var selection = $(this).html();
-    $("#Response").val(selection);
+var submitIfResponseExists = function() {
+    if ($("#Response").val() !== "") {
+        $("form").submit(); // after default min_timer function, submit form
+    }
+}
 
-    // remove highlighting from all buttons
-    $(".TestMC").removeClass("collectorButtonActive");
-
-    // add highlighting to clicked button
-    $(this).addClass("collectorButtonActive");
-
-    $("form").submit();
-  });
+$(".TestMC").click(function() {
+    $("#Response").val(this.innerHTML); // save selection
+    $("form").submit();                 // try to submit form, although a min or max time will block this
+    $(".collectorButtonActive").removeClass("collectorButtonActive"); // remove any highlighting that exists
+    $(this).addClass(".collectorButtonActive"); // add highlighting to the clicked button
+});
 </script>
