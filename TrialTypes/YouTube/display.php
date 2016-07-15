@@ -86,7 +86,7 @@ $parameters['end'] = $endTime;
   function onPlayerStateChange(e) {
     if (e.data === YT.PlayerState.ENDED) {
       if (submitOnDone) {
-        $("#FormSubmitButton").click();
+        Collector.submit();
       }
       if (preventEarlySubmit) {
         $("#FormSubmitButton").removeClass("invisible");
