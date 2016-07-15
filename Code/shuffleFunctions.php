@@ -8,7 +8,7 @@
  *
  * @param array  $settings    The (by-reference) array of settings to search.
  * @param string $target      The setting to search for.
- * @param bool   $removeFound Indicates whether the setting should be unset if 
+ * @param bool   $removeFound Indicates whether the setting should be unset if
  *                            found. True by default.
  *
  * @return string|bool The setting if it existed, else false.
@@ -34,7 +34,7 @@ function findSetting(array &$settings, $target, $removeFound = true)
 /**
  * Shuffles the values in an array (by-reference) while keeping the order of
  * the keys intact.
- * 
+ *
  * @param array $array The (by-reference) array to shuffle.
  */
 function shuffleAssoc(&$array)
@@ -49,10 +49,10 @@ function shuffleAssoc(&$array)
 
 /**
  * Helper function to generate the message for shuffle exceptions.
- * 
+ *
  * @param string $msg         The message to append to the common message.
  * @param string $errorOrigin The origin of the error.
- * 
+ *
  * @return string The full exception message.
  */
 function getShuffleExceptionMsg($msg, $errorOrigin)
@@ -151,7 +151,7 @@ function shuffle2dArray(array $array, $debug = false)
 
             $target = findSetting($shuffleInfo, 'target');
             if (is_bool($target)) {
-                // if false, "target" wasn't found.  
+                // if false, "target" wasn't found.
                 // if true, they had the "target" keyword, but no columns
                 // either way, just shuffle the columns up to this point
                 $targets = $prevColumns;
@@ -268,19 +268,19 @@ function shuffle2dArray(array $array, $debug = false)
 /**
  * any rows with the same value in the same "within" value will be shuffled together.
  * Note: Not tested with associative arrays.
- * 
+ *
  * @param array  $array     The (by-reference) 2-D array to be shuffled.
- * @param string $shuffle   The column name that is being used to guide the 
+ * @param string $shuffle   The column name that is being used to guide the
  *                          shuffle. It is expected to exist inside $array.
  * @param array  $within    Reference array with the same indices as $array
  *                          and scalar values that indicate which group the
- *                          corresponding index in $array belongs to (e.g. 
+ *                          corresponding index in $array belongs to (e.g.
  *                          '1', '2', 'yes', 'no', '', 'banana').
- * @param array  $noShuffle Groups in $within and $shuffle that should not 
- *                          be shuffled. Generally these are set to '', 
- *                          'off', 'no', and '0'. Values can be anything 
+ * @param array  $noShuffle Groups in $within and $shuffle that should not
+ *                          be shuffled. Generally these are set to '',
+ *                          'off', 'no', and '0'. Values can be anything
  *                          except NULL.
- * 
+ *
  * @todo test simpleShuffle() on associative arrays.
  * @todo description of simpleShuffle() does not make sense.
  */
@@ -310,29 +310,29 @@ function simpleShuffle(array &$array, $shuffle, array $within, array $noShuffle)
 
 /**
  * BlockShuffle.
- * 
- * As long as two consecutive rows have the same value in their shuffle 
- * column and their $within setting, they will be grouped into the same 
- * block. Then, shuffled blocks will be shuffled, and the array will be 
+ *
+ * As long as two consecutive rows have the same value in their shuffle
+ * column and their $within setting, they will be grouped into the same
+ * block. Then, shuffled blocks will be shuffled, and the array will be
  * reconstructed by going through each block and writing each row back into
  * the array.
- * 
+ *
  * It's possible to affect non-shuffled rows with this. If a block with two
- * rows is shuffled with a block with 4 rows, then everything under the 
+ * rows is shuffled with a block with 4 rows, then everything under the
  * original 2-row block will be moved down to make way for the 4-row block.
- * 
+ *
  * @param array  $array     The (by-reference) 2-D array to be shuffled.
- * @param string $shuffle   The column name that is being used to guide the 
+ * @param string $shuffle   The column name that is being used to guide the
  *                          shuffle. It is expected to exist inside $array.
  * @param array  $within    Reference array with the same indices as $array
  *                          and scalar values that indicate which group the
- *                          corresponding index in $array belongs to (e.g. 
+ *                          corresponding index in $array belongs to (e.g.
  *                          '1', '2', 'yes', 'no', '', 'banana').
- * @param array  $noShuffle Groups in $within and $shuffle that should not 
- *                          be shuffled. Generally these are set to '', 
- *                          'off', 'no', and '0'. Values can be anything 
+ * @param array  $noShuffle Groups in $within and $shuffle that should not
+ *                          be shuffled. Generally these are set to '',
+ *                          'off', 'no', and '0'. Values can be anything
  *                          except NULL.
- * 
+ *
  * @todo update description for superBlockShuffle
  */
 function superBlockShuffle(array &$array, $shuffle, array $within, array $noShuffle)
@@ -397,36 +397,36 @@ function superBlockShuffle(array &$array, $shuffle, array $within, array $noShuf
 
 /**
  * listShuffle.
- * 
+ *
  * Shuffled items are categorized into lists, and then each shuffled list is
  * pointed at another shuffled list. Then for each row, if that row belongs
- * to a shuffled list, it is replaced with the next row from the matching 
+ * to a shuffled list, it is replaced with the next row from the matching
  * replacement list.
- * If one list is longer than its replacement, the replacement will start 
+ * If one list is longer than its replacement, the replacement will start
  * reusing rows, starting back at the first row. If the replacement is too
  * long, unused rows will simply be lost.
- * 
+ *
  * @example
- *       Cue  Target    ListShuffle          Cue  Target    ListShuffle 
- *   1.  a    apple     1                1.  b    bear      2   
- *   2.  b    bear      2                2.  a    apple     1 
+ *       Cue  Target    ListShuffle          Cue  Target    ListShuffle
+ *   1.  a    apple     1                1.  b    bear      2
+ *   2.  b    bear      2                2.  a    apple     1
  *   3.  c    cucumber  1                3.  d    dog       2
  *   4.  d    dog       2            =>  4.  c    cucumber  1
- *   5.  e    eggplant  1                5.  f    fish      2 
- *   6.  f    fish      2                6.  e    eggplant  1  
+ *   5.  e    eggplant  1                5.  f    fish      2
+ *   6.  f    fish      2                6.  e    eggplant  1
  *   7.  g    grapes    1                7.  h    horse     2
- *   8.  h    horse     2                8.  g    grapes    1 
- * 
+ *   8.  h    horse     2                8.  g    grapes    1
+ *
  * @param array  $array     The (by-reference) 2-D array to be shuffled.
- * @param string $shuffle   The column name that is being used to guide the 
+ * @param string $shuffle   The column name that is being used to guide the
  *                          shuffle. It is expected to exist inside $array.
  * @param array  $within    Reference array with the same indices as $array
  *                          and scalar values that indicate which group the
- *                          corresponding index in $array belongs to (e.g. 
+ *                          corresponding index in $array belongs to (e.g.
  *                          '1', '2', 'yes', 'no', '', 'banana').
- * @param array  $noShuffle Groups in $within and $shuffle that should not 
- *                          be shuffled. Generally these are set to '', 
- *                          'off', 'no', and '0'. Values can be anything 
+ * @param array  $noShuffle Groups in $within and $shuffle that should not
+ *                          be shuffled. Generally these are set to '',
+ *                          'off', 'no', and '0'. Values can be anything
  *                          except NULL.
  */
 function listShuffle(array &$array, $shuffle, array $within, array $noShuffle)
@@ -468,12 +468,12 @@ function listShuffle(array &$array, $shuffle, array $within, array $noShuffle)
     }
 }
 
-/** 
- * Shuffles within a row, rather than between rows, excluding the shuffle 
+/**
+ * Shuffles within a row, rather than between rows, excluding the shuffle
  * column.
- * 
+ *
  * @param array  $array   The (by-reference) 2-D array to be shuffled.
- * @param string $shuffle The column name that is being used to guide the 
+ * @param string $shuffle The column name that is being used to guide the
  *                        shuffle. It is expected to exist inside $array.
  */
 function sideShuffle(&$array, $shuffle)
@@ -495,7 +495,7 @@ function sideShuffle(&$array, $shuffle)
  *   - include a hashtag/pound sign in the shuffle column (e.g., '#Group1').
  *
  * @param array $input  2-D data read from a .csv table using getFromFile().
- * @param int   $levels Indicates which level the function is currently 
+ * @param int   $levels Indicates which level the function is currently
  *                      shuffling (do not adjust --- this is for the function).
  *
  * @return array The shuffled array.
@@ -581,7 +581,7 @@ function multiLevelShuffle($input, $levels = 0)
                     }
                 }
             }
-            // if the shuffle code hasn't changed (and isn't off) add it to a 
+            // if the shuffle code hasn't changed (and isn't off) add it to a
             // $holder array (grouped by lower shuffle column)
             if ($begin === $current) {
                 $holder[$currentLo][] = $input[$i];

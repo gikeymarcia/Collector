@@ -1,9 +1,9 @@
-<?php 
+<?php
     // if the key doesn't exist OR it isn't set to true then reject their action
     if (!isset($noPass)
         || $noPass !== true
     ) {
-        exit('You are not allowed to access this script directly. To change your 
+        exit('You are not allowed to access this script directly. To change your
               password delete the password file in "Experiments/Common/".');
     }
 
@@ -27,7 +27,7 @@
     <input type="password" name="pass" value="" placeholder="3 characters or more" class="collectorInput">
     <button type="submit" class="collectorButton">Set Password</button>
     <p>
-        <i>Note: To reset your password delete the password file in 
+        <i>Note: To reset your password delete the password file in
         <code>Experiments/Common/</code></i>
     </p>
     <p><b>Password must be 3 characters or longer</b></p>

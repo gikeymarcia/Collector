@@ -48,40 +48,40 @@ class PostTrial extends Trial
         $this->response->seal();
         $this->complete = true;
     }
-    
+
     /**
      * Validates the Trial using the Validator registered for its trial type, if
      * the Validator exists.
-     * 
+     *
      * @return array Returns an indexed array of the errors found when running
      *               validation and the information about the Trial with errors.
      */
     public function validate()
     {
         $validator = $this->expt->getValidator($this->data['trial type']);
-        
+
         return isset($validator) ? $validator->validate($this) : array();
     }
-    
+
     /**
      * Updates the named key in the relatedFiles MiniDb for this Trial with the
      * path to the given related file (like 'script.php').
-     * 
+     *
      * @param string $name The name of the related file being added.
      * @param string $path The full path of the related file.
-     * 
+     *
      * @return bool Returns true if the key is added, else false.
      */
     public function setRelatedFile($name, $path)
     {
         return $this->relatedFiles->update($name, $path);
     }
-    
+
     /**
      * Gets the named path from the relatedFiles MiniDb.
-     * 
+     *
      * @param string $name The name of the related file to get the path for.
-     * 
+     *
      * @return mixed Returns the stored value if the key exists, else null.
      */
     public function getRelatedFile($name)
@@ -105,11 +105,11 @@ class PostTrial extends Trial
     public function get($name, $strict = true)
     {
         $val = parent::get($name);
-        
+
         if (!isset($val)) {
             $val = $this->main->getFromStimuli($name);
         }
-        
+
         if ($strict) {
             return $val;
         }
@@ -147,9 +147,9 @@ class PostTrial extends Trial
     {
         return $this->main;
     }
-    
-    
-    
+
+
+
     /**
      * The Experiment::duplicate method clones trials completely. After cloning
      * this magic method resets the responses array.

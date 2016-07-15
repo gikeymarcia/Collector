@@ -171,11 +171,11 @@ class Pathfinder
 
         $this->setRootPaths();
     }
-    
+
     public function __get($path) {
         return $this->get($path);
     }
-    
+
     public function __wakeup() {
         $this->setRootPaths();
     }
@@ -407,13 +407,13 @@ class Pathfinder
 
         return $path;
     }
-    
+
     /**
      * Sets a new path in the path list or replaces the existing path.
-     * 
+     *
      * The name string is converted to lowercase and spaces are replaced with
      * underscores.
-     * 
+     *
      * @param string $name The name of the path to set.
      * @param string $path The path to set, absolute or relative to the root.
      */
@@ -574,7 +574,7 @@ class Pathfinder
 
         return "<script src='$path' type='text/javascript'></script>";
     }
-    
+
     /**
      * gets a variable from $_SERVER, using filter_input if possible
      *

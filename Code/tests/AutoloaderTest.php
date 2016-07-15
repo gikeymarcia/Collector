@@ -10,7 +10,7 @@ class AutoloaderTest extends \PHPUnit_Framework_TestCase
     {
         $this->obj = new Autoloader;
     }
-    
+
     protected function getProperty(&$object, $propName)
     {
         $reflection = new \ReflectionClass(get_class($object));

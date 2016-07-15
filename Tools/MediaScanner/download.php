@@ -1,4 +1,4 @@
-<?php 
+<?php
 require '../loginFunctions.php';
 adminOnly();
 

@@ -23,7 +23,7 @@ function gotoDone()
 function recordTrial(Collector\MainTrial $trial, array $extraData = array())
 {
     global $_PATH;
-    
+
     // update timestamp
     $oldTime = $_SESSION['Timestamp'];
     $_SESSION['Timestamp'] = microtime(true);
@@ -52,7 +52,7 @@ function recordTrial(Collector\MainTrial $trial, array $extraData = array())
     if (!empty($extraData)) {
         $data = placeData($extraData, $data, 'extra * ');
     }
-    
+
     // record line into output CSV
     arrayToLine($data, $_PATH->get('Experiment Output'));
 }

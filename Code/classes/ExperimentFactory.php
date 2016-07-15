@@ -8,7 +8,7 @@ namespace Collector;
 /**
  * Class for use in creating Experiments easily. Normally the Experiment should
  * be created and then Trials should be added to the Experiment. The create
- * function in this class accepts a raw procedure array, as returned from 
+ * function in this class accepts a raw procedure array, as returned from
  * a Procedure object, and converts each line to a Trial and adds it to the
  * Experiment.
  */
@@ -16,23 +16,23 @@ class ExperimentFactory
 {
     /**
      * Creates a new Experiment instance with the given condition, procedure,
-     * stimuli, and validator directory arrays. Procedure and stimuli arrays 
+     * stimuli, and validator directory arrays. Procedure and stimuli arrays
      * should be pre-stitched and pre-shuffled.
-     * 
+     *
      * This static factory function differs from normal instantiation of an
      * Experiment because it accepts a procedure array which is processed for
      * post trial information and then looped through to add new Trials to the
      * Experiment.
-     * 
+     *
      * @param array      $condition  The array of condition information.
      * @param array      $procedure  The array of procedure information.
      * @param array      $stimuli    The array of stimuli information.
      * @param Pathfinder $pathfinder The Experiment's Pathfinder, which should
      *                               be able to find various related files like
      *                               trial types, validators, displays, etc.
-     * 
+     *
      * @return Experiment Returns a fully-instantiated Experiment class.
-     * 
+     *
      * @uses separatePostTrials Uses separatePostTrials to sort information in
      *                          the procedure array according to which post
      *                          trial it belongs to.
@@ -48,19 +48,19 @@ class ExperimentFactory
             // organize and clean up the row data
             $data = self::separatePostTrials($row);
             self::removeOffPostTrials($data);
-            
+
             // create the trial
             $trial = $expt->addTrialAbsolute($data['main']);
             foreach ($data['post'] as $post) {
                 $trial->addPostTrial($post);
             }
         }
-        
+
         $expt->warm();
         if (isset($pathfinder)) {
             self::addRelatedFiles($expt, $pathfinder);
         }
-            
+
         return $expt;
     }
 
@@ -94,11 +94,11 @@ class ExperimentFactory
 
         return $data;
     }
-    
+
     /**
      * Removes any post trial arrays from the procedure data that have trial
      * types "off" or "no" or empty values.
-     * 
+     *
      * @param array $procData The procedure data to filter.
      */
     private static function removeOffPostTrials(array &$procData)
@@ -113,10 +113,10 @@ class ExperimentFactory
             }
         }
     }
-    
+
     /**
      * Adds related files to the Trials in the Experiment (e.g. 'display.php').
-     * 
+     *
      * @param Experiment $expt       The Experiment to add related files to.
      * @param Pathfinder $pathfinder The Pathfinder that will find the files.
      */
@@ -129,7 +129,7 @@ class ExperimentFactory
             $position = ($class === 'PostTrial')
                       ? $trial->getMainTrial()->position ." (post: {$trial->position})"
                       : $trial->position;
-                
+
             $relatedFiles = $allRelated[strtolower($type)];
             if (empty($relatedFiles)) {
                 throw new \Exception('Could not retrieve related files for '
@@ -139,7 +139,7 @@ class ExperimentFactory
                     . "Procedure, when the trial type does not exist, or when "
                     . "an invalid Pathfinder is specified.");
             }
-            
+
             foreach ($relatedFiles as $name => $path) {
                 $trial->setRelatedFile($name, $path);
             }

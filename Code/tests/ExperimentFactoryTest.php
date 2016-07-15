@@ -8,7 +8,7 @@ class ExperimentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->pathfinder = new \Pathfinder();
     }
-    
+
     protected function getProperty(&$object, $propName)
     {
         $reflection = new \ReflectionClass(get_class($object));
@@ -17,7 +17,7 @@ class ExperimentFactoryTest extends \PHPUnit_Framework_TestCase
 
         return $property->getValue($object);
     }
-    
+
     /**
      * @covers Collector\ExperimentFactory::create
      */
@@ -35,13 +35,13 @@ class ExperimentFactoryTest extends \PHPUnit_Framework_TestCase
             $expected['stimuli'],
             $expected['pathfinder']
         );
-        
+
         $this->assertEquals($expected['condition'], $expt->getCondition());
         $this->assertEquals($expected['stimuli'], $expt->getStimuli());
         $this->assertEquals($expected['pathfinder'], $expt->getPathfinder());
         $this->assertCount(1, $expt);
     }
-    
+
     /**
      * @covers Collector\ExperimentFactory::create
      * @covers Collector\ExperimentFactory::separatePostTrials
@@ -51,15 +51,15 @@ class ExperimentFactoryTest extends \PHPUnit_Framework_TestCase
         $expt = ExperimentFactory::create(
             array(),
             array(array(
-                'a' => 2, 'trial type' => 'cue', 
+                'a' => 2, 'trial type' => 'cue',
                 'post 1 a' => 1, 'post 1 trial type' => 'cue'
-            )), 
+            )),
             array(),
             $this->pathfinder
         );
         $this->assertEquals(1, $expt->getTrial()->getPostTrial(1)->get('a', true));
     }
-    
+
     /**
      * @covers Collector\ExperimentFactory::create
      * @covers Collector\ExperimentFactory::addRelatedFiles
@@ -70,12 +70,12 @@ class ExperimentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->expectExceptionMessageRegExp('/type \'\' at position 1/');
         ExperimentFactory::create(
             array(),
-            array(array('trial type' => 'cue'), array('a' => 2, 'post 1 a' => 1)), 
+            array(array('trial type' => 'cue'), array('a' => 2, 'post 1 a' => 1)),
             array(),
             $this->pathfinder
         );
     }
-    
+
     /**
      * @covers Collector\ExperimentFactory::create
      * @covers Collector\ExperimentFactory::addRelatedFiles
@@ -86,7 +86,7 @@ class ExperimentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->expectExceptionMessageRegExp('/type \'\' at position 0 \(post: 1\)/');
         ExperimentFactory::create(
             array(),
-            array(array('trial type' => 'cue', 'post 1 a' => 1)), 
+            array(array('trial type' => 'cue', 'post 1 a' => 1)),
             array(),
             $this->pathfinder
         );
@@ -95,7 +95,7 @@ class ExperimentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers Collector\ExperimentFactory::create
      * @covers Collector\ExperimentFactory::removeOffPostTrials
-     */    
+     */
     public function testCreateWithPostTrialOffUsingValueOff()
     {
         $expt = ExperimentFactory::create(
@@ -109,7 +109,7 @@ class ExperimentFactoryTest extends \PHPUnit_Framework_TestCase
             array(),
             $this->pathfinder
         );
-        
+
         $this->assertNotNull($expt->getTrialAbsolute(0)->getPostTrialAbsolute(1));
         $this->assertNotNull($expt->getTrialAbsolute(0)->getPostTrialAbsolute(2));
         $this->assertNull($expt->getTrialAbsolute(1)->getPostTrialAbsolute(1));
@@ -119,11 +119,11 @@ class ExperimentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($expt->getTrialAbsolute(3)->getPostTrialAbsolute(1));
         $this->assertNull($expt->getTrialAbsolute(3)->getPostTrialAbsolute(2));
     }
-    
+
     /**
      * @covers Collector\ExperimentFactory::create
      * @covers Collector\ExperimentFactory::removeOffPostTrials
-     */    
+     */
     public function testCreateWithPostTrialOffUsingValueNo()
     {
         $expt = ExperimentFactory::create(
@@ -137,7 +137,7 @@ class ExperimentFactoryTest extends \PHPUnit_Framework_TestCase
             array(),
             $this->pathfinder
         );
-        
+
         $this->assertNotNull($expt->getTrialAbsolute(0)->getPostTrialAbsolute(1));
         $this->assertNotNull($expt->getTrialAbsolute(0)->getPostTrialAbsolute(2));
         $this->assertNull($expt->getTrialAbsolute(1)->getPostTrialAbsolute(1));
@@ -147,11 +147,11 @@ class ExperimentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($expt->getTrialAbsolute(3)->getPostTrialAbsolute(1));
         $this->assertNull($expt->getTrialAbsolute(3)->getPostTrialAbsolute(2));
     }
-    
+
     /**
      * @covers Collector\ExperimentFactory::create
      * @covers Collector\ExperimentFactory::removeOffPostTrials
-     */    
+     */
     public function testCreateWithPostTrialOffUsingValueBlank()
     {
         $expt = ExperimentFactory::create(
@@ -165,7 +165,7 @@ class ExperimentFactoryTest extends \PHPUnit_Framework_TestCase
             array(),
             $this->pathfinder
         );
-        
+
         $this->assertNotNull($expt->getTrialAbsolute(0)->getPostTrialAbsolute(1));
         $this->assertNotNull($expt->getTrialAbsolute(0)->getPostTrialAbsolute(2));
         $this->assertNull($expt->getTrialAbsolute(1)->getPostTrialAbsolute(1));

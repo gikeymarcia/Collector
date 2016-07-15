@@ -25,7 +25,7 @@ class MainTrialTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertCount(3, $this->obj);
     }
-    
+
     /**
      * @covers Collector\MainTrial::export
      * @covers Collector\PostTrial::export
@@ -44,7 +44,7 @@ class MainTrialTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->obj->isComplete());
         $this->assertFalse($this->obj->record(array('a' => 1)));
     }
-    
+
     /**
      * @covers Collector\MainTrial::validate
      */
@@ -53,7 +53,7 @@ class MainTrialTest extends \PHPUnit_Framework_TestCase
         $validator = new Validator(__DIR__ . '/validators/passCheck.php');
         $this->obj->getExperiment()->addValidator('a', $validator);
         $this->obj->update('trial type', 'a');
-        
+
         $this->assertNotEmpty($this->obj->validate()); // key1 not in Main
 
         $this->obj->update('key1', 1);
@@ -157,7 +157,7 @@ class MainTrialTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertTrue($this->obj->add('new information', 1));
         $this->assertFalse($this->obj->add('new information', 1));
-        
+
         $result = $this->obj->export();
         $this->assertEquals(1, $result['main']['new information']);
     }
@@ -169,7 +169,7 @@ class MainTrialTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertTrue($this->obj->add('new information', 1, true));
         $this->assertFalse($this->obj->add('new information', 1, true));
-        
+
         $result = $this->obj->export();
         $this->assertEquals(1, $result['main']['new information']);
     }
@@ -182,7 +182,7 @@ class MainTrialTest extends \PHPUnit_Framework_TestCase
         $this->obj->advance();
         $this->assertTrue($this->obj->add('new information', 1));
         $this->assertFalse($this->obj->add('new information', 1));
-        
+
         $result = $this->obj->export();
         $this->assertEquals(1, $result['post 1']['new information']);
     }
@@ -195,7 +195,7 @@ class MainTrialTest extends \PHPUnit_Framework_TestCase
         $this->obj->advance();
         $this->assertTrue($this->obj->add('new information', 1, true));
         $this->assertFalse($this->obj->add('new information', 1, true));
-        
+
         $result = $this->obj->export();
         $this->assertEquals(1, $result['main']['new information']);
     }
@@ -285,7 +285,7 @@ class MainTrialTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(4, $this->obj->export());
         $this->assertInstanceOf('Collector\PostTrial', $this->obj->getPostTrial(3));
     }
-    
+
     /**
      * @covers Collector\MainTrial::apply
      */
@@ -295,7 +295,7 @@ class MainTrialTest extends \PHPUnit_Framework_TestCase
             $trial->add($key, $value);
         };
         $this->obj->apply($function, array('brand new key', 10));
-        
+
         for ($i = 0; $i < 3; ++$i) {
             $this->assertEquals(10, $this->obj->get('brand new key', true));
             $this->obj->advance();
@@ -315,7 +315,7 @@ class MainTrialTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($clone, $clone->getPostTrial());
         $this->assertEquals($clone->getResponse(), new Response());
     }
-    
+
     /**
      * @covers Collector\MainTrial::deletePostTrialAbsolute
      */
@@ -325,7 +325,7 @@ class MainTrialTest extends \PHPUnit_Framework_TestCase
         $this->obj->deletePostTrialAbsolute(1);
         $this->assertCount($precount - 1, $this->obj);
     }
-    
+
     /**
      * @covers Collector\MainTrial::deletePostTrialAbsolute
      */
@@ -334,7 +334,7 @@ class MainTrialTest extends \PHPUnit_Framework_TestCase
         $this->obj->deletePostTrialAbsolute(1);
         $this->assertEquals(1, $this->obj->getPostTrial(1)->position);
     }
-    
+
     /**
      * @covers Collector\MainTrial::deletePostTrialAbsolute
      */
@@ -344,7 +344,7 @@ class MainTrialTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->obj->deletePostTrialAbsolute(1));
         $this->assertNotSame($deleted, $this->obj->getPostTrialAbsolute(1));
     }
-    
+
     /**
      * @covers Collector\MainTrial::deletePostTrial
      */
@@ -354,7 +354,7 @@ class MainTrialTest extends \PHPUnit_Framework_TestCase
         $this->obj->deletePostTrial(1);
         $this->assertNotSame($deleted, $this->obj->getPostTrial(1));
     }
-    
+
     /**
      * @covers Collector\MainTrial::deletePostTrialAbsolute
      * @covers Collector\MainTrial::deletePostTrial
@@ -367,7 +367,7 @@ class MainTrialTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->obj->deletePostTrial(-1));
         $this->assertSame($notDeleted, $this->obj->getPostTrial(-1));
     }
-    
+
     /**
      * @covers Collector\MainTrial::deletePostTrialAbsolute
      * @covers Collector\MainTrial::deletePostTrial
@@ -378,7 +378,7 @@ class MainTrialTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->obj->deletePostTrial(0));
         $this->assertSame($notDeleted, $this->obj->getPostTrial());
     }
-    
+
     /**
      * @covers Collector\MainTrial::deletePostTrialsAbsolute
      * @covers Collector\MainTrial::deletePostTrials
@@ -392,7 +392,7 @@ class MainTrialTest extends \PHPUnit_Framework_TestCase
         $this->assertCount($precount - 2, $this->obj);
         $this->assertSame($trialThree, $this->obj->getPostTrial(1));
     }
-    
+
     /**
      * @covers Collector\MainTrial::deletePostTrialsAbsolute
      * @covers Collector\MainTrial::deletePostTrials
@@ -412,7 +412,7 @@ class MainTrialTest extends \PHPUnit_Framework_TestCase
      * @covers Collector\MainTrial::deletePostTrial
      * @covers Collector\MainTrial::deletePostTrialsAbsolute
      * @covers Collector\MainTrial::deletePostTrials
-     */    
+     */
     public function testDeleteFuturePostTrialUpdatesIsComplete()
     {
         $this->obj->deletePostTrials("1::2");

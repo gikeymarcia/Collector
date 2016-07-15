@@ -168,7 +168,7 @@ foreach ($buttons as $i => $button) {
 // when timer is up, submit automatically if a response has already been made
 if (typeof Collector.min_timer !== "undefined") {
     var min_time_func = Collector.min_timer.callback; // save default behavior
-    
+
     // replace min timer function with modified function
     Collector.min_timer.callback = function() {
         min_time_func(); // execute default behavior first

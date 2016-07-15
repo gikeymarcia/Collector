@@ -1,24 +1,24 @@
 <?php
 /**
  * System Map.
- * 
- * To use this file, map out the directory structure of the program, using keys 
+ *
+ * To use this file, map out the directory structure of the program, using keys
  * as directory or file names, and values as either the contents of a directory,
  * or the label for that directory or file. Then set a variable equal to a
  * require or include of the file, e.g. $sysMap = require 'systemMap.php';
- * 
- * Inside the map, certain keys can be a variable using 'Dir Name' as the key, 
- * you can give a label to the directory, using {var}, you can provide a point 
- * for the user to provide their own information (such as the specific trial 
+ *
+ * Inside the map, certain keys can be a variable using 'Dir Name' as the key,
+ * you can give a label to the directory, using {var}, you can provide a point
+ * for the user to provide their own information (such as the specific trial
  * type "instruct").
- * 
- * Using {Default Name}, you can create a different type of variable, which 
+ *
+ * Using {Default Name}, you can create a different type of variable, which
  * should only need to be set once for the experiment good uses for this include
  * the default procedure file or the default output file This can just be part
- * of a file, such as '{Username}.json' 
- * 
+ * of a file, such as '{Username}.json'
+ *
  * More information can be found inside the Pathfinder class.
- * 
+ *
  * @see Pathfinder
  */
 return array(

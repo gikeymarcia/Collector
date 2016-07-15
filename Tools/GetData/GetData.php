@@ -1,31 +1,31 @@
 <?php
     adminOnly();
-    
+
     require 'getdataFunctions.php';
-    
+
     $filePrefixes = array(
         'Output' => 'Exp_',
         'Side'   => 'Side_',
         'Status_Begin' => 'Status_Begin_',
         'Status_End' => 'Status_End_'
     );
-    
+
     if ($_POST !== array()) {
         require 'getdataGenerate.php';
         exit;
     }
-    
+
     echo '<form id="GetDataForm" method="POST" target="_self">';
-    
+
     require 'scan.php';
-    
+
     $dataScan = getDataScan($_PATH);
-    
+
     $trialTypes = array_keys(getAllTrialTypeFiles());
-    
+
     $massChecker2 = '<input type="checkbox" class="massCheckbox" data-nest="2">';
     $massChecker3 = '<input type="checkbox" class="massCheckbox" data-nest="3">';
-    
+
     $expander = '<button type="button" class="expander">&#11014;</button>';
     $expanderCont = '<span class="expanderContainer">' . $expander . '</span>';
 ?>
@@ -83,7 +83,7 @@
                     'Status_Begin' => 'Status Begin',
                     'Status_End' => 'Status End'
                 );
-                
+
                 foreach ($dataScan['Columns'] as $file => $columns) {
                     echo '<div class="inputBlock">';
                     echo '<h3><label class="massLabel">' . $massChecker3 . $fileLabels[$file] . "</label> $expander</h3>";
@@ -142,19 +142,19 @@
 <script>
     $(window).load(function() {
         $(":focus").blur();
-        
+
         var userTitles = $("#Users").find(".massLabel");
         var maxWidth = 0;
-        
+
         userTitles.each(function() {
             maxWidth = Math.max(maxWidth, $(this).width()+0.5);
         });
-        
+
         userTitles.width(maxWidth);
-        
+
         $("body").css("min-height", $("body").height()+2+"px");
     });
-    
+
     $("input[name='format']").on("change", function() {
         if ($(this).val() === 'html') {
             $("form").attr("target", "_blank");
@@ -162,43 +162,43 @@
             $("form").attr("target", "_self");
         }
     });
-    
+
     $(".massCheckbox").each(function() {
         var mass = $(this);
         var nestedLevel = parseInt(mass.data("nest")) || 1;
         var targets = mass;
         var targetMasses, targetIndividuals;
-        
+
         for (var i=0; i<nestedLevel; ++i) {
             targets = targets.parent();
         }
-        
+
         targets = targets.find("input[type='checkbox']");
         targetMasses      = targets.filter(".massCheckbox").not(this);
         targetIndividuals = targets.not(".massCheckbox");
-        
+
         mass.on("change", function() {
             targets.prop("checked", mass.prop("checked"))
             targetMasses.prop("indeterminate", false);
         });
-        
+
         targetIndividuals.on("change", function() {
             setMassCheckerState(mass, targetIndividuals);
         });
-        
+
         targetMasses.on("change", function() {
             setTimeout(function() {
                 setMassCheckerState(mass, targetIndividuals);
             }, 0);
         });
-        
+
         targetIndividuals.first().change();
     });
-    
+
     function setMassCheckerState(massChecker, targets) {
         var checked = targets.filter(":checked").length;
         var total   = targets.length;
-        
+
         if (checked === 0) {
             massChecker.prop("checked", false);
             massChecker.prop("indeterminate", false);
@@ -210,20 +210,20 @@
             massChecker.prop("indeterminate", false);
         }
     }
-    
+
     $(".expander").on("click", function() {
         var title   = $(this).parent();
-        
+
         if (title.hasClass("expanderContainer")) {
             title = title.parent();
         }
-        
+
         var content = title.next();
         var timing  = 90;
-        
+
         if (content.is(":visible")) {
             title.width(Math.max(
-                content.width(), 
+                content.width(),
                 title.width()+0.5 // correcting by half a pixel because something seems to be rounding down and causing format changes
             ));
             content.hide(timing);
@@ -238,13 +238,13 @@
             $(this).html("&#11014;");
         }
     });
-    
+
     var eligibleLabels = $(".radioTable label:not('.massLabel')");
     var selectingLabels = false;
     var startingLabel = null;
     var intendedState = null;
     var selectionContainer = null;
-    
+
     eligibleLabels.on("mousedown", function() {
         selectingLabels = true;
         startingLabel = this;
@@ -261,18 +261,18 @@
     .on("mouseup", function() {
         if (this === startingLabel) $(this).removeClass("SelectedLabel"); // will already trigger a click
     });
-    
+
     $("body").on("mouseup", function() {
         if (!selectingLabels) return;
-        
+
         selectingLabels = false;
-        
+
         var selected = $(".SelectedLabel");
-        
+
         $(".SelectedLabel").removeClass("SelectedLabel")
             .find("input[type='checkbox']").prop("checked", intendedState)
                 .first().change();
-        
+
         startingLabel = null;
     });
 </script>

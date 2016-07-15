@@ -3,30 +3,30 @@ var Collector = {
     inputs: {},
 
     element_selectors: {
-        content:         "#content",  
+        content:         "#content",
         duration:        "#Duration",
         focus:           "#Focus",
         first_timestamp: "#First_Input_Time",
         last_timestamp:  "#Last_Input_Time",
     },
-    
+
     el: function(element_name) {
         return $(this.element_selectors[element_name]);
     },
-    
+
     ready_to_submit: function() {
         for (var prop in this.submit_conditions) {
             if (!this.submit_conditions[prop]) return false;
         }
-        
+
         return true;
     },
-    
+
     set_submit_condition: function(name, val) {
         this.submit_conditions[name] = val;
         this.getFormSubmits().prop("disabled", !this.ready_to_submit());
     },
-    
+
     submit_conditions: {},
 
     timestamp: null, // is set in control_timing(),
@@ -145,7 +145,7 @@ var Collector = {
             });
         }
     },
-    
+
     submit: function() {
         this.submit_conditions = {}; // wipe out all submit conditions, force submit
         this.el('content').submit();

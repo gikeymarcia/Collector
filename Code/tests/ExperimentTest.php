@@ -10,12 +10,12 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $this->testTrial = new MainTrial(array('trial 0' => 0), null);
         $this->testTrial->addPostTrial(array("post trial 0-1" => 0))
                         ->addPostTrial(array("post trial 0-2" => 0));
-        
+
         for ($i = 0; $i < 4; ++$i) {
             $this->obj->addTrialAbsolute()->addPostTrial()->addPostTrial();
         }
     }
-    
+
     protected function getProperty(&$object, $propName)
     {
         $reflection = new \ReflectionClass(get_class($object));
@@ -144,7 +144,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $trialOne->position);
         $this->assertEquals(2, $trialTwo->position);
     }
-    
+
     /**
      * @covers Collector\Experiment::getTrialsAbsolute
      */
@@ -154,7 +154,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->obj->getTrialAbsolute(1), $trials[1]);
         $this->assertEquals($this->obj->getTrialAbsolute(2), $trials[2]);
     }
-    
+
     /**
      * @covers Collector\Experiment::getTrialsAbsolute
      */
@@ -164,7 +164,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->obj->getTrialAbsolute(1), $trials[1]);
         $this->assertEquals($this->obj->getTrialAbsolute(2), $trials[2]);
     }
-    
+
     /**
      * @covers Collector\Experiment::getTrialsAbsolute
      */
@@ -173,7 +173,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $trials = $this->obj->getTrialsAbsolute('all');
         $this->assertCount(count($this->obj), $trials);
     }
-    
+
     /**
      * @covers Collector\Experiment::getTrials
      */
@@ -183,7 +183,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->obj->getTrial(1), $trials[1]);
         $this->assertEquals($this->obj->getTrial(2), $trials[2]);
     }
-    
+
     /**
      * @covers Collector\Experiment::getTrials
      */
@@ -193,7 +193,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->obj->getTrial(1), $trials[1]);
         $this->assertEquals($this->obj->getTrial(2), $trials[2]);
     }
-    
+
     /**
      * @covers Collector\Experiment::getTrials
      */
@@ -232,7 +232,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Collector\MainTrial', $this->obj->getCurrent());
         $this->assertTrue($this->obj->getTrial(-1)->isComplete());
     }
-    
+
     /**
      * @covers Collector\Experiment::skip
      */
@@ -244,7 +244,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Collector\MainTrial', $this->obj->getCurrent());
         $this->assertTrue($this->obj->getTrial(-1)->isComplete());
     }
-    
+
     /**
      * @covers Collector\Experiment::skip
      */
@@ -254,7 +254,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $this->obj->skip(2);
         $this->assertEquals($pos + 2, $this->obj->position);
     }
-    
+
     /**
      * @covers Collector\Experiment::skip
      */
@@ -263,7 +263,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $this->obj->skip(16);
         $this->assertEquals(count($this->obj) - 1, $this->obj->position);
     }
-    
+
     /**
      * @covers Collector\Experiment::isComplete
      */
@@ -416,7 +416,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $this->obj->get('stuff', false));
         $this->assertNull($this->obj->get('things'));
     }
-    
+
     /**
      * @convers Collector\Experiment::getCondition
      */
@@ -436,7 +436,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('b', $stim);
         $this->assertContains('c', $stim);
     }
-    
+
     /**
      * @covers Collector\Experiment::getStimuli
      */
@@ -459,7 +459,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
             $this->obj->getStimulus(3),
             $this->obj->getStimulus(4),
         );
-        
+
         $this->assertContains('a', $stim);
         $this->assertContains('b', $stim);
         $this->assertContains('c', $stim);
@@ -526,7 +526,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $trial = new MainTrial(array('a' => 1, 'b' => 2));
         $precount = count($this->obj);
         $added = $this->obj->addTrialAbsolute($trial);
-        
+
         $this->assertInstanceOf('Collector\MainTrial', $added);
         $this->assertCount($precount + 1, $this->obj);
         $this->assertEquals($precount, $added->position);
@@ -542,7 +542,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $trial = new MainTrial(array('a' => 1, 'b' => 2));
         $precount = count($this->obj);
         $added = $this->obj->addTrialAbsolute($trial, 2);
-        
+
         $this->assertInstanceOf('Collector\MainTrial', $added);
         $this->assertCount($precount + 1, $this->obj);
         $this->assertEquals(2, $added->position);
@@ -557,7 +557,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $trial = new MainTrial(array('a' => 1, 'b' => 2), $this->obj);
         $precount = count($this->obj);
         $added = $this->obj->addTrialAbsolute($trial);
-        
+
         $this->assertInstanceOf('Collector\MainTrial', $added);
         $this->assertCount($precount + 1, $this->obj);
         $this->assertEquals($precount, $added->position);
@@ -572,7 +572,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $trial = new MainTrial(array('a' => 1, 'b' => 2), new Experiment());
         $precount = count($this->obj);
         $added = $this->obj->addTrialAbsolute($trial);
-        
+
         $this->assertInstanceOf('Collector\MainTrial', $added);
         $this->assertCount($precount + 1, $this->obj);
         $this->assertEquals($precount, $added->position);
@@ -599,14 +599,14 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
             $trials[$i]->position = $precount + $i;
             $trials[$i]->setExperiment($this->obj);
         }
-        
+
         $this->obj->addTrialsAbsolute($data);
         $this->assertCount($precount + 3, $this->obj);
         $this->assertEquals($trials[0], $this->obj->getTrialAbsolute($precount));
         $this->assertEquals($trials[1], $this->obj->getTrialAbsolute($precount + 1));
         $this->assertEquals($trials[2], $this->obj->getTrialAbsolute($precount + 2));
     }
-    
+
     /**
      * @covers Collector\Experiment::addTrialsAbsolute
      */
@@ -627,14 +627,14 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
             $trials[$i]->position = $i;
             $trials[$i]->setExperiment($this->obj);
         }
-        
+
         $this->obj->addTrialsAbsolute($data, 0);
         $this->assertCount($precount + 3, $this->obj);
         $this->assertEquals($trials[0], $this->obj->getTrialAbsolute(0));
         $this->assertEquals($trials[1], $this->obj->getTrialAbsolute(1));
         $this->assertEquals($trials[2], $this->obj->getTrialAbsolute(2));
     }
-    
+
     /**
      * @covers Collector\Experiment::addTrialsAbsolute
      */
@@ -650,14 +650,14 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
             $trials[$i]->position = $precount + $i;
             $trials[$i]->setExperiment($this->obj);
         }
-        
+
         $this->obj->addTrialsAbsolute($trials);
         $this->assertCount($precount + 3, $this->obj);
         $this->assertEquals($trials[0], $this->obj->getTrialAbsolute($precount));
         $this->assertEquals($trials[1], $this->obj->getTrialAbsolute($precount + 1));
         $this->assertEquals($trials[2], $this->obj->getTrialAbsolute($precount + 2));
     }
-    
+
     /**
      * @covers Collector\Experiment::addTrialsAbsolute
      */
@@ -674,14 +674,14 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
             $trials[$i]->position = $precount + $i;
             $trials[$i]->setExperiment($this->obj);
         }
-        
+
         $this->obj->addTrialsAbsolute($trials);
         $this->assertCount($precount + 3, $this->obj);
         $this->assertEquals($trials[0], $this->obj->getTrialAbsolute($precount));
         $this->assertEquals($trials[1], $this->obj->getTrialAbsolute($precount + 1));
         $this->assertEquals($trials[2], $this->obj->getTrialAbsolute($precount + 2));
     }
-    
+
     /**
      * @covers Collector\Experiment::addTrial
      * @covers Collector\Experiment::getTrial
@@ -693,7 +693,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $actual = $this->getProperty($this->obj->getTrial(1), 'data');
         $this->assertEquals(array('a' => 1), $actual);
     }
-    
+
     /**
      * @covers Collector\Experiment::addTrial
      * @covers Collector\Experiment::getTrial
@@ -705,7 +705,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $actual = $this->getProperty($this->obj->getTrial(3), 'data');
         $this->assertEquals(array('a' => 1), $actual);
     }
-    
+
     /**
      * @covers Collector\Experiment::addTrial
      * @covers Collector\Experiment::getTrial
@@ -736,7 +736,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array('b' => 2),
             $this->getProperty($this->obj->getTrial(2), 'data'));
     }
-    
+
     /**
      * @covers Collector\Experiment::apply
      */
@@ -746,7 +746,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
             $trial->add($key, $value);
         };
         $this->obj->apply($function, array('brand new key', 10));
-        
+
         for ($i = 0; $i < 11; ++$i) {
             $this->assertEquals(10, $this->obj->get('brand new key', true));
             $this->obj->advance();
@@ -762,15 +762,15 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
             return $trial->get('trial') === 0 ? true : "Failed!";
         });
         $this->obj->addValidator('a', $validator);
-        
-        $result = $this->getProperty($this->obj, 'validators'); 
+
+        $result = $this->getProperty($this->obj, 'validators');
         $test = $result['a'];
         $this->assertEquals($validator, $test);
-        
+
         $this->obj->addValidator('a', $validator, true);
         $this->assertCount(2, $this->getProperty($test, 'checks'));
     }
-    
+
     /**
      * @covers Collector\Experiment::getValidator
      * @covers Collector\Experiment::loadValidator
@@ -781,11 +781,11 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
             return $trial->get('trial') === 0 ? true : "Failed!";
         });
         $this->obj->addValidator('a', $validator);
-        
+
         $this->assertEquals($validator, $this->obj->getValidator('a'));
         $this->assertNull($this->obj->getValidator('b'));
     }
-    
+
     /**
      * @covers Collector\Experiment::loadValidator
      */
@@ -794,11 +794,11 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $pathfinder = new \Pathfinder();
         $path = __DIR__.'/validators/validatordir1';
         $pathfinder->set('custom trial types', __DIR__.'/validators/validatordir1');
-        
+
         $expt = new Experiment(array(), array(), $pathfinder);
         $this->assertInstanceOf('Collector\Validator', $expt->getValidator('testtrialtype1'));
     }
-    
+
     /**
      * @depends testGetValidator
      * @covers Collector\Experiment::setValidators
@@ -809,20 +809,20 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
             'a' => new Validator(function($trial) { return $trial; }),
             'b' => new Validator(function($trial) { return $trial; }),
         );
-            
+
         $this->obj->setValidators($validators, false);
         $validator1 = $this->obj->getValidator('a');
         $this->assertEquals($validators['a'], $validator1);
-        
+
         $this->obj->setValidators($validators, false);
         $validator2 = $this->obj->getValidator('a');
         $this->assertEquals($validators['a'], $validator2);
-        
+
         $this->obj->setValidators($validators, true);
         $validator3 = $this->obj->getValidator('a');
         $this->assertCount(2, $this->getProperty($validator3, 'checks'));
     }
-    
+
     /**
      * @covers Collector\Experiment::validate
      */
@@ -831,14 +831,14 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $validator = new Validator(__DIR__ . '/validators/passCheck.php');
         $this->obj->addValidator('a', $validator);
         $this->obj->update('trial type', 'a');
-        
+
         $result = $this->obj->validate();
         $this->assertEquals('Failed!', $result[0]['message']);
-        
+
         $this->obj->update('key1', 1);
         $this->assertEmpty($this->obj->validate());
     }
-    
+
     /**
      * @covers Collector\Experiment::deleteTrialAbsolute
      */
@@ -848,7 +848,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $this->obj->deleteTrialAbsolute(0);
         $this->assertCount($precount - 1, $this->obj);
     }
-    
+
     /**
      * @covers Collector\Experiment::deleteTrialAbsolute
      */
@@ -859,7 +859,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $this->obj->getTrial(1)->position);
         $this->assertEquals(2, $this->obj->getTrial(2)->position);
     }
-    
+
     /**
      * @covers Collector\Experiment::deleteTrialAbsolute
      */
@@ -867,14 +867,14 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
     {
         $deletedThree = $this->obj->getTrialAbsolute(3);
         $deletedZero = $this->obj->getTrial();
-        
+
         $this->assertTrue($this->obj->deleteTrialAbsolute(3));
         $this->assertTrue($this->obj->deleteTrialAbsolute(0));
-        
+
         $this->assertNotSame($deletedZero, $this->obj->getTrialAbsolute(0));
         $this->assertNotSame($deletedThree, $this->obj->getTrialAbsolute(2));
     }
-    
+
     /**
      * @covers Collector\Experiment::deleteTrial
      */
@@ -884,7 +884,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $this->obj->deleteTrial(1);
         $this->assertNotSame($deleted, $this->obj->getTrial(1));
     }
-    
+
     /**
      * @covers Collector\Experiment::deleteTrialAbsolute
      * @covers Collector\Experiment::deleteTrial
@@ -896,7 +896,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->obj->deleteTrial(-1));
         $this->assertSame($notDeleted, $this->obj->getTrial(-1));
     }
-    
+
     /**
      * @covers Collector\Experiment::deleteTrialsAbsolute
      * @covers Collector\Experiment::deleteTrials
@@ -909,7 +909,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $this->assertCount($precount - 2, $this->obj);
         $this->assertSame($trialThree, $this->obj->getTrial(1));
     }
-    
+
     /**
      * @covers Collector\Experiment::deleteTrialsAbsolute
      * @covers Collector\Experiment::deleteTrials
@@ -928,14 +928,14 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
      * @covers Collector\Experiment::deleteTrial
      * @covers Collector\Experiment::deleteTrialsAbsolute
      * @covers Collector\Experiment::deleteTrials
-     */    
+     */
     public function testDeleteFutureTrialUpdatesIsComplete()
     {
         $this->obj->deleteTrials("1::3");
         $this->obj->getTrial()->markComplete();
         $this->assertTrue($this->obj->isComplete());
     }
-    
+
     /**
      * @covers Collector\Experiment::stringToRange
      */
@@ -949,7 +949,7 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(1,2,3), Experiment::stringToRange('1::3'));
         $this->assertEquals(array(1,2,3,4), Experiment::stringToRange('1::3, 4'));
     }
-    
+
     /**
      * @covers Collector\Experiment::getNext
      */
@@ -958,16 +958,16 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
         $onePostOne = $this->obj->getNext();
         $alsoOnePostOne = $this->obj->getNext(1);
         $two = $this->obj->getNext(3);
-        
+
         $this->obj->advance();
         $this->assertSame($onePostOne, $alsoOnePostOne);
         $this->assertSame($onePostOne, $this->obj->getCurrent());
-        
+
         $this->obj->advance();
         $this->obj->advance();
         $this->assertSame($two, $this->obj->getCurrent());
     }
-    
+
     /**
      * @covers Collector\Experiment::getPrev
      */
@@ -975,11 +975,11 @@ class ExperimentTest extends \PHPUnit_Framework_TestCase
     {
         $this->obj->advance();
         $onePostOne = $this->obj->getCurrent();
-        
+
         $this->obj->advance();
         $this->obj->advance();
         $two = $this->obj->getCurrent();
-        
+
         $this->obj->advance();
         $this->assertSame($two, $this->obj->getPrev());
         $this->assertSame($two, $this->obj->getPrev(1));

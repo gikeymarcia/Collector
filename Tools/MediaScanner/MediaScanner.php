@@ -27,7 +27,7 @@ function scandir_recursive($dir, $max_depth = 25) {
                 }
             }
         } elseif (is_file($relative)) {
-            $output[] = $relative;  
+            $output[] = $relative;
         }
     }
     return $output;
@@ -84,7 +84,7 @@ $show = getFromFile("MediaScanner/tempStim.csv");
     .display2dArray {
         font-size: 16pt;
         background-color: #dee7ec;
-        padding-bottom: 2em;    
+        padding-bottom: 2em;
     }
     td:first-child {
         font-weight:700;
@@ -94,7 +94,7 @@ $show = getFromFile("MediaScanner/tempStim.csv");
         text-align: left;
     }
 
-    #dl {   
+    #dl {
         margin-top: 1em;
         font-size: 32pt;
         text-align: left;

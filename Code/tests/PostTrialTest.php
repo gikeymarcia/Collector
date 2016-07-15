@@ -26,7 +26,7 @@ class PostTrialTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Collector\MainTrial', $this->obj->getMainTrial());
         $this->assertEquals(2, $this->obj->get('post trial 1'));
     }
-    
+
     /**
      * @covers Collector\PostTrial::markComplete
      */
@@ -36,10 +36,10 @@ class PostTrialTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->obj->isComplete());
         $this->assertFalse($this->obj->record(array('something new' => 1)));
     }
-    
+
     /**
      * @covers Collector\PostTrial::validate
-     */    
+     */
     public function testValidate()
     {
         $validator = new Validator(__DIR__ . '/validators/passCheck.php');
@@ -47,7 +47,7 @@ class PostTrialTest extends \PHPUnit_Framework_TestCase
 
         $this->obj->update('trial type', 'a');
         $this->assertNotEmpty($this->obj->validate());
-        
+
         $this->obj->update('key1', 'any');
         $this->assertEmpty($this->obj->validate());
     }

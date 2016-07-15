@@ -7,7 +7,7 @@ namespace Collector;
 
 /**
  * Validators are used to validate Trials.
- * 
+ *
  * When the validate function is called, the Validator runs each check on the
  * Trial passed to the function. The checks are closures that have been added to
  * the checks property via addCheck(). All checks need to accept a Trial, and
@@ -19,10 +19,10 @@ class Validator {
      * @var array
      */
     protected $checks;
-    
+
     /**
      * Constructor.
-     * 
+     *
      * @param string|array $pathToCheck [Optional] The path(s) to the validator
      *                                  scripts to initialize the object with.
      */
@@ -40,10 +40,10 @@ class Validator {
 
     /**
      * Validates the given Trial using the registered check functions.
-     * 
+     *
      * @param Trial $trial The Trial to validate.
-     * 
-     * @return array Returns an array of any errors that are caught during 
+     *
+     * @return array Returns an array of any errors that are caught during
      *               validation.
      */
     public function validate(Trial $trial)
@@ -53,7 +53,7 @@ class Validator {
             $check = include($path);
             $result = $check($trial);
             $this->checkReturnType($result);
-            
+
             if (!in_array($result, array(true, null), true)) {
                 $errors[] = array(
                     'message' => $result,
@@ -61,35 +61,35 @@ class Validator {
                 );
             }
         }
-        
+
         return $errors;
     }
-    
+
     /**
      * Adds a new check function to be used by the Validator.
-     * 
+     *
      * @param \Closure $pathToCheck The check function to add.
      */
     public function addCheck($pathToCheck)
     {
         $this->checks[] = $pathToCheck;
     }
-    
+
     /**
      * Gets all the checks registered for this Validator.
-     * 
+     *
      * Useful for merging two Validators by combining their checks.
-     * 
+     *
      * @return array Returns the array of checks registered with this Validator.
      */
     public function getChecks()
     {
         return $this->checks;
     }
-    
+
     /**
      * Combines the given Validator's check functions with the current's.
-     * 
+     *
      * @param Validator $validator The Validator to merge with the current.
      */
     public function merge(Validator $validator)
@@ -98,13 +98,13 @@ class Validator {
             $this->addCheck($check);
         }
     }
-    
+
     /**
      * Checks that a Validator check function's result is a valid type (string,
      * true, null).
-     * 
+     *
      * @param mixed $result The result from a check function.
-     * 
+     *
      * @throws \Exception Throws an Exception if the return type is not a string,
      *                    true, or null.
      */
