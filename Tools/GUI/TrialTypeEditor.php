@@ -35,7 +35,7 @@
     left:           810px;  
     width:          500px;
     top:            300px;
-    height:         500px;
+    height:         800px;
     padding:        10px;
     opacity:        .9;
     border-radius:  10px;
@@ -377,22 +377,22 @@
         </tr>
         <tr title="how long do you want until the element appears on screen?">
           <td>onset time:</td>
-          <td><input id="onsetId" class="onsetOffset" type="time" value="00:00:00" step=".001" onchange="adjustOnsetTime()"></td>
+          <td><input id="onsetId" class="onsetOffset" type="time" value="00:00:00" step=".001" onchange="adjustTime('onset')"></td>
         </tr>
         <tr title="if you want the element to disappear after a certain amount of time, change from 00:00">
           <td>offset time:</td>
-          <td><input id="offsetId" class="onsetOffset" type="time" value="00:00:00" step=".001" onchange="adjustOffsetTime()"></td>
+          <td><input id="offsetId" class="onsetOffset" type="time" value="00:00:00" step=".001" onchange="adjustTime('offset')"></td>
         </tr>
         <tr>
           <td><input id="deleteButton" type="button" value="delete" class="collectorButton"></td>
         </tr>       
       </table>
-      
     </div>
 
     <div id="keyboardResponses">
       <h1>Keyboard responses</h1>
         accepted keyboard response(s) <input id="acceptedKeyboardResponses" name="acceptedKeyboardResponses" onkeyup="adjustKeyboard()"><br>
+        proceed when an accepted key is pressed <input id="proceedKeyboardResponses" type="checkbox" onchange="adjustKeyboard()"> 
     </div>
 
     
@@ -423,7 +423,7 @@
           </tr>
           <tr>
             <td>Proceed Click</td>
-            <td><input id="proceedId" title="if you want the trial to proceed when you click on this element, check this box" type="checkbox" onclick="adjustProceed()"></td>
+            <td><input id="clickProceedId" title="if you want the trial to proceed when you click on this element, check this box" type="checkbox" onclick="adjustClickProceed()"></td>
           </tr>
         </table>
       </div>
@@ -437,7 +437,41 @@
 
 </form>
 
+<script src="GUI/trialTypeFunctions.js"></script>
+
 <script>
+
+/* Configurations and preparing global variables */
+var elementScale = 8; // config
+
+
+var currentElement      =   0;                                              //assumes that we are working from scratch
+var trialTypeElements   =   <?= $jsontrialTypeElements ?>;                  //the object containing all the trialTypeInformation
+var inputElementType;                                                       //the type of element that is currently selected to be added to the task. "Select" also included
+var elementNo           =   Object.size(trialTypeElements['elements'])-1;   //elements are numbered, e.g. "element0","element1"
+var responseArray       =   trialTypeElements['responses'];
+var noOfResponses       =   0;
+var currentResponseNo   =   0;                                              //this needs to be updated whenever you click on an element;
+var inputButtonArray    =   ["media","text","input","select"];
+
+elementType('select');                                                      // by default you are in select mode, not creating an element
+
+
+
+/* * *
+/ I may want to include more code within document.ready function?
+* * */
+
+$(document).ready(function() {
+  $("#controlPanelRibbon button").click(function() { // when clicking on a button within the control panel ribbon
+    var targetElementID = this.value;                // use the value of the clicked button
+    
+    $("#controlPanelItems > div").hide();            // hide all of the interface in the control panel
+    
+    $(targetElementID).show();                       // except the one for the clicked button
+  });
+});
+
 
 /* structuring code
 
@@ -445,75 +479,38 @@
     - try to pass in objects through functions rather than refer to global variables
 
 */
-function saveTextAsFile() // solution by NatureShade at http://stackoverflow.com/questions/609530/download-textarea-contents-as-a-file-using-only-javascript-no-server-side 
-{
-    var textToWrite = JSON.stringify(trialTypeElements);//Your text input;
-    var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'});
-    var fileNameToSaveAs = "elementArray.json";//Your filename;
-
-    var downloadLink = document.createElement("a");
-    downloadLink.download = fileNameToSaveAs;
-    downloadLink.innerHTML = "Download File";
-    if (window.webkitURL != null)
-    {
-        // Chrome allows the link to be clicked
-        // without actually adding it to the DOM.
-        downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
-    }
-    else
-    {
-        // Firefox requires the link to be added to the DOM
-        // before it can be clicked.
-        downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
-        downloadLink.onclick = destroyClickedElement;
-        downloadLink.style.display = "none";
-        document.body.appendChild(downloadLink);
-    }
-
-    downloadLink.click();
-}
 
 
 
-var elementScale = 8;
-
- $(document).ready(function() {
-  $("#controlPanelRibbon button").click(function() {
-    var targetElementID = this.value;
-    
-    $("#controlPanelItems > div").hide();
-    
-    $(targetElementID).show();
-  });
-});
-
-function hideShowControlPanel(){
-//  $("#controlPanelItems").hide();
-}
-
-function supportClickOutcomes(){
-  console.dir ("test");
-  // this may be developed in version 2 to help users use this functionality; Need a list somewhere of all functions.   
-}; 
-
-var trialTypeElements = <?= $jsontrialTypeElements ?>;
-var inputElementType;
-var elementNo = Object.size(trialTypeElements['elements'])-1;
-
+/* * * * *
+* button clicking functions
+* * * * * */
 
 $("#deleteButton").on("click", function() {
-  alert ("deleting!!!");
-  var element = document.getElementById("element"+currentElement);
-  $("#configurationSettings").hide();
-  element.parentNode.removeChild(element);
-  
-  alert(currentElement);
-  trialTypeElements['elements'].splice(currentElement,1);
-  
-  currentStimType.innerHTML="No Element Selected";
-  alert(elementNo);
-  updateTrialTypeElements();
+  delConf=confirm ("Are you sure you wish to delete?");
+  if (delConf== true){
+    var element = document.getElementById("element"+currentElement);
+    $("#configurationSettings").hide();
+    element.parentNode.removeChild(element);
+    
+    trialTypeElements['elements'].splice(currentElement,1);
+    
+    currentStimType.innerHTML="No Element Selected";
+    updateTrialTypeElements();    
+  }
 });
+
+$("#loadButton").on("click",function(){
+  if(trialTypeLoading.value=="-select a trial type-"){
+    alert ("You must select a trial type to proceed!!");
+  } else {
+    $("#loadButtonAction").click();
+  }
+});
+
+/* * * * 
+* Saving using CTRL S - doesn't suppress event in Firefox
+* * * */
 
 $(window).bind('keydown', function(event) {
     if (event.ctrlKey || event.metaKey) {
@@ -525,14 +522,6 @@ $(window).bind('keydown', function(event) {
             break;
         }
     }
-});
-
-$("#loadButton").on("click",function(){
-  if(trialTypeLoading.value=="-select a trial type-"){
-    alert ("You must select a trial type to proceed!!");
-  } else {
-    $("#loadButtonAction").click();
-  }
 });
 
 function addDeleteFunction(x){
@@ -552,334 +541,143 @@ function addDeleteFunction(x){
   */
 }
 
-function adjustKeyboard(){
-  trialTypeElements['keyboard']={
-    acceptedResponses:acceptedKeyboardResponses.value,
-    proceed:proceedKeyboardResponses.checked,    
-  }
-  updateTrialTypeElements();
-}
-
-function adjustStimulus(){
-  var stimText=stimInputValue.value;
-  document.getElementById("element"+currentElement).innerHTML=stimText;
-  
-//  if(stimText.indexOf('[') != -1 & stimText.indexOf(']') != -1 & stimText.indexOf('[') < stimText.indexOf(']')){ // may need to put checks on this to prevent e.g.s like "[stim]asdfadsf"
-  if(stimText.indexOf('$') != -1 ){  // may need to put checks on this to prevent e.g.s like "[stim]asdfadsf"
-    stimInputValue.style.color="blue";
-  } else {
-    stimInputValue.style.color="black";
-  }
-  
-  //stimText=stimInputValue.value;
-
-  trialTypeElements['elements'][currentElement]['stimulus']=stimText;//update trialTypeElements
-  updateTrialTypeElements();
-
-}
-
-function adjustElementName(){
-  var elementNameText=elementNameValue.value;
-  document.getElementById("element"+currentElement).innerHTML=elementNameText;
-  
-  if(elementNameText.indexOf('$') != -1 ){  // may need to put checks on this to prevent e.g.s like "[stim]asdfadsf"
-    elementNameValue.style.color="blue";
-  } else {
-    elementNameValue.style.color="black";
-  }
-//  elementNameText=stimInputValue.value;
-  trialTypeElements['elements'][currentElement]['elementName']=elementNameText;//update trialTypeElements
-  updateTrialTypeElements();
-}
 
 
-function adjustHeight(){
-  if(Number(yPosId.value) + Number(elementHeight.value) > 100){
-    elementHeight.value = 100-yPosId.value; // temporary correction will still allow user to create something bigger than the screen
-  }
-  newHeight = elementScale*elementHeight.value;
-  newHeight = newHeight +"px";
-  document.getElementById("element"+currentElement).style.height = newHeight;
-  trialTypeElements['elements'][currentElement]['height']=elementHeight.value;//update trialTypeElements
-  updateTrialTypeElements();
-}
 
-function adjustWidth(){
-  if( Number(xPosId.value) + Number(elementWidth.value) > 100){
-    elementWidth.value = 100-xPosId.value; // temporary correction will still allow user to create something bigger than the screen
-  }
-  newWidth = elementScale*elementWidth.value;
-  newWidth = newWidth +"px";
-  document.getElementById("element"+currentElement).style.width = newWidth;
-  trialTypeElements['elements'][currentElement]['width']=elementWidth.value;//update trialTypeElements
-  updateTrialTypeElements();
-}
 
-function adjustXPos(){
-  if( Number(xPosId.value) + Number(elementWidth.value) > 100){
-    xPosId.value= 100- elementWidth.value; // temporary correction will still allow user to create something bigger than the screen
-  }  
-  newXPos=(Number(xPosId.value)*elementScale) +"px";
-  document.getElementById("element"+currentElement).style.left = newXPos; //-xPosId.value; // temporary correction will still allow user to create something bigger than the screen
-  trialTypeElements['elements'][currentElement]['xPos']=xPosId.value;//update trialTypeElements
-  updateTrialTypeElements();
-}
+/* * * * 
+*  loading inputs with trialTypeElements settings 
+*/
 
-function adjustYPos(){
-  if( Number(yPosId.value) + Number(elementHeight.value) > 100){
-    yPosId.value= 100- elementHeight.value; // temporary correction will still allow user to create something bigger than the screen
-  }  
-  newYPos=(Number(yPosId.value)*elementScale) +"px";
-  document.getElementById("element"+currentElement).style.top = newYPos; //-xPosId.value; // temporary correction will still allow user to create something bigger than the screen
-  trialTypeElements['elements'][currentElement]['yPosition']=yPosId.value;//update trialTypeElements
-  updateTrialTypeElements();
-}
 
-function adjustZPos(){
-  trialTypeElements['elements'][currentElement]['zPosition']=zPosId.value;//update trialTypeElements
-  
-  //update style here!!!
-  document.getElementById("element"+currentElement).style.zIndex = zPosId.value;
-  
-  updateTrialTypeElements();
-}
 
-function adjustUserInputType(){
-  var element = document.getElementById("element"+currentElement);
-  element.parentNode.removeChild(element);
-  currentXPos=xPosId.value*5;
-  currentYPos=yPosId.value*5;
-  currentWidth=elementWidth.value*5;
-  currentHeight=elementHeight.value*5;
-  document.getElementById("trialEditor").innerHTML=document.getElementById("trialEditor").innerHTML+"<input class='inputElement' type='"+userInputTypeValue.value+"' id='element"+currentElement+"' style='position: absolute;left:"+currentXPos+"px;top:"+currentYPos+"px; width:"+currentWidth+"px; height:"+currentHeight+"px' onclick='clickElement("+elementNo+")' name='"+currentElement+"' value='"+stimInputValue.value+"' readonly>";  
+/* Keyboard */
+acceptedKeyboardResponses.value     =   trialTypeElements['keyboard'].acceptedResponses;
+proceedKeyboardResponses.checked    =   trialTypeElements['keyboard'].proceed;
 
-  trialTypeElements['elements'][currentElement]['userInputType']=userInputTypeValue.value;
-  updateTrialTypeElements();
-}
+/* response Values code*/
+ 
+  if(typeof(responseArray) != 'undefined'){
 
-// Could probably consolidate this into a single function
-function adjustOnsetTime(){
-  if(onsetId.value=="00:00"){
-    onsetId.style.color="grey";
-  } else {
-    onsetId.style.color="blue";
-  }
-  trialTypeElements['elements'][currentElement]['onsetTime']=onsetId.value;//update trialTypeElements
-  updateTrialTypeElements();
-}
-function adjustOffsetTime(){
-  //alert(offsetId.value);
-  if(offsetId.value=="00:00"){
-    offsetId.style.color="grey";
-  } else {
-    offsetId.style.color="blue";
-  }
-  trialTypeElements['elements'][currentElement]['offsetTime']=offsetId.value;//update trialTypeElements
-  updateTrialTypeElements();
-}
+    updateResponseValuesId("initiate");  
 
-function adjustProceed(){
-  trialTypeElements['elements'][currentElement]['proceed']=proceedId.checked;//update trialTypeElements
-  updateTrialTypeElements();
-}
-
-function adjustOutcomeElement(){
-    trialTypeElements['elements'][currentElement]['clickOutcomesElement']=clickOutcomesElementId.value;
-    updateTrialTypeElements();
-}
-
-function adjustClickOutcomes(){
-  if(clickOutcomesActionId.value=="response"){
-    $("#clickOutcomesElementId").hide();
-    $("#responseValueId").show();
-    $("#respNoSpanId").show();
-    updateResponseValuesId();
-  } else {
-    $("#clickOutcomesElementId").show();
-    populateClickElements();    
-    $("#responseValueId").hide();
-    $("#respNoSpanId").hide();
-    trialTypeElements['elements'][currentElement]['clickOutcomesElement']=clickOutcomesElementId.value;
   }
 
-  trialTypeElements['elements'][currentElement]['clickOutcomesAction']=clickOutcomesActionId.value;//update trialTypeElements
-  updateTrialTypeElements();
-  // could add preview of outcome e.g. temp fade of another element if that's the action
-  currentResponseNo=responseNoId.value;
-
-}
-
-var responseArray=trialTypeElements['responses'];
-
-var noOfResponses = 0;
-
-if(typeof(responseArray) != 'undefined'){
-  initiateResponseArray();
-  
-}
-
-function initiateResponseArray(){ // can this be integrated into code below to avoid duplication
-  responseValuesTidyId.innerHTML=""; // wipe the list  
-  for(i=0; i<responseArray.length;i++){
-    if(responseArray[i].indexOf(elementNameValue.value)!=-1){
-      newRespElement=false;
-    }
-    // could add code to tidy this list here
-    responseValuesTidyId.innerHTML+="Response "+i+":" +responseArray[i]+"<br>";
-  }
-  responseValuesId.value=JSON.stringify(responseArray);  
-}
-
-
-function updateResponseValuesId(){
-  newRespElement=true;
-  responseValuesTidyId.innerHTML=""; // wipe the list  
-  for(i=0; i<responseArray.length;i++){
-    if(responseArray[i].indexOf(elementNameValue.value)!=-1){
-      newRespElement=false;
-    }
-    // could add code to tidy this list here
-    responseValuesTidyId.innerHTML+="Response "+i+":" +responseArray[i]+"<br>";
-  }
-
-  if(newRespElement==true){
-    responseNoId.value=noOfResponses;
-    //noOfResponses++;
-    //will start as response zero
+  function updateResponseValuesId(x){
+    newRespElement=true; // by default
     
-    if(typeof responseArray[0] != 'undefined' ){
-      var tempStartArray=responseArray[0]; // fill in temp array with new value.
-      tempStartArray[responseArray[0].length]=elementNameValue.value;
+    responseValuesTidyId.innerHTML=""; // wipe the list  
+    for(i=0; i<responseArray.length;i++){
+      if(responseArray[i].indexOf(elementNameValue.value)!=-1){
+        newRespElement=false;
+      }
+      responseArray[i]                =   removeNullValues(responseArray[i]);
+      if(responseArray[i].length==0){
+        responseArray.splice(i,1);
+      } else {
+        responseValuesTidyId.innerHTML  +=  "Response "+i+":" +responseArray[i]+"<br>";
+      }
+    }
+
+    if(x!="initiate"){
+      if(newRespElement==true){
+        responseNoId.value=noOfResponses;
+        
+        if(typeof responseArray[0] != 'undefined' ){
+          var tempStartArray=responseArray[0]; // fill in temp array with new value.
+          tempStartArray[responseArray[0].length]=elementNameValue.value;
+        } else {
+          tempStartArray[0]=elementNameValue.value;
+        }
+        
+        responseArray[responseNoId.value] =   tempStartArray;
+        trialTypeElements['responses']    =   responseArray;
+           
+      }
+      
+      trialTypeElements['elements'][currentElement]['responseValue']  =   responseValueId.value;
+      trialTypeElements['elements'][currentElement]['responseNo']     =   responseNoId.value;
+      updateTrialTypeElements();    
+    }
+
+    responseValuesId.value=JSON.stringify(responseArray);
+    
+  }
+
+
+  function adjustResponseOrder(){
+
+    if(typeof responseArray[responseNoId.value] != 'undefined'){
+      newPos=responseArray[responseNoId.value].length;
     } else {
-      tempStartArray[0]=elementNameValue.value;
+      responseArray[responseNoId.value]=[];
+      newPos=0;
     }
-    responseArray[responseNoId.value]=tempStartArray;
-    trialTypeElements['responses']=responseArray;
-    updateTrialTypeElements();
-  }
-  responseValuesId.value=JSON.stringify(responseArray);
-  
-  
-  trialTypeElements['elements'][currentElement]['responseValue']=responseValueId.value;//update trialTypeElements
-  trialTypeElements['elements'][currentElement]['responseNo']=responseNoId.value;//update trialTypeElements
-  updateTrialTypeElements();
-  
-}
-
-var currentResponseNo=0; //this needs to be updated whenever you click on an element;
-
-function adjustResponseOrder(){
-
-  if(typeof responseArray[responseNoId.value] != 'undefined'){
-    newPos=responseArray[responseNoId.value].length;
-  } else {
-    responseArray[responseNoId.value]=[];
-    newPos=0;
-  }
-  
-  //remove from original array
-  
-  for(i=0; i<responseArray.length;i++){
-    if(responseArray[i].indexOf(elementNameValue.value)!=-1){
-      responseArray[i][responseArray[i].indexOf(elementNameValue.value)] = null;
+      
+    for(i=0; i<responseArray.length;i++){
+      if(responseArray[i].indexOf(elementNameValue.value)!=-1){
+        responseArray[i][responseArray[i].indexOf(elementNameValue.value)] = null;
+      }
     }
+    responseArray[responseNoId.value][newPos]=elementNameValue.value;  
+    updateResponseValuesId();  
   }
-  
-  responseArray[responseNoId.value][newPos]=elementNameValue.value;  
-  updateResponseValuesId();
-  
-}
-
-function adjustTextBack(){
-  document.getElementById("element"+currentElement).style.backgroundColor=textBackId.value;
-  if(textBackId.value==""){
-    trialTypeElements['elements'][currentElement]['textBack']="";
-  } else {
-    trialTypeElements['elements'][currentElement]['textBack']=textBackId.value;//update trialTypeElements
-  }
-  updateTrialTypeElements();
-}
-
-function adjustTextColor(){
-  document.getElementById("element"+currentElement).style.color=textColorId.value;
-  if(textColorId.value==""){
-    trialTypeElements['elements'][currentElement]['textColor']="";
-  } else {
-    trialTypeElements['elements'][currentElement]['textColor']=textColorId.value;//update trialTypeElements
-  }
-  updateTrialTypeElements();
-}
-
-function adjustTextFont(){
-  document.getElementById("element"+currentElement).style.fontFamily=textFontId.value;
-  if(textFontId.value==""){
-    trialTypeElements['elements'][currentElement]['textFont']="";
-  } else {
-    trialTypeElements['elements'][currentElement]['textFont']=textFontId.value;//update trialTypeElements
-  }
-  updateTrialTypeElements();
-}
-
-function adjustTextSize(){
-  document.getElementById('element'+currentElement).style.fontSize=(textSizeId.value*3)+"px";
-  
-  trialTypeElements['elements'][currentElement]['textSize']=textSizeId.value;//update trialTypeElements
-    
-  updateTrialTypeElements();
-}
-
 
 function alertMouse(){ // can I break this down into multiple functions
+
   if(inputElementType!="select"){
-    elementNo++;   
-    xPos=Math.round((_mouseX)/elementScale);
-    yPos=Math.round((_mouseY)/elementScale);
+    elementNo++; // we're not selecting an element, so we're creating one, which means we need a new element number.
+    
+    xPos  =  Math.round((_mouseX)/elementScale);
+    yPos  =  Math.round((_mouseY)/elementScale);
     
     if(inputElementType=="input"){
       
-      document.getElementById("trialEditor").innerHTML=document.getElementById("trialEditor").innerHTML+"<input class='inputElement' type='text' id='element"+elementNo+"' style='position: absolute; width:80px; left:"+_mouseX+"px;top:"+_mouseY+"px' onclick='clickElement("+elementNo+")' name='"+inputElementType+"' readonly>";  
+      document.getElementById("trialEditor").innerHTML+=
+        "<input class='inputElement' type='text' id='element"+elementNo+"' style='position: absolute; width:80px; left:"+_mouseX+"px;top:"+_mouseY+"px' onclick='clickElement("+elementNo+")' name='"+inputElementType+"' readonly>";  
       
     } else {
-      document.getElementById("trialEditor").innerHTML=document.getElementById("trialEditor").innerHTML+"<span class='"+inputElementType+"Element' id='element"+elementNo+"' style='position: absolute; left:"+_mouseX+"px;top:"+_mouseY+"px; z-index:"+elementNo+"' onclick='clickElement("+elementNo+")' name='"+inputElementType+"'>"+inputElementType+"</span>";
+      document.getElementById("trialEditor").innerHTML+=
+        "<span class='"+inputElementType+"Element' id='element"+elementNo+"' style='position: absolute; left:"+_mouseX+"px;top:"+_mouseY+"px; z-index:"+elementNo+"' onclick='clickElement("+elementNo+")' name='"+inputElementType+"'>"+inputElementType+"</span>";
     }
     
     //could take this object out - maybe
     trialTypeElements['elements'][elementNo] = {
-      width:20, 
-      height:20,
-      xPos: xPos,
-      yPosition: yPos,
-      zPosition: elementNo,
-      elementName: 'element'+elementNo,
-      stimulus: 'not yet added',
-      response: false,
-      trialElementType: inputElementType, // repetition here
-      clickOutcomesAction:'',
-      clickOutcomesElement:'',
-      proceed: false,
-      };
-      // add attributes depending on what type of element
-      if(inputElementType=="media"){
-        trialTypeElements['elements'][elementNo]['mediaType']="Pic";
-      }
-      if(inputElementType=="text" | inputElementType=="input"){
-        var elemIndex=trialTypeElements['elements'][elementNo]; // to allow more concise coding of the variables
-        elemIndex['textSize']    =    12;
-        elemIndex['textColor']   =    '';
-        elemIndex['textFont']    =    '';
-        elemIndex['textBack']    =    '';
-
-/*        
-        trialTypeElements['elements'][elementNo]['textSize']=12;
-        trialTypeElements['elements'][elementNo]['textColor']="";
-        trialTypeElements['elements'][elementNo]['textFont']="";
-        trialTypeElements['elements'][elementNo]['textBack']="";
- */       
-      }
-      if(inputElementType=="input"){
-        trialTypeElements['elements'][elementNo]['userInputType']="text";
-        trialTypeElements['elements'][elementNo]['height']="5"; //overwriting default height
-      }
+      width                 :   20, 
+      height                :   20,
+      xPos                  :   xPos,
+      yPosition             :   yPos,
+      zPosition             :   elementNo,
+      elementName           :   'element'+elementNo,
+      stimulus              :   'not yet added',
+      response              :   false,
+      trialElementType      :   inputElementType, // repetition here
+      clickOutcomesAction   :   '',
+      clickOutcomesElement  :   '',
+      proceed               :   false,
+    };
+    
+    
+    var elemIndex=trialTypeElements['elements'][elementNo];
+    
+    /* add attributes depending on what type of element */
+    
+    if(inputElementType ==  "media"){
+      elemIndex['mediaType']="Pic"; // default assumption
+    }
+    
+    if(inputElementType ==  "text" | inputElementType=="input"){
+       // to allow more concise coding of the variables
+      elemIndex['textSize']    =    12;
+      elemIndex['textColor']   =    '';
+      elemIndex['textFont']    =    '';
+      elemIndex['textBack']    =    '';
+    }
+    
+    if(inputElementType=="input"){
+      elemIndex['userInputType']="text";
+      elemIndex['height']="5"; //overwriting default height
+    }
        
     updateTrialTypeElements();
   }
@@ -914,11 +712,11 @@ function changeMediaType(){
   // code here to change image cue if we include media images
 }
 
-var currentElement = 0;
 function clickElement(x){
   if(inputElementType=="select"){
-    currentElement = x;
-    thisElement="element"+x;
+    currentElement =  x;            // this is in order to update the global variable "currentElement";
+    thisElement    =  "element"+x;
+    
     for(i=0;i<=elementNo;i++){
       if(i==x){
         //alert (trialTypeElements[i]['inputType']+"ElementSelected");
@@ -938,9 +736,11 @@ function clickElement(x){
     $(targetElementID).show();
 
     loadConfigs(); // this loads the configurations for the editor
+       
     
-    // here's where you distinguish between different element types
-    switch (trialTypeElements['elements'][x]['trialElementType']){
+    currentElementAttributes=trialTypeElements['elements'][x]; // to simplify later code
+    
+    switch (currentElementAttributes['trialElementType']){
       case "media":
         document.getElementById("inputStimTypeCell").innerHTML="Media Type";
         $("#configurationSettings").show();
@@ -965,10 +765,10 @@ function clickElement(x){
             '<td><input type="text" id="textBackId" onkeyup="adjustTextBack()" placeholder="background-color" style="width:50px" value=></td>';
                
         //rather than embed it in above text, i've listed these values below for improved legibility
-        textFontId.value=trialTypeElements['elements'][currentElement].textFont;
-        textColorId.value=trialTypeElements['elements'][currentElement].textColor;
-        textSizeId.value=trialTypeElements['elements'][currentElement].textSize;
-        textBackId.value=trialTypeElements['elements'][currentElement].textBack;
+        textFontId.value   =  currentElementAttributes.textFont;
+        textColorId.value  =  currentElementAttributes.textColor;
+        textSizeId.value   =  currentElementAttributes.textSize;
+        textBackId.value   =  currentElementAttributes.textBack;
       break      
 
       case "input":      
@@ -986,10 +786,10 @@ function clickElement(x){
           '<td><input type="text" id="textBackId" onkeyup="adjustTextBack()" placeholder="background-color" style="width:50px" value=></td>';
 
         //rather than embed it in above text, i've listed these values below for improved legibility
-        textFontId.value=trialTypeElements['elements'][currentElement].textFont;
-        textColorId.value=trialTypeElements['elements'][currentElement].textColor;
-        textSizeId.value=trialTypeElements['elements'][currentElement].textSize;
-        textBackId.value=trialTypeElements['elements'][currentElement].textBack;
+        textFontId.value    =   currentElementAttributes.textFont;
+        textColorId.value   =   currentElementAttributes.textColor;
+        textSizeId.value    =   currentElementAttributes.textSize;
+        textBackId.value    =   currentElementAttributes.textBack;
 
           
         // might add check box and radio in a later release
@@ -1012,195 +812,179 @@ function removeOptions(selectbox) // this solution was from Fabiano at http://st
 
 function loadConfigs(){
 
-  if (trialTypeElements['elements'][currentElement].clickOutcomesAction=="response"){
+  currentElementAttributes=trialTypeElements['elements'][currentElement]; //to make following code more concise
+
+  /* deciding which part of interactionEditor to show  - this may need to be more flexible when more interactive features are added*/ 
+  if (currentElementAttributes.clickOutcomesAction=="response"){
     $("#clickOutcomesElementId").hide();
     $("#responseValueId").show();
     $("#respNoSpanId").show();
     
-    responseValueId.value=trialTypeElements['elements'][currentElement].responseValue;
-    responseNoId.value=trialTypeElements['elements'][currentElement].responseNo;
+    responseValueId.value = currentElementAttributes.responseValue;
+    responseNoId.value    = currentElementAttributes.responseNo;
     updateResponseValuesId();
-    
+  
   } else {
     $("#clickOutcomesElementId").show();
     $("#responseValueId").hide();
     $("#respNoSpanId").hide();
     populateClickElements();    
   }
-    
-  elementNameValue.value=trialTypeElements['elements'][currentElement].elementName;
-  userInputTypeValue.value=trialTypeElements['elements'][currentElement].mediaType;
-  stimInputValue.value=trialTypeElements['elements'][currentElement].stimulus;
-  elementWidth.value=trialTypeElements['elements'][currentElement].width;
-  elementHeight.value=trialTypeElements['elements'][currentElement].height;
-  xPosId.value=trialTypeElements['elements'][currentElement].xPos;
-  yPosId.value=trialTypeElements['elements'][currentElement].yPosition;
-  zPosId.value=trialTypeElements['elements'][currentElement].zPosition;  
-  clickOutcomesActionId.value=trialTypeElements['elements'][currentElement].clickOutcomesAction;
-  
-  
-  //javascript code to select element
-  document.getElementById('clickOutcomesElementId').value= trialTypeElements['elements'][currentElement].clickOutcomesElement; //2;
-//  alert(document.getElementById('clickOutcomesElementId').value);  
 
+  elementNameValue.value        =   currentElementAttributes.elementName;
+  userInputTypeValue.value      =   currentElementAttributes.mediaType;
+  stimInputValue.value          =   currentElementAttributes.stimulus;
+  elementWidth.value            =   currentElementAttributes.width;
+  elementHeight.value           =   currentElementAttributes.height;
+  
+  /* positions */
+  xPosId.value                  =   currentElementAttributes.xPos;
+  yPosId.value                  =   currentElementAttributes.yPosition;
+  zPosId.value                  =   currentElementAttributes.zPosition; 
+  
+  /* click events */
+  clickOutcomesActionId.value   =   currentElementAttributes.clickOutcomesAction;
+  clickOutcomesElementId.value  =   currentElementAttributes.clickOutcomesElement;
+
+  /* Timings */
+  if(typeof(currentElementAttributes.onsetTime) == 'undefined'){
+    onsetId.value           =   "00:00:00.000";
+    onsetId.style.color     =   "grey";
+  } else {    
+    onsetId.value           =   currentElementAttributes.onsetTime; 
+    onsetId.style.color     =   "blue";    
+  }
+  
+  if(typeof(currentElementAttributes.onsetTime) == 'undefined'){
+    offsetId.value           =   "00:00:00.000";
+    offsetId.style.color     =   "grey";
+  } else {
+    offsetId.value           =   currentElementAttributes.offsetTime; 
+    offsetId.style.color     =   "blue";    
+  }  
 }
 
 
 
 function populateClickElements(){
   removeOptions(document.getElementById("clickOutcomesElementId"));   
-  var option = document.createElement("option");
-  option.text = '';
+
+  var option  =   document.createElement("option");
+  option.text =   '';
   document.getElementById("clickOutcomesElementId").add(option);
   clickOutcomesElementId.value= trialTypeElements['elements'][currentElement].clickOutcomesElement;  
-  var arrayNo=0;
   var elementList = [];
+
   for(x in trialTypeElements['elements']){
-    arrayNo++;
-//    alert(trialTypeElements['elements'][x].elementName);
     elementList.push(trialTypeElements['elements'][x].elementName); //may become redundant
-    var option = document.createElement("option");
-    option.text = trialTypeElements['elements'][x].elementName;
-    option.value=trialTypeElements['elements'][x].elementName; //arrayNo;
+    var option    =   document.createElement("option");
+    option.text   =   trialTypeElements['elements'][x].elementName;
+    option.value  =   trialTypeElements['elements'][x].elementName; 
     document.getElementById("clickOutcomesElementId").add(option);
-
-    //alert(elementList);
-    // add x to element array
   }
 }
 
-
-
-var keyboardShow = false;
-var keyboardOptionsShow = false;
-
-function displayHideKeyboard(){
-  if(keyboardOptionsShow == false){
-    $("#keyboardOptions").show();
-    keyboardOptionsShow = true;
-  } else {  
-    $("#keyboardOptions").hide();
-    keyboardOptionsShow = false;
-  }
-}
-
-var inputButtonArray=["media","text","input","select"];
-
-elementType('select');
-
-function elementType(x){
-  inputElementType=x;
-  for(i=0;i<inputButtonArray.length;i++){
-    if(inputButtonArray[i]==x){
-      document.getElementById(inputButtonArray[i]+"Button").className="elementButtonSelected";
-    } else {
-        if (typeof ("element"+i) != 'undefined') { //code to check whether the element exists or not
-          document.getElementById(inputButtonArray[i]+"Button").className="elementButton";
-        }     
+/* Which element type are you adding to the trial */
+  function elementType(x){
+    inputElementType=x;
+    for(i=0;i<inputButtonArray.length;i++){
+      if(inputButtonArray[i]==x){
+        document.getElementById(inputButtonArray[i]+"Button").className="elementButtonSelected";
+      } else {
+          if (typeof ("element"+i) != 'undefined') { //code to check whether the element exists or not
+            document.getElementById(inputButtonArray[i]+"Button").className="elementButton";
+          }     
+      }
     }
+    if(x!="select"){
+      $("#configurationSettings").hide();
+      $("#userInputTypeValue").value="n/a";
+
+      currentStimType.innerHTML="No Element Selected";
+      // for all elements revert formatting to element
+      for(i=0;i<=elementNo;i++){
+          if (typeof trialTypeElements['elements'][i] != 'undefined') { //code to check whether the element exists or not
+            document.getElementById("element"+i).className=trialTypeElements['elements'][i]['trialElementType']+"Element";
+          }      
+      }
+    }  
   }
-  if(x!="select"){
-    $("#configurationSettings").hide();
-    $("#userInputTypeValue").value="n/a";
-
-    currentStimType.innerHTML="No Element Selected";
-//    interactionEditor.innerHTML="No Element Selected";
-    // for all elements revert formatting to element
-    for(i=0;i<=elementNo;i++){
-        if (typeof trialTypeElements['elements'][i] != 'undefined') { //code to check whether the element exists or not
-          document.getElementById("element"+i).className=trialTypeElements['elements'][i]['trialElementType']+"Element";
-        }      
-    }
-  }  
-}
 
 
-function getPositions(ev) {
-if (ev == null) { ev = window.event }
-  var offset = $("#trialEditor").offset(); 
-  _mouseX = ev.pageX;
-  _mouseY = ev.pageY;
+  /* mouse functions */
   
-  /* may use this later */
-  //console.dir(_mouseX);
-  //console.dir(_mouseY);
-  //console.dir(offset);
+  function getPositions(ev) { 
+  if (ev == null) { ev = window.event }
+    var offset = $("#trialEditor").offset(); 
+    _mouseX = ev.pageX;
+    _mouseY = ev.pageY;
+    _mouseX -= offset.left;
+    _mouseY -= offset.top;
+     
+  }
+
+  function mouseMovingFunctions(){
+    if(inputElementType=="select"){
+      
+      /* text element style */
+      var css   =  '.textElement:hover{ border-color        :     black;'+
+                                        'background-color   :     transparent;'+
+                                        'text-shadow        :     -1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000; }';
+      
+      applynewStyle();
  
-  _mouseX -= offset.left;
-  _mouseY -= offset.top;
-   
-}
+      /* media element style */
+      var css   =   '.mediaElement:hover{ border-color      :     white;'+
+                                          'background-color :     green;'+
+                                          'color            :     white }';
+      
+      applynewStyle();
 
-function mouseMovingFunctions(){
-  if(inputElementType=="select"){
-    
-    var css = '.textElement:hover{ border-color: black; background-color:transparent; text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000; }';
-    style = document.createElement('style');
+      
+      /* input elemnt style */
+      var css   =   '.inputElement:hover{ border-color      : green;'+
+                                          'background-color : green;'+
+                                          'color            : blue }';
+                                          
+      applynewStyle();
+   }     
+      
+     
+    /* change all element styles to nonHover version */ 
+    if(inputElementType!="select"){
+      //text elements
+      var css   =   '.textElement:hover{  border-color      :   transparent;'+
+                                          'background-color :   transparent;'+
+                                          'color            :   blue}';
+      applynewStyle();
 
-    if (style.styleSheet) {
-        style.styleSheet.cssText = css;
-    } else {
-        style.appendChild(document.createTextNode(css));
+      //media elements
+      var css   =   '.mediaElement:hover{ border-color      :   blue;'+
+                                          'background-color :   transparent;'+
+                                          'color:blue }';
+      applynewStyle();
+      
+      //input elements
+      var css   =   '.inputElement:hover{ border            :   1px solid #cccccc;'+
+                                          'background-color :   white;'+
+                                          'color            :   white}';
+      applynewStyle();
     }
-    document.getElementsByTagName('head')[0].appendChild(style);
-    
-    
-    var css = '.mediaElement:hover{ border-color: white; background-color:green; color:white }';
-    style = document.createElement('style');
+    //keeping this function local;
+    function applynewStyle(){
+      style = document.createElement('style');
 
-    if (style.styleSheet) {
-        style.styleSheet.cssText = css;
-    } else {
-        style.appendChild(document.createTextNode(css));
+      if (style.styleSheet) {
+          style.styleSheet.cssText = css;
+      } else {
+          style.appendChild(document.createTextNode(css));
+      }
+      document.getElementsByTagName('head')[0].appendChild(style);  
     }
-    document.getElementsByTagName('head')[0].appendChild(style);
-    
-    var css = '.inputElement:hover{ border-color: green; background-color:green; color:blue }';
-    style = document.createElement('style');
-
-    if (style.styleSheet) {
-        style.styleSheet.cssText = css;
-    } else {
-        style.appendChild(document.createTextNode(css));
-    }
-    document.getElementsByTagName('head')[0].appendChild(style);    
   }
+
+
   
-
-  if(inputElementType!="select"){
-    // change all elements to nonHover version
-    var css = '.textElement:hover{ border-color: transparent; background-color:transparent; color:blue }';
-    style = document.createElement('style');
-
-    if (style.styleSheet) {
-        style.styleSheet.cssText = css;
-    } else {
-        style.appendChild(document.createTextNode(css));
-    }
-    document.getElementsByTagName('head')[0].appendChild(style);
-
-    var css = '.mediaElement:hover{ border-color: blue; background-color:transparent; color:blue }';
-    style = document.createElement('style');
-
-    if (style.styleSheet) {
-        style.styleSheet.cssText = css;
-    } else {
-        style.appendChild(document.createTextNode(css));
-    }
-    document.getElementsByTagName('head')[0].appendChild(style);    //unset hover style
-    
-    
-    var css = '.inputElement:hover{ border: 1px solid #cccccc; background-color:white; color:white }';
-    style = document.createElement('style');
-
-    if (style.styleSheet) {
-        style.styleSheet.cssText = css;
-    } else {
-        style.appendChild(document.createTextNode(css));
-    }
-    document.getElementsByTagName('head')[0].appendChild(style);
-  }
-}
 
 var showHideRequestInput=false;
 $("#showRequestOptionsId").on("click", function(){
@@ -1211,8 +995,5 @@ $("#showRequestOptionsId").on("click", function(){
     showHideRequestInput=false;
     $("#newFunctionTable").hide();
   }
-});
-
-  
-  
+});  
 </script>
