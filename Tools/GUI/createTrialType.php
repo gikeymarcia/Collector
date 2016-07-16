@@ -44,120 +44,125 @@
         
     // reading each of the html for each element    
     foreach($newTrialTypeArray as $newTrialTypeElement){
-      if(isset($newTrialTypeElement->onsetTime)){
-        $initialDisplay = "display:none;";
-      } else {
-        $initialDisplay = "";
-      }
-      
-      $elementValue='';
-      if(isset($newTrialTypeElement->responseValue)){
-        $elementValue='data-value="'.$newTrialTypeElement->responseValue.'"';
-      }
-            
-      if(strPos($newTrialTypeElement->stimulus,"$")!==false){
-        /* good place for security checks for use of $? */
-        
-        $newTrialTypeElement->stimulus=str_replace('$','',$newTrialTypeElement->stimulus);
-        $newTrialTypeElement->stimulus='$_EXPT->get("'.$newTrialTypeElement->stimulus.'")';
-        $medStim = $newTrialTypeElement->stimulus;
-      } else {
-        
-        $medStim = "'" . $newTrialTypeElement->stimulus ."'";
-      }
-      
-      if($newTrialTypeElement->trialElementType=="media"){
-
-        if($newTrialTypeElement->mediaType=="Pic"){
-          $mediaPath='$_PATH->get("Media")';
-          $medElementName=$newTrialTypeElement->elementName;
-          
-          $newTrialHtmlCode=$newTrialHtmlCode."  
-            <img id='$medElementName'
-              src='<?= $mediaPath.'/'. $medStim ?>' 
-             $elementValue             
-            style= '$initialDisplay
-                    position:absolute; 
-                    width:".$newTrialTypeElement->width."%;
-                    height:".$newTrialTypeElement->height."%;
-                    left:".$newTrialTypeElement->xPos."%;
-                    top:".$newTrialTypeElement->yPosition."%;
-                    z-index:".$newTrialTypeElement->zPosition.";
-          '>";
+      if($newTrialTypeElement   !=    null){      
+        if(isset($newTrialTypeElement->onsetTime)){
+          $initialDisplay = "display:none;";
+        } else {
+          $initialDisplay = "";
         }
-        if($newTrialTypeElement->mediaType=="Video"){
-          $newTrialHtmlCode=$newTrialHtmlCode.'  
-          <iframe id ="'.$newTrialTypeElement->elementName.'"
-            ' .$elementValue. '          
+        
+        $elementValue='';
+        if(isset($newTrialTypeElement->responseValue)){
+          $elementValue='data-value="'.$newTrialTypeElement->responseValue.'"';
+        }
+              
+        if(strPos($newTrialTypeElement->stimulus,"$")!==false){
+          /* good place for security checks for use of $? */
+          
+          $newTrialTypeElement->stimulus=str_replace('$','',$newTrialTypeElement->stimulus);
+          $newTrialTypeElement->stimulus='$_EXPT->get("'.$newTrialTypeElement->stimulus.'")';
+          $medStim = $newTrialTypeElement->stimulus;
+        } else {
+          
+          $medStim = "'" . $newTrialTypeElement->stimulus ."'";
+        }
+        
+        if($newTrialTypeElement->trialElementType=="media"){
+
+          if($newTrialTypeElement->mediaType=="Pic"){
+            $mediaPath='$_PATH->get("Media")';
+            $medElementName=$newTrialTypeElement->elementName;
+            
+            $newTrialHtmlCode=$newTrialHtmlCode."  
+              <img id='$medElementName'
+                src='<?= $mediaPath.'/'. $medStim ?>' 
+               $elementValue             
+              style= '$initialDisplay
+                      position:absolute; 
+                      width:".$newTrialTypeElement->width."%;
+                      height:".$newTrialTypeElement->height."%;
+                      left:".$newTrialTypeElement->xPos."%;
+                      top:".$newTrialTypeElement->yPosition."%;
+                      z-index:".$newTrialTypeElement->zPosition.";
+            '>";
+          }
+          if($newTrialTypeElement->mediaType=="Video"){
+            $newTrialHtmlCode=$newTrialHtmlCode.'  
+            <iframe id ="'.$newTrialTypeElement->elementName.'"
+              ' .$elementValue. '          
+              style=" '.$initialDisplay.'
+              position:absolute;
+              left:'.$newTrialTypeElement->xPos.'%;
+              top:'.$newTrialTypeElement->yPosition.'%;
+              z-index:'.$newTrialTypeElement->zPosition.';"
+              width="'.$newTrialTypeElement->width.'%" 
+              height="'.$newTrialTypeElement->height.'%" 
+              frameborder="0"
+              webkitallowfullscreen mozallowfullscreen allowfullscreen
+              src=<?= "../Experiments/_Common/'.$newTrialTypeElement->stimulus.'"?>
+              >
+            </iframe>';
+          }
+          if($newTrialTypeElement->mediaType=="Audio"){
+            $newTrialHtmlCode=$newTrialHtmlCode.'  
+            <audio id ="'.$newTrialTypeElement->elementName.'" src="<?= "../Experiments/_Common/'.$newTrialTypeElement->stimulus.'"?>" autoplay>
+            </audio>';
+          }            
+        }
+        
+        //standardising sizes
+        if(isset($newTrialTypeElement->textSize)){
+          $newTrialTypeElement->textSize=$newTrialTypeElement->textSize;
+        }
+        
+        
+        if(strcmp($newTrialTypeElement->trialElementType,"text")==0){
+          $newTrialHtmlCode=$newTrialHtmlCode.'<div id ="'.$newTrialTypeElement->elementName.'" 
+            ' .$elementValue. '
             style=" '.$initialDisplay.'
             position:absolute;
+            width:'.$newTrialTypeElement->width.'%;
+            height:'.$newTrialTypeElement->height.'%;
             left:'.$newTrialTypeElement->xPos.'%;
             top:'.$newTrialTypeElement->yPosition.'%;
-            z-index:'.$newTrialTypeElement->zPosition.';"
-            width="'.$newTrialTypeElement->width.'%" 
-            height="'.$newTrialTypeElement->height.'%" 
-            frameborder="0"
-            webkitallowfullscreen mozallowfullscreen allowfullscreen
-            src=<?= "../Experiments/_Common/'.$newTrialTypeElement->stimulus.'"?>
-            >
-          </iframe>';
+            z-index:'.$newTrialTypeElement->zPosition.';
+            font-size:'.$newTrialTypeElement->textSize.'px;
+            color:'.$newTrialTypeElement->textColor.';
+            background-color:'.$newTrialTypeElement->textBack.';
+            font-family:'.$newTrialTypeElement->textFont.';            
+            "><?= "'.$newTrialTypeElement->stimulus.'"; ?></div>'; //if no $ is present. Or maybe even if a dollar is present
+            
         }
-        if($newTrialTypeElement->mediaType=="Audio"){
-          $newTrialHtmlCode=$newTrialHtmlCode.'  
-          <audio id ="'.$newTrialTypeElement->elementName.'" src="<?= "../Experiments/_Common/'.$newTrialTypeElement->stimulus.'"?>" autoplay>
-          </audio>';
-        }            
-      }
-      
-      //standardising sizes
-      if(isset($newTrialTypeElement->textSize)){
-        $newTrialTypeElement->textSize=3*$newTrialTypeElement->textSize;
-      }
-      
-      
-      if(strcmp($newTrialTypeElement->trialElementType,"text")==0){
-        $newTrialHtmlCode=$newTrialHtmlCode.'<div id ="'.$newTrialTypeElement->elementName.'" 
-          ' .$elementValue. '
-          style=" '.$initialDisplay.'
-          position:absolute;
-          width:'.$newTrialTypeElement->width.'%;
-          height:'.$newTrialTypeElement->height.'%;
-          left:'.$newTrialTypeElement->xPos.'%;
-          top:'.$newTrialTypeElement->yPosition.'%;
-          z-index:'.$newTrialTypeElement->zPosition.';
-          font-size:'.$newTrialTypeElement->textSize.'px;
-          color:'.$newTrialTypeElement->textColor.';
-          background-color:'.$newTrialTypeElement->textBack.';
-          font-family:'.$newTrialTypeElement->textFont.';            
-          "><?= "'.$newTrialTypeElement->stimulus.'"; ?></div>'; //if no $ is present. Or maybe even if a dollar is present
-          
-      }
-      if($newTrialTypeElement->trialElementType=="input"){
-        $newTrialHtmlCode=$newTrialHtmlCode.'<input id ="'.$newTrialTypeElement->elementName.'" 
-          ' .$elementValue. '
-          
-          type="'.$newTrialTypeElement->userInputType.'"
-          
-          style=" '.$initialDisplay.'
-          position:absolute;
-          width:'.$newTrialTypeElement->width.'%;
-          height:'.$newTrialTypeElement->height.'%;
-          left:'.$newTrialTypeElement->xPos.'%;
-          top:'.$newTrialTypeElement->yPosition.'%;
-          z-index:'.$newTrialTypeElement->zPosition.';
-          font-size:'.$newTrialTypeElement->textSize.'px;
-          color:'.$newTrialTypeElement->textColor.';
-          background-color:'.$newTrialTypeElement->textBack.';
-          font-family:'.$newTrialTypeElement->textFont.';
-          " value= "'.$newTrialTypeElement->stimulus.'";   />'; //if no $ is present. Or maybe even if a dollar is present
+        if($newTrialTypeElement->trialElementType=="input"){
+          $newTrialHtmlCode=$newTrialHtmlCode.'<input id ="'.$newTrialTypeElement->elementName.'" 
+            ' .$elementValue. '
+            
+            type="'.$newTrialTypeElement->userInputType.'"
+            
+            style=" '.$initialDisplay.'
+            position:absolute;
+            width:'.$newTrialTypeElement->width.'%;
+            height:'.$newTrialTypeElement->height.'%;
+            left:'.$newTrialTypeElement->xPos.'%;
+            top:'.$newTrialTypeElement->yPosition.'%;
+            z-index:'.$newTrialTypeElement->zPosition.';
+            font-size:'.$newTrialTypeElement->textSize.'px;
+            color:'.$newTrialTypeElement->textColor.';
+            background-color:'.$newTrialTypeElement->textBack.';
+            font-family:'.$newTrialTypeElement->textFont.';
+            " value= "'.$newTrialTypeElement->stimulus.'";   />'; //if no $ is present. Or maybe even if a dollar is present
 
+        }
       }
     }
       // Javascript code is being added here
       $newTrialJSCode="<script>";
       
           foreach($newTrialTypeArray as $newTrialTypeElement){
-            $jsAction='';
+            if($newTrialTypeElement   !=    null){
+            
+              $jsAction='';
+$jsAction='';
             $respPos='';
             $jsResp='';
             $jsProc='';
@@ -211,11 +216,67 @@
               '.$jsResp.'
               '.$jsProc.'
             });'; 
+              $respPos='';
+              $jsResp='';
+              $jsProc='';
+              
+              if($newTrialTypeElement->clickOutcomesAction!=''){
+                //$clickElement='onclick="'.$newTrialTypeElement->elementName.'Click()"';
+                
+                /* Click Actions */
+                // list files in clickActions folder
+                $clickActions = glob('GUI/clickActionsBackend/*.php');
+                foreach ($clickActions as $clickAction){
+                  require ("$clickAction");
+                }
+                
+                           
+                
+                
+                /* Response processing */
+  //              $responseElements=json_decode($responseElements);
+                /*
+                print_r($responseElements[0][0]);
+                echo "br".count($responseElements)."<br>";
+                */
+                for($i=0;$i<count($responseElements);$i++){
+                   // echo "<br> here<br>";
+                  
+                  if(in_array($newTrialTypeElement->elementName,$responseElements[$i])){
+                    
+                    //echo "<br> here<br>";
+                    // code to add to form
+                    //identify position of element in array
+  //                  $respPos=array_search($newTrialTypeElement->elementName,$responseElements);
+                    $jsResp="respArray[$i]=".'$("#'.$newTrialTypeElement->elementName.'").data("value");
+                    updateResp();';                
+                  }                
+                }
+                
+                
+                
 
+                
+              }
+              /* Proceed elements */
+              if($newTrialTypeElement->proceed=="true"){
+                $jsProc="$('form').submit();";
+              }
+
+              $newTrialJSCode=$newTrialJSCode.'
+              $("#'.$newTrialTypeElement->elementName.'").click(function(){
+                '.$jsAction.'
+                '.$jsResp.'
+                '.$jsProc.'
+              });'; 
+
+            }
+            
           }
           
           //currently handling onset and offsets separately - for simplicity
           $jsOnsetCode='';
+          $jsOffsetCode='';
           foreach($newTrialTypeArray as $newTrialTypeElement){
             if(isset($newTrialTypeElement->onsetTime)){
               $splitOnset=explode(":",$newTrialTypeElement->onsetTime);
@@ -229,11 +290,23 @@
               $("#'.$newTrialTypeElement->elementName.'").delay('.$onsetMS.').fadeIn(0);
               ';
             }
+            if(isset($newTrialTypeElement->offsetTime)){
+              $splitOffset=explode(":",$newTrialTypeElement->offsetTime);
+              $offsetMS=24*60*1000*60000*$splitOffset[0]+60*1000*$splitOffset[1]+1000*$splitOffset[2];
+              if (isset($splitOffset[3])){ //ms data is not always present
+                $offsetMS+$splitOffset[3];                
+              }
+              //$newTrialTypeElement->onsetTime=DurationFormatUtils.formatDuration($newTrialTypeElement->onsetTime, "SSS");
+              //time($newTrialTypeElement->onsetTime);
+              $jsOffsetCode=$jsOffsetCode.'
+              $("#'.$newTrialTypeElement->elementName.'").delay('.$offsetMS.').fadeOut(0);
+              ';
+            }
    //         $("#element1").delay(1500).fadeIn(0);
           
           
           }
-          $newTrialJSCode=$newTrialJSCode.$jsOnsetCode;
+          $newTrialJSCode=$newTrialJSCode.$jsOnsetCode.$jsOffsetCode;
 
           
 

@@ -137,7 +137,7 @@ function adjustWidth(){
       $("#clickOutcomesElementId").hide();
       $("#responseValueId").show();
       $("#respNoSpanId").show();
-      updateResponseValuesId();
+      updateClickResponseValues();
     } else {
       $("#clickOutcomesElementId").show();
       populateClickElements();    
@@ -186,7 +186,7 @@ function adjustWidth(){
   }
 
   function adjustTextSize(){
-    document.getElementById('element'+currentElement).style.fontSize=(textSizeId.value*3)+"px";
+    document.getElementById('element'+currentElement).style.fontSize=(textSizeId.value)+"px";
     
     trialTypeElements['elements'][currentElement]['textSize']=textSizeId.value;//update trialTypeElements
       
@@ -210,11 +210,23 @@ function adjustTime(onsetOffset){
 function adjustUserInputType(){
   var element = document.getElementById("element"+currentElement);
   element.parentNode.removeChild(element);
-  currentXPos=xPosId.value*5;
-  currentYPos=yPosId.value*5;
-  currentWidth=elementWidth.value*5;
-  currentHeight=elementHeight.value*5;
-  document.getElementById("trialEditor").innerHTML=document.getElementById("trialEditor").innerHTML+"<input class='inputElement' type='"+userInputTypeValue.value+"' id='element"+currentElement+"' style='position: absolute;left:"+currentXPos+"px;top:"+currentYPos+"px; width:"+currentWidth+"px; height:"+currentHeight+"px' onclick='clickElement("+elementNo+")' name='"+currentElement+"' value='"+stimInputValue.value+"' readonly>";  
+  currentXPos=xPosId.value*elementScale;
+  currentYPos=yPosId.value*elementScale;
+  currentWidth=elementWidth.value*elementScale;
+  currentHeight=elementHeight.value*elementScale;
+  document.getElementById("trialEditor").innerHTML+="<input class='inputElement' type='"+userInputTypeValue.value+"' id='element"+currentElement+"' style='position: absolute;left:"+currentXPos+"px;top:"+currentYPos+"px; width:"+currentWidth+"px; height:"+currentHeight+"px' onclick='clickElement("+elementNo+")' name='"+currentElement+"' value='"+stimInputValue.value+"' readonly>";  
+  
+  document.getElementById('element'+currentElement).style.color             =   textColorId.value;
+  document.getElementById('element'+currentElement).style.fontFamily        =   textFontId.value;
+  document.getElementById('element'+currentElement).style.fontSize          =   (textSizeId.value)+"px";
+  document.getElementById('element'+currentElement).style.backgroundColor   =   textBackId.value;
+          
+          /*
+          currentElementAttributes.textFont = textFontId.value;
+          currentElementAttributes.textSize = textSizeId.value;
+          currentElementAttributes.textBack = textBackId.value;
+          */
+  
 
   trialTypeElements['elements'][currentElement]['userInputType']=userInputTypeValue.value;
   updateTrialTypeElements();
@@ -237,6 +249,5 @@ function removeNullValues(x){
 // future development
 
 function supportClickOutcomes(){
-  console.dir ("test");
   // this may be developed in version 2 to help users use this functionality; Need a list somewhere of all functions.   
 }; 
