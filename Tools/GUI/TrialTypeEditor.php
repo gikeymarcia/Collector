@@ -29,6 +29,11 @@
     display: none;
   }
   
+  input{
+    border-radius : 10px;
+    padding       : 5px;
+  }
+  
   #controlPanel {
     position:       absolute;
     border:         2px solid black;
@@ -194,41 +199,68 @@
   // rename function
   // else scratch 
   
+  $trialTypeElementsPhp;
   
-  //sorting out whether we are working from scratch, have just saved a file, or are loading a file
+  function loadTrialType($filename){
+    
+    global $_DATA;  // would ideally make this an input that could be dynamically altered
+    
+    $file_contents                                        =   file_get_contents("GUI/newTrialTypes/".$filename);
+    $trialTypeElementsPhp                                 =   json_decode($file_contents);
+    $_DATA['trialTypeEditor']['currentTrialTypeName']     =   str_replace('.txt','',$filename);
+    return  ($trialTypeElementsPhp);
+  }
+  
+  function saveTrialType($elementArray){
+  
+    global $_DATA,$_PATH;
+    
+    $trialTypeElementsPhp=json_decode($elementArray);  
+    
+    // Renaming files if task name has changed 
+    if(isset($_DATA['trialTypeEditor']['currentTrialTypeName'])){   // checking if there is there a long term value for the name to check against
+      /* does the new name match the old name*/
+      if(strcmp($_DATA['trialTypeEditor']['currentTrialTypeName'], $trialTypeElementsPhp->trialTypeName)!=0){                 //i.e. a new trialType name
+        if(file_exists("GUI/newTrialTypes/"       .     $_DATA['trialTypeEditor']['currentTrialTypeName'] . ".txt")){
+          unlink("GUI/newTrialTypes/"             .     $_DATA['trialTypeEditor']['currentTrialTypeName'] . ".txt");          //Delete original file here            
+          unlink($_PATH->get('Custom Trial Types')."/". $_DATA['trialTypeEditor']['currentTrialTypeName']  . "/display.php"); //deleting php file
+          rmdir($_PATH->get('Custom Trial Types') ."/". $_DATA['trialTypeEditor']['currentTrialTypeName']);                   //deleting directory
+        }
+        $_DATA['trialTypeEditor']['currentTrialTypeName']=$trialTypeElementsPhp->trialTypeName;                               //identify correct name here
+      }  
+    }
+    
+    // saving backup of task (.txt), schematic of task (.txt) and task (.php)
+    file_put_contents('GUI/newTrialTypes/backup.txt',$elementArray);                                                //creating backup - currently not being used :-\
+    file_put_contents("GUI/newTrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName'].'.txt',$elementArray); //actual act of saving
+    require('createTrialType.php');                                                                                 //php file
+    
+    return $trialTypeElementsPhp;
+  }
+  
+  
+  /*sorting out whether we are working from scratch, have just saved a file, or are loading a file */
+  
+  /* loading */
   if(isset($_POST['loadButton'])){   //load first
-    $file_contents                                    =   file_get_contents("GUI/newTrialTypes/".$_POST['trialTypeLoaded']);
-    $trialTypeElementsPhp                             =   json_decode($file_contents);
-    $_DATA['trialTypeEditor']['currentTrialTypeName'] =   str_replace('.txt','',$_POST['trialTypeLoaded']);#
-    
-  } else {
-    if(!empty($_POST['elementArray'])){ // have just saved
-    
-      $trialTypeElementsPhp=json_decode($_POST['elementArray']);  
-      if(isset($_DATA['trialTypeEditor']['currentTrialTypeName'])){ // Renaming files if task name has changed 
-        if(strcmp($_DATA['trialTypeEditor']['currentTrialTypeName'], $trialTypeElementsPhp->trialTypeName)!=0){ //i.e. a new trialType name
-          if(file_exists("GUI/newTrialTypes/"       .     $_DATA['trialTypeEditor']['currentTrialTypeName'] . ".txt")){
-            unlink("GUI/newTrialTypes/"             .       $_DATA['trialTypeEditor']['currentTrialTypeName'] . ".txt"); //Delete original file here            
-            unlink($_PATH->get('Custom Trial Types')."/".$_DATA['trialTypeEditor']['currentTrialTypeName']."/display.php"); //deleting php file
-            rmdir($_PATH->get('Custom Trial Types') ."/".$_DATA['trialTypeEditor']['currentTrialTypeName']); //deleting directory
-          }
-          $_DATA['trialTypeEditor']['currentTrialTypeName']=$trialTypeElementsPhp->trialTypeName; //identify correct name here
-        }  
-      }
-      
-      // saving backup of task (.txt), schematic of task (.txt) and task (.php)
-      file_put_contents('GUI/newTrialTypes/backup.txt',$_POST['elementArray']);  //creating backup
-      file_put_contents("GUI/newTrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName'].'.txt',$_POST['elementArray']); //actual act of saving
-      require('createTrialType.php');
 
-    } else { // creating a file from scratch 
-      require ("guiClasses.php"); //not sure we need this;  maybe the guiClassed can be tidied up  
-      $trialTypeElementsPhp = new trialTypeElements();        
-      $_DATA['trialTypeEditor']['currentTrialTypeName']='';
+    $trialTypeElementsPhp = loadTrialType($_POST['trialTypeLoaded'],$_DATA['trialTypeEditor']['currentTrialTypeName']);
+  
+  } else {
+    /* saving */
+    if(!empty($_POST['elementArray'])){ // have just saved
+       
+      $trialTypeElementsPhp=saveTrialType($_POST['elementArray']);
+
+    } else { 
+      /* creating a file from scratch */
+      require ("guiClasses.php"); //not sure we need this;  maybe the guiClasses can be tidied up  
+      $trialTypeElementsPhp                               =   new trialTypeElements();        
+      $_DATA['trialTypeEditor']['currentTrialTypeName']   =   '';
     }
   }    
-  $jsontrialTypeElements = json_encode($trialTypeElementsPhp); //to use for javascript manipulations
-  $_DATA['trialTypeEditor']['currentTrialTypeFilename']=$_DATA['trialTypeEditor']['currentTrialTypeName'].".txt";
+  $jsontrialTypeElements                                  =   json_encode($trialTypeElementsPhp);                       //to use for javascript manipulations
+  $_DATA['trialTypeEditor']['currentTrialTypeFilename']   =   $_DATA['trialTypeEditor']['currentTrialTypeName'].".txt";
      
   // list of trial types the user can edit
   if (!is_dir("GUI/newTrialTypes")) {
@@ -285,12 +317,18 @@ echo $_DATA['trialTypeEditor']['currentTrialTypeName']
 
   foreach($trialTypeElementsPhp->elements as $elementKey=>$element){
     if($element!=NULL){ //ideally I'll tidy it up so that there are no null elements 
-      echo "<div id='element$elementKey' class='".$element->trialElementType."Element' 
-               style='position:absolute;
-                width:".($elementScale*$element->width)."px;
-                height:".($elementScale*$element->height)."px;
-                left:".($elementScale*$element->xPos)."px;
-                top:".($elementScale*$element->yPosition)."px;
+      /* identify if input or other type of element */
+      if(isset($element->userInputType)){
+                
+        echo "<input id='element$elementKey' type='".$element->userInputType."'";
+      } else {
+        echo "<div id='element$elementKey' class='".$element->trialElementType."Element'";
+      }
+      echo "    style='position:absolute;
+                width   : ".($elementScale*$element->width)."px;
+                height  : ".($elementScale*$element->height)."px;
+                left    : ".($elementScale*$element->xPosition)."px;
+                top     : ".($elementScale*$element->yPosition)."px;
                 ";
       if (isset($element->textColor)){
         echo "color:$element->textColor;
@@ -298,8 +336,17 @@ echo $_DATA['trialTypeEditor']['currentTrialTypeName']
               background-color:$element->textBack;
               font-size:".($element->textSize)."px;"; // look into this when I've finalised spacing for interfaces
       }
-      echo "' onclick='clickElement($elementKey)'
-               >".$element->stimulus."</div>";      
+      echo "'   onclick       =   'clickElement($elementKey)'";
+      if(isset($element->userInputType)){
+        if($element->userInputType=="Text"){
+          echo "placeholder   =   '".$element->stimulus."' readonly>";
+        } else {  // it's a "Button"
+          echo "value         =   '".$element->stimulus."'>";
+        }
+      }else {
+        // it's not an input, so it's a div we're writing
+        echo ">".$element->stimulus."</div>";        
+      }
     }
   }
   
@@ -488,15 +535,15 @@ $(document).ready(function() {
 * * * * * */
 
 $("#deleteButton").on("click", function() {
-  delConf=confirm ("Are you sure you wish to delete?");
-  if (delConf== true){
+  delConf   =   confirm ("Are you sure you wish to delete?");
+  if (delConf == true){
     var element = document.getElementById("element"+currentElement);
     $("#configurationSettings").hide();
     element.parentNode.removeChild(element);
     
     trialTypeElements['elements'].splice(currentElement,1);
     
-    currentStimType.innerHTML="No Element Selected";
+    currentStimType.innerHTML   =   "No Element Selected";
     updateTrialTypeElements();    
 
     
@@ -518,18 +565,18 @@ $("#loadButton").on("click",function(){
 * * * */
 
 $(window).bind('keydown', function(event) {
-    if (event.ctrlKey || event.metaKey) {
-        switch (String.fromCharCode(event.which).toLowerCase()) {
-        case 's':
-            event.preventDefault();
-            alert('Saving');
-            $("#saveButton").click();
-            break;
-        }
+  if (event.ctrlKey || event.metaKey) {
+    switch (String.fromCharCode(event.which).toLowerCase()) {
+    case 's':
+      event.preventDefault();
+      alert('Saving');
+      $("#saveButton").click();
+      break;
     }
+  }
 });
 
-/*
+/* this function will be added in a later release 
 function addDeleteFunction(x){
   alert ("The ability to have multiple click actions for a single element will be added in a later release");
   
@@ -553,7 +600,6 @@ function addDeleteFunction(x){
 */
 
 
-
   /* Keyboard */
 
   acceptedKeyboardResponses.value     =   trialTypeElements['keyboard'].acceptedResponses;
@@ -567,27 +613,29 @@ function addDeleteFunction(x){
   }
 
   
-  // identifying which response clicking on the element contributes to, e.g. - whether clicking on element1 contributes to Response1,Response2 etc.
+  // identifying which response clicking on the element contributes to, e.g. - whether clicking on element1 contributes to Response1 or Response2
   function updateClickResponseValues(x){
     
     // assume that the element is part of a new response. This will be checked later.
-    newRespElement=true; // by default
+    newRespElement=true;
     
     var currentElementName = $("#elementNameValue").val();
     
     responseValuesTidyId.innerHTML=""; // wipe the list  
+    
+    // check whether the current element is already in the response array
     for(i=0; i<responseArray.length;i++){
       if(responseArray[i].indexOf(currentElementName)!=-1){
-        newRespElement=false;
+        newRespElement=false;      //if it is 
       }
     } 
     
     /* new Element being added to an array */        
-    if(x!="initiate"){                                                    // don't load this at startup
+    if(x!="initiate"){                                                      // don't load this at startup
       
-      if(newRespElement==true & currentElementName!=""){                  // or on first click of an element
-        responseArray[0][responseArray[0].length]=currentElementName;     //add it to the end of the first array in responseArray
-        responseNoId.value=0;                                             // reset response number to zero (as it is being added to the first array)
+      if(newRespElement==true & currentElementName!=""){                    // or on first click of an element
+        responseArray[0][responseArray[0].length] =   currentElementName;   // add it to the end of the first array in responseArray
+        responseNoId.value                        =   0;                    // reset response number to zero (as it is being added to the first array)
       }
     
     }
@@ -625,12 +673,12 @@ function addDeleteFunction(x){
     
     /* adding to array that already exists */
     if(typeof responseArray[responseNoId.value] != 'undefined'){
-      newPos=responseArray[responseNoId.value].length;
+      newPos    =   responseArray[responseNoId.value].length;
     } else {
     
     /* creating a new array within responseArray */    
-      responseArray[responseNoId.value]=[];
-      newPos=0;
+      responseArray[responseNoId.value]   =   [];
+      newPos                              =   0;
     }
       
     /* place null value where the element used to be (before being moved). This is tidied later. */
@@ -642,14 +690,14 @@ function addDeleteFunction(x){
     
     //now that the element's been removed from it's original position, we can add it to the array.
     responseArray[responseNoId.value][newPos]   =   elementNameValue.value;  
-    updateClickResponseValues(); // check if   
+    updateClickResponseValues();                                             
   }
 
   /* adding elements to the trialType or clicking on them for editing */
   
   function alertMouse(){ // can I break this down into multiple functions
 
-    if(inputElementType!="select"){
+    if(inputElementType !=  "select"){
       elementNo++; // we're not selecting an element, so we're creating one, which means we need a new element number.
       
       xPos  =  Math.round((_mouseX)/elementScale);
@@ -661,15 +709,16 @@ function addDeleteFunction(x){
           "<input class='inputElement' type='text' id='element"+elementNo+"' style='position: absolute; width:80px; left:"+_mouseX+"px;top:"+_mouseY+"px' onclick='clickElement("+elementNo+")' name='"+inputElementType+"' readonly>";  
         
       } else {
+        // it is not an input, so can create a span instead //
         document.getElementById("trialEditor").innerHTML+=
           "<span class='"+inputElementType+"Element' id='element"+elementNo+"' style='position: absolute; left:"+_mouseX+"px;top:"+_mouseY+"px; z-index:"+elementNo+"' onclick='clickElement("+elementNo+")' name='"+inputElementType+"'>"+inputElementType+"</span>";
       }
       
-      //could take this object out - maybe
+      // adding properties about new element
       trialTypeElements['elements'][elementNo] = {
         width                 :   20, 
         height                :   20,
-        xPos                  :   xPos,
+        xPosition             :   xPos,
         yPosition             :   yPos,
         zPosition             :   elementNo,
         elementName           :   'element'+elementNo,
@@ -681,13 +730,12 @@ function addDeleteFunction(x){
         proceed               :   false,
       };
       
-      
       var elemIndex=trialTypeElements['elements'][elementNo];
       
       /* add attributes depending on what type of element */
       
       if(inputElementType ==  "media"){
-        elemIndex['mediaType']="Pic"; // default assumption
+        elemIndex['mediaType']   =    "Pic"; // default assumption
       }
       
       if(inputElementType ==  "text" | inputElementType=="input"){
@@ -699,7 +747,7 @@ function addDeleteFunction(x){
       }
       
       if(inputElementType=="input"){
-        elemIndex['userInputType']="text";
+        elemIndex['userInputType']="Text";
         elemIndex['height']="5"; //overwriting default height
       }
          
@@ -823,26 +871,36 @@ function addDeleteFunction(x){
           $("#interactionEditorConfiguration").show();
           document.getElementById('userInputTypeValue').style.visibility="visible";
           currentStimType.innerHTML="Input";
+          textTableSize       =     '<tr id="textTableSizeRow">'+
+                                      '<td>size</td>'+
+                                      '<td><input type="number" id="textSizeId" onchange="adjustTextSize()" value=12 min="1" style="width:50px">px</td><br>'+
+                                    '</tr>';
+          textTableColor      =     '<tr id="textTableColorRow">'+
+                                      '<td>color</td>'+
+                                      '<td><input type="text" id="textColorId" onkeyup="adjustTextColor()" placeholder="e.g. red, #FF0000" ></td>'+
+                                    '</tr>';
+          textTableFont       =     '<tr id="textTableFontRow">'+
+                                      '<td>font</td>'+
+                                      '<td><input type="text" id="textFontId" onkeyup="adjustTextFont()" placeholder="font"></td>'+
+                                    '</tr>';
+          textTableBackColor  =     '<tr id="textTableBackRow">'+
+                                      '<td>background-color</td>'+
+                                      '<td><input type="text" id="textBackId" onkeyup="adjustTextBack()" placeholder="background-color"></td>'+
+                                    '</tr>';
+                            
+          /* if handling text, not button input, then need to remove font color and background-color due to inflexibility of placeholders */
+  
           inputStimSelectCell.innerHTML=
-            '<select id="userInputTypeValue" onchange="adjustUserInputType()"><option>Text</option><option>Button</option></select>'+
+            '<select id="userInputTypeValue" onchange="adjustUserInputType()">'+
+              '<option>Text</option>'+
+              '<option>Button</option>'+
+            '</select>'+
             '</td><br>'+
             '<table>'+
-              '<tr>'+
-                '<td>size</td>'+
-                '<td><input type="number" id="textSizeId" onchange="adjustTextSize()" value=12 min="1" style="width:50px">px</td><br>'+
-              '</tr>'+
-              '<tr>'+
-                '<td>color</td>'+
-                '<td><input type="text" id="textColorId" onkeyup="adjustTextColor()" placeholder="color" ></td>'+
-              '</tr>'+
-              '<tr>'+
-                '<td>font</td>'+
-                '<td><input type="text" id="textFontId" onkeyup="adjustTextFont()" placeholder="font"></td>'+
-              '</tr>'+
-              '<tr>'+
-                '<td>background-color</td>'+
-                '<td><input type="text" id="textBackId" onkeyup="adjustTextBack()" placeholder="background-color"></td>'+
-              '</tr>'+
+              textTableSize+
+              textTableColor+
+              textTableFont+
+              textTableBackColor+
             '</table>';
 
           //rather than embed it in above text, i've listed these values below for improved legibility
@@ -850,8 +908,16 @@ function addDeleteFunction(x){
           textColorId.value         =   currentElementAttributes.textColor;
           textSizeId.value          =   currentElementAttributes.textSize;
           textBackId.value          =   currentElementAttributes.textBack;
-          document.getElementById("userInputTypeValue").value  =   currentElementAttributes.userInputType;
-
+          document.getElementById("userInputTypeValue").value   =   currentElementAttributes.userInputType;
+          
+          if(document.getElementById("userInputTypeValue").value    ==    "Text"){
+            $('#textTableColorRow').hide();
+            $('#textTableBackRow').hide();
+          } else {
+            $('#textTableColorRow').show();
+            $('#textTableBackRow').show();
+          }
+          
             
           // might add check box and radio in a later release
         break      
@@ -861,14 +927,7 @@ function addDeleteFunction(x){
     }
   }
 
-function removeOptions(selectbox) // this solution was from Fabiano at http://stackoverflow.com/questions/3364493/how-do-i-clear-all-options-in-a-dropdown-box
-  {
-    var i;
-    for(i=selectbox.options.length-1;i>=0;i--)
-    {
-        selectbox.remove(i);
-    }
-  }
+  
 
 
 function loadConfigs(){
@@ -899,7 +958,7 @@ function loadConfigs(){
   elementHeight.value           =   currentElementAttributes.height;
   
   /* positions */
-  xPosId.value                  =   currentElementAttributes.xPos;
+  xPosId.value                  =   currentElementAttributes.xPosition;
   yPosId.value                  =   currentElementAttributes.yPosition;
   zPosId.value                  =   currentElementAttributes.zPosition; 
   
@@ -937,7 +996,6 @@ function populateClickElements(){
   var elementList                 =   [];
 
   
-  console.dir(trialTypeElements['elements']);
   for(x in trialTypeElements['elements']){
     
     // here be the bug //
@@ -952,7 +1010,7 @@ function populateClickElements(){
   }
 }
 
-/* Which element type are you adding to the trial */
+  /* Which element type are you adding to the trial */
   function elementType(x){
     inputElementType=x;
     for(i=0;i<inputButtonArray.length;i++){
@@ -1050,18 +1108,16 @@ function populateClickElements(){
       document.getElementsByTagName('head')[0].appendChild(style);  
     }
   }
-
-
   
 
-var showHideRequestInput=false;
-$("#showRequestOptionsId").on("click", function(){
-  if(showHideRequestInput==false){
-    showHideRequestInput=true;
-    $("#newFunctionTable").show();
-  } else {
-    showHideRequestInput=false;
-    $("#newFunctionTable").hide();
-  }
-});  
+  var showHideRequestInput=false;
+  $("#showRequestOptionsId").on("click", function(){
+    if(showHideRequestInput==false){
+      showHideRequestInput=true;
+      $("#newFunctionTable").show();
+    } else {
+      showHideRequestInput=false;
+      $("#newFunctionTable").hide();
+    }
+  });  
 </script>

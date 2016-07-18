@@ -40,7 +40,21 @@ function adjustKeyboard(){
 
 function adjustStimulus(){
   var stimText=stimInputValue.value;
-  document.getElementById("element"+currentElement).innerHTML=stimText;
+  
+  // check if it's a text input - which would mean we change the placeholder, not the text //
+  if (typeof(trialTypeElements['elements'][currentElement]['userInputType'])!="undefined"){
+    
+    if(trialTypeElements['elements'][currentElement]['userInputType']=="Text"){
+      // wipe value (so that user can see placholder) and update placeholder value
+      document.getElementById("element"+currentElement).value         =   '';
+      document.getElementById("element"+currentElement).placeholder   =   stimText;
+    } else {
+      // update value for buttons
+      document.getElementById("element"+currentElement).value         =   stimText;
+    }
+    
+  }
+  document.getElementById("element"+currentElement).innerHTML   =   stimText;
   
   if(stimText.indexOf('$') != -1 ){  // may need to put checks on this to prevent e.g.s like "[stim]asdfadsf"
     stimInputValue.style.color="blue";
@@ -96,7 +110,7 @@ function adjustWidth(){
     }  
     newXPos=(Number(xPosId.value)*elementScale) +"px";
     document.getElementById("element"+currentElement).style.left = newXPos; //-xPosId.value; // temporary correction will still allow user to create something bigger than the screen
-    trialTypeElements['elements'][currentElement]['xPos']=xPosId.value;//update trialTypeElements
+    trialTypeElements['elements'][currentElement]['xPosition']=xPosId.value;//update trialTypeElements
     updateTrialTypeElements();
   }
 
@@ -210,10 +224,10 @@ function adjustTime(onsetOffset){
 function adjustUserInputType(){
   var element = document.getElementById("element"+currentElement);
   element.parentNode.removeChild(element);
-  currentXPos=xPosId.value*elementScale;
-  currentYPos=yPosId.value*elementScale;
-  currentWidth=elementWidth.value*elementScale;
-  currentHeight=elementHeight.value*elementScale;
+  currentXPos   =   xPosId.value        *   elementScale;
+  currentYPos   =   yPosId.value        *   elementScale;
+  currentWidth  =   elementWidth.value  *   elementScale;
+  currentHeight =   elementHeight.value *   elementScale;
   document.getElementById("trialEditor").innerHTML+="<input class='inputElement' type='"+userInputTypeValue.value+"' id='element"+currentElement+"' style='position: absolute;left:"+currentXPos+"px;top:"+currentYPos+"px; width:"+currentWidth+"px; height:"+currentHeight+"px' onclick='clickElement("+elementNo+")' name='"+currentElement+"' value='"+stimInputValue.value+"' readonly>";  
   
   document.getElementById('element'+currentElement).style.color             =   textColorId.value;
@@ -221,29 +235,47 @@ function adjustUserInputType(){
   document.getElementById('element'+currentElement).style.fontSize          =   (textSizeId.value)+"px";
   document.getElementById('element'+currentElement).style.backgroundColor   =   textBackId.value;
           
-          /*
-          currentElementAttributes.textFont = textFontId.value;
-          currentElementAttributes.textSize = textSizeId.value;
-          currentElementAttributes.textBack = textBackId.value;
-          */
   
+  /* hide and show attributes depending on whether it's a text input or now. This is because placeholders (whice are used in text variables) are awkward to color dynamically */
+  if(document.getElementById("userInputTypeValue").value    ==    "Text"){
 
-  trialTypeElements['elements'][currentElement]['userInputType']=userInputTypeValue.value;
+    //  prevent element attributes changing the color on the editor;
+    document.getElementById('element'+currentElement).style.color             =   "grey";
+    document.getElementById('element'+currentElement).style.backgroundColor   =   "white";
+
+    //  hide the attributes themselves
+    $('#textTableColorRow').hide();
+    $('#textTableBackRow').hide();
+  } else {
+    $('#textTableColorRow').show();
+    $('#textTableBackRow').show();
+  }
+  
+  trialTypeElements['elements'][currentElement]['userInputType']  =   userInputTypeValue.value;
   updateTrialTypeElements();
 }
 
 // other functions
 
-/* used for cleaning array of null values*/
-function removeNullValues(x){ 
-  var cleanArray=[];          // only add values that exist to this array (i.e. not NULL)
-  for(j=0; j<x.length;j++){
-    if(x[j]){
-      cleanArray.push(x[j]);  
-    }    
+  /* used for cleaning array of null values*/
+  function removeNullValues(x){ 
+    var cleanArray=[];          // only add values that exist to this array (i.e. not NULL)
+    for(j=0; j<x.length;j++){
+      if(x[j]){
+        cleanArray.push(x[j]);  
+      }    
+    }
+    return cleanArray;
   }
-  return cleanArray;
-}
+
+function removeOptions(selectbox) // this solution was from Fabiano at http://stackoverflow.com/questions/3364493/how-do-i-clear-all-options-in-a-dropdown-box
+  {
+    var i;
+    for(i=selectbox.options.length-1;i>=0;i--)
+    {
+        selectbox.remove(i);
+    }
+  }
 
 
 // future development

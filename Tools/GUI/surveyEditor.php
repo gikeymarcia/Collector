@@ -517,24 +517,24 @@ var stimTable;
         }
     }
     function updateDimensions(hot, addWidth, addHeight) {
-        var addW = addWidth  || 0;
-        var addH = addHeight || 0;
-        
-        var container   = hot.container;
-        var thisSizeBox = $(container).find(".wtHider");
-        
-        var thisWidth  = thisSizeBox.width()+22+addW;
-        var thisHeight = thisSizeBox.height()+22+addH;
-        
-        var thisArea = $(container).closest(".tableArea");
-        
-        thisWidth  = Math.min(thisWidth,  thisArea.width());
-        thisHeight = Math.min(thisHeight, 700);
-        
-        hot.updateSettings({
-            width:  thisWidth,
-            height: thisHeight
-        });
+      var addW = addWidth  || 0;
+      var addH = addHeight || 0;
+      
+      var container   = hot.container;
+      var thisSizeBox = $(container).find(".wtHider");
+      
+      var thisWidth  = thisSizeBox.width()+22+addW;
+      var thisHeight = thisSizeBox.height()+22+addH;
+      
+      var thisArea = $(container).closest(".tableArea");
+      
+      thisWidth  = Math.min(thisWidth,  thisArea.width());
+      thisHeight = Math.min(thisHeight, 600);
+      
+      hot.updateSettings({
+        width:  thisWidth,
+        height: thisHeight
+      });
     }
     function updateDimensionsDelayed(hot, addWidth, addHeight) {
         updateDimensions(hot, addWidth, addHeight);
@@ -543,73 +543,73 @@ var stimTable;
         }, 0);
     }
     function createHoT(container, data) {
-        var table = new Handsontable(container, {
-            data: data,
-            width: 1,
-            height: 1,
-      
-      afterChange: function(changes, source) {
-        updateDimensions(this);
+      var table = new Handsontable(container, {
+        data: data,
+        width: 1,
+        height: 1,
   
-        var middleColEmpty=0;
-        var middleRowEmpty=0;
-        var postEmptyCol=0; //identify if there is a used col after empty one
-        var postEmptyRow=0; // same for rows
+        afterChange: function(changes, source) {
+          updateDimensions(this);
+  
+          var middleColEmpty=0;
+          var middleRowEmpty=0;
+          var postEmptyCol=0; //identify if there is a used col after empty one
+          var postEmptyRow=0; // same for rows
 
-        //identify if repetition has occurred and adjusting value
-        var topRow=[];
-        for (var k=0; k<this.countCols()-1; k++){
-          var cellValue=this.getDataAtCell(0,k);
-          topRow[k]=this.getDataAtCell(0,k);
-          for (l=0; l<k; l++){
-            if (this.getDataAtCell(0,k)==this.getDataAtCell(0,l)){
-              alert ('repetition has occurred!');
-              this.setDataAtCell(0,k,this.getDataAtCell(0,k)+'*');
+          //identify if repetition has occurred and adjusting value
+          var topRow=[];
+          for (var k=0; k<this.countCols()-1; k++){
+            var cellValue=this.getDataAtCell(0,k);
+            topRow[k]=this.getDataAtCell(0,k);
+            for (l=0; l<k; l++){
+              if (this.getDataAtCell(0,k)==this.getDataAtCell(0,l)){
+                alert ('repetition has occurred!');
+                this.setDataAtCell(0,k,this.getDataAtCell(0,k)+'*');
+              }
             }
-          }
                   
-        }
-        
-        //Removing Empty middle columns
-        for (var k=0; k<this.countCols()-1; k++){
-          if (this.isEmptyCol(k)){
-            if (middleColEmpty==0){
-              middleColEmpty=1;
-            }
-          }            
-          if (!this.isEmptyCol(k) & middleColEmpty==1){
-            postEmptyCol =1;
-            alert ("You have an empty column in the middle - Being removed from table!");
-            this.alter("remove_col",k-1); //delete column that is empty 
-            middleColEmpty=0;
-          }            
-        }
-        
-        //Same thing for rows
-        for (var k=0; k<this.countRows()-1; k++){
-          if (this.isEmptyRow(k)){
-            if (middleRowEmpty==0){
-              middleRowEmpty=1;
-            }
-          }            
-          if (!this.isEmptyRow(k) & middleRowEmpty==1){
-            postEmptyRow =1;
-            alert ("You have an empty row in the middle - Being removed from table!");
-            this.alter("remove_row",k-1); //delete column that is empty
-            middleRowEmpty=0;
-          }            
-        }        
-        if(postEmptyCol != 1 ){
-          while(this.countEmptyCols()>1){  
-            this.alter("remove_col",this.countCols); //delete the last col
           }
-        }
-        if(postEmptyRow != 1){
-          while(this.countEmptyRows()>1){  
-            this.alter("remove_row",this.countRows);//delete the last row
+        
+          //Removing Empty middle columns
+          for (var k=0; k<this.countCols()-1; k++){
+            if (this.isEmptyCol(k)){
+              if (middleColEmpty==0){
+                middleColEmpty=1;
+              }
+            }            
+            if (!this.isEmptyCol(k) & middleColEmpty==1){
+              postEmptyCol =1;
+              alert ("You have an empty column in the middle - Being removed from table!");
+              this.alter("remove_col",k-1); //delete column that is empty 
+              middleColEmpty=0;
+            }            
           }
-        }
-      },
+          
+          //Same thing for rows
+          for (var k=0; k<this.countRows()-1; k++){
+            if (this.isEmptyRow(k)){
+              if (middleRowEmpty==0){
+                middleRowEmpty=1;
+              }
+            }            
+            if (!this.isEmptyRow(k) & middleRowEmpty==1){
+              postEmptyRow =1;
+              alert ("You have an empty row in the middle - Being removed from table!");
+              this.alter("remove_row",k-1); //delete column that is empty
+              middleRowEmpty=0;
+            }            
+          }        
+          if(postEmptyCol != 1 ){
+            while(this.countEmptyCols()>1){  
+              this.alter("remove_col",this.countCols); //delete the last col
+            }
+          }
+          if(postEmptyRow != 1){
+            while(this.countEmptyRows()>1){  
+              this.alter("remove_row",this.countRows);//delete the last row
+            }
+          }
+        },
       afterInit: function() {
           updateDimensions(this);
       },

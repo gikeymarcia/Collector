@@ -81,7 +81,7 @@
                       position:absolute; 
                       width:".$newTrialTypeElement->width."%;
                       height:".$newTrialTypeElement->height."%;
-                      left:".$newTrialTypeElement->xPos."%;
+                      left:".$newTrialTypeElement->xPosition."%;
                       top:".$newTrialTypeElement->yPosition."%;
                       z-index:".$newTrialTypeElement->zPosition.";
             '>";
@@ -92,7 +92,7 @@
               ' .$elementValue. '          
               style=" '.$initialDisplay.'
               position:absolute;
-              left:'.$newTrialTypeElement->xPos.'%;
+              left:'.$newTrialTypeElement->xPosition.'%;
               top:'.$newTrialTypeElement->yPosition.'%;
               z-index:'.$newTrialTypeElement->zPosition.';"
               width="'.$newTrialTypeElement->width.'%" 
@@ -123,7 +123,7 @@
             position:absolute;
             width:'.$newTrialTypeElement->width.'%;
             height:'.$newTrialTypeElement->height.'%;
-            left:'.$newTrialTypeElement->xPos.'%;
+            left:'.$newTrialTypeElement->xPosition.'%;
             top:'.$newTrialTypeElement->yPosition.'%;
             z-index:'.$newTrialTypeElement->zPosition.';
             font-size:'.$newTrialTypeElement->textSize.'px;
@@ -140,16 +140,16 @@
             type="'.$newTrialTypeElement->userInputType.'"
             
             style=" '.$initialDisplay.'
-            position:absolute;
-            width:'.$newTrialTypeElement->width.'%;
-            height:'.$newTrialTypeElement->height.'%;
-            left:'.$newTrialTypeElement->xPos.'%;
-            top:'.$newTrialTypeElement->yPosition.'%;
-            z-index:'.$newTrialTypeElement->zPosition.';
-            font-size:'.$newTrialTypeElement->textSize.'px;
-            color:'.$newTrialTypeElement->textColor.';
-            background-color:'.$newTrialTypeElement->textBack.';
-            font-family:'.$newTrialTypeElement->textFont.';
+            position          :   absolute;
+            width             :   '.$newTrialTypeElement->width.'%;
+            height            :   '.$newTrialTypeElement->height.'%;
+            left              :   '.$newTrialTypeElement->xPosition.'%;
+            top               :   '.$newTrialTypeElement->yPosition.'%;
+            z-index           :   '.$newTrialTypeElement->zPosition.';
+            font-size         :   '.$newTrialTypeElement->textSize.'px;
+            color             :   '.$newTrialTypeElement->textColor.';
+            background-color  :   '.$newTrialTypeElement->textBack.';
+            font-family       :   '.$newTrialTypeElement->textFont.';
             " value= "'.$newTrialTypeElement->stimulus.'";   />'; //if no $ is present. Or maybe even if a dollar is present
 
         }
