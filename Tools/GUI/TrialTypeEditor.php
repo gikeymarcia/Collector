@@ -499,11 +499,17 @@ var currentElement      =   0;                                              //as
 var trialTypeElements   =   <?= $jsontrialTypeElements ?>;                  //the object containing all the trialTypeInformation
 var inputElementType;                                                       //the type of element that is currently selected to be added to the task. "Select" also included
 var elementNo           =   Object.size(trialTypeElements['elements'])-1;   //elements are numbered, e.g. "element0","element1"
-var responseArray       =   trialTypeElements['responses'];
 var currentResponseNo   =   0;                                              //this needs to be updated whenever you click on an element;
 var inputButtonArray    =   ["media","text","input","select"];
 
 elementType('select');                                                      // by default you are in select mode, not creating an element
+
+
+if(typeof(trialTypeElements['responses']=='undefined')){
+  trialTypeElements['responses']=[[]];
+}
+var responseArray       =   trialTypeElements['responses'];
+
 
 
 /* * *
@@ -624,14 +630,8 @@ function addDeleteFunction(x){
     responseValuesTidyId.innerHTML=""; // wipe the list
     
     /* new Element being added to an array */        
-    if(x!="initiate"){                                                      // don't load this at startup
-      
-      if(newRespElement==true & currentElementName!=""){                    // or on first click of an element
-        responseArray[0][responseArray[0].length] =   currentElementName;   // add it to the end of the first array in responseArray
-        responseNoId.value                        =   0;                    // reset response number to zero (as it is being added to the first array)
-      }
-    
-    }
+    addNewElementToResponseArray(x,newRespElement,currentElementName);
+
     
     /* clear responseArray of null values and write out array in legible form  */
     for(i=0; i<responseArray.length; i++){    
@@ -644,10 +644,9 @@ function addDeleteFunction(x){
       responseValuesTidyId.innerHTML  +=  "Response "+i+":" +responseArray[i]+"<br>";
       
     }
-    
-    
+   
     /* update trialTypeElements with input values */
-     
+    
     if(x!="initiate"){ // not relevant when initiating page
       trialTypeElements['elements'][currentElement]['responseValue']  =   responseValueId.value;
       trialTypeElements['elements'][currentElement]['responseNo']     =   responseNoId.value;
@@ -668,6 +667,14 @@ function addDeleteFunction(x){
     return true;
   }
 
+  function addNewElementToResponseArray(initiate,newRespElement,currentElementName){
+    if(x!="initiate" && newRespElement && currentElementName!=""){                                                      // don't load this at startup
+      
+        responseArray[0][responseArray[0].length] =   currentElementName;   // add it to the end of the first array in responseArray
+        responseNoId.value                        =   0;                    // reset response number to zero (as it is being added to the first array)
+    
+    }    
+  }
 
   /* adjust position of element within responseArray */
   function adjustResponseOrder(){
