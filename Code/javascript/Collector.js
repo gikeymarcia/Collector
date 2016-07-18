@@ -300,13 +300,11 @@ Collector.Timer.prototype = {
 
     set_timer_function: function() {
         if (typeof performance.now === "function") {
-            return performance.now.bind(window.performance);
+            return function() { return performance.now() }
         } else if(typeof Date.now === "function") {
-            return Date.now.bind(window.Date);
+            return function() { return Date.now() }
         } else {
-            return function() {
-                return new Date().getTime();
-            }
+            return function() { return new Date().getTime() }
         }
     },
 
