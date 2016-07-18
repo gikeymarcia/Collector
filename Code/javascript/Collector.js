@@ -29,7 +29,7 @@ var Collector = {
                 self.inputs.min,
                 self.inputs.max
             );
-            self.page_timer = new this.Timer();
+            self.page_timer = new self.Timer();
             self.page_timer.start();
             self.display_trial();
             self.focus_first_input();
@@ -300,9 +300,9 @@ Collector.Timer.prototype = {
 
     set_timer_function: function() {
         if (typeof performance.now === "function") {
-            return performance.now;
+            return performance.now.bind(window.performance);
         } else if(typeof Date.now === "function") {
-            return Date.now;
+            return Date.now.bind(window.Date);
         } else {
             return function() {
                 return new Date().getTime();
