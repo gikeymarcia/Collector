@@ -616,19 +616,12 @@ function addDeleteFunction(x){
   // identifying which response clicking on the element contributes to, e.g. - whether clicking on element1 contributes to Response1 or Response2
   function updateClickResponseValues(x){
     
-    // assume that the element is part of a new response. This will be checked later.
-    newRespElement=true;
-    
     var currentElementName = $("#elementNameValue").val();
     
-    responseValuesTidyId.innerHTML=""; // wipe the list  
+    // assume that the element is part of a new response. This will be checked later.
+    var newRespElement = checkIfResponseListContainsName(responseArray, currentElementName);
     
-    // check whether the current element is already in the response array
-    for(i=0; i<responseArray.length;i++){
-      if(responseArray[i].indexOf(currentElementName)!=-1){
-        newRespElement=false;      //if it is 
-      }
-    } 
+    responseValuesTidyId.innerHTML=""; // wipe the list
     
     /* new Element being added to an array */        
     if(x!="initiate"){                                                      // don't load this at startup
@@ -639,7 +632,6 @@ function addDeleteFunction(x){
       }
     
     }
-    
     
     /* clear responseArray of null values and write out array in legible form  */
     for(i=0; i<responseArray.length; i++){    
@@ -663,6 +655,17 @@ function addDeleteFunction(x){
     }
     
     $("#responseValuesId").val(JSON.stringify(responseArray));
+  }
+    
+  function checkIfResponseListContainsName(responseArray, currentElementName) {
+    // check whether the current element is already in the response array
+    for(i=0; i<responseArray.length;i++){
+      if(responseArray[i].indexOf(currentElementName)!=-1){
+        return false;      //if it is 
+      }
+    } 
+    
+    return true;
   }
 
 
