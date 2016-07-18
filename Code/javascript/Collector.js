@@ -18,18 +18,19 @@ var Collector = {
             self.apply_force_numeric();
             self.prevent_autocomplete();
             self.prevent_back_nav();
-            self.fit_content();
             self.prepare_to_catch_action_timestamps();
             self.prepare_form_submit();
             self.start_checking_focus();
         });
 
         $(window).load(function() {
+            self.fit_content();
             self.control_timing(
                 self.inputs.min,
                 self.inputs.max
             );
-            self.timestamp = Date.now();
+            self.page_timer = new this.Timer();
+            self.page_timer.start();
             self.display_trial();
             self.focus_first_input();
 
@@ -147,10 +148,8 @@ var Collector = {
         }
     },
 
-    timestamp: null, // is set in control_timing(),
-
     get_elapsed_time: function() {
-        return Date.now() - this.timestamp;
+        return this.page_timer.elapsed();
     },
 
     // Collector.el("property name") will return the jQuery object
@@ -245,6 +244,7 @@ var Collector = {
     Timer: function(timeUp, callback) {
         this.callback = callback;
         this.timeUp = timeUp;
+        this.now = this.set_timer_function();
     },
 
 
@@ -259,8 +259,8 @@ var Collector = {
 
 Collector.Timer.prototype = {
     start: function () {
-        this.goal           = Date.now() + (this.timeUp*1000);
-        this.startTimestamp = Date.now();
+        this.startTimestamp = this.now();
+        this.goal           = this.startTimestamp + (this.timeUp*1000);
         this.stopped = false;
         this.runTimer();
     },
@@ -285,16 +285,29 @@ Collector.Timer.prototype = {
     },
 
     stop: function() {
-        this.error = Date.now() - this.goal;
+        this.end = this.now();
+        this.error = this.end - this.goal;
         this.stopped = true;
     },
 
     remaining: function() {
-        return (this.goal - Date.now());
+        return (this.goal - this.now());
     },
 
     elapsed: function () {
-        return (Date.now() - this.startTimestamp);
+        return (this.now() - this.startTimestamp);
+    },
+
+    set_timer_function: function() {
+        if (typeof performance.now === "function") {
+            return performance.now;
+        } else if(typeof Date.now === "function") {
+            return Date.now;
+        } else {
+            return function() {
+                return new Date().getTime();
+            }
+        }
     },
 
     show: function($showElement, waitTime) {
