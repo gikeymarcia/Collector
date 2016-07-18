@@ -151,7 +151,7 @@ function adjustWidth(){
       $("#clickOutcomesElementId").hide();
       $("#responseValueId").show();
       $("#respNoSpanId").show();
-      updateClickResponseValues();
+      updateClickResponseValues("update",trialTypeElements['responses']);
     } else {
       $("#clickOutcomesElementId").show();
       populateClickElements();    

@@ -463,7 +463,7 @@ echo $_DATA['trialTypeEditor']['currentTrialTypeName']
                 <option></option>
               </select>
               <input id="responseValueId" placeholder="[insert desired value here]" style="display:none" onkeyup="adjustClickOutcomes()">
-              <span id="respNoSpanId" title="If you want multiple elements to contribute to the response, order the responses in the order you want them in the output" style="display:none"> <br>Resp No <input id="responseNoId" type="number" min="0" value="1" style="width:50px" onchange="adjustResponseOrder(); adjustClickOutcomes() ">
+              <span id="respNoSpanId" title="If you want multiple elements to contribute to the response, order the responses in the order you want them in the output" style="display:none"> <br>Resp No <input id="responseNoId" type="number" min="0" value="1" style="width:50px" onchange="adjustResponseOrder(trialTypeElements['responses']); adjustClickOutcomes() ">
               </span>
             </td>
           </tr>   
@@ -505,10 +505,6 @@ var inputButtonArray    =   ["media","text","input","select"];
 elementType('select');                                                      // by default you are in select mode, not creating an element
 
 
-if(typeof(trialTypeElements['responses']=='undefined')){
-  trialTypeElements['responses']=[[]];
-}
-var responseArray       =   trialTypeElements['responses'];
 
 
 
@@ -613,52 +609,42 @@ function addDeleteFunction(x){
 
   
   /* response Values code*/
+
+  if(typeof(trialTypeElements['responses']=='undefined')){
+    trialTypeElements['responses'] = [[]];
+  }
+
   
-  if(typeof(responseArray) != 'undefined'){ // if there is an array already
-    updateClickResponseValues("initiate");  
+  if(typeof(trialTypeElements['responses']) != 'undefined'){ // if there is an array already
+    updateClickResponseValues("initiate",trialTypeElements['responses']);  
   }
 
   
   // identifying which response clicking on the element contributes to, e.g. - whether clicking on element1 contributes to Response1 or Response2
-  function updateClickResponseValues(x){
+  function updateClickResponseValues(initiateUpdate,responseArray){
     
     var currentElementName = $("#elementNameValue").val();
     
-    // assume that the element is part of a new response. This will be checked later.
-    var newRespElement = checkIfResponseListContainsName(responseArray, currentElementName);
-    
-    responseValuesTidyId.innerHTML=""; // wipe the list
-    
-    /* new Element being added to an array */        
-    addNewElementToResponseArray(x,newRespElement,currentElementName);
+    var newRespElement = checkIfResponseListContainsName(responseArray, currentElementName);                        // check if this element is part of new response
 
+    console.dir(responseArray);
     
-    /* clear responseArray of null values and write out array in legible form  */
-    for(i=0; i<responseArray.length; i++){    
-      /* tidying */
-      responseArray[i]  =   removeNullValues(responseArray[i]);
-      
-      /* could add code here to remove blank arrays, but be careful - user may have a blank array in the middle of the response array, which - if deleted, will mess up the order of the arrays. You have been warned. */
-      
-      /* writing out array in Responses area in form that is legible to user */
-      responseValuesTidyId.innerHTML  +=  "Response "+i+":" +responseArray[i]+"<br>";
-      
-    }
+    responseValuesTidyId.innerHTML="";                                                                              // wipe user friendly list of responses associated with elements
+    
+    responseArray = addNewElementToResponseArray(responseArray,initiateUpdate,newRespElement,currentElementName);   // new Element being added to response array         
+
+    responseArray = tidyResponseArray(responseArray);                                                               // remove null values from response array and populates user
+                                                                                                                    // friendly response array
+    
+    trialTypeElements['elements'][currentElement] = updateTrialTypeElementsResponses(trialTypeElements['elements'][currentElement],initiateUpdate);  // update trialTypeElements with input values
    
-    /* update trialTypeElements with input values */
-    
-    if(x!="initiate"){ // not relevant when initiating page
-      trialTypeElements['elements'][currentElement]['responseValue']  =   responseValueId.value;
-      trialTypeElements['elements'][currentElement]['responseNo']     =   responseNoId.value;
-      updateTrialTypeElements();    
-    }
-    
-    $("#responseValuesId").val(JSON.stringify(responseArray));
+    $("#responseValuesId").val(JSON.stringify(responseArray));                                                                        // update the hidden response code that is 
+                                                                                                                                      //used for - apparently nothing anymore...
   }
     
   function checkIfResponseListContainsName(responseArray, currentElementName) {
     // check whether the current element is already in the response array
-    for(i=0; i<responseArray.length;i++){
+    for(var i=0; i<responseArray.length;i++){
       if(responseArray[i].indexOf(currentElementName)!=-1){
         return false;      //if it is 
       }
@@ -667,23 +653,52 @@ function addDeleteFunction(x){
     return true;
   }
 
-  function addNewElementToResponseArray(initiate,newRespElement,currentElementName){
-    if(x!="initiate" && newRespElement && currentElementName!=""){                                                      // don't load this at startup
+  function addNewElementToResponseArray(responseArray,initiate,newRespElement,currentElementName){
+    if(initiate!="initiate" && newRespElement && currentElementName!=""){                                                      // don't load this at startup
       
         responseArray[0][responseArray[0].length] =   currentElementName;   // add it to the end of the first array in responseArray
         responseNoId.value                        =   0;                    // reset response number to zero (as it is being added to the first array)
-    
+
     }    
+    return responseArray;
   }
 
-  /* adjust position of element within responseArray */
-  function adjustResponseOrder(){
+  function tidyResponseArray(responseArray){
 
+    for(i=0; i<responseArray.length; i++){    
+      /* tidying */
+      responseArray[i]  =   removeNullValues(responseArray[i]);
+      
+      /* could add code here to remove blank arrays, but be careful - user may have a blank array in the middle of the response array, which - if deleted, will mess up the order of the arrays. You have been warned. */
+      
+      /* writing out array in Responses area in form that is legible to user */      
+      responseValuesTidyId.innerHTML  +=  "Response "+i+":" +responseArray[i]+"<br>";
+           
+    }
+    
+    return responseArray;
+  
+  }
+
+  function updateTrialTypeElementsResponses(trialTypeElementStem,initiateUpdate){
+
+    if(initiateUpdate!="initiate"){ // not relevant when initiating page
+      trialTypeElementStem['responseValue']  =   responseValueId.value;
+      trialTypeElementStem['responseNo']     =   responseNoId.value;
+      updateTrialTypeElements();    
+    }
+    return trialTypeElementStem;
+  
+  }
+
+  
+  /* adjust position of element within responseArray */
+  function adjustResponseOrder(responseArray){
     var newPos; // the position the element will fit within the array selected. E.g. if the element is added to response 1, newPos will be at the end of response 1.
     
     /* adding to array that already exists */
     if(typeof responseArray[responseNoId.value] != 'undefined'){
-      newPos    =   responseArray[responseNoId.value].length;
+      newPos = responseArray[responseNoId.value].length;
     } else {
     
     /* creating a new array within responseArray */    
@@ -700,7 +715,7 @@ function addDeleteFunction(x){
     
     //now that the element's been removed from it's original position, we can add it to the array.
     responseArray[responseNoId.value][newPos]   =   elementNameValue.value;  
-    updateClickResponseValues();                                             
+    updateClickResponseValues("update",responseArray);                                             
   }
 
   /* adding elements to the trialType or clicking on them for editing */
@@ -952,7 +967,7 @@ function loadConfigs(){
     
     responseValueId.value = currentElementAttributes.responseValue;
     responseNoId.value    = currentElementAttributes.responseNo;
-    updateClickResponseValues();
+    updateClickResponseValues("update",trialTypeElements['responses']);
   
   } else {
     $("#clickOutcomesElementId").show();
