@@ -463,11 +463,11 @@ echo $_DATA['trialTypeEditor']['currentTrialTypeName']
         </tr>
         <tr title="how long do you want until the element appears on screen?">
           <td class="elementProperty">Onset time</td>
-          <td><input id="onsetId" class="onsetOffset" type="text" value="00:00:00" step=".001" onchange="adjustTime('onset')"></td>
+          <td><input id="onsetId" placeholder="seconds" class="onsetOffset" type="text" onkeyup="adjustTime('onset')"></td>
         </tr>
         <tr title="if you want the element to disappear after a certain amount of time, change from 00:00">
           <td class="elementProperty">Offset time</td>
-          <td><input id="offsetId" class="onsetOffset" type="text" value="00:00:00" step=".001" onchange="adjustTime('offset')"></td>
+          <td><input id="offsetId" placeholder="seconds" class="onsetOffset" type="text" onkeyup="adjustTime('offset')"></td>
         </tr>
         <tr>
           <td><input id="deleteButton" type="button" value="delete" class="collectorButton"></td>
@@ -1085,19 +1085,15 @@ function addDeleteFunction(x){
 
     /* Timings */
     if(typeof(currentElementAttributes.onsetTime) == 'undefined'){
-      onsetId.value           =   "00:00:00.000";
-      onsetId.style.color     =   "grey";
+      $('#onsetId').val("");
     } else {    
-      onsetId.value           =   currentElementAttributes.onsetTime; 
-      onsetId.style.color     =   "blue";    
+      $('#onsetId').val(currentElementAttributes.onsetTime);
     }
     
     if(typeof(currentElementAttributes.onsetTime) == 'undefined'){
-      offsetId.value           =   "00:00:00.000";
-      offsetId.style.color     =   "grey";
+      $('#offsetId').val("");
     } else {
-      offsetId.value           =   currentElementAttributes.offsetTime; 
-      offsetId.style.color     =   "blue";    
+      $('#offsetId').val(currentElementAttributes.offsetTime); 
     }  
   }
 

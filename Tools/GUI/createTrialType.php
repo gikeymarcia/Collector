@@ -283,30 +283,22 @@
     }      
   }
           
-  //currently handling onset and offsets separately - for simplicity
+          
+  //handling onset and offsets
   $jsOnsetCode='';
   $jsOffsetCode='';
   foreach($newTrialTypeArray as $newTrialTypeElement){
     if(isset($newTrialTypeElement->onsetTime)){
-      $splitOnset=explode(":",$newTrialTypeElement->onsetTime);
-      $onsetMS=24*60*1000*60000*$splitOnset[0]+60*1000*$splitOnset[1]+1000*$splitOnset[2];
-      if (isset($splitOnset[3])){ //ms data is not always present
-        $onsetMS+$splitOnset[3];                
-      }
-      //$newTrialTypeElement->onsetTime=DurationFormatUtils.formatDuration($newTrialTypeElement->onsetTime, "SSS");
-      //time($newTrialTypeElement->onsetTime);
+      $onsetMS=$newTrialTypeElement->onsetTime*1000;
       $jsOnsetCode=$jsOnsetCode.'
       $("#'.$newTrialTypeElement->elementName.'").delay('.$onsetMS.').fadeIn(0);
       ';
     }
     if(isset($newTrialTypeElement->offsetTime)){
-      $splitOffset=explode(":",$newTrialTypeElement->offsetTime);
-      $offsetMS=24*60*1000*60000*$splitOffset[0]+60*1000*$splitOffset[1]+1000*$splitOffset[2];
-      if (isset($splitOffset[3])){ //ms data is not always present
-        $offsetMS+$splitOffset[3];                
+      $offsetMS=$newTrialTypeElement->offsetTime*1000;
+      if(isset($onsetMS)){
+        $offsetMS-=$onsetMS;
       }
-      //$newTrialTypeElement->onsetTime=DurationFormatUtils.formatDuration($newTrialTypeElement->onsetTime, "SSS");
-      //time($newTrialTypeElement->onsetTime);
       $jsOffsetCode=$jsOffsetCode.'
       $("#'.$newTrialTypeElement->elementName.'").delay('.$offsetMS.').fadeOut(0);
       ';
@@ -315,49 +307,31 @@
   $newTrialJSCode=$newTrialJSCode.$jsOnsetCode.$jsOffsetCode;
 
           
+  //record keyboard responses here
 
-      //record keyboard responses here
-
-      $keyboardResponse='';
-      if(!empty($newTrialTypeInfo->keyboard->acceptedResponses)){
-        $keyboardResponse = "
-        $(window).bind('keydown', function(event) {
-          switch (String.fromCharCode(event.which).toLowerCase()) {";
-          for($i = 0; $i<strlen($newTrialTypeInfo->keyboard->acceptedResponses); $i++){
-            $currentKey=$newTrialTypeInfo->keyboard->acceptedResponses[$i];
-            $keyboardResponse = $keyboardResponse."
-            case '$currentKey':
-                event.preventDefault(); // not sure this is working in firefox
-                response.value='$currentKey'; // change response //";
-                if($newTrialTypeInfo->keyboard->proceed="true"){
-                  $keyboardResponse=$keyboardResponse."
-                  $('form').submit();
-                  ";
-                }
-                
-                "
-                //proceed trial if keyboard response is meant to do so
-                
-                break;            
-            ";
-          }       
-          $keyboardResponse = $keyboardResponse."}
-          });";
-
-      /* Steps:
-        -add "keyboard responses" to newTrialTypeInfo object
-        -go through each character separately.
-          -check whether it's in the "correct keyboard response"
-          
-        
-      /*
-      
-      "textSize": 12,
-      "textColor": "default",
-      "textFont": "default"
-      */
-
-      }
+  $keyboardResponse='';
+  if(!empty($newTrialTypeInfo->keyboard->acceptedResponses)){
+  $keyboardResponse = "
+  $(window).bind('keydown', function(event) {
+    switch (String.fromCharCode(event.which).toLowerCase()) {";
+    for($i = 0; $i<strlen($newTrialTypeInfo->keyboard->acceptedResponses); $i++){
+      $currentKey=$newTrialTypeInfo->keyboard->acceptedResponses[$i];
+      $keyboardResponse = $keyboardResponse."
+      case '$currentKey':
+        event.preventDefault(); // not sure this is working in firefox
+        response.value='$currentKey'; // change response //";
+        if($newTrialTypeInfo->keyboard->proceed="true"){
+          $keyboardResponse=$keyboardResponse."
+          $('form').submit();
+          ";
+        }        
+        $keyboardResponse=$keyboardResponse."   
+        break;            
+      ";
+    }       
+    $keyboardResponse = $keyboardResponse."}
+    });";
+  }
       
   $newTrialJSCode=$newTrialJSCode.$keyboardResponse."
     respArray=[];
