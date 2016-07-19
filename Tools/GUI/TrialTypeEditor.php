@@ -421,6 +421,12 @@ echo $_DATA['trialTypeEditor']['currentTrialTypeName']
           <tr title="If you want to refer to a stimulus list then write '$cue' or '$answer' etc.">
             <td id="inputStimTypeCell" class="elementProperty">Input Type</td>
             <td id="inputStimSelectCell">
+              <select style="padding:5px" id="mediaTypeValue" onchange="changeMediaType()">
+                <option>Pic</option>
+                <option>Audio</option>
+                <option>Video</option>
+              </select>
+            
               <select id="userInputTypeValue" onchange="adjustUserInputType()">
                 <option>Text</option>
                 <option>Button</option> 
@@ -457,11 +463,11 @@ echo $_DATA['trialTypeEditor']['currentTrialTypeName']
         </tr>
         <tr title="how long do you want until the element appears on screen?">
           <td class="elementProperty">Onset time</td>
-          <td><input id="onsetId" class="onsetOffset" type="time" value="00:00:00" step=".001" onchange="adjustTime('onset')"></td>
+          <td><input id="onsetId" class="onsetOffset" type="text" value="00:00:00" step=".001" onchange="adjustTime('onset')"></td>
         </tr>
         <tr title="if you want the element to disappear after a certain amount of time, change from 00:00">
           <td class="elementProperty">Offset time</td>
-          <td><input id="offsetId" class="onsetOffset" type="time" value="00:00:00" step=".001" onchange="adjustTime('offset')"></td>
+          <td><input id="offsetId" class="onsetOffset" type="text" value="00:00:00" step=".001" onchange="adjustTime('offset')"></td>
         </tr>
         <tr>
           <td><input id="deleteButton" type="button" value="delete" class="collectorButton"></td>
@@ -857,7 +863,7 @@ function addDeleteFunction(x){
   }
 
   function changeMediaType(){
-    trialTypeElements['elements'][currentElement]['mediaType']  =   userInputTypeValue.value;
+    trialTypeElements['elements'][currentElement]['mediaType']  =   mediaTypeValue.value;
     updateTrialTypeElements();
     // code here to change image cue if we include media images
   }
@@ -914,18 +920,18 @@ function addDeleteFunction(x){
         $("#interactionEditorConfiguration").show();
         document.getElementById('userInputTypeValue').style.visibility="hidden";
         currentStimType.innerHTML="Media";
-        inputStimSelectCell.innerHTML='<select id="userInputTypeValue" onchange="changeMediaType()"><option>Pic</option><option>Audio</option><option>Video</option></select>';
+//        inputStimSelectCell.innerHTML='<select style="padding:5px" id="userInputTypeValue" onchange="changeMediaType()"><option>Pic</option><option>Audio</option><option>Video</option></select>';
       break
 
       case "text":
         $("#displaySettings").show();
         $("#interactionEditorConfiguration").show();
-        document.getElementById('userInputTypeValue').style.visibility="hidden";
+        document.getElementById('mediaTypeValue').style.visibility="hidden";
         currentStimType.innerHTML="Text";
         document.getElementById("inputStimTypeCell").innerHTML="Text properties";
         // userInputTypeValue is being used for both media and input types - this could probably be tidier by keeping them separate
         inputStimSelectCell.innerHTML=
-          '<input id="userInputTypeValue" style="display:none">'+
+          '<input id="mediaTypeValue" style="display:none">'+
           '<table>'+ 
             '<tr>'+
               '<td>font size</td>'+
@@ -956,7 +962,8 @@ function addDeleteFunction(x){
       case "input":      
         document.getElementById("inputStimTypeCell").innerHTML="Input Type";
         $("#displaySettings").show();
-        $("#interactionEditorConfiguration").show();
+        $("#interactionEditorConfiguration").show();        
+        document.getElementById('mediaTypeValue').style.visibility="invisible";
         document.getElementById('userInputTypeValue').style.visibility="visible";
         currentStimType.innerHTML="Input";
         textTableSize       =     '<tr id="textTableSizeRow">'+
@@ -1017,6 +1024,8 @@ function addDeleteFunction(x){
 
     currentElementAttributes=trialTypeElements['elements'][currentElement]; //to make following code more concise
 
+    console.dir(currentElementAttributes.mediaType);
+        
     /* deciding which part of interactionEditor to show  - this may need to be more flexible when more interactive features are added*/ 
     if (currentElementAttributes.clickOutcomesAction=="response"){
       $("#clickOutcomesElementId").hide();
@@ -1043,7 +1052,24 @@ function addDeleteFunction(x){
     }
 
     elementNameValue.value        =   currentElementAttributes.elementName;
-    userInputTypeValue.value      =   currentElementAttributes.mediaType;
+    
+    if(typeof(currentElementAttributes.mediaType)!="undefined"){
+    
+      console.dir(currentElementAttributes.mediaType);
+      console.dir(mediaTypeValue.value);
+
+      mediaTypeValue.value      =   currentElementAttributes.mediaType;
+      
+      console.dir(currentElementAttributes.mediaType);
+      console.dir(mediaTypeValue.value);
+
+    }
+    
+    if(typeof(currentElementAttributes.userInputType)!="undefined"){
+      userInputTypeValue.value      =   currentElementAttributes.userInputType;
+    }
+    
+    
     stimInputValue.value          =   currentElementAttributes.stimulus;
     elementWidth.value            =   currentElementAttributes.width;
     elementHeight.value           =   currentElementAttributes.height;

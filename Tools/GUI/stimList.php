@@ -66,7 +66,7 @@
  
  
 	// need to match 
-	$acceptedFileTypes = array("jpg","png","jpeg","gif","mp4"); //this is copied in the upload file - may want to reduce this to a session variable.
+	$acceptedFileTypes = array("jpg","png","jpeg","gif","mp4","flv","mp3"); //this is copied in the upload file - may want to reduce this to a session variable.
     ?>  
     
   
