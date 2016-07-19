@@ -29,22 +29,38 @@
     display: none;
   }
   
+  h1{
+    color       : grey;
+    font-style  : bold;
+    text-shadow : 0px 1px 0px rgba(255,255,255,.3), 0px -1px 0px rgba(0,0,0,.7);
+  }
+  
   input{
     border-radius : 10px;
     padding       : 5px;
   }
   
+  .elementProperty{
+    padding     : 5px;
+    font-family : arial;
+    text-shadow : 0px 1.5px 0px rgba(255,255,255,.3), 0px -1.5px 0px rgba(0,0,0,.7);
+    font-size   : 18px;
+    color  : grey;
+  }
+  
+  
   #controlPanel {
-    position:       absolute;
-    border:         2px solid black;
-    left:           810px;  
-    width:          500px;
-    top:            300px;
-    height:         800px;
-    padding:        10px;
-    opacity:        .9;
-    border-radius:  10px;
-    z-index:        5;
+    position         :  absolute;
+    border           :  2px solid black;
+    left             :  810px;  
+    width            :  500px;
+    top              :  300px;
+    height           :  800px;
+    padding          :  10px;
+    opacity          :  .9;
+    border-radius    :  10px;
+    z-index          :  5;
+    background-color :  #cfebfd;
   }
   
   #controlPanelRibbon {
@@ -139,6 +155,8 @@
     color:black;
   }
   
+
+  
   .inputElement{
     border:1px solid #cccccc;
   }
@@ -211,11 +229,21 @@
     return  ($trialTypeElementsPhp);
   }
   
+  
+  
+  
   function saveTrialType($elementArray){
   
-    global $_DATA,$_PATH;
+    global $_DATA,$_PATH,$_POST;
     
     $trialTypeElementsPhp=json_decode($elementArray);  
+        
+  
+    /*
+    if(!isset($trialTypeElementsPhp->trialTypeName)){
+      $trialTypeElementsPhp->trialTypeName=$_POST['trialTypeName'];
+    }
+    */
     
     // Renaming files if task name has changed 
     if(isset($_DATA['trialTypeEditor']['currentTrialTypeName'])){   // checking if there is there a long term value for the name to check against
@@ -231,6 +259,8 @@
     }
     
     // saving backup of task (.txt), schematic of task (.txt) and task (.php)
+    
+    
     file_put_contents('GUI/newTrialTypes/backup.txt',$elementArray);                                                //creating backup - currently not being used :-\
     file_put_contents("GUI/newTrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName'].'.txt',$elementArray); //actual act of saving
     require('createTrialType.php');                                                                                 //php file
@@ -269,6 +299,8 @@
       $trialTypesList = scandir("GUI/newTrialTypes");
       $trialTypesList = array_slice($trialTypesList,2);
   }
+  
+//  var_dump($trialTypeElementsPhp); // so not in the code that is passed to javascript
   ?>
 
 <form method="post">
@@ -311,7 +343,7 @@ echo $_DATA['trialTypeEditor']['currentTrialTypeName']
 
     </div>
 
-  <div id="trialEditor" onMouseMove="mouseMovingFunctions()" onclick="getPositions(); alertMouse()">
+  <div id="trialEditor" onMouseMove="mouseMovingFunctions()" onclick="getPositions(); tryCreateElement()">
 
 <?php
 
@@ -361,13 +393,8 @@ echo $_DATA['trialTypeEditor']['currentTrialTypeName']
 ?>
 </div>
 
-<!-- Bootstrap alerts !-->
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"> <!-- this is redundant, helper bar is a normal div !-->
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
 <!-- the helper bar !-->
-<div id="controlPanel" class="alert-success">
+<div id="controlPanel">
   <div id="controlPanelRibbon">
     <button type="button" class="collectorButton" value="#displayEditor"      style="display:none"  id="displayEditorButton">Display </button>
     <button type="button" class="collectorButton" value="#interactionEditor"  style="display:none"  id="interactionEditorButton">Interaction </button>
@@ -377,18 +404,22 @@ echo $_DATA['trialTypeEditor']['currentTrialTypeName']
   
   
   <div id="controlPanelItems">
-  <div id = "responseInputs">
-    <h2> <b>Click Responses</b> that you have coded </h2>
-    <textarea name="responseValues" id="responseValuesId" style="display:none" readonly></textarea>
-    <div id="responseValuesTidyId"></div>
-  </div>
+    <div id = "responseInputs">
+      <h1> <b>Click Responses</b> that you have coded </h2>
+      <textarea name="responseValues" id="responseValuesId" style="display:none"></textarea>
+      <div id="responseValuesTidyId" class="elementProperty"></div>
+    </div>
 
     <div id="displayEditor">
       <h1>Display editor <br><span style="font-size:20px" id="currentStimType">No Element Selected</span></h1>
-      <table id="configurationSettings" style="display:none">
-        <tr title="we may allow editing of element names in a later release but without careful coding it can make code break easily"><td>Element Name</td><td><input type="text" id="elementNameValue" onkeyup="adjustElementName()" readonly style="background-color:#d3d3d3"></td><tr>
+      <table id="displaySettings" style="display:none">
+        <tr title="we may allow editing of element names in a later release but without careful coding it can make code break easily">
+          <td class="elementProperty">Element Name</td>
+          <td><input type="text" id="elementNameValue" onkeyup="adjustElementName()" readonly style="background-color:#d3d3d3"></td>
+        </tr>
         <div id="userInputSettings">
-          <tr title="If you want to refer to a stimulus list then write '[stimulus1]' or '[stimulus2]' etc."><td id="inputStimTypeCell">Input Type:</td>
+          <tr title="If you want to refer to a stimulus list then write '$cue' or '$answer' etc.">
+            <td id="inputStimTypeCell" class="elementProperty">Input Type</td>
             <td id="inputStimSelectCell">
               <select id="userInputTypeValue" onchange="adjustUserInputType()">
                 <option>Text</option>
@@ -399,37 +430,37 @@ echo $_DATA['trialTypeEditor']['currentTrialTypeName']
         </div>
         
         <tr title="If you want to refer to a stimulus list then write '[stimulus1]' or '[stimulus2]' etc.">
-          <td>Stimulus:</td>
+          <td class="elementProperty">Stimulus</td>
           <td><input id="stimInputValue" type="text" onkeyup="adjustStimulus()"></td>
         </tr>
         <tr>
-          <td>Width:</td><td><input id="elementWidth" type="number" value="20" min="1" max="100" onchange="adjustWidth()">%</td>
+          <td class="elementProperty">Width</td><td><input id="elementWidth" type="number" value="20" min="1" max="100" onchange="adjustWidth()">%</td>
           <td></td>
         </tr>
         <tr>
-          <td>Height:</td><td><input id="elementHeight" type="number" value="20" min="1" max="100" onchange="adjustHeight()">%</td>
+          <td class="elementProperty">Height</td><td><input id="elementHeight" type="number" value="20" min="1" max="100" onchange="adjustHeight()">%</td>
           <td></td>
         </tr>
         <tr title="this position is based on the left of the element">
-          <td>X-Position:</td>
+          <td class="elementProperty">X-Position</td>
           <td><input id="xPosId" type="number" min="1" max="100" step="1" onchange="adjustXPos()">%</td>
           <td></td>
         </tr>
         <tr title="this position is based on the top of the element">
-          <td>Y-Position:</td>
+          <td class="elementProperty">Y-Position</td>
           <td><input id="yPosId" type="number" min="1" max="100" step="1" onchange="adjustYPos()">%</td>
           <td></td>
         </tr>
         <tr title="change this value to bring the element to forward or backward (to allow it to be on top of or behind other elements">
-          <td>Z-Position:</td>
+          <td class="elementProperty">Z-Position</td>
           <td><input id="zPosId" type="number" step="1" min="0" onchange="adjustZPos()"></td>
         </tr>
         <tr title="how long do you want until the element appears on screen?">
-          <td>onset time:</td>
+          <td class="elementProperty">Onset time</td>
           <td><input id="onsetId" class="onsetOffset" type="time" value="00:00:00" step=".001" onchange="adjustTime('onset')"></td>
         </tr>
         <tr title="if you want the element to disappear after a certain amount of time, change from 00:00">
-          <td>offset time:</td>
+          <td class="elementProperty">Offset time</td>
           <td><input id="offsetId" class="onsetOffset" type="time" value="00:00:00" step=".001" onchange="adjustTime('offset')"></td>
         </tr>
         <tr>
@@ -451,7 +482,7 @@ echo $_DATA['trialTypeEditor']['currentTrialTypeName']
       <div id="interactionEditorConfiguration"> 
         <table>
           <tr title="What actions to other elements do you want when clicking on this element? E.G. hide'(element1)'">
-            <td>Click outcomes:</td>
+            <td class="elementProperty">Click outcomes:</td>
             <td>
               <select id="clickOutcomesActionId" onchange="adjustClickOutcomes(); supportClickOutcomes()">
                 <option></option>
@@ -471,7 +502,7 @@ echo $_DATA['trialTypeEditor']['currentTrialTypeName']
          <!--   <td> <input type="button" class="collectorButton" id="addDeleteFunctionButton0" value="Add Function" onclick="addDeleteFunction(0)"> </td> !-->
           </tr>
           <tr>
-            <td>Proceed Click</td>
+            <td class="elementProperty">Proceed Click</td>
             <td><input id="clickProceedId" title="if you want the trial to proceed when you click on this element, check this box" type="checkbox" onclick="adjustClickProceed()"></td>
           </tr>
         </table>
@@ -519,7 +550,16 @@ $(document).ready(function() {
     $("#controlPanelItems > div").hide();            // hide all of the interface in the control panel
     
     $(targetElementID).show();                       // except the one for the clicked button
+    
   });
+  
+  // initiating response array once the page is loaded
+  if(typeof(trialTypeElements['responses']=='undefined')){
+    trialTypeElements['responses'] = [[]];
+  } else {
+    updateClickResponseValues("initiate",trialTypeElements['responses']);    
+  }
+  
 });
 
 
@@ -540,7 +580,7 @@ $("#deleteButton").on("click", function() {
   delConf   =   confirm ("Are you sure you wish to delete?");
   if (delConf == true){
     var element = document.getElementById("element"+currentElement);
-    $("#configurationSettings").hide();
+    $("#displaySettings").hide();
     element.parentNode.removeChild(element);
     
     trialTypeElements['elements'].splice(currentElement,1);
@@ -608,31 +648,20 @@ function addDeleteFunction(x){
   proceedKeyboardResponses.checked    =   trialTypeElements['keyboard'].proceed;
 
   
-  /* response Values code*/
 
-  if(typeof(trialTypeElements['responses']=='undefined')){
-    trialTypeElements['responses'] = [[]];
-  }
-
-  
-  if(typeof(trialTypeElements['responses']) != 'undefined'){ // if there is an array already
-    updateClickResponseValues("initiate",trialTypeElements['responses']);  
-  }
-
-  
   // identifying which response clicking on the element contributes to, e.g. - whether clicking on element1 contributes to Response1 or Response2
   function updateClickResponseValues(initiateUpdate,responseArray){
     
     var currentElementName = $("#elementNameValue").val();
     
     var newRespElement = checkIfResponseListContainsName(responseArray, currentElementName);                        // check if this element is part of new response
-
-    console.dir(responseArray);
     
     responseValuesTidyId.innerHTML="";                                                                              // wipe user friendly list of responses associated with elements
     
+    
     responseArray = addNewElementToResponseArray(responseArray,initiateUpdate,newRespElement,currentElementName);   // new Element being added to response array         
 
+    
     responseArray = tidyResponseArray(responseArray);                                                               // remove null values from response array and populates user
                                                                                                                     // friendly response array
     
@@ -640,6 +669,7 @@ function addDeleteFunction(x){
    
     $("#responseValuesId").val(JSON.stringify(responseArray));                                                                        // update the hidden response code that is 
                                                                                                                                       //used for - apparently nothing anymore...
+    
   }
     
   function checkIfResponseListContainsName(responseArray, currentElementName) {
@@ -664,7 +694,7 @@ function addDeleteFunction(x){
   }
 
   function tidyResponseArray(responseArray){
-
+    
     for(i=0; i<responseArray.length; i++){    
       /* tidying */
       responseArray[i]  =   removeNullValues(responseArray[i]);
@@ -694,8 +724,10 @@ function addDeleteFunction(x){
   
   /* adjust position of element within responseArray */
   function adjustResponseOrder(responseArray){
+       
     var newPos; // the position the element will fit within the array selected. E.g. if the element is added to response 1, newPos will be at the end of response 1.
     
+    // add to array that exists or create a new array
     /* adding to array that already exists */
     if(typeof responseArray[responseNoId.value] != 'undefined'){
       newPos = responseArray[responseNoId.value].length;
@@ -718,47 +750,21 @@ function addDeleteFunction(x){
     updateClickResponseValues("update",responseArray);                                             
   }
 
-  /* adding elements to the trialType or clicking on them for editing */
-  
-  function alertMouse(){ // can I break this down into multiple functions
-
+  /* adding elements to the trialType if not clicking on them for editing */
+  function tryCreateElement(){        
     if(inputElementType !=  "select"){
+
       elementNo++; // we're not selecting an element, so we're creating one, which means we need a new element number.
       
       xPos  =  Math.round((_mouseX)/elementScale);
       yPos  =  Math.round((_mouseY)/elementScale);
       
-      if(inputElementType=="input"){
-        
-        document.getElementById("trialEditor").innerHTML+=
-          "<input class='inputElement' type='text' id='element"+elementNo+"' style='position: absolute; width:80px; left:"+_mouseX+"px;top:"+_mouseY+"px' onclick='clickElement("+elementNo+")' name='"+inputElementType+"' readonly>";  
-        
-      } else {
-        // it is not an input, so can create a span instead //
-        document.getElementById("trialEditor").innerHTML+=
-          "<span class='"+inputElementType+"Element' id='element"+elementNo+"' style='position: absolute; left:"+_mouseX+"px;top:"+_mouseY+"px; z-index:"+elementNo+"' onclick='clickElement("+elementNo+")' name='"+inputElementType+"'>"+inputElementType+"</span>";
-      }
-      
-      // adding properties about new element
-      trialTypeElements['elements'][elementNo] = {
-        width                 :   20, 
-        height                :   20,
-        xPosition             :   xPos,
-        yPosition             :   yPos,
-        zPosition             :   elementNo,
-        elementName           :   'element'+elementNo,
-        stimulus              :   'not yet added',
-        response              :   false,
-        trialElementType      :   inputElementType, // repetition here
-        clickOutcomesAction   :   '',
-        clickOutcomesElement  :   '',
-        proceed               :   false,
-      };
-      
+      createElementFunction();                          //  add new element to trialType 
+      populateDefaultValues();                          //  add default values to this new element
+            
       var elemIndex=trialTypeElements['elements'][elementNo];
       
       /* add attributes depending on what type of element */
-      
       if(inputElementType ==  "media"){
         elemIndex['mediaType']   =    "Pic"; // default assumption
       }
@@ -772,40 +778,82 @@ function addDeleteFunction(x){
       }
       
       if(inputElementType=="input"){
-        elemIndex['userInputType']="Text";
-        elemIndex['height']="5"; //overwriting default height
+        elemIndex['userInputType']  = "Text";
+        elemIndex['height']         = "5"; //overwriting default height
       }
          
       updateTrialTypeElements();
     }
   }
+  
+  function createElementFunction(){
+
+    if(inputElementType=="input"){
+      
+      document.getElementById("trialEditor").innerHTML+=
+        "<input class='inputElement' type='text' id='element"+elementNo+"' style='position: absolute; width:"+elementScale*20+"px; left:"+_mouseX+"px;top:"+_mouseY+"px' onclick='clickElement("+elementNo+")' name='"+inputElementType+"' readonly>";  
+      
+    } else {
+      // it is not an input, so can create a span instead //
+      document.getElementById("trialEditor").innerHTML+=
+        "<span class='"+inputElementType+"Element' id='element"+elementNo+"' style='position: absolute; left:"+_mouseX+"px;top:"+_mouseY+"px; z-index:"+elementNo+"' onclick='clickElement("+elementNo+")' name='"+inputElementType+"'>"+inputElementType+"</span>";
+    }
+  
+  }
+  
+  function populateDefaultValues(){
+    trialTypeElements['elements'][elementNo] = {
+      width                 :   20, 
+      height                :   20,
+      xPosition             :   xPos,
+      yPosition             :   yPos,
+      zPosition             :   elementNo,
+      elementName           :   'element'+elementNo,
+      stimulus              :   'not yet added',
+      response              :   false,
+      trialElementType      :   inputElementType, // repetition here
+      clickOutcomesAction   :   '',
+      clickOutcomesElement  :   '',
+      proceed               :   false,
+    };        
+  }
+
 
 
   /* updating the trialType */
   
   backupTrialTypeName   =   trialTypeName.value;    //in case the user tries an illegal name
-  var illegalChars      =   ['.',' '];              // this probably should be expanded
- 
+
   function updateTrialTypeElements(){
-      
-    $("#trialTypeName").val(trialTypeName.value.replace(/ /g,""));
-    var trialName   =   $("#trialTypeName").val(); //apply this to later code in place of "trialTypeName.value";
     
+    $("#trialTypeName").val(trialTypeName.value.replace(/ /g,""));      //  remove whitespace from title
+    var trialName   =   $("#trialTypeName").val();                      //  apply this to later code in place of "trialTypeName.value";
+    
+    trialName=removeIllegalCharacters(trialName);                       //remove illegal characters from title
+
+    trialTypeElements['trialTypeName']                  =   trialName;
+    
+    document.getElementById("elementArray").innerHTML   =   JSON.stringify(trialTypeElements,  null, 2);
+    
+    elementType("select");
+  }
+
+  function removeIllegalCharacters(thisString){
+    var illegalChars        =   ['.',' '];              // this probably should be expanded
     var illegalCharPresent  =   false;
-    for (i  = 0; i  < illegalChars.length; i++){
-      if(trialName.indexOf(illegalChars[i])   !=  -1){
+    for (var i  = 0; i  < illegalChars.length; i++){
+      if(thisString.indexOf(illegalChars[i]) !=  -1){
         alert("Illegal character in name, reverting to acceptable version");
         illegalCharPresent  =   true;
-        trialName           =   backupTrialTypeName;
+        thisString           =   backupTrialTypeName;
+        $("#trialTypeName").val(thisString);            // this will have to change if we use this function on anything other than the title
       }   
     }
     if(illegalCharPresent   ==    false){
       backupTrialTypeName  =  trialTypeName.value;    
     }
-    trialTypeElements['trialTypeName']                  =   trialName;
-    document.getElementById("elementArray").innerHTML   =   JSON.stringify(trialTypeElements,  null, 2);
-    inputElementType                                    =   "select";
-    elementType("select");
+    
+    return thisString;
   }
 
   function changeMediaType(){
@@ -814,226 +862,244 @@ function addDeleteFunction(x){
     // code here to change image cue if we include media images
   }
 
-  function clickElement(x){
+  function clickElement(elementX){
     if(inputElementType=="select"){
-      $("#displayEditorButton").show(1000);
-      $("#interactionEditorButton").show(1000);
       
-      currentElement =  x;            // this is in order to update the global variable "currentElement";
-      thisElement    =  "element"+x;
+      $("#displayEditorButton").show(1000);                             //this button is hidden at start and after deleting elements
+      $("#interactionEditorButton").show(1000);                         //this button is hidden at start and after deleting elements
+                            
+      currentElement =  elementX;                                       // this is in order to update the global variable "currentElement";
       
-      for(i=0;i<=elementNo;i++){
-        if(i==x){
-          document.getElementById("element"+i).className    =   trialTypeElements['elements'][i]['trialElementType']  +   "ElementSelected";
-        } else {
-          
-          if (trialTypeElements['elements'][i] != null) { //code to check whether the element exists or not
-            document.getElementById("element"+i).className  =   trialTypeElements['elements'][i]['trialElementType']  +   "Element";
-          }
+      selectUnselectElements(elementNo,currentElement);                 // selecting and unselecting elements
+            
+      showDisplayEditor();                                              // and hide the other editors
+        
+      loadConfigs();                                                    // this loads the configurations for the editor
+                      
+      currentElementAttributes=trialTypeElements['elements'][elementX]; // to simplify later code
+      
+      editElement(currentElementAttributes);                             // preparing user interface for editing element
+
+    }
+
+  } 
+  
+  function selectUnselectElements(elementNo,currentElement){
+    for(var i=0;i<=elementNo;i++){
+      if(i==currentElement){
+        document.getElementById("element"+i).className    =   trialTypeElements['elements'][i]['trialElementType']  +   "ElementSelected";
+      } else {
+        
+        if (trialTypeElements['elements'][i] != null) { //code to check whether the element exists or not
+          document.getElementById("element"+i).className  =   trialTypeElements['elements'][i]['trialElementType']  +   "Element";
         }
       }
-      $("#configurationSettings").hide();
-      $("#interactionEditorConfiguration").hide();
-      $("#userInputSettings").hide();
-      var targetElementID = "#displayEditor";
-      $("#controlPanelItems > div").hide();
-      $(targetElementID).show();
+    }
+  }
 
-      loadConfigs(); // this loads the configurations for the editor
-         
-      
-      currentElementAttributes=trialTypeElements['elements'][x]; // to simplify later code
-      
-      switch (currentElementAttributes['trialElementType']){
-        case "media":
-          document.getElementById("inputStimTypeCell").innerHTML="Media Type";
-          $("#configurationSettings").show();
-          $("#interactionEditorConfiguration").show();
-          document.getElementById('userInputTypeValue').style.visibility="hidden";
-          currentStimType.innerHTML="Media";
-          inputStimSelectCell.innerHTML='<select id="userInputTypeValue" onchange="changeMediaType()"><option>Pic</option><option>Audio</option><option>Video</option></select>';
-        break
-
-        case "text":
-          $("#configurationSettings").show();
-          $("#interactionEditorConfiguration").show();
-          document.getElementById('userInputTypeValue').style.visibility="hidden";
-          currentStimType.innerHTML="Text";
-          document.getElementById("inputStimTypeCell").innerHTML="Text properties";
-          // userInputTypeValue is being used for both media and input types - this could probably be tidier by keeping them separate
-          inputStimSelectCell.innerHTML=
-            '<input id="userInputTypeValue" style="display:none">'+
-            '<table>'+ 
-              '<tr>'+
-                '<td>font size</td>'+
-                '<td><input type="number" id="textSizeId" onchange="adjustTextSize()" value=12 min="1" style="width:50px">px</td>'+
-              '</tr>'+
-              '<tr>'+
-                '<td>color</td>'+
-                '<td><input type="text" id="textColorId" onkeyup="adjustTextColor()" placeholder="color"></td>'+
-              '</tr>'+
-              '<tr>'+
-                '<td>font</td>'+
-                '<td><input type="text" id="textFontId" onkeyup="adjustTextFont()" placeholder="font"></td>'+
-              '</tr>'+
-              '<tr>'+
-                '<td>background-color</td>'+
-                '<td><input type="text" id="textBackId" onkeyup="adjustTextBack()" placeholder="background-color"></td>'+
-              '</tr>'
-            '</table>';
-                 
-          //rather than embed it in above text, i've listed these values below for improved legibility
-          textFontId.value   =  currentElementAttributes.textFont;
-          textColorId.value  =  currentElementAttributes.textColor;
-          textSizeId.value   =  currentElementAttributes.textSize;
-          textBackId.value   =  currentElementAttributes.textBack;
-          
-        break      
-
-        case "input":      
-          document.getElementById("inputStimTypeCell").innerHTML="Input Type";
-          $("#configurationSettings").show();
-          $("#interactionEditorConfiguration").show();
-          document.getElementById('userInputTypeValue').style.visibility="visible";
-          currentStimType.innerHTML="Input";
-          textTableSize       =     '<tr id="textTableSizeRow">'+
-                                      '<td>size</td>'+
-                                      '<td><input type="number" id="textSizeId" onchange="adjustTextSize()" value=12 min="1" style="width:50px">px</td><br>'+
-                                    '</tr>';
-          textTableColor      =     '<tr id="textTableColorRow">'+
-                                      '<td>color</td>'+
-                                      '<td><input type="text" id="textColorId" onkeyup="adjustTextColor()" placeholder="e.g. red, #FF0000" ></td>'+
-                                    '</tr>';
-          textTableFont       =     '<tr id="textTableFontRow">'+
-                                      '<td>font</td>'+
-                                      '<td><input type="text" id="textFontId" onkeyup="adjustTextFont()" placeholder="font"></td>'+
-                                    '</tr>';
-          textTableBackColor  =     '<tr id="textTableBackRow">'+
-                                      '<td>background-color</td>'+
-                                      '<td><input type="text" id="textBackId" onkeyup="adjustTextBack()" placeholder="background-color"></td>'+
-                                    '</tr>';
-                            
-          /* if handling text, not button input, then need to remove font color and background-color due to inflexibility of placeholders */
+  function showDisplayEditor(){
+    $("#displaySettings").hide();
+    $("#interactionEditorConfiguration").hide();
+    $("#userInputSettings").hide();
+    $("#controlPanelItems > div").hide();
+    $("#displayEditor").show();  
+  }
   
-          inputStimSelectCell.innerHTML=
-            '<select id="userInputTypeValue" onchange="adjustUserInputType()">'+
-              '<option>Text</option>'+
-              '<option>Button</option>'+
-            '</select>'+
-            '</td><br>'+
-            '<table>'+
-              textTableSize+
-              textTableColor+
-              textTableFont+
-              textTableBackColor+
-            '</table>';
+  function editElement(currentElementAttributes){
+    switch (currentElementAttributes['trialElementType']){
 
-          //rather than embed it in above text, i've listed these values below for improved legibility
-          textFontId.value          =   currentElementAttributes.textFont;
-          textColorId.value         =   currentElementAttributes.textColor;
-          textSizeId.value          =   currentElementAttributes.textSize;
-          textBackId.value          =   currentElementAttributes.textBack;
-          document.getElementById("userInputTypeValue").value   =   currentElementAttributes.userInputType;
-          
-          if(document.getElementById("userInputTypeValue").value    ==    "Text"){
-            $('#textTableColorRow').hide();
-            $('#textTableBackRow').hide();
-          } else {
-            $('#textTableColorRow').show();
-            $('#textTableBackRow').show();
-          }
-          
-            
-          // might add check box and radio in a later release
-        break      
-      break //this break necessary?
+    case "media":
+        document.getElementById("inputStimTypeCell").innerHTML="Media Type";
+        $("#displaySettings").show();
+        $("#interactionEditorConfiguration").show();
+        document.getElementById('userInputTypeValue').style.visibility="hidden";
+        currentStimType.innerHTML="Media";
+        inputStimSelectCell.innerHTML='<select id="userInputTypeValue" onchange="changeMediaType()"><option>Pic</option><option>Audio</option><option>Video</option></select>';
+      break
 
+      case "text":
+        $("#displaySettings").show();
+        $("#interactionEditorConfiguration").show();
+        document.getElementById('userInputTypeValue').style.visibility="hidden";
+        currentStimType.innerHTML="Text";
+        document.getElementById("inputStimTypeCell").innerHTML="Text properties";
+        // userInputTypeValue is being used for both media and input types - this could probably be tidier by keeping them separate
+        inputStimSelectCell.innerHTML=
+          '<input id="userInputTypeValue" style="display:none">'+
+          '<table>'+ 
+            '<tr>'+
+              '<td>font size</td>'+
+              '<td><input type="number" id="textSizeId" onchange="adjustTextSize()" value=12 min="1" style="width:50px">px</td>'+
+            '</tr>'+
+            '<tr>'+
+              '<td>color</td>'+
+              '<td><input type="text" id="textColorId" onkeyup="adjustTextColor()" placeholder="color"></td>'+
+            '</tr>'+
+            '<tr>'+
+              '<td>font</td>'+
+              '<td><input type="text" id="textFontId" onkeyup="adjustTextFont()" placeholder="font"></td>'+
+            '</tr>'+
+            '<tr>'+
+              '<td>background-color</td>'+
+              '<td><input type="text" id="textBackId" onkeyup="adjustTextBack()" placeholder="background-color"></td>'+
+            '</tr>'
+          '</table>';
+               
+        //rather than embed it in above text, i've listed these values below for improved legibility
+        textFontId.value   =  currentElementAttributes.textFont;
+        textColorId.value  =  currentElementAttributes.textColor;
+        textSizeId.value   =  currentElementAttributes.textSize;
+        textBackId.value   =  currentElementAttributes.textBack;
+        
+      break      
+
+      case "input":      
+        document.getElementById("inputStimTypeCell").innerHTML="Input Type";
+        $("#displaySettings").show();
+        $("#interactionEditorConfiguration").show();
+        document.getElementById('userInputTypeValue').style.visibility="visible";
+        currentStimType.innerHTML="Input";
+        textTableSize       =     '<tr id="textTableSizeRow">'+
+                                    '<td>size</td>'+
+                                    '<td><input type="number" id="textSizeId" onchange="adjustTextSize()" value=12 min="1" style="width:50px">px</td><br>'+
+                                  '</tr>';
+        textTableColor      =     '<tr id="textTableColorRow">'+
+                                    '<td>color</td>'+
+                                    '<td><input type="text" id="textColorId" onkeyup="adjustTextColor()" placeholder="e.g. red, #FF0000" ></td>'+
+                                  '</tr>';
+        textTableFont       =     '<tr id="textTableFontRow">'+
+                                    '<td>font</td>'+
+                                    '<td><input type="text" id="textFontId" onkeyup="adjustTextFont()" placeholder="font"></td>'+
+                                  '</tr>';
+        textTableBackColor  =     '<tr id="textTableBackRow">'+
+                                    '<td>background-color</td>'+
+                                    '<td><input type="text" id="textBackId" onkeyup="adjustTextBack()" placeholder="background-color"></td>'+
+                                  '</tr>';
+                          
+        /* if handling text, not button input, then need to remove font color and background-color due to inflexibility of placeholders */
+
+        inputStimSelectCell.innerHTML=
+          '<select id="userInputTypeValue" onchange="adjustUserInputType()">'+
+            '<option>Text</option>'+
+            '<option>Button</option>'+
+          '</select>'+
+          '</td><br>'+
+          '<table>'+
+            textTableSize+
+            textTableColor+
+            textTableFont+
+            textTableBackColor+
+          '</table>';
+
+        //rather than embed it in above text, i've listed these values below for improved legibility
+        textFontId.value          =   currentElementAttributes.textFont;
+        textColorId.value         =   currentElementAttributes.textColor;
+        textSizeId.value          =   currentElementAttributes.textSize;
+        textBackId.value          =   currentElementAttributes.textBack;
+        document.getElementById("userInputTypeValue").value   =   currentElementAttributes.userInputType;
+        
+        if(document.getElementById("userInputTypeValue").value    ==    "Text"){
+          $('#textTableColorRow').hide();
+          $('#textTableBackRow').hide();
+        } else {
+          $('#textTableColorRow').show();
+          $('#textTableBackRow').show();
+        }
+        
+          
+        // might add check box and radio in a later release
+      break      
+    
+    }
+  }
+
+  function loadConfigs(){
+
+    currentElementAttributes=trialTypeElements['elements'][currentElement]; //to make following code more concise
+
+    /* deciding which part of interactionEditor to show  - this may need to be more flexible when more interactive features are added*/ 
+    if (currentElementAttributes.clickOutcomesAction=="response"){
+      $("#clickOutcomesElementId").hide();
+      $("#responseValueId").show();
+      $("#respNoSpanId").show();
+    
+      if(typeof(currentElementAttributes.responseValue)!="undefined"){
+        responseValueId.value = currentElementAttributes.responseValue;
+        responseNoId.value    = currentElementAttributes.responseNo;
+        clickProceedId.checked= currentElementAttributes.proceed;
+      } else {
+        responseValueId.value = ""
+        responseNoId.value    = 0;
+        clickProceedId.checked= false;
+      }
+      updateClickResponseValues("update",trialTypeElements['responses']);
+
+    
+    } else {
+      $("#clickOutcomesElementId").show();
+      $("#responseValueId").hide();
+      $("#respNoSpanId").hide();
+      populateClickElements();    
+    }
+
+    elementNameValue.value        =   currentElementAttributes.elementName;
+    userInputTypeValue.value      =   currentElementAttributes.mediaType;
+    stimInputValue.value          =   currentElementAttributes.stimulus;
+    elementWidth.value            =   currentElementAttributes.width;
+    elementHeight.value           =   currentElementAttributes.height;
+    
+    /* positions */
+    xPosId.value                  =   currentElementAttributes.xPosition;
+    yPosId.value                  =   currentElementAttributes.yPosition;
+    zPosId.value                  =   currentElementAttributes.zPosition; 
+    
+    /* click events */
+    clickOutcomesActionId.value   =   currentElementAttributes.clickOutcomesAction;
+    clickOutcomesElementId.value  =   currentElementAttributes.clickOutcomesElement;
+
+    /* Timings */
+    if(typeof(currentElementAttributes.onsetTime) == 'undefined'){
+      onsetId.value           =   "00:00:00.000";
+      onsetId.style.color     =   "grey";
+    } else {    
+      onsetId.value           =   currentElementAttributes.onsetTime; 
+      onsetId.style.color     =   "blue";    
+    }
+    
+    if(typeof(currentElementAttributes.onsetTime) == 'undefined'){
+      offsetId.value           =   "00:00:00.000";
+      offsetId.style.color     =   "grey";
+    } else {
+      offsetId.value           =   currentElementAttributes.offsetTime; 
+      offsetId.style.color     =   "blue";    
+    }  
+  }
+
+
+
+  function populateClickElements(){
+    removeOptions(document.getElementById("clickOutcomesElementId"));   
+
+    var option                      =   document.createElement("option");
+    option.text                     =   '';
+    document.getElementById("clickOutcomesElementId").add(option);
+    clickOutcomesElementId.value    =   trialTypeElements['elements'][currentElement].clickOutcomesElement;  
+    var elementList                 =   [];
+
+    
+    for(x in trialTypeElements['elements']){
+      
+      // here be the bug //
+      
+      if (trialTypeElements['elements'][x] != null){
+        elementList.push(trialTypeElements['elements'][x].elementName); //may become redundant
+        var option    =   document.createElement("option");
+        option.text   =   trialTypeElements['elements'][x].elementName;
+        option.value  =   trialTypeElements['elements'][x].elementName; 
+        document.getElementById("clickOutcomesElementId").add(option);  
       }
     }
   }
-
-  
-
-
-function loadConfigs(){
-
-  currentElementAttributes=trialTypeElements['elements'][currentElement]; //to make following code more concise
-
-  /* deciding which part of interactionEditor to show  - this may need to be more flexible when more interactive features are added*/ 
-  if (currentElementAttributes.clickOutcomesAction=="response"){
-    $("#clickOutcomesElementId").hide();
-    $("#responseValueId").show();
-    $("#respNoSpanId").show();
-    
-    responseValueId.value = currentElementAttributes.responseValue;
-    responseNoId.value    = currentElementAttributes.responseNo;
-    updateClickResponseValues("update",trialTypeElements['responses']);
-  
-  } else {
-    $("#clickOutcomesElementId").show();
-    $("#responseValueId").hide();
-    $("#respNoSpanId").hide();
-    populateClickElements();    
-  }
-
-  elementNameValue.value        =   currentElementAttributes.elementName;
-  userInputTypeValue.value      =   currentElementAttributes.mediaType;
-  stimInputValue.value          =   currentElementAttributes.stimulus;
-  elementWidth.value            =   currentElementAttributes.width;
-  elementHeight.value           =   currentElementAttributes.height;
-  
-  /* positions */
-  xPosId.value                  =   currentElementAttributes.xPosition;
-  yPosId.value                  =   currentElementAttributes.yPosition;
-  zPosId.value                  =   currentElementAttributes.zPosition; 
-  
-  /* click events */
-  clickOutcomesActionId.value   =   currentElementAttributes.clickOutcomesAction;
-  clickOutcomesElementId.value  =   currentElementAttributes.clickOutcomesElement;
-
-  /* Timings */
-  if(typeof(currentElementAttributes.onsetTime) == 'undefined'){
-    onsetId.value           =   "00:00:00.000";
-    onsetId.style.color     =   "grey";
-  } else {    
-    onsetId.value           =   currentElementAttributes.onsetTime; 
-    onsetId.style.color     =   "blue";    
-  }
-  
-  if(typeof(currentElementAttributes.onsetTime) == 'undefined'){
-    offsetId.value           =   "00:00:00.000";
-    offsetId.style.color     =   "grey";
-  } else {
-    offsetId.value           =   currentElementAttributes.offsetTime; 
-    offsetId.style.color     =   "blue";    
-  }  
-}
-
-
-
-function populateClickElements(){
-  removeOptions(document.getElementById("clickOutcomesElementId"));   
-
-  var option                      =   document.createElement("option");
-  option.text                     =   '';
-  document.getElementById("clickOutcomesElementId").add(option);
-  clickOutcomesElementId.value    =   trialTypeElements['elements'][currentElement].clickOutcomesElement;  
-  var elementList                 =   [];
-
-  
-  for(x in trialTypeElements['elements']){
-    
-    // here be the bug //
-    
-    if (trialTypeElements['elements'][x] != null){
-      elementList.push(trialTypeElements['elements'][x].elementName); //may become redundant
-      var option    =   document.createElement("option");
-      option.text   =   trialTypeElements['elements'][x].elementName;
-      option.value  =   trialTypeElements['elements'][x].elementName; 
-      document.getElementById("clickOutcomesElementId").add(option);  
-    }
-  }
-}
 
   /* Which element type are you adding to the trial */
   function elementType(x){
@@ -1048,7 +1114,7 @@ function populateClickElements(){
       }
     }
     if(x!="select"){
-      $("#configurationSettings").hide();
+      $("#displaySettings").hide();
       $("#userInputTypeValue").value="n/a";
 
       currentStimType.innerHTML="No Element Selected";

@@ -87,7 +87,7 @@
 				}
 			}
 		}
-		$deletePath="../../Experiments/Common/".$_POST['delete'];
+		$deletePath="$_PATH->get('Media')/".$_POST['delete'];
 		$deletePath=str_ireplace('%20',' ',$deletePath);		
 		if ($deleteOK==1 & file_exists($deletePath)){
 			unlink($deletePath);
@@ -95,7 +95,7 @@
 	} else {
 		unset($_SESSION['uploadedFiles']);
 	}
-	$commonFiles = scandir ("../../Experiments/Common");
+	$commonFiles = scandir ($_PATH->get('Media'));
 	$stimFiles=array();
 	$spaceUsed=0;
 	for ($i=0; $i<count($commonFiles); $i++){
@@ -117,7 +117,7 @@
 			echo "<span class='stimText' id='stim$stimNo' onclick='displayStim(\"$stimFile,$stimNo\")'>$stimFile
 			</span>
 			<br>";
-		$spaceUsed=$spaceUsed+filesize("../../Experiments/Common/$stimFile");
+		$spaceUsed=$spaceUsed+filesize($_PATH->get('Media')."/$stimFile");
 	}
 	$stimNoJson = json_encode($stimNo);
 	$spaceUsed=$spaceUsed/1000000;
@@ -179,7 +179,7 @@ window.setInterval(function(){
 function displayStim(x){
   xSplit=x.split(','); //to separate the filename and the span id
 	y=xSplit[0].replace(/ /g,"%20");
-	stimDivArea.innerHTML="<div class='stimCenter'><embed src="+"'../../Experiments/Common/"+y+"' width='100%'" + ">" + "<br><button class='collectorButton' type='submit'  name='delete' id='deleteButton' value="+y+" style='display:none'>No Text Needed</button><input type='button' onclick='confirmDelete()' class='collectorButton' value='Delete?'></div>";
+	stimDivArea.innerHTML="<div class='stimCenter'><embed src="+"'../../Experiments/_Common/Media/"+y+"' width='100%'" + ">" + "<br><button class='collectorButton' type='submit'  name='delete' id='deleteButton' value="+y+" style='display:none'>No Text Needed</button><input type='button' onclick='confirmDelete()' class='collectorButton' value='Delete?'></div>";
 	//now highlight/bold text for selected image
 	document.getElementById('stim'+xSplit[1]).style.color="green";
 
