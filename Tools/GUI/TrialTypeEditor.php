@@ -349,6 +349,12 @@ echo $_DATA['trialTypeEditor']['currentTrialTypeName']
 
   foreach($trialTypeElementsPhp->elements as $elementKey=>$element){
     if($element!=NULL){ //ideally I'll tidy it up so that there are no null elements 
+      // identify if deleted or not //
+      $delete='';
+      if(isset($element->delete)){
+        $delete="display:none;";
+      }
+      
       /* identify if input or other type of element */
       if(isset($element->userInputType)){
                 
@@ -361,6 +367,7 @@ echo $_DATA['trialTypeEditor']['currentTrialTypeName']
                 height  : ".($elementScale*$element->height)."px;
                 left    : ".($elementScale*$element->xPosition)."px;
                 top     : ".($elementScale*$element->yPosition)."px;
+                $delete
                 ";
       if (isset($element->textColor)){
         echo "color:$element->textColor;
@@ -586,18 +593,17 @@ $(document).ready(function() {
 $("#deleteButton").on("click", function() {
   delConf   =   confirm ("Are you sure you wish to delete?");
   if (delConf == true){
-    var element = document.getElementById("element"+currentElement);
-    $("#displaySettings").hide();
-    element.parentNode.removeChild(element);
+      
+    trialTypeElements['elements'][currentElement]['delete']=true
     
-    trialTypeElements['elements'].splice(currentElement,1);
+    document.getElementById("element"+currentElement).style.display="none";
+    $("#displaySettings").hide();
     
     currentStimType.innerHTML   =   "No Element Selected";
-    updateTrialTypeElements();    
-
-    
     $("#interactionEditorButton").hide();
     $("#displayEditorButton").hide();
+    
+    updateTrialTypeElements();    
   }
 });
 
@@ -1154,9 +1160,11 @@ function addDeleteFunction(x){
       currentStimType.innerHTML="No Element Selected";
       // for all elements revert formatting to element
       for(i=0;i<=elementNo;i++){
-          if (typeof trialTypeElements['elements'][i] != 'undefined') { //code to check whether the element exists or not
-            document.getElementById("element"+i).className=trialTypeElements['elements'][i]['trialElementType']+"Element";
-          }      
+        
+        if(typeof (trialTypeElements['elements'][i]) != 'undefined' && document.getElementById("element"+i)!=null) { //code to check whether the element exists or not
+          console.dir(trialTypeElements['elements'][i]);
+          document.getElementById("element"+i).className=trialTypeElements['elements'][i]['trialElementType']+"Element";
+        }      
       }
     }  
   }

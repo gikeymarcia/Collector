@@ -200,7 +200,7 @@
   // reading each of the html for each element    
   foreach($newTrialTypeArray as $newTrialTypeElement){
 
-    if($newTrialTypeElement   !=    null){      
+    if($newTrialTypeElement   !=    null  && !isset($newTrialTypeElement->delete)){      
       
       // determine whether there is an onset or not, and do not display at start if there is an onset time
       $initialDisplay = "";
