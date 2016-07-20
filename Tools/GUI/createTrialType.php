@@ -181,12 +181,22 @@
       if($newTrialTypeElement->userInputType=="Button"){
         $thisValue        = "value= '$newTrialTypeElement->stimulus'";
         $thisPlaceholder  = ""; 
+        $responseName     = ''; // not doing anything at the moment
       }
       
       // if text
       if($newTrialTypeElement->userInputType=="Text"){
         $thisValue        = "";
         $thisPlaceholder  = "placeholder= '$newTrialTypeElement->stimulus'"; 
+        
+        
+        
+//        $responseName     = "response$newTrialTypeElement->";
+
+        // could have this stored in part of an array - so that each response is tested against answer. - work with Tyson on this later
+       
+        
+        
       }
             
       $newTrialHtmlCode=$newTrialHtmlCode.'<input id ="'.$newTrialTypeElement->elementName.'" 
@@ -364,8 +374,4 @@
   file_put_contents("../Experiments/_Common/TrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName']."/display.php",$newTrialCode);
   
   ?>
-      
-      
-<script>
-  //alert("creating trial type");
-</script>
+     
