@@ -560,11 +560,16 @@ $(document).ready(function() {
   });
   
   // initiating response array once the page is loaded
-  if(typeof(trialTypeElements['responses']=='undefined')){
+  console.dir(trialTypeElements['responses']);
+  if(typeof(trialTypeElements['responses'])=='undefined'){
+    console.dir("undefined");
     trialTypeElements['responses'] = [[]];
   } else {
+    console.dir("defined");
     updateClickResponseValues("initiate",trialTypeElements['responses']);    
   }
+  console.dir(trialTypeElements['responses']);
+  
   
 });
 
@@ -658,7 +663,9 @@ function addDeleteFunction(x){
   // identifying which response clicking on the element contributes to, e.g. - whether clicking on element1 contributes to Response1 or Response2
   function updateClickResponseValues(initiateUpdate,responseArray){
     
+    console.dir(responseArray);
     var currentElementName = $("#elementNameValue").val();
+    
     
     var newRespElement = checkIfResponseListContainsName(responseArray, currentElementName);                        // check if this element is part of new response
     
@@ -673,8 +680,11 @@ function addDeleteFunction(x){
     
     trialTypeElements['elements'][currentElement] = updateTrialTypeElementsResponses(trialTypeElements['elements'][currentElement],initiateUpdate);  // update trialTypeElements with input values
    
-    $("#responseValuesId").val(JSON.stringify(responseArray));                                                                        // update the hidden response code that is 
-                                                                                                                                      //used for - apparently nothing anymore...
+    $("#responseValuesId").val(JSON.stringify(responseArray));                                                        // update the hidden response code that is 
+                                                                                                                      //used for - apparently nothing anymore...
+                                                                                                                      
+    console.dir(responseArray);
+
     
   }
     
@@ -1058,7 +1068,13 @@ function addDeleteFunction(x){
       console.dir(currentElementAttributes.mediaType);
       console.dir(mediaTypeValue.value);
 
+      /* may not be a media type yet! fix here!!! */
+      if(typeof(currentElementAttributes.mediaType)=="undefined"){
+        currentElementAttributes.mediaType  = "Pic";
+      } 
+      
       mediaTypeValue.value      =   currentElementAttributes.mediaType;
+
       
       console.dir(currentElementAttributes.mediaType);
       console.dir(mediaTypeValue.value);
