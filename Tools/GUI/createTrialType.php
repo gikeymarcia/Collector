@@ -190,7 +190,7 @@
     color             :   '.$newTrialTypeElement->textColor.';
     background-color  :   '.$newTrialTypeElement->textBack.';
     font-family       :   '.$newTrialTypeElement->textFont.';
-    " value= "'.$newTrialTypeElement->stimulus.'";   />
+    " placeholder= "'.$newTrialTypeElement->stimulus.'";   />
   '; 
 
     }

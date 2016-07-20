@@ -560,15 +560,11 @@ $(document).ready(function() {
   });
   
   // initiating response array once the page is loaded
-  console.dir(trialTypeElements['responses']);
   if(typeof(trialTypeElements['responses'])=='undefined'){
-    console.dir("undefined");
     trialTypeElements['responses'] = [[]];
   } else {
-    console.dir("defined");
     updateClickResponseValues("initiate",trialTypeElements['responses']);    
   }
-  console.dir(trialTypeElements['responses']);
   
   
 });
@@ -1029,27 +1025,55 @@ function addDeleteFunction(x){
     
     }
   }
-
+  
+  
+  // loading configurations //
+  
   function loadConfigs(){
 
-    currentElementAttributes=trialTypeElements['elements'][currentElement]; //to make following code more concise
+    currentElementAttributes=trialTypeElements['elements'][currentElement];               //to make following code more concise
 
-    console.dir(currentElementAttributes.mediaType);
+    $("#elementNameValue").val(currentElementAttributes.elementName);                     // update element name 
+    loadResponses(currentElementAttributes);                                              // when loading an element, prepare response (or lack of) values
+    currentElementAttributes.mediaType = loadMedia(currentElementAttributes.mediaType);   // update media type, if appropriate
         
-    /* deciding which part of interactionEditor to show  - this may need to be more flexible when more interactive features are added*/ 
+    if(typeof(currentElementAttributes.userInputType)!="undefined"){                      // update input type, if appropriate
+      userInputTypeValue.value      =   currentElementAttributes.userInputType;
+    }
+
+    loadTimings(currentElementAttributes);                                                // Load Timings
+    
+    // values that don't need functions to load (i.e. exist across elements)
+    stimInputValue.value          =   currentElementAttributes.stimulus;
+    elementWidth.value            =   currentElementAttributes.width;
+    elementHeight.value           =   currentElementAttributes.height;
+    
+    // positions
+    xPosId.value                  =   currentElementAttributes.xPosition;
+    yPosId.value                  =   currentElementAttributes.yPosition;
+    zPosId.value                  =   currentElementAttributes.zPosition; 
+    
+    // click events
+    clickOutcomesActionId.value   =   currentElementAttributes.clickOutcomesAction;
+    clickOutcomesElementId.value  =   currentElementAttributes.clickOutcomesElement;
+  
+  }
+  
+  // load responses (part of load config) //
+  function loadResponses(currentElementAttributes){
     if (currentElementAttributes.clickOutcomesAction=="response"){
       $("#clickOutcomesElementId").hide();
       $("#responseValueId").show();
       $("#respNoSpanId").show();
     
       if(typeof(currentElementAttributes.responseValue)!="undefined"){
-        responseValueId.value = currentElementAttributes.responseValue;
-        responseNoId.value    = currentElementAttributes.responseNo;
-        clickProceedId.checked= currentElementAttributes.proceed;
+        $("#responseValueId").val(currentElementAttributes.responseValue);
+        $("#responseNoId").val(currentElementAttributes.responseNo);
+        clickProceedId.checked  = currentElementAttributes.proceed;
       } else {
-        responseValueId.value = ""
-        responseNoId.value    = 0;
-        clickProceedId.checked= false;
+        $("#responseValueId").val("");
+        $("#responseNoId").val(0);
+        clickProceedId.checked  = false;
       }
       updateClickResponseValues("update",trialTypeElements['responses']);
 
@@ -1060,46 +1084,24 @@ function addDeleteFunction(x){
       $("#respNoSpanId").hide();
       populateClickElements();    
     }
-
-    elementNameValue.value        =   currentElementAttributes.elementName;
+  }
+  
+  // whether loading a picture, video or audio - part of loadConfigs
+  function loadMedia(currentElementAttributes.mediaType){
     
     if(typeof(currentElementAttributes.mediaType)!="undefined"){
-    
-      console.dir(currentElementAttributes.mediaType);
-      console.dir(mediaTypeValue.value);
-
       /* may not be a media type yet! fix here!!! */
       if(typeof(currentElementAttributes.mediaType)=="undefined"){
         currentElementAttributes.mediaType  = "Pic";
       } 
-      
-      mediaTypeValue.value      =   currentElementAttributes.mediaType;
+      $("#mediaTypeValue").val(currentElementAttributes.mediaType);
+    } 
+    return currentElementAttributes.mediaType; 
+  }
 
-      
-      console.dir(currentElementAttributes.mediaType);
-      console.dir(mediaTypeValue.value);
+  // load onset and offset timings - part of loadConfigs
+  function loadTimings(currentElementAttributes){
 
-    }
-    
-    if(typeof(currentElementAttributes.userInputType)!="undefined"){
-      userInputTypeValue.value      =   currentElementAttributes.userInputType;
-    }
-    
-    
-    stimInputValue.value          =   currentElementAttributes.stimulus;
-    elementWidth.value            =   currentElementAttributes.width;
-    elementHeight.value           =   currentElementAttributes.height;
-    
-    /* positions */
-    xPosId.value                  =   currentElementAttributes.xPosition;
-    yPosId.value                  =   currentElementAttributes.yPosition;
-    zPosId.value                  =   currentElementAttributes.zPosition; 
-    
-    /* click events */
-    clickOutcomesActionId.value   =   currentElementAttributes.clickOutcomesAction;
-    clickOutcomesElementId.value  =   currentElementAttributes.clickOutcomesElement;
-
-    /* Timings */
     if(typeof(currentElementAttributes.onsetTime) == 'undefined'){
       $('#onsetId').val("");
     } else {    
@@ -1110,10 +1112,9 @@ function addDeleteFunction(x){
       $('#offsetId').val("");
     } else {
       $('#offsetId').val(currentElementAttributes.offsetTime); 
-    }  
+    }    
   }
-
-
+  
 
   function populateClickElements(){
     removeOptions(document.getElementById("clickOutcomesElementId"));   
