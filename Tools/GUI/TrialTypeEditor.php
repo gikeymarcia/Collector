@@ -659,7 +659,6 @@ function addDeleteFunction(x){
   // identifying which response clicking on the element contributes to, e.g. - whether clicking on element1 contributes to Response1 or Response2
   function updateClickResponseValues(initiateUpdate,responseArray){
     
-    console.dir(responseArray);
     var currentElementName = $("#elementNameValue").val();
     
     
@@ -677,10 +676,6 @@ function addDeleteFunction(x){
     trialTypeElements['elements'][currentElement] = updateTrialTypeElementsResponses(trialTypeElements['elements'][currentElement],initiateUpdate);  // update trialTypeElements with input values
    
     $("#responseValuesId").val(JSON.stringify(responseArray));                                                        // update the hidden response code that is 
-                                                                                                                      //used for - apparently nothing anymore...
-                                                                                                                      
-    console.dir(responseArray);
-
     
   }
     
@@ -1087,16 +1082,16 @@ function addDeleteFunction(x){
   }
   
   // whether loading a picture, video or audio - part of loadConfigs
-  function loadMedia(currentElementAttributes.mediaType){
+  function loadMedia(mediaType){
     
-    if(typeof(currentElementAttributes.mediaType)!="undefined"){
+    if(typeof(mediaType)!="undefined"){
       /* may not be a media type yet! fix here!!! */
-      if(typeof(currentElementAttributes.mediaType)=="undefined"){
-        currentElementAttributes.mediaType  = "Pic";
+      if(typeof(mediaType)=="undefined"){
+        mediaType  = "Pic";
       } 
-      $("#mediaTypeValue").val(currentElementAttributes.mediaType);
+      $("#mediaTypeValue").val(mediaType);
     } 
-    return currentElementAttributes.mediaType; 
+    return mediaType; 
   }
 
   // load onset and offset timings - part of loadConfigs
