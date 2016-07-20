@@ -144,7 +144,7 @@
     }
     $surveySheetsInfo->thisSurveyName="Survey$newNo";
     $surveySheetsInfo->thisSurveyFilename="$surveySheetsInfo->thisSurveyName.csv";
-    copy($_PATH->get('Common')."/Surveys/demoSurvey.csv",$_PATH->get('Common')."/Surveys/".$surveySheetsInfo->thisSurveyFilename);
+    copy($_PATH->get('Common')."/Surveys/SurveyDemo.csv",$_PATH->get('Common')."/Surveys/".$surveySheetsInfo->thisSurveyFilename);
   }
   
   //Saving - working
@@ -174,7 +174,7 @@
   // use demo survey if working from scratch 
   if($surveySheetsInfo->thisSurveyFilename=="to be declared" ||  $surveySheetsInfo->thisSurveyFilename=='[No survey Selected]'){
     $surveySheetsInfo->thisSurveyFilename=="newSurvey.csv";
-    $stimuli=getFromFile($_PATH->get('Common')."/Surveys/demoSurvey.csv",false,','); // this can be integrated with later code for tidying
+    $stimuli=getFromFile($_PATH->get('Common')."/Surveys/SurveyDemo.csv",false,','); // this can be integrated with later code for tidying
   } 
   
   else // load current survey

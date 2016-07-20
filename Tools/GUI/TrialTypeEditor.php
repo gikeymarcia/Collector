@@ -260,6 +260,8 @@
     
     // saving backup of task (.txt), schematic of task (.txt) and task (.php)
     
+    $dir="GUI/newTrialTypes";
+    if(!is_dir($dir)) mkdir($dir, 0777, true);
     
     file_put_contents('GUI/newTrialTypes/backup.txt',$elementArray);                                                //creating backup - currently not being used :-\
     file_put_contents("GUI/newTrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName'].'.txt',$elementArray); //actual act of saving
