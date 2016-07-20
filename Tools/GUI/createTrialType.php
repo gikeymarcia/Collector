@@ -175,6 +175,20 @@
   function inputProcessing($newTrialTypeElement,$elementValue,$initialDisplay,$newTrialHtmlCode){
   
     if($newTrialTypeElement->trialElementType=="input"){
+      
+      $thisValue='';
+      // if button
+      if($newTrialTypeElement->userInputType=="Button"){
+        $thisValue        = "value= '$newTrialTypeElement->stimulus'";
+        $thisPlaceholder  = ""; 
+      }
+      
+      // if text
+      if($newTrialTypeElement->userInputType=="Text"){
+        $thisValue        = "";
+        $thisPlaceholder  = "placeholder= '$newTrialTypeElement->stimulus'"; 
+      }
+            
       $newTrialHtmlCode=$newTrialHtmlCode.'<input id ="'.$newTrialTypeElement->elementName.'" 
       ' .$elementValue. '      
     type="'.$newTrialTypeElement->userInputType.'"
@@ -189,8 +203,9 @@
     font-size         :   '.$newTrialTypeElement->textSize.'px;
     color             :   '.$newTrialTypeElement->textColor.';
     background-color  :   '.$newTrialTypeElement->textBack.';
-    font-family       :   '.$newTrialTypeElement->textFont.';
-    " placeholder= "'.$newTrialTypeElement->stimulus.'";   />
+    font-family       :   '.$newTrialTypeElement->textFont.';"
+    '.$thisPlaceholder.
+    $thisValue.' />
   '; 
 
     }
