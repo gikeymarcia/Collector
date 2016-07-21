@@ -48,7 +48,7 @@ require $_PATH->get('Header');
     </ul>
 
     <p>Otherwise, you can access one of the other tools
-       <a href="<?= $_PATH->get('Tools') ?>">here</a>.
+       <a href="<?= $_PATH->get('Admin') ?>">here</a>.
     </p>
 </div>
 

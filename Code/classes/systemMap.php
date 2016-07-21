@@ -227,9 +227,14 @@ return array(
         ),
     ),
 
-    'Tools' => array(
-        'Dir Name' => 'Tools',
+    'Admin' => array(
+        'Dir Name' => 'Admin',
 
+        'index.php' => 'Admin Index',
+        
+        'Tools' => array(
+            'Dir Name' => 'Tools'
+        )
         // lots of stuff in here
     ),
 
