@@ -760,6 +760,8 @@ function getAllTrialTypeFiles(Pathfinder $pathfinder = null)
     $trialTypeDirs = array($paths->get('Custom Trial Types'), $paths->get('Trial Types'));
 
     foreach ($trialTypeDirs as $dir) {
+        if (!is_dir($dir)) continue;
+        
         $dirScan = scandir($dir);
         foreach ($dirScan as $entry) {
             $type = strtolower(trim($entry));
