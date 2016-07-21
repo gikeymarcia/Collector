@@ -23,7 +23,7 @@ require 'initiateCollector.php';
 $isReturningUser = isset($isReturningUser) ? $isReturningUser : false;
 
 // get the directory of the currently running script (should be Experiment name)
-$scriptName = filter_input(INPUT_SERVER, 'SCRIPT_NAME', FILTER_SANITIZE_STRING);
+$scriptName = filter_input_fix(INPUT_SERVER, 'SCRIPT_NAME', FILTER_SANITIZE_STRING);
 $pathParts = explode('/', $scriptName);
 $currentExp = $pathParts[count($pathParts) - 2];
 
@@ -130,7 +130,7 @@ if ($_SETTINGS->show_condition_selector == true && !$isReturningUser) {
     </div>
 
     <div class="flexChild">
-      <input name="Username" type="text" value="" class="collectorInput" placeholder="<?= $_SETTINGS->ask_for_login ?>">
+      <input name="Username" type="text" value="" class="collectorInput" placeholder="<?= $_SETTINGS->ask_for_login ?>" autofocus>
 
       <!-- Condition selector -->
       <select name="Condition" class="<?= $selectClass ?>">

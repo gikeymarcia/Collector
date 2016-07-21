@@ -168,7 +168,7 @@ class StatusController
             'Browser' => $this->browser,
             'DeviceType' => $this->deviceType,
             'OS' => $this->OS,
-            'IP' => $_SERVER['REMOTE_ADDR'], // some IDEs will say 'filter superglobals!' but: http://stackoverflow.com/a/2018561
+            'IP' => filter_input_fix(INPUT_SERVER, 'REMOTE_ADDR'), // some IDEs will say 'filter superglobals!' but: http://stackoverflow.com/a/2018561
         );
         foreach ($this->condition as $key => $value) {
             $data["Cond_$key"] = $value;

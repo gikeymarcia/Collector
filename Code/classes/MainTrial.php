@@ -64,9 +64,9 @@ class MainTrial extends Trial implements \Countable
     }
 
     /**
-     * Validates the MainTrial and related PostTrials using the Validator 
+     * Validates the MainTrial and related PostTrials using the Validator
      * registered for their trial types, if the Validators exist.
-     * 
+     *
      * @return array Returns an indexed array of the errors found when running
      *               validation and the information about the Trial with errors.
      */
@@ -80,38 +80,38 @@ class MainTrial extends Trial implements \Countable
                 $errors[] = $error;
             }
         }
-        
+
         foreach ($this->postTrials as $post) {
             $result = $post->validate();
             foreach ($result as $error) {
                 $errors[] = $error;
             }
         }
-        
+
         return $errors;
     }
-    
+
     /**
-     * Updates the named key in the relatedFiles MiniDb for the current Trial 
+     * Updates the named key in the relatedFiles MiniDb for the current Trial
      * with the path to the given related file (like 'script.php').
-     * 
+     *
      * @param string $name The name of the related file being added.
      * @param string $path The full path of the related file.
-     * 
+     *
      * @return bool Returns true if the key is added, else false.
      */
     public function setRelatedFile($name, $path)
     {
-        return $this->postPosition === 0 
+        return $this->postPosition === 0
             ? $this->relatedFiles->update($name, $path)
             : $this->getPostTrial()->setRelatedFile($name, $path);
     }
-    
+
     /**
      * Gets the named path from the relatedFiles MiniDb for the current Trial.
-     * 
+     *
      * @param string $name The name of the related file to get the path for.
-     * 
+     *
      * @return mixed Returns the stored value if the key exists, else null.
      */
     public function getRelatedFile($name)
@@ -120,11 +120,11 @@ class MainTrial extends Trial implements \Countable
             ? $this->relatedFiles->get($name)
             : $this->getPostTrial()->getRelatedFile($name);
     }
-    
+
     /**
      * Returns the number of Trials in the PostTrials property, including this
-     * trial (i.e. a MainTrial with 2 PostTrials has a count of 3). 
-     * 
+     * trial (i.e. a MainTrial with 2 PostTrials has a count of 3).
+     *
      * This is also the implementation of the count function and will be called
      * when count is called on the MainTrial like count($trial).
      *
@@ -134,7 +134,7 @@ class MainTrial extends Trial implements \Countable
     {
         return count($this->postTrials) + 1;
     }
-    
+
     /* Overrides
      **************************************************************************/
     /**
@@ -220,11 +220,11 @@ class MainTrial extends Trial implements \Countable
 
         return $this->formatArray($data, $format);
     }
-    
+
     /**
      * Checks to see if this MainTrial has been marked complete, if not it
      * checks to see if the MainTrial is complete before marking it complete.
-     * 
+     *
      * @return bool Returns true if the MainTrial is complete, else false.
      */
     public function isComplete()
@@ -232,15 +232,15 @@ class MainTrial extends Trial implements \Countable
         if ($this->complete === false) {
             return false;
         }
-        
+
         foreach ($this->postTrials as $trial) {
             if (!$trial->isComplete()) {
                 return false;
             }
         }
-        
+
         $this->markComplete();
-        
+
         return true;
     }
 
@@ -321,14 +321,14 @@ class MainTrial extends Trial implements \Countable
     {
         return $this->getPostTrial();
     }
-    
+
     /**
      * Deletes the PostTrial at the given position in this MainTrial.
-     * 
+     *
      * This function will fail when trying to delete previous trials.
-     * 
+     *
      * @param int $position The absolute position of the PostTrial to delete.
-     * 
+     *
      * @return boolean|int Returns FALSE if the position to delete is less than
      *                     the current position, 0 if the position to delete
      *                     does not exist, TRUE if the position was deleted, or
@@ -339,16 +339,16 @@ class MainTrial extends Trial implements \Countable
         if ($position < $this->postPosition || $position === 0) {
             return false;
         }
-        
+
         if (!isset($this->postTrials[$position])) {
             $result = 0;
         }
-        
+
         unset($this->postTrials[$position]);
         if (isset($this->postTrials[$position])) {
             $result = false;
         }
-        
+
         // reindex the post trials array starting at 1
         if (!empty($this->postTrials)) {
             $this->updatePositions();
@@ -358,18 +358,18 @@ class MainTrial extends Trial implements \Countable
             );
             ksort($this->postTrials);
         }
-        
-        return isset($result) ? $result : true;        
+
+        return isset($result) ? $result : true;
     }
-    
+
     /**
-     * Deletes the PostTrial at the given offset from the current position in 
+     * Deletes the PostTrial at the given offset from the current position in
      * this MainTrial.
-     * 
+     *
      * This function will fail when trying to delete previous trials.
-     * 
+     *
      * @param int $offset The relative offset of the PostTrial to delete.
-     * 
+     *
      * @return boolean|int Returns FALSE if the position to delete is less than
      *                     the current position, 0 if the position to delete
      *                     does not exist, TRUE if the position was deleted, or
@@ -379,14 +379,14 @@ class MainTrial extends Trial implements \Countable
     {
         return $this->deletePostTrialAbsolute($this->postPosition + $offset);
     }
-    
+
     /**
      * Deletes the PostTrials at the given positions in this MainTrial.
-     * 
+     *
      * This function will fail to delete previous trials.
-     * 
-     * @param array|string $positions The absolute positions of the MainTrials 
-     *                                to delete as indicated by an array of the 
+     *
+     * @param array|string $positions The absolute positions of the MainTrials
+     *                                to delete as indicated by an array of the
      *                                positions or a valid stringToArray string.
      */
     public function deletePostTrialsAbsolute($positions)
@@ -394,7 +394,7 @@ class MainTrial extends Trial implements \Countable
         if (!is_array($positions)) {
             $positions = Experiment::stringToRange($positions);
         }
-        
+
         // must start deleting from smallest value and update as we go
         sort($positions);
         $offset = 0;
@@ -409,23 +409,23 @@ class MainTrial extends Trial implements \Countable
     /**
      * Deletes the PostTrials at the given offsets from the current position in
      * this MainTrial.
-     * 
+     *
      * This function will fail to delete previous trials.
-     * 
+     *
      * @param array|string $offsets The absolute positions of the PostTrials to
-     *                              delete as indicated by an array of the 
+     *                              delete as indicated by an array of the
      *                              offsets or a valid stringToArray string.
-     */    
+     */
     public function deletePostTrials($offsets)
     {
         if (!is_array($offsets)) {
             $offsets = Experiment::stringToRange($offsets);
         }
-        
+
         foreach ($offsets as &$offset) {
-            $offset += $this->postPosition; 
+            $offset += $this->postPosition;
         }
-        
+
         $this->deletePostTrialsAbsolute($offsets);
     }
 
@@ -433,7 +433,7 @@ class MainTrial extends Trial implements \Countable
      * Applies a function to this trial and all of the related PostTrials. The
      * callable function must accept a Trial as it's first parameter: each trial
      * will be injected via this parameter.
-     * 
+     *
      * @param Closure $function The function to run with each Trial. The
      *                          function must accept a Trial as the first
      *                          parameter.
@@ -443,11 +443,11 @@ class MainTrial extends Trial implements \Countable
     public function apply(\Closure $function, array $args = array())
     {
         $params = array_values($args);
-        
+
         // apply to MainTrial
         array_unshift($params, $this);
         call_user_func_array($function, $params);
-        
+
         // apply to PostTrials
         foreach ($this->postTrials as $trial) {
             $params[0] = $trial;
@@ -467,13 +467,13 @@ class MainTrial extends Trial implements \Countable
         $this->position = null;
         $this->postPosition = 0;
         $this->response = new Response();
-        
+
         foreach ($this->postTrials as $pos => $trial) {
             $this->postTrials[$pos] = clone $trial;
             $this->postTrials[$pos]->position = $pos;
         }
     }
-    
+
     /**
      * Updates the positions of the post trials.
      */

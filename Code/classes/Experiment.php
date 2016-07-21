@@ -17,7 +17,7 @@ class Experiment extends MiniDb implements \Countable
      * @var int
      */
     public $position;
-    
+
     /**
      * The Condition information for this Experiment.
      * @var array
@@ -35,14 +35,14 @@ class Experiment extends MiniDb implements \Countable
      * @var array
      */
     protected $trials;
-    
+
     /**
      * The Validators that should be used for each trial type. Stored in a
      * trialType => validator array.
      * @var array
      */
     protected $validators;
-    
+
     /**
      * The directory or directories where the Validators can be found.
      * @var array|string
@@ -67,7 +67,7 @@ class Experiment extends MiniDb implements \Countable
      **************************************************************************/
     /**
      * Constructor.
-     * 
+     *
      * @param array        $condition     The condition information.
      * @param array        $stimuli       The stimuli to use.
      * @param array|string $validatorDirs The paths to the trial types folders.
@@ -82,10 +82,10 @@ class Experiment extends MiniDb implements \Countable
         $this->position = 0;
         $this->pathfinder = $pathfinder;
         $this->validators = array();
-        
+
         parent::__construct();
     }
-    
+
     /**
      * Runs code to prime the trials in the experiment.
      */
@@ -93,10 +93,10 @@ class Experiment extends MiniDb implements \Countable
     {
         $this->apply(function($trial) {
             $trial->settings->addSettings($this->getFromStimuli('settings'));
-            
+
             // other warm up code here...
         });
-        
+
         return $this;
     }
 
@@ -182,7 +182,7 @@ class Experiment extends MiniDb implements \Countable
      * Advances the Experiment to the next Trial, first attempting to advance
      * to the next PostTrial via the MainTrial, then by advancing the Experiment
      * position if the MainTrial and all PostTrials are complete.
-     * 
+     *
      * @return int Returns 1 if advancing caused us to move to a new MainTrial,
      *             else 0.
      */
@@ -192,17 +192,17 @@ class Experiment extends MiniDb implements \Countable
         $trial->advance();
         if ($trial->isComplete()) {
             $this->position = $this->isComplete() ? $this->position : $this->position + 1;
-            
+
             return 1;
         }
-        
+
         return 0;
     }
 
     /**
      * Marks the current MainTrial (including PostTrials) as complete and
      * advances the Experiment position.
-     * 
+     *
      * @param int $num The number of MainTrials to skip (including the current).
      */
     public function skip($num = 1)
@@ -215,10 +215,10 @@ class Experiment extends MiniDb implements \Countable
             ++$this->position;
         }
     }
-    
+
     /**
      * Determines whether there are more Trials to run in the Experiment.
-     * 
+     *
      * @return bool Returns TRUE if the Experiment is complete, else FALSE.
      */
     public function isComplete()
@@ -259,7 +259,7 @@ class Experiment extends MiniDb implements \Countable
 
         return isset($trial) ? $trial->getResponse($name) : null;
     }
-    
+
     /**
      * Gets the current Trial (i.e. if on a PostTrial, get the PostTrial,
      * otherwise return a reference to the MainTrial).
@@ -273,13 +273,13 @@ class Experiment extends MiniDb implements \Countable
 
     /**
      * Gets the Trial that occurs directly after the current Trial.
-     * 
-     * @param int $offset The absolute offset of the Trial to retrieve, e.g. if 
-     *                    at PostTrial 1 of a MainTrial with 2 PostTrials, 
+     *
+     * @param int $offset The absolute offset of the Trial to retrieve, e.g. if
+     *                    at PostTrial 1 of a MainTrial with 2 PostTrials,
      *                    getNext(1) would return PostTrial 2 and getNext(2)
      *                    would return the next MainTrial.
-     * 
-     * @return MainTrial|PostTrial|null Returns the MainTrial or PostTrial at 
+     *
+     * @return MainTrial|PostTrial|null Returns the MainTrial or PostTrial at
      *                                  the given absolute offset if it exists,
      *                                  else null.
      */
@@ -291,13 +291,13 @@ class Experiment extends MiniDb implements \Countable
             $offset += $current->position;
             $current = $this->getTrial();
         }
-        
+
         while ($offset > -1) {
             if ($offset < count($current)) {
                 // offset is post within current main
                 return $current->getPostTrialAbsolute($offset);
             }
-            
+
             // offset is outside of current main
             $offset -= count($current);
             $current = $this->getTrial(1);
@@ -306,22 +306,22 @@ class Experiment extends MiniDb implements \Countable
             }
         }
     }
-    
+
     /**
      * Gets the Trial at the position directly before the current Trial, i.e.
      * the last PostTrial or MainTrial in the line-up.
-     * 
+     *
      * Note this function will not honor skips. That is, if you skipped a Trial,
      * this function will not recognize that and will return the last Trial that
      * would have occurred had you not skipped.
-     * 
+     *
      * @param int $offset The absolute offset of a previous Trial to receive
      *                    (offset should be a positive number), e.g. if at
      *                    PostTrial 1 of a MainTrial with 2 PostTrials, and the
      *                    previous MainTrial had 2 PostTrials, getPrev(1) would
-     *                    return the current MainTrial and getPrev(2) would 
+     *                    return the current MainTrial and getPrev(2) would
      *                    return PostTrial 2 of the previous MainTrial.
-     * 
+     *
      * @return MainTrial|PostTrial|null Returns the MainTrial or PostTrial at
      *                                  the given absolute offset if it exists,
      *                                  else null.
@@ -338,7 +338,7 @@ class Experiment extends MiniDb implements \Countable
 
         // offset is in a prior MainTrial, move offset to beginning of this Main
         $offset -= $current->position;
-        
+
         // go back until offset becomes negative or 0 (just past requested)
         while ($offset > 0) {
             $current = $this->getTrial(-1);
@@ -347,7 +347,7 @@ class Experiment extends MiniDb implements \Countable
             }
             $offset -= count($current);
         }
-        
+
         // requested is now the inverse of the offset
         return $current->getPostTrialAbsolute(-1 * $offset);
     }
@@ -376,21 +376,21 @@ class Experiment extends MiniDb implements \Countable
     {
         return isset($this->trials[$pos]) ? $this->trials[$pos] : null;
     }
-    
+
     /**
      * Gets the trials at the relative offsets from the current position.
-     * 
+     *
      * An array of the offsets should be passed, or 'all' or a string that can
      * be converted using Experiment::stringToRange.
-     * 
+     *
      * @param array|string $offsets The array of offsets for the Trials to
      *                              retrieve. If 'all' is given, all of the
      *                              Trials are returned. If any other string is
      *                              given, the method converts it to a range
      *                              array using Experiment::stringToRange.
-     * 
+     *
      * @return array The array of Trials with the relative offsets as keys.
-     * 
+     *
      * @uses stringToRange Uses stringToRange to convert strings to offset range
      *                     arrays.
      */
@@ -400,31 +400,31 @@ class Experiment extends MiniDb implements \Countable
             if (trim(strtolower($offsets)) === 'all') {
                 return $this->getTrialsAbsolute($offsets);
             }
-            
+
             $offsets = Experiment::stringToRange($offsets);
         }
-        
+
         foreach ($offsets as &$offset) {
-            $offset += $this->position; 
+            $offset += $this->position;
         }
-        
+
         return $this->getTrialsAbsolute($offsets);
     }
-    
+
     /**
      * Gets the trials at the absolute positions in the current Experiment.
-     * 
+     *
      * An array of the offsets should be passed, or 'all' or a string that can
      * be converted using Experiment::stringToRange.
-     * 
+     *
      * @param array|string $positions The array of positions for the Trials to
      *                                retrieve. If 'all' is given, all of the
      *                                Trials are returned. If any other string
      *                                is given, the method converts it to a
      *                                range array using stringToRange.
-     * 
+     *
      * @return array The array of Trials with the positions as keys.
-     * 
+     *
      * @uses stringToRange Uses stringToRange to convert strings to offset range
      *                     arrays.
      */
@@ -434,25 +434,25 @@ class Experiment extends MiniDb implements \Countable
             if (trim(strtolower($positions)) === 'all') {
                 return $this->trials;
             }
-            
+
             $positions = Experiment::stringToRange($positions);
         }
-        
+
         $trials = array();
         foreach ($positions as $pos) {
             $trials[$pos] = $this->getTrialAbsolute($pos);
         }
-        
+
         return $trials;
     }
-    
+
     /**
      * Deletes the MainTrial at the given position in the Experiment.
-     * 
+     *
      * This function will fail when trying to delete previous trials.
-     * 
+     *
      * @param int $position The absolute position of the MainTrial to delete.
-     * 
+     *
      * @return boolean|int Returns FALSE if the position to delete is less than
      *                     the current position, 0 if the position to delete
      *                     does not exist, TRUE if the position was deleted, or
@@ -463,31 +463,31 @@ class Experiment extends MiniDb implements \Countable
         if ($position < $this->position) {
             return false;
         }
-        
+
         if (!isset($this->trials[$position])) {
             $result = 0;
         }
-        
+
         unset($this->trials[$position]);
         if (isset($this->trials[$position])) {
             $result = false;
         }
-        
+
         $this->updatePositions();
         $this->trials = array_values($this->trials);
         ksort($this->trials);
-        
-        return isset($result) ? $result : true;        
+
+        return isset($result) ? $result : true;
     }
-    
+
     /**
-     * Deletes the MainTrial at the given offset from the current position in 
+     * Deletes the MainTrial at the given offset from the current position in
      * the Experiment.
-     * 
+     *
      * This function will fail when trying to delete previous trials.
-     * 
+     *
      * @param int $offset The relative offset of the MainTrial to delete.
-     * 
+     *
      * @return boolean|int Returns FALSE if the position to delete is less than
      *                     the current position, 0 if the position to delete
      *                     does not exist, TRUE if the position was deleted, or
@@ -497,14 +497,14 @@ class Experiment extends MiniDb implements \Countable
     {
         return $this->deleteTrialAbsolute($this->position + $offset);
     }
-    
+
     /**
      * Deletes the MainTrials at the given positions in the Experiment.
-     * 
+     *
      * This function will fail to delete previous trials.
-     * 
-     * @param array|string $positions The absolute positions of the MainTrials 
-     *                                to delete as indicated by an array of the 
+     *
+     * @param array|string $positions The absolute positions of the MainTrials
+     *                                to delete as indicated by an array of the
      *                                positions or a valid stringToArray string.
      */
     public function deleteTrialsAbsolute($positions)
@@ -512,7 +512,7 @@ class Experiment extends MiniDb implements \Countable
         if (!is_array($positions)) {
             $positions = Experiment::stringToRange($positions);
         }
-        
+
         // must start deleting from smallest value and update as we go
         sort($positions);
         $offset = 0;
@@ -527,23 +527,23 @@ class Experiment extends MiniDb implements \Countable
     /**
      * Deletes the MainTrials at the given offsets from the current position in
      * the Experiment.
-     * 
+     *
      * This function will fail to delete previous trials.
-     * 
+     *
      * @param array|string $offsets The absolute positions of the MainTrials to
-     *                              delete as indicated by an array of the 
+     *                              delete as indicated by an array of the
      *                              offsets or a valid stringToArray string.
-     */    
+     */
     public function deleteTrials($offsets)
     {
         if (!is_array($offsets)) {
             $offsets = Experiment::stringToRange($offsets);
         }
-        
+
         foreach ($offsets as &$offset) {
-            $offset += $this->position; 
+            $offset += $this->position;
         }
-        
+
         $this->deleteTrialsAbsolute($offsets);
     }
 
@@ -565,7 +565,7 @@ class Experiment extends MiniDb implements \Countable
             foreach (Experiment::stringToRange($subset) as $pos) {
                 $items[] = $this->getStimulus($pos);
             }
-            
+
             return $items;
         }
 
@@ -584,16 +584,16 @@ class Experiment extends MiniDb implements \Countable
         if ($pos !== null && isset($this->stimuli[$pos - 2])) {
             return $this->stimuli[$pos - 2];
         }
-        
+
         return null;
     }
-    
+
     /**
      * Retrieves the value at the given key in the stimuli array for the current
      * Trial.
-     * 
+     *
      * @param string $name The name of the variable to retrieve.
-     * 
+     *
      * @return mixed The value for the named variable in the current Trial's
      *               stimuli array.
      */
@@ -603,10 +603,49 @@ class Experiment extends MiniDb implements \Countable
 
         return isset($trial) ? $trial->getFromStimuli($name) : null;
     }
-    
+
+    /**
+     * Scans the given key (retrieved by the get method) for variables and
+     * replaces the variable with the appropriate value as stored in the
+     * Experiment.
+     *
+     * Example:
+     * ```php
+     * $_EXPT->add('age', 26);
+     * $_EXPT->add('text', 'I am $age.');
+     * $_EXPT->updateVariables('text');
+     *
+     * // returns 'I am 26.'
+     * $_EXPT->get('text');
+     * ```
+     * @param string $key    The key to update.
+     * @param bool   $strict Set to true to restrict the search only to the
+     *                       current MainTrial.
+     */
+    public function updateVariables($key, $strict = true)
+    {
+        $val = $this->get(trim($key), $strict);
+        if (!empty($val)) {
+            $regexp = array(
+                // normal variables: $variable
+                '/\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)/',
+
+                // non-normal variables: ${weird column & name}
+                '/\$\{.*\}/',
+            );
+
+            $val = preg_replace_callback($regexp,
+                function($ms) { return $this->get($ms[1]); },
+                $val
+            );
+
+            $this->update($key, $val);
+        }
+    }
+
     /**
      * Gets the condition information for this Experiment.
-     * 
+     *
      * @return array Returns the array of condition information for this object.
      */
     public function getCondition()
@@ -616,14 +655,14 @@ class Experiment extends MiniDb implements \Countable
 
     /**
      * Gets the Experiment's Pathfinder object.
-     * 
+     *
      * @return Pathfinder Returns the Experiment's Pathfinder object.
      */
     public function getPathfinder()
     {
         return $this->pathfinder;
     }
-    
+
     /**
      * Sets the Experiment's Pathfinder object.
      * @param Pathfinder $pathfinder The new Pathfinder object to use.
@@ -632,7 +671,7 @@ class Experiment extends MiniDb implements \Countable
     {
         $this->pathfinder = $pathfinder;
     }
-    
+
     /**
      * Inserts a MainTrial at the specified position. If no position is given,
      * the trial is inserted at the end. The position numbers for all trials are
@@ -654,11 +693,11 @@ class Experiment extends MiniDb implements \Countable
      *
      * @param MainTrial|array $trial The MainTrial or the data to construct the
      *                               MainTrial with.
-     * @param int             $pos   The 0-indexed position at which to insert. 
-     *                               If null is given (default) the trial will 
-     *                               be added at the end of the Experiment. If a 
-     *                               negative offset is given, the insertion is 
-     *                               made at that position relative to the end 
+     * @param int             $pos   The 0-indexed position at which to insert.
+     *                               If null is given (default) the trial will
+     *                               be added at the end of the Experiment. If a
+     *                               negative offset is given, the insertion is
+     *                               made at that position relative to the end
      *                               of the Experiment.
      *
      * @return MainTrial Returns the inserted trial.
@@ -674,7 +713,7 @@ class Experiment extends MiniDb implements \Countable
                 . 'that the to-be-added trial information is an array or '
                 . 'already constructed MainTrial ');
         }
-        
+
         $trial->setExperiment($this);
 
         array_splice($this->trials, is_null($pos)
@@ -701,26 +740,26 @@ class Experiment extends MiniDb implements \Countable
             $this->addTrialAbsolute($data, is_null($pos) ? $pos : ($i + $pos));
         }
     }
-    
+
     /**
      * Adds a Trial or trial information array at the given relative offset.
-     * 
-     * @param MainTrial|array $trial  The MainTrial or array to create a 
+     *
+     * @param MainTrial|array $trial  The MainTrial or array to create a
      *                                MainTrial from.
      * @param int             $offset The offset to insert the trial at.
-     * 
+     *
      * @return MainTrial Returns the MainTrial that was added.
      */
     public function addTrial($trial = array(), $offset = 1)
     {
         return $this->addTrialAbsolute($trial, $this->position + $offset);
     }
-    
+
     /**
      * Adds multiple MainTrials from an array at the given relative offset. The
      * array can consist of any combination of MainTrials or trial information
      * arrays that MainTrials can be created from.
-     * 
+     *
      * @param array $trials The trials to insert.
      * @param int   $offset The offset at which to insert the trials.
      */
@@ -728,7 +767,7 @@ class Experiment extends MiniDb implements \Countable
     {
         $this->addTrialsAbsolute($trials, $this->position + $offset);
     }
-    
+
     /**
      * Updates the position properties of all the trials. This function is
      * called each time a trial is added or removed.
@@ -741,11 +780,11 @@ class Experiment extends MiniDb implements \Countable
             ++$i;
         }
     }
-    
+
     /**
      * Execute an anonymous function on every trial in the experiment. The
      * function must accept a Trial as the first argument.
-     * 
+     *
      * @param \Closure $function The function to apply on each trial.
      * @param array    $args     The arguments to use in the function call.
      */
@@ -753,13 +792,13 @@ class Experiment extends MiniDb implements \Countable
     {
         foreach ($this->trials as $maintrial) {
             $maintrial->apply($function, $args);
-       } 
+       }
     }
-    
+
     /**
      * Validates a Trial using the Validator registered for its trial type, if
      * the Validator exists.
-     * 
+     *
      * @return array Returns an indexed array of the errors found when running
      *               validation and information about the Trials with errors.
      */
@@ -772,14 +811,14 @@ class Experiment extends MiniDb implements \Countable
                 $errors[] = $error;
             }
         }
-        
+
         return $errors;
     }
-    
+
     /**
      * Adds a validator to be used by the Experiment. The trial type it should
      * be used for must be specified.
-     * 
+     *
      * @param string    $trialtype The trial type to use the Validator for.
      * @param Validator $validator The Validator to add.
      * @param bool      $merge     Indicates whether the new Validator should
@@ -794,12 +833,12 @@ class Experiment extends MiniDb implements \Countable
             $this->validators[$trialtype]->merge($validator);
         }
     }
-    
+
     /**
      * Retrieves the Validator for the given trial type, if one exists.
-     * 
+     *
      * @param string $trialtype The trial type to retrieve the Validator for.
-     * 
+     *
      * @return Validator|null The Validator for the given trial type, else null.
      */
     public function getValidator($trialtype)
@@ -807,13 +846,13 @@ class Experiment extends MiniDb implements \Countable
         if (!isset($this->validators[$trialtype])) {
             $this->loadValidator($trialtype);
         }
-        
+
         return $this->validators[$trialtype];
     }
-    
+
     /**
      * Loads a Validator if it is not present in the validators array.
-     * 
+     *
      * @param string $trialtype The trial type to load the Validator for.
      */
     protected function loadValidator($trialtype)
@@ -827,12 +866,12 @@ class Experiment extends MiniDb implements \Countable
                 false)
             : null;
     }
-    
+
     /**
      * Sets an array of Validators to the validators property. By default the
-     * old Validators are replaced, but the merge argument can be used to 
+     * old Validators are replaced, but the merge argument can be used to
      * combine the groups.
-     * 
+     *
      * @param array $validators The Validators to set.
      * @param bool $merge       Indicates whether the new Validator should
      *                          replace any existing (FALSE) or merge with
@@ -854,14 +893,14 @@ class Experiment extends MiniDb implements \Countable
      *
      * @param int $pos   The position of the MainTrial to copy, relative to the
      *                   current position.
-     * 
+     *
      * @return MainTrial The cloned MainTrial.
      */
     public function copy($pos = 0)
     {
         return $this->getTrial($pos)->copy();
     }
-    
+
     /**
      * Converts a string in selective range syntax to an array of the digits.
      * Syntax: separate terms with commas (',') or semicolons (';'), and
@@ -887,7 +926,7 @@ class Experiment extends MiniDb implements \Countable
             }
             $out = array_merge($out, is_array($val) ? $val : array($val));
         }
-        
+
         foreach ($out as $i => $string) {
             if (!is_numeric($string)) {
                 unset($out[$i]);
@@ -896,13 +935,13 @@ class Experiment extends MiniDb implements \Countable
 
         return $out;
     }
-    
+
     /**
      * Determines if a string can be converted to a range using
      * Experiment::stringToRange().
-     * 
+     *
      * @param string $string The string to check.
-     * 
+     *
      * @return bool True if the string can be converted to a range, else false.
      */
     public static function isValidStringToRange($string)

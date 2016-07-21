@@ -171,11 +171,11 @@ class Pathfinder
 
         $this->setRootPaths();
     }
-    
+
     public function __get($path) {
         return $this->get($path);
     }
-    
+
     public function __wakeup() {
         $this->setRootPaths();
     }
@@ -323,10 +323,10 @@ class Pathfinder
      */
     public function getURL()
     {
-        $port = $_SERVER['SERVER_PORT'];
-        $https = isset($_SERVER['HTTPS']) ? $_SERVER['HTTPS'] : null;
-        $domain = $_SERVER['HTTP_HOST'];
-        $resource = $_SERVER['REQUEST_URI'];
+        $port     = $this->getServerValue('SERVER_PORT');
+        $https    = $this->getServerValue('HTTPS');
+        $domain   = $this->getServerValue('SERVER_NAME');
+        $resource = $this->getServerValue('SCRIPT_NAME');
 
         // from http://stackoverflow.com/q/4503135
         if ($port === 443 || ($https !== null && $https !== 'off')) {
@@ -407,13 +407,13 @@ class Pathfinder
 
         return $path;
     }
-    
+
     /**
      * Sets a new path in the path list or replaces the existing path.
-     * 
+     *
      * The name string is converted to lowercase and spaces are replaced with
      * underscores.
-     * 
+     *
      * @param string $name The name of the path to set.
      * @param string $path The path to set, absolute or relative to the root.
      */
@@ -573,5 +573,22 @@ class Pathfinder
         $path = $this->get($selector);
 
         return "<script src='$path' type='text/javascript'></script>";
+    }
+
+    /**
+     * gets a variable from $_SERVER, using filter_input if possible
+     *
+     * @param string $variable_name a key inside $_SERVER
+     *
+     * @return mixed server value, or null if not found
+     */
+    private function getServerValue($variable_name) {
+        if (filter_has_var(INPUT_SERVER, $variable_name)) {
+            return filter_input(INPUT_SERVER, $variable_name);
+        } elseif (isset($_SERVER[$variable_name])) {
+            return $_SERVER[$variable_name];
+        } else {
+            return null;
+        }
     }
 }

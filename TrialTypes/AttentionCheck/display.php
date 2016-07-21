@@ -1,20 +1,20 @@
-<?php 
+<?php
 /**
  * Attention Check-- how to use it
  * - This trial is designed to be a like an 'Instruct' that verifies whether
  * - or not the participant understood the question
- * 
+ *
  * Main text of the 'Instruct' goes into the 'Text' column of the procedure
- * 
- * 
+ *
+ *
  * The options for the multiple choice text go into the 'Settings' column
- *     
+ *
  *     Setting         Value
- *     
+ *
  *     Question        Who watches the Watchmen?
  *     Correct         Text for the correction option goes here
  *     Alternatives    option1; option2; option 3; etc...
- * 
+ *
  */
 
 // reading and saving settings

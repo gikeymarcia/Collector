@@ -13,7 +13,7 @@ function Task(tracks)
   this.attempt = null;
   this.beepTrack = new Track(beepFile);
   this.cueTracks = tracks;
-  
+
   /**
    * Creates the trial for the next level and starts it.
    */
@@ -35,7 +35,7 @@ function Task(tracks)
 
   /**
    * Determines whether the task is complete or not.
-   * @return {string} 'complete' if the last level has a score of 0 and both 
+   * @return {string} 'complete' if the last level has a score of 0 and both
    *                  trials were run for it, else 'incomplete'.
    */
   this.determineStatus = function () {
@@ -117,7 +117,7 @@ function Record()
   }
 
   /**
-   * Calculates the reaction time, defined as milliseconds between the last 
+   * Calculates the reaction time, defined as milliseconds between the last
    * call to Record.setRtBase and the call of this function.
    * @return {number} The number of milliseconds since Record.setRtBase was last called.
    */
@@ -126,7 +126,7 @@ function Record()
   }
 
   /**
-   * Prints all sequences, responses, scores, and rts as a JSON object 
+   * Prints all sequences, responses, scores, and rts as a JSON object
    * organized by presentation order.
    * @return {object} JSON object of all recorded data organized by trial.
    */
@@ -134,7 +134,7 @@ function Record()
     var output = [];
     for (var i = 0, ct = this.sequences.length; i < ct; ++i) {
       output.push({
-        'sequence': this.sequences[i], 
+        'sequence': this.sequences[i],
         'response': this.responses[i],
         'score': this.scores[i],
         'rt': this.rts[i]
@@ -142,7 +142,7 @@ function Record()
     }
 
     return JSON.stringify(output);
-  } 
+  }
 }
 
 /**
@@ -228,7 +228,7 @@ function Trial(level, tracks)
     do {
       digit = 1 + Math.floor(Math.random() * (9 - 1 + 1));
     } while (digit === this.sequence[0]);
-    
+
     this.sequence.unshift(digit);
     this.tracks.unshift(tracks[digit - 1]);
   }

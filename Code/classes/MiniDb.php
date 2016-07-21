@@ -22,7 +22,7 @@ class MiniDb
 
     /**
      * Constructor.
-     * 
+     *
      * @param array $data [Optional] The data to initialze the MiniDb with.
      */
     public function __construct(array $data = array())
@@ -76,7 +76,7 @@ class MiniDb
      * @param string $name  The key to add or update.
      * @param mixed  $value The value to assign to the key.
      *
-     * @return bool Returns true if a key was updated, else false if a key was 
+     * @return bool Returns true if a key was updated, else false if a key was
      *              added.
      */
     public function update($name, $value)
@@ -114,7 +114,7 @@ class MiniDb
     {
         switch (strtolower($format)) {
             case 'json':
-                return (version_compare(PHP_VERSION, '5.4.0') >= 0) 
+                return (version_compare(PHP_VERSION, '5.4.0') >= 0)
                     ? json_encode($array, JSON_PRETTY_PRINT)
                     : json_encode($array);
             default:

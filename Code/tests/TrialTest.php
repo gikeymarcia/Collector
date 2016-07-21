@@ -17,7 +17,7 @@ class TrialTest extends \PHPUnit_Framework_TestCase
     {
         $expt = $this->obj->getExperiment();
         $this->assertNull($expt);
-        
+
         $expt2 = new Experiment();
         $this->obj->setExperiment($expt2);
         $this->assertSame($expt2, $this->obj->getExperiment());
@@ -38,10 +38,10 @@ class TrialTest extends \PHPUnit_Framework_TestCase
     {
         $stim = array(1 => array('cue' => 'cue1'), 2 => array('cue' => 'cue2'));
         $this->obj->setExperiment(new Experiment(array(), $stim));
-        
+
         $this->obj->update('item', '3');
         $this->assertEquals(array('cue' => 'cue1'), $this->obj->get('item'));
-        
+
         $this->obj->update('item', '4');
         $this->assertEquals(array('cue' => 'cue2'), $this->obj->get('item'));
     }
@@ -56,7 +56,7 @@ class TrialTest extends \PHPUnit_Framework_TestCase
         $this->obj->add('item', 'survey1.csv');
         $this->assertEquals('survey1.csv', $this->obj->get('item'));
     }
-    
+
     /**
      * @covers Collector\Trial::getFromStimuli
      */
@@ -67,7 +67,7 @@ class TrialTest extends \PHPUnit_Framework_TestCase
         $this->obj->add('item', 3);
         $this->assertEquals('cue1', $this->obj->getFromStimuli('Cue'));
     }
-    
+
     /**
      * @covers Collector\Trial::getDebugInfo
      */

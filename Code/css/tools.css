@@ -25,11 +25,11 @@
   }
 #salt {
   font-family: "Inconsolata", "inconsolata_local", "Courier New", Courier, monospace;
-  color: #f7f7f7;     
+  color: #f7f7f7;
   font-weight: 400; /* we only have the 400s for inconsolata */
-  width: 300px;       
+  width: 300px;
   line-height: 95%;
-  word-wrap: break-word;  
+  word-wrap: break-word;
   display: block;
   margin: 50px auto 20px auto;
   font-size: 1.3em;

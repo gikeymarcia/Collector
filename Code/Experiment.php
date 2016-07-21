@@ -37,18 +37,20 @@ if ($_POST !== array()) {
     // score data
     require $_TRIAL->getRelatedFile('scoring');
     $data = isset($data) ? $data : $_POST;
-    
+
     if (isset($sideData)) {
-        if(empty($sidedata_label)) $sidedata_label = $trial_type;
+        if (empty($sidedata_label)) {
+            $sidedata_label = $trial_type;
+        }
         $_SIDE->add($sideData, $sidedata_label);
     }
-    
+
     // record data and advance to next PostTrial if applicable
     $_EXPT->record($data);
     if (($_EXPT->advance()) === 1) {
-        recordTrial($_EXPT->getTrial());
+        recordTrial($_EXPT->getTrial(-1));
     }
-    
+
     // still need to complete this file, don't write to file yet
     header('Location: ' . $_PATH->get('Experiment Page'));
     exit;
@@ -71,46 +73,14 @@ if (!empty($helper)) {
     require $helper;
 }
 
-// update $text containing $columnNames by passing them to $_EXPT->get()
-$text = $_EXPT->get('text');
-if (!empty($text)) {
-    $regexp = array(
-        '/\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)/', // normal variables: $variable
-        '/\$\{.*\}/', // non-normal variables: ${weird column & name}
-    );
-    $text = preg_replace_callback($regexp,
-        function($matches) use ($_EXPT) { return $_EXPT->get($matches[1]); },
-        $text
-    );
-} else {
-    $text = '';
-}
-$_EXPT->update('text', $text);
-unset($text);
+// update the text string by looking for variables in it (e.g. $var) and getting
+// the values using $_EXPT->get()
+$_EXPT->updateVariables('text');
 
 // override time in debug mode, use standard timing if no debug time is set
 if ($_SESSION['Debug'] == true && $_SETTINGS->debug_time != '') {
     $_EXPT->update('max time', $_SETTINGS->debug_time);
 }
-
-if ($_EXPT->get('min time') === null) {
-    $_EXPT->update('min time', 'not set');
-}
-if (!isset($defaultMaxTime)) {
-    $defaultMaxTime = null;
-}
-
-// set class for input form (shows or hides 'submit' button)
-$maxTime = strtolower($_EXPT->get('max time'));
-if ($maxTime === 'computer' || $maxTime === 'default') {
-    $maxTime = is_numeric($defaultMaxTime) ? $defaultMaxTime : 'user';
-}
-if (!is_numeric($maxTime)) {
-    $maxTime = 'user';
-}
-$formClass = ($maxTime === 'user') ? 'UserTiming' : 'ComputerTiming';
-$_EXPT->update('max time', $maxTime);
-unset($maxTime);
 
 /*
  *  DISPLAY
@@ -127,18 +97,25 @@ require $_PATH->get('Header');
 // actually include the trial type display file here
 $display = $_TRIAL->getRelatedFile('display');
 if ($display): ?>
-<form class="experimentForm <?= $formClass; ?> invisible" action="<?= $postTo; ?>" method="post" id="content" autocomplete="off">
+<script src="<?= $_PATH->get('Collector JS', 'url') ?>"></script>
+<script>
+    Collector.inputs.min = "<?= $_EXPT->get('min time') ?>";
+    Collector.inputs.max = "<?= $_EXPT->get('max time') ?>";
+</script>
+<form class="experimentForm invisible" action="<?= $postTo; ?>" method="post" id="content" autocomplete="off">
   <?php include $display ?>
 
   <?php if ($_SESSION['Debug']) : ?>
   <button type="submit" style="position: absolute; top: 50px; right: 50px;"onclick="$('form').submit()">Debug Submit!</button>
   <?php endif; ?>
 
-  <input id="RT"       name="RT"      type="hidden"  value="-1"/>
-  <input id="RTfirst"  name="RTfirst" type="hidden"  value="-1"/>
-  <input id="RTlast"   name="RTlast"  type="hidden"  value="-1"/>
-  <input id="Focus"    name="Focus"   type="hidden"  value="-1"/>
+  <input id="Duration"          name="Duration"          type="hidden"  value="-1"/>
+  <input id="First_Input_Time"  name="First_Input_Time"  type="hidden"  value="-1"/>
+  <input id="Last_Input_Time"   name="Last_Input_Time"   type="hidden"  value="-1"/>
+  <input id="Focus"             name="Focus"             type="hidden"  value="-1"/>
 </form>
+
+
 
 <?php else: ?>
 <h2>Could not find the following trial type: <strong><?= $_TRIAL->get('trial type') ?></strong></h2>
@@ -166,7 +143,7 @@ endif; ?>
 <?php
 // Diagnostics
 if (($_SETTINGS->trial_diagnostics == true) || ($trialFail == true)) {
-    d($_TRIAL->getDebugInfo());
+    datadump($_TRIAL->getDebugInfo());
 }
 ?>
 
@@ -178,7 +155,7 @@ if ($_EXPT->getTrial(1) !== null) {
     if (is_array($item) && !empty($item)) {
         foreach (array_values($_EXPT->getTrial(1)->get('item')) as $val) {
             if (show($val) !== $val) {
-                echo show($val); 
+                echo show($val);
             }
         }
     }

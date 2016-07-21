@@ -1,5 +1,5 @@
 <?php
-// if not set then set to 0, 
+// if not set then set to 0,
 // otherwise convert formatted times like "5d:10h:15m:8s" to seconds
 $minTime = $_EXPT->get('min time');
 $maxTime = $_EXPT->get('max time');

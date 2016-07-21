@@ -745,7 +745,7 @@ function getTrialTypeFiles($trialTypeName, Pathfinder $pathfinder = null)
  * Finds all trial types and their files.
  *
  * @global Pathfinder $_PATH The Pathfinder currently in use.
- * 
+ *
  * @param Pathfinder $pathfinder [Optional] The pathfinder to use.
  *
  * @return array Associative array of $trialtype => $arrayOfFiles.
@@ -755,10 +755,10 @@ function getAllTrialTypeFiles(Pathfinder $pathfinder = null)
     global $_PATH;
     $paths = isset($pathfinder) ? $pathfinder : $_PATH;
     if (!isset($paths)) { return null; }
-    
+
     $trialTypes = array();
     $trialTypeDirs = array($paths->get('Custom Trial Types'), $paths->get('Trial Types'));
-    
+
     foreach ($trialTypeDirs as $dir) {
         $dirScan = scandir($dir);
         foreach ($dirScan as $entry) {
@@ -1008,11 +1008,11 @@ function scanDirRecursively($dir)
 
 /**
  * Determine if the string refers to an audio or image file and generate tags.
- * 
+ *
  * @param string $string  The string to process.
  * @param bool   $endOnly If TRUE, only the last 5 characters of the string
  *                        are checked for an extension.
- * 
+ *
  * @return string The processed string with HTML tags if appropriate.
  */
 function show($string, $endOnly = true)
@@ -1113,18 +1113,18 @@ function cleanPath ($path) {
 }
 /**
  * Searches a given directory for a target file or directory.
- * 
+ *
  * @param string $dir        The directory to search inside.
  * @param string $target     The file or directory to look for.
  * @param bool   $findAltExt If TRUE, files with the same name but different
  *                           extensions will be matched.
- * @param int    $findDir    Set 0 to only find files, 1 to find files and 
+ * @param int    $findDir    Set 0 to only find files, 1 to find files and
  *                           directories, or 2 to only find directories.
- * 
- * @return string|bool Returns the path to the file if it was found, else 
+ *
+ * @return string|bool Returns the path to the file if it was found, else
  *                     false.
  */
-function findInDir($dir, $target, $findAltExt = true, 
+function findInDir($dir, $target, $findAltExt = true,
     $findDir = 1
 ) {
     // this public static function is expecting valid file paths
@@ -1248,11 +1248,11 @@ function convertAbsoluteDir($dir) {
  *
  * @param string $path     The file to search for.
  * @param bool $findAltExt Set false for strict extension checking.
- * @param int  $findDir    Set 0 to only return paths to actual files, 1 to 
+ * @param int  $findDir    Set 0 to only return paths to actual files, 1 to
  *                         return paths to both files and directories, or 2
  *                         to only return paths to directories
- * 
- * @return string|bool Returns the path to the file if it was found, else 
+ *
+ * @return string|bool Returns the path to the file if it was found, else
  *                     false.
  */
 function fileExists ($path, $findAltExt = true, $findDir = 1) {
@@ -1595,4 +1595,53 @@ function stripUrlScheme($url)
 function isLocal($path)
 {
     return !filter_var($path, FILTER_VALIDATE_URL);
+}
+
+// Gregor Macgregor at http://stackoverflow.com/questions/25232975/php-filter-inputinput-server-request-method-returns-null
+/**
+ * Pulls a variable from a superglobal, using the provided filter
+ *
+ * Fixes issue where $_SERVER is not populated on fast-cgi servers
+ *
+ * @param int $type One of INPUT_GET, INPUT_POST, INPUT_COOKIE, INPUT_SERVER, or INPUT_ENV
+ * @param string $variable_name Name of a variable to get.
+ * @param $filter [Optional] The ID of the filter to apply, default FILTER_DEFAULT
+ * @param mixed $options [Optional] Associative array of options or bitwise disjunction of flags.
+ *                                  If filter accepts options, flags can be provided in "flags" field of array.
+ *
+ * @return mixed null if not found, else variable with provided filter
+ */
+function filter_input_fix($type, $variable_name, $filter = FILTER_DEFAULT, $options = NULL )
+{
+    $checkTypes = array(
+        INPUT_GET,
+        INPUT_POST,
+        INPUT_COOKIE
+    );
+
+    if ($options === NULL) {
+        // No idea if this should be here or not
+        // Maybe someone could let me know if this should be removed?
+        $options = FILTER_NULL_ON_FAILURE;
+    }
+
+    if (in_array($type, $checkTypes) || filter_has_var($type, $variable_name)) {
+        return filter_input($type, $variable_name, $filter, $options);
+    } else if ($type == INPUT_SERVER && isset($_SERVER[$variable_name])) {
+        return filter_var($_SERVER[$variable_name], $filter, $options);
+    } else if ($type == INPUT_ENV && isset($_ENV[$variable_name])) {
+        return filter_var($_ENV[$variable_name], $filter, $options);
+    } else {
+        return NULL;
+    }
+}
+
+/**
+ * prints information about a value
+ *
+ * @param mixed $data the data to be printed
+ */
+function datadump($data) {
+    require_once __DIR__ . '/vendor/kint/Kint.class.php';
+    d($data);
 }

@@ -17,7 +17,7 @@ abstract class Trial extends MiniDb
      * @var TrialSettings
      */
     public $settings;
-    
+
     /**
      * The Experiment that this Trial belongs to.
      * @var Experiment
@@ -42,7 +42,7 @@ abstract class Trial extends MiniDb
      * @var Response
      */
     protected $response;
-    
+
     /**
      * Files related to this Trial like the scoring, display, styles.
      * @var MiniDb
@@ -70,13 +70,13 @@ abstract class Trial extends MiniDb
                 $this->settings = new TrialSettings($val);
                 continue;
             }
-            
+
             if (!empty($val)) {
                 $cleanData[$key] = $val;
             }
         }
         parent::__construct($cleanData);
-        
+
         if (!isset($this->settings)) {
             $this->settings = new TrialSettings('');
         }
@@ -89,48 +89,48 @@ abstract class Trial extends MiniDb
      * the Response so that it cannot be edited further.
      */
     abstract public function markComplete();
-    
+
     /**
      * Should find the appropriate Validator if it exists and return any errors
      * found during validation along with relevant information about the Trial.
-     * 
+     *
      * @return array Should return an array of errors found during validation.
      */
     abstract public function validate();
-    
+
     /**
      * Should update the named key in the relatedFiles MiniDb for the current
      * Trial with the path to the given related file (like 'script.php').
-     * 
+     *
      * @param string $name The name of the related file being added.
      * @param string $path The full path of the related file.
-     * 
+     *
      * @return bool Should return true if the key is added, else false.
      */
     abstract public function setRelatedFile($name, $path);
-    
+
     /**
      * Should gets the named path from the relatedFiles MiniDb.
-     * 
+     *
      * @param string $name The name of the related file to get the path for.
-     * 
+     *
      * @return mixed Should return the stored value if the key exists, else null.
      */
     abstract public function getRelatedFile($name);
-    
+
     /* Overrides
      **************************************************************************/
     /**
      * Overrides MiniDB::get to also check the Trial's stimuli for a key.
-     * 
+     *
      * @param string $name The key for the value to retrieve.
-     * 
+     *
      * @return mixed The value if it exists, else null.
      */
     public function get($name)
     {
         $val = parent::get($name);
-        
+
         if (strtolower($name) === 'item') {
             if (is_numeric($val)) {
                 $val = $this->expt->getStimulus($val);
@@ -138,7 +138,7 @@ abstract class Trial extends MiniDb
                 $val = $this->expt->getStimuli($val);
             }
         }
-        
+
         return $val !== null ? $val : $this->getFromStimuli($name);
     }
 
@@ -146,9 +146,9 @@ abstract class Trial extends MiniDb
      **************************************************************************/
     /**
      * Retrieves the value for the given key in the Trial's 'item' array.
-     * 
+     *
      * @param string $name The key to retrieve from the 'item' array.
-     * 
+     *
      * @return mixed Returns the value at the key in the 'item' array if it
      *               exists, else null.
      */
@@ -157,21 +157,21 @@ abstract class Trial extends MiniDb
         $item = $this->expt->getStimulus(parent::get('item'));
         if (is_array($item) && !empty($item)) {
             $item = array_change_key_case($item, CASE_LOWER);
-            
+
             return isset($item[strtolower($name)])
                 ? $item[strtolower($name)]
                 : null;
         }
-        
+
         return null;
     }
-    
+
     /**
      * Returns an array of the Trial's information to help debug it.
-     * 
+     *
      * @param bool $noObjects Set TRUE to convert this Trial object using export
      *                        before outputting the information.
-     * 
+     *
      * @returns array Returns an array of the Trial's information.
      */
     public function getDebugInfo($noObjects = false)
@@ -184,7 +184,7 @@ abstract class Trial extends MiniDb
             'object' => $noObjects ? $this->export() : $this,
         );
     }
-    
+
     /**
      * Retrieves the given key from the Trial's Response object.
      *
@@ -250,7 +250,7 @@ abstract class Trial extends MiniDb
     {
         return $this->complete;
     }
-    
+
     /**
      * Alias for cloning the object.
      *

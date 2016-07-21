@@ -7,20 +7,20 @@
  * Checks that the scrambled+hashed response matches what the server
  * calculates when it does the same scramble+hash with the stored password.
  *
- * This is done so the user doesn't send us the password. Instead we 
- * hash(salt+password) server side and challenge the user to get the 
+ * This is done so the user doesn't send us the password. Instead we
+ * hash(salt+password) server side and challenge the user to get the
  * same resultant hash (i.e., they entered the correct password)
  *
  * By doing this procedure anyone sniffing the transmission is never shown
  * the password and the response they see transmitted cannot be used in the
- * future to login becasue each login is dependent on a unique salt the 
+ * future to login becasue each login is dependent on a unique salt the
  * sever generates for every login attempt
- * 
+ *
  * @param string $response  The user response = hash(user input + salt).
  * @param string $password  The stored password in Password.php.
  * @param string $salt      The salt for the password.
  * @param string $hash_algo The hash algorithm to use.
- * 
+ *
  * @return bool True if the password is correct.
  */
 function checkPass($response, $password, $salt, $hash_algo)
@@ -29,16 +29,16 @@ function checkPass($response, $password, $salt, $hash_algo)
     if ($correct === $response) {
         return true;
     }
-    
+
     return false;
 }
 
 /**
  * Determines the appropriate login state.
- * 
+ *
  * @param string $Password The currently set password. Will bounce if it has not
  *                         been altered since downloading Collector.
- * 
+ *
  * @return string The current login state.
  */
 function loginState($Password)
@@ -54,29 +54,29 @@ function loginState($Password)
     // not logged in
     if (!isset($_SESSION['admin']['status'])
     ) {
-        
+
         return 'newChallenger';
     }
 
     // wrong password
     if ($_SESSION['admin']['status'] === 'failed') {
-        
+
         return 'wrongPass';
     }
 
     // logged in
     if ($_SESSION['admin']['status'] === 'loggedIn') {
         $age = time() - $_SESSION['admin']['birth'];
-        
+
         // check expiration
         if ($age > $LoginExpiration) {
-            
+
             return 'expired';
         } else {
             return 'loggedIn';
         }
     } else {
-        
+
         return 'newChallenger';
     }
 
@@ -86,7 +86,7 @@ function loginState($Password)
 
 /**
  * Shows the appropriate response page.
- * 
+ *
  * @param string $state The current login state.
  */
 function loginPrompt($state)
@@ -136,7 +136,7 @@ function loginPrompt($state)
 }
 
 /**
- * Makes a long random string that will be used to salt the password before 
+ * Makes a long random string that will be used to salt the password before
  * hashing it.
  * @param int $bits The number of bits to use.
  * @return string

@@ -7,7 +7,7 @@
  * Website:        http://www.cogfog.com/
  * Author:         Adam Blake
 
- 
+
  == CONTENTS: =================================================================
 
  $RESET            HTML5 reset
@@ -17,7 +17,7 @@
  $BUTTONS          Buttons
  $FORMS            Forms
  $CONTENT          General styles for main content
- $NO-JS            Javascript disabled redirect 
+ $NO-JS            Javascript disabled redirect
  $PAGE-SPECIFIC    Styles for specific pages:
                        Basic Info
                        Instructions
@@ -25,7 +25,7 @@
  $GRIDS            Grid framework
  $MEDIA            Responsive styles
  $TOOLS            Tools styling
- 
+
 
  ---------------------------------------------------------------------------- */
 
@@ -42,7 +42,7 @@ b, i,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, figcaption, figure, 
+article, aside, canvas, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section, summary,
 time, mark, audio, video {
   margin:0;
@@ -59,7 +59,7 @@ body {
 }
 
 article,aside,details,figcaption,figure,
-footer,header,hgroup,menu,nav,section { 
+footer,header,hgroup,menu,nav,section {
   display:block;
 }
 
@@ -93,7 +93,7 @@ ins {
 
 mark {
   background-color:#ff9;
-  color:#000; 
+  color:#000;
   font-style:italic;
   font-weight:bold;
 }
@@ -115,7 +115,7 @@ table {
 hr {
   display:block;
   height:1px;
-  border:0;   
+  border:0;
   border-top:1px solid #cccccc;
   margin:1em 0;
   padding:0;
@@ -367,7 +367,7 @@ inv {
 }
 
 
-/*  $BUTTONS 
+/*  $BUTTONS
  ---------------------------------------------------------------------------- */
 .collectorButton {
   font-family:"Open Sans", "open_sans_local", Helvetica, Arial, sans-serif;
@@ -380,7 +380,7 @@ inv {
   cursor: pointer;
 }
 
-.collectorButton:hover, 
+.collectorButton:hover,
 .collectorButton:focus {
   background-color: #09c;
 }
@@ -474,7 +474,7 @@ body > form {       /*Has the ID of 'content'*/
 .flexChild {
   flex: 0 0 auto;
 }
-    
+
 /* text alignment */
 .textcenter {
   text-align:center;
@@ -579,7 +579,7 @@ input[type="submit"].button-trial-advance {
 .alignToInput .study-left, .alignToInput .study-divider {
   padding-top: .08em;
 }
-.test-cue input  { 
+.test-cue input  {
   margin:0em 0 0 1px; width: 200px;
   padding: 0px 0px;
   max-width: 4em;
