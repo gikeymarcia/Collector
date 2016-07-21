@@ -20,15 +20,15 @@
     <input name="Response" type="text" value="" class="copybox collectorInput">
   </div>
 </div>
-  
+
 <div class="textcenter">
   <button class="collectorButton collectorAdvance" id="FormSubmitButton">Submit</button>
 </div>
 
 
 <script>
-  COLLECTOR.experiment.delaycopy = function() {
-    COLLECTOR.timer( 3, function() {
+  Collector.start = function() {
+    Collector.setTimeout (3, function() {
       $(".study-right").first().html( "<?= $_EXPT->get('answer'); ?>" );
     });
 };

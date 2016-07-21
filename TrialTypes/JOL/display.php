@@ -1,7 +1,7 @@
 <?php
 /**
  * JOL trial type inputs
- * 
+ *
  *     Column        Values
  *     text          question|description
  */
@@ -16,12 +16,12 @@ $mainText = array_shift($texts);
 
 <div class="textcenter">
   <h3><?= $mainText ?></h3>
-  
+
   <?php foreach ($texts as $t): ?>
   <p><?= $t ?></p>
   <?php endforeach; ?>
 </div>
-  
+
 <div class="textcenter">
   <input name="JOL" type="text" value="" class="forceNumeric textcenter collectorInput">
   <button class="collectorButton" id="FormSubmitButton">Submit</button>

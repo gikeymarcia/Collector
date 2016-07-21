@@ -18,7 +18,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->invalid = __DIR__ . './validators/invalidValidator.php';
         $this->obj = new Validator($this->passCheck);
     }
-    
+
     /**
      * @covers Collector\Validator::validate
      * @covers Collector\Validator::checkReturnType
@@ -28,7 +28,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('set', $this->trial->get('key1'));
         $this->assertEmpty($this->obj->validate($this->trial));
     }
-    
+
     /**
      * @covers Collector\Validator::__construct
      * @covers Collector\Validator::validate
@@ -36,14 +36,14 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     public function testValidateFailing()
     {
         $obj = new Validator($this->failCheck);
-        
+
         $expected = array(array(
-            'message' => 'Failed!', 
+            'message' => 'Failed!',
             'info' => $this->trial->getDebugInfo())
         );
         $this->assertEquals($expected, $obj->validate($this->trial));
     }
-    
+
     /**
      * @covers Collector\Validator::checkReturnType
      */
@@ -56,21 +56,21 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             . 'of the type string for invalid trials ');
         $obj->validate(new MainTrial());
     }
-    
+
     /**
      * @covers Collector\Validator::addCheck
      */
     public function testAddCheck()
     {
         $this->obj->addCheck($this->failCheck);
-        
+
         $expected = array(array(
-            'message' => 'Failed!', 
+            'message' => 'Failed!',
             'info' => $this->trial->getDebugInfo())
         );
-        $this->assertEquals($expected, $this->obj->validate($this->trial));        
+        $this->assertEquals($expected, $this->obj->validate($this->trial));
     }
-    
+
     /**
      * @covers Collector\Validator::addCheck
      * @covers Collector\Validator::getChecks
@@ -79,12 +79,12 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->obj->addCheck($this->failCheck);
         $checks = $this->obj->getChecks();
-        
+
         $this->assertCount(2, $checks);
         $this->assertEquals($this->passCheck, $checks[0]);
         $this->assertEquals($this->failCheck, $checks[1]);
     }
-    
+
     /**
      * @covers Collector\Validator::merge
      */
@@ -92,7 +92,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $new = new Validator($this->failCheck);
         $this->obj->merge($new);
-        
+
         $checks = $this->obj->getChecks();
         $this->assertCount(2, $checks);
         $this->assertEquals($this->passCheck, $checks[0]);

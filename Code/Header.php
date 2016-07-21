@@ -1,12 +1,13 @@
-<!DOCTYPE html>
+<?php
+    header('Content-Type: text/html; charset=utf-8');
+?><!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- Page title -->
-  <?php $php_self = filter_input(INPUT_SERVER, 'PHP_SELF', FILTER_SANITIZE_STRING); ?>
-  <?php $title = isset($title) ? $title : pathinfo($php_self, PATHINFO_FILENAME); ?>
+  <?php $title = isset($title) ? $title : 'Collector'; ?>
   <title><?= $title ?></title>
 
   <!-- Icons -->
@@ -25,7 +26,6 @@
 
   <!-- JS Tools -->
   <script src="<?= $_PATH->get('Jquery UI Custom', 'url') ?>"></script>
-  <script src="<?= $_PATH->get('Collector JS', 'url') ?>"></script>
 
   <!-- Additional styles -->
   <?php if (isset($addedStyles)): foreach ($addedStyles as $additionalStyle): ?>
@@ -36,9 +36,8 @@
 <?php
  // if $_dataController/$_dataAction is not set set it to an empty string
 $_dataController = isset($_dataController) ? $_dataController : '';
-$_dataAction = isset($_dataAction) ? $_dataAction : '';
 ?>
-<body id="flexBody" data-controller="<?= $_dataController ?>" data-action="<?= $_dataAction ?>">
+<body id="flexBody" data-controller="<?= $_dataController ?>" >
   <!-- redirect if Javascript is disabled -->
   <noscript>
     <meta http-equiv="refresh" content="0;url=<?= $_PATH->get('No JS', 'url') ?>" />

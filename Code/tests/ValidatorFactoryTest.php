@@ -14,7 +14,7 @@ class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
         $this->dirOne = __DIR__.'/validators/validatordir1';
         $this->dirTwo = __DIR__.'/validators/validatordir2';
     }
-    
+
     protected function getProperty(&$object, $propName)
     {
         $reflection = new \ReflectionClass(get_class($object));
@@ -23,7 +23,7 @@ class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
 
         return $property->getValue($object);
     }
-    
+
     /**
      * @covers Collector\ValidatorFactory::createSpecific
      * @covers Collector\ValidatorFactory::filter
@@ -32,12 +32,12 @@ class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $validator1 = ValidatorFactory::createSpecific('dne', $this->dirOne);
         $this->assertNull($validator1);
-        
+
         $validator2 = ValidatorFactory::createSpecific('testtrialtype1',
                 $this->dirOne);
         $this->assertInstanceOf('Collector\Validator', $validator2);
     }
-    
+
     /**
      * @covers Collector\ValidatorFactory::createSpecific
      * @covers Collector\ValidatorFactory::filter
@@ -52,24 +52,24 @@ class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Collector\Validator', $validators['testtrialtype1']);
         $this->assertInstanceOf('Collector\Validator', $validators['testtrialtype2']);
     }
-    
+
     /**
      * @covers Collector\ValidatorFactory::createSpecific
      * @covers Collector\ValidatorFactory::filter
      */
     public function testCreateSpecificFromDirsSingle()
     {
-        $validator1 = ValidatorFactory::createSpecific('dne', 
+        $validator1 = ValidatorFactory::createSpecific('dne',
                 array($this->dirOne, $this->dirTwo)
         );
         $this->assertNull($validator1);
-        
-        $validator2 = ValidatorFactory::createSpecific('testtrialtype3', 
+
+        $validator2 = ValidatorFactory::createSpecific('testtrialtype3',
                 array($this->dirOne, $this->dirTwo)
         );
         $this->assertInstanceOf('Collector\Validator', $validator2);
     }
-    
+
     /**
      * @covers Collector\ValidatorFactory::createSpecific
      * @covers Collector\ValidatorFactory::filter
@@ -84,7 +84,7 @@ class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $this->getProperty($validators['testtrialtype1'], 'checks'));
         $this->assertCount(1, $this->getProperty($validators['testtrialtype2'], 'checks'));
     }
-    
+
     /**
      * @covers Collector\ValidatorFactory::createSpecificFromMultipleDirs
      */
@@ -99,7 +99,7 @@ class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $this->getProperty($validators['testtrialtype1'], 'checks'));
         $this->assertCount(1, $this->getProperty($validators['testtrialtype3'], 'checks'));
     }
-    
+
     /**
      * @covers Collector\ValidatorFactory::getPaths
      */
@@ -112,7 +112,7 @@ class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals($expected, ValidatorFactory::getPaths($basepath));
     }
-    
+
     /**
      * @covers Collector\ValidatorFactory::merge
      */
@@ -128,7 +128,7 @@ class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
                 return 'Failed!';
             }
         });
-        
+
         foreach(array($validator1, $validator2) as $validator) {
             $this->assertCount(1, $this->getProperty($validator, 'checks'));
         }
@@ -136,7 +136,7 @@ class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $this->getProperty($validator1, 'checks'));
         $this->assertCount(1, $this->getProperty($validator2, 'checks'));
         $this->assertCount(2, $this->getProperty($merged, 'checks'));
-        
+
     }
 
     /**
@@ -150,7 +150,7 @@ class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
         $group2 = ValidatorFactory::createSpecific(
             array('testtrialtype1', 'testtrialtype2', 'testtrialtype3'), $this->dirTwo);
         $validators = ValidatorFactory::mergeGroup($group1, $group2, true);
-        
+
         $this->assertCount(3, $validators);
         foreach ($validators as $validator) {
             $this->assertInstanceOf('Collector\Validator', $validator);
@@ -159,7 +159,7 @@ class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $this->getProperty($validators['testtrialtype2'], 'checks'));
         $this->assertCount(1, $this->getProperty($validators['testtrialtype3'], 'checks'));
     }
-    
+
     /**
      * @covers Collector\ValidatorFactory::mergeGroup
      */
@@ -170,7 +170,7 @@ class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
         $group2 = ValidatorFactory::createSpecific(
             array('testtrialtype1', 'testtrialtype2', 'testtrialtype3'), $this->dirTwo);
         $validators = ValidatorFactory::mergeGroup($group1, $group2, false);
-        
+
         $this->assertCount(3, $validators);
         foreach ($validators as $validator) {
             $this->assertInstanceOf('Collector\Validator', $validator);

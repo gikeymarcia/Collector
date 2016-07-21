@@ -20,14 +20,13 @@ function gotoDone()
  *                         using the keys as columns.
  * @param int   $pos       [Optional] The trial to record.
  */
-function recordTrial(Collector\Trial $trial, array $extraData = array(), $pos = null)
+function recordTrial(Collector\MainTrial $trial, array $extraData = array())
 {
     global $_PATH;
-    
-    // calculate time difference from current to last trial
+
+    // update timestamp
     $oldTime = $_SESSION['Timestamp'];
     $_SESSION['Timestamp'] = microtime(true);
-    $timeDif = $_SESSION['Timestamp'] - $oldTime;
 
     // write to data array
     $data = array(
@@ -37,9 +36,10 @@ function recordTrial(Collector\Trial $trial, array $extraData = array(), $pos = 
         'Session' => $_SESSION['Session'],
         'Trial' => $trial->position,
         'Date' => date('c'),
-        'TimeDif' => $timeDif,
+        'TimeDif' => $_SESSION['Timestamp'] - $oldTime,
     );
 
+    // flatten out the trial data before writing to file
     foreach ($trial->export() as $name => $trialPart) {
         $data = placeData($trialPart, $data, "$name * ");
     }
@@ -52,7 +52,7 @@ function recordTrial(Collector\Trial $trial, array $extraData = array(), $pos = 
     if (!empty($extraData)) {
         $data = placeData($extraData, $data, 'extra * ');
     }
-    
+
     // record line into output CSV
     arrayToLine($data, $_PATH->get('Experiment Output'));
 }

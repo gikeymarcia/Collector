@@ -14,7 +14,6 @@ $("#revealRC").click( function() {
 // either advance page or gives notice to read closely
 $(".MCbutton").click( function() {
     if (this.id === "correct") {
-        $("#RT").val( COLLECTOR.getRT() );
         $("form").submit();
     }
     else {

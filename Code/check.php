@@ -66,7 +66,7 @@ $noGo = array();
  * User's IP address.
  * @var string
  */
-$ip = filter_input(INPUT_SERVER, 'REMOTE_ADDR', FILTER_SANITIZE_STRING);
+$ip = filter_input_fix(INPUT_SERVER, 'REMOTE_ADDR', FILTER_SANITIZE_STRING);
 
 /*
  * Filename of the list of rejected IPs.

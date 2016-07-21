@@ -13,7 +13,7 @@
     <input name="Response" type="text" value="" class="copybox collectorInput">
   </div>
 </div>
-  
+
 <div class="textcenter">
   <button class="collectorButton collectorAdvance" id="FormSubmitButton">Submit</button>
 </div>

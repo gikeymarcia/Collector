@@ -150,8 +150,8 @@ $_EXPT = Collector\ExperimentFactory::create(
 $validationErrors = $_EXPT->validate();
 if (!empty($validationErrors)) {
     foreach ($validationErrors as $error) {
-        $errors->add($error['message'] . " Error found in MainTrial " . 
-            $error['info']['position'] . " at post position " . 
+        $errors->add($error['message'] . " Error found in MainTrial " .
+            $error['info']['position'] . " at post position " .
             $error['info']['postPosition'] . ". (positions are 0-indexed)");
     }
 }
@@ -170,7 +170,7 @@ if ($errors->arePresent() || !empty($validationErrors)) {
           <button class='collectorButton' onClick='window.location.reload(true);'>Refresh</button>
           <button class='collectorButton' onClick='window.location.href=\"{$_PATH->get('Current Experiment')}\";'>Back to Login</button>
       </div>";
-    d($_EXPT);
+    datadump($_EXPT);
     require $_PATH->get('Footer');
     exit;
 }

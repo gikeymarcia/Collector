@@ -1,16 +1,16 @@
-<?php 
+<?php
 $cues    = explode('|', $_EXPT->get('cue'));
 $answers = explode('|', $_EXPT->get('answer'));
 $prompts = explode('|', $_EXPT->get('text'));
 ?>
-  
+
 <div class="prompt"> <?= trim($prompts[0]) ?> </div>
 
 <?php
 if (isset($prompts[1])) {
     foreach ($cues as $i => $cue) {
         echo str_replace(
-            array('$cue', '$answer'), 
+            array('$cue', '$answer'),
             array($cue, $answers[$i]),
             $prompts[1]
         );
@@ -38,7 +38,7 @@ if ($input === 'one'): ?>
   <br><button class="collectorButton collectorAdvance" id="FormSubmitButton" autofocus>Submit</button>
 </div>
 
-<?php else: 
+<?php else:
 $comparison = ($input === 'many') ? $input : (substr_count($answer, '|') + 1);
 ?>
 <style>
