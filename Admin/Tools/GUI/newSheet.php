@@ -1,7 +1,6 @@
 <?php
-
-  if(!isset($_SESSION)) { exit; }
-
+  require "../../initiateTool.php";
+  
 /*  
 	GUI
 

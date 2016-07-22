@@ -1,85 +1,199 @@
-
 <?php
-	require "../../initiateTool.php";
-  if(!isset($_SESSION)) { exit; }
-?>	  
 
-
-<style>
+  require "../../initiateTool.php";	
   
-  #returnToIndex{
-    position:relative;
-  }
+/*  
+	GUI
 
+	Collector
+    A program for running experiments on the web
+    Copyright 2012-2015 Mikey Garcia & Nate Kornell
+
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 3 as published by
+    the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>
+
+ */
+    // start the session, load our custom functions, and create $_PATH
+    $title = 'Collector GUI';
+    $branches = getCollectorExperiments();
+  
+  	unset ($_DATA['guiSheets']['csvSelected']);
+    
+    $gradient1="#ADD8E6";
+    $gradient2="#E0FFFF";
+    
+?>
+<style>
+  .guiTasks { display: inline-block; }
+  .guiTasks input {width: 120px; margin: 20px; }
+  .buttonRows {text-align: right; max-width: 800px; margin: auto;}
+  .editorType{
+    background: <?=$gradient1?>                                                       ; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(left top, <?=$gradient1 ?>, <?=$gradient2?>)  ; /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(bottom right, <?=$gradient1 ?>, <?=$gradient2?>)   ; /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(bottom right, <?=$gradient1 ?>, <?=$gradient2?>) ; /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to bottom right, <?=$gradient1 ?>, <?=$gradient2?>)   ; /* Standard syntax */
+    padding           : 15px;
+    border-radius     : 50px;
+  }
 </style>
 
-<div>
-  <form action="index.php" method="post">
-    <input type="hidden" name="currentGuiSheetPage" value="indexGui">
-    <button id="returnToIndex" name="goBackToBegin" value="done" class="collectorButton"> return to index </button>
-  </form>
 
-  
 <?php
-  require_once("guiFunctions.php");
-        
-  $pages = array (
-      'indexGui'     ,
-      'copySheets'   ,
-      'newSheet'     ,
-      'sheetsEditor' ,
-      'TrialTypeEditor',
-      'surveyEditor'
-      
-  );
+
+  //create select lists
   
-  $illegalInputs=array('<?','{','}','/','\\') ; // need to also exclude \
+  $selectArray        = array();
+  $illegalStudyNames  = array('.','..','New Experiment','Common');
+  $branchStudyKey     = array();
+  $editStudySelect    = '';
+  $newStudySelect     = '';
+  
+  // creating lists for studies
+
+  foreach ($branches as $study) {
+    $branch           = $study;
+    $illegalStudyName = true;
     
-    
-  if(isset($_POST['currentGuiSheetPage'])){
-    checkPost($_POST,array('currentGuiSheetPage'),$illegalInputs);
-    if(!in_array($_POST['currentGuiSheetPage'],$pages)){
-//      die ("You tried to go somewhere you were not allowed!");
-      
-      echo "<div class='alert alert-warning fade in'>
-        <a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>
-        <strong>Warning!</strong>You tried to go somewhere you were not allowed!
-      </div>";
-      //print_r($_POST);
-      //$_POST['currentGuiSheetPage']='indexGui';
-      //die();
-      
+    if(in_array($study,$illegalStudyNames)  !=1 & stripos($study,'.') ==  false){    //don't look at studies that exist within illegalStudyNames array
+      $illegalStudyName = false;
     }  
-  } // else needed? other checks are dealt with on pages themselves
-  
-  if($_POST['goBackToBegin']="done"){
-    $_DATA['guiSheets']['currentGuiSheetPage']='indexGui';
+        
+    $branchStudyKey[$study] = $branch;
+        
+    if( $illegalStudyName == false) {   $editStudySelect  = $editStudySelect."<option>$study</option>";   }
+    $newStudySelect   = $newStudySelect."<option>$study</option>";
+        
   }
-  
-	if(isset($_POST['currentGuiSheetPage'])){
-		$_DATA['guiSheets']['currentGuiSheetPage']=$_POST['currentGuiSheetPage'];
-	}
-  if(isset($_DATA['trialTypeEditor'])){
-   
-   // this may be legitimate code
-   /* if($_DATA['guiSheets']['currentGuiSheetPage']!="trialTypeEditor" & $_DATA['guiSheets']['currentGuiSheetPage']!="createTrialType"){
-      unset($_DATA['trialTypeEditor']);
-    }  */ 
+ 
+ // creating list for surveys
+
+  $surveySelect = '';
+  foreach (glob($_PATH->get("Common")."/Surveys/*.csv") as $survey) {
+    $survey = str_ireplace($_PATH->get("Common")."/Surveys/","",$survey);         // remove directory from filename
+        
+    $surveySelect = $surveySelect."<option>$survey</option>";  
   }
 
-	
-  if(!isset($_DATA['guiSheets']['currentGuiSheetPage'])){
-    require('indexGui.php');
-    $_DATA['guiSheets']['currentGuiSheetPage']='indexGui';
-  }
-  
-	
-  else {
-    require(($_DATA['guiSheets']['currentGuiSheetPage']).".php");
-  }
+  // creating list for trial types
 
+  $trialTypeSelect = '';
+  foreach (glob($_PATH->get("Tools")."/GUI/newTrialTypes/*.txt") as $trialType) {
+    $trialType = str_ireplace($_PATH->get("Tools")."/GUI/newTrialTypes/","",$trialType);   // remove directory from filename
+
+    $trialTypeSelect = $trialTypeSelect."<option>$trialType</option>";  
+  }
   
-  
+  $branchStudyKeyJson=json_encode($branchStudyKey);
+
 ?>
 
+<div class="buttonRows">
+  <div class = "guiTasks">
+  <form action="sheetsEditor.php" method="post">
+    <div class="editorType">
+      <div class="buttonRows">
+        Which study do you want to edit?
+        <select name="editStudyName" onchange="updateGuiStudyName()">
+          <?= $editStudySelect ?>
+        </select>
+      
+        <input class="collectorButton" type="submit"  value="Edit Study" name="editStudy" title="This tool edits the spreadsheets for your study">
+      </div>
+      
+      <div class="buttonRows">
+        Or select a study to base a NEW study on:
+        <select name="createStudyName">
+          <?= $newStudySelect ?>
+        </select>
+        <input id="newStudy" class="collectorButton" type="submit" value="New Study" name="createStudy" title="This tool edits the spreadsheets for your study">
+      </div>
+    </div>
+    <textarea id="newStudyName" name="newStudyName" style="display:none"></textarea>
+
+  </form>
+  
+  <br><br>
+  
+  <form class="editorType" action="surveyEditor.php" method="post">
+  
+      <div>
+        Do you want to use the Survey/Questionnaire editor?        
+        <select name="editSurveyName">
+          <?= $surveySelect ?>
+        </select>
+        <input type="submit" name="editSurvey" value="Edit Survey" class="collectorButton" >
+      </div>
+
+      <div>
+        Or select a Survey/Questionnaire to base a NEW survey on:        
+        <select name="createSurveyName">
+          <?= $surveySelect ?>
+        </select>
+        <input id="newSurvey" name="createSurvey" type="submit" value="Create Survey" class="collectorButton" >
+      </div>
+    <textarea id="newSurveyName" name="newSurveyName" style="display:none"></textarea>
+  </form>
+  
+  <br>
+  <br>
+  
+  <form action="trialTypeEditor.php" method="post">  
+    <div class="editorType">
+      <div class= "buttonRows">
+        Do you want to edit a trial type?
+        <select name="editTrialTypeName">
+          <?= $trialTypeSelect ?>
+        </select>
+        <input type="submit" name="editTrialType" value="Edit" class="collectorButton">
+      </div>
+    
+
+      <div class= "buttonRows">
+        Or select a trial type to base a NEW trial type on:
+        <select name="createTrialTypeName">
+          <option>[Blank]</option>
+          <?= $trialTypeSelect ?>
+        </select>
+        <input id="newTrialType" type="submit" name="createTrialType" value="Create" class="collectorButton">
+      </div>
+    </div>
+    <textarea id="newTrialTypeName" name="newTrialTypeName" style="display:none"></textarea>
+
+  </form>
 </div>
+
+<script>
+
+$("#newStudy").on("click",function(event){
+  newName(event,"newStudyName");
+});
+
+$("#newSurvey").on("click",function(event){
+  newName(event,"newSurveyName");
+});
+
+$("#newTrialType").on("click",function(event){
+  newName(event,"newTrialTypeName");
+});
+
+
+function newName(event,nameType){
+  var newName = prompt("What would you like to name this?", "");
+  if (newName != null && newName.length  > 0) {
+    document.getElementById(nameType).value =  newName;
+  } else {
+    event.preventDefault();
+  }
+}
+</script>

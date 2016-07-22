@@ -1,6 +1,6 @@
 <?php
 
-	if(!isset($_SESSION)){ exit; }
+  require "../../initiateTool.php";
 
 
 /*
@@ -127,11 +127,32 @@
   // List csv files in the directories
   $surveySheetsInfo->surveySheets=getCsvsInDir($_PATH->get('Common')."/Surveys");
   
-  // opening files - works
+  print_r($_POST);
+ 
+  // jumping in from index page //
+  
+  // having selected "edit" a page
+  if(isset($_POST['editSurvey'])){
+    $surveySheetsInfo->thisSurveyFilename=$_POST['editSurveyName'];
+  }
+  
+  // having selected "edit" a page
+  if(isset($_POST['createSurvey'])){
+    $surveySheetsInfo->thisSurveyFilename=$_POST['newSurveyName'].".csv";
+    $templateFilename=$_POST['createSurveyName'];
+    /* this code can be taken from creating a survey below */
+        
+    copy($_PATH->get('Common')."/Surveys/$templateFilename",$_PATH->get('Common')."/Surveys/".$surveySheetsInfo->thisSurveyFilename);
+        
+  }
+
+  // opening files
   if (isset($_POST['openButton'])){  //wrong - surveyPostName is only for opening files
     $surveySheetsInfo->thisSurveyFilename=$_POST['surveyPostName'];
-    $surveySheetsInfo->thisSurveyName=str_ireplace('.csv','',$surveySheetsInfo->thisSurveyFilename);
   }
+
+  $surveySheetsInfo->thisSurveyName=str_ireplace('.csv','',$surveySheetsInfo->thisSurveyFilename);
+
   
   // creating new Survey - works  
   if(isset($_POST['newSurvey'])){  //code for creating a new CSV sheet
@@ -207,7 +228,7 @@
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
 
-<form action='index.php' method='post' id="TableForm">
+<form action='surveyEditor.php' method='post' id="TableForm">
   <textarea id="currentGuiSheetPage" name="currentGuiSheetPage" style="display:none">surveyEditor</textarea>
   <h1 style="padding:30px">
     <?php 

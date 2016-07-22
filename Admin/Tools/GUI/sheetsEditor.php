@@ -1,7 +1,8 @@
 <?php
 
-	if(!isset($_SESSION)){ exit; }
-
+  require "../../initiateTool.php";
+  
+	
 
 /*
   GUI
@@ -26,31 +27,44 @@
  */
 
   // requiring files and calling in classes
-  $title = 'Collector GUI';
+  $title            = 'Collector GUI';
   require_once ('guiFunctions.php');
   require('guiClasses.php');
-  $thisDirInfo = new csvDirInfo(); // calling in class for directory information
-  $studySheetsInfo = new csvSheetsInfo(); // calling in class for sheets information
+  $thisDirInfo      = new csvDirInfo(); // calling in class for directory information
+  $studySheetsInfo  = new csvSheetsInfo(); // calling in class for sheets information
   
-  
+
   
   //identifying (file) name of the study
-  if (isset($_POST['csvPostName'])){
-    $thisDirInfo->studyDir=$_PATH->get("Experiments")."/".$_POST['csvPostName'];    
-    $_DATA['guiSheets']['thisDir']=$thisDirInfo->studyDir;//redundant??
-    $_DATA['guiSheets']['studyName']=$_POST['csvPostName'];
+  //  if file has been selected for editing
+  if(isset($_POST['editStudy'])){
+    $thisDirInfo->studyDir            = $_PATH->get("Experiments")."/".$_POST['editStudyName'];    
+    $_DATA['guiSheets']['studyName']  = $_POST['editStudyName'];
   } else {
-    if(isset($_DATA['guiSheets']['studyName'])){
-      $thisDirInfo->studyDir=$_DATA['guiSheets']['thisDir'];
-      $thisDirInfo->studyName=$_DATA['guiSheets']['studyName'];
+    
+    //if file has just been created
+    if(isset($_POST['createStudy'])){
+      require ("copySheets.php");
+      
+      $thisDirInfo->studyDir  = $_PATH->get("Experiments")."/".$_POST['newStudyName'];          
+      $thisDirInfo->studyName = $_DATA['guiSheets']['studyName'];
+
+    }
+    
+    else {  
+      //file is in the process of being edited
+      if(isset($_DATA['guiSheets']['studyName'])){
+        $thisDirInfo->studyDir          = $_PATH->get("Experiments")."/".$_POST['currStudyName'];
+        $thisDirInfo->studyName         = $_DATA['guiSheets']['studyName'];
+      }    
     }
   }
   
-  // List csv files in the directories
-  $studySheetsInfo->stimSheets=getCsvsInDir($thisDirInfo->studyDir.'/Stimuli/');
-  $studySheetsInfo->procSheets=getCsvsInDir($thisDirInfo->studyDir.'/Procedure/');
 
-//  $studySheetsInfo->
+  // List csv files in the directories
+  $studySheetsInfo->stimSheets  = getCsvsInDir($thisDirInfo->studyDir.'/Stimuli/');
+  $studySheetsInfo->procSheets  = getCsvsInDir($thisDirInfo->studyDir.'/Procedure/');
+
 
 
   $studySheetsInfo->legitSheets=array_merge($studySheetsInfo->stimSheets,$studySheetsInfo->procSheets); //note that new sheet and conditions is not in this array  
@@ -69,7 +83,9 @@
   
   //insert Tyson's illegal character thing here
     //preg_replace('([^ \\-0-9A-Za-z])', '', $_POST['u']);
-  
+
+
+    
   checkPost($_POST,$legitPostNames,$illegalInputs); // defined in guiFunctions
          
 ?>
@@ -84,16 +100,16 @@
     text-align: center; 
     margin: 10px 0 40px; 
   }
+   
+  
   form {
-    text-align: center;
-    margin: 30px;
-  }
-  .expTable{
+    text-align: left;
     
   }
+
   .tableArea {
-    display: inline-block;
-    width: 80%;
+    display: block;
+    width: 100%;
     box-sizing: border-box;
     padding: 10px 30px;
     vertical-align: top;
@@ -106,17 +122,14 @@
 
 
 <?php
-
-  if(!file_exists("$thisDirInfo->studyDir/name.txt")){ //create name.txt for first run
-    file_put_contents("$thisDirInfo->studyDir/name.txt",$_DATA['guiSheets']['studyName']);
-  }	
   
   if(isset($_POST['csvSelected'])){ //to allow reference to session if post doesn't exist (although may want to check if this can be tidier in future).
     $_DATA['guiSheets']['csvSelected']=$_POST['csvSelected'];
   }
+
   
   //updating study name
-  $thisDirInfo->studyName=file_get_contents("$thisDirInfo->studyDir/name.txt");
+  $thisDirInfo->studyName=$_DATA['guiSheets']['studyName'];
 
   // get a list of all the filenames to allow checking for duplications
   $branches = getCsvsInDir($_PATH->get("Experiments")."/");
@@ -152,8 +165,7 @@
   
   // updating study name - doesn't need a save to do this
   if(isset($_POST['currStudyName'])){
-    file_put_contents($thisDirInfo->studyDir.'/name.txt',$_POST['currStudyName']);
-    $thisDirInfo->studyName=file_get_contents($thisDirInfo->studyDir.'/name.txt');
+    $thisDirInfo->studyName=$_POST['currStudyName'];
   }
   
   if(isset($_POST['newSheet'])){  //code for creating a new CSV sheet
@@ -240,7 +252,7 @@
   
 ?>
 
-<form action='index.php' method='post'>
+<form action='sheetsEditor.php' method='post'>
   <textarea id="currentGuiSheetPage" name="currentGuiSheetPage" style="display:none">sheetsEditor</textarea>
   <h1>
     <textarea id="currStudyName" name="currStudyName" style="color:#069;" rows="1"
@@ -301,7 +313,7 @@
   <?php
     // doing this in PHP to prevent whitespace
     echo '<div id="stimArea" class="tableArea">'
-       .         '<div id="stimTable" class="expTable"></div>'
+       .         '<div id="stimTable"></div>'
        .     '</div>'
        . '</div>';
   ?>
@@ -436,24 +448,24 @@ var stimTable;
         }
     }
     function updateDimensions(hot, addWidth, addHeight) {
-        var addW = addWidth  || 0;
-        var addH = addHeight || 0;
-        
-        var container   = hot.container;
-        var thisSizeBox = $(container).find(".wtHider");
-        
-        var thisWidth  = thisSizeBox.width()+22+addW;
-        var thisHeight = thisSizeBox.height()+22+addH;
-        
-        var thisArea = $(container).closest(".tableArea");
-        
-        thisWidth  = Math.min(thisWidth,  thisArea.width());
-        thisHeight = Math.min(thisHeight, 600);
-        
-        hot.updateSettings({
-            width:  1000, //thisWidth,
-            height: thisHeight
-        });
+      var addW = addWidth  || 0;
+      var addH = addHeight || 0;
+      
+      var container   = hot.container;
+      var thisSizeBox = $(container).find(".wtHider");
+      
+      var thisWidth  = thisSizeBox.width()+22+addW;
+      var thisHeight = thisSizeBox.height()+22+addH;
+      
+      var thisArea = $(container).closest(".tableArea");
+      
+      thisWidth  = Math.min(thisWidth,  thisArea.width());
+      thisHeight = Math.min(thisHeight, 600);
+      
+      hot.updateSettings({
+        width:  thisWidth,
+        height: thisHeight
+      });
     }
     function updateDimensionsDelayed(hot, addWidth, addHeight) {
         updateDimensions(hot, addWidth, addHeight);

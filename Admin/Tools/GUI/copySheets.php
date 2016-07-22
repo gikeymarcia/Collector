@@ -4,24 +4,27 @@
 
   //require('guiFunctions.php'); //for use of recurse_copy
 
+  /*
   $illegalInputs=array('<?','{','}','/','.',"'",',') ; // need to also exclude \
   $legitPosts=array('templateExperiment',
                     'csvPostName');
   
   checkPost($_POST,$legitPosts,$illegalInputs);
   
+  */
+  
+  print_r($_POST);
+  
 	#create a new study
   $expFolder  = $_PATH->get('Experiments');
   
-	$studySource  = $expFolder."/".$_POST['templateExperiment'];
-	$studyDest    = $expFolder."/".$_POST["csvPostName"];
+	$studySource  = $expFolder."/".$_POST["createStudyName"];
+	$studyDest    = $expFolder."/".$_POST["newStudyName"];
 	recurse_copy($studySource,$studyDest);
-	unlink($expFolder."/".$_POST["csvPostName"]."/name.txt");//to facilitate new name
-	$_DATA['guiSheets']['thisDir']=$expFolder."/".$_POST['csvPostName'];
-	$_DATA['guiSheets']['studyName']=$_POST['csvPostName'];
-	$_DATA['guiSheets']['currentGuiSheetPage']='sheetsEditor';
+	$_DATA['guiSheets']['thisDir']=$expFolder."/".$_POST['newStudyName'];
+	$_DATA['guiSheets']['studyName']=$_POST['newStudyName'];
 
-	header ("Location: index.php");
+	//header ("Location: index.php");
 
 ?>	
 	

@@ -1,7 +1,9 @@
 <?php
 
-	if(!isset($_SESSION)){ exit; }
-
+  require "../../initiateTool.php";
+  require_once("guiFunctions.php");
+  
+  
 /*
   	GUI - Trial type editor by Anthony Haffey
 
@@ -23,7 +25,6 @@
 
     */
     
-
 ?>
 
 <style>
@@ -147,17 +148,17 @@
     background-color:white;
     color:black;
   }
+  
   .elementButtonSelected{
     
     background-color:green;
     color:white;
   }
+  
   .elementButtonSelected:hover{
     background-color:transparent;
     color:black;
   }
-  
-
   
   .inputElement{
     border:1px solid #cccccc;
@@ -201,12 +202,19 @@
     font-size:30px;
     font-weight:bold;
   }
-  
-  <!--  	pointer-events: none; !-->
-  
+    
 </style>
 
 <?php     
+  
+  if(!isset($_DATA['trialTypeEditor']['trialTypeName'])){         //  If there is no trialType Name yet
+    $_DATA['trialTypeEditor']['trialTypeName']  = '';             //  Create one
+  }
+
+  $trialTypeName =& $_DATA['trialTypeEditor']['trialTypeName'];   // for legibility
+
+  define('TRIAL_DIR',"newTrialTypes");                            // creating a variable that is accessible within functions
+
   
   /* * * * * * * *
   * Configurations
@@ -214,60 +222,48 @@
 
   $elementScale   =   8; // as the interface for inserting elements if 800px x 800px, and we are scaling to a 100% height or width (800/100 = 8)
   
-  // load function 
-  // save function
-  // rename function
-  // else scratch 
   
   $trialTypeElementsPhp;
+
+  // load function //
   
   function loadTrialType($filename){
-    
-    global $_DATA;  // would ideally make this an input that could be dynamically altered
-    
-    $file_contents                                        =   file_get_contents("newTrialTypes/".$filename);
-    $trialTypeElementsPhp                                 =   json_decode($file_contents);
-    $_DATA['trialTypeEditor']['currentTrialTypeName']     =   str_replace('.txt','',$filename);
-    return  ($trialTypeElementsPhp);
+        
+    $file_contents         =  file_get_contents(TRIAL_DIR."/".$filename);
+    $trialTypeElementsPhp  =  json_decode($file_contents);
+    return  $trialTypeElementsPhp;
   }
+
+  // save function  //
   
+  function saveTrialType($elementArray,$trialTypeName){
   
-  
-  
-  function saveTrialType($elementArray){
-  
-    global $_DATA,$_PATH,$_POST;
+    global $_PATH;
     
     $trialTypeElementsPhp=json_decode($elementArray);  
-        
-  
-    /*
-    if(!isset($trialTypeElementsPhp->trialTypeName)){
-      $trialTypeElementsPhp->trialTypeName=$_POST['trialTypeName'];
-    }
-    */
-    
+            
     // Renaming files if task name has changed 
-    if(isset($_DATA['trialTypeEditor']['currentTrialTypeName'])){   // checking if there is there a long term value for the name to check against
+    if($trialTypeName !== ''){   // checking if there is there a long term value for the name to check against
       /* does the new name match the old name*/
-      if(strcmp($_DATA['trialTypeEditor']['currentTrialTypeName'], $trialTypeElementsPhp->trialTypeName)!=0){                 //i.e. a new trialType name
-        if(file_exists("newTrialTypes/"           .     $_DATA['trialTypeEditor']['currentTrialTypeName'] . ".txt")){
-          unlink("newTrialTypes/"                 .     $_DATA['trialTypeEditor']['currentTrialTypeName'] . ".txt");          //Delete original file here            
-          unlink($_PATH->get('Custom Trial Types')."/". $_DATA['trialTypeEditor']['currentTrialTypeName']  . "/display.php"); //deleting php file
-          rmdir($_PATH->get('Custom Trial Types') ."/". $_DATA['trialTypeEditor']['currentTrialTypeName']);                   //deleting directory
+      if($trialTypeName !== $trialTypeElementsPhp->trialTypeName){                          //i.e. a new trialType name
+        if(file_exists(TRIAL_DIR."/"           .     $trialTypeName . ".txt")){
+          unlink(TRIAL_DIR."/"                 .     $trialTypeName . ".txt");              //Delete original file here            
+          unlink($_PATH->get('Custom Trial Types')."/". $trialTypeName . "/display.php");   //deleting php file
+          $trialTypeCodeDir=$_PATH->get('Custom Trial Types')."/". $trialTypeName;          
+          if(count(scandir($trialTypeCodeDir)) <= 2){                                       //if empty
+            rmdir($_PATH->get('Custom Trial Types') ."/". $trialTypeName);                  //deleting directory. Don't do this if score.php or other file present.
+          }
         }
-        $_DATA['trialTypeEditor']['currentTrialTypeName']=$trialTypeElementsPhp->trialTypeName;                               //identify correct name here
+        $trialTypeName  = $trialTypeElementsPhp->trialTypeName;                             //identify correct name here
       }  
     }
     
-    // saving backup of task (.txt), schematic of task (.txt) and task (.php)
+    // saving schematic of task (.txt) and task (.php)
+    if(!is_dir(TRIAL_DIR)) mkdir($dir, 0777, true);
     
-    $dir="newTrialTypes";
-    if(!is_dir($dir)) mkdir($dir, 0777, true);
+    file_put_contents(TRIAL_DIR."/".$trialTypeName.'.txt',$elementArray); //actual act of saving
     
-    file_put_contents('newTrialTypes/backup.txt',$elementArray);                                                //creating backup - currently not being used :-\
-    file_put_contents("newTrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName'].'.txt',$elementArray); //actual act of saving
-    require('createTrialType.php');                                                                                 //php file
+    require('createTrialType.php');                                      //php file
     
     return $trialTypeElementsPhp;
   }
@@ -276,41 +272,55 @@
   /*sorting out whether we are working from scratch, have just saved a file, or are loading a file */
   
   /* loading */
-  if(isset($_POST['loadButton'])){   //load first
+  print_r($_POST);
+  if(isset($_POST['loadButton']) || isset($_POST['editTrialType'])){   //load first
 
-    $trialTypeElementsPhp = loadTrialType($_POST['trialTypeLoaded'],$_DATA['trialTypeEditor']['currentTrialTypeName']);
-  
+    if(isset($_POST['loadButton'])){
+      $trialTypeElementsPhp   = loadTrialType($_POST['trialTypeLoaded']);
+      $trialTypeName          = str_replace('.txt','',$_POST['trialTypeLoaded']);
+    } 
+    if(isset($_POST['editTrialType'])) {
+      $trialTypeElementsPhp   = loadTrialType($_POST['editTrialTypeName']);
+      $trialTypeName          = str_replace('.txt','',$_POST['editTrialTypeName']); 
+    }
+      
   } else {
     /* saving */
     if(!empty($_POST['elementArray'])){ // have just saved
        
-      $trialTypeElementsPhp=saveTrialType($_POST['elementArray']);
+      $trialTypeElementsPhp = saveTrialType($_POST['elementArray'],$trialTypeName);
 
     } else { 
-      /* creating a file from scratch */
-      require ("guiClasses.php"); //not sure we need this;  maybe the guiClasses can be tidied up  
-      $trialTypeElementsPhp                               =   new trialTypeElements();        
-      $_DATA['trialTypeEditor']['currentTrialTypeName']   =   '';
+      // creating a new file //
+      if($_POST['createTrialTypeName']=="[Blank]"){
+        require ("guiClasses.php"); //not sure we need this;  maybe the guiClasses can be tidied up  
+        $trialTypeElementsPhp = new trialTypeElements();
+        
+      } else {
+        // creating from template
+        
+        
+      }
+      
+      $trialTypeName        = $_POST['newTrialTypeName'];
     }
   }    
-  $jsontrialTypeElements                                  =   json_encode($trialTypeElementsPhp);                       //to use for javascript manipulations
-  $_DATA['trialTypeEditor']['currentTrialTypeFilename']   =   $_DATA['trialTypeEditor']['currentTrialTypeName'].".txt";
+  $jsontrialTypeElements  =   json_encode($trialTypeElementsPhp);   //to use for javascript manipulations
      
   // list of trial types the user can edit
-  if (!is_dir("newTrialTypes")) {
+  if (!is_dir(TRIAL_DIR)) {
       $trialTypesList = array();
   } else {
-      $trialTypesList = scandir("newTrialTypes");
+      $trialTypesList = scandir(TRIAL_DIR);
       $trialTypesList = array_slice($trialTypesList,2);
   }
   
-//  var_dump($trialTypeElementsPhp); // so not in the code that is passed to javascript
   ?>
 
 <form method="post" action="index.php">
-  <textarea id="currentGuiSheetPage" name="currentGuiSheetPage" style="display:none">TrialTypeEditor</textarea>  
+  <textarea id="currentGuiSheetPage" name="currentGuiSheetPage" style="display:none">TrialTypeEditor</textarea>   <!-- this can go now in Admin branch -->
   <textarea id="trialTypeName" placeholder="[insert name of trial type here]" onkeyup="updateTrialTypeElements()"><?php 
-echo $_DATA['trialTypeEditor']['currentTrialTypeName']
+echo $trialTypeName
 ?></textarea>
     
   <div id="elementTypeList">
@@ -337,8 +347,7 @@ echo $_DATA['trialTypeEditor']['currentTrialTypeName']
             }
             ?>
           </select> 
-          <input type="button" id="loadButton" class="collectorButton" value="Load">
-          <input type="submit" id="loadButtonAction" name="loadButton" class="collectorButton" value="Load" style="display:none">
+          <input type="submit" id="loadButton" name="loadButton" class="collectorButton" value="Load">
       <?php
       }
     ?>  
@@ -393,13 +402,7 @@ echo $_DATA['trialTypeEditor']['currentTrialTypeName']
     }
   }
   
-  if(isset($_DATA['trialTypeEditor']['currentTrialTypeName'])){
-    if(file_exists("newTrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName'].".txt")){
-      $loadedContents=file_get_contents("newTrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName'].".txt");
-    } else {
-      $loadedContents='';
-    }
-  }
+
   
 ?>
 </div>
@@ -531,7 +534,7 @@ echo $_DATA['trialTypeEditor']['currentTrialTypeName']
   </div>  
 </div>
 
-  <textarea id="elementArray" name="elementArray"><?=$loadedContents?></textarea>
+  <textarea id="elementArray" name="elementArray"></textarea>
 
 </form>
 
@@ -577,7 +580,8 @@ $(document).ready(function() {
     updateClickResponseValues("initiate",trialTypeElements['responses']);    
   }
   
-  
+  updateTrialTypeElements();
+
 });
 
 
@@ -611,11 +615,10 @@ $("#deleteButton").on("click", function() {
   }
 });
 
-$("#loadButton").on("click",function(){
+$("#loadButton").on("click",function(event){
   if(trialTypeLoading.value=="-select a trial type-"){
+    event.preventDefault();
     alert ("You must select a trial type to proceed!!");
-  } else {
-    $("#loadButtonAction").click();
   }
 });
 
@@ -840,7 +843,7 @@ function addDeleteFunction(x){
   /* updating the trialType */
   
   backupTrialTypeName   =   trialTypeName.value;    //in case the user tries an illegal name
-
+  
   function updateTrialTypeElements(){
     
     $("#trialTypeName").val(trialTypeName.value.replace(/ /g,""));      //  remove whitespace from title
@@ -930,8 +933,8 @@ function addDeleteFunction(x){
         $("#displaySettings").show();
         $("#interactionEditorConfiguration").show();
         document.getElementById('userInputTypeValue').style.visibility="hidden";
+        document.getElementById('mediaTypeValue').style.visibility="visible";
         currentStimType.innerHTML="Media";
-//        inputStimSelectCell.innerHTML='<select style="padding:5px" id="userInputTypeValue" onchange="changeMediaType()"><option>Pic</option><option>Audio</option><option>Video</option></select>';
       break
 
       case "text":

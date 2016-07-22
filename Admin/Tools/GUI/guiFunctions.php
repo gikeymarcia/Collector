@@ -36,7 +36,9 @@ function rename_win($oldfile,$newfile) {
 ### the below code was found at: http://stackoverflow.com/questions/2050859/copy-entire-contents-of-a-directory-to-another-using-php
 function recurse_copy($src,$dest) {
     $dir = opendir($src); 
-    mkdir($dest); 
+    if(!file_exists($dest)){
+      mkdir($dest);
+    }
     while(false !== ( $file = readdir($dir)) ) { 
         if (( $file != '.' ) && ( $file != '..' )) { 
             if ( is_dir("$src/$file") ) { 
