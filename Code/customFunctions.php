@@ -761,7 +761,7 @@ function getAllTrialTypeFiles(Pathfinder $pathfinder = null)
 
     foreach ($trialTypeDirs as $dir) {
         if (!is_dir($dir)) continue;
-        
+
         $dirScan = scandir($dir);
         foreach ($dirScan as $entry) {
             $type = strtolower(trim($entry));
@@ -889,45 +889,6 @@ function rangeToArray($string, $separator = ',', $rangeIndicator = '::')
     }
 
     return $output;
-}
-
-/**
- * Prints an array in a readable manner and appends collapsible tags for CSS and
- * Javascript manipulation. Useful for debugging.
- *
- * @param array  $displayArray The array to print.
- * @param string $name         The title of the array.
- *
- * @todo make it public static function cleanly as it did in Collector 1.0
- */
-function readable(array $displayArray, $name = 'Untitled array')
-{
-    // echo HTML
-    echo '<div>'
-          .'<div class="button collapsibleTitle">'
-          .'<h3>'.$name.'</h3>'
-          .'<p>(Click to Open/Close)</p>'
-          .'</div>'
-          .'<pre>', print_r($displayArray, true), '</pre>'
-       .'</div>';
-}
-
-/**
- * Var_dump's the input value inside of pre tags.
- * Used to debug code and inspect arrays
- *
- * @param mixed  $input
- * @param string $label
- *
- */
-function pre_var_dump($input, $label = '')
-{
-    echo '<pre class="pre_var_dump">';
-    if ($label !== '') {
-        echo "<b>$label</b><br>";
-    }
-    var_dump($input);
-    echo '</pre>';
 }
 
 /**

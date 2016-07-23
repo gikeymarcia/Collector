@@ -10,10 +10,12 @@ require 'initiateTool.php';
 $tools = getTools();
 
 ?>
-<h2>Welcome to the Admin page for the Collector</h2>
-<p>To use one of our tools, select from the options below.</p>
-<?php
-
-foreach ($tools as $tool) {
-    echo "<a href='Tools/$tool/'>$tool</a>";
-}
+<div class="toolWidth">
+    <h2>Welcome to the Admin page for the Collector</h2>
+    <p>To use one of our tools, select from the options below.</p>
+    <?php
+    foreach ($tools as $tool) {
+        echo "<a href='Tools/$tool/'>$tool</a><br>";
+    }
+    ?>
+</div>

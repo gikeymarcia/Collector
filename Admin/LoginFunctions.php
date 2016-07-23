@@ -12,46 +12,46 @@ function runLogin($password) {
         $_SESSION['admin']['login'] = time() + 60 * 60 * 2; // stay logged in for 2 hours
         unset($_SESSION['admin']['nonce']);
         header('Location: ' . $_SERVER['REQUEST_URI']);
-        
+
     } else {
         $_SESSION['admin']['nonce'] = makeNonce();
 
         createPasswordForm($loginStatus, $hashIterations);
     }
-    
+
     exit; // either header refresh on success or stop at password form
 }
 /**
  * Checks that the scrambled+hashed response matches what the server
  * calculates when it does the same scramble+hash with the stored password.
  *
- * This is done so the user doesn't send us the password. Instead we 
- * hash(salt+password) server side and challenge the user to get the 
+ * This is done so the user doesn't send us the password. Instead we
+ * hash(salt+password) server side and challenge the user to get the
  * same resultant hash (i.e., they entered the correct password)
  *
  * By doing this procedure anyone sniffing the transmission is never shown
  * the password and the response they see transmitted cannot be used in the
- * future to login becasue each login is dependent on a unique salt the 
+ * future to login becasue each login is dependent on a unique salt the
  * sever generates for every login attempt
- * 
+ *
  * @param string $submittedPassword The user response = hash(user input + salt).
  * @param string $nonce             The salt for the password.
  * @param string $hashedPassword    The stored password in Password.php.
  * @param string $hashIterations    The number of times to hash with the nonce
- * 
+ *
  * @return bool True if the password is correct.
  */
 function checkLogin($submittedPassword, $nonce, $hashedPassword, $hashIterations) {
     $hashedPassword = hash('sha256', $hashedPassword); // password should have been saved as sha256
-    
+
     for ($i=0; $i<$hashIterations; ++$i) {
         $hashedPassword = hash('sha256', $hashedPassword . $nonce);
     }
-    
+
     return $hashedPassword === $submittedPassword;
 }
 /**
- * Makes a long random string that will be used to salt the password before 
+ * Makes a long random string that will be used to salt the password before
  * hashing it.
  * @param int $bits The number of bits to use.
  * @return string
@@ -83,9 +83,9 @@ function checkLoginStatus($password, $hashIterations) {
         if ($login) {
             return 'success';
         } else {
-            return '<div class="error">Error: Password incorrect</div>';
+            return 'Error: Password incorrect';
         }
-        
+
     } else {
         return '';
     }
@@ -93,30 +93,42 @@ function checkLoginStatus($password, $hashIterations) {
 
 function createPasswordForm($errorMessage, $hashIterations) {
     $_PATH = new Pathfinder();
-    
+
     $addedScripts = array(
         $_PATH->get('Sha256 JS'),
         $_PATH->get('root') . '/Admin/Login.js'
     );
-    
+
     $title = 'Collector - Login';
-    
+
     require $_PATH->get('Header');
-    
-    echo $errorMessage;
-    
+
     ?>
     <div id="PaswordInputArea">
-        Please enter your password. <br>
-        <input type="password" required id="PasswordInput"> 
-        <button type="button" id="PasswordSubmitButton">Submit</button>
+        <div class="error"><?= $errorMessage; ?></div>
+        <label>Please enter your password.<br>
+            <input  type="password" class="CollectorInput"  id="PasswordInput" required autofocus>
+            <button type="button"   class="collectorButton" id="PasswordSubmitButton">Submit</button>
+        </label>
     </div>
 
     <script>
         var hashIterations =  <?= $hashIterations    ?>;
         var nonce          = "<?= $_SESSION['admin']['nonce'] ?>";
     </script>
+    <style>
+        #flexBody {
+            justify-content: flex-start;
+        }
+        #PaswordInputArea {
+            margin: 50px auto;
+        }
+        .error {
+            font-weight: 700;
+            color: red;
+        }
+    </style>
     <?php
-    
+
     require $_PATH->get('Footer');
 }
