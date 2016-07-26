@@ -1,9 +1,7 @@
 <?php
 
-  require "../../initiateTool.php";
+  require "../../../initiateTool.php";
   
-	
-
 /*
   GUI
 
@@ -25,47 +23,79 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>
 
  */
-
+  
   // requiring files and calling in classes
-  $title            = 'Collector GUI';
-  require_once ('guiFunctions.php');
-  require('guiClasses.php');
+  require_once  ('../guiFunctions.php');
+  require_once  ('../guiClasses.php');
   $thisDirInfo      = new csvDirInfo(); // calling in class for directory information
   $studySheetsInfo  = new csvSheetsInfo(); // calling in class for sheets information
   
-
   
-  //identifying (file) name of the study
-  //  if file has been selected for editing
+  // copy functions
+  
+  function copyStudy($source,$dest){
+    /*
+      $illegalInputs=array('<?','{','}','/','.',"'",',') ; // need to also exclude \
+      $legitPosts=array('templateExperiment',
+                        'csvPostName');    
+      checkPost($_POST,$legitPosts,$illegalInputs);
+    */
+    global $_DATA,$_PATH;
+        
+    #create a new study
+    $expFolder  = $_PATH->get('Experiments');
+    
+    $studySource  = $expFolder."/".$source; //$_POST["createStudyName"];
+    $studyDest    = $expFolder."/".$dest;   //$_POST["newStudyName"];
+    recurse_copy($studySource,$studyDest);
+    $_DATA['guiSheets']['thisDir']    = $expFolder."/".$_POST['newStudyName'];
+    $_DATA['guiSheets']['studyName']  = $_POST['newStudyName'];
+    
+  }  
+  
+  // edit study
+  function editStudy($originalName,$newName){
+    
+    global $_PATH,$thisDirInfo;
+    
+    $thisDirInfo->studyDir      =   $_PATH->get("Experiments")."/".$newName;
+    if($newName  !=  $originalName){
+      
+      //rename folder
+      $oldDir = $_PATH->get("Experiments")."/".$originalName;
+      $newDir = $_PATH->get("Experiments")."/".$newName;
+      rename($oldDir,$newDir);                
+    }
+    return $newName;
+  }
+  
   if(isset($_POST['editStudy'])){
+    //  if file has been selected for editing (from higher level index file in GUI folder)
     $thisDirInfo->studyDir            = $_PATH->get("Experiments")."/".$_POST['editStudyName'];    
     $_DATA['guiSheets']['studyName']  = $_POST['editStudyName'];
-  } else {
-    
+  } else {    
     //if file has just been created
     if(isset($_POST['createStudy'])){
-      require ("copySheets.php");
-      
+      copyStudy($_POST["createStudyName"],$_POST["newStudyName"]);
       $thisDirInfo->studyDir  = $_PATH->get("Experiments")."/".$_POST['newStudyName'];          
       $thisDirInfo->studyName = $_DATA['guiSheets']['studyName'];
-
     }
-    
     else {  
       //file is in the process of being edited
-      if(isset($_DATA['guiSheets']['studyName'])){
-        $thisDirInfo->studyDir          = $_PATH->get("Experiments")."/".$_POST['currStudyName'];
-        $thisDirInfo->studyName         = $_DATA['guiSheets']['studyName'];
-      }    
+      $thisDirInfo->studyName           = editStudy($_DATA['guiSheets']['studyName'],$_POST['currStudyName']);
+      $_DATA['guiSheets']['studyName']  = $thisDirInfo->studyName;
+      
     }
   }
   
-
   // List csv files in the directories
+  
+  
   $studySheetsInfo->stimSheets  = getCsvsInDir($thisDirInfo->studyDir.'/Stimuli/');
   $studySheetsInfo->procSheets  = getCsvsInDir($thisDirInfo->studyDir.'/Procedure/');
 
-
+  
+    
 
   $studySheetsInfo->legitSheets=array_merge($studySheetsInfo->stimSheets,$studySheetsInfo->procSheets); //note that new sheet and conditions is not in this array  
   
@@ -83,9 +113,7 @@
   
   //insert Tyson's illegal character thing here
     //preg_replace('([^ \\-0-9A-Za-z])', '', $_POST['u']);
-
-
-    
+   
   checkPost($_POST,$legitPostNames,$illegalInputs); // defined in guiFunctions
          
 ?>
@@ -99,14 +127,10 @@
     font-size: 180%; 
     text-align: center; 
     margin: 10px 0 40px; 
-  }
-   
-  
+  }  
   form {
-    text-align: left;
-    
+    text-align: left; 
   }
-
   .tableArea {
     display: block;
     width: 100%;
@@ -252,7 +276,7 @@
   
 ?>
 
-<form action='sheetsEditor.php' method='post'>
+<form action='index.php' method='post'>
   <textarea id="currentGuiSheetPage" name="currentGuiSheetPage" style="display:none">sheetsEditor</textarea>
   <h1>
     <textarea id="currStudyName" name="currStudyName" style="color:#069;" rows="1"
@@ -291,8 +315,8 @@
     <button type='submit' class='collectorButton' value='Select'>Open</button>
   </div>    
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-  <link rel="stylesheet" href="handsontables/handsontables.full.css">
-  <script src="handsontables/handsontables.full.js"></script>
+  <link rel="stylesheet" href="../handsontables/handsontables.full.css">
+  <script src="../handsontables/handsontables.full.js"></script>
 
   <?php
     if (strcmp("$studySheetsInfo->thisSheetName.csv","Conditions.csv")==0){ ?>

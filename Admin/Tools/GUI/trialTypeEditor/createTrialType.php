@@ -24,6 +24,7 @@
     */
 
   // retrieving elements in readable form
+  
   $newTrialTypeInfo = file_get_contents("newTrialTypes/".$_DATA['trialTypeEditor']['currentTrialTypeName'].".txt");
   $newTrialTypeInfo = json_decode($newTrialTypeInfo);
   

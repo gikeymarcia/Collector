@@ -1,7 +1,7 @@
 <?php
 
-  require "../../initiateTool.php";
-  require_once("guiFunctions.php");
+  require "../../../initiateTool.php";
+  require_once("../guiFunctions.php");
   
   
 /*
@@ -27,184 +27,7 @@
     
 ?>
 
-<style>
-  input[type="time"]::-webkit-clear-button {
-    display: none;
-  }
-  
-  h1{
-    color       : grey;
-    font-style  : bold;
-    text-shadow : 0px 1px 0px rgba(255,255,255,.3), 0px -1px 0px rgba(0,0,0,.7);
-  }
-  
-  input{
-    border-radius : 10px;
-    padding       : 5px;
-  }
-  
-  .elementProperty{
-    padding     : 5px;
-    font-family : arial;
-    text-shadow : 0px 1.5px 0px rgba(255,255,255,.3), 0px -1.5px 0px rgba(0,0,0,.7);
-    font-size   : 18px;
-    color  : grey;
-  }
-  
-  
-  #controlPanel {
-    position         :  absolute;
-    border           :  2px solid black;
-    left             :  810px;  
-    width            :  500px;
-    top              :  300px;
-    height           :  800px;
-    padding          :  10px;
-    opacity          :  .9;
-    border-radius    :  10px;
-    z-index          :  5;
-    background-color :  #cfebfd;
-  }
-  
-  #controlPanelRibbon {
-    padding: 5px;
-    border-bottom: 1px solid gray;
-  }
-
-  #controlPanelItems > div {
-    display: none;
-    height: 400px;
-    border: none;
-  }
-  
-  #displayEditor{
-    width:400px;
-    border:2px solid black;
-    border-radius: 25px;
-    padding:25px;
-  }
-  #elementArray{
-    width:400px;
-    height: 800px;
-    top: 300px;
-    left: 1350px;
-    position:absolute;
-    border:2px solid black;
-    border-radius: 25px;
-    padding:50px;  
-  }
-  
-  #elementTypeList{
-    position:absolute;
-    left:100px;
-    top:250px;
-  }
-  #keyboardResponses{
-    width:400px;
-    height:500px;
-    position:absolute;
-    padding:10px;
-    border: 2px solid black;
-    border-radius: 25px;
-  }  
-  #interactionEditor{
-    width:400px;
-    height:500px;
-    position:absolute;
-    border:2px solid black;
-    border-radius: 25px;
-    padding:25px;
-  }
-  
-  #trialEditor{
-    width:800px;
-    height:800px;
-    position:absolute;
-    top:300px;
-    left:0px;
-    border:2px solid black;
-    border-radius: 25px;
-    padding:50px;
-  }
-  #trialEditor:hover{
-    border: 2px solid blue;
-  }
-
-  #trialTypeName{
-    position:absolute;
-    left: 100px;
-    top: 200px;
-    width: 600px;
-    line-height: 1;
-    font-size:30px;
-    padding: 5px;
-  }
-  
-  .elementButton{
-    background-color:blue;
-    color:white;
-  }
-  .elementButton:hover{
-    background-color:white;
-    color:black;
-  }
-  
-  .elementButtonSelected{
-    
-    background-color:green;
-    color:white;
-  }
-  
-  .elementButtonSelected:hover{
-    background-color:transparent;
-    color:black;
-  }
-  
-  .inputElement{
-    border:1px solid #cccccc;
-  }
-
-  .inputElementSelected{
-    background-color:green;
-  }
-  
-  .mediaElement{
-    color:blue;
-    width:160px;
-    height: 160px;
-    line-height:70px;
-    border: 2px solid blue;
-    border-radius: 10px;
-    padding:10px;    
-  }
-
-  .mediaElementSelected{
-    color:green;
-    width:160px;
-    height: 160px;
-    line-height:70px;
-    border: 4px solid green;    
-    border-radius: 10px;
-    padding:10px;    
-
-  }
-  .onsetOffset{
-    color:grey;
-  }
-  
-  .textElement{
-    font-size:30px;
-    color:black;
-  }
-
-  .textElementSelected {
-    color:black;
-    font-size:30px;
-    font-weight:bold;
-  }
-    
-</style>
-
+<link rel="stylesheet" href="trialTypeEditor.css">
 <?php     
   
   if(!isset($_DATA['trialTypeEditor']['trialTypeName'])){         //  If there is no trialType Name yet
@@ -263,6 +86,10 @@
     
     file_put_contents(TRIAL_DIR."/".$trialTypeName.'.txt',$elementArray); //actual act of saving
     
+    if(!isset($_DATA['trialTypeEditor']['currentTrialTypeName'])){
+      $_DATA['trialTypeEditor']['currentTrialTypeName']=$trialTypeName;
+    }      
+    
     require('createTrialType.php');                                      //php file
     
     return $trialTypeElementsPhp;
@@ -272,7 +99,6 @@
   /*sorting out whether we are working from scratch, have just saved a file, or are loading a file */
   
   /* loading */
-  print_r($_POST);
   if(isset($_POST['loadButton']) || isset($_POST['editTrialType'])){   //load first
 
     if(isset($_POST['loadButton'])){
@@ -318,7 +144,6 @@
   ?>
 
 <form method="post" action="index.php">
-  <textarea id="currentGuiSheetPage" name="currentGuiSheetPage" style="display:none">TrialTypeEditor</textarea>   <!-- this can go now in Admin branch -->
   <textarea id="trialTypeName" placeholder="[insert name of trial type here]" onkeyup="updateTrialTypeElements()"><?php 
 echo $trialTypeName
 ?></textarea>
@@ -333,7 +158,7 @@ echo $trialTypeName
       <input id="selectButton"  type="button" class="elementButton" value="Select"  onclick="elementType('select')">
 
     </span>
-    <span style="position:relative; left:420px">
+    <span style="position:relative; left:520px">
 
       <input  type="submit" class="collectorButton" id="saveButton" name="saveButton" value="Save">
       <button type="button" class="collectorButton" onclick="saveTextAsFile()">download JSON</button>
@@ -543,8 +368,8 @@ echo $trialTypeName
 <script>
 
 /* Configurations and preparing global variables */
-var elementScale = 8; // config
-
+var elementScale  = 8; // config
+var textScale     = 20;
 
 var currentElement      =   0;                                              //assumes that we are working from scratch
 var trialTypeElements   =   <?= $jsontrialTypeElements ?>;                  //the object containing all the trialTypeInformation
@@ -791,7 +616,7 @@ function addDeleteFunction(x){
       
       if(inputElementType ==  "text" | inputElementType=="input"){
          // to allow more concise coding of the variables
-        elemIndex['textSize']    =    12;
+        elemIndex['textSize']    =    textScale;
         elemIndex['textColor']   =    '';
         elemIndex['textFont']    =    '';
         elemIndex['textBack']    =    '';
@@ -816,7 +641,7 @@ function addDeleteFunction(x){
     } else {
       // it is not an input, so can create a span instead //
       document.getElementById("trialEditor").innerHTML+=
-        "<span class='"+inputElementType+"Element' id='element"+elementNo+"' style='position: absolute; left:"+_mouseX+"px;top:"+_mouseY+"px; z-index:"+elementNo+"' onclick='clickElement("+elementNo+")' name='"+inputElementType+"'>"+inputElementType+"</span>";
+        "<span class='"+inputElementType+"Element' id='element"+elementNo+"' style='position: absolute; font-size:"+textScale+"px; left:"+_mouseX+"px;top:"+_mouseY+"px; z-index:"+elementNo+"' onclick='clickElement("+elementNo+")' name='"+inputElementType+"'>"+inputElementType+"</span>";
     }
   
   }
@@ -949,7 +774,7 @@ function addDeleteFunction(x){
           '<table>'+ 
             '<tr>'+
               '<td>font size</td>'+
-              '<td><input type="number" id="textSizeId" onchange="adjustTextSize()" value=12 min="1" style="width:50px">px</td>'+
+              '<td><input type="number" id="textSizeId" onchange="adjustTextSize()" value='+textScale+' min="1" style="width:50px">px</td>'+
             '</tr>'+
             '<tr>'+
               '<td>color</td>'+
@@ -982,7 +807,7 @@ function addDeleteFunction(x){
         currentStimType.innerHTML="Input";
         textTableSize       =     '<tr id="textTableSizeRow">'+
                                     '<td>size</td>'+
-                                    '<td><input type="number" id="textSizeId" onchange="adjustTextSize()" value=12 min="1" style="width:50px">px</td><br>'+
+                                    '<td><input type="number" id="textSizeId" onchange="adjustTextSize()" value='+textScale+' min="1" style="width:50px">px</td><br>'+
                                   '</tr>';
         textTableColor      =     '<tr id="textTableColorRow">'+
                                     '<td>color</td>'+

@@ -1,6 +1,6 @@
 <?php
 
-  require "../../initiateTool.php";
+  require "../../../initiateTool.php";
 
 
 /*
@@ -95,9 +95,9 @@
 <?php
 
   // requiring files and calling in classes
-  require_once ('guiFunctions.php');
-  require('guiClasses.php');
-  require("guiCss.php"); 
+  require_once ('../guiFunctions.php');
+  require('../guiClasses.php');
+  require("../guiCss.php"); 
   $surveySheetsInfo = new surveySheetsInfo(); // calling in class for sheets information
 
 
@@ -269,8 +269,8 @@
   </span>
   
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-  <link rel="stylesheet" href="handsontables/handsontables.full.css">
-  <script src="handsontables/handsontables.full.js"></script>
+  <link rel="stylesheet" href="../handsontables/handsontables.full.css">
+  <script src="../handsontables/handsontables.full.js"></script>
 
      
 

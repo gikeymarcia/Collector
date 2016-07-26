@@ -1,0 +1,75 @@
+{
+  "trialTypeName": "NewTrialTypeJa",
+  "elements": [
+    {
+      "width": 20,
+      "height": 20,
+      "xPosition": 22,
+      "yPosition": 12,
+      "zPosition": 0,
+      "elementName": "element0",
+      "stimulus": "$cue",
+      "response": false,
+      "trialElementType": "media",
+      "clickOutcomesAction": "",
+      "clickOutcomesElement": "",
+      "proceed": false,
+      "mediaType": "Pic"
+    },
+    {
+      "width": 20,
+      "height": 20,
+      "xPosition": 35,
+      "yPosition": 43,
+      "zPosition": 1,
+      "elementName": "element1",
+      "stimulus": "$hello",
+      "response": false,
+      "trialElementType": "media",
+      "clickOutcomesAction": "",
+      "clickOutcomesElement": "",
+      "proceed": false,
+      "mediaType": "Pic"
+    },
+    {
+      "width": 20,
+      "height": 20,
+      "xPosition": 72,
+      "yPosition": 22,
+      "zPosition": 2,
+      "elementName": "element2",
+      "stimulus": "whoopah",
+      "response": false,
+      "trialElementType": "text",
+      "clickOutcomesAction": "",
+      "clickOutcomesElement": "",
+      "proceed": false,
+      "textSize": 12,
+      "textColor": "",
+      "textFont": "",
+      "textBack": ""
+    },
+    {
+      "width": 20,
+      "height": 20,
+      "xPosition": 59,
+      "yPosition": 12,
+      "zPosition": 3,
+      "elementName": "element3",
+      "stimulus": "hello boys",
+      "response": false,
+      "trialElementType": "text",
+      "clickOutcomesAction": "",
+      "clickOutcomesElement": "",
+      "proceed": false,
+      "textSize": 20,
+      "textColor": "",
+      "textFont": "",
+      "textBack": ""
+    }
+  ],
+  "keyboard": [],
+  "responses": [
+    []
+  ]
+}

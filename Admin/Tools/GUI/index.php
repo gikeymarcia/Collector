@@ -88,8 +88,8 @@
   // creating list for trial types
 
   $trialTypeSelect = '';
-  foreach (glob($_PATH->get("Tools")."/GUI/newTrialTypes/*.txt") as $trialType) {
-    $trialType = str_ireplace($_PATH->get("Tools")."/GUI/newTrialTypes/","",$trialType);   // remove directory from filename
+  foreach (glob($_PATH->get("Tools")."/GUI/trialTypeEditor/newTrialTypes/*.txt") as $trialType) {
+    $trialType = str_ireplace($_PATH->get("Tools")."/GUI/trialTypeEditor/newTrialTypes/","",$trialType);   // remove directory from filename
 
     $trialTypeSelect = $trialTypeSelect."<option>$trialType</option>";  
   }
@@ -100,7 +100,7 @@
 
 <div class="buttonRows">
   <div class = "guiTasks">
-  <form action="sheetsEditor.php" method="post">
+  <form action="sheetsEditor/index.php" method="post">
     <div class="editorType">
       <div class="buttonRows">
         Which study do you want to edit?
@@ -125,7 +125,7 @@
   
   <br><br>
   
-  <form class="editorType" action="surveyEditor.php" method="post">
+  <form class="editorType" action="surveyEditor/index.php" method="post">
   
       <div>
         Do you want to use the Survey/Questionnaire editor?        
@@ -148,7 +148,7 @@
   <br>
   <br>
   
-  <form action="trialTypeEditor.php" method="post">  
+  <form action="trialTypeEditor/index.php" method="post">  
     <div class="editorType">
       <div class= "buttonRows">
         Do you want to edit a trial type?
