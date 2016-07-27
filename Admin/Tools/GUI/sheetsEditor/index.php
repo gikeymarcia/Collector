@@ -23,6 +23,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>
 
  */
+ 
+ ?>
+
+<link rel="stylesheet" href="sheetsEditor.css">
+ 
+<?php
   
   // requiring files and calling in classes
   require_once  ('../guiFunctions.php');
@@ -31,7 +37,7 @@
   $studySheetsInfo  = new csvSheetsInfo(); // calling in class for sheets information
   
   
-  // copy functions
+  // functions //
   
   function copyStudy($source,$dest){
     /*
@@ -51,9 +57,10 @@
     $_DATA['guiSheets']['thisDir']    = $expFolder."/".$_POST['newStudyName'];
     $_DATA['guiSheets']['studyName']  = $_POST['newStudyName'];
     
+    return $_DATA['guiSheets']['studyName'];
+    
   }  
   
-  // edit study
   function editStudy($originalName,$newName){
     
     global $_PATH,$thisDirInfo;
@@ -69,6 +76,7 @@
     return $newName;
   }
   
+  // set filename and copy if necessary
   if(isset($_POST['editStudy'])){
     //  if file has been selected for editing (from higher level index file in GUI folder)
     $thisDirInfo->studyDir            = $_PATH->get("Experiments")."/".$_POST['editStudyName'];    
@@ -76,95 +84,22 @@
   } else {    
     //if file has just been created
     if(isset($_POST['createStudy'])){
-      copyStudy($_POST["createStudyName"],$_POST["newStudyName"]);
-      $thisDirInfo->studyDir  = $_PATH->get("Experiments")."/".$_POST['newStudyName'];          
-      $thisDirInfo->studyName = $_DATA['guiSheets']['studyName'];
+      $_DATA['guiSheets']['studyName']  = copyStudy($_POST["createStudyName"],$_POST["newStudyName"]);
+      $thisDirInfo->studyDir            = $_PATH->get("Experiments")."/".$_POST['newStudyName'];          
     }
     else {  
-      //file is in the process of being edited
-      $thisDirInfo->studyName           = editStudy($_DATA['guiSheets']['studyName'],$_POST['currStudyName']);
-      $_DATA['guiSheets']['studyName']  = $thisDirInfo->studyName;
+
+      $_DATA['guiSheets']['studyName']    = editStudy($_DATA['guiSheets']['studyName'],$_POST['currStudyName']);  //file is in the process of being edited
       
+      $_DATA['guiSheets']['csvSelected']  = $_POST['csvSelected'];    // in case the user is not working from the default ("conditions.csv") spreadsheet
     }
   }
-  
-  // List csv files in the directories
-  
-  
-  $studySheetsInfo->stimSheets  = getCsvsInDir($thisDirInfo->studyDir.'/Stimuli/');
-  $studySheetsInfo->procSheets  = getCsvsInDir($thisDirInfo->studyDir.'/Procedure/');
-
-  
-    
-
-  $studySheetsInfo->legitSheets=array_merge($studySheetsInfo->stimSheets,$studySheetsInfo->procSheets); //note that new sheet and conditions is not in this array  
-  
-  //checking whether the post is legitimate
-  $legitPostNames=array
-    ( 'currentGuiSheetPage',
-      'currStudyName',
-      'csvSelected',
-      'eventName',
-      'stimTableInput',
-      'newSheet',
-      'DeleteSheet',
-      'Save');
-  $illegalInputs=array('<?','{','}','/','\\'); // need to also exclude \
-  
-  //insert Tyson's illegal character thing here
-    //preg_replace('([^ \\-0-9A-Za-z])', '', $_POST['u']);
-   
-  checkPost($_POST,$legitPostNames,$illegalInputs); // defined in guiFunctions
-         
-?>
-
-<style>
-  body { 
-    color: black; 
-    background-color: white; 
-  }
-  #header { 
-    font-size: 180%; 
-    text-align: center; 
-    margin: 10px 0 40px; 
-  }  
-  form {
-    text-align: left; 
-  }
-  .tableArea {
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 10px 30px;
-    vertical-align: top;
-  }
-  textarea { 
-    border-radius: 5px;
-    border-color: #E8E8E8  ;
-  }
-</style>
-
-
-<?php
-  
-  if(isset($_POST['csvSelected'])){ //to allow reference to session if post doesn't exist (although may want to check if this can be tidier in future).
-    $_DATA['guiSheets']['csvSelected']=$_POST['csvSelected'];
-  }
-
   
   //updating study name
   $thisDirInfo->studyName=$_DATA['guiSheets']['studyName'];
 
-  // get a list of all the filenames to allow checking for duplications
-  $branches = getCsvsInDir($_PATH->get("Experiments")."/");
-  $listStudyNames=array();
-  foreach($branches as $branch){
-    if(file_exists($_PATH->get("Experiments")."/$branch/name.txt")){
-      array_push($listStudyNames,file_get_contents($_PATH->get("Experiments")."/$branch/name.txt"));
-    }
-  }
-  $listStudyNamesJson=json_encode($listStudyNames);
   
+  // loading either default csv files, or whichever file was loaded //
   if(!isset($_DATA['guiSheets']['csvSelected'])){ //i.e. if this page has just been opened
     $studySheetsInfo->thisSheetName='Conditions';
     $studySheetsInfo->thisSheetFilename='Conditions.csv';
@@ -178,142 +113,187 @@
       $studySheetsInfo->postSheetInfo($_DATA['guiSheets']['csvSelected']);  
     }  
   }
+
   
-  if(isset($_POST['DeleteSheet'])){//something is being deleted
-		
+  // List csv files in the directories
+  $studySheetsInfo->stimSheets  = getCsvsInDir($thisDirInfo->studyDir.'/Stimuli/');
+  $studySheetsInfo->procSheets  = getCsvsInDir($thisDirInfo->studyDir.'/Procedure/');
+  $studySheetsInfo->legitSheets = array_merge($studySheetsInfo->stimSheets,$studySheetsInfo->procSheets); //note that new sheet and conditions is not in this array  
+  
+
+  //checking whether the post is legitimate
+  $legitPostNames=array
+    ( 'currentGuiSheetPage',
+      'currStudyName',
+      'csvSelected',
+      'sheetName',
+      'stimTableInput',
+      'newSheet',
+      'DeleteSheet',
+      'Save');
+  $illegalInputs=array('<?','{','}','/','\\'); // need to also exclude \
+  
+  //insert Tyson's illegal character thing here
+    //preg_replace('([^ \\-0-9A-Za-z])', '', $_POST['u']);
+   
+  checkPost($_POST,$legitPostNames,$illegalInputs); // defined in guiFunctions
+         
+  
+  $branches = scandir($_PATH->get("Experiments"));
+  $listStudyNames = array();
+  foreach ($branches as $branch) {
+    if ($branch === '.' or $branch === '..' or $branch === "_Common") continue;
+
+    if (is_dir($_PATH->get("Experiments") . '/' . $branch)) {
+        array_push($listStudyNames,$branch);
+    }
+  } 
+  
+  $listStudyNamesJson=json_encode($listStudyNames);
+  
+  if(isset($_POST['DeleteSheet'])){//something is being deleted	
     unlink ("$thisDirInfo->studyDir/$studySheetsInfo->thisSheetFilename");
     $studySheetsInfo->thisSheetName='Conditions';
     $studySheetsInfo->thisSheetFolder='';
     $studySheetsInfo->thisSheetFilename="$studySheetsInfo->thisSheetFolder/Conditions.csv";
   }
   
-  // updating study name - doesn't need a save to do this
-  if(isset($_POST['currStudyName'])){
-    $thisDirInfo->studyName=$_POST['currStudyName'];
+  
+  // creating new sheet //
+  
+  function createNewSheet($procStim,$studySheetsInfo){
+    global $_PATH, $thisDirInfo;
+    
+    $newName  = 0;
+    $newNo    = 0;
+    
+    if($procStim=="Procedure"){
+      $thisSheetsList=$studySheetsInfo->procSheets;
+    } else { // it is a stimuli sheet being created
+      $thisSheetsList=$studySheetsInfo->stimSheets;
+    }
+
+    while ($newName==0){
+      $newNo++;
+      if(!in_array("$procStim$newNo.csv",$thisSheetsList)){
+        $newName=1;
+      }          
+    }
+    $studySheetsInfo->thisSheetName     = "$procStim$newNo";
+    $studySheetsInfo->thisSheetFolder   = "$procStim";
+    $studySheetsInfo->thisSheetFilename = "$studySheetsInfo->thisSheetFolder/$studySheetsInfo->thisSheetName.csv";
+    copy($_PATH->get("Experiments")."/New Experiment/$procStim/$procStim.csv","$thisDirInfo->studyDir/$studySheetsInfo->thisSheetFilename");   
+    return $studySheetsInfo;
   }
   
-  if(isset($_POST['newSheet'])){  //code for creating a new CSV sheet
-    $newName=0;
-    $newNo=0;
+  if(isset($_POST['newSheet'])){
     switch ($_POST['newSheet']){
       case "stim":
         //identify what novel filename needs to be          
-        while ($newName==0){
-          $newNo++;
-          if(!in_array("Stimuli$newNo.csv",$studySheetsInfo->stimSheets)){
-            $newName=1;
-          }          
-        }
-        $studySheetsInfo->thisSheetName="Stimuli$newNo";
-        $studySheetsInfo->thisSheetFolder="Stimuli";
-        $studySheetsInfo->thisSheetFilename="$studySheetsInfo->thisSheetFolder/$studySheetsInfo->thisSheetName.csv";
-        copy($_PATH->get("Experiments")."/New Experiment/Stimuli/Stimuli.csv","$thisDirInfo->studyDir/$studySheetsInfo->thisSheetFilename");
-        break;    
+        $studySheetsInfo  = createNewSheet("Stimuli",$studySheetsInfo);
+        break;
       case "proc":
-        //identify what novel filename needs to be          
-        while ($newName==0){
-          $newNo++;
-          if(!in_array("Procedure$newNo.csv",$studySheetsInfo->procSheets)){
-            $newName=1;
-          }          
-        }    
-        $studySheetsInfo->thisSheetName="Procedure$newNo";
-        $studySheetsInfo->thisSheetFolder="Procedure";
-        $studySheetsInfo->thisSheetFilename="$studySheetsInfo->thisSheetFolder/$studySheetsInfo->thisSheetName.csv";
-        copy($_PATH->get("Experiments")."/New Experiment/Procedure/Procedure.csv","$thisDirInfo->studyDir/$studySheetsInfo->thisSheetFilename");
+        //identify what novel filename needs to be        
+        $studySheetsInfo  = createNewSheet("Procedure",$studySheetsInfo);        
         break;
     }
   }
   
-  if (isset($_POST['Save'])){ //Saving whichever csv you are currently working on
-    // renaming file if the user renamed it
-    if (strcmp($studySheetsInfo->thisSheetName,'Conditions')==0){
-      // skip this renaming process
-    } else {
-      if (strcmp($_POST['eventName'],$studySheetsInfo->thisSheetName)!=0){
-        $illegalChars=array('  ',' ','.');
-        foreach ($illegalChars as $illegalChar){
-          $_POST['eventName']=str_ireplace($illegalChar,'',$_POST['eventName']);
-        }
-        $newFile=$thisDirInfo->studyDir.'/'.$studySheetsInfo->thisSheetFolder.'/'.$_POST['eventName'].'.csv';
-        $originalFile=$thisDirInfo->studyDir.'/'.$studySheetsInfo->thisSheetFilename;
-        copy($originalFile,$newFile);
-        unlink($originalFile);
-        $studySheetsInfo->thisSheetName=$_POST['eventName'];
-        // do not change $studySheetsInfo->thisSheetFolder it's the same folder
-        $studySheetsInfo->thisSheetFilename="$studySheetsInfo->thisSheetFolder/$studySheetsInfo->thisSheetName.csv";        
+  //Saving whichever csv you are currently working on
+  if (isset($_POST['Save'])){ 
+    
+    // renaming spreadsheet if the user renamed it
+    if ($studySheetsInfo->thisSheetName!='Conditions' && strcmp($_POST['sheetName'],$studySheetsInfo->thisSheetName)!=0){      
+      $illegalChars = array('  ',' ','.');
+      foreach ($illegalChars as $illegalChar){
+        $_POST['sheetName'] = str_ireplace($illegalChar,'',$_POST['sheetName']);
       }
+      $newFile      = $thisDirInfo->studyDir.'/'.$studySheetsInfo->thisSheetFolder.'/'.$_POST['sheetName'].'.csv';
+      $originalFile = $thisDirInfo->studyDir.'/'.$studySheetsInfo->thisSheetFilename;
+      copy($originalFile,$newFile);
+      unlink($originalFile);
+      $studySheetsInfo->thisSheetName     = $_POST['sheetName'];
+      $studySheetsInfo->thisSheetFilename = "$studySheetsInfo->thisSheetFolder/$studySheetsInfo->thisSheetName.csv";        
     }
-    // converting raw table data into usable array
-    //removing symbols
-		$stimTableArray=json_decode($_POST['stimTableInput'], true);
-		writeHoT("$thisDirInfo->studyDir/$studySheetsInfo->thisSheetFilename",$stimTableArray);
+
+    $stimTableArray = json_decode($_POST['stimTableInput'], true);                            // converting json from POST into array table data into array
+		writeHoT("$thisDirInfo->studyDir/$studySheetsInfo->thisSheetFilename",$stimTableArray);   // saving array into HoT format
   }      
   
   // extract table from csv file
-  $stimuli=getFromFile("$thisDirInfo->studyDir/$studySheetsInfo->thisSheetFilename",false,',');
-  $stimData = array(array_keys(reset($stimuli)));
+  $stimuli  = getFromFile("$thisDirInfo->studyDir/$studySheetsInfo->thisSheetFilename",false,',');  // reading csv file into array
+  $stimData = array(array_keys(reset($stimuli)));                                                   // storing header into array
+  
   foreach ($stimuli as $row) {
-    $stimData[] = array_values($row);
+    
+    $stimData[] = array_values($row);   //  adding new row to stimData array;
+    
   }
-  $stimData = json_encode($stimData);      
+  $stimData = json_encode($stimData);   //  json encoding stimData
+  
   
   //list all csv files - should this be a function within $studySheetsInfo?
-  $studySheetsInfo->stimSheets=getCsvsInDir($thisDirInfo->studyDir.'/Stimuli/');
-  $studySheetsInfo->procSheets=getCsvsInDir($thisDirInfo->studyDir.'/Procedure/');
-  $sheetsList=array();
-  foreach($studySheetsInfo->stimSheets as $stimSheet){
-    array_push($sheetsList,$stimSheet);
-  }
-  foreach($studySheetsInfo->procSheets as $procSheet){
-    array_push($sheetsList,$procSheet);
-  }
+  $studySheetsInfo->stimSheets=getCsvsInDir($thisDirInfo->studyDir.'/Stimuli/');      //  stim sheets
+  $studySheetsInfo->procSheets=getCsvsInDir($thisDirInfo->studyDir.'/Procedure/');    //  proc sheets
+  $sheetsList=array_merge($studySheetsInfo->stimSheets,$studySheetsInfo->procSheets); //  merging the two together
+  
   $jsonSheets=json_encode($sheetsList);
-  
-  //consolidate session names as backups for post variables
-  $_SESSION['eventName']=$studySheetsInfo->thisSheetName;
-  $_SESSION['currStudyName']=$thisDirInfo->studyName;
-  
+   
 ?>
 
 <form action='index.php' method='post'>
-  <textarea id="currentGuiSheetPage" name="currentGuiSheetPage" style="display:none">sheetsEditor</textarea>
+ 
   <h1>
     <textarea id="currStudyName" name="currStudyName" style="color:#069;" rows="1"
     onchange="checkName()"><?=$thisDirInfo->studyName?></textarea>
   </h1>
+  
   <span>
     <button name="newSheet" value="stim" class="collectorButton" id="newStimButton"> new stimuli sheet </button>
     <button name="newSheet" value="proc" class="collectorButton" id="newProcButton"> new procedure sheet </button>
-    <input type="button" class="collectorButton" id="stimButton" value="list of stimuli files">
-
+    <button type ="button" class ="collectorButton" id="stimButton"> list of stimuli files</button>
   </span>
   <br>  
   <br>
-  <div>
-<?php    
-  echo '<select name="csvSelected" title="[filename],[folder]">';
   
-  if (!$studySheetsInfo->thisSheetFilename==''){ //if nature is redundant? 
-    echo"<option name='csvSelected' value='$studySheetsInfo->thisSheetName.csv,$studySheetsInfo->thisSheetFolder'>$studySheetsInfo->thisSheetName.csv,$studySheetsInfo->thisSheetFolder</option>";      
-  } 
-  if('Conditions' != $studySheetsInfo->thisSheetName){
-    echo "<option name='csvSelected' value='Conditions.csv,'>Conditions.csv,</option>";
-  }      
-  foreach ($studySheetsInfo->procSheets as $procFile){
-    if($procFile != "$studySheetsInfo->thisSheetName.csv"){
-      echo "<option name='csvSelected' value='$procFile,Procedure'>$procFile,Procedure</option>";
-    }  
-  }      
-  foreach ($studySheetsInfo->stimSheets as $stimFile){
-    if($stimFile != "$studySheetsInfo->thisSheetName.csv"){
-      echo "<option name='csvSelected' value='$stimFile,Stimuli'>$stimFile,Stimuli</option>";  
-    }
-  }
-?>    
+  <div>
+    
+    <select id="csvSelected" name="csvSelected" title="[filename],[folder]">
+
+      <?php  
+        // what is the first item in list - either the current sheet or the default sheet ("conditions");
+        
+        if ($studySheetsInfo->thisSheetFilename !=  ''){            // current sheet
+        
+          echo"<option  value='$studySheetsInfo->thisSheetName.csv,$studySheetsInfo->thisSheetFolder'>$studySheetsInfo->thisSheetName.csv,$studySheetsInfo->thisSheetFolder</option>";      
+          
+        } 
+
+        if('Conditions' != $studySheetsInfo->thisSheetName){        // conditions sheet
+        
+          echo "<option value='Conditions.csv,'>Conditions.csv,</option>";
+        
+        }      
+        
+        // rest of the list
+        foreach ($studySheetsInfo->procSheets as $procFile){      // procedure files
+          if($procFile != "$studySheetsInfo->thisSheetName.csv"){
+            echo "<option value='$procFile,Procedure'>$procFile,Procedure</option>";
+          }  
+        }      
+        
+        foreach ($studySheetsInfo->stimSheets as $stimFile){      // stimuli files
+          if($stimFile != "$studySheetsInfo->thisSheetName.csv"){
+            echo "<option value='$stimFile,Stimuli'>$stimFile,Stimuli</option>";  
+          }
+        }
+      ?>    
     </select>
+  
     <button type='submit' class='collectorButton' value='Select'>Open</button>
+  
   </div>    
+  
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
   <link rel="stylesheet" href="../handsontables/handsontables.full.css">
   <script src="../handsontables/handsontables.full.js"></script>
@@ -321,20 +301,16 @@
   <?php
     if (strcmp("$studySheetsInfo->thisSheetName.csv","Conditions.csv")==0){ ?>
       <h2 title="You cannot edit the Conditions.csv filename or delete the file.">Conditions.csv</h2>
-      <?php    
+  <?php    
     }  else {
-      ?>
+  ?>
       
       <h2>
-        <textarea id="sheetName" name="eventName" style="color:#069;" rows="1" onchange="checkSheetName()"><?=$studySheetsInfo->thisSheetName?></textarea>
+        <textarea id="sheetName" name="sheetName" style="color:#069;" rows="1" onchange="checkSheetName()"><?=$studySheetsInfo->thisSheetName?></textarea>
       </h2>
-      <?php 
-      }
-      ?>  
+  <?php 
+    }
 
-  <div>
-    
-  <?php
     // doing this in PHP to prevent whitespace
     echo '<div id="stimArea" class="tableArea">'
        .         '<div id="stimTable"></div>'
@@ -348,16 +324,13 @@
   <input id="saveButton" type="button" class="collectorButton" value="Save">  
   <button id="submitButton" type="submit" name="Save" class="collectorButton" style="display:none"></button> 
 
-
-  
   <?php
     if (strcmp("$studySheetsInfo->thisSheetName.csv",'Conditions.csv')!=0){  ?>
       <input type="button" id="deleteSheetButton" name="DeleteSheetQuestion" class="collectorButton" value="Delete?">  
       <button id="deleteActivate" type="submit" name="DeleteSheet" class="collectorButton" value="Delete" style="display:none">No text needed</button>
-    <?php    
+  <?php    
     }  
-      ?>
-      
+  ?>      
   
 </form>
 
@@ -365,11 +338,11 @@
 <script type="text/javascript">
 
 //importing json encoded lists from php
-listStudyNames=<?=$listStudyNamesJson?>;
-listSheetsNames=<?=$jsonSheets?>;
+listStudyNames  = <?=$listStudyNamesJson?>;
+listSheetsNames = <?=$jsonSheets?>;
 
 //removing the current study's name from the list (because this list is to prevent duplication)
-studyIndex=listStudyNames.indexOf(currStudyName.value);
+studyIndex  = listStudyNames.indexOf(currStudyName.value);
 listStudyNames.splice(studyIndex,1);
 
 // Checks for preventing repeating study names
@@ -659,17 +632,28 @@ $("#deleteSheetButton").on("click", function() {
   }  
 });
 
+
+// saving code //
+
+var csvSelectedValue  = csvSelected.value; // this to prevent a bug resulting from a user saving after changing the spreadsheet selected
+
 $("#saveButton").on("click", function() { //final checks before saving
   //are there too many empty column headers?
-  emptyHeadCols=0;
+  emptyHeadCols = 0;
   for(i=0; i<stimTable.countCols();i++){
     if(stimTable.getDataAtCell(0,i)==''){
       emptyHeadCols++;
     }
   }
+  
   if(emptyHeadCols>1){
     alert("You have an empty header - will not save. Fix before trying to save again.");
   } else {
+    
+    // dealing with bug that emerges if someone tries to save after changing the csvSelected value;
+    if($("#csvSelected").val()!=csvSelectedValue){
+      $("#csvSelected").val(csvSelectedValue); 
+    }
     $('#submitButton').click();
   }
 });
