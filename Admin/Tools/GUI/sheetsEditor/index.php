@@ -34,25 +34,7 @@
   
   
   
-  !!! tyson addition
   
-  <?php
-
-$oldToken = isset($_SESSION['token']) ? $_SESSION['token'] : null;
-$_SESSION['token'] = rand_string(24);
-
-if (isset($_POST['token']) AND $_POST['token'] === $oldToken) {
-    // execute code
-}
-
-?>
-
-<form>
-    
-    <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>">
-</form>
-
-!!!
   
   
   
