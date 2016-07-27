@@ -17,7 +17,7 @@ h4 {
   padding: 1em;
   border-style: outset;
   min-width: 800px;
-  overflow: visible;
+  overflow: hidden;
 }
 .settings input[type=textbox] {
   width: 500px;

@@ -1,13 +1,18 @@
 body {
     min-width: 700px;
-    justify-content: flex-start; 
+}
+#flexBody, html {
+    display: block;
+    height: 100vh;
 }
 /* nav bar */
 #ToolsNavBar {
     width: 100%;
-    margin:0px 0px 5px 0px;
+    overflow: auto;
+    margin:0px 0px 10px 0px;
     background-color: #DEE7EC;
     padding: 20px 0px 20px 0px;
+    min-width: 700px;
 }
 #ToolsNavBar h1 {
     float: left;
@@ -25,4 +30,11 @@ body {
     width: 300px;
     float: right;
     margin-right: 25px;
+}
+.toolWidth {
+  width: 90%;
+  display: block;
+  margin: 0px auto;
+  overflow: visible;
+  min-width: 800px;
 }

@@ -13,7 +13,7 @@ function getTools() {
             unset($tools[$i]);
         }
     }
-    
+
     return $tools;
 }
 
@@ -37,18 +37,18 @@ function determineCurrentTool() {
  // $toolsDir == "C:\localhost\Collector\Admin"
     $toolsDir =  str_replace('\\', '/', $toolsDir); // "C:/localhost/Collector/Admin"
     $toolsDir .= '/Tools/';
-    
+
     // if we are not in tools, the script wont start with the path to tools
     if ($toolsDir !== substr($script, 0, strlen($toolsDir))) {
         return false;
     }
-    
+
     $toolPath = substr($script, strlen($toolsDir));
  // $toolPath = "GetData/index.php"
-    
+
     // get path up to first directory separater (find the first folder name)
     $tool = substr($toolPath, 0, strpos($toolPath, '/'));
-    
+
     return $tool;
 }
 
@@ -69,7 +69,7 @@ function verifyLogin($password) {
 
 function writeToolsHtmlHead(Pathfinder $_PATH, $tool = null) {
     if ($tool === null) $tool = determineCurrentTool();
-    
+
     $title = $tool ? $tool : 'Collector - Admin Menu';
     require $_PATH->get('Header');
 
@@ -87,22 +87,22 @@ function writeToolsNavBar(Pathfinder $_PATH, $tool = null) {
     $tools     = getTools();
     $logoutUrl = $_PATH->get('root') . '/Admin/logout.php';
     $title     = $tool ? $tool : 'Collector - Admin Menu';
-    
+
     $options = '';
-    
+
     if ($tool === false) {
         $options .= '<option selected disabled hidden value="">Choose a tool</option>';
     }
-    
+
     $rootUrl = $_PATH->get('root', 'url');
-    
+
     foreach ($tools as $toolOption) {
         $selected = ($tool === $toolOption) ? 'selected' : '';
         $path     = "$rootUrl/Admin/Tools/$toolOption";
-        
+
         $options .= "<option $selected value='$path'>$toolOption</option>";
     }
-    
+
     ?>
     <div id="ToolsNavBar">
         <h1><?= $title ?></h1>

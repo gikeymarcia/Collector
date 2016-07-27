@@ -507,10 +507,6 @@ body > form {       /*Has the ID of 'content'*/
   visibility: hidden!important;
 }
 
-.pre_var_dump {
-    white-space: pre-wrap;
-}
-
 
 /*  $NO-JS
  ---------------------------------------------------------------------------- */
@@ -607,28 +603,12 @@ input[type="submit"].button-trial-advance {
 }
 
 /* format diagnostics */
-.diagnostics {
-  margin-top:2em;
-  font-family: "Inconsolata", "inconsolata_local", "Courier New", Courier, monospace;
-  clear: both;
-  font-size: .9em;
-}
-.diagnostics ul {
-  margin-bottom:1em;
-}
-.collapsibleTitle {
-  margin:1em auto;
-  width: 85%
-}
-.collapsibleTitle h3 {
-  color:#fff;
-}
 .before, .after {
     width:   49%;
-    display: block-inline;
+    display: inline-block;
     padding: 3px;
     float:   left;
-    overflow: hidden;
+    overflow: auto;
     font-size: .9em;
 }
 .before table{
@@ -637,8 +617,6 @@ input[type="submit"].button-trial-advance {
 .after table{
     background: #A5DEFC;
 }
-
-
 
 
 /* $MEDIA
