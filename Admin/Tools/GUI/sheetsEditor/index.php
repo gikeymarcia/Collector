@@ -30,6 +30,41 @@
  
 <?php
   
+  
+  
+  
+  
+  !!! tyson addition
+  
+  <?php
+
+$oldToken = isset($_SESSION['token']) ? $_SESSION['token'] : null;
+$_SESSION['token'] = rand_string(24);
+
+if (isset($_POST['token']) AND $_POST['token'] === $oldToken) {
+    // execute code
+}
+
+?>
+
+<form>
+    
+    <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>">
+</form>
+
+!!!
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   // requiring files and calling in classes
   require_once  ('../guiFunctions.php');
   require_once  ('../guiClasses.php');
@@ -244,8 +279,7 @@
 <form action='index.php' method='post'>
  
   <h1>
-    <textarea id="currStudyName" name="currStudyName" style="color:#069;" rows="1"
-    onchange="checkName()"><?=$thisDirInfo->studyName?></textarea>
+    <textarea id="currStudyName" name="currStudyName" style="color:#069;" rows="1" onkeyup="checkName()"><?=$thisDirInfo->studyName?></textarea>
   </h1>
   
   <span>
@@ -341,30 +375,30 @@
 listStudyNames  = <?=$listStudyNamesJson?>;
 listSheetsNames = <?=$jsonSheets?>;
 
+
 //removing the current study's name from the list (because this list is to prevent duplication)
 studyIndex  = listStudyNames.indexOf(currStudyName.value);
 listStudyNames.splice(studyIndex,1);
 
+
 // Checks for preventing repeating study names
-var revertStudyName=currStudyName.value;
+var revertStudyName = currStudyName.value;
 function checkName(){
   // check if member of array
   if($.inArray(currStudyName.value,listStudyNames)!=-1){
     alert("This is the same name of another study, reverting to unique name");
-    currStudyName.value=revertStudyName;
+    $("#currStudyName").val(revertStudyName);
   } else{
-    revertStudyName=currStudyName.value;
+    revertStudyName = $("#currStudyName").val();
   }
 }
 
 
-//checks for preventing repeating sheet names
-
 //removing the current study's name from the list (because this list is to prevent duplication)
-if (typeof sheetName !== 'undefined'){
-  sheetIndex=listSheetsNames.indexOf(sheetName.value+'.csv');
+if (typeof sheetName !== 'undefined'){                            //i.e. if this is not "conditions.csv"
+  sheetIndex  = listSheetsNames.indexOf(sheetName.value+'.csv');  
   listSheetsNames.splice(sheetIndex,1);
-  var revertSheetName=sheetName.value;
+  var revertSheetName = sheetName.value;
   function checkSheetName(){
     potentialSheetName=sheetName.value+'.csv';
     // check if member of array
