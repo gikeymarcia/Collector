@@ -26,6 +26,11 @@ form {
   text-align  : left; 
 }
 
+#sheetsForm {
+  width: auto;
+  padding: 0 30px;
+}
+
 textarea { 
   border-radius : 5px;
   border-color  : #E8E8E8  ;

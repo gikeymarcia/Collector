@@ -258,7 +258,7 @@
    
 ?>
 
-<form action='index.php' method='post'>
+<form id="sheetsForm" action='index.php' method='post'>
  
   <h1>
     <textarea id="currStudyName" name="currStudyName" style="color:#069;" rows="1" onkeyup="checkName()"><?=$thisDirInfo->studyName?></textarea>
