@@ -56,8 +56,7 @@
   $selectArray        = array();
   $illegalStudyNames  = array('.','..','New Experiment','Common');
   $branchStudyKey     = array();
-  $editStudySelect    = '';
-  $newStudySelect     = '';
+  $studySelect        = '';
   
   // creating lists for studies
 
@@ -71,8 +70,7 @@
         
     $branchStudyKey[$study] = $branch;
         
-    if( $illegalStudyName == false) {   $editStudySelect  = $editStudySelect."<option>$study</option>";   }
-    $newStudySelect   = $newStudySelect."<option>$study</option>";
+    if( $illegalStudyName == false) {   $studySelect  .=  "<option>$study</option>";   }
         
   }
  
@@ -105,7 +103,7 @@
       <div class="buttonRows">
         Which study do you want to edit?
         <select name="editStudyName" onchange="updateGuiStudyName()">
-          <?= $editStudySelect ?>
+          <?= $studySelect ?>
         </select>
       
         <input class="collectorButton" type="submit"  value="Edit Study" name="editStudy" title="This tool edits the spreadsheets for your study">
@@ -114,7 +112,8 @@
       <div class="buttonRows">
         Or select a study to base a NEW study on:
         <select name="createStudyName">
-          <?= $newStudySelect ?>
+          <option>New Experiment</option>
+          <?= $studySelect ?>
         </select>
         <input id="newStudy" class="collectorButton" type="submit" value="New Study" name="createStudy" title="This tool edits the spreadsheets for your study">
       </div>
