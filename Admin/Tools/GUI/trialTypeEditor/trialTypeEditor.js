@@ -13,9 +13,6 @@ var inputButtonArray    =   ["media","text","input","select"];
 elementType('select');                                                      // by default you are in select mode, not creating an element
 
 
-
-
-
 /* * *
 / I may want to include more code within document.ready function?
 * * */
@@ -402,7 +399,6 @@ function addDeleteFunction(x){
         document.getElementById("inputStimTypeCell").innerHTML="Text properties";
         // userInputTypeValue is being used for both media and input types - this could probably be tidier by keeping them separate
         inputStimSelectCell.innerHTML=
-          '<input id="mediaTypeValue" style="display:none">'+
           '<table>'+ 
             '<tr>'+
               '<td>font size</td>'+

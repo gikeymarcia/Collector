@@ -126,10 +126,8 @@
 
   // List csv files in the directories
   $surveySheetsInfo->surveySheets=getCsvsInDir($_PATH->get('Common')."/Surveys");
-  
-  print_r($_POST);
  
-  // jumping in from index page //
+ // jumping in from index page //
   
   // having selected "edit" a page
   if(isset($_POST['editSurvey'])){
@@ -229,8 +227,10 @@
 
 
 <form action='surveyEditor.php' method='post' id="TableForm">
-  <textarea id="currentGuiSheetPage" name="currentGuiSheetPage" style="display:none">surveyEditor</textarea>
-  <h1 style="padding:30px">
+ <input type="button" id="indexButton" class="collectorButton" value="Go back to Index" onclick="document.location.href = '../';" style=" position:absolute;
+  right:20px;">
+  
+ <h1 style="padding:30px">
     <?php 
       if(strcmp($surveySheetsInfo->thisSurveyName,"[No survey Selected]")==0){
         ?>
@@ -243,6 +243,7 @@
           onchange="checkName()"><?=$surveySheetsInfo->thisSurveyName?></textarea>        
         <?php } ?>  
   </h1>
+ 
   
   <span style="padding:30px">
     <button name="newSurvey" value="stim" class="collectorButton" id="newSurveyButton"> new survey </button>

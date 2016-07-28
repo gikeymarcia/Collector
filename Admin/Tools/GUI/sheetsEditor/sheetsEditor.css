@@ -9,6 +9,10 @@
   margin      : 10px 0 40px; 
 }  
 
+#indexButton {
+  position:absolute;
+  right:20px;
+}
 .tableArea {
   display         : block;
   width           : 100%;

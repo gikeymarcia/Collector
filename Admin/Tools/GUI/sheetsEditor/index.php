@@ -260,6 +260,8 @@
 
 <form id="sheetsForm" action='index.php' method='post'>
   <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>"> 
+  <input type="button" id="indexButton" class="collectorButton" value="Go back to Index" onclick="document.location.href = '../';" style=" position:absolute;
+  right:20px;">
   <h1>
     <textarea id="currStudyName" name="currStudyName" style="color:#069;" rows="1" onkeyup="checkName()"><?=$thisDirInfo->studyName?></textarea>
   </h1>
