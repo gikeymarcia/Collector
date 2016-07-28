@@ -4,7 +4,6 @@ var elementScale  = 8; // config
 var textScale     = 20;
 
 var currentElement      =   0;                                              //assumes that we are working from scratch
-var trialTypeElements   =   <?= $jsontrialTypeElements ?>;                  //the object containing all the trialTypeInformation
 var inputElementType;                                                       //the type of element that is currently selected to be added to the task. "Select" also included
 var elementNo           =   Object.size(trialTypeElements['elements'])-1;   //elements are numbered, e.g. "element0","element1"
 var currentResponseNo   =   0;                                              //this needs to be updated whenever you click on an element;
@@ -293,7 +292,6 @@ function addDeleteFunction(x){
   }
 
 
-
   /* updating the trialType */
   
   backupTrialTypeName   =   trialTypeName.value;    //in case the user tries an illegal name
@@ -399,6 +397,7 @@ function addDeleteFunction(x){
         document.getElementById("inputStimTypeCell").innerHTML="Text properties";
         // userInputTypeValue is being used for both media and input types - this could probably be tidier by keeping them separate
         inputStimSelectCell.innerHTML=
+          // create mediatype input //
           '<table>'+ 
             '<tr>'+
               '<td>font size</td>'+

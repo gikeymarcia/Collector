@@ -299,7 +299,7 @@
     
     /* Proceed elements */
     if($newTrialTypeElement->proceed=="true"){
-      $jsProc="$('form').submit();";
+      $jsProc="Collector.submit();";
     }
 
       $newTrialJSCode=$newTrialJSCode.'
@@ -318,7 +318,7 @@
   foreach($newTrialTypeArray as $newTrialTypeElement){
     if(isset($newTrialTypeElement->onsetTime)){
       $onsetMS=$newTrialTypeElement->onsetTime*1000;
-      $jsOnsetCode=$jsOnsetCode.'
+      $jsOnsetCode.='
       $("#'.$newTrialTypeElement->elementName.'").delay('.$onsetMS.').fadeIn(0);
       ';
     }
@@ -327,7 +327,7 @@
       if(isset($onsetMS)){
         $offsetMS-=$onsetMS;
       }
-      $jsOffsetCode=$jsOffsetCode.'
+      $jsOffsetCode.='
       $("#'.$newTrialTypeElement->elementName.'").delay('.$offsetMS.').fadeOut(0);
       ';
     }          
@@ -350,7 +350,7 @@
         response.value='$currentKey'; // change response //";
         if($newTrialTypeInfo->keyboard->proceed="true"){
           $keyboardResponse=$keyboardResponse."
-          $('form').submit();
+          Collector.submit();
           ";
         }        
         $keyboardResponse=$keyboardResponse."   

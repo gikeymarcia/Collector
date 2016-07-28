@@ -365,3 +365,8 @@ echo $trialTypeName
 
 <script src="trialTypeFunctions.js"></script>
 <script src="trialTypeEditor.js"></script>
+<script>
+
+  var trialTypeElements   =   <?= $jsontrialTypeElements ?>;                  //the object containing all the trialTypeInformation
+
+</script>
