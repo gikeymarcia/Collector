@@ -15,6 +15,7 @@ var Collector = {
         var self = this;
 
         $(document).ready(function() {
+            self.insert_spreadsheet_variables();
             self.apply_force_numeric();
             self.prevent_autocomplete();
             self.prevent_back_nav();
@@ -38,6 +39,35 @@ var Collector = {
                 self.start();
             }
         });
+    },
+    
+    insert_spreadsheet_variables: function() {
+        var template = this.el('content').html();
+        var self = this;
+        
+        template = template.replace(/\[[^\]]+\]/g, function(keyWithBrackets) {
+            var key = keyWithBrackets.substr(1, keyWithBrackets.length-2); // pull off the brackets
+            key = key.toLowerCase();
+            
+            if (typeof self.inputs.proc[key] !== "undefined") {
+                return self.inputs.proc[key];
+            } else if (typeof self.inputs.stim[key] !== "undefined") {
+                return self.inputs.stim[key];
+            } else {
+                return keyWithBrackets;
+            }
+        }).replace(/{[^}]+}/g, function(keyWithBrackets) {
+            var key = keyWithBrackets.substr(1, keyWithBrackets.length-2); // pull off the brackets
+            key = key.toLowerCase();
+            
+            if (typeof self.inputs.extra[key] !== "undefined") {
+                return self.inputs.extra[key];
+            } else {
+                return keyWithBrackets;
+            }
+        });
+        
+        this.el('content').html(template);
     },
 
     // these functions control when submission of a trial is enabled/disabled

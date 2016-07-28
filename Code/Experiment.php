@@ -94,6 +94,21 @@ $_dataAction = $_TRIAL->get('trial type');
 
 require $_PATH->get('Header');
 
+/* export trial data to JS */
+$procData = $_TRIAL->export(null);
+
+if ($_TRIAL->position === 0) {
+    $procData = $procData['main'];
+    $stimData = $_TRIAL->get('item');
+} else {
+    $stimData = $_TRIAL->getMainTrial()->get('item');
+}
+
+// lowercase the stim columns to be consistent with the proc data
+$stimData = array_change_key_case($stimData);
+
+unset($procData['response']);
+
 // actually include the trial type display file here
 $display = $_TRIAL->getRelatedFile('display');
 if ($display): ?>
@@ -101,6 +116,8 @@ if ($display): ?>
 <script>
     Collector.inputs.min = "<?= $_EXPT->get('min time') ?>";
     Collector.inputs.max = "<?= $_EXPT->get('max time') ?>";
+    Collector.inputs.proc = <?= json_encode($procData) ?>;
+    Collector.inputs.stim = <?= json_encode($stimData) ?>;
 </script>
 <form class="experimentForm invisible" action="<?= $postTo; ?>" method="post" id="content" autocomplete="off">
   <?php include $display ?>
