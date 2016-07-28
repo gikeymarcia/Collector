@@ -130,7 +130,7 @@
       
       $trialTypeName        = $_POST['newTrialTypeName'];
     }
-  }    
+  }
   $jsontrialTypeElements  =   json_encode($trialTypeElementsPhp);   //to use for javascript manipulations
      
   // list of trial types the user can edit
@@ -181,7 +181,7 @@ echo $trialTypeName
 
     </div>
 
-  <div id="trialEditor" onMouseMove="mouseMovingFunctions()" onclick="getPositions(); tryCreateElement()">
+  <div id="trialEditor" onclick="getPositions(); tryCreateElement()">
 
 <?php
 
@@ -384,10 +384,44 @@ echo $trialTypeName
 
   <textarea id="elementArray" name="elementArray"></textarea>
 
+  
+  
+  
+  <script src="../handsontables/handsontables.full.js"></script>
+  <link rel="stylesheet" href="../handsontables/handsontables.full.css">
+  <script src="../handsontables/GUI_Handson.js"></script>
+
+  
+  <div id="stimArea" class="tableArea">
+    <div id="stimTable"></div>
+  </div>
+ 
+  <div id="procArea" class="tableArea">
+    <div id="procTable"></div>
+  </div>
+  
 </form>
 
 <script src="trialTypeFunctions.js"></script>
+
 <script>
+
+  var stimTable = document.getElementById("stimTable");
+  var stimDefault = [
+      ['Cue', 'Answer'],
+      ['AAA', 'Apple']
+  ];
+  var stimData = createHoT(stimTable, stimDefault);
+
+  
+  var procTable = document.getElementById("procTable");
+  var procDefault = [
+      ['Cue', 'Answer'],
+      ['AAA', 'Apple']
+  ];
+  var procData = createHoT(procTable, procDefault);
+  
+  
 
   /* Configurations and preparing global variables */
   var elementScale  = <?=$elementScale?>; // config

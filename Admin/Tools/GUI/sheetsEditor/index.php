@@ -315,6 +315,7 @@
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
   <link rel="stylesheet" href="../handsontables/handsontables.full.css">
   <script src="../handsontables/handsontables.full.js"></script>
+  <script src="../handsontables/GUI_Handson.js"></script>
 
   <?php
     if (strcmp("$studySheetsInfo->thisSheetName.csv","Conditions.csv")==0){ ?>
@@ -333,7 +334,7 @@
     echo '<div id="stimArea" class="tableArea">'
        .         '<div id="stimTable"></div>'
        .     '</div>'
-       . '</div>';
+       //. '</div>';
   ?>
   <br>
 
