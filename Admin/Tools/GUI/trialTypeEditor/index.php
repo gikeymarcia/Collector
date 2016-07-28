@@ -44,7 +44,7 @@
   * * * * * * * */
 
   $elementScale   =   8; // as the interface for inserting elements if 800px x 800px, and we are scaling to a 100% height or width (800/100 = 8)
-  
+  $textScale      =   20;
   
   $trialTypeElementsPhp;
 
@@ -119,7 +119,7 @@
     } else { 
       // creating a new file //
       if($_POST['createTrialTypeName']=="[Blank]"){
-        require ("guiClasses.php"); //not sure we need this;  maybe the guiClasses can be tidied up  
+        require ("../guiClasses.php"); //not sure we need this;  maybe the guiClasses can be tidied up  
         $trialTypeElementsPhp = new trialTypeElements();
         
       } else {
@@ -270,6 +270,29 @@ echo $trialTypeName
                 <option>Text</option>
                 <option>Button</option> 
               </select>
+              
+              
+              <table> 
+                <tr>
+                  <td>font size</td>
+                  <td><input type="number" id="textSizeId" onchange="adjustTextSize()" value='<?=$textScale ?>' min="1" style="width:50px">px</td>
+                </tr>
+                <tr>
+                  <td>color</td>
+                  <td><input type="text" id="textColorId" onkeyup="adjustTextColor()" placeholder="color"></td>
+                </tr>
+                <tr>
+                  <td>font</td>
+                  <td><input type="text" id="textFontId" onkeyup="adjustTextFont()" placeholder="font"></td>
+                </tr>
+                <tr>
+                  <td>background-color</td>
+                  <td><input type="text" id="textBackId" onkeyup="adjustTextBack()" placeholder="background-color"></td>
+                </tr>
+              </table>
+
+              
+              
             </td>
           </tr>
         </div>
@@ -287,17 +310,17 @@ echo $trialTypeName
           <td></td>
         </tr>
         <tr title="this position is based on the left of the element">
-          <td class="elementProperty">X-Position</td>
+          <td class="elementProperty">X-Axis</td>
           <td><input id="xPosId" type="number" min="1" max="100" step="1" onchange="adjustXPos()">%</td>
           <td></td>
         </tr>
         <tr title="this position is based on the top of the element">
-          <td class="elementProperty">Y-Position</td>
+          <td class="elementProperty">Y-Axis</td>
           <td><input id="yPosId" type="number" min="1" max="100" step="1" onchange="adjustYPos()">%</td>
           <td></td>
         </tr>
         <tr title="change this value to bring the element to forward or backward (to allow it to be on top of or behind other elements">
-          <td class="elementProperty">Z-Position</td>
+          <td class="elementProperty">Z-Axis</td>
           <td><input id="zPosId" type="number" step="1" min="0" onchange="adjustZPos()"></td>
         </tr>
         <tr title="how long do you want until the element appears on screen?">
@@ -364,9 +387,14 @@ echo $trialTypeName
 </form>
 
 <script src="trialTypeFunctions.js"></script>
-<script src="trialTypeEditor.js"></script>
 <script>
+
+  /* Configurations and preparing global variables */
+  var elementScale  = <?=$elementScale?>; // config
+  var textScale     = <?=$textScale?>;
+
 
   var trialTypeElements   =   <?= $jsontrialTypeElements ?>;                  //the object containing all the trialTypeInformation
 
 </script>
+<script src="trialTypeEditor.js"></script>

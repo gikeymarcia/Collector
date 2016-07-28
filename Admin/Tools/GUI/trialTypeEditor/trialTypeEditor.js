@@ -1,8 +1,4 @@
 
-/* Configurations and preparing global variables */
-var elementScale  = 8; // config
-var textScale     = 20;
-
 var currentElement      =   0;                                              //assumes that we are working from scratch
 var inputElementType;                                                       //the type of element that is currently selected to be added to the task. "Select" also included
 var elementNo           =   Object.size(trialTypeElements['elements'])-1;   //elements are numbered, e.g. "element0","element1"
@@ -396,34 +392,14 @@ function addDeleteFunction(x){
         currentStimType.innerHTML="Text";
         document.getElementById("inputStimTypeCell").innerHTML="Text properties";
         // userInputTypeValue is being used for both media and input types - this could probably be tidier by keeping them separate
-        inputStimSelectCell.innerHTML=
-          // create mediatype input //
-          '<table>'+ 
-            '<tr>'+
-              '<td>font size</td>'+
-              '<td><input type="number" id="textSizeId" onchange="adjustTextSize()" value='+textScale+' min="1" style="width:50px">px</td>'+
-            '</tr>'+
-            '<tr>'+
-              '<td>color</td>'+
-              '<td><input type="text" id="textColorId" onkeyup="adjustTextColor()" placeholder="color"></td>'+
-            '</tr>'+
-            '<tr>'+
-              '<td>font</td>'+
-              '<td><input type="text" id="textFontId" onkeyup="adjustTextFont()" placeholder="font"></td>'+
-            '</tr>'+
-            '<tr>'+
-              '<td>background-color</td>'+
-              '<td><input type="text" id="textBackId" onkeyup="adjustTextBack()" placeholder="background-color"></td>'+
-            '</tr>'
-          '</table>';
-               
+                
         //rather than embed it in above text, i've listed these values below for improved legibility
         textFontId.value   =  currentElementAttributes.textFont;
         textColorId.value  =  currentElementAttributes.textColor;
         textSizeId.value   =  currentElementAttributes.textSize;
         textBackId.value   =  currentElementAttributes.textBack;
         
-      break      
+      break
 
       case "input":      
         document.getElementById("inputStimTypeCell").innerHTML="Input Type";
@@ -431,38 +407,6 @@ function addDeleteFunction(x){
         $("#interactionEditorConfiguration").show();        
         document.getElementById('mediaTypeValue').style.visibility="invisible";
         document.getElementById('userInputTypeValue').style.visibility="visible";
-        currentStimType.innerHTML="Input";
-        textTableSize       =     '<tr id="textTableSizeRow">'+
-                                    '<td>size</td>'+
-                                    '<td><input type="number" id="textSizeId" onchange="adjustTextSize()" value='+textScale+' min="1" style="width:50px">px</td><br>'+
-                                  '</tr>';
-        textTableColor      =     '<tr id="textTableColorRow">'+
-                                    '<td>color</td>'+
-                                    '<td><input type="text" id="textColorId" onkeyup="adjustTextColor()" placeholder="e.g. red, #FF0000" ></td>'+
-                                  '</tr>';
-        textTableFont       =     '<tr id="textTableFontRow">'+
-                                    '<td>font</td>'+
-                                    '<td><input type="text" id="textFontId" onkeyup="adjustTextFont()" placeholder="font"></td>'+
-                                  '</tr>';
-        textTableBackColor  =     '<tr id="textTableBackRow">'+
-                                    '<td>background-color</td>'+
-                                    '<td><input type="text" id="textBackId" onkeyup="adjustTextBack()" placeholder="background-color"></td>'+
-                                  '</tr>';
-                          
-        /* if handling text, not button input, then need to remove font color and background-color due to inflexibility of placeholders */
-
-        inputStimSelectCell.innerHTML=
-          '<select id="userInputTypeValue" onchange="adjustUserInputType()">'+
-            '<option>Text</option>'+
-            '<option>Button</option>'+
-          '</select>'+
-          '</td><br>'+
-          '<table>'+
-            textTableSize+
-            textTableColor+
-            textTableFont+
-            textTableBackColor+
-          '</table>';
 
         //rather than embed it in above text, i've listed these values below for improved legibility
         textFontId.value          =   currentElementAttributes.textFont;
