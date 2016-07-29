@@ -138,6 +138,25 @@ function checkPost($post,$legitPostNames,$illegalInputs){
   }
 }
 
+function getExperimentCsvs($type, Pathfinder $_path) {
+  $exps = getCollectorExperiments();
+
+  $files = array();
+
+  foreach ($exps as $exp) {
+    $defaults = array('Current Experiment' => $exp);
+    $dir = $_path->get("$type Dir", 'relative', $defaults);
+      
+    foreach (scandir($dir) as $file) {
+      if (substr($file, -4) !== '.csv') continue;
+          
+      $files["$exp/$file"] = "$dir/$file";
+    }
+  }
+  
+  return $files;
+}
+
 ?>
 
 <script>

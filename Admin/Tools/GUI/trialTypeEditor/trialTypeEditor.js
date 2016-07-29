@@ -862,6 +862,18 @@ function addDeleteFunction(x){
     return associateArray(data);
   }
    
+   
+  $("#stimFileSelection").on("change",function(){
+    
+    if(this.value==""){
+      return
+    } else {
+      
+    }
+    
+  }); 
+   
+   
   /*functions*/
 
    

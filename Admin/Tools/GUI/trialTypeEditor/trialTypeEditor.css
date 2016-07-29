@@ -2,6 +2,11 @@
     display: none;
   }
   
+body > form {
+  width: initial;
+  margin: 5px;
+}
+
   h1{
     color       : grey;
     font-style  : bold;
@@ -23,11 +28,11 @@
   
   
   #controlPanel {
-    position         :  absolute;
+    display          :  inline-block;
+    vertical-align   :  top;
+    position         :  relative;
     border           :  2px solid black;
-    left             :  810px;  
     width            :  500px;
-    top              :  250px;
     height           :  800px;
     padding          :  10px;
     opacity          :  .9;
@@ -54,10 +59,10 @@
     padding:25px;
   }
   #elementArray{
+    display:inline-block;
+    position:relative;
     width         : 400px;
     height        : 800px;
-    top           : 250px;
-    left          : 1350px;
     position      : absolute;
     border        : 2px solid black;
     border-radius : 25px;
@@ -65,9 +70,8 @@
   }
   
   #elementTypeList{
-    position:absolute;
+    position:relative;
     left: 20px;
-    top : 180px;
   }
   #keyboardResponses{
     width:400px;
@@ -87,24 +91,30 @@
   }
   
   #procArea{
-    position:absolute;
-    top:1200px;
-    left:800px;
+    display:inline-block;
+    position:relative;
     width:500px;
   }
 
   #stimArea{
-    position:absolute;
-    top:1200px;
-    left:300px;
+    display:inline-block;
+    position:relative;
     width:500px;
   }
 
+  #tableDiv{
+      
+    border: 0px solid black;
+    border-top-width:2px;
+    margin-top: 30px;
+  }
+
   #trialEditor{
+    display : inline-block;
+    vertical-align:  top;
+    position:relative;
     width:800px;
     height:800px;
-    position:absolute;
-    top:  250px;
     left:0px;
     border:2px solid black;
     border-radius: 25px;
@@ -112,9 +122,7 @@
   }
     
   #trialCodePreview{
-    position:absolute;
-    top:1200px;
-    left:1000px;
+    position:relative;
     width: 500px; 
     height: 200px
   }
@@ -129,9 +137,8 @@
   }
   
   #trialTypeName{
-    position:absolute;
+    position:relative;
     left: 20px;
-    top: 125px;
     width: 600px;
     line-height: .5;
     font-size:30px;
