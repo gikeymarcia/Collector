@@ -863,15 +863,30 @@ function addDeleteFunction(x){
   }
    
    
-  $("#stimFileSelection").on("change",function(){
+   
+  // loading in HoT data
+  function loadStimData(data) {
+    loadHoTData(stimData, data);
+  }
+  
+  function loadProcData(data) {
+    loadHoTData(procData, data);
+  }
+  
+  function loadHoTData(hot, jsonStringData) {
+    hot.loadData(JSON.parse(jsonStringData));
+  }
+  
+  $("#stimFileSelection").on("change", function() {
+    if (this.value === '') return;
     
-    if(this.value==""){
-      return
-    } else {
-      
-    }
-    
-  }); 
+    $.get(
+      'csvRetrieval.php',
+      {file: this.value},
+      loadStimData,
+      'text'
+    );
+  });
    
    
   /*functions*/
