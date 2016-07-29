@@ -629,10 +629,11 @@ function addDeleteFunction(x){
 
   function createTextElement(element) {   
     return '<div id="' + element.elementName + '" '
-           +   getStyleAsHtml(element.style)
-           + ">"
-           +   element.stimulus
-           + '</div>';
+         + ' class="textElement" '
+         +   getStyleAsHtml(element.style)
+         + ">"
+         +   element.stimulus
+         + '</div>';
   }
 
   function getStyleAsHtml(attributes) {
@@ -651,7 +652,8 @@ function addDeleteFunction(x){
     var stimProp = (type === 'Text') ? 'placeholder' : 'value';
     
     return '<input type="' + type + '"'
-         + ' id="' + element.elementName + '" '
+         + ' id="' + element.elementName + '"'
+         + ' class="inputElement" '
          +   getStyleAsHtml(element.style)
          + ' ' + stimProp + '="' + element.stimulus + '"'
          + '>';
@@ -670,6 +672,7 @@ function addDeleteFunction(x){
 
   function createPicElement(element) {
     return '<img id="' + element.elementName + '"'
+         + ' class="mediaElement"'
          + ' src="{getLocation:' + element.stimulus + '}"'
          + ' ' + getStyleAsHtml(element.style)
          + '>';
@@ -677,6 +680,7 @@ function addDeleteFunction(x){
 
   function createAudElement(element) {
     return '<audio id="' + element.elementName + '"'
+         + ' class="mediaElement"'
          + ' src="{getLocation:' + element.stimulus + '}"'
          + ' autoplay'
          + '>';
@@ -684,6 +688,7 @@ function addDeleteFunction(x){
 
   function createVidElement(element) {
     return '<iframe id="' + element.elementName + '"'
+         + ' class="mediaElement"'
          + ' ' + getStyleAsHtml(element.style)
          + ' frameborder="0"'
          + ' webkitallowfullscreen mozallowfullscreen allowfullscreen'
@@ -786,8 +791,21 @@ function addDeleteFunction(x){
 
   
   function getTrialData() {
-    var procData    = getCsvData('procedure')[window['Current Proc Row']];
-    var item        = procData['item'];
+    var allProcData = getCsvData('procedure');
+    var procRow     = window['Current Proc Row'];
+    
+    if (typeof allProcData[procRow] !== "undefined") {
+        var procData = allProcData[procRow];
+    } else {
+        var procData = allProcData[0];
+    }
+    
+    if (typeof procData['item'] !== "undefined") {
+      var item = procData['item'];
+    } else {
+      var item = 0;
+    }
+    
     var allStimData = getCsvData('stimuli');
     
     if (typeof allStimData[item-2] !== "undefined") {

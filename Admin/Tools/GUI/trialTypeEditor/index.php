@@ -431,7 +431,7 @@ echo $trialTypeName
         ['Cue', 'Answer'],
         ['AAA', 'Apple']
     ];
-    stimData = createHoT(stimTable, stimDefault, updateTrialTypeElements);
+    stimData = createHoT(stimTable, stimDefault);
 
     
     var procTable = document.getElementById("procTable");
@@ -439,17 +439,19 @@ echo $trialTypeName
         ['Item', 'Text','Settings'],
         ['2', 'Hey hey','blank']
     ];
-    procData = createHoT(procTable, procDefault, updateTrialTypeElements);
+    procData = createHoT(procTable, procDefault);
     
     procData.addHook('afterSelectionEnd',function(){         
       var coords        = this.getSelected();
-      window['Current Proc Row'] = coords[1]; // takes top row
+      window['Current Proc Row'] = coords[0]-1; // takes top row
+      updateTrialTypeElements();
     });
     
-    stimData.addHook('afterChange',function(){
-      console.dir(this);
+    [stimData, procData].forEach(dataTable => {
+      dataTable.addHook('afterChange', function() {
+        updateTrialTypeElements();
+      });
     });
-    
   });
   
   window['Current Proc Row'] = 0;
