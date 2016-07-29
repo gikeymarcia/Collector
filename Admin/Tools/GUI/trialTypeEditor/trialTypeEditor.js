@@ -280,7 +280,7 @@ function addDeleteFunction(x){
         xPosition   :   xPos,
         yPosition   :   yPos,
         zPosition   :   elementNo,        
-      }
+      },
       elementName           :   'element'+elementNo,
       stimulus              :   'not yet added',
       response              :   false,
@@ -392,6 +392,7 @@ function addDeleteFunction(x){
       case "text":
         $("#displaySettings").show();
         $("#interactionEditorConfiguration").show();
+        
         document.getElementById('mediaTypeValue').style.visibility="hidden";
         currentStimType.innerHTML="Text";
         document.getElementById("inputStimTypeCell").innerHTML="Text properties";
@@ -409,7 +410,7 @@ function addDeleteFunction(x){
         document.getElementById("inputStimTypeCell").innerHTML="Input Type";
         $("#displaySettings").show();
         $("#interactionEditorConfiguration").show();        
-        document.getElementById('mediaTypeValue').style.visibility="invisible";
+        document.getElementById('mediaTypeValue').style.visibility="hidden";
         document.getElementById('userInputTypeValue').style.visibility="visible";
 
         //rather than embed it in above text, i've listed these values below for improved legibility
@@ -613,7 +614,7 @@ function addDeleteFunction(x){
   // creating js trialType
 
   function createTextElement(element) {
-    return = '<div id="' + element.elementName + '" '
+    return '<div id="' + element.elementName + '" '
            +   getStyleAsHtml(element.style)
            + ">"
            +   element.stimulus
@@ -705,11 +706,13 @@ function addDeleteFunction(x){
   /*functions*/
 
    
-  
+  /*
   function locateFileLocalInternet($medStim){
     $mediaPath='$_PATH->get("Media")';      
     $internetLocalLocation=   
-  '<?php
+  
+  
+'<?php
  
     // checking whether this is a local file or an online one.
     if(strPos('.$medStim.',"http")!==false){
@@ -832,7 +835,7 @@ function addDeleteFunction(x){
   function jsClickActions($newTrialTypeElement,$jsAction){    
     //$clickElement='onclick="'.$newTrialTypeElement->elementName.'Click()"';
     
-    /* Click Actions */
+    // Click Actions 
     $clickActions = glob('clickActionsBackend/*.php'); // list files in clickActions folder
     
     foreach ($clickActions as $clickAction){
@@ -864,7 +867,7 @@ function addDeleteFunction(x){
       $jsResp   = jsClickResponses($newTrialTypeElement->elementName,$responseElements,$jsResp);
     }
     
-    /* Proceed elements */
+    // Proceed elements 
     if($newTrialTypeElement->proceed=="true"){
       $jsProc="Collector.submit();";
     }
@@ -953,7 +956,7 @@ function addDeleteFunction(x){
   }
   
   
-  
+  */
   
   
   
