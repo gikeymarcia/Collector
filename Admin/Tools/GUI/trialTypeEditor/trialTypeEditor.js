@@ -179,6 +179,8 @@ function addDeleteFunction(x){
   
   }
 
+  
+  
   function updateTrialTypeElementsResponses(trialTypeElementStem,initiateUpdate){
 
     if(initiateUpdate!="initiate"){ // not relevant when initiating page
@@ -188,7 +190,6 @@ function addDeleteFunction(x){
     }
     return trialTypeElementStem;
   
-    createTrialType(trialTypeElements); // this may CRASH :-S  
   }
 
   
@@ -243,10 +244,10 @@ function addDeleteFunction(x){
       
       if(inputElementType ==  "text" | inputElementType=="input"){
          // to allow more concise coding of the variables
-        elemIndex['textSize']    =    textScale;
-        elemIndex['textColor']   =    '';
-        elemIndex['textFont']    =    '';
-        elemIndex['textBack']    =    '';
+        elemIndex['style']['font-size']         =    textScale+"px";
+        elemIndex['style']['color']             =    '';
+        elemIndex['style']['font-family']       =    '';
+        elemIndex['style']['background-color']  =    '';
       }
       
       if(inputElementType=="input"){
@@ -276,11 +277,12 @@ function addDeleteFunction(x){
   function populateDefaultValues(){
     trialTypeElements['elements'][elementNo] = {
       style : {
-        width       :   20, 
-        height      :   20,
-        xPosition   :   xPos,
-        yPosition   :   yPos,
-        zPosition   :   elementNo,        
+        position    :   "absolute",
+        width       :   20    + "%", 
+        height      :   20    + "%",
+        left        :   xPos  + "%",
+        top         :   yPos  + "%",
+        "z-index"   :   elementNo,        
       },
       elementName           :   'element'+elementNo,
       stimulus              :   'not yet added',
@@ -309,6 +311,9 @@ function addDeleteFunction(x){
     document.getElementById("elementArray").innerHTML   =   JSON.stringify(trialTypeElements,  null, 2);
     
     elementType("select");
+    
+    createTrialType(trialTypeElements); // this may CRASH :-S  
+
   }
 
   function removeIllegalCharacters(thisString){
@@ -379,6 +384,7 @@ function addDeleteFunction(x){
   }
   
   function editElement(currentElementAttributes){
+    
     switch (currentElementAttributes['trialElementType']){
 
     case "media":
@@ -405,10 +411,10 @@ function addDeleteFunction(x){
       
               
       //rather than embed it in above text, i've listed these values below for improved legibility
-      textFontId.value   =  currentElementAttributes.textFont;
-      textColorId.value  =  currentElementAttributes.textColor;
-      textSizeId.value   =  currentElementAttributes.textSize;
-      textBackId.value   =  currentElementAttributes.textBack;
+      textFontId.value  = currentElementAttributes['style']['font-family'];
+      textColorId.value = currentElementAttributes['style'].color;
+      textSizeId.value  = currentElementAttributes['style']['font-size'].replace("px","");
+      textBackId.value  = currentElementAttributes['style']['background-color'];
       
     break
 
@@ -462,14 +468,14 @@ function addDeleteFunction(x){
     loadTimings(currentElementAttributes);                                                // Load Timings
     
     // values that don't need functions to load (i.e. exist across elements)
-    stimInputValue.value          =   currentElementAttributes.stimulus;
-    elementWidth.value            =   currentElementAttributes.width;
-    elementHeight.value           =   currentElementAttributes.height;
+    stimInputValue.value   =   currentElementAttributes.stimulus;
+    elementWidth.value     =   currentElementAttributes.style['width'].replace("%","");
+    elementHeight.value    =   currentElementAttributes.style['height'].replace("%","");
     
     // positions
-    xPosId.value                  =   currentElementAttributes.xPosition;
-    yPosId.value                  =   currentElementAttributes.yPosition;
-    zPosId.value                  =   currentElementAttributes.zPosition; 
+    xPosId.value = currentElementAttributes.style['left'].replace("%","");
+    yPosId.value = currentElementAttributes.style['top'].replace("%","");
+    zPosId.value = currentElementAttributes.style['z-index'];
     
     // click events
     clickOutcomesActionId.value   =   currentElementAttributes.clickOutcomesAction;
@@ -579,7 +585,6 @@ function addDeleteFunction(x){
       for(i=0;i<=elementNo;i++){
         
         if(typeof (trialTypeElements['elements'][i]) != 'undefined' && document.getElementById("element"+i)!=null) { //code to check whether the element exists or not
-          console.dir(trialTypeElements['elements'][i]);
           document.getElementById("element"+i).className=trialTypeElements['elements'][i]['trialElementType']+"Element";
         }      
       }
@@ -622,7 +627,7 @@ function addDeleteFunction(x){
   
   // creating js trialType
 
-  function createTextElement(element) {
+  function createTextElement(element) {   
     return '<div id="' + element.elementName + '" '
            +   getStyleAsHtml(element.style)
            + ">"
@@ -634,7 +639,8 @@ function addDeleteFunction(x){
     var style = 'style="';
     
     for (var attr in attributes) {
-      style += attr + ': ' + attributes[attr] + '; ';
+      
+      style += attr + ': ' + attributes[attr] + ';   ';
     }
     
     return style + '"';
@@ -646,7 +652,7 @@ function addDeleteFunction(x){
     
     return '<input type="' + type + '"'
          + ' id="' + element.elementName + '" '
-         +   getAttributesAsCss(element.styles)
+         +   getStyleAsHtml(element.style)
          + ' ' + stimProp + '="' + element.stimulus + '"'
          + '>';
   }
@@ -665,7 +671,7 @@ function addDeleteFunction(x){
   function createPicElement(element) {
     return '<img id="' + element.elementName + '"'
          + ' src="{getLocation:' + element.stimulus + '}"'
-         + ' ' + getStyleAsHtml(element.styles)
+         + ' ' + getStyleAsHtml(element.style)
          + '>';
   }
 
@@ -678,7 +684,7 @@ function addDeleteFunction(x){
 
   function createVidElement(element) {
     return '<iframe id="' + element.elementName + '"'
-         + ' ' + getStyleAsHtml(element.styles)
+         + ' ' + getStyleAsHtml(element.style)
          + ' frameborder="0"'
          + ' webkitallowfullscreen mozallowfullscreen allowfullscreen'
          + ' src="{getLocation:' + element.stimulus + '}"'
@@ -701,18 +707,142 @@ function addDeleteFunction(x){
       var elHTML;
 
       switch (elType){
-        case "media"  : elHTML = createMedia(element); break
-        case "text"   : elHTML = createText(element) ; break
-        case "input"  : elHTML = createInput(element); break
+        case "media"  : elHTML = createMediaElement(element); break
+        case "text"   : elHTML = createTextElement(element) ; break
+        case "input"  : elHTML = createInputElement(element); break
       }
       newTrialHtmlCode += elHTML;
     }       
+    enactTrialType(newTrialHtmlCode);
   }
+
+
+
     
   function enactTrialType(newTrialHtmlCode){
-    trialEditor.innerHTML=newTrialHtmlCode;
+    
+    window.newTrialTemplate = newTrialHtmlCode;
+    
+    trialCodePreview.value  = newTrialHtmlCode;
+    
+    
+    trialEditor.innerHTML   = newTrialHtmlCode;
+    fillTrialTypeTemplate();
   }
   
+  $("#trialEditor").on("click", '*', function() {
+    //alert("you just clicked " + this.id);
+    
+    var elementNumber = this.id.replace("element","");
+        
+    clickElement(elementNumber);
+  });  
+  
+  
+  function associateArray(data) {
+    var rowI, rowN = data.length,
+        colI, colN = data[0].length;
+    var output = [], row, col, val, empty, cols = [];
+    
+    for (colI=0; colI<colN; ++colI) {
+        if (data[0][colI] === null) {
+            cols.push(null);
+        } else {
+            cols.push(data[0][colI].toLowerCase());
+        }
+    }
+    
+    for (rowI=1; rowI<rowN; ++rowI) {
+        row = {};
+        empty = true;
+        
+        for (colI=0; colI<colN; ++colI) {
+            col = cols[colI];
+            if (col === null || col === '') continue;
+            
+            val = data[rowI][colI];
+            
+            row[col] = val;
+            
+            if (val !== null && val !== '') empty = false;
+        }
+        
+        if (!empty) output.push(row);
+    }
+    
+    return output;
+  }
+  
+  function fillTrialTypeTemplate() {
+    
+    var trialData = getTrialData();
+      
+    var container = $("#trialEditor");
+    
+    var template = window.newTrialTemplate;//container.html();
+   
+    
+    container.html(fillTemplate(template, trialData));
+}
+
+  function getTrialData() {
+    var procData    = getCsvData('procedure')[0];
+    var item        = procData['item'];
+    var allStimData = getCsvData('stimuli');
+    
+    if (typeof allStimData[item-2] !== "undefined") {
+      var stimData = getCsvData('stimuli')[item-2];
+    } else {
+      var stimData = {};
+    }
+    
+    return {
+      inputs: {
+        stim: procData,
+        proc: stimData,
+        extra: {}
+      }
+    }
+  }
+
+  function fillTemplate(template, data) {
+    
+    var self = data;
+      
+    return template.replace(/\[[^\]]+\]/g, function(keyWithBrackets) {
+      
+      var key = keyWithBrackets.substr(1, keyWithBrackets.length-2); // pull off the brackets
+      key = key.toLowerCase();
+          
+      if (typeof self.inputs.proc[key] !== "undefined") {
+        return self.inputs.proc[key];
+      } else if (typeof self.inputs.stim[key] !== "undefined") {
+        return self.inputs.stim[key];
+      } else {
+        return keyWithBrackets;
+      }
+    }).replace(/{[^}]+}/g, function(keyWithBrackets) {
+      var key = keyWithBrackets.substr(1, keyWithBrackets.length-2); // pull off the brackets
+      key = key.toLowerCase();
+        
+      if (typeof self.inputs.extra[key] !== "undefined") {
+        return self.inputs.extra[key];
+      } else {
+        return keyWithBrackets;
+      }
+    });
+  }
+
+  function getCsvData(type) {
+    if (type === 'stimuli') {
+        if (typeof stimData === "undefined") return [{}];
+        var data = stimData.getData();
+    } else {
+        if (typeof procData === "undefined") return [{}];
+        var data = procData.getData();
+    }
+    return associateArray(data);
+  }
    
   /*functions*/
 

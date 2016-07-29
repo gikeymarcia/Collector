@@ -417,28 +417,32 @@ echo $trialTypeName
     <div id="procTable"></div>
   </div>
   
+  <textarea id="trialCodePreview"></textarea>
+  
 </form>
 
 <script src="trialTypeFunctions.js"></script>
 
 <script>
 
-  var stimTable = document.getElementById("stimTable");
-  var stimDefault = [
-      ['Cue', 'Answer'],
-      ['AAA', 'Apple']
-  ];
-  var stimData = createHoT(stimTable, stimDefault);
+  $(document).ready(function(){
+    var stimTable = document.getElementById("stimTable");
+    var stimDefault = [
+        ['Cue', 'Answer'],
+        ['AAA', 'Apple']
+    ];
+    stimData = createHoT(stimTable, stimDefault, updateTrialTypeElements);
 
+    
+    var procTable = document.getElementById("procTable");
+    var procDefault = [
+        ['Item', 'Text','Settings'],
+        ['2', 'Hey hey','blank']
+    ];
+    procData = createHoT(procTable, procDefault, updateTrialTypeElements);
+  });
   
-  var procTable = document.getElementById("procTable");
-  var procDefault = [
-      ['Cue', 'Answer'],
-      ['AAA', 'Apple']
-  ];
-  var procData = createHoT(procTable, procDefault);
-  
-  
+  window.newTrialTemplate = '';
 
   /* Configurations and preparing global variables */
   var elementScale  = <?=$elementScale?>; // config

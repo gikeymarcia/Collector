@@ -87,7 +87,7 @@ function adjustHeight(){
   newHeight = elementScale*elementHeight.value;
   newHeight = newHeight +"px";
   document.getElementById("element"+currentElement).style.height = newHeight;
-  trialTypeElements['elements'][currentElement]['height']=elementHeight.value;//update trialTypeElements
+  trialTypeElements['elements'][currentElement]['style']['height']=elementHeight.value+"px";//update trialTypeElements
   updateTrialTypeElements();
 }
 
@@ -98,7 +98,7 @@ function adjustWidth(){
   newWidth = elementScale*elementWidth.value;
   newWidth = newWidth +"px";
   document.getElementById("element"+currentElement).style.width = newWidth;
-  trialTypeElements['elements'][currentElement]['width']=elementWidth.value;//update trialTypeElements
+  trialTypeElements['elements'][currentElement]['style']['width']=elementWidth.value+"px";//update trialTypeElements
   updateTrialTypeElements();
 }
 
@@ -110,7 +110,7 @@ function adjustWidth(){
     }  
     newXPos=(Number(xPosId.value)*elementScale) +"px";
     document.getElementById("element"+currentElement).style.left = newXPos; //-xPosId.value; // temporary correction will still allow user to create something bigger than the screen
-    trialTypeElements['elements'][currentElement]['xPosition']=xPosId.value;//update trialTypeElements
+    trialTypeElements['elements'][currentElement]['style']['left']=xPosId.value+"%";//update trialTypeElements
     updateTrialTypeElements();
   }
 
@@ -121,12 +121,12 @@ function adjustWidth(){
     }  
     newYPos=(Number(yPosId.value)*elementScale) +"px";
     document.getElementById("element"+currentElement).style.top = newYPos; //-xPosId.value; // temporary correction will still allow user to create something bigger than the screen
-    trialTypeElements['elements'][currentElement]['yPosition']=yPosId.value;//update trialTypeElements
+    trialTypeElements['elements'][currentElement]['style']['top']=yPosId.value+"%";//update trialTypeElements
     updateTrialTypeElements();
   }
 
   function adjustZPos(){
-    trialTypeElements['elements'][currentElement]['zPosition']=zPosId.value;//update trialTypeElements
+    trialTypeElements['elements'][currentElement]['z-index']=zPosId.value;//update trialTypeElements
     
     //update style here!!!
     document.getElementById("element"+currentElement).style.zIndex = zPosId.value;
@@ -172,9 +172,9 @@ function adjustWidth(){
   function adjustTextBack(){
     document.getElementById("element"+currentElement).style.backgroundColor=textBackId.value;
     if(textBackId.value==""){
-      trialTypeElements['elements'][currentElement]['textBack']="";
+      trialTypeElements['elements'][currentElement]['style']['textBack']="";
     } else {
-      trialTypeElements['elements'][currentElement]['textBack']=textBackId.value;//update trialTypeElements
+      trialTypeElements['elements'][currentElement]['style']['background-color']=textBackId.value;//update trialTypeElements
     }
     updateTrialTypeElements();
   }
@@ -182,9 +182,9 @@ function adjustWidth(){
   function adjustTextColor(){
     document.getElementById("element"+currentElement).style.color=textColorId.value;
     if(textColorId.value==""){
-      trialTypeElements['elements'][currentElement]['textColor']="";
+      trialTypeElements['elements'][currentElement]['style']['color']="";
     } else {
-      trialTypeElements['elements'][currentElement]['textColor']=textColorId.value;//update trialTypeElements
+      trialTypeElements['elements'][currentElement]['style']['color']=textColorId.value;//update trialTypeElements
     }
     updateTrialTypeElements();
   }
@@ -192,9 +192,9 @@ function adjustWidth(){
   function adjustTextFont(){
     document.getElementById("element"+currentElement).style.fontFamily=textFontId.value;
     if(textFontId.value==""){
-      trialTypeElements['elements'][currentElement]['textFont']="";
+      trialTypeElements['elements'][currentElement]['style']['font-family']="";
     } else {
-      trialTypeElements['elements'][currentElement]['textFont']=textFontId.value;//update trialTypeElements
+      trialTypeElements['elements'][currentElement]['style']['font-family']=textFontId.value;//update trialTypeElements
     }
     updateTrialTypeElements();
   }
@@ -202,7 +202,7 @@ function adjustWidth(){
   function adjustTextSize(){
     document.getElementById('element'+currentElement).style.fontSize=(textSizeId.value)+"px";
     
-    trialTypeElements['elements'][currentElement]['textSize']=textSizeId.value;//update trialTypeElements
+    trialTypeElements['elements'][currentElement]['style']['font-size']=textSizeId.value+"px";//update trialTypeElements
       
     updateTrialTypeElements();
   }
@@ -277,6 +277,75 @@ function removeOptions(selectbox) // this solution was from Fabiano at http://st
     }
   }
 
+  
+  function fillTrialTypeTemplate() {
+    
+    var trialData = getTrialData();
+    
+    var container = $("#trialEditor");
+    
+    var template = container.html();
+    
+    container.html(fillTemplate(template, trialData));
+}
+
+  function getTrialData() {
+    var procData    = getCsvData('procedure')[0];
+    var item        = procData['item'];
+    var allStimData = getCsvData('stimuli');
+    
+    if (typeof allStimData[item-2] !== "undefined") {
+      var stimData = getCsvData('stimuli')[item-2];
+    } else {
+      var stimData = {};
+    }
+    
+    return {
+      inputs: {
+        stim: procData,
+        proc: stimData,
+        extra: {}
+      }
+    }
+  }
+
+  function fillTemplate(template, data) {
+    
+    var self = data;
+      
+    return template.replace(/\[[^\]]+\]/g, function(keyWithBrackets) {
+      
+      var key = keyWithBrackets.substr(1, keyWithBrackets.length-2); // pull off the brackets
+      key = key.toLowerCase();
+          
+      if (typeof self.inputs.proc[key] !== "undefined") {
+        return self.inputs.proc[key];
+      } else if (typeof self.inputs.stim[key] !== "undefined") {
+        return self.inputs.stim[key];
+      } else {
+        return keyWithBrackets;
+      }
+    }).replace(/{[^}]+}/g, function(keyWithBrackets) {
+      var key = keyWithBrackets.substr(1, keyWithBrackets.length-2); // pull off the brackets
+      key = key.toLowerCase();
+        
+      if (typeof self.inputs.extra[key] !== "undefined") {
+        return self.inputs.extra[key];
+      } else {
+        return keyWithBrackets;
+      }
+    });
+  }
+
+  function getCsvData(type) {
+    if (type === 'stimuli') {
+      var data = stimData.getData();
+    } else {
+      var data = procData.getData();
+    }
+    return associateArray(data);
+  }
+  
 
 // future development
 

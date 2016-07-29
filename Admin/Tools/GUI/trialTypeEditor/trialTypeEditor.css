@@ -109,6 +109,15 @@
     border-radius: 25px;
     padding:50px;
   }
+    
+  #trialCodePreview{
+    position:absolute;
+    top:1200px;
+    left:1000px;
+    width: 500px; 
+    height: 200px
+  }
+
   #trialEditor:hover{
     border: 2px solid blue;
   }
