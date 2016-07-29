@@ -90,15 +90,14 @@ function updateDimensionsDelayed(hot, addWidth, addHeight) {
         updateDimensions(hot);
     }, 0);
 }
-function createHoT(container, data, keyupFunc) {
+function createHoT(container, data) {
     var table = new Handsontable(container, {
         data: data,
         width: 1,
         height: 1,
   
         afterChange: function(changes, source) {
-          if(typeof keyupFunc === "function" ) keyupFunc();
-            updateDimensions(this);  
+          updateDimensions(this);  
     
     var middleColEmpty=0;
     var middleRowEmpty=0;
@@ -174,6 +173,7 @@ function createHoT(container, data, keyupFunc) {
   afterRemoveRow: function() {
       updateDimensionsDelayed(this);
   },
+    
   rowHeaders: false,
   contextMenu: true,
   cells: function(row, col, prop) {

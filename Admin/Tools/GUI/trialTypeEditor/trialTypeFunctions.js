@@ -278,73 +278,7 @@ function removeOptions(selectbox) // this solution was from Fabiano at http://st
   }
 
   
-  function fillTrialTypeTemplate() {
-    
-    var trialData = getTrialData();
-    
-    var container = $("#trialEditor");
-    
-    var template = container.html();
-    
-    container.html(fillTemplate(template, trialData));
-}
-
-  function getTrialData() {
-    var procData    = getCsvData('procedure')[0];
-    var item        = procData['item'];
-    var allStimData = getCsvData('stimuli');
-    
-    if (typeof allStimData[item-2] !== "undefined") {
-      var stimData = getCsvData('stimuli')[item-2];
-    } else {
-      var stimData = {};
-    }
-    
-    return {
-      inputs: {
-        stim: procData,
-        proc: stimData,
-        extra: {}
-      }
-    }
-  }
-
-  function fillTemplate(template, data) {
-    
-    var self = data;
-      
-    return template.replace(/\[[^\]]+\]/g, function(keyWithBrackets) {
-      
-      var key = keyWithBrackets.substr(1, keyWithBrackets.length-2); // pull off the brackets
-      key = key.toLowerCase();
-          
-      if (typeof self.inputs.proc[key] !== "undefined") {
-        return self.inputs.proc[key];
-      } else if (typeof self.inputs.stim[key] !== "undefined") {
-        return self.inputs.stim[key];
-      } else {
-        return keyWithBrackets;
-      }
-    }).replace(/{[^}]+}/g, function(keyWithBrackets) {
-      var key = keyWithBrackets.substr(1, keyWithBrackets.length-2); // pull off the brackets
-      key = key.toLowerCase();
-        
-      if (typeof self.inputs.extra[key] !== "undefined") {
-        return self.inputs.extra[key];
-      } else {
-        return keyWithBrackets;
-      }
-    });
-  }
-
-  function getCsvData(type) {
-    if (type === 'stimuli') {
-      var data = stimData.getData();
-    } else {
-      var data = procData.getData();
-    }
-    return associateArray(data);
-  }
+  
   
 
 // future development

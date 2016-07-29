@@ -781,12 +781,12 @@ function addDeleteFunction(x){
     
     var template = window.newTrialTemplate;//container.html();
    
-    
     container.html(fillTemplate(template, trialData));
 }
 
+  
   function getTrialData() {
-    var procData    = getCsvData('procedure')[0];
+    var procData    = getCsvData('procedure')[window['Current Proc Row']];
     var item        = procData['item'];
     var allStimData = getCsvData('stimuli');
     

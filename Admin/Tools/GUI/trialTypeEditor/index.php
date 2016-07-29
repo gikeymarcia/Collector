@@ -440,8 +440,20 @@ echo $trialTypeName
         ['2', 'Hey hey','blank']
     ];
     procData = createHoT(procTable, procDefault, updateTrialTypeElements);
+    
+    procData.addHook('afterSelectionEnd',function(){         
+      var coords        = this.getSelected();
+      window['Current Proc Row'] = coords[1]; // takes top row
+    });
+    
+    stimData.addHook('afterChange',function(){
+      console.dir(this);
+    });
+    
   });
   
+  window['Current Proc Row'] = 0;
+
   window.newTrialTemplate = '';
 
   /* Configurations and preparing global variables */
