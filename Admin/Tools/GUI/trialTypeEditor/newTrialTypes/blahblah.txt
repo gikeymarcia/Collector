@@ -1,0 +1,31 @@
+{
+  "trialTypeName": "blahblah",
+  "elements": [
+    {
+      "style": {
+        "width": 20,
+        "height": 20,
+        "xPosition": 43,
+        "yPosition": 27,
+        "zPosition": 0
+      },
+      "elementName": "element0",
+      "stimulus": "hallo",
+      "response": false,
+      "trialElementType": "input",
+      "clickOutcomesAction": "",
+      "clickOutcomesElement": "",
+      "proceed": false,
+      "textSize": 20,
+      "textColor": "",
+      "textFont": "wingdings",
+      "textBack": "yellow",
+      "userInputType": "Text",
+      "height": "5"
+    }
+  ],
+  "keyboard": [],
+  "responses": [
+    []
+  ]
+}

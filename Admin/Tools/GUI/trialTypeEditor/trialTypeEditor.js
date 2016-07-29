@@ -188,6 +188,7 @@ function addDeleteFunction(x){
     }
     return trialTypeElementStem;
   
+    createTrialType(trialTypeElements); // this may CRASH :-S  
   }
 
   
@@ -381,44 +382,52 @@ function addDeleteFunction(x){
     switch (currentElementAttributes['trialElementType']){
 
     case "media":
-        document.getElementById("inputStimTypeCell").innerHTML="Media Type";
-        $("#displaySettings").show();
-        $("#interactionEditorConfiguration").show();
-        document.getElementById('userInputTypeValue').style.visibility="hidden";
-        document.getElementById('mediaTypeValue').style.visibility="visible";
-        currentStimType.innerHTML="Media";
-      break
+      document.getElementById("inputStimTypeCell").innerHTML="Media Type";
+      currentStimType.innerHTML="Media";
 
-      case "text":
-        $("#displaySettings").show();
-        $("#interactionEditorConfiguration").show();
-        
-        document.getElementById('mediaTypeValue').style.visibility="hidden";
-        currentStimType.innerHTML="Text";
-        document.getElementById("inputStimTypeCell").innerHTML="Text properties";
-        // userInputTypeValue is being used for both media and input types - this could probably be tidier by keeping them separate
-                
-        //rather than embed it in above text, i've listed these values below for improved legibility
-        textFontId.value   =  currentElementAttributes.textFont;
-        textColorId.value  =  currentElementAttributes.textColor;
-        textSizeId.value   =  currentElementAttributes.textSize;
-        textBackId.value   =  currentElementAttributes.textBack;
-        
-      break
+      $("#displaySettings").show();
+      $("#interactionEditorConfiguration").show();
+      $("#userInputTypeValue").hide();
+      $("#mediaTypeValue").show();
+      $("#textStyle").hide();        
+      
+    break
 
-      case "input":      
-        document.getElementById("inputStimTypeCell").innerHTML="Input Type";
-        $("#displaySettings").show();
-        $("#interactionEditorConfiguration").show();        
-        document.getElementById('mediaTypeValue').style.visibility="hidden";
-        document.getElementById('userInputTypeValue').style.visibility="visible";
+    case "text":
+      document.getElementById("inputStimTypeCell").innerHTML="Text properties";
+      currentStimType.innerHTML="Text";
 
-        //rather than embed it in above text, i've listed these values below for improved legibility
-        textFontId.value          =   currentElementAttributes.textFont;
-        textColorId.value         =   currentElementAttributes.textColor;
-        textSizeId.value          =   currentElementAttributes.textSize;
-        textBackId.value          =   currentElementAttributes.textBack;
-        document.getElementById("userInputTypeValue").value   =   currentElementAttributes.userInputType;
+      $("#displaySettings").show();
+      $("#interactionEditorConfiguration").show();
+      $("#userInputTypeValue").hide();
+      $("#mediaTypeValue").hide();
+      $("#textStyle").show();
+      
+              
+      //rather than embed it in above text, i've listed these values below for improved legibility
+      textFontId.value   =  currentElementAttributes.textFont;
+      textColorId.value  =  currentElementAttributes.textColor;
+      textSizeId.value   =  currentElementAttributes.textSize;
+      textBackId.value   =  currentElementAttributes.textBack;
+      
+    break
+
+    case "input":      
+      document.getElementById("inputStimTypeCell").innerHTML="Input Type";
+      
+      $("#displaySettings").show();
+      $("#interactionEditorConfiguration").show();
+      $("#userInputTypeValue").show();
+      $("#mediaTypeValue").hide();
+      $("#textStyle").show();
+      
+
+      //rather than embed it in above text, i've listed these values below for improved legibility
+      textFontId.value          =   currentElementAttributes.textFont;
+      textColorId.value         =   currentElementAttributes.textColor;
+      textSizeId.value          =   currentElementAttributes.textSize;
+      textBackId.value          =   currentElementAttributes.textBack;
+      document.getElementById("userInputTypeValue").value   =   currentElementAttributes.userInputType;
         
         if(document.getElementById("userInputTypeValue").value    ==    "Text"){
           $('#textTableColorRow').hide();
@@ -700,7 +709,9 @@ function addDeleteFunction(x){
     }       
   }
     
-  
+  function enactTrialType(newTrialHtmlCode){
+    trialEditor.innerHTML=newTrialHtmlCode;
+  }
   
    
   /*functions*/

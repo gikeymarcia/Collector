@@ -90,7 +90,7 @@
       $_DATA['trialTypeEditor']['currentTrialTypeName']=$trialTypeName;
     }      
     
-    require('createTrialType.php');                                      //php file
+// this is being redacted    require('createTrialType.php');                                      //php file
     
     return $trialTypeElementsPhp;
   }
@@ -146,7 +146,7 @@
 <form method="post" action="index.php">
   <textarea id="trialTypeName" placeholder="[insert name of trial type here]" onkeyup="updateTrialTypeElements()"><?php 
 echo $trialTypeName
-?></textarea>
+?></textarea> 
     
   <div id="elementTypeList">
     <br>
@@ -154,10 +154,27 @@ echo $trialTypeName
       <input id="mediaButton"   type="button" class="elementButton" value="Media"   onclick="elementType('media')">
       <input id="textButton"    type="button" class="elementButton" value="Text"    onclick="elementType('text')">
       <input id="inputButton"   type="button" class="elementButton" value="Input"   onclick="elementType('input')">
+      
+      <!-- may include this in later release 
       <input id="complexButton" type="button" class="elementButton" value="Complex" onclick="alert('This will include more code heavy elements, e.g. progress bars, and will be in a later release')">
+      -->
+      
       <input id="selectButton"  type="button" class="elementButton" value="Select"  onclick="elementType('select')">
 
     </span>
+    <span style="position:relative; left:375px">
+      Mode: 
+        <label title="clicking on elements will not set off actions for them">
+          <span>Edit</span>
+          <input type="radio"   id="editModeRadio"      name  ="editPreview"      value="edit" checked>
+        </label>
+        |
+        <label title="this will run like a trial (as much as possible)">
+          <span>Preview</span>
+          <input type="radio"   id="previewModeRadio"   name  ="editPreview"      value="preview">
+        </label>
+    </span>
+    
     <span style="position:relative; left:520px">
 
       <input  type="submit" class="collectorButton" id="saveButton" name="saveButton" value="Save">
@@ -185,6 +202,7 @@ echo $trialTypeName
 
 <?php
 
+  /* this is redundant now that we will be creating using JS 
   foreach($trialTypeElementsPhp->elements as $elementKey=>$element){
     if($element!=NULL){ //ideally I'll tidy it up so that there are no null elements 
       // identify if deleted or not //
@@ -193,7 +211,7 @@ echo $trialTypeName
         $delete="display:none;";
       }
       
-      /* identify if input or other type of element */
+      // identify if input or other type of element //
       if(isset($element->userInputType)){
                 
         echo "<input id='element$elementKey' type='".$element->userInputType."'";
@@ -226,9 +244,8 @@ echo $trialTypeName
       }
     }
   }
-  
-
-  
+  */
+   
 ?>
 </div>
 
@@ -272,7 +289,7 @@ echo $trialTypeName
               </select>
               
               
-              <table> 
+              <table id="textStyle"> 
                 <tr>
                   <td>font size</td>
                   <td><input type="number" id="textSizeId" onchange="adjustTextSize()" value='<?=$textScale ?>' min="1" style="width:50px">px</td>
