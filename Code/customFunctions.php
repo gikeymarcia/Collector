@@ -1608,3 +1608,35 @@ function datadump($data) {
     require_once __DIR__ . '/vendor/kint/Kint.class.php';
     d($data);
 }
+
+/**
+ * replaces substrings wrapped in square brackets inside a larger string
+ *
+ * @param string $string the template containing the substrings to replace
+ * @param array $inputs assoc array where instances of "[$key]" are replaced
+ *                      with the value
+ * return string
+ */
+function fill_template($string, $inputs) {
+    $components = explode('[', $string);
+    
+    $output = $components[0];
+    unset($components[0]);
+    
+    foreach ($components as $varAndStaticString) {
+        $varAndStaticArray = explode(']', $varAndStaticString);
+        $varKey = $varAndStaticArray[0];
+        
+        if (isset($inputs[$varKey])) {
+            $output .= $inputs[$varKey];
+        } else {
+            $output .= "[$varKey]";
+        }
+        
+        if (isset($varAndStaticArray[1])) {
+            $output .= $varAndStaticArray[1];
+        }
+    }
+    
+    return $output;
+}
