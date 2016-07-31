@@ -1614,10 +1614,21 @@ function datadump($data) {
  *
  * @param string $string the template containing the substrings to replace
  * @param array $inputs assoc array where instances of "[$key]" are replaced
- *                      with the value
+ *                      with the value, while numeric keys are used to 
+ *                      replace successive instances of [var]
  * return string
  */
 function fill_template($string, $inputs) {
+    $vars = array();
+    
+    foreach ($inputs as $key => $val) {
+        if (is_numeric($key)) {
+            $vars[] = $val;
+            unset($inputs[$key]);
+        }
+    }
+    unset($inputs['var']);
+    
     $components = explode('[', $string);
     
     $output = $components[0];
@@ -1627,10 +1638,18 @@ function fill_template($string, $inputs) {
         $varAndStaticArray = explode(']', $varAndStaticString);
         $varKey = $varAndStaticArray[0];
         
-        if (isset($inputs[$varKey])) {
-            $output .= $inputs[$varKey];
+        if ($varKey === 'var') {
+            if (count($vars) < 1) throw new Exception(
+                'Not enough vars for template: ' . $string
+            );
+            
+            $output .= array_shift($vars);
         } else {
-            $output .= "[$varKey]";
+            if (!isset($inputs[$varKey])) throw new Exception(
+                'Missing input with key: ' . $varKey
+            );
+            
+            $output .= $inputs[$varKey];
         }
         
         if (isset($varAndStaticArray[1])) {
