@@ -1,7 +1,7 @@
 <?php
 return array(
 'root'                       => array('Dir'  , '.'),
-'index'                      => array('Plain', 'index.php'),
+'index'                      => array('File' , 'index.php'),
 
 'Experiments'                => array('Dir'  , 'Experiments/'),
   'Common'                   => array('Dir'  , 'Experiments/Common/'),
@@ -21,12 +21,12 @@ return array(
   'Current Experiment'       => array('Dir'  , 'Experiments/[Current Experiment]/')
   'Current Index'            => array('File' , 'Experiments/[Current Experiment]/index.php')
   'Current Return'           => array('File' , 'Experiments/[Current Experiment]/Return.php')
-  'Conditions'               => array('ioCSV', 'Experiments/[Current Experiment]/Conditions.csv')
+  'Conditions'               => array('CSV'  , 'Experiments/[Current Experiment]/Conditions.csv')
   'Experiment Settings'      => array('File' , 'Experiments/[Current Experiment]/Settings.json')
   'Stimuli Dir'              => array('Dir'  , 'Experiments/[Current Experiment]/Stimuli/')
-    'Stimuli'                => array('ioCSV', 'Experiments/[Current Experiment]/Stimuli/[Stimuli]')
+    'Stimuli'                => array('CSV'  , 'Experiments/[Current Experiment]/Stimuli/[Stimuli]')
   'Procedure Dir'            => array('Dir'  , 'Experiments/[Current Experiment]/Procedure/')
-    'Procedure'              => array('ioCSV', 'Experiments/[Current Experiment]/Procedure/[Procedure]')
+    'Procedure'              => array('CSV'  , 'Experiments/[Current Experiment]/Procedure/[Procedure]')
 
 'Code'                       => array('Dir'  , 'Code/'),
   'Welcome'                  => array('File' , 'Code/Welcome.php'),
@@ -83,30 +83,30 @@ return array(
 'Data'                       => array('Dir'  , 'Data/'),
   'Current Data Dir'         => array('Dir'  , 'Data/[Current Experiment]-Data[Data Sub Dir]/'),
     'Instructions Data'      => array('File' , 'Data/[Current Experiment]-Data[Data Sub Dir]/InstructionsData.csv'),
-    'Status Begin Data'      => array('ioCSV', 'Data/[Current Experiment]-Data[Data Sub Dir]/Status_Begin.csv'),
-    'Status End Data'        => array('ioCSV', 'Data/[Current Experiment]-Data[Data Sub Dir]/Status_End.csv'),
-    'SideData Data'          => array('ioCSV', 'Data/[Current Experiment]-Data[Data Sub Dir]/SideData.csv'),
+    'Status Begin Data'      => array('CSV'  , 'Data/[Current Experiment]-Data[Data Sub Dir]/Status_Begin.csv'),
+    'Status End Data'        => array('CSV'  , 'Data/[Current Experiment]-Data[Data Sub Dir]/Status_End.csv'),
+    'SideData Data'          => array('CSV'  , 'Data/[Current Experiment]-Data[Data Sub Dir]/SideData.csv'),
     'Counter Dir'            => array('Dir'  , 'Data/[Current Experiment]-Data[Data Sub Dir]/Counter/'),
       'Counter'              => array('File' , 'Data/[Current Experiment]-Data[Data Sub Dir]/Counter/Counter.csv'),
     'Session Storage Dir'    => array('Dir'  , 'Data/[Current Experiment]-Data[Data Sub Dir]/session/'),
-      'Session Storage'      => array('---'  , 'Data/[Current Experiment]-Data[Data Sub Dir]/session/[Username].txt'),
+      'Session Storage'      => array('Sess' , 'Data/[Current Experiment]-Data[Data Sub Dir]/session/[Username].txt'),
     'Output Dir'             => array('Dir'  , 'Data/[Current Experiment]-Data[Data Sub Dir]/Output/'),
-      'Experiment Output'    => array('ioCSV', 'Data/[Current Experiment]-Data[Data Sub Dir]/Output/[Output]'),
-        'Trial Validations Dir'     => array('kVal', 'Data/[Current Experiment]-Data[Data Sub Dir]/validations/'),
-        'Trial Validation Scan Time'=> array('File', 'Data/[Current Experiment]-Data[Data Sub Dir]/validations/'),
+      'Experiment Output'    => array('CSV'  , 'Data/[Current Experiment]-Data[Data Sub Dir]/Output/[Output]'),
+        'Trial Validations Dir'     => array('Dir', 'Data/[Current Experiment]-Data[Data Sub Dir]/validations/'),
+        'Trial Validation Scan Time'=> array('List', 'Data/[Current Experiment]-Data[Data Sub Dir]/validations/'),
 
-'Admin'                      => array('Dir' , 'Admin/'),
-  'Admin Index'              => array('File', 'Admin/index.php'),
-  'Tools'                    => array('Dir' , 'Admin/Tools/'),
+'Admin'                      => array('Dir'  , 'Admin/'),
+  'Admin Index'              => array('File' , 'Admin/index.php'),
+  'Tools'                    => array('Dir'  , 'Admin/Tools/'),
 
-'Trial Types'                => array('Dir' , 'TrialTypes/'),
-  'Trial Type Dir'           => array('Dir' , 'TrialTypes/[var]/'),
-    'Trial Display'          => array('File', 'TrialTypes/[var]/display.php'),
-    'Trial Helper'           => array('File', 'TrialTypes/[var]/helper.php'),
-    'Trial Scoring'          => array('File', 'TrialTypes/[var]/scoring.php'),
-    'Trial Script'           => array('File', 'TrialTypes/[var]/script.js'),
-    'Trial Style'            => array('File', 'TrialTypes/[var]/style.css'),
-    'Trial Validator'        => array('File', 'TrialTypes/[var]/validator.php'),
-  'default helper'           => array('File', 'TrialTypes/defaultTrialHelper.php'),
-  'default scoring'          => array('File', 'TrialTypes/defaultTrialScoring.php'),
+'Trial Types'                => array('Dir'  , 'TrialTypes/'),
+  'Trial Type Dir'           => array('Dir'  , 'TrialTypes/[var]/'),
+    'Trial Display'          => array('File' , 'TrialTypes/[var]/display.php'),
+    'Trial Helper'           => array('File' , 'TrialTypes/[var]/helper.php'),
+    'Trial Scoring'          => array('File' , 'TrialTypes/[var]/scoring.php'),
+    'Trial Script'           => array('File' , 'TrialTypes/[var]/script.js'),
+    'Trial Style'            => array('File' , 'TrialTypes/[var]/style.css'),
+    'Trial Validator'        => array('File' , 'TrialTypes/[var]/validator.php'),
+  'default helper'           => array('File' , 'TrialTypes/defaultTrialHelper.php'),
+  'default scoring'          => array('File' , 'TrialTypes/defaultTrialScoring.php'),
 );
