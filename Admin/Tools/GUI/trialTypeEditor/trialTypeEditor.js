@@ -742,6 +742,8 @@ function addDeleteFunction(x){
       var element = trialTypeObject['elements'][elementIndex];
       var elType  = element.trialElementType;
       var elHTML;
+      
+      if(element.style.display  ==  "none"){ continue }
 
       switch (elType){
         case "media"  : elHTML = createMediaElement(element); break
