@@ -131,6 +131,8 @@ class InputOutput
 
 /**
  * These are the functions that any data implementation need to have
+ * to add another access method, add the method to ioAbstractDataType
+ * and it will enforce that all datatypes implement that method
  * read, write, writeMany, overwrite, query
  */
     public function read($source)

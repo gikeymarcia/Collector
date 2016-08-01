@@ -1,6 +1,6 @@
 <?php
 /*
-This the contract all ioDataImplementations must honor
+This is the contract all ioDataType_* implementations must honor
  */
 abstract class ioAbstractDataType
 {
@@ -16,13 +16,13 @@ abstract class ioAbstractDataType
             $allData[$index] = $data;
         }
 
-        return static::write($path, $allData);
+        return static::overwrite($path, $allData);
     }
 
     // this should really be optimized by each extending class
     public static function writeMany($path, $data) {
         foreach ($data as $index => $datum) {
-            $lastWrite = static::append($path, $datum, $index);
+            $lastWrite = static::write($path, $datum, $index);
         }
 
         return $lastWrite;
