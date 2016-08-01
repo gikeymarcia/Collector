@@ -25,6 +25,11 @@ body > form {
     font-size   : 18px;
     color  : grey;
   }
+
+  .wtHolder {
+    padding: 4px;
+    width:500px;
+  }
   
   
   #controlPanel {
@@ -93,21 +98,27 @@ body > form {
   #procArea{
     display:inline-block;
     position:relative;
-    width:500px;
+    width:750px;
   }
   #procOrg{
-    margin:20px;
-    padding:20px;
     display:inline-block;
+    vertical-align:top;
+    width:750px;
+      
   }
+
 
   #stimArea{
     display:inline-block;
     position:relative;
-    width:500px;
+    width:750px;
   }
   #stimOrg{
     display:inline-block;
+    vertical-align:top;
+    padding: 0px 0px 0px 20px;
+    width:750px;
+    
   }
 
   #tableDiv{
@@ -129,7 +140,8 @@ body > form {
     padding:50px;
   }
     
-  #trialCodePreview{
+  #trialCodePreview{  
+    vertical-align:top;
     display:inline-block;
     position:relative;
     width: 500px; 

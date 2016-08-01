@@ -144,9 +144,11 @@
   ?>
 
 <form method="post" action="index.php">
-  <textarea id="trialTypeName" placeholder="[insert name of trial type here]" onkeyup="updateTrialTypeElements()"><?php 
-echo $trialTypeName
+  <textarea id="trialTypeName" placeholder="[insert name of trial type here]" onkeyup="updateTrialTypeElements()"><?= $trialTypeName
 ?></textarea> 
+
+    <input type="button" id="indexButton" class="collectorButton" value="Go back to Index" onclick="document.location.href = '../';" style=" position:absolute;
+  right:20px;"> 
     
   <div id="elementTypeList">
     <br>
@@ -198,56 +200,9 @@ echo $trialTypeName
 
     </div>
 
-  <div id="trialEditor" onclick="getPositions(); tryCreateElement()">
+  <div id="trialEditor" onclick="getPositions(); tryCreateElement()"></div>
+ 
 
-<?php
-
-  /* this is redundant now that we will be creating using JS 
-  foreach($trialTypeElementsPhp->elements as $elementKey=>$element){
-    if($element!=NULL){ //ideally I'll tidy it up so that there are no null elements 
-      // identify if deleted or not //
-      $delete='';
-      if(isset($element->delete)){
-        $delete="display:none;";
-      }
-      
-      // identify if input or other type of element //
-      if(isset($element->userInputType)){
-                
-        echo "<input id='element$elementKey' type='".$element->userInputType."'";
-      } else {
-        echo "<div id='element$elementKey' class='".$element->trialElementType."Element'";
-      }
-      echo "    style='position:absolute;
-                width   : ".($elementScale*$element->width)."px;
-                height  : ".($elementScale*$element->height)."px;
-                left    : ".($elementScale*$element->xPosition)."px;
-                top     : ".($elementScale*$element->yPosition)."px;
-                $delete
-                ";
-      if (isset($element->textColor)){
-        echo "color:$element->textColor;
-              font-family:$element->textFont;
-              background-color:$element->textBack;
-              font-size:".($element->textSize)."px;"; // look into this when I've finalised spacing for interfaces
-      }
-      echo "'   onclick       =   'clickElement($elementKey)'";
-      if(isset($element->userInputType)){
-        if($element->userInputType=="Text"){
-          echo "placeholder   =   '".$element->stimulus."' readonly>";
-        } else {  // it's a "Button"
-          echo "value         =   '".$element->stimulus."'>";
-        }
-      }else {
-        // it's not an input, so it's a div we're writing
-        echo ">".$element->stimulus."</div>";        
-      }
-    }
-  }
-  */
-   
-?>
-</div>
 
 <!-- the helper bar !-->
 <div id="controlPanel">
@@ -412,7 +367,7 @@ echo $trialTypeName
 
     <div id="procOrg">
     <select id="procFileSelection" class="csvSelection">
-      <option value="">-template-</option>
+      <option value="">-proc template-</option>
         <?php
         foreach (getExperimentCsvs('Procedure', $_PATH) as $name => $path) {
           echo "<option value='$path'>$name</option>";
@@ -427,7 +382,7 @@ echo $trialTypeName
     
     <div id="stimOrg">      
       <select id="stimFileSelection" class="csvSelection">
-          <option value="">-template-</option>
+          <option value="">-stim template-</option>
           <?php
           
           foreach (getExperimentCsvs('Stimuli', $_PATH) as $name => $path) {
@@ -459,7 +414,6 @@ echo $trialTypeName
         ['AAA', 'Apple']
     ];
     stimData = createHoT(stimTable, stimDefault);
-
     
     var procTable = document.getElementById("procTable");
     var procDefault = [
@@ -468,6 +422,8 @@ echo $trialTypeName
     ];
     procData = createHoT(procTable, procDefault);
     
+    // change width here?
+          
     procData.addHook('afterSelectionEnd',function(){         
       var coords        = this.getSelected();
       window['Current Proc Row'] = coords[0]-1; // takes top row

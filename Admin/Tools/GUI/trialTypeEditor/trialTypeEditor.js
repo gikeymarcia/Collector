@@ -51,7 +51,7 @@ $("#deleteButton").on("click", function() {
   delConf   =   confirm ("Are you sure you wish to delete?");
   if (delConf == true){
       
-    trialTypeElements['elements'][currentElement]['delete']=true
+    trialTypeElements['elements'][currentElement]['style'].display="none";
     
     document.getElementById("element"+currentElement).style.display="none";
     $("#displaySettings").hide();
@@ -259,12 +259,14 @@ function addDeleteFunction(x){
     }
   }
   
+
+  
   function createElementFunction(){
 
     if(inputElementType=="input"){
       
       document.getElementById("trialEditor").innerHTML+=
-        "<input class='inputElement' type='text' id='element"+elementNo+"' style='position: absolute; width:"+elementScale*20+"px; left:"+_mouseX+"px;top:"+_mouseY+"px' onclick='clickElement("+elementNo+")' name='"+inputElementType+"' readonly>";  
+        "<input class='inputElement' type='text' id='element"+elementNo+"' style='position: absolute; width:"+elementScale*20+"%; left:"+_mouseX+"px;top:"+_mouseY+"px' onclick='clickElement("+elementNo+")' name='"+inputElementType+"' readonly>";  
       
     } else {
       // it is not an input, so can create a span instead //
@@ -275,11 +277,27 @@ function addDeleteFunction(x){
   }
   
   function populateDefaultValues(){
+    var thisHeight;
+    switch (inputElementType){
+      case  "text":
+        thisHeight  = "5%";
+        break
+      
+      case  "input":
+        thisHeight  = "5%";
+        break
+      
+      case  "media":
+        thisHeight  = "20%";
+        break
+    }
+    if(inputElementType)
+    
     trialTypeElements['elements'][elementNo] = {
       style : {
         position    :   "absolute",
         width       :   20    + "%", 
-        height      :   20    + "%",
+        height      :   thisHeight,
         left        :   xPos  + "%",
         top         :   yPos  + "%",
         "z-index"   :   elementNo,        
@@ -287,7 +305,7 @@ function addDeleteFunction(x){
       elementName           :   'element'+elementNo,
       stimulus              :   'not yet added',
       response              :   false,
-      trialElementType      :   inputElementType, // repetition here
+      trialElementType      :   inputElementType,
       clickOutcomesAction   :   '',
       clickOutcomesElement  :   '',
       proceed               :   false,
@@ -312,7 +330,7 @@ function addDeleteFunction(x){
     
     elementType("select");
     
-    createTrialType(trialTypeElements); // this may CRASH :-S  
+    createTrialType(trialTypeElements);  
 
   }
 
@@ -429,11 +447,16 @@ function addDeleteFunction(x){
       
 
       //rather than embed it in above text, i've listed these values below for improved legibility
-      textFontId.value          =   currentElementAttributes.textFont;
-      textColorId.value         =   currentElementAttributes.textColor;
-      textSizeId.value          =   currentElementAttributes.textSize;
-      textBackId.value          =   currentElementAttributes.textBack;
+      textFontId.value          =   currentElementAttributes['style']['font-family'];
+      textColorId.value         =   currentElementAttributes['style'].color;
+      textSizeId.value          =   currentElementAttributes['style']['font-size'].replace("px","");
+      textBackId.value          =   currentElementAttributes['style']['background-color'];
+      
+      $("#userInputTypeValue").val(currentElementAttributes.userInputType);
+
+      /*
       document.getElementById("userInputTypeValue").value   =   currentElementAttributes.userInputType;
+      */  
         
         if(document.getElementById("userInputTypeValue").value    ==    "Text"){
           $('#textTableColorRow').hide();
@@ -637,6 +660,7 @@ function addDeleteFunction(x){
   }
 
   function getStyleAsHtml(attributes) {
+    
     var style = 'style="';
     
     for (var attr in attributes) {
@@ -704,7 +728,8 @@ function addDeleteFunction(x){
     
     //response code for later
     // '<textarea id="response" name="Response" placeholder="your responses will go here!"></textarea>';
-     
+
+    
     var newTrialHtmlCode = '';
     for (var elementIndex in trialTypeObject['elements']){
       var element = trialTypeObject['elements'][elementIndex];
@@ -892,9 +917,6 @@ function addDeleteFunction(x){
   
   
   // Anthony trying to make this work for Proc
-  
-  
-
   
    
   /*functions*/

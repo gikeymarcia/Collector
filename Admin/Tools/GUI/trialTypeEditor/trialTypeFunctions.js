@@ -1,5 +1,9 @@
+
+
+
 function saveTextAsFile() // solution by NatureShade at http://stackoverflow.com/questions/609530/download-textarea-contents-as-a-file-using-only-javascript-no-server-side 
 {
+    console.dir("fuck!!!");
     var textToWrite = JSON.stringify(trialTypeElements);//Your text input;
     var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'});
     var fileNameToSaveAs = "elementArray.json";//Your filename;
@@ -30,77 +34,80 @@ function saveTextAsFile() // solution by NatureShade at http://stackoverflow.com
 * Adjust events
 * * * * * */
 
-function adjustKeyboard(){
-  trialTypeElements['keyboard']={
-    acceptedResponses:acceptedKeyboardResponses.value,
-    proceed:proceedKeyboardResponses.checked,    
-  }
-  updateTrialTypeElements();
-}
-
-function adjustStimulus(){
-  var stimText=stimInputValue.value;
-  
-  // check if it's a text input - which would mean we change the placeholder, not the text //
-  if (typeof(trialTypeElements['elements'][currentElement]['userInputType'])!="undefined"){
-    
-    if(trialTypeElements['elements'][currentElement]['userInputType']=="Text"){
-      // wipe value (so that user can see placholder) and update placeholder value
-      document.getElementById("element"+currentElement).value         =   '';
-      document.getElementById("element"+currentElement).placeholder   =   stimText;
-    } else {
-      // update value for buttons
-      document.getElementById("element"+currentElement).value         =   stimText;
+  function adjustKeyboard(){
+    trialTypeElements['keyboard']={
+      acceptedResponses:acceptedKeyboardResponses.value,
+      proceed:proceedKeyboardResponses.checked,    
     }
+    updateTrialTypeElements();
+  }
+
+  function adjustStimulus(){
+    var stimText=stimInputValue.value;
+    
+    // check if it's a text input - which would mean we change the placeholder, not the text //
+    if (typeof(trialTypeElements['elements'][currentElement]['userInputType'])!="undefined"){
+      
+      if(trialTypeElements['elements'][currentElement]['userInputType']=="Text"){
+        // wipe value (so that user can see placholder) and update placeholder value
+        document.getElementById("element"+currentElement).value         =   '';
+        document.getElementById("element"+currentElement).placeholder   =   stimText;
+      } else {
+        // update value for buttons
+        document.getElementById("element"+currentElement).value         =   stimText;
+      }
+      
+    }
+    document.getElementById("element"+currentElement).innerHTML   =   stimText;
+    
+    if(stimText.indexOf('$') != -1 ){  // may need to put checks on this to prevent e.g.s like "[stim]asdfadsf"
+      stimInputValue.style.color="blue";
+    } else {
+      stimInputValue.style.color="black";
+    }
+
+    trialTypeElements['elements'][currentElement]['stimulus']=stimText;//update trialTypeElements
+    updateTrialTypeElements();
+
+  }
+
+  function adjustElementName(){
+    var elementNameText=elementNameValue.value;
+    document.getElementById("element"+currentElement).innerHTML=elementNameText;
+    
+    if(elementNameText.indexOf('$') != -1 ){  // may need to put checks on this to prevent e.g.s like "[stim]asdfadsf"
+      elementNameValue.style.color="blue";
+    } else {
+      elementNameValue.style.color="black";
+    }
+    trialTypeElements['elements'][currentElement]['elementName']=elementNameText;//update trialTypeElements
+    updateTrialTypeElements();
+  }
+
+  function adjustHeight(){
+    if(Number(yPosId.value) + Number(elementHeight.value) > 100){
+      elementHeight.value = 100-yPosId.value; // temporary correction will still allow user to create something bigger than the screen
+    }
+    newHeight = elementScale*elementHeight.value;
+    newHeight = newHeight +"px";
+    document.getElementById("element"+currentElement).style.height = newHeight;
+    trialTypeElements['elements'][currentElement]['style']['height']=elementHeight.value+"%";//update trialTypeElements
+    updateTrialTypeElements();
+  }
+
+
+  function adjustWidth(){
+    
+    if( Number(xPosId.value) + Number(elementWidth.value) > 100){
+      elementWidth.value = 100-xPosId.value; // temporary correction will still allow user to create something bigger than the screen
+    }
+    newWidth = elementScale*elementWidth.value;
+    newWidth = newWidth +"%";
+    document.getElementById("element"+currentElement).style.width = newWidth;
+    trialTypeElements['elements'][currentElement]['style']['width']=elementWidth.value+"%";//update trialTypeElements
+    updateTrialTypeElements();
     
   }
-  document.getElementById("element"+currentElement).innerHTML   =   stimText;
-  
-  if(stimText.indexOf('$') != -1 ){  // may need to put checks on this to prevent e.g.s like "[stim]asdfadsf"
-    stimInputValue.style.color="blue";
-  } else {
-    stimInputValue.style.color="black";
-  }
-
-  trialTypeElements['elements'][currentElement]['stimulus']=stimText;//update trialTypeElements
-  updateTrialTypeElements();
-
-}
-
-function adjustElementName(){
-  var elementNameText=elementNameValue.value;
-  document.getElementById("element"+currentElement).innerHTML=elementNameText;
-  
-  if(elementNameText.indexOf('$') != -1 ){  // may need to put checks on this to prevent e.g.s like "[stim]asdfadsf"
-    elementNameValue.style.color="blue";
-  } else {
-    elementNameValue.style.color="black";
-  }
-  trialTypeElements['elements'][currentElement]['elementName']=elementNameText;//update trialTypeElements
-  updateTrialTypeElements();
-}
-
-function adjustHeight(){
-  if(Number(yPosId.value) + Number(elementHeight.value) > 100){
-    elementHeight.value = 100-yPosId.value; // temporary correction will still allow user to create something bigger than the screen
-  }
-  newHeight = elementScale*elementHeight.value;
-  newHeight = newHeight +"px";
-  document.getElementById("element"+currentElement).style.height = newHeight;
-  trialTypeElements['elements'][currentElement]['style']['height']=elementHeight.value+"px";//update trialTypeElements
-  updateTrialTypeElements();
-}
-
-function adjustWidth(){
-  if( Number(xPosId.value) + Number(elementWidth.value) > 100){
-    elementWidth.value = 100-xPosId.value; // temporary correction will still allow user to create something bigger than the screen
-  }
-  newWidth = elementScale*elementWidth.value;
-  newWidth = newWidth +"px";
-  document.getElementById("element"+currentElement).style.width = newWidth;
-  trialTypeElements['elements'][currentElement]['style']['width']=elementWidth.value+"px";//update trialTypeElements
-  updateTrialTypeElements();
-}
 
   // position adjustment:
 
@@ -108,7 +115,7 @@ function adjustWidth(){
     if( Number(xPosId.value) + Number(elementWidth.value) > 100){
       xPosId.value= 100- elementWidth.value; // temporary correction will still allow user to create something bigger than the screen
     }  
-    newXPos=(Number(xPosId.value)*elementScale) +"px";
+    newXPos=(Number(xPosId.value)*elementScale) +"%";
     document.getElementById("element"+currentElement).style.left = newXPos; //-xPosId.value; // temporary correction will still allow user to create something bigger than the screen
     trialTypeElements['elements'][currentElement]['style']['left']=xPosId.value+"%";//update trialTypeElements
     updateTrialTypeElements();
@@ -119,7 +126,7 @@ function adjustWidth(){
     if( Number(yPosId.value) + Number(elementHeight.value) > 100){
       yPosId.value= 100- elementHeight.value; // temporary correction will still allow user to create something bigger than the screen
     }  
-    newYPos=(Number(yPosId.value)*elementScale) +"px";
+    newYPos=(Number(yPosId.value)*elementScale) +"%";
     document.getElementById("element"+currentElement).style.top = newYPos; //-xPosId.value; // temporary correction will still allow user to create something bigger than the screen
     trialTypeElements['elements'][currentElement]['style']['top']=yPosId.value+"%";//update trialTypeElements
     updateTrialTypeElements();
@@ -222,14 +229,20 @@ function adjustTime(onsetOffset){
 
 
 function adjustUserInputType(){
+  /* I seem to delete and then recreate the elements upon each change!!! let's not do that
   var element = document.getElementById("element"+currentElement);
   element.parentNode.removeChild(element);
-  currentXPos   =   xPosId.value        *   elementScale;
-  currentYPos   =   yPosId.value        *   elementScale;
-  currentWidth  =   elementWidth.value  *   elementScale;
-  currentHeight =   elementHeight.value *   elementScale;
-  document.getElementById("trialEditor").innerHTML+="<input class='inputElement' type='"+userInputTypeValue.value+"' id='element"+currentElement+"' style='position: absolute;left:"+currentXPos+"px;top:"+currentYPos+"px; width:"+currentWidth+"px; height:"+currentHeight+"px' onclick='clickElement("+elementNo+")' name='"+currentElement+"' value='"+stimInputValue.value+"' readonly>";  
+  */
   
+  
+  currentXPos   =   xPosId.value        *   elementScale + "%";
+  currentYPos   =   yPosId.value        *   elementScale + "%";
+  currentWidth  =   elementWidth.value  *   elementScale + "%";
+  currentHeight =   elementHeight.value *   elementScale + "%";
+  
+  /*
+  document.getElementById("trialEditor").innerHTML+="<input class='inputElement' type='"+userInputTypeValue.value+"' id='element"+currentElement+"' style='position: absolute;left:"+currentXPos+"px;top:"+currentYPos+"px; width:"+currentWidth+"px; height:"+currentHeight+"px' onclick='clickElement("+elementNo+")' name='"+currentElement+"' value='"+stimInputValue.value+"' readonly>";  
+  */
   document.getElementById('element'+currentElement).style.color             =   textColorId.value;
   document.getElementById('element'+currentElement).style.fontFamily        =   textFontId.value;
   document.getElementById('element'+currentElement).style.fontSize          =   (textSizeId.value)+"px";

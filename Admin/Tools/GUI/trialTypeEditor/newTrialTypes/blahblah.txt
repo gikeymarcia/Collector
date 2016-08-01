@@ -22,6 +22,72 @@
       "textBack": "yellow",
       "userInputType": "Text",
       "height": "5"
+    },
+    {
+      "style": {
+        "position": "absolute",
+        "width": "20%",
+        "height": "20%",
+        "left": "33%",
+        "top": "27%",
+        "z-index": 1,
+        "font-size": "20px",
+        "color": "",
+        "font-family": "",
+        "background-color": "yellow"
+      },
+      "elementName": "element1",
+      "stimulus": "not yet added",
+      "response": false,
+      "trialElementType": "text",
+      "clickOutcomesAction": "",
+      "clickOutcomesElement": "",
+      "proceed": false
+    },
+    {
+      "style": {
+        "position": "absolute",
+        "width": "20%",
+        "height": "5%",
+        "left": "63%",
+        "top": "16%",
+        "z-index": 2,
+        "font-size": "20px",
+        "color": "",
+        "font-family": "",
+        "background-color": "b",
+        "textBack": ""
+      },
+      "elementName": "element2",
+      "stimulus": "not yet added",
+      "response": false,
+      "trialElementType": "text",
+      "clickOutcomesAction": "",
+      "clickOutcomesElement": "",
+      "proceed": false
+    },
+    {
+      "style": {
+        "position": "absolute",
+        "width": "24%",
+        "height": "10%",
+        "left": "76%",
+        "top": "90%",
+        "z-index": 3,
+        "font-size": "20px",
+        "color": "",
+        "font-family": "",
+        "background-color": ""
+      },
+      "elementName": "element3",
+      "stimulus": "not yet added",
+      "response": false,
+      "trialElementType": "input",
+      "clickOutcomesAction": "",
+      "clickOutcomesElement": "",
+      "proceed": false,
+      "userInputType": "Text",
+      "height": "5"
     }
   ],
   "keyboard": [],
