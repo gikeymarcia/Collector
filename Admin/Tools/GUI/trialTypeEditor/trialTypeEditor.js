@@ -877,31 +877,15 @@ function addDeleteFunction(x){
     hot.loadData(JSON.parse(jsonStringData));
   }
   
-  $("#procFileSelection").on("change", function() {
-    console.dir("whoop");
-    /*
+  $(".csvSelection").on("change", function() {
     if (this.value === '') return;
+    
+    var func = (this.id === "procFileSelection") ? loadProcData : loadStimData;
     
     $.get(
       'csvRetrieval.php',
       {file: this.value},
-      loadProcData,
-      'text'
-    );
-    */
-  });
-
-
-  $("#stimFileSelection").on("change", function() {
-    if (this.value === '') return;
-    
-    console.dir("whoopStim");
-    
-    
-    $.get(
-      'csvRetrieval.php',
-      {file: this.value},
-      loadStimData,
+      func,
       'text'
     );
   });

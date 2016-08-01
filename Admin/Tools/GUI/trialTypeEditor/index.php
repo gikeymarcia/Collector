@@ -411,7 +411,7 @@ echo $trialTypeName
   <div id="tableDiv">
 
     <div id="procOrg">
-    <select id="procFileSelection" onchange="alert('hello')">
+    <select id="procFileSelection" class="csvSelection">
       <option value="">-template-</option>
         <?php
         foreach (getExperimentCsvs('Procedure', $_PATH) as $name => $path) {
@@ -426,7 +426,7 @@ echo $trialTypeName
     </div>
     
     <div id="stimOrg">      
-      <select id="stimFileSelection">
+      <select id="stimFileSelection" class="csvSelection">
           <option value="">-template-</option>
           <?php
           

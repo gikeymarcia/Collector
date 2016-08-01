@@ -95,11 +95,19 @@ body > form {
     position:relative;
     width:500px;
   }
+  #procOrg{
+    margin:20px;
+    padding:20px;
+    display:inline-block;
+  }
 
   #stimArea{
     display:inline-block;
     position:relative;
     width:500px;
+  }
+  #stimOrg{
+    display:inline-block;
   }
 
   #tableDiv{
@@ -122,6 +130,7 @@ body > form {
   }
     
   #trialCodePreview{
+    display:inline-block;
     position:relative;
     width: 500px; 
     height: 200px
