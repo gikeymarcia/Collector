@@ -414,7 +414,8 @@ function addDeleteFunction(x){
       $("#userInputTypeValue").hide();
       $("#mediaTypeValue").show();
       $("#textStyle").hide();        
-      
+      $("#textColorRow").hide();
+
     break
 
     case "text":
@@ -426,7 +427,7 @@ function addDeleteFunction(x){
       $("#userInputTypeValue").hide();
       $("#mediaTypeValue").hide();
       $("#textStyle").show();
-      
+      $("#textColorRow").show();
               
       //rather than embed it in above text, i've listed these values below for improved legibility
       textFontId.value  = currentElementAttributes['style']['font-family'];
@@ -444,6 +445,12 @@ function addDeleteFunction(x){
       $("#userInputTypeValue").show();
       $("#mediaTypeValue").hide();
       $("#textStyle").show();
+
+      if(currentElementAttributes.userInputType=="Text"){
+        $("#textColorRow").hide();
+      } else {
+        $("#textColorRow").show();
+      }
       
 
       //rather than embed it in above text, i've listed these values below for improved legibility

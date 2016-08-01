@@ -229,10 +229,6 @@ function adjustTime(onsetOffset){
 
 
 function adjustUserInputType(){
-  /* I seem to delete and then recreate the elements upon each change!!! let's not do that
-  var element = document.getElementById("element"+currentElement);
-  element.parentNode.removeChild(element);
-  */
   
   
   currentXPos   =   xPosId.value        *   elementScale + "%";
@@ -240,9 +236,6 @@ function adjustUserInputType(){
   currentWidth  =   elementWidth.value  *   elementScale + "%";
   currentHeight =   elementHeight.value *   elementScale + "%";
   
-  /*
-  document.getElementById("trialEditor").innerHTML+="<input class='inputElement' type='"+userInputTypeValue.value+"' id='element"+currentElement+"' style='position: absolute;left:"+currentXPos+"px;top:"+currentYPos+"px; width:"+currentWidth+"px; height:"+currentHeight+"px' onclick='clickElement("+elementNo+")' name='"+currentElement+"' value='"+stimInputValue.value+"' readonly>";  
-  */
   document.getElementById('element'+currentElement).style.color             =   textColorId.value;
   document.getElementById('element'+currentElement).style.fontFamily        =   textFontId.value;
   document.getElementById('element'+currentElement).style.fontSize          =   (textSizeId.value)+"px";
@@ -252,16 +245,16 @@ function adjustUserInputType(){
   /* hide and show attributes depending on whether it's a text input or now. This is because placeholders (whice are used in text variables) are awkward to color dynamically */
   if(document.getElementById("userInputTypeValue").value    ==    "Text"){
 
+    $("#textColorRow").hide();
+    
     //  prevent element attributes changing the color on the editor;
     document.getElementById('element'+currentElement).style.color             =   "grey";
-    document.getElementById('element'+currentElement).style.backgroundColor   =   "white";
-
+    
     //  hide the attributes themselves
     $('#textTableColorRow').hide();
     $('#textTableBackRow').hide();
   } else {
-    $('#textTableColorRow').show();
-    $('#textTableBackRow').show();
+    $("#textColorRow").show();
   }
   
   trialTypeElements['elements'][currentElement]['userInputType']  =   userInputTypeValue.value;

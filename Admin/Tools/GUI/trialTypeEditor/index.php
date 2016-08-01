@@ -249,7 +249,7 @@
                   <td>font size</td>
                   <td><input type="number" id="textSizeId" onchange="adjustTextSize()" value='<?=$textScale ?>' min="1" style="width:50px">px</td>
                 </tr>
-                <tr>
+                <tr id="textColorRow">
                   <td>color</td>
                   <td><input type="text" id="textColorId" onkeyup="adjustTextColor()" placeholder="color"></td>
                 </tr>
