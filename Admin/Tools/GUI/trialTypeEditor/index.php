@@ -409,9 +409,23 @@ echo $trialTypeName
   <script src="../handsontables/GUI_Handson.js"></script>
 
   <div id="tableDiv">
-  
-    <div id="stimOrg">
-      
+
+    <div id="procOrg">
+    <select id="procFileSelection" onchange="alert('hello')">
+      <option value="">-template-</option>
+        <?php
+        foreach (getExperimentCsvs('Procedure', $_PATH) as $name => $path) {
+          echo "<option value='$path'>$name</option>";
+        }        
+        ?>
+      </select>
+      <br>
+      <div id="procArea" class="tableArea">
+        <div id="procTable"></div>
+      </div>
+    </div>
+    
+    <div id="stimOrg">      
       <select id="stimFileSelection">
           <option value="">-template-</option>
           <?php
@@ -423,16 +437,12 @@ echo $trialTypeName
           ?>
       </select>
       <br>
-      
-
-        <div id="stimArea" class="tableArea">
+      <div id="stimArea" class="tableArea">
         <div id="stimTable"></div>
       </div>
     </div>
-   
-    <div id="procArea" class="tableArea">
-      <div id="procTable"></div>
-    </div>
+    
+
     
     <textarea id="trialCodePreview"></textarea>
   </div>

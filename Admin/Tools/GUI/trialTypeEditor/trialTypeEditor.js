@@ -877,8 +877,26 @@ function addDeleteFunction(x){
     hot.loadData(JSON.parse(jsonStringData));
   }
   
+  $("#procFileSelection").on("change", function() {
+    console.dir("whoop");
+    /*
+    if (this.value === '') return;
+    
+    $.get(
+      'csvRetrieval.php',
+      {file: this.value},
+      loadProcData,
+      'text'
+    );
+    */
+  });
+
+
   $("#stimFileSelection").on("change", function() {
     if (this.value === '') return;
+    
+    console.dir("whoopStim");
+    
     
     $.get(
       'csvRetrieval.php',
@@ -887,7 +905,13 @@ function addDeleteFunction(x){
       'text'
     );
   });
-   
+  
+  
+  // Anthony trying to make this work for Proc
+  
+  
+
+  
    
   /*functions*/
 
