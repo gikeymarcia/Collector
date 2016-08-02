@@ -1,6 +1,6 @@
 <?php
 
-abstract class ioFlatfilesType_Csv extends ioFlatfilesType
+abstract class ioDataType_CSV extends ioAbstractDataType
 {
     /**
      * Things I'm trying to handle (e.g. should write tests for)
