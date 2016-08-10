@@ -18,5 +18,5 @@ $_SESSION['settings'] = new Collector\Settings($_FILES);
 $_SETTINGS = $_SESSION['settings'];
 
 if ($_SETTINGS->password === null) {
-    require $_FILES->getPath("Set Password");
+    require $_FILES->get_path("Set Password");
 }

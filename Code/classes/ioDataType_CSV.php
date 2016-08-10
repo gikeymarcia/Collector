@@ -11,42 +11,42 @@ abstract class ioDataType_CSV extends ioAbstractDataType
      */
     public static function read($path) {
         if (!is_file($path)) return array();
-        
+
         $fileStream = fopen($path, 'r');
         $data = array();
-        
+
         $headers = self::readRow($fileStream);
-        
+
         while ($row = self::readRow($fileStream, $headers)) {
             $data[] = $row;
         }
-        
+
         fclose($fileStream);
         return $data;
     }
-    
+
     public static function overwrite($path, $data) {
         $dir = dirname($path);
-        
+
         if (!is_dir($dir)) mkdir($dir, 0777, true);
-        
+
         $data = self::trimHeaders($data);
         $fileStream = fopen($path, 'w');
         $headers = array();
-        
+
         foreach ($data as $row) {
             foreach ($row as $header => $val) {
                 $headers[$header] = true;
             }
         }
-        
+
         $headers = array_keys($headers);
         $written = fputcsv($fileStream, $headers);
         $written += self::writeRows($fileStream, $headers, $data);
         fclose($fileStream);
         return $written;
     }
-    
+
     /**
      * Things I'm trying to handle (e.g. should write tests for)
      *
@@ -59,25 +59,25 @@ abstract class ioDataType_CSV extends ioAbstractDataType
         if ($index !== null && (!is_numeric($index) || $index < 0)) {
             throw new Exception('Csv append index must be null or non-negative number');
         }
-        
+
         if (is_numeric($index)) {
             return self::rewriteLine($path, $data, $index);
         } else {
             return self::writeMany($path, array($data));
         }
     }
-    
+
     public static function writeMany($path, $data) {
         if (!is_file($path)) {
             return self::overwrite($path, $data);
         }
-        
+
         $data           = self::trimHeaders($data);
         $fileStream     = fopen($path, 'r+');
         $oldHeaders     = fgetcsv($fileStream);
         $oldHeadersFlip = array_flip($oldHeaders);
         $newHeadersFlip = array();
-        
+
         foreach ($data as $row) {
             foreach ($row as $col => $cell) {
                 if (!isset($oldHeadersFlip[$col])) {
@@ -85,88 +85,88 @@ abstract class ioDataType_CSV extends ioAbstractDataType
                 }
             }
         }
-        
+
         if ($newHeadersFlip !== array()) {
             $finalHeaders = array_merge($oldHeaders, array_keys($newHeadersFlip));
             $oldData = stream_get_contents($fileStream);
             rewind($fileStream);
-            
+
             fputcsv($fileStream, $finalHeaders);
             fwrite($fileStream, $oldData);
-            
+
         } else {
             fseek($fileStream, 0, SEEK_END);
             $finalHeaders = $oldHeaders;
         }
-        
+
         $written = self::writeRows($fileStream, $finalHeaders, $data);
         fclose($fileStream);
         return $written;
     }
-    
+
     private static function writeRows($fileStream, $headers, $rows) {
         $written = 0;
-        
+
         foreach ($rows as $row) {
             $sortedRow = array();
-            
+
             foreach ($headers as $header) {
                 $sortedRow[$header] = isset($row[$header]) ? $row[$header] : '';
             }
-            
+
             $written += fputcsv($fileStream, $sortedRow);
         }
-        
+
         return $written;
     }
-    
+
     private static function readRow($fileStream, $headers = null) {
         $rowIsEmpty = true;
-        
+
         while ($rowIsEmpty) {
             $row = fgetcsv($fileStream);
-            
+
             if ($row === false || $row === null) return $row;
-            
+
             $cleanRow = array();
-            
+
             foreach ($row as $cell) {
                 if (($cleanRow[] = trim($cell)) !== '') $rowIsEmpty = false;
             }
         }
-        
+
         if ($headers === null) {
             return $row;
         } else {
             $sortedRow = array();
-            
+
             foreach ($headers as $i => $header) {
                 $sortedRow[$header] = isset($row[$i]) ? $row[$i] : '';
             }
-            
+
             return $sortedRow;
         }
     }
-    
+
     private static function trimHeaders($data) {
         $trimmedData = array();
-        
+
         foreach ($data as $i => $row) {
             foreach ($row as $header => $cell) {
                 $trimmedData[$i][trim($header)] = $cell;
             }
         }
-        
+
         return $trimmedData;
     }
-    
+
     private static function rewriteLine($path, $data, $index) {
         $index = (int) $index;
         $fileStream = fopen($path, 'r+');
         $headers = self::readRow($fileStream);
         $currentIndex = 0;
         $newData = self::trimHeaders(array($data));
-        
+
         do {
             if ($currentIndex === $index) {
                 $rewriteOffset = ftell($fileStream);
@@ -178,10 +178,10 @@ abstract class ioDataType_CSV extends ioAbstractDataType
                 fclose($fileStream);
                 return $written;
             }
-            
+
             ++$currentIndex;
         } while (self::readRow($fileStream));
-        
+
         // turns out, the row we are replacing doesnt exist
         // so, create some padding rows
         $paddingContent = array_pad(array(), count($headers), '_');

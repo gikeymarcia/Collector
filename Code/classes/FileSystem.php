@@ -5,18 +5,18 @@ class FileSystem
     private $root = '.';
     private $map;
     private $defaults = array();
-    private $validatedDataTypes = array();
+    private $validated_data_types = array();
 
     public function __construct()
     {
-        $this->map = $this->getSystemMap();
+        $this->map = $this->get_system_map();
     }
 
     /**
      * Return systemMap data with all keys lowercased
      * @return array systemMap.php data structure
      */
-    private function getSystemMap()
+    private function get_system_map()
     {
         // change key case defaults to return lowercased keys
         return array_change_key_case(
@@ -25,7 +25,7 @@ class FileSystem
     }
 
 
-    private function getRoot() {
+    private function get_root() {
         $root  = $this->root;
         $count = 0;
 
@@ -53,7 +53,7 @@ class FileSystem
                                      can be false to return raw path
      * @return string                relative path to source
      */
-    public function getPath($source, $variables = array())
+    public function get_path($source, $variables = array())
     {
         $source = strtolower(trim($source));
 
@@ -71,11 +71,11 @@ class FileSystem
             $varsReplaced = fill_template(
                 $this->map[$source][1], $variables
             );
-            return $this->getRoot() . "/$varsReplaced";
+            return $this->get_root() . "/$varsReplaced";
         }
     }
 
-    public function getType($source)
+    public function get_type($source)
     {
         $source = strtolower(trim($source));
 
@@ -94,26 +94,26 @@ class FileSystem
 
     private function access($source, $command, $data = null, $index = null)
     {
-        $path = $this->getPath($source);
-        $className = 'ioDataType_' . $this->getType($source);
-        $this->validateDataType($className);
+        $path = $this->get_path($source);
+        $class_name = 'ioDataType_' . $this->get_type($source);
+        $this->validate_date_type($class_name);
 
         if ($command == "query") {
-            return $className::$command($path, $index);
+            return $class_name::$command($path, $index);
         }
 
-        return $className::$command($path, $data, $index);
+        return $class_name::$command($path, $data, $index);
     }
 
-    private function validateDataType($dataType) {
-        if (isset($this->validatedDataTypes[$dataType])) {
+    private function validate_date_type($dataType) {
+        if (isset($this->validated_data_types[$dataType])) {
             return true;
         }
 
         $parents = class_parents($dataType);
 
         if (isset($parents['ioAbstractDataType'])) {
-            $this->validatedDataTypes[$dataType] = true;
+            $this->validated_data_types[$dataType] = true;
             return true;
         }
 
@@ -126,7 +126,7 @@ class FileSystem
     }
 
     public function __wakeup() {
-        $this->map = $this->getSystemMap();
+        $this->map = $this->get_system_map();
     }
 
 /**

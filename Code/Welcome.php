@@ -28,14 +28,11 @@ $pathParts = explode('/', $scriptName);
 $currentExp = $pathParts[count($pathParts) - 2];
 
 // Set default path for the Current Experiment
-$_PATH->setDefault('Current Experiment', $currentExp);
+$_FILES->set_default('Current Experiment', $currentExp);
 
 // Set default path for the Data directory
 // the conditions class will automatically create a login counter dir, and it needs this value
-$_PATH->setDefault('Data Sub Dir', '');
-
-// refresh settings to read from correct experiment settings
-$_SETTINGS->upToDate($_PATH);
+$_FILES->set_default('Data Sub Dir', '');
 
 /*
  * Login objects
@@ -43,13 +40,13 @@ $_SETTINGS->upToDate($_PATH);
 $errors = new Collector\ErrorController();
 
 $cond = new Collector\ConditionController(
-    $_PATH->get('Conditions'),
-    $_PATH->get('Counter'),
+    $_FILES->get_path('Conditions'),
+    $_FILES->get_path('Counter'),
     $errors,
     $_SETTINGS->hide_flagged_conditions
 );
 
-$cond->checkConditionsFile($_PATH->get('Procedure Dir'), $_PATH->get('Stimuli Dir'));
+$cond->checkConditionsFile($_FILES->get_path('Procedure Dir'), $_FILES->get_path('Stimuli Dir'));
 if ($errors->arePresent()) {
     $errors->printErrors();
     exit;
@@ -61,8 +58,8 @@ $conditions = $cond->getAllConditions();
  */
 // load page header
 $title = 'Experiment Login Page';
-require $_PATH->get('Header');
-$action = $_PATH->get('Login', 'url');
+require $_FILES->get_path('Header');
+$action = $_FILES->get_path('Login', 'url');
 
 // modify condition option tag attributes according to Settings
 $options = array();
@@ -156,4 +153,4 @@ if ($_SETTINGS->show_condition_selector == true && !$isReturningUser) {
 </form>
 
 <?php
-require $_PATH->get('Footer');
+require $_FILES->get_path('Footer');

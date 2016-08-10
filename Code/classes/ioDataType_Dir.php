@@ -4,16 +4,16 @@ class ioDataType_Dir extends ioAbstractDataType
 {
     public static function read($path) {
         $scan = scandir($path);
-        
+
         foreach ($scan as $i => $entry) {
             if ($entry === '.' || $entry === '..') {
                 unset($scan[$i]);
             }
         }
-        
+
         return $scan;
     }
-    
+
     public static function overwrite($path, $data) {
         // technically, this function should clear out the existing dir,
         // but that is way too powerful, and too easy to accidentally abuse
