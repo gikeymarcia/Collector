@@ -7,7 +7,7 @@ return array(
   'Common'                   => array('Dir'  , 'Experiments/Common/'),
   'Common Settings'          => array('File' , 'Experiments/Common/Common Settings.json'),
   'Password'                 => array('File' , 'Experiments/Common/Password.php'),
-  'Ineligibility Dir'        => array('Dir'  , 'Experiments/Common/Ineligible/')
+  'Ineligibility Dir'        => array('Dir'  , 'Experiments/Common/Ineligible/'),
   'Media'                    => array('Dir'  , 'Experiments/Common/Media/'),
   'Custom Trial Types'       => array('Dir'  , 'Experiments/Common/TrialTypes/'),
   'Custom Trial Type Dir'    => array('Dir'  , 'Experiments/Common/TrialTypes/[var]/'),
