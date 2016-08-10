@@ -1614,13 +1614,13 @@ function datadump($data) {
  *
  * @param string $string the template containing the substrings to replace
  * @param array $inputs assoc array where instances of "[$key]" are replaced
- *                      with the value, while numeric keys are used to 
+ *                      with the value, while numeric keys are used to
  *                      replace successive instances of [var]
  * return string
  */
 function fill_template($string, $inputs) {
     $vars = array();
-    
+
     foreach ($inputs as $key => $val) {
         if (is_numeric($key)) {
             $vars[] = $val;
@@ -1628,34 +1628,52 @@ function fill_template($string, $inputs) {
         }
     }
     unset($inputs['var']);
-    
+
     $components = explode('[', $string);
-    
+
     $output = $components[0];
     unset($components[0]);
-    
+
     foreach ($components as $varAndStaticString) {
         $varAndStaticArray = explode(']', $varAndStaticString);
         $varKey = $varAndStaticArray[0];
-        
+
         if ($varKey === 'var') {
             if (count($vars) < 1) throw new Exception(
                 'Not enough vars for template: ' . $string
             );
-            
+
             $output .= array_shift($vars);
         } else {
             if (!isset($inputs[$varKey])) throw new Exception(
                 'Missing input with key: ' . $varKey
             );
-            
+
             $output .= $inputs[$varKey];
         }
-        
+
         if (isset($varAndStaticArray[1])) {
             $output .= $varAndStaticArray[1];
         }
     }
-    
+
     return $output;
+}
+
+
+function Collector_session_start() {
+    $sess_dir = __DIR__ . '/../../Data/sess';
+    if (!is_dir($sess_dir)) mkdir($sess_dir, 0777, true);
+
+    session_save_path($sess_dir);
+    session_start();
+}
+
+function Collector_prepare_autoloader() {
+    $code_folder = dirname(__DIR__);
+    require "$code_folder/classes/Autoloader.php";
+    $autoloader = new Collector\Autoloader();
+    $autoloader->register();
+    $autoloader->add('Collector', "$code_folder/classes");
+    $autoloader->add('phpbrowscap', "$code_folder/vendor/phpbrowscap");
 }

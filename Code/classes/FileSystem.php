@@ -1,6 +1,6 @@
 <?php
 
-class InputOutput
+class FileSystem
 {
     private $root = '.';
     private $map;
@@ -104,27 +104,27 @@ class InputOutput
 
         return $className::$command($path, $data, $index);
     }
-    
+
     private function validateDataType($dataType) {
         if (isset($this->validatedDataTypes[$dataType])) {
             return true;
         }
-        
+
         $parents = class_parents($dataType);
-        
+
         if (isset($parents['ioAbstractDataType'])) {
             $this->validatedDataTypes[$dataType] = true;
             return true;
         }
-        
+
         throw new Exception("System map cannot use '$dataType', as it is not "
             . "an extension of 'ioAbstractDataType'.");
     }
-    
+
     public function __sleep() {
         return array('root', 'defaults');
     }
-    
+
     public function __wakeup() {
         $this->map = $this->getSystemMap();
     }

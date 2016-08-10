@@ -1,7 +1,6 @@
 <?php
     // if the key doesn't exist OR it isn't set to true then reject their action
-    if (!isset($noPass)
-        || $noPass !== true
+    if (!isset($_SESSION)
     ) {
         exit('You are not allowed to access this script directly. To change your
               password delete the password file in "Experiments/Common/".');
@@ -47,4 +46,4 @@
 </style>
 
 
-<?php require $_PATH->get("Footer"); ?>
+<?php require $_PATH->get("Footer"); exit;?>
