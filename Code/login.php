@@ -2,7 +2,15 @@
 /*  Collector
     A program for running experiments on the web
  */
-require 'initiateCollector.php';
+
+require __DIR__ . '/initiateCollector.php';
+
+$user = filter_input(INPUT_GET, 'username');
+$exp  = filter_input(INPUT_GET, 'experiment');
+$cond = filter_input(INPUT_GET, 'condition');
+$ip   = server_input(INPUT_SERVER, 'REMOTE_ADDR');
+
+$_SESSION = Login::run($user, $ip, $_SETTINGS->debug_name, $_FILES);
 
 // reset session to remove information from any previous login attempts
 $_SESSION = array();

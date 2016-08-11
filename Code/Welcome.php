@@ -46,7 +46,11 @@ $cond = new Collector\ConditionController(
     $_SETTINGS->hide_flagged_conditions
 );
 
-$cond->checkConditionsFile($_FILES->get_path('Procedure Dir'), $_FILES->get_path('Stimuli Dir'));
+$cond->checkConditionsFile(
+    $_FILES->get_path('Procedure Dir'),
+    $_FILES->get_path('Stimuli Dir')
+);
+
 if ($errors->arePresent()) {
     $errors->printErrors();
     exit;
@@ -59,7 +63,7 @@ $conditions = $cond->getAllConditions();
 // load page header
 $title = 'Experiment Login Page';
 require $_FILES->get_path('Header');
-$action = $_FILES->get_path('Login', 'url');
+$action = $_FILES->get_path('Login');
 
 // modify condition option tag attributes according to Settings
 $options = array();
