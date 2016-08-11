@@ -1,10 +1,10 @@
 <?php
 error_reporting(E_ALL);
 
+require_once __DIR__.'/customFunctions.php';
+
 // configure and register autoloader
 Collector_prepare_autoloader();
-
-require_once __DIR__.'/customFunctions.php';
 
 // start session
 Collector_session_start();

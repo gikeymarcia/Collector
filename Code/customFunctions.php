@@ -1670,7 +1670,7 @@ function Collector_session_start() {
 }
 
 function Collector_prepare_autoloader() {
-    $code_folder = dirname(__DIR__);
+    $code_folder = __DIR__;
     require "$code_folder/classes/Autoloader.php";
     $autoloader = new Collector\Autoloader();
     $autoloader->register();

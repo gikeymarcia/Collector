@@ -29,7 +29,7 @@ class FileSystem
         $root  = $this->root;
         $count = 0;
 
-        while (!is_file("$root/Code/classes/InputOutput.php")) {
+        while (!is_file("$root/Code/classes/FileSystem.php")) {
             if (++$count === 1) {
                 $root = '.';
             } else {
@@ -37,7 +37,7 @@ class FileSystem
             }
 
             if ($count > 10) throw new Exception(
-                'Could not find the InputOutput.php file expected in '
+                'Could not find the FileSystem.php file expected in '
                 . '/Code/classes/');
         }
 
