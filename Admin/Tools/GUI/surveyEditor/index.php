@@ -28,69 +28,8 @@
   
 ?>
   
-  <style>
-  body { 
-    color: black; 
-    background-color: white; 
-  }
-  #header { 
-    font-size: 180%; 
-    text-align: center; 
-    margin: 10px 0 40px; 
-  }
-  form {
-    text-align: left;
-  }
-  .tableArea {
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 10px 30px;
-    vertical-align: top;
-  }
-  textarea { 
-    border-radius: 5px;
-    border-color: #E8E8E8  ;
-  }
-  .alert-success{
-    position:       absolute; 
-    right:          10%;
-    width:          200px;
-    top:            10%;
-    bottom:         10%;
-    padding:        10px;
-    opacity:        .8;
-    border-radius:  10px;
-    z-index:        3;
-  }
-  
-  .helpType_Col { display: none; }
-  #helpTypeDefault { display: block; }
-  
-  #helperBar {
-    display: inline-block;
-    width: 20%;
-    background-color: #EFE;
-    border: 2px solid #6D6;
-    border-radius: 8px;
-    box-sizing: border-box;
-    padding: 10px;
-    vertical-align: top;
-    margin-top: 180px;
-  }
-  
-  #TableForm {
-    display: inline-block;
-    width: 75%;
-    box-sizing: border-box;
-  }
-  .typeHeader{
-    color:blue;
-  }
-  .typeHeader:hover{
-    color:green ;
-  }
-</style>
+<link rel="stylesheet" href="surveyEditor.css">
+
 
 <?php
 
@@ -346,19 +285,47 @@
     shuffle135
   </div>
   
+  <div class="helpType_Col" id="helpType_Score">
+    <b>Score</b> is used to calculate how to score a particular question as part of the scale in the header. For example, if your header were "Score: Subscale 1" then you would be calculating how this question contributes to "Subscale 1".<br><br> More specifically, it'll control how the scores from the <b>Values</b> column is scored. If you leave it blank, then this question will not be added to the score. If you add a "1", then it will be scored as the <b>Values </b> column scored it. If you add a "r1" then it will reverse score what the <b>Values</b> column scored.
+  
 
+  
+  </div>
   <div class="helpType_Col" id="helpType_Type">
     <?php
-      $surveyTypes=getFromFile("surveyTypes.csv",",");
-      $surveyTypes=array_slice($surveyTypes,2);
+
+
+    /*
+    $surveyTypes  = getFromFile("surveyTypes.csv",",");
+    $surveyTypes  = array_slice($surveyTypes,2);
+    */  
+        $surveyPath = '../../../../TrialTypes/Survey/Types';
+        $surveyTypes  = glob($surveyPath . '/*' , GLOB_ONLYDIR);
+        
+      
+      
       
       $surveyTypeVector=[];
       foreach($surveyTypes as $surveyType){
-        array_push($surveyTypeVector,$surveyType["surveyType"]);
-        ?>
-        <h3 class="typeHeader" id='header<?=$surveyType["surveyType"]?>' onclick='hideShow("detail<?=$surveyType["surveyType"]?>")'><?=$surveyType["surveyType"]?></h3>
-        <div id='detail<?=$surveyType["surveyType"]?>' style='display:none'><?=$surveyType["surveyDetail"]?></div>
-        <?php
+        
+        $surveyName = explode("/",$surveyType);
+        $surveyName = $surveyName[count($surveyName)-1];
+  
+        array_push($surveyTypeVector,$surveyName);
+        
+        if(file_exists($surveyType."/help.txt")){
+          
+          $helpText = file_get_contents($surveyType."/help.txt");
+          
+        } else {
+          
+          $helpText = "The help file for this survey is missing! Please contact a.haffey@reading.ac.uk";
+        
+        }
+        
+        echo "<h3 class='typeHeader' id='header$surveyName' onclick='hideShow(\"detail$surveyName\")'>$surveyName</h3>";
+        echo "<div id='detail$surveyName' style='display:none'>$helpText</div>";
+        
       }
         $jsonSurveyVector=json_encode($surveyTypeVector);
     ?>
@@ -444,6 +411,12 @@ function helperActivate(columnName, cellValue){
   
   var columnCodeName = columnName.replace(/ /g, '');
   
+  if (columnCodeName.indexOf("Score:") !== -1){
+    columnCodeName = "Score";
+  }
+  
+  console.dir(columnCodeName);
+  
   $("#helperBar").find(".helpType_Col").hide();
 
   if ($("#helperBar").find("#helpType_" + columnCodeName).length > 0) {
@@ -451,6 +424,8 @@ function helperActivate(columnName, cellValue){
   } else {
     $("#helperBar").find("#helpTypeDefault").show();
   }
+  
+  
   
   // code for specific helper bars
   if(columnCodeName=="Type"){
@@ -475,7 +450,7 @@ function helperActivate(columnName, cellValue){
 }
 
 
-var stimTable;
+    var stimTable;
     function isTrialTypeHeader(colHeader) {
         var isTrialTypeCol = false;
         

@@ -255,7 +255,8 @@
   $sheetsList=array_merge($studySheetsInfo->stimSheets,$studySheetsInfo->procSheets); //  merging the two together
   
   $jsonSheets=json_encode($sheetsList);
-   
+  
+  
 ?>
 
 <form id="sheetsForm" action='index.php' method='post'>
@@ -265,6 +266,7 @@
   <h1>
     <textarea id="currStudyName" name="currStudyName" style="color:#069;" rows="1" onkeyup="checkName()"><?=$thisDirInfo->studyName?></textarea>
   </h1>
+  
   
   <span>
     <button name="newSheet" value="stim" class="collectorButton" id="newStimButton"> new stimuli sheet </button>
@@ -354,13 +356,97 @@
 </form>
 
 
+<div id="helperBar">
+  <h1> Helper </h1>
+
+  <h2 id="helpType">Select Cell</h2>
+  
+  <!-- Help Types -->
+  
+  <!-- Conditions -->
+  <div class="helpType_Col" id="helpType_Description">
+    This description determines what the condition name will be when starting the task. If you have more than one condition then you need to have a unique <b>Description</b> for each condition. 
+  </div>
+
+  <div class="helpType_Col" id="helpType_Notes">
+    This description is mainly for your use, just to clarify what is involved in the condition. It is not necessary to change it to make the task work.
+  </div>
+
+  
+  <div class="helpType_Col" id="helpType_Stimuli">
+    The header of this column needs to have a number at the end, e.g. "Stimuli 1". This cell is where you identify which <b>Stimuli</b> file this condition will be calling from, e.g. <em>"Stimuli.csv"</em>.
+  </div>
+
+  <div class="helpType_Col" id="helpType_Procedure">
+    The header of this column needs to have a number at the end, e.g. "Procedure 1". This cell is where you identify which <b>Procedure</b> file this condition will be calling from, e.g. <em>"Procedure.csv"</em>.
+  </div>
+  
+  <!-- Procedure file -->
+  
+  <div class="helpType_Col" id="helpType_Item">
+    This cell refers to which row of the <em>Stimuli</em> file you have referred to. This number treats the header row as a row - so the first item below the header row is on row <b>2</b>. Use row <b>0</b> if you don't wish to accidentally call in stimuli. 
+  </div>  
+  
+  <div class="helpType_Col" id="helpType_TrialType">
+    
+  
+  <?php
+    $trialTypes=getAllTrialTypeFiles();//;
+  
+  
+  $customTrialTypesDir = $_PATH->get("Custom Trial Types");
+  
+  $trialTypesDir       = $_PATH->get("Trial Types");
+  
+  $trialTypes = array_keys($trialTypes);
+  
+  $trialTypesJson = json_encode($trialTypes);
+  
+  foreach($trialTypes as $trialType){
+      echo " <h3 class='typeHeader' id='header$trialType' onclick='hideShow(\"detail$trialType\")'>$trialType</h3>";
+
+    if(file_exists($trialTypesDir."/".$trialType."/help.txt")){
+      
+      echo "<div id='detail$trialType' style='display:none'>".file_get_contents($trialTypesDir."/".$trialType."/help.txt")."</div>"; // the actual help
+      
+    } if(file_exists($customTrialTypesDir."/".$trialType."/help.txt")){
+      
+      echo "<div id='detail$trialType' style='display:none'>".file_get_contents($customTrialTypesDir."/".$trialType."/help.txt")."</div>"; // the actual help
+      
+    } 
+    
+    else {
+      echo "<div id='detail$trialType' style='display:none'>No 'help.txt' file present. If this is a custom trial type you wrote please create one. Otherwise, please contact a.haffey@reading.ac.uk</div>";
+    }
+  }
+
+  ?>
+  
+  </div>
+  
+  
+  
+  
+  
+  
+  
+  <!-- default !-->
+  <div class="helpType_Col" id="helpTypeDefault">
+    Select a cell to see more information about that column.
+  </div>  
+  
+</div>
+
+
 <script type="text/javascript">
 
   //importing json encoded lists from php
   listStudyNames  = <?=$listStudyNamesJson?>;
   listSheetsNames = <?=$jsonSheets?>;
-  var stimData = <?= $stimData ?>;
-   
+  var stimData    = <?= $stimData ?>;
+  
+  trialTypesJson  = <?=$trialTypesJson?>
+  
 </script>
 
 <script src="sheetsEditor.js"></script>

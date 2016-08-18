@@ -1,0 +1,1 @@
+Gives the participant a text box to write in their answer.

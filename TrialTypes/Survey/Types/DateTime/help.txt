@@ -1,0 +1,1 @@
+This survey type asks for the date and time.  This allows participants to enter the date and time freely.

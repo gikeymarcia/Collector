@@ -1,0 +1,1 @@
+This allows standardised storage of date. Note that this works better in Chrome than firefox.

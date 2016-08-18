@@ -1,0 +1,1 @@
+If you want the participant to be able to select multiple options, use a checkbox. If you only want them to be able to select one option, use a <b>Radio</b>.

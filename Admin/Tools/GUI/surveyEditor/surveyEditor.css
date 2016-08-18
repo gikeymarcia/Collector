@@ -1,0 +1,61 @@
+  body { 
+    color: black; 
+    background-color: white; 
+  }
+  #header { 
+    font-size: 180%; 
+    text-align: center; 
+    margin: 10px 0 40px; 
+  }
+  form {
+    text-align: left;
+  }
+  .tableArea {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 30px;
+    vertical-align: top;
+  }
+  textarea { 
+    border-radius: 5px;
+    border-color: #E8E8E8  ;
+  }
+  .alert-success{
+    position:       absolute; 
+    right:          10%;
+    width:          200px;
+    top:            10%;
+    bottom:         10%;
+    padding:        10px;
+    opacity:        .8;
+    border-radius:  10px;
+    z-index:        3;
+  }
+  
+  .helpType_Col { display: none; }
+  #helpTypeDefault { display: block; }
+  
+  #helperBar {
+    display: inline-block;
+    width: 20%;
+    background-color: #EFE;
+    border: 2px solid #6D6;
+    border-radius: 8px;
+    box-sizing: border-box;
+    padding: 10px;
+    vertical-align: top;
+    margin-top: 180px;
+  }
+  
+  #TableForm {
+    display: inline-block;
+    width: 75%;
+    box-sizing: border-box;
+  }
+  .typeHeader{
+    color:blue;
+  }
+  .typeHeader:hover{
+    color:green ;
+  }

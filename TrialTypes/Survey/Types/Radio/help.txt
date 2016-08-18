@@ -1,0 +1,1 @@
+Allows the participant to only select one option in a list (unlike checkboxes)

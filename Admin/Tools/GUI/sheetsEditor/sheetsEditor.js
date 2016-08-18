@@ -36,7 +36,7 @@ if (typeof sheetName !== 'undefined'){                            //i.e. if this
   }  
 }
 
-var stimTable;
+  var stimTable;
     
     
   var stimContainer = document.getElementById("stimTable");
@@ -104,18 +104,105 @@ $("#saveButton").on("click", function() { //final checks before saving
 
 $(window).bind('keydown', function(event) {
     if (event.ctrlKey || event.metaKey) {
-        switch (String.fromCharCode(event.which).toLowerCase()) {
-        case 's':
-            event.preventDefault();
-            alert('Saving');
+      switch (String.fromCharCode(event.which).toLowerCase()) {
+      case 's':
+        event.preventDefault();
+        alert('Saving');
       stimTable.deselectCell();      
       $("#saveButton").click();
-            break;
-        case 'd':
-            event.preventDefault();
+        break;
+      case 'd':
+        event.preventDefault();
       $("#deleteButton").click();
-            break;
-        }
+        break;
+      }
     }
+});
+
+stimTable.addHook('afterSelectionEnd', function(){
+  var coords        = this.getSelected();
+  var column        = this.getDataAtCell(0,coords[1]);//stimTable.getDataAtCell(0,1); 
+  var thisCellValue = this.getDataAtCell(coords[0],coords[1]);
+  window['Current HoT Coordinates'] = coords;
+  
+  helperActivate(column, thisCellValue)
+});
+// add         helperActivate(column, thisCellValue); to handsontable       afterSelectionEnd: function(){
+
+//        helperActivate(column, thisCellValue);
+
+
+
+
+function helperActivate(columnName, cellValue){
+  $("#helpType").html(columnName);
+  
+  var columnCodeName = columnName.replace(/ /g, '');
+  
+  if (columnCodeName.indexOf("Score:") !== -1){
+    columnCodeName = "Score";
+  }
+  
+  
+  $("#helperBar").find(".helpType_Col").hide();
+
+  // Conditions helpers //
+  
+  if (columnCodeName.indexOf("Procedure") !== -1){
+    columnCodeName = "Procedure";
+  }
+  
+  if (columnCodeName.indexOf("Stimuli") !== -1){
+    columnCodeName = "Notes";
+  }
+
+
+  if ($("#helperBar").find("#helpType_" + columnCodeName).length > 0) {
+    $("#helperBar").find("#helpType_" + columnCodeName).show();
+  } else {
+    $("#helperBar").find("#helpTypeDefault").show();
+  }
+  
+  // code for specific helper bars
+  if(columnCodeName=="TrialType" & cellValue !== null){
+    //compare if string is within string
+    for(i=0;i<trialTypesJson.length;i++){
+      //remove cases for comparisons
+      var surveyValue=trialTypesJson[i].toLowerCase();
+      if(surveyValue.indexOf(cellValue.toLowerCase())==-1){
+        $("#header"+trialTypesJson[i]).hide();
+      } else {
+        $("#header"+trialTypesJson[i]).show(); // show header
+      }
+      
+      // show details if only one item fits criterion
+      if(surveyValue.localeCompare(cellValue.toLowerCase())==0){ 
+        $("#detail"+trialTypesJson[i]).show();
+      } else {
+        $("#detail"+trialTypesJson[i]).hide();
+      }
+    }    
+  }  
+}
+
+function hideShow(x){
+  if($('#'+x).is(':visible')) {
+    $('#'+x).hide();
+  } else {
+    $('#'+x).show();
+  }
+}
+
+// during typing into HandsOnTable, update the helper bar
+$(document).on("input", ".handsontableInput", function() {
+  
+  
+  
+    var coord  = window['Current HoT Coordinates'];
+
+  var y      = coord[1];
+  
+    var column = stimTable.getDataAtCell(0, y);
+    helperActivate(column, this.value);
 });
 

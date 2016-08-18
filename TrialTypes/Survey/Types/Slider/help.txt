@@ -1,0 +1,1 @@
+The participant can slide between values you specify.

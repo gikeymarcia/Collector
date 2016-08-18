@@ -728,9 +728,6 @@ function addDeleteFunction(x){
   }
   
   
-  
-  
-  
   function createTrialType(trialTypeObject){
     
     //response code for later
