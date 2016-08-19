@@ -1,1 +1,1 @@
-this is some help for the attention check
+This trial type is used for checking whether the participant is paying attention.

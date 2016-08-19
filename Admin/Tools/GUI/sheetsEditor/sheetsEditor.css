@@ -1,9 +1,11 @@
 #csvSelected{
+  display         : inline-block;
   padding : 5px;
   border-radius: 10px;
 }
 
 #header { 
+  display         : inline-block;
   font-size   : 180%; 
   text-align  : center; 
   margin      : 10px 0 40px; 
@@ -14,22 +16,24 @@
 }
 
 .helpType_Col { display: none; }
-  #helpTypeDefault { display: block; }
-  
-  #helperBar {
-    display: inline-block;
-    width: 20%;
-    background-color: #EFE;
-    border: 2px solid #6D6;
-    border-radius: 8px;
-    box-sizing: border-box;
-    padding: 10px;
-    vertical-align: top;
-    margin-top: 10px;
-  }
+
+#helpTypeDefault { display: inline-block; }
+
+#helperBar {
+  display: inline-block;
+  width: 20%;
+  right: 20px;
+  background-color: #EFE;
+  border: 2px solid #6D6;
+  border-radius: 8px;
+  box-sizing: border-box;
+  padding: 10px;
+  vertical-align: top;
+  margin-top: 10px;
+}
 
 .tableArea {
-  display         : block;
+  display         : inline-block;
   width           : 100%;
   box-sizing      : border-box;
   padding         : 10px 30px;
@@ -46,6 +50,7 @@ form {
 }
 
 #sheetsForm {
+  display         : inline-block;
   width: auto;
   padding: 0 30px;
 }

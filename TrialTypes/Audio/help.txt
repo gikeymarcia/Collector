@@ -1,0 +1,1 @@
+This trial type will play the audio file listed in the <b>Cue</b> column at the onset of the trial.

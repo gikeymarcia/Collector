@@ -267,15 +267,15 @@
     <textarea id="currStudyName" name="currStudyName" style="color:#069;" rows="1" onkeyup="checkName()"><?=$thisDirInfo->studyName?></textarea>
   </h1>
   
-  
   <span>
     <button name="newSheet" value="stim" class="collectorButton" id="newStimButton"> new stimuli sheet </button>
     <button name="newSheet" value="proc" class="collectorButton" id="newProcButton"> new procedure sheet </button>
     <button type ="button" class ="collectorButton" id="stimButton"> list of stimuli files</button>
   </span>
-  <br>  
   <br>
   
+
+<div style="display:inline-block; width:1000px">
   <div>
     
     <select id="csvSelected" name="csvSelected" title="[filename],[folder]">
@@ -353,10 +353,11 @@
     }  
   ?>      
   
-</form>
+</div>
 
 
-<div id="helperBar">
+  
+  <div id="helperBar">
   <h1> Helper </h1>
 
   <h2 id="helpType">Select Cell</h2>
@@ -406,28 +407,27 @@
       echo " <h3 class='typeHeader' id='header$trialType' onclick='hideShow(\"detail$trialType\")'>$trialType</h3>";
 
     if(file_exists($trialTypesDir."/".$trialType."/help.txt")){
+      echo "<div id='detail$trialType' style='display:none'><h4><em>Collector Trial Type</em></h4>".file_get_contents($trialTypesDir."/".$trialType."/help.txt")."</div>"; // the actual help
       
-      echo "<div id='detail$trialType' style='display:none'>".file_get_contents($trialTypesDir."/".$trialType."/help.txt")."</div>"; // the actual help
+    } else {
+      if(file_exists($customTrialTypesDir."/".$trialType."/help.txt")){
       
-    } if(file_exists($customTrialTypesDir."/".$trialType."/help.txt")){
+        echo "<div id='detail$trialType' style='display:none'>
+        <h4><em>Custom Trial Type</em></h4>
+        ".file_get_contents($customTrialTypesDir."/".$trialType."/help.txt")."</div>"; // the actual help
       
-      echo "<div id='detail$trialType' style='display:none'>".file_get_contents($customTrialTypesDir."/".$trialType."/help.txt")."</div>"; // the actual help
-      
+      }
+      else {
+        echo "<div id='detail$trialType' style='display:none'>No 'help.txt' file present. If this is a custom trial type you wrote please create one. Otherwise, please contact a.haffey@reading.ac.uk</div>";
+      }
     } 
     
-    else {
-      echo "<div id='detail$trialType' style='display:none'>No 'help.txt' file present. If this is a custom trial type you wrote please create one. Otherwise, please contact a.haffey@reading.ac.uk</div>";
-    }
+    
   }
 
   ?>
   
   </div>
-  
-  
-  
-  
-  
   
   
   <!-- default !-->
@@ -436,6 +436,8 @@
   </div>  
   
 </div>
+  
+</form>
 
 
 <script type="text/javascript">

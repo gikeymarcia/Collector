@@ -1,0 +1,1 @@
+Presents an image with a caption. The image is identified in the <b> Cue </b> column in the <b>Stimuli</b> spreadsheet. The caption is taken from the <b>Answer</b> column of the <b>Stimuli</b> sheet. 

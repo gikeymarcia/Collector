@@ -1,0 +1,1 @@
+This trial type allows you to present a consent form in the form of a pdf file. You identify which pdf file in the <b>Cue</b> column of the <b>Stimuli</b> spreadsheet.
