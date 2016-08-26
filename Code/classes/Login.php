@@ -5,7 +5,7 @@ class Login
     public static function run($username, $ip, $debug_name, FileSystem $_files) {
         $user = preg_replace('([^ !#$%&\'()+,\\-.0-9;=@A-Z[\\]^_a-z~])', '', $username);
         if (strlen($user) < 4) throw new Exception('Username too short');
-        
+
         // TODO: self::check_eligibility($user, $ip, $_files);
 
         $old_sess_id = $_files->query('PHP Session Table', $user);
@@ -19,23 +19,23 @@ class Login
         } else {
             $data = self::reload_session($old_sess_id, $_files);
         }
-        
+
         self::set_file_defaults($user, $data, $data['_FILES']);
         $_files->write('PHP Session Table', session_id(), $user);
-        
+
         return $data;
     }
-    
+
     private static function check_eligibility($user, $ip, FileSystem $_files) {
         $banned = $_files->get('Banned Users');
-        
+
         if (isset($banned[$user])) {
             throw new Exception('Banned newb');
         }
-        
+
         $blacklistedIPs = $_files->get('Blacklisted IPs');
         $whitelistedIPs = $_files->get('Whitelisted IPs');
-        
+
         if (isset($blacklistedIPs[$ip]) && !isset($whitelistedIPs[$ip])) {
             throw new Exception('Banned IP');
         }
@@ -45,7 +45,7 @@ class Login
         $data = $_files->read('Session', array('Session ID' => $sessID));
 
         self::validate_session($data);
-        
+
         return $data;
     }
 
