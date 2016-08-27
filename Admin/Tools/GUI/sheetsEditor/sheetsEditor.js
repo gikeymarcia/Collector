@@ -145,7 +145,8 @@ function helperActivate(columnName, cellValue){
   
   
   $("#helperBar").find(".helpType_Col").hide();
-
+  $("#helperBar").find(".helpType_Button").hide();
+  
   // Conditions helpers //
   
   if (columnCodeName.indexOf("Procedure") !== -1){
@@ -159,6 +160,9 @@ function helperActivate(columnName, cellValue){
 
   if ($("#helperBar").find("#helpType_" + columnCodeName).length > 0) {
     $("#helperBar").find("#helpType_" + columnCodeName).show();
+
+    $("#helperBar").find(".helpType_Button").hide();
+    $("#helperBar").find("#helpType_" + columnCodeName +"Button").show();
   } else {
     $("#helperBar").find("#helpTypeDefault").show();
   }
@@ -168,15 +172,15 @@ function helperActivate(columnName, cellValue){
     //compare if string is within string
     for(i=0;i<trialTypesJson.length;i++){
       //remove cases for comparisons
-      var surveyValue=trialTypesJson[i].toLowerCase();
-      if(surveyValue.indexOf(cellValue.toLowerCase())==-1){
+      var trial_type_value=trialTypesJson[i].toLowerCase();
+      if(trial_type_value.indexOf(cellValue.toLowerCase())==-1){
         $("#header"+trialTypesJson[i]).hide();
       } else {
         $("#header"+trialTypesJson[i]).show(); // show header
       }
       
       // show details if only one item fits criterion
-      if(surveyValue.localeCompare(cellValue.toLowerCase())==0){ 
+      if(trial_type_value.localeCompare(cellValue.toLowerCase())==0){ 
         $("#detail"+trialTypesJson[i]).show();
       } else {
         $("#detail"+trialTypesJson[i]).hide();

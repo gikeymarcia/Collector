@@ -1,0 +1,1 @@
+Fill in <b>Cue</b> and <b> Answer </b> columns in Stimuli sheet for this trialtype. There is a delay in this trialtype.

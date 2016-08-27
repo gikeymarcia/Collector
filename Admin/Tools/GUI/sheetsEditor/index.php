@@ -358,96 +358,163 @@
 
   
   <div id="helperBar">
-  <h1> Helper </h1>
+    <h1> Helper </h1>
 
-  <h2 id="helpType">Select Cell</h2>
-  
-  <!-- Help Types -->
-  
-  <!-- Conditions -->
-  <div class="helpType_Col" id="helpType_Description">
-    This description determines what the condition name will be when starting the task. If you have more than one condition then you need to have a unique <b>Description</b> for each condition. 
-  </div>
-
-  <div class="helpType_Col" id="helpType_Notes">
-    This description is mainly for your use, just to clarify what is involved in the condition. It is not necessary to change it to make the task work.
-  </div>
-
-  
-  <div class="helpType_Col" id="helpType_Stimuli">
-    The header of this column needs to have a number at the end, e.g. "Stimuli 1". This cell is where you identify which <b>Stimuli</b> file this condition will be calling from, e.g. <em>"Stimuli.csv"</em>.
-  </div>
-
-  <div class="helpType_Col" id="helpType_Procedure">
-    The header of this column needs to have a number at the end, e.g. "Procedure 1". This cell is where you identify which <b>Procedure</b> file this condition will be calling from, e.g. <em>"Procedure.csv"</em>.
-  </div>
-  
-  <!-- Procedure file -->
-  
-  <div class="helpType_Col" id="helpType_Item">
-    This cell refers to which row of the <em>Stimuli</em> file you have referred to. This number treats the header row as a row - so the first item below the header row is on row <b>2</b>. Use row <b>0</b> if you don't wish to accidentally call in stimuli. 
-  </div>  
-  
-  <div class="helpType_Col" id="helpType_TrialType">
+    <h2 id="helpType">Select Cell</h2>
     
-  
-  <?php
-    $trialTypes=getAllTrialTypeFiles();//;
-  
-  
-  $customTrialTypesDir = $_PATH->get("Custom Trial Types");
-  
-  $trialTypesDir       = $_PATH->get("Trial Types");
-  
-  $trialTypes = array_keys($trialTypes);
-  
-  $trialTypesJson = json_encode($trialTypes);
-  
-  foreach($trialTypes as $trialType){
-      echo " <h3 class='typeHeader' id='header$trialType' onclick='hideShow(\"detail$trialType\")'>$trialType</h3>";
+      <!-- Help Types -->
+    
+    <!-- Conditions -->
+    <?php 
+      // create list of all helper files
+      
+      $helper_files_dir   = "helper/Original/";
+      $helper_files      = glob("$helper_files_dir*.txt"); 
+      
+      $filename_remove    = array(".txt",$helper_files_dir);
 
-    if(file_exists($trialTypesDir."/".$trialType."/help.txt")){
-      echo "<div id='detail$trialType' style='display:none'><h4><em>Collector Trial Type</em></h4>".file_get_contents($trialTypesDir."/".$trialType."/help.txt")."</div>"; // the actual help
+      $helper_files_clean = json_encode(str_ireplace($filename_remove,"",$helper_files));
+
+      $backup_help        = array(); 
       
-    } else {
-      if(file_exists($customTrialTypesDir."/".$trialType."/help.txt")){
-      
-        echo "<div id='detail$trialType' style='display:none'>
-        <h4><em>Custom Trial Type</em></h4>
-        ".file_get_contents($customTrialTypesDir."/".$trialType."/help.txt")."</div>"; // the actual help
-      
+      foreach($helper_files as $helper_file){
+        
+        $helper_filename  = explode("/",$helper_file);
+        $helper_filename  = $helper_filename[count($helper_filename)-1];
+        $helper_name      = str_ireplace(".txt","",$helper_filename);
+        
+        if (file_exists("helper/UserCustom/$helper_filename")){
+          $helper_contents = file_get_contents("helper/UserCustom/$helper_filename"); // use custom file if it exists
+        } else {
+          $helper_contents = file_get_contents($helper_file);
+        }
+        $backup_contents = file_get_contents($helper_file);                         // so that we can revert back to basic trial types
+
+        echo  "<div class='helpType_Col' id='helpType_$helper_name' contentEditable='true' title='you can edit these notes'>";
+        echo  "$helper_contents";
+        echo  "</div>";
+        ?>
+
+        <br> <input id='helpType_<?=$helper_name?>Button' type='button' class='helpType_Button collectorButton' onclick='revertHelpFile("<?= $helper_name ?>")' value='Revert help to original' style="display:none">
+        
+        <?php
+        
+        echo  "<span id='help_type_backup_$helper_name' style='display:none'>$backup_contents</span>";
+        
       }
-      else {
-        echo "<div id='detail$trialType' style='display:none'>No 'help.txt' file present. If this is a custom trial type you wrote please create one. Otherwise, please contact a.haffey@reading.ac.uk</div>";
-      }
-    } 
+        
+    ?>
     
+    <div class="helpType_Col" id="helpType_TrialType">
+      
     
-  }
+    <?php
+      $trialTypes=getAllTrialTypeFiles();
+    
+      $customTrialTypesDir = $_PATH->get("Custom Trial Types");
+      
+      $trialTypesDir       = $_PATH->get("Trial Types");
+      
+      $trialTypes = array_keys($trialTypes);
+      
+      $trialTypesJson = json_encode($trialTypes);
+      
+      foreach($trialTypes as $trialType){
+          echo " <h3 class='typeHeader' id='header$trialType' onclick='hideShow(\"detail$trialType\")'>$trialType</h3>";
 
-  ?>
-  
+        if(file_exists($trialTypesDir."/".$trialType."/help.txt")){
+          echo "<div id='detail$trialType' style='display:none'><h4><em>Collector Trial Type</em></h4>".file_get_contents($trialTypesDir."/".$trialType."/help.txt")."</div>"; // the actual help
+          
+        } else {
+          if(file_exists($customTrialTypesDir."/".$trialType."/help.txt")){
+          
+            echo "<div id='detail$trialType' style='display:none'>
+            <h4><em>Custom Trial Type</em></h4>
+            ".file_get_contents($customTrialTypesDir."/".$trialType."/help.txt")."</div>"; // the actual help
+          
+          }
+          else {
+            echo "<div id='detail$trialType' style='display:none'>No 'help.txt' file present. If this is a custom trial type you wrote please create one. Otherwise, please contact a.haffey@reading.ac.uk</div>";
+          }
+        } 
+        
+        
+      }
+
+    ?>
+    
+    </div>
+    
+    
+    <!-- default !-->
+    <div class="helpType_Col" id="helpTypeDefault">
+      Select a cell to see more information about that column.
+    </div>  
+    
   </div>
-  
-  
-  <!-- default !-->
-  <div class="helpType_Col" id="helpTypeDefault">
-    Select a cell to see more information about that column.
-  </div>  
-  
-</div>
   
 </form>
 
 
 <script type="text/javascript">
 
+
+
+//  var help_files = <?= $helper_files_clean ?>;  // not currently used - delete when sure don't need it.
+  
+  var help_location = "helper/UserCustom/";
+  
+  var help_files = document.getElementsByClassName("helpType_Col");
+    
+  function updateCustomFile(i) {
+    
+    var custom_help = i.replace("helpType_","");
+    custom_help     += ".txt"; 
+    
+    //ajax call here
+    $.get(
+      'HelpUpdate.php',
+      { file    : custom_help,
+        content : document.getElementById(i).innerHTML,
+        location: help_location
+      }      
+    );
+    
+  }
+  
+  
+  
+  function revertHelpFile(helpSelected){
+    //alert(helpSelected);
+//    console.dir(helpSelected);
+//    console.dir(String(helpSelected));
+    
+    
+//    alert($("#helpType_"+helpSelected).html());
+    $("#helpType_"+helpSelected).html($("#help_type_backup_"+helpSelected).html());
+    updateCustomFile("helpType_"+helpSelected);
+    
+  }
+  
+  
+  for (var i=0; i<help_files.length; i++){
+    
+    help_files[i].addEventListener('input', (function(i) {
+      return function() {
+        updateCustomFile(help_files[i].id);
+      }
+    })(i))
+
+  }
+    
+    
   //importing json encoded lists from php
   listStudyNames  = <?=$listStudyNamesJson?>;
   listSheetsNames = <?=$jsonSheets?>;
   var stimData    = <?= $stimData ?>;
+  trialTypesJson  = <?=$trialTypesJson ?>;
   
-  trialTypesJson  = <?=$trialTypesJson?>
+  
   
 </script>
 

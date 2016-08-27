@@ -165,7 +165,7 @@
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
 
-<form action='surveyEditor.php' method='post' id="TableForm">
+<form action='index.php' method='post' id="TableForm">
  <input type="button" id="indexButton" class="collectorButton" value="Go back to Index" onclick="document.location.href = '../';" style=" position:absolute;
   right:20px;">
   

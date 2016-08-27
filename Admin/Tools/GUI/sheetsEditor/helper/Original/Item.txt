@@ -1,0 +1,1 @@
+This cell refers to which row of the <em>Stimuli</em> file you have referred to. This number treats the header row as a row - so the first item below the header row is on row <b>2</b>. Use row <b>0</b> if you don't wish to accidentally call in stimuli.
