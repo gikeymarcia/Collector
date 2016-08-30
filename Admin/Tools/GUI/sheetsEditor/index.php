@@ -340,11 +340,10 @@
   ?>
   <br>
 
-  <input type="hidden" name="stimTableInput">
-    
-  <input id="saveButton" type="button" class="collectorButton" value="Save">  
-  <button id="submitButton" type="submit" name="Save" class="collectorButton" style="display:none"></button> 
-
+  <input type="hidden" id="stimTableInput" name="stimTableInput">
+  
+  <span id="save_status">No changes registered yet</span>  
+  
   <?php
     if (strcmp("$studySheetsInfo->thisSheetName.csv",'Conditions.csv')!=0){  ?>
       <input type="button" id="deleteSheetButton" name="DeleteSheetQuestion" class="collectorButton" value="Delete?">  
@@ -458,9 +457,7 @@
 
 <script type="text/javascript">
 
-
-
-//  var help_files = <?= $helper_files_clean ?>;  // not currently used - delete when sure don't need it.
+  var currentFileLocation = '<?= "$thisDirInfo->studyDir/$studySheetsInfo->thisSheetFilename"?>';
   
   var help_location = "helper/UserCustom/";
   
@@ -485,12 +482,7 @@
   
   
   function revertHelpFile(helpSelected){
-    //alert(helpSelected);
-//    console.dir(helpSelected);
-//    console.dir(String(helpSelected));
-    
-    
-//    alert($("#helpType_"+helpSelected).html());
+  
     $("#helpType_"+helpSelected).html($("#help_type_backup_"+helpSelected).html());
     updateCustomFile("helpType_"+helpSelected);
     

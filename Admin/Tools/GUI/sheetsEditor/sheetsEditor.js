@@ -52,9 +52,7 @@ if (typeof sheetName !== 'undefined'){                            //i.e. if this
         }, 100);
     });
    
-$("#submitButton").on("click", function() {
-  $("input[name='stimTableInput']").val(JSON.stringify(stimTable.getData()));
-});
+
 
 $("#stimButton").on("click", function() {
   //$("#stimListDiv").show();
@@ -81,26 +79,7 @@ $("#deleteSheetButton").on("click", function() {
 
 var csvSelectedValue  = csvSelected.value; // this to prevent a bug resulting from a user saving after changing the spreadsheet selected
 
-$("#saveButton").on("click", function() { //final checks before saving
-  //are there too many empty column headers?
-  emptyHeadCols = 0;
-  for(i=0; i<stimTable.countCols();i++){
-    if(stimTable.getDataAtCell(0,i)==''){
-      emptyHeadCols++;
-    }
-  }
-  
-  if(emptyHeadCols>1){
-    alert("You have an empty header - will not save. Fix before trying to save again.");
-  } else {
-    
-    // dealing with bug that emerges if someone tries to save after changing the csvSelected value;
-    if($("#csvSelected").val()!=csvSelectedValue){
-      $("#csvSelected").val(csvSelectedValue); 
-    }
-    $('#submitButton').click();
-  }
-});
+
 
 $(window).bind('keydown', function(event) {
     if (event.ctrlKey || event.metaKey) {
@@ -109,7 +88,7 @@ $(window).bind('keydown', function(event) {
         event.preventDefault();
         alert('Saving');
       stimTable.deselectCell();      
-      $("#saveButton").click();
+      $("#save_status").click();
         break;
       case 'd':
         event.preventDefault();
@@ -117,6 +96,26 @@ $(window).bind('keydown', function(event) {
         break;
       }
     }
+  
+  
+  if(event.keyCode == 46){
+    alert("delete button pressed");
+    ajaxSave();
+  }
+
+  if(event.keyCode == 27){
+    alert("There's a bug with the escape button - your changes will NOT be reverted");
+    
+    // code below is redundant as it stands :-(
+    
+    stimTable.deselectCell();
+    ajaxSave();
+  }
+  
+});
+
+$(window).bind('keydown', function(event) {
+  
 });
 
 stimTable.addHook('afterSelectionEnd', function(){
@@ -124,7 +123,7 @@ stimTable.addHook('afterSelectionEnd', function(){
   var column        = this.getDataAtCell(0,coords[1]);//stimTable.getDataAtCell(0,1); 
   var thisCellValue = this.getDataAtCell(coords[0],coords[1]);
   window['Current HoT Coordinates'] = coords;
-  
+    
   helperActivate(column, thisCellValue)
 });
 // add         helperActivate(column, thisCellValue); to handsontable       afterSelectionEnd: function(){
@@ -202,11 +201,34 @@ $(document).on("input", ".handsontableInput", function() {
   
   
   
-    var coord  = window['Current HoT Coordinates'];
+  var coord  = window['Current HoT Coordinates'];
 
+  var x      = coord[0];
   var y      = coord[1];
   
-    var column = stimTable.getDataAtCell(0, y);
-    helperActivate(column, this.value);
+  var column = stimTable.getDataAtCell(0, y);
+  helperActivate(column, this.value);
+
+  stimTable.getData()[x][y]=this.value;
+  
+  ajaxSave();
+  
 });
 
+function ajaxSave(){
+  
+  $("#save_status").html("saving");  
+  
+  var stimuli = JSON.stringify(stimTable.getData());
+  
+  $.get(
+    'AjaxSave.php',
+    { file    : currentFileLocation,
+      content : stimuli,        
+    } , 
+    function(returned_data) {
+      $("#save_status").html("All changes up to date");  
+    }
+  );
+  
+}
