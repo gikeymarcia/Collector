@@ -3,31 +3,30 @@
 require '../../initiateTool.php';
 
 // make a temporary pathfinder to get us to the right settings
-unset($_PATH);
-$_PATH = $_DATA['_PATH'] = new Pathfinder();
-$exps = array_flip(getCollectorExperiments());
+$_FILES = new FileSystem();
+$exps   = array_flip(getCollectorExperiments());
 
 // change experiment if one is selected
 if (isset($_GET['Exp'])
     && isset($exps[$_GET['Exp']])
 ) {
     $_DATA['exp'] = $_GET['Exp'];
-    $_PATH->setDefault('Current Experiment', $_GET['Exp']);
+    $_FILES->set_default('Current Experiment', $_GET['Exp']);
 }
 $_DATA['exp'] = (isset($_DATA['exp'])) ? $_DATA['exp'] : "";
 if (!empty($_DATA['exp'])) {
-    $_PATH->setDefault('Current Experiment', $_DATA['exp']);
+    $_FILES->set_default('Current Experiment', $_DATA['exp']);
 }
 
 // make a new instance of the settings class
 $yourSettings = new Collector\Settings(
-    $_PATH->get("Common Settings"),
-    $_PATH->get("Experiment Settings"),
-    $_PATH->get("Password")
+    $_FILES->get_path('Common Settings'),
+    $_FILES->get_path('Experiment Settings'),
+    $_FILES->get_path('Password')
 );
 
-require 'saveSettings.php';
-require 'makeSettingOptions.php';
+require __DIR__ . '/saveSettings.php';
+require __DIR__ . '/makeSettingOptions.php';
 
 ?>
 <link rel="stylesheet" type="text/css" href="styles.css">
@@ -78,13 +77,12 @@ require 'makeSettingOptions.php';
 <div class="common settings toolWidth">
     <h3 class='type'>Common Settings (Shared Across Experiments)<button type='button' class='expander'>&#8679;</button></h3>
     <?php
-        // echo ""
-        setting_string($yourSettings, "experimenter_email" , "Experimenter Email" , $tooltips);
-        setting_bool  ($yourSettings, "check_all_files"    , "Check All Files"    , $tooltips);
-        setting_bool  ($yourSettings, "check_current_files", "Check Current Files", $tooltips);
-        setting_string($yourSettings, "debug_name", "Debug Name" , $tooltips);
-        setting_string($yourSettings, "debug_time", "Debug Time" , $tooltips);
-        setting_bool  ($yourSettings, "trial_diagnostics", "Show Trial Diagnostics", $tooltips);
+        setting_string($yourSettings, 'experimenter_email' , 'Experimenter Email'    , $tooltips);
+        setting_bool  ($yourSettings, 'check_all_files'    , 'Check All Files'       , $tooltips);
+        setting_bool  ($yourSettings, 'check_current_files', 'Check Current Files'   , $tooltips);
+        setting_string($yourSettings, 'debug_name'         , 'Debug Name'            , $tooltips);
+        setting_string($yourSettings, 'debug_time'         , 'Debug Time'            , $tooltips);
+        setting_bool  ($yourSettings, 'trial_diagnostics'  , 'Show Trial Diagnostics', $tooltips);
     ?>
 </div>
 

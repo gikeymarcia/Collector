@@ -60,35 +60,28 @@ class Settings
     );
 
     /**
-     * Information about the loaded common settings file: last modification time
-     * ('mod'), the path to the file ('loc'), and its data ('data').
+     * Information about the loaded common settings file:
+     * path to the file ('loc'),
+     * and its data ('data').
      *
      * @var array
      */
     protected $common = array(
-        'mod' => 0,
         'loc' => null,
         'data' => array(),
     );
 
     /**
-     * Information about the loaded experiment settings file: last modification
-     * time ('mod'), the path to the file ('loc'), and its ('data').
+     * Information about the loaded experiment settings file:
+     * path to the file ('loc'),
+     * and its data ('data').
      *
      * @var array
      */
     protected $experiment = array(
-        'mod' => 0,
         'loc' => null,
         'data' => array(),
     );
-
-    /**
-     * Temporary storage for all properties set on the fly.
-     *
-     * @var array
-     */
-    protected $temp = array();
 
     /**
      * The path to the password file.
@@ -111,12 +104,12 @@ class Settings
      * @param string $expLoc    The path to the experiment specific settings file.
      * @param string $passLoc   The path to the password.
      */
-    public function __construct($commonLoc, $expLoc, $passLoc)
+    public function __construct(FileSystem $_files)
     {
         $this->jsonOptions = $this->canPrettyPrint() ? JSON_PRETTY_PRINT : null;
-        $this->common = $this->load($commonLoc);
-        $this->experiment = $this->load($expLoc);
-        $this->passLoc = $passLoc;
+        $this->common      = $this->load($_files->get_path('Common Settings'));
+        $this->experiment  = $this->load($_files->get_path('Experiment Settings'));
+        $this->passLoc     = $passLoc;
     }
 
     /**
@@ -140,39 +133,19 @@ class Settings
 
         // return values depending on their priority
         // if no value is found then trigger error and return null
-        if (isset($this->temp[$key])) {
-            // Temporarily set variables
-            return $this->temp[$key];
-        } elseif (isset($this->experiment['data'][$key])) {
-            // Experiment Settings
+        if (isset($this->experiment['data'][$key])) {
             return $this->experiment['data'][$key];
         } elseif (isset($this->common['data'][$key])) {
-            // Common settings
             return $this->common['data'][$key];
         } elseif (isset($this->defaultExp[$key])) {
-            // default experiment settings
             return $this->defaultExp[$key];
         } elseif (isset($this->defaultCommon[$key])) {
-            // default common settings
             return $this->defaultCommon[$key];
         } else {
             // @todo perhaps this should throw an \InvalidArgumentException instead?
             trigger_error('You have attempted to use the setting value of '
                 ."{$key} when that value is not specified", E_WARNING);
         }
-    }
-
-    /**
-     * Magic setter.
-     * All values set on the fly are added to the temp property (which has the
-     * highest priority when __get is called).
-     *
-     * @param string $var The name of the property to set.
-     * @param mixed  $val The value to set to the property.
-     */
-    public function __set($var, $val)
-    {
-        $this->temp[trim(strtolower($var))][$val];
     }
 
     /**
@@ -187,14 +160,12 @@ class Settings
     private function load($file_path)
     {
         $out = array(
-            'mod' => 0,
             'loc' => $file_path,
             'data' => array(),
         );
 
         if (file_exists($file_path)) {
             $out['data'] = json_decode(file_get_contents($file_path), true);
-            $out['mod'] = date('U', filemtime($file_path));
         }
 
         return $out;
@@ -207,9 +178,7 @@ class Settings
      */
     public function setPassword($input = null)
     {
-        if ($input === null) {
-            $input = $this->defaultPass;
-        }
+        $input = ($input === null) ? $this->defaultPass : $input;
 
         if (!isset($input[2])) {
             return;
@@ -238,40 +207,6 @@ class Settings
         return $password;
     }
 
-    /**
-     * Refreshes the settings to ensure the correct experiment's settings have
-     * been loaded.
-     * Uses Pathfinder object to determine what settings to use.
-     *
-     * @param Pathfinder $paths The current experiment's Pathfinder.
-     */
-    public function upToDate(\Pathfinder $paths)
-    {
-        $commonLoc = $paths->get('Common Settings');
-        $commonMod = (file_exists($commonLoc)) ? date('U', filemtime($commonLoc)) : 0;
-
-        $expLoc = $paths->get('Experiment Settings');
-        $expMod = (file_exists($expLoc)) ? date('U', filemtime($expLoc)) : 0;
-
-        // update common settings
-        if ($this->common['loc'] !== $commonLoc
-            || $this->common['mod'] < $commonMod
-        ) {
-            $this->common = $this->load($commonLoc);
-        }
-
-        // update experiment specific settings
-        if ($this->experiment['loc'] !== $expLoc
-            || $this->experiment['mod'] < $expMod
-        ) {
-            $this->experiment = $this->load($expLoc);
-        }
-
-        $this->passLoc = $paths->get("Password");
-
-        // clear out temporary settings
-        $this->temp = array();
-    }
 
     /**
      * Checks the current PHP version to see if JSON pretty print is possible.
@@ -325,7 +260,6 @@ class Settings
             $source['data'][$key] = $val;
         // allow all other types to be juggled
         } else {
-            // $val = htmlspecialchars($val);
             $source['data'][$key] = $val;
         }
     }
@@ -339,27 +273,19 @@ class Settings
     public function writeSettings()
     {
         // write common settings
-        $common = array();
-        foreach ($this->defaultCommon as $key => $value) {
-            $common[$key] = $value;
-        }
-        foreach ($this->common['data'] as $key => $value) {
-            $common[$key] = $value;
-        }
-        $json = json_encode($common, $this->jsonOptions);
-        file_put_contents($this->common['loc'], $json);
+        $common = array_merge($this->defaultCommon, $this->common['data']);
+        $this->write_json($common, $this->common['loc']);
 
         // write experiment settings if we actually have a path to write to
-        if (strpos($this->experiment['loc'], '{') === false) {
-            $experiment = array();
-            foreach ($this->defaultExp as $key => $value) {
-                $experiment[$key] = $value;
-            }
-            foreach ($this->experiment['data'] as $key => $value) {
-                $experiment[$key] = $value;
-            }
-            $json = json_encode($experiment, $this->jsonOptions);
-            file_put_contents($this->experiment['loc'], $json);
+        if ($this->experiment['data'] !== array()) {
+            $experiemnt = array_merge($this->defaultExp, $this->experiment['data']);
+            $this->write_json($experiemnt, $this->experiment['loc']);
         }
+    }
+
+    private function write_json($data, $location)
+    {
+        $json = json_encode($data, $this->jsonOptions);
+        file_put_contents($location, $json);
     }
 }
