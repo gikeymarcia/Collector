@@ -43,4 +43,5 @@ Data/
 # Password
 Experiments/_Common/Password.php
 
-# Admin
+# Admin - GetData Images
+Admin/Tools/GetData/imgs

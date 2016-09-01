@@ -1,5 +1,5 @@
 <?php
-if (!isset($_SESSION)) exit;
+if(!isset($_SESSION)) { exit; }
 
 function getHeadersInDir($dir) {
     if (!is_dir($dir)) return array();
