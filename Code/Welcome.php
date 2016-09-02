@@ -37,6 +37,7 @@ $_FILES->set_default('Data Sub Dir', '');
 /*
  * Login objects
  */
+ /* to be updated, and possibly converted to JS
 $errors = new Collector\ErrorController();
 
 $cond = new Collector\ConditionController(
@@ -56,6 +57,9 @@ if ($errors->arePresent()) {
     exit;
 }
 $conditions = $cond->getAllConditions();
+*/
+
+$conditions = $_FILES->read('Conditions');
 
 /*
  * Display

@@ -92,6 +92,11 @@ class FileSystem
         $this->defaults[$key] = $val;
     }
 
+    public function get_default($key)
+    {
+        return isset($this->defaults[$key]) ? $this->defaults[$key] : null;
+    }
+
     private function access($source, $command, $data = null, $index = null, $path_vars = array())
     {
         $path = $this->get_path($source, $path_vars);

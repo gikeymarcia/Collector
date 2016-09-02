@@ -1,6 +1,6 @@
 <?php
 
-class ioDataType_Dir extends ioAbstractDataType
+class fsDataType_Dir extends fsAbstractDataType
 {
     public static function read($path) {
         $scan = scandir($path);

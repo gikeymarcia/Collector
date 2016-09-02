@@ -1,6 +1,6 @@
 <?php
 
-class ioDataType_Sess extends ioAbstractDataType
+class fsDataType_Sess extends fsAbstractDataType
 {
     public static function read($path) {
         if (!is_file($path)) return array();

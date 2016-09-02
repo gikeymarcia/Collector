@@ -1,439 +1,94 @@
 <?php
-/**
- * Helper class of static functions.
- */
 
 use phpbrowscap\Browscap;
 
 /**
- * A set of static helper functions that can be used in the Collector. Over time
- * these functions may be refactored into classes according to their functions.
- * This may cause existing code to break and thus will only be implemented on
- * major releases (e.g. 1.0 to 2.0 and not 1.1 to 1.2).
+ *
  */
-
-
-/**
- * Load settings from common settings, as well as current Experiment folder.
- * The common settings are loaded first and then the Experiment settings are
- * loaded, overwriting any collisions.
- *
- * @global Pathfinder $_PATH Pathfinder object currently in use.
- *
- * @param string $currentExp (Optional) Load settings for the given experiment.
- *
- * @return stdClass Object with a property for each setting.
- *
- * @global Pathfinder $_PATH Pathfinder object currently in use.
- *
- * @return array Indexed array of the valid experiments.
- */
-function getCollectorExperiments()
-{
-    global $_PATH;
-
-    $possibleExperiments = scandir($_PATH->get('Experiments'));
-    foreach ($possibleExperiments as $i => $possExp) {
-        if ($possExp === '.'
-            || $possExp === '..'
-            || $possExp === '.htaccess'
-            || $possExp === $_PATH->get('Common', 'base')
-            || !isValidExperimentDir($possExp)
-        ) {
-            unset($possibleExperiments[$i]);
-        }
+function get_Collector_experiments(FileSystem $_files) {
+    $experiment_names = $_files->read('Experiments');
+    
+    $common = str_replace($_files->get_path('Experiments'), '', $_files->get_path('Common'));
+    
+    foreach ($experiment_names as $i => $name) {
+        if ($name === $common) unset($experiment_names[$i]);
     }
-
-    return array_values($possibleExperiments);
+    
+    return $experiment_names;
 }
-
 /**
- * Indicates whether the named experiment is a valid collector experiment.
- *
- * @param string $name The name of the experiment to check.
- *
- * @return bool True if the experiment exists and is valid, else false.
+ * creates an experiment by reading the relevant stim and proc files of
+ * either a given or a randomly assigned condition
  */
-function issetCollectorExperiment($name)
-{
-        $flippedExpts = array_flip(getCollectorExperiments());
-
-        return isset($flippedExpts[$name]);
-}
-
-/**
- * Determines if the given experiment name is a valid experiment directory.
- * Checks if the given experiment directory existsand if it has the required
- * directory tree: index file, settings file, conditions file, stimuli
- * directory, and procedure directory.
- *
- * @global Pathfinder $_PATH Pathfinder object currently in use.
- *
- * @param string $expName The name of subdirectory to check in the Experiments folder.
- *
- * @return bool
- */
-function isValidExperimentDir($expName)
-{
-    global $_PATH;
-
-    $default = array('Current Experiment' => $expName);
-    $requiredFiles = array(
-        'Current Index', 'Conditions',
-        'Stimuli Dir', 'Procedure Dir',
+function create_experiment(FileSystem $_files, $condition = null) {
+    $condition = ConditionAssignment::get($_files, $condition);
+        
+    $stimuli   = load_exp_files($_files, 'Stimuli',   $condition['Stimuli']);
+    $procedure = load_exp_files($_files, 'Procedure', $condition['Procedure']);
+    
+    return array(
+        'Condition' => $condition,
+        'Stimuli'   => $stimuli,
+        'Procedure' => $procedure
     );
+}
+/**
+ * reads and shuffles a string of comma-separated stimuli or procedure files
+ *
+ * @param string     $filenames comma-delimited filenames to load
+ * @param string     $type      "Stimuli" or "Procedure"
+ * @param FileSystem $_files    the method of locating and loading files
+ *
+ * @return array the data from all the csvs, combined and shuffled
+ */
+function load_exp_files($filenames, $type, FileSystem $_files) {
+    $files = explode(',', $filenames);
+    
+    $all_data = array();
+    
+    foreach ($files as $file) {
+        $file_data = $_files->read($type, array($type => $file));
+        $all_data = array2d_merge($all_data, $file_data);
+    }
+    
+    $all_data = multiLevelShuffle($all_data);
+    $all_data = shuffle2dArray($all_data);
+    
+    return $all_data;
+}
 
-    foreach ($requiredFiles as $req) {
-        $test = $_PATH->get($req, 'relative', $default);
-
-        if (!fileExists($test)) {
-            return false;
+/**
+ * combines the rows of 2 associative arrays so that every row has each header
+ * in the same order
+ *
+ * @param array $arr1 the first array to combine
+ * @param array $arr2 the second array to combine
+ *
+ * @return array the two arrays combined
+ */
+function array2d_merge($arr1, $arr2) {
+    $all_headers = array_keys(reset($arr1) + reset($arr2));
+    
+    $all_data = array();
+    
+    foreach (array($arr1, $arr2) as $arr) {
+        foreach ($arr as $row) {
+            $merged_row = array();
+            
+            foreach ($all_headers as $header) {
+                if (isset($row[$header])) {
+                    $merged_row[$header] = $row[$header];
+                } else {
+                    $merged_row[$header] = '';
+                }
+            }
+            
+            $all_data[] = $merged_row;
         }
     }
-
-    return true;
+    
+    return $all_data;
 }
-
-/**
- * Add a column (sub-array key) to a 2-D array (like getFromFile() creates).
- *
- * @param array  $array  The array to add to (by-reference).
- * @param string $column The name of the key (column) to add.
- * @param mixed  $value  The value to insert into the column.
- *
- * @see getFromFile()
- */
-function addColumn(array &$array, $column, $value = '')
-{
-    // only compare against lowercase keys to prevent misleading duplicates
-    $lowerCol = strtolower($column);
-    foreach ($array as $i => &$row) {
-        // only compare against lowercase keys to prevent misleading duplicates
-        $lowerKeyRow = array_change_key_case($row, CASE_LOWER);
-
-        // skip the first two indices (offsets) and do not overwrite
-        if (!is_array($row) || isset($lowerKeyRow[$lowerCol])) {
-            continue;
-        }
-
-        // add the values
-        if ($value === '$i') {
-            // cast to string to match getFromFile() contents
-            $row[$column] = (string) $i;
-        } else {
-            $row[$column] = $value;
-        }
-    }
-}
-
-/**
- * Writes and array to a line of a CSV file.
- *
- * All strings in the array have whitespace converted to single spaces, and then
- * the encoding of the string is converted to the given encoding.
- *
- * @param array  $data        The associative array of data to write.
- * @param string $filename    The path to the file to write to.
- * @param string $delim       The single character delimiter to use.
- * @param bool   $encodeToWin Indicates whether to convert to Win-1252 encoding.
- *
- * @return array
- *
- * @see writeLineToFile()
- */
-function arrayToLine(array $data, $filename, $delim = null, $encodeToWin = true)
-{
-    // set delimiter
-    if (null === $delim) {
-        $delim = isset($_SESSION['OutputDelimiter']) ? $_SESSION['OutputDelimiter'] : ',';
-    }
-
-    // convert encoding
-    foreach ($data as &$datum) {
-        $datum = whiteSpaceToSpace($datum);
-        if ($encodeToWin) {
-            $datum = convertEncoding($datum, 'Windows-1252');
-        }
-    }
-
-    // write to file
-    return writeLineToFile($data, $filename, $delim);
-}
-
-/**
- * Converts all whitespace in a string to a single space.
- *
- * @param string $string
- *
- * @return string
- */
-function whiteSpaceToSpace($string)
-{
-    return preg_replace("/[\s]+/", ' ', $string);
-}
-
-/**
- * Converts a string of unknown encoding to a desired encoding.
- *
- * @param string $string          The string to convert.
- * @param string $desiredEncoding The desired encoding.
- *
- * @return string
- */
-function convertEncoding($string, $desiredEncoding = 'UTF-8')
-{
-    $currentEncoding = determineEncoding($string);
-
-    return iconv($currentEncoding, $desiredEncoding, $string);
-}
-
-/**
- * Determines a string's encoding.
- *
- * @param string $string
- *
- * @return string
- */
-function determineEncoding($string)
-{
-    return mb_detect_encoding($string, mb_detect_order(), true);
-}
-
-/**
- * Converts a file's contents' encoding to desired encoding if it does not match.
- *
- * @param string $filename
- * @param string $desiredEncoding
- */
-function convertFileEncoding($filename, $desiredEncoding = 'UTF-8')
-{
-    $contents = file_get_contents($filename);
-    if ($desiredEncoding !== determineEncoding($contents)) {
-        file_put_contents($filename, convertEncoding($contents));
-    }
-}
-
-/**
- * Writes a single row to a CSV file, merging headers before writing, if needed.
- *
- * @param array  $array    The row to write to the file.
- * @param string $filename The path to the file to write to.
- * @param string $delim    A single character noting the delimiter in the file.
- *
- * @uses readCsv()  Reads the CSV file to which the data will be appended.
- * @uses writeCsv() Write the data back to the CSV file.
- */
-function writeLineToFile(array $array, $filename, $delim = ',')
-{
-    if (!fileExists($filename)) {
-        // file doesn't exist, write away
-        $file = fForceOpen($filename, 'wb');
-        fputcsv($file, array_keys($array), $delim);
-        fputcsv($file, $array, $delim);
-    } else {
-        // file already exists, need to merge headers before writing
-        $data = readCsv($filename, $delim);
-        $headers = array_flip($data[0]);
-        $newHeaders = array_diff_key($array, $headers);
-        if (count($newHeaders) > 0) {
-            $headers = $headers + $newHeaders;
-            $data[0] = array_keys($headers);
-            $data[] = sortArrayLikeArray($array, $headers);
-            writeCsv($filename, $data, $delim);
-        } else {
-            writeCsv($filename, array(sortArrayLikeArray($array, $headers)), $delim, true);
-        }
-    }
-
-    return $array;
-}
-
-/**
- * Reads a full CSV file to an array.
- *
- * @param string $filename The path to the CSV file.
- * @param string $delim    A single character noting the delimiter in the file.
- * @param int    $length   The max length of each line.
- *
- * @return array
- */
-function readCsv($filename, $delim = ',', $length = 0)
-{
-    if (is_readable($filename)) {
-        $file = fopen($filename, 'rb');
-        $data = array();
-        while (false !== $line = fgetcsv($file, $length, $delim)) {
-            $data[] = $line;
-        }
-        fclose($file);
-
-        return $data;
-    }
-
-    // file could not be read
-    trigger_error(__FUNCTION__.'('.$filename.'): failed to read file: '
-        .'Unreadable or does not exist', E_USER_WARNING);
-}
-
-/**
- * Writes a 2D array of data to a CSV file. If the filepath contains a directory
- * that does not exist, the directory will be created using fForceOpen().
- *
- * @param string $filename File to output the file to.
- * @param array  $data     2D array of data.
- * @param string $delim    A single character noting the delimiter in the file.
- * @param bool   $append   Change to true to append instead of overwrite the file.
- *
- * @see fForceOpen()
- */
-function writeCsv($filename, array $data, $delim = ',', $append = false)
-{
-    $mode = (true === $append) ? 'ab' : 'wb';
-    $file = fForceOpen($filename, $mode);
-    foreach ($data as $datum) {
-        fputcsv($file, $datum, $delim);
-    }
-    fclose($file);
-}
-
-/**
- * Opens a file, and creates file's directory if it does not exist.
- *
- * @param string $filename The file to open.
- * @param string $mode     The way the file should be opened.
- *
- * @return mixed Returns a file pointer resource on success, or false on error.
- *
- * @see \fopen()
- */
-function fForceOpen($filename, $mode)
-{
-    $dirname = dirname($filename);
-    if (!is_dir($dirname)) {
-        mkdir($dirname, 0777, true);
-    }
-    touch($filename);
-
-    return fopen($filename, $mode);
-}
-
-/**
- * Recursively escapes an array to prevent passing code along from user input.
- *
- * @param mixed $input The array to clean.
- *
- * @return array The array with all values stripped using htmlspecialchars.
- */
-function arrayCleaner($input)
-{
-    if (is_array($input)) {
-        return array_map('arrayCleaner', $input);
-    }
-
-    return htmlspecialchars($input, ENT_QUOTES);
-}
-
-/**
- * Recursively trims an array's values.
- *
- * @param mixed $input The array to trim.
- *
- * @return array The array with all of its values trimmed.
- */
-function trimArrayRecursive($input)
-{
-    if (is_array($input)) {
-        return array_map('trimArrayRecursive', $input);
-    }
-
-    return trim($input);
-}
-
-/**
- * Converts a value to the desired encoding, recursively.
- *
- * @param mixed  $input    The value to convert.
- * @param string $encoding The encoding to convert to.
- *
- * @return mixed The input value(s) converted to the new encoding.
- *
- * @todo there are multiple convert encoding public static functions in customFuncs -- should we consolidate them?
- */
-function convertArrayEncodingRecursive($input, $encoding)
-{
-    if (is_array($input)) {
-        foreach ($input as $key => $value) {
-            $input[$key] = convertArrayEncodingRecursive($value, $encoding);
-        }
-    } else {
-        $thisEncoding = mb_detect_encoding($input, 'UTF-8,ISO-8859-1', true);
-        // Windows-1252 is always detected as iso-8891-1, even though win is a superset
-        if ($thisEncoding === 'ISO-8859-1') {
-            $thisEncoding = 'Windows-1252';
-        }
-        if ($thisEncoding !== $encoding) {
-            $input = mb_convert_encoding($input, $encoding, $thisEncoding);
-        }
-    }
-
-    return $input;
-}
-
-/**
- * Converts words separated by space to unspaced camel case.
- *
- * @param string $string
- *
- * @return string
- */
-function camelCase($string)
-{
-    $studlyCase = ucwords(strtolower(trim($string)));
-    $noSpace = str_replace(' ', '', $studlyCase);
-    $noSpace[0] = strtolower($noSpace[0]);
-
-    return $noSpace;
-}
-
-/**
- * Creates global variables for each of an array of keys => values. Numeric
- * keys are prepended with an underscore like this: '_2'.
- *
- * @global mixed $name A variable is made for each key and set to its value.
- *
- * @param array $array     The array of variables.
- * @param bool  $overwrite Set to 'true' to allow overwriting existing values.
- */
-function createAliases(array $array, $overwrite = false)
-{
-    foreach ($array as $rawName => $tempVal) {
-        // remove any unwanted characters
-        $strippedName = preg_replace('/[^0-9a-zA-Z_]/', '', $rawName);
-
-        // break apart any camel case into spaced strings
-        $brokenName = preg_replace('/[A-Z]/', ' \\0', $strippedName);
-
-        // rejoin all as single camel case string
-        $name = camelCase($brokenName);
-
-        // skip variables with no name or no legal characters
-        if ($name === '') {
-            continue;
-        }
-
-        // convert numeric variables to legal variable name strings
-        if (is_numeric($name[0])) {
-            $name = '_'.$name;
-        }
-
-        // create the global variable from the legal name and set the value
-        global $$name;
-        if (!isset($$name) || $overwrite) {
-            $$name = $tempVal;
-        }
-    }
-}
-
 /**
  * Echoes a 2-D array as an HTML table.
  *
@@ -611,330 +266,6 @@ function durationInSeconds($duration = '')
 }
 
 /**
- * Transliterates special characters (like smart quotes in ISO 8859-1) to the
- * desired encoding. Defaults to 'UTF-8', the standard for web browsers.
- *
- * @param string $string         The string to transliterate.
- * @param string $outputEncoding The encoding to transliterate to.
- *
- * @return string
- *
- * @todo fixBadChars(): another encoding conversion public static function
- */
-function fixBadChars($string, $outputEncoding = 'UTF-8')
-{
-    $strEncoding = determineEncoding($string);
-    $outEncoding = trim(strtoupper($outputEncoding));
-
-    return iconv($strEncoding, $outEncoding.'//IGNORE//TRANSLIT', $string);
-}
-
-/**
- * Reads a CSV file in as an associative array using the header names as array
- * keys. Contents are converted to UTF-8, the row lengths are normalized, and
- * two padding rows are used at the top to ensure that row indices correspond
- * to matching Excel rows.
- *
- * @param string $filename  The file to read.
- * @param bool   $padding   Set false if no padding rows are desired.
- * @param string $delimiter A single character noting the delimiter in the file.
- *
- * @return array
- */
-function getFromFile($filename, $padding = true, $delimiter = ',')
-{
-    // make sure PHP auto-detects line endings
-    ini_set('auto_detect_line_endings', true);
-
-    // read the file in and get the header
-    $dataDirty = readCsv($filename, $delimiter);
-    $trimmed = trimArrayRecursive($dataDirty);
-    $data = convertArrayEncodingRecursive($trimmed, 'UTF-8');
-    $columns = array_shift($data);
-    $columnsCount = count($columns);
-
-    // make first two indices blank so that others correspond to Excel rows
-    // build the rest of the output array
-    $out = ($padding == true) ? array(0 => 0, 1 => 0) : array();
-    foreach ($data as $row) {
-        // add values to row if there are more columns than values
-        for ($rowCount = count($row); $columnsCount > $rowCount; ++$rowCount) {
-            $row[] = '';
-        }
-
-        // trim values from row if there are fewer columns than values
-        if ($columnsCount < $rowCount) {
-            $row = array_slice($row, 0, $columnsCount);
-        }
-
-        // convert to column=>value pairs and add to output
-        if (!isBlankLine($row)) {
-            $out[] = array_combine($columns, $row);
-        }
-    }
-
-    return $out;
-}
-
-/**
- * Finds the location of a trial type's files.
- *
- * @global Pathfinder $_PATH    The Pathfinder currently in use.
- *
- * @staticvar array $trialTypes Caches the results of the public static function.
- *
- * @param string     $trialTypeName The name of the trial type
- * @param Pathfinder $pathfinder    [Optional] The pathfinder to use.
- *
- * @return bool|array An array of file paths if the type was found, or false.
- */
-function getTrialTypeFiles($trialTypeName, Pathfinder $pathfinder = null)
-{
-    global $_PATH;
-    $pathfinder = isset($pathfinder) ? $pathfinder : $_PATH;
-
-    // convert user inputs to lowercase; e.g. 'Likert' === 'likert'
-    $trialType = strtolower(trim($trialTypeName));
-
-    // initialize a static variable to cache the results, so that we can run
-    // the public static function multiple times and efficiently get our data back
-    static $trialTypes = array();
-    if (isset($trialTypes[$trialType])) {
-        return $trialTypes[$trialType];
-    }
-
-    // as it stands, we have two places where trial types can be found
-    // we will search the Experiment/ folder first, so that if we find
-    // the trial type, we won't have to look in the Code/ folder
-    // this way, the Experiment/ trial types will overwrite the Code/ types
-    $customDisplay = $pathfinder->get('custom trial display', 'relative', $trialType);
-    $normalDisplay = $pathfinder->get('trial display',        'relative', $trialType);
-
-    if (fileExists($customDisplay)) {
-        $pre = 'custom trial ';
-    } elseif (fileExists($normalDisplay)) {
-        $pre = 'trial ';
-    } else {
-        return false;
-    }
-
-    $files = array('display', 'scoring', 'helper', 'script', 'style', 'validator');
-
-    $foundFiles = array();
-
-    foreach ($files as $file) {
-        $path = $pathfinder->get($pre.$file, 'relative', $trialType);
-        $existingPath = fileExists($path);
-        if ($existingPath !== false) {
-            $foundFiles[$file] = $existingPath;
-        }
-    }
-
-    if (!isset($foundFiles['scoring'])) {
-        $foundFiles['scoring'] = $pathfinder->get('default scoring');
-    }
-
-    if (!isset($foundFiles['helper'])) {
-        $foundFiles['helper'] = $pathfinder->get('default helper');
-    }
-
-    return $foundFiles;
-}
-
-/**
- * Finds all trial types and their files.
- *
- * @global Pathfinder $_PATH The Pathfinder currently in use.
- *
- * @param Pathfinder $pathfinder [Optional] The pathfinder to use.
- *
- * @return array Associative array of $trialtype => $arrayOfFiles.
- */
-function getAllTrialTypeFiles(Pathfinder $pathfinder = null)
-{
-    global $_PATH;
-    $paths = isset($pathfinder) ? $pathfinder : $_PATH;
-    if (!isset($paths)) { return null; }
-
-    $trialTypes = array();
-    $trialTypeDirs = array($paths->get('Custom Trial Types'), $paths->get('Trial Types'));
-
-    foreach ($trialTypeDirs as $dir) {
-        if (!is_dir($dir)) continue;
-
-        $dirScan = scandir($dir);
-        foreach ($dirScan as $entry) {
-            $type = strtolower(trim($entry));
-
-            // dont override custom trial types, which are found first
-            if (isset($trialTypes[$type])) {
-                continue;
-            }
-
-            $files = getTrialTypeFiles($type, $paths);
-            $trialTypes[strtolower($entry)] = $files ? $files : null;
-        }
-    }
-
-    return array_filter($trialTypes);
-}
-
-/**
- * Checks if a given string can be found within another.
- * (Wrapper public static function for strpos and stripos.).
- *
- * @param string $needle        The string to search for.
- * @param string $haystack      The string to search within.
- * @param bool   $caseSensitive True if the search should be case-sensitive.
- *
- * @return bool True if the string was found, else false.
- */
-function inString($needle, $haystack, $caseSensitive = false)
-{
-    return ($caseSensitive == false && stripos($haystack, $needle) !== false)
-        || ($caseSensitive == true && strpos($haystack, $needle) !== false);
-}
-
-/**
- * Returns true if each item in an array is empty (or not 0).
- *
- * @param array $array The array to check.
- *
- * @return bool True if the array was empty, else false.
- */
-function isBlankLine(array $array)
-{
-    foreach ($array as $item) {
-        if (!empty($item) || $item === 0) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-/**
- * Merges an input array into a target array. Optionally adds a prefix to the
- * beginning of each array key as it is being added to the target array.
- *
- * @param array  $input  The array to merge from.
- * @param array  $target The array to merge into.
- * @param string $prefix [Optional] The prefix to add to each key.
- *
- * @return array The merged array.
- */
-function placeData(array $input, array $target, $prefix = '')
-{
-    foreach ($input as $key => $value) {
-        $target[$prefix.$key] = $value;
-    }
-
-    return $target;
-}
-
-/**
- * Turns a string like '2,4::6' into an array like [2, 4, 5, 6].
- *
- * @param string $string         A string indicating how the array should be constructed.
- * @param string $separator      A string indicating how the ranges are separated.
- * @param string $rangeIndicator A string that symbolizes a continuous range.
- *
- * @return array The range of values.
- *
- * @todo is there any way rangeToArray can be refactored/cleaned-up?
- */
-function rangeToArray($string, $separator = ',', $rangeIndicator = '::')
-{
-    $output = array();
-    $ranges = explode($separator, $string);
-    $rangesCount = count($ranges);
-    $rangesEscaped = array();
-    $currentStr = '';
-    for ($i = 0; $i < $rangesCount; ++$i) {
-        if (isset($ranges[$i][0]) and $ranges[$i][strlen($ranges[$i]) - 1] === '\\') {
-            // escaped
-            $currentStr .= substr($ranges[$i], 0, -1).$separator; // remove backslash, add separator
-        } else {
-            $rangesEscaped[] = $currentStr.$ranges[$i];
-            $currentStr = null;
-        }
-    }
-    // if the last string appeared escaped, add it in
-    if ($currentStr !== null) {
-        $rangesEscaped[] = substr($currentStr, 0, -strlen($separator));
-    }
-    foreach ($rangesEscaped as $range) {
-        // get the end points of the range
-        $endPointsDirty = explode($rangeIndicator, $range);
-        $endPoints = array_map('trim', $endPointsDirty);
-
-        // update the output array
-        $count = count($endPoints);
-        if ($count === 1) {
-            $output[] = $endPoints[0];
-        } else {
-            $lastPoint = &$endPointsDirty[$count - 1];
-            $stepExploded = explode('#', $lastPoint);
-            if (isset($stepExploded[1]) and is_numeric($stepExploded[1])) {
-                $step = trim($stepExploded[1]);
-            } else {
-                $step = 1;
-            }
-            $lastPoint = trim($stepExploded[0]);
-            unset($lastPoint);
-            $output = array_merge(
-                $output, range($endPoints[0], $endPoints[$count - 1], $step)
-            );
-        }
-    }
-
-    return $output;
-}
-
-/**
- * Removes the label from the beginning of a string.
- *
- * @param string $input       The string to strip the label from.
- * @param string $label       The label to strip.
- * @param bool   $extendLabel Checks if the label is followed by certain.
- *                            characters removes them as well. Set false for
- *                            strict matching to $label.
- *
- * @return mixed The string with the label removed, true if the string only
- *               contained the label, and false if the label was not present.
- */
-function removeLabel($input, $label, $extendLabel = true)
-{
-    $inputString = trim($input);
-    $inputLower = strtolower($inputString);
-    $labelClean = strtolower(trim($label));
-    $trimLength = strlen($labelClean);
-
-    if (substr($inputLower, 0, $trimLength) !== $labelClean) {
-        // the first part of the string does not match the label
-        return false;
-    }
-
-    // remove extra characters for extendLabel
-    if ($extendLabel) {
-        foreach (['s', ' ', ':', '='] as $char) {
-            if (substr($inputLower, $trimLength, 1) === $char) {
-                ++$trimLength;
-            }
-        }
-    }
-
-    $output = trim(substr($inputString, $trimLength));
-
-    if (($output === '') || ($output === false)) {
-        // output string is empty
-        return true;
-    }
-
-    return $output;
-}
-
-/**
  * Get all the file paths inside a given directory and its subdirectories.
  *
  * @param string $dir Directory to scan.
@@ -967,51 +298,6 @@ function scanDirRecursively($dir)
     }
 
     return array_values($scan);
-}
-
-/**
- * Determine if the string refers to an audio or image file and generate tags.
- *
- * @param string $string  The string to process.
- * @param bool   $endOnly If TRUE, only the last 5 characters of the string
- *                        are checked for an extension.
- *
- * @return string The processed string with HTML tags if appropriate.
- */
-function show($string, $endOnly = true)
-{
-    global $_PATH;
-    // navigate path to Experiment folder (unless linking to external file)
-    if (!inString('www.', $string)) {
-        $fileName = $_PATH->get('Media') . '/' . $string;
-        if (fileExists($fileName)) {
-            $fileName = fileExists($fileName);
-        }
-    } else {
-        $fileName = $string;
-    }
-    if ($endOnly) {
-        $searchString = substr($fileName, -5);  // only check last 5 characters for file extensions
-    } else {
-        $searchString = $fileName;
-    }
-    // check extension to determine which tags to add
-    if (strripos($searchString, '.jpg') !== false
-        || strripos($searchString, '.jpeg') !== false
-        || strripos($searchString, '.png') !== false
-        || strripos($searchString, '.gif') !== false
-        || strripos($searchString, '.bmp') !== false
-    ) {
-        // add image tags
-        $string = '<img src="' . $fileName . '">';
-    } elseif (strripos($searchString, '.mp3')
-        || strripos($searchString, '.wav')
-        || strripos($searchString, '.ogg')
-    ) {
-        // audio tags
-        $string = '<source src="' . $fileName . '"/>';
-    }
-    return $string;
 }
 
 /**
@@ -1332,73 +618,6 @@ function fileExists ($path, $findAltExt = true, $findDir = 1) {
 }
 
 /**
- * Determine if the given path points to a valid file or directory.
- * By default, if the file is not immediately found the public static function will search
- * against only the filenames in the directory (i.e. ignore extensions) and
- * return the first match it finds. The file can additionally be checked
- * strictly as to whether it is a file or a directory with the $findDir
- * argument. That is, if the parameter is set to only search for directories,
- * a path will only be returned if it points to a directory, not a file.
- *
- * @param string $filename The path to check.
- * @param bool   $altExt   Allows alternate extensions to be searched.
- * @param int    $findDir  Indicates whether (0) only files should be searched,
- *                         (1) both files and directories should be searched, or
- *                         (2) only directories should be searched.
- *
- * @return string|bool The path to the file, or false if one was not found.
- */
-function fileExistsAlt($filename, $altExt = true, $findDir = 1)
-{
-    // normalize the path
-    $search = str_replace(DIRECTORY_SEPARATOR, '/', $filename);
-
-    if (!is_file($search) && ($findDir < 2) && ($altExt === true)) {
-        // no exact match found, but we can search for other extensions
-        $path = altFileExists($search);
-    }
-
-    // no file with other ext exists, but a dir might: restore search if false
-    $path = isset($path) ? $path : $search;
-
-    // alter output based on $findDir's value
-    if (($findDir === 1 && file_exists($path))
-        || ($findDir === 0 && is_file($path))
-        || ($findDir === 2 && is_dir($path))
-    ) {
-        return $path;
-    }
-
-    return false;
-}
-
-/**
- * Determines if any files in the directory of the given path match the filename
- * of the given path, regardless of extension.
- * For a path like "path/to/some/file.php", the first file found that matches
- * the path regardless of the extension will be returned, like
- * "path/to/some/file.txt".
- *
- * @param string $path The path to check.
- *
- * @return string|bool The file with the alternative extension, else false.
- */
-function altFileExists($path)
-{
-    $path_parts = pathinfo($path);
-    if (is_dir($path_parts['dirname'])) {
-        foreach (scandir($path_parts['dirname']) as $file) {
-            $filename = pathinfo($file, PATHINFO_FILENAME);
-            if (strtolower($path_parts['filename']) === strtolower($filename)) {
-                return $path_parts['dirname'].'/'.$file;
-            }
-        }
-    }
-
-    return false;
-}
-
-/**
  * Generates a random, lowercase alphanumeric string.
  *
  * @param int $length [Optional] The length of string.
@@ -1412,47 +631,6 @@ function randString($length = 10)
     $out = '';
     for ($i = 0; $i < $length; ++$i) {
         $out .= $chars[mt_rand(0, $size - 1)];
-    }
-
-    return $out;
-}
-
-/**
- * Prefixes all keys in an array.
- *
- * @param string $prefix The prefix to add to each key.
- * @param array  $array  The array to modify.
- *
- * @return array The modified array.
- */
-function addPrefixToArray($prefix, array $array)
-{
-    $out = array();
-    foreach ($array as $key => $val) {
-        $out[$prefix.$key] = $val;
-    }
-
-    return $out;
-}
-
-/**
- * Sorts an array to match the order of a template array. Keys in the template
- * that are not present in the target are given null values in the target array.
- *
- * @param array $array    The array to sort.
- * @param array $template The sorting template.
- *
- * @return array The sorted array.
- */
-function sortArrayLikeArray(array $array, array $template)
-{
-    $out = array();
-    foreach (array_keys($template) as $key) {
-        if (isset($array[$key])) {
-            $out[$key] = $array[$key];
-        } else {
-            $out[$key] = null;
-        }
     }
 
     return $out;

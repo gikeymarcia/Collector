@@ -2,74 +2,39 @@
 
 class Login
 {
-    public static function run($username, $ip, $debug_name, FileSystem $_files) {
-        $user = preg_replace('([^ !#$%&\'()+,\\-.0-9;=@A-Z[\\]^_a-z~])', '', $username);
-        if (strlen($user) < 4) throw new Exception('Username too short');
+    public static function run($username_raw, Collector\Settings $settings) {
+        $login = array();
         
-        // TODO: self::check_eligibility($user, $ip, $_files);
-
-        $old_sess_id = $_files->query('PHP Session Table', $user);
-
-        if ($old_sess_id === null) {
-            $data = array(
-                'Session' => 1,
-                'Debug'   => self::check_debug_mode($user, $debug_name),
-                '_FILES'  => $_files
-            );
-        } else {
-            $data = self::reload_session($old_sess_id, $_files);
-        }
+        $_files = $login['_FILES'] = new FileSystem();
         
-        self::set_file_defaults($user, $data, $data['_FILES']);
-        $_files->write('PHP Session Table', session_id(), $user);
+        $username     = self::clean_and_validate_username($username_raw);
+        $debug_mode   = self::determine_debug_mode($settings, $username);
+        $data_sub_dir = $debug_mode ? '/Debug' : '';
+        $id           = rand_string(10);
         
-        return $data;
+        $login['Username']   = $username;
+        $login['ID']         = $id;
+        $login['Debug Mode'] = $debug_mode;
+        
+        $_files->set_default('Username',     $username);
+        $_files->set_default('ID',           $id);
+        $_files->set_default('Data Sub Dir', $data_sub_dir);
+        
+        return $login;
     }
     
-    private static function check_eligibility($user, $ip, FileSystem $_files) {
-        $banned = $_files->get('Banned Users');
+    private static function clean_and_validate_username($username_raw) {
+        $username = preg_replace('([^ !#$%&\'()+,\\-.0-9;=@A-Z[\\]^_a-z~])', '', $username);
+        if (strlen($username) < 4) throw new Exception('Username too short');
         
-        if (isset($banned[$user])) {
-            throw new Exception('Banned newb');
-        }
+        return $username;
+    }
+    
+    private static function determine_debug_mode(Collector\Settings $settings, $username) {
+        if ($settings->debug_mode) return true;
         
-        $blacklistedIPs = $_files->get('Blacklisted IPs');
-        $whitelistedIPs = $_files->get('Whitelisted IPs');
+        $debug_name = $settings->debug_name;
         
-        if (isset($blacklistedIPs[$ip]) && !isset($whitelistedIPs[$ip])) {
-            throw new Exception('Banned IP');
-        }
-    }
-
-    private static function reload_session($sessID, FileSystem $_files) {
-        $data = $_files->read('Session', array('Session ID' => $sessID));
-
-        self::validate_session($data);
-        
-        return $data;
-    }
-
-    private static function validate_session($data) {
-        $minTime = $data['Min Time'];
-        $maxTime = $data['Max Time'];
-        $now     = time();
-
-        if (!empty($maxTime) && $now > $maxTime) {
-            throw new Exception('Too late!');
-        }
-
-        if ($now < $minTime) {
-            throw new Exception('Too early!');
-        }
-    }
-
-    private static function set_file_defaults($user, $data, FileSystem $_files) {
-        $_files->set_default('Username', $user);
-        $_files->set_default('SessionN', $data['Session']);
-        $_files->set_default('ID',       rand_string(10));
-    }
-
-    private function check_debug_mode($user, $debugName) {
-        return substr($user, 0, strlen($debugName)) === $debugName;
+        return substr($username, 0, strlen($debug_name)) === $debug_name;
     }
 }

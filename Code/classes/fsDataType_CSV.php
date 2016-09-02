@@ -1,6 +1,6 @@
 <?php
 
-abstract class ioDataType_CSV extends ioAbstractDataType
+abstract class fsDataType_CSV extends fsAbstractDataType
 {
     /**
      * Things I'm trying to handle (e.g. should write tests for)

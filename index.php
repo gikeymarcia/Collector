@@ -18,12 +18,11 @@
  */
 require 'Code/initiateCollector.php';
 
-$_SETTINGS->upToDate($_PATH);
-
 // get possible experiments to choose from
 $experiments = array();
-foreach (getCollectorExperiments() as $expName) {
-    $experiments[$expName] = $_PATH->get('Experiments')."/$expName";
+$exp_folder  = $_FILES->get_path('Experiments');
+foreach (get_Collector_experiments($_FILES) as $expName) {
+    $experiments[$expName] = "$exp_folder/$expName";
 }
 
 $title = 'Collector Homepage';

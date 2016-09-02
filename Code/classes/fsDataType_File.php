@@ -1,9 +1,9 @@
 <?php
 
-class ioDataType_File extends ioAbstractDataType
+class fsDataType_File extends fsAbstractDataType
 {
     public static function read($path) {
-        return file_get_contents($path);
+        return is_file($path) ? file_get_contents($path) : null;
     }
 
     public static function overwrite($path, $data) {

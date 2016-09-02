@@ -1,8 +1,8 @@
 <?php
 /*
-This is the contract all ioDataType_* implementations must honor
+This is the contract all fsDataType_* implementations must honor
  */
-abstract class ioAbstractDataType
+abstract class fsAbstractDataType
 {
     abstract public static function read($path);
     abstract public static function overwrite($path, $data);

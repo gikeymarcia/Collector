@@ -11,8 +11,8 @@
   <title><?= $title ?></title>
 
   <!-- Icons -->
-  <link rel="icon" href="<?= $_PATH->get('Icon', 'url') ?>" type="image/png">
-  <link rel="shortcut icon" href="<?= $_PATH->get('Icon', 'url') ?>" type="image/png">
+  <link rel="icon" href="<?= $_FILES->get_path('Icon') ?>" type="image/png">
+  <link rel="shortcut icon" href="<?= $_FILES->get_path('Icon') ?>" type="image/png">
 
   <!-- Custom fonts: Roboto (headers), Open Sans (body), Inconsolata (monospace) -->
   <link href='http://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
@@ -20,17 +20,18 @@
   <link href='http://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
 
   <!-- Base styles -->
-  <link rel="stylesheet" href="<?= $_PATH->get('Global CSS', 'url') ?>">
-  <link rel="stylesheet" href="<?= $_PATH->get('Jquery UI Custom CSS', 'url') ?>">
+  <link rel="stylesheet" href="<?= $_FILES->get_path('Global CSS') ?>">
+  <link rel="stylesheet" href="<?= $_FILES->get_path('Jquery UI Custom CSS') ?>">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <!-- Base scripts -->
+  <script>
+    if (typeof jQuery === "undefined") {
+      document.write("<script src='<?= $_FILES->get_path('Jquery') ?>'><\/script>");
+    }
+  </script>
 
   <!-- JS Tools -->
-  <script src="<?= $_PATH->get('Jquery UI Custom', 'url') ?>"></script>
-
-  <!-- Additional styles -->
-  <?php if (isset($addedStyles)): foreach ($addedStyles as $additionalStyle): ?>
-  <link rel='stylesheet' href='<?= $additionalStyle ?>'>
-  <?php endforeach; endif; ?>
+  <script src="<?= $_FILES->get_path('Jquery UI Custom') ?>"></script>
 </head>
 
 <?php
@@ -40,5 +41,5 @@ $_dataController = isset($_dataController) ? $_dataController : '';
 <body id="flexBody" data-controller="<?= $_dataController ?>" >
   <!-- redirect if Javascript is disabled -->
   <noscript>
-    <meta http-equiv="refresh" content="0;url=<?= $_PATH->get('No JS', 'url') ?>" />
+    <meta http-equiv="refresh" content="0;url=<?= $_FILES->get_path('No JS') ?>" />
   </noscript>
