@@ -177,7 +177,7 @@ var Collector = {
                 content_size += $(this).height();
             });
             var flex_prop = (window_size <= content_size) ? 'flex-start' : 'center ';
-            $("body").css("justify-content",flex_prop);
+            $("body").css("justify-content", flex_prop);
         }
         checkSize();
 
