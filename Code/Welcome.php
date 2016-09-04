@@ -35,30 +35,6 @@ $_FILES->set_default('Current Experiment', $current_exp);
 // the conditions class will automatically create a login counter dir, and it needs this value
 $_FILES->set_default('Data Sub Dir', '');
 
-/*
- * Login objects
- */
- /* to be updated, and possibly converted to JS
-$errors = new Collector\ErrorController();
-
-$cond = new Collector\ConditionController(
-    $_FILES->get_path('Conditions'),
-    $_FILES->get_path('Counter'),
-    $errors,
-    $_SETTINGS->hide_flagged_conditions
-);
-
-$cond->checkConditionsFile(
-    $_FILES->get_path('Procedure Dir'),
-    $_FILES->get_path('Stimuli Dir')
-);
-
-if ($errors->arePresent()) {
-    $errors->printErrors();
-    exit;
-}
-$conditions = $cond->getAllConditions();
-*/
 
 $conditions = $_FILES->read('Conditions');
 

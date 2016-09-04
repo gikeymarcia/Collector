@@ -108,6 +108,7 @@ class Settings
             // @todo perhaps this should throw an \InvalidArgumentException instead?
             trigger_error('You have attempted to use the setting value of '
                 ."{$key} when that value is not specified", E_WARNING);
+            return null;
         }
     }
 
@@ -120,7 +121,7 @@ class Settings
         if ($data_source == null
             || $this->files->get_path($data_source, array(), false) == false)
             return array();
-        
+
         return $this->files->read($data_source);
     }
 
@@ -138,8 +139,8 @@ class Settings
             return;
         }
 
-        // @todo Perhaps this password should be sanitized? Is it from a user-input form?
-        $php_string = "<?php return '$input'; ?>";
+        $json_safe_pass = json_encode('$input');
+        $php_string = "<?php return json_decode($json_safe_pass) ?>";
 
         $this->files->overwrite("Password", $php_string);
     }

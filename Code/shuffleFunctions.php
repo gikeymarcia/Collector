@@ -4,7 +4,7 @@
  */
 
 /**
- * [Description].
+ * Given an array of key = val format, finds the val
  *
  * @param array  $settings    The (by-reference) array of settings to search.
  * @param string $target      The setting to search for.
@@ -12,8 +12,6 @@
  *                            found. True by default.
  *
  * @return string|bool The setting if it existed, else false.
- *
- * @todo description for find setting
  */
 function findSetting(array &$settings, $target, $removeFound = true)
 {
@@ -72,7 +70,6 @@ function getShuffleExceptionMsg($msg, $errorOrigin)
  *
  * @throws \Exception Exception thrown if the search is out-of-bounds.
  *
- * @todo description for findIndex()
  */
 function findIndex($array, $search, $errorOrig)
 {
@@ -117,7 +114,6 @@ function findIndex($array, $search, $errorOrig)
  *
  * @return array The shuffled array
  *
- * @todo description for what specifically happens in this function.
  */
 function shuffle2dArray(array $array, $debug = false)
 {
@@ -281,8 +277,6 @@ function shuffle2dArray(array $array, $debug = false)
  *                          'off', 'no', and '0'. Values can be anything
  *                          except NULL.
  *
- * @todo test simpleShuffle() on associative arrays.
- * @todo description of simpleShuffle() does not make sense.
  */
 function simpleShuffle(array &$array, $shuffle, array $within, array $noShuffle)
 {
@@ -332,8 +326,6 @@ function simpleShuffle(array &$array, $shuffle, array $within, array $noShuffle)
  *                          be shuffled. Generally these are set to '',
  *                          'off', 'no', and '0'. Values can be anything
  *                          except NULL.
- *
- * @todo update description for superBlockShuffle
  */
 function superBlockShuffle(array &$array, $shuffle, array $within, array $noShuffle)
 {

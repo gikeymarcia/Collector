@@ -36,7 +36,6 @@ return array(
   'Experiment Page'          => array('File' , 'Code/Experiment.php'),
   'Footer'                   => array('File' , 'Code/footer.php'),
   'Header'                   => array('File' , 'Code/header.php'),
-  'Icon'                     => array('File' , 'Code/icon.png'),
   'Initiate Collector'       => array('File' , 'Code/initiateCollector.php'),
   'Trial Validator Require'  => array('File' , 'Code/trialValidator.require.php'),
   'No JS'                    => array('File' , 'Code/nojs.php'),
@@ -45,6 +44,7 @@ return array(
   'Custom Functions'         => array('File' , 'Code/customFunctions.php'),
 
   'CSS Dir'                  => array('Dir'  , 'Code/css'),
+    'Icon'                   => array('File' , 'Code/css/icon.png'),
     'Global CSS'             => array('File' , 'Code/css/global.css'),
     'Jquery UI CSS'          => array('File' , 'Code/css/jquery-ui.min.css'),
     'Jquery UI Custom CSS'   => array('File' , 'Code/css/jquery-ui-1.10.4.custom.min.css'),

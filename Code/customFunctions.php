@@ -7,15 +7,15 @@ use phpbrowscap\Browscap;
  */
 function get_Collector_experiments(FileSystem $_files) {
     $experiment_names = $_files->read('Experiments');
-    
+
     foreach ($experiment_names as $i => $exp) {
         $temp_defaults = array('Current Experiment' => $exp);
-        
+
         if ($_files->read('Conditions', $temp_defaults) === array()) {
             unset($experiment_names[$i]);
         }
     }
-    
+
     return $experiment_names;
 }
 /**
@@ -24,10 +24,10 @@ function get_Collector_experiments(FileSystem $_files) {
  */
 function create_experiment(FileSystem $_files, $condition_index = null) {
     $condition = ConditionAssignment::get($_files, $condition_index);
-    
+
     $stimuli   = load_exp_files($_files, 'Stimuli',   $condition);
     $procedure = load_exp_files($_files, 'Procedure', $condition);
-    
+
     return array(
         'Condition' => $condition,
         'Stimuli'   => $stimuli,
@@ -46,23 +46,23 @@ function create_experiment(FileSystem $_files, $condition_index = null) {
 function load_exp_files(FileSystem $_files, $type, $condition) {
     $files      = array();
     $file_index = 1;
-    
+
     while (isset($condition["$type $file_index"])) {
         $files[] = $condition["$type $file_index"];
         ++$file_index;
     }
-    
+
     $all_data = array();
-    
+
     foreach ($files as $file) {
         $file_data = $_files->read($type, array($type => $file));
         $all_data  = array2d_merge($all_data, $file_data);
     }
-    
+
     require_once $_files->get_path('Shuffle Functions');
     $all_data = multiLevelShuffle($all_data);
     $all_data = shuffle2dArray($all_data);
-    
+
     return $all_data;
 }
 
@@ -77,21 +77,21 @@ function load_exp_files(FileSystem $_files, $type, $condition) {
  */
 function array2d_merge($arr1, $arr2) {
     $all_headers = array();
-    
+
     foreach (array($arr1, $arr2) as $arr) {
         $first_row = reset($arr);
-        
+
         if ($first_row !== false) $all_headers += $first_row;
     }
-    
+
     $all_headers = array_keys($all_headers);
-    
+
     $all_data = array();
-    
+
     foreach (array($arr1, $arr2) as $arr) {
         foreach ($arr as $row) {
             $merged_row = array();
-            
+
             foreach ($all_headers as $header) {
                 if (isset($row[$header])) {
                     $merged_row[$header] = $row[$header];
@@ -99,11 +99,11 @@ function array2d_merge($arr1, $arr2) {
                     $merged_row[$header] = '';
                 }
             }
-            
+
             $all_data[] = $merged_row;
         }
     }
-    
+
     return $all_data;
 }
 /**
@@ -288,6 +288,7 @@ function durationInSeconds($duration = '')
  * @param string $dir Directory to scan.
  *
  * @return array List of complete paths to files.
+ * @TODO: why are there two scan dirs?
  */
 function scanDirRecursively($dir)
 {

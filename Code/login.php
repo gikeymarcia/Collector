@@ -20,7 +20,7 @@ $_FILES->set_default('Current Experiment', $input_exp);
 // if data doesn't exist for this user, create it
 if ($_FILES->read('User Data') === null) {
     $user_data = create_experiment($_FILES, $input_condition);
-    
+
     $_FILES->overwrite('User Data', $user_data);
 }
 
