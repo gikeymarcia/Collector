@@ -212,9 +212,9 @@ class Settings
      * Updates the actual settings files.
      * Will add and overwrite with any values set using Settings::set().
      * Temporary settings set as properties (using the magic __set()) will not
-     * be written by Settings::writeSettings().
+     * be written by Settings::write_settings().
      */
-    public function writeSettings()
+    public function write_settings()
     {
         // write common settings
         $common = array_merge($this->default_common, $this->common);

@@ -38,6 +38,6 @@
     }
 
     if ($found === true) {
-        $yourSettings->writeSettings();
+        $yourSettings->write_settings();
         header('Location: ./');
     }
