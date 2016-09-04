@@ -49,7 +49,7 @@
   }
 
   function report_se(input_variable){
-    var se_array = anthony_object[input_variable];    
+    var se_array = data_by_cols[input_variable];    
     outputArea.innerHTML += "<br> se("+ input_variable +") <br> "+  calculate_se(se_array);
   } 
 */  
