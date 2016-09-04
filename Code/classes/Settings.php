@@ -67,7 +67,7 @@ class Settings
      * @var array
      */
     protected $common = array(
-        'loc' => null,
+        'loc'  => null,
         'data' => array(),
     );
 
@@ -79,7 +79,7 @@ class Settings
      * @var array
      */
     protected $experiment = array(
-        'loc' => null,
+        'loc'  => null,
         'data' => array(),
     );
 
@@ -104,12 +104,15 @@ class Settings
      * @param string $expLoc    The path to the experiment specific settings file.
      * @param string $passLoc   The path to the password.
      */
-    public function __construct(FileSystem $_files)
+    public function __construct(\FileSystem $_files)
     {
-        $this->jsonOptions = $this->canPrettyPrint() ? JSON_PRETTY_PRINT : null;
-        $this->common      = $this->load($_files->get_path('Common Settings'));
-        $this->experiment  = $this->load($_files->get_path('Experiment Settings'));
-        $this->passLoc     = $passLoc;
+        $this->jsonOptions    = $this->canPrettyPrint() ? JSON_PRETTY_PRINT : null;
+        $this->common['data'] = $_files->read('Common Settings'    , array(), false);
+        $this->common['loc']  = $_files->get_path('Common Settings', array(), false);
+
+        $this->experiment['data'] = $_files->read('Experiment Settings', array(), false);
+        $this->experiment['loc']  = $_files->get_path('Experiment Settings', array(), false);
+        $this->passLoc = $passLoc;
     }
 
     /**
@@ -148,28 +151,6 @@ class Settings
         }
     }
 
-    /**
-     * Loads a settings file.
-     * Stores the last time the file was modified ('mod') the location of the
-     * file ('loc') and the data it contains ('data').
-     *
-     * @param string $file_path The path to the file to load.
-     *
-     * @return array The array of information about the file.
-     */
-    private function load($file_path)
-    {
-        $out = array(
-            'loc' => $file_path,
-            'data' => array(),
-        );
-
-        if (file_exists($file_path)) {
-            $out['data'] = json_decode(file_get_contents($file_path), true);
-        }
-
-        return $out;
-    }
 
     /**
      * Sets a new password to the password file.
