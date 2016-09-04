@@ -29,8 +29,7 @@
     $expanderCont = '<span class="expanderContainer">' . $expander . '</span>';
 ?>
 
-
-
+<link rel="stylesheet" type="text/css" href="GetDataStyle.css">
 
 <div class="textcenter"><button id="GetDataDownloadButton" type="submit">Click here to download your data</button></div>
 

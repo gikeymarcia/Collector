@@ -59,7 +59,7 @@
   user-select: none;           /* Non-prefixed version, currently
                                   not supported by any browser */
 }
-#AnthonyInterface{
+#analysis_interface{
   background-color:grey;
   border-radius   :10px;
   padding         :5px;

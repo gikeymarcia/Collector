@@ -268,13 +268,11 @@
                         
                         // Anthony injection //
                         ?>
-                        <script>
                         if(typeof(row_array)=="undefined"){
                           row_array=[<?= $json_sorted_row ?>];
                         } else {
                           row_array[row_array.length]=<?= $json_sorted_row ?>;
                         }
-                        </script>
                         <?php
                          */
                         // End of Anthony injection //

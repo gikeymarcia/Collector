@@ -61,7 +61,7 @@ $json_stats_options = json_encode($stats_options);
     <input class="interface_button" type="button" id="script_interface_button"    value="Script">
     <input class="interface_button" type="button" id="custom_interface_button"    value="Custom">
 </span> 
-<div id="AnthonyInterface">
+<div id="analysis_interface">
    
   <div class="interface" id="GUI_interface">
     <h3>GUI</h3>
@@ -225,7 +225,6 @@ $json_stats_options = json_encode($stats_options);
   
   </div>
 
-</div>
 
 <script>
   $(".interface").hide();
