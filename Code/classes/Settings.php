@@ -152,12 +152,10 @@ class Settings
      */
     protected function get_password()
     {
-        $path = $this->files->get_path('Password', array(), false);
-        if ($path === false) return null;
+        $pass_path = $this->files->get_path('Password', array(), false);
+        if (!is_file($pass_path)) return null;
 
-        $pass_path = $this->files->get_path('Password', array());
         $password = require $pass_path;
-
         if ($password == $this->default_pass) $password = null;
 
         return $password;
