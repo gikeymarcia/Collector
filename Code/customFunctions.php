@@ -8,10 +8,12 @@ use phpbrowscap\Browscap;
 function get_Collector_experiments(FileSystem $_files) {
     $experiment_names = $_files->read('Experiments');
     
-    $common = str_replace($_files->get_path('Experiments'), '', $_files->get_path('Common'));
-    
-    foreach ($experiment_names as $i => $name) {
-        if ($name === $common) unset($experiment_names[$i]);
+    foreach ($experiment_names as $i => $exp) {
+        $temp_defaults = array('Current Experiment' => $exp);
+        
+        if ($_files->read('Conditions', $temp_defaults) === array()) {
+            unset($experiment_names[$i]);
+        }
     }
     
     return $experiment_names;

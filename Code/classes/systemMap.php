@@ -32,6 +32,7 @@ return array(
 'Code'                       => array('Dir'  , 'Code'),
   'Welcome'                  => array('File' , 'Code/Welcome.php'),
   'Custom Functions'         => array('File' , 'Code/customFunctions.php'),
+  'Login'                    => array('File' , 'Code/login.php'),
   'Experiment Page'          => array('File' , 'Code/Experiment.php'),
   'Footer'                   => array('File' , 'Code/footer.php'),
   'Header'                   => array('File' , 'Code/header.php'),

@@ -1,4 +1,4 @@
 <?php
 // this value needs to be set to true to trigger changes in the welcome page
-$isReturningUser = true;
+$is_returning_user = true;
 require '../../Code/Welcome.php';

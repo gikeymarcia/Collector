@@ -20,15 +20,15 @@
 require 'initiateCollector.php';
 
 // determine whether participant is returning or not (see Return.php)
-$isReturningUser = isset($isReturningUser) ? $isReturningUser : false;
+$is_returning_user = isset($is_returning_user) ? $is_returning_user : false;
 
 // get the directory of the currently running script (should be Experiment name)
-$scriptName = filter_input_fix(INPUT_SERVER, 'SCRIPT_NAME', FILTER_SANITIZE_STRING);
-$pathParts = explode('/', $scriptName);
-$currentExp = $pathParts[count($pathParts) - 2];
+$script_name = filter_input_fix(INPUT_SERVER, 'SCRIPT_NAME', FILTER_SANITIZE_STRING);
+$path_parts = explode('/', $script_name);
+$current_exp = $path_parts[count($path_parts) - 2];
 
 // Set default path for the Current Experiment
-$_FILES->set_default('Current Experiment', $currentExp);
+$_FILES->set_default('Current Experiment', $current_exp);
 
 // Set default path for the Data directory
 // the conditions class will automatically create a login counter dir, and it needs this value
@@ -94,15 +94,15 @@ foreach ($conditions as $i => $cond) {
 }
 
 // set the login prompt text based on whether this is a returning user or not
-$loginText = "Please enter your {$_SETTINGS->ask_for_login}";
-if ($isReturningUser) {
-    $loginText .= ' and make sure it is the same one you used last time';
+$login_text = "Please enter your {$_SETTINGS->ask_for_login}";
+if ($is_returning_user) {
+    $login_text .= ' and make sure it is the same one you used last time';
 }
 
 // only show the select box if enabled and this is not a returning user
-$selectClass = 'hidden';
-if ($_SETTINGS->show_condition_selector == true && !$isReturningUser) {
-    $selectClass = 'collectorInput';
+$select_class = 'hidden';
+if ($_SETTINGS->show_condition_selector == true && !$is_returning_user) {
+    $select_class = 'collectorInput';
 }
 
 ?>
@@ -131,14 +131,14 @@ if ($_SETTINGS->show_condition_selector == true && !$isReturningUser) {
 
   <section id="indexLogin" class="flexVert">
     <div class="textcenter flexChild">
-      <?= $loginText ?>
+      <?= $login_text ?>
     </div>
 
     <div class="flexChild">
       <input name="Username" type="text" value="" class="collectorInput" placeholder="<?= $_SETTINGS->ask_for_login ?>" autofocus>
 
       <!-- Condition selector -->
-      <select name="Condition" class="<?= $selectClass ?>">
+      <select name="Condition" class="<?= $select_class ?>">
         <option default selected value="Auto">Auto</option>
 
         <?php foreach ($options as $o): ?>
@@ -150,10 +150,10 @@ if ($_SETTINGS->show_condition_selector == true && !$isReturningUser) {
       </select>
 
       <!-- Submit button -->
-      <?php if ($isReturningUser): ?>
+      <?php if ($is_returning_user): ?>
       <input type="hidden" name="returning" value="1">
       <?php endif; ?>
-      <input type="hidden" name="CurrentExp" value="<?= $currentExp ?>">
+      <input type="hidden" name="CurrentExp" value="<?= $current_exp ?>">
       <button class="collectorButton" type="submit">Login</button>
 
     </div>
