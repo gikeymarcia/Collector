@@ -4,7 +4,7 @@ class ConditionAssignment
 {
     public static function get(FileSystem $_files, $condition = null) {
         if ($_files->get_default('Current Experiment') === null) {
-            throw new Exception('Cannot assign condition with FileSystem provided,'
+            throw new Exception('Cannot assign condition with FileSystem provided,' .
                                 ' because it does not know the current condition.');
         }
         

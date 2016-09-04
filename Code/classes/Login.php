@@ -24,7 +24,7 @@ class Login
     }
     
     private static function clean_and_validate_username($username_raw) {
-        $username = preg_replace('([^ !#$%&\'()+,\\-.0-9;=@A-Z[\\]^_a-z~])', '', $username);
+        $username = preg_replace('([^ !#$%&\'()+,\\-.0-9;=@A-Z[\\]^_a-z~])', '', $username_raw);
         if (strlen($username) < 4) throw new Exception('Username too short');
         
         return $username;

@@ -24,6 +24,8 @@ function get_Collector_experiments(FileSystem $_files) {
  */
 function create_experiment(FileSystem $_files, $condition = null) {
     $condition = ConditionAssignment::get($_files, $condition);
+    
+    // @TODO: properly read a condition row
         
     $stimuli   = load_exp_files($_files, 'Stimuli',   $condition['Stimuli']);
     $procedure = load_exp_files($_files, 'Procedure', $condition['Procedure']);
@@ -626,13 +628,12 @@ function fileExists ($path, $findAltExt = true, $findDir = 1) {
  *
  * @return string The generated random string.
  */
-function randString($length = 10)
+function rand_string($length = 10)
 {
-    $chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    $size = strlen($chars);
+    $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     $out = '';
     for ($i = 0; $i < $length; ++$i) {
-        $out .= $chars[mt_rand(0, $size - 1)];
+        $out .= $chars[mt_rand(0, 35)];
     }
 
     return $out;
@@ -784,7 +785,7 @@ function filter_input_fix($type, $variable_name, $filter = FILTER_DEFAULT, $opti
  *
  * @param mixed $data the data to be printed
  */
-function datadump($data) {
+function data_dump($data) {
     require_once __DIR__ . '/vendor/kint/Kint.class.php';
     d($data);
 }

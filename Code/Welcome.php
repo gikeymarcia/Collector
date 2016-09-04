@@ -20,6 +20,7 @@
 require 'initiateCollector.php';
 
 // determine whether participant is returning or not (see Return.php)
+// @TODO: make this set a flag at login, to tell Experiment that this user must be returning
 $is_returning_user = isset($is_returning_user) ? $is_returning_user : false;
 
 // get the directory of the currently running script (should be Experiment name)
@@ -153,7 +154,7 @@ if ($_SETTINGS->show_condition_selector == true && !$is_returning_user) {
       <?php if ($is_returning_user): ?>
       <input type="hidden" name="returning" value="1">
       <?php endif; ?>
-      <input type="hidden" name="CurrentExp" value="<?= $current_exp ?>">
+      <input type="hidden" name="Experiment" value="<?= $current_exp ?>">
       <button class="collectorButton" type="submit">Login</button>
 
     </div>

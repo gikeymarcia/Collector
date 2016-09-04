@@ -22,5 +22,7 @@ var User_Data = {
 }
 </script>
 
+You've made it!
+
 <?php
     require $_FILES->get_path('Footer');
