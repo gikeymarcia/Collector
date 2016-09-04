@@ -143,6 +143,8 @@
     $stimuli=getFromFile($_PATH->get('Common')."/Surveys/$surveySheetsInfo->thisSurveyFilename",false,',');
   }
 
+  $currentFileLocation = $_PATH->get('Common')."/Surveys/$surveySheetsInfo->thisSurveyFilename";
+  
   //preparing Stim data
   $stimData = array(array_keys(reset($stimuli)));   
   foreach ($stimuli as $row) {
@@ -200,6 +202,7 @@
     </select>
     <button type='submit' name="openButton" class='collectorButton' value='Select'>Open</button>
     <input id="saveButton" type="button" class="collectorButton" value="Save">  
+    <span id="save_status">No changes registered</span>
     <button id="submitButton" type="submit" name="Save" class="collectorButton" style="display:none"></button> 
     <input type="button" id="deleteSheetButton" name="DeleteSheetQuestion" class="collectorButton" value="Delete?">  
     <button id="deleteActivate" type="submit" name="DeleteSheet" class="collectorButton" value="Delete" style="display:none">No text needed</button>
@@ -339,6 +342,7 @@
 </div>
 
 
+<script src="AjaxSave.js"></script>
 <script type="text/javascript">
 
 $("#helperButton").click(function(){
@@ -409,44 +413,46 @@ if (typeof sheetName !== 'undefined'){
 function helperActivate(columnName, cellValue){
   $("#helpType").html(columnName);
   
-  var columnCodeName = columnName.replace(/ /g, '');
-  
-  if (columnCodeName.indexOf("Score:") !== -1){
-    columnCodeName = "Score";
-  }
-  
-  console.dir(columnCodeName);
-  
-  $("#helperBar").find(".helpType_Col").hide();
-
-  if ($("#helperBar").find("#helpType_" + columnCodeName).length > 0) {
-    $("#helperBar").find("#helpType_" + columnCodeName).show();
-  } else {
-    $("#helperBar").find("#helpTypeDefault").show();
-  }
-  
-  
-  
-  // code for specific helper bars
-  if(columnCodeName=="Type"){
-    //compare if string is within string
-    for(i=0;i<surveyVector.length;i++){
-      //remove cases for comparisons
-      var surveyValue=surveyVector[i].toLowerCase();
-      if(surveyValue.indexOf(cellValue.toLowerCase())==-1){
-        $("#header"+surveyVector[i]).hide();
-      } else {
-        $("#header"+surveyVector[i]).show(); // show header
-      }
-      
-      // show details if only one item fits criterion
-      if(surveyValue.localeCompare(cellValue.toLowerCase())==0){ 
-        $("#detail"+surveyVector[i]).show();
-      } else {
-        $("#detail"+surveyVector[i]).hide();
-      }
+  if(columnName !== null){
+   var columnCodeName = columnName.replace(/ /g, '');
+    
+    if (columnCodeName.indexOf("Score:") !== -1){
+      columnCodeName = "Score";
+    }
+    
+    console.dir(columnCodeName);
+        
+    $("#helperBar").find(".helpType_Col").hide();
+    if ($("#helperBar").find("#helpType_" + columnCodeName).length > 0) {
+      $("#helperBar").find("#helpType_" + columnCodeName).show();
+    } else {
+      $("#helperBar").find("#helpTypeDefault").show();
+    }
+    
+    
+    
+    // code for specific helper bars
+    if(columnCodeName=="Type"){
+      //compare if string is within string
+      for(i=0;i<surveyVector.length;i++){
+        //remove cases for comparisons
+        var surveyValue=surveyVector[i].toLowerCase();
+        if(surveyValue.indexOf(cellValue.toLowerCase())==-1){
+          $("#header"+surveyVector[i]).hide();
+        } else {
+          $("#header"+surveyVector[i]).show(); // show header
+        }
+        
+        // show details if only one item fits criterion
+        if(surveyValue.localeCompare(cellValue.toLowerCase())==0){ 
+          $("#detail"+surveyVector[i]).show();
+        } else {
+          $("#detail"+surveyVector[i]).hide();
+        }
+      }    
     }    
-  }  
+  }
+   
 }
 
 
@@ -725,29 +731,64 @@ $("#saveButton").on("click", function() { //final checks before saving
 });
 
 $(window).bind('keydown', function(event) {
-    if (event.ctrlKey || event.metaKey) {
-        switch (String.fromCharCode(event.which).toLowerCase()) {
-        case 's':
-            event.preventDefault();
-            alert('Saving');
+  if (event.ctrlKey || event.metaKey) {
+    switch (String.fromCharCode(event.which).toLowerCase()) {
+    case 's':
+      event.preventDefault();
+      alert('Saving');
       stimTable.deselectCell();      
       $("#saveButton").click();
-            break;
-        case 'd':
-            event.preventDefault();
-      $("#deleteButton").click();
-            break;
-        }
+      break;
+    case 'd':
+      event.preventDefault();
+  $("#deleteButton").click();
+      break;
     }
+  }
+  
+  if(event.keyCode == 46){
+    ajaxSave();
+  }
+
+  if(event.keyCode == 27){
+    alert("There's a bug with the escape button - your changes will NOT be reverted.");
+//        stimTable.Dom.stopImmediatePropagation(event);
+    
+    // code below is redundant as it stands :-(
+    
+    stimTable.deselectCell();
+    
+    ajaxSave();
+  }
+  
+});
+
+
+stimTable.updateSettings({
+  beforeKeyDown: function (e) {
+    if (e.keyCode === 27) {
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      
+    }
+  }
 });
 
 // during typing into HandsOnTable, update the helper bar
 $(document).on("input", ".handsontableInput", function() {
     var coord  = window['Current HoT Coordinates'];
+    var x      = coord[0];
     var y      = coord[1];
     var column = stimTable.getDataAtCell(0, y);
     helperActivate(column, this.value);
+    
+    
+    stimTable.getData()[x][y]=this.value;
+    ajaxSave();
 });
+
+var currentFileLocation = "<?= $currentFileLocation ?>";
+
 
 
 </script>

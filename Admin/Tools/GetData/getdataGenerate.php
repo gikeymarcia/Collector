@@ -71,18 +71,28 @@
 	<title>Get Data</title>
 </head>
 <body>
+  <span id="tableSelection">
+    <input type="button" id="rawTable"    value="raw">
+    <input type="button" id="uploadTable" value="upload .csv">
+  </span>
+  <br>
+  <div id="tableArea">
 	<table id="GetDataTable">
-        <thead> <tr> <th><?= implode('</th><th>', $columns) ?></th> </tr> </thead>
+      <thead> <tr> <th><?= implode('</th><th>', $columns) ?></th> </tr> </thead>
         <tbody>
 <?php
     #### Data Summary
     } elseif ($_POST['format'] === 'summary') {
         require $_PATH->get('Header');
 ?>
+
+
     <script>
-      if (typeof jQuery === "undefined") {
+          
+    if (typeof jQuery === "undefined") {
         document.write("<script src='<?= $_PATH->get('Jquery', 'url') ?>'><\/script>");
       }
+      
     </script>
     <script src="summaryFunctions.js"></script>
     <script>
@@ -212,6 +222,7 @@
                 }
             } elseif (!isset($dataFiles['exp'])) {
                 foreach ($dataByID as $row) {
+                  
                     $sortedRow = array();
                     foreach ($columns as $col) {
                         if (isset($row[$col])) {
@@ -256,6 +267,21 @@
                         } else {
                             fputcsv($outstream, $sortedRow, $d);
                         }
+                        
+                        $json_sorted_row=json_encode($sortedRow);
+                        
+                        // Anthony injection //
+                        
+                        ?>
+                        <script>
+                        if(typeof(row_array)=="undefined"){
+                          row_array=[<?= $json_sorted_row ?>];
+                        } else {
+                          row_array[row_array.length]=<?= $json_sorted_row ?>;
+                        }
+                        </script>
+                        <?php
+                        // End of Anthony injection //
                     }
                 }
             }
@@ -263,10 +289,11 @@
     }
     
     if ($_POST['format'] === 'html') {
-        echo '</tbody></table></body></html>';
+        echo '</tbody></table></div></body></html>';
     } elseif ($_POST['format'] === 'summary') {
 ?>
     ];
+    
     
     var getdataHeaders = data[0].slice(0);
     var getdataData    = associateArray(data);
@@ -337,6 +364,7 @@
     </div>
     <div id="barChart">
     </div>
+    
     
     
     <script>

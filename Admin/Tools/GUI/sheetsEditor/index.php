@@ -256,6 +256,7 @@
   
   $jsonSheets=json_encode($sheetsList);
   
+   
   
 ?>
 
@@ -457,6 +458,9 @@
 
 <script type="text/javascript">
 
+  var this_sheet_folder = "<?= $studySheetsInfo->thisSheetFolder ?>";
+
+
   var currentFileLocation = '<?= "$thisDirInfo->studyDir/$studySheetsInfo->thisSheetFilename"?>';
   
   var help_location = "helper/UserCustom/";
@@ -509,5 +513,5 @@
   
   
 </script>
-
+<script src="AjaxSave.js"></script>
 <script src="sheetsEditor.js"></script>
