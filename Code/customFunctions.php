@@ -22,13 +22,11 @@ function get_Collector_experiments(FileSystem $_files) {
  * creates an experiment by reading the relevant stim and proc files of
  * either a given or a randomly assigned condition
  */
-function create_experiment(FileSystem $_files, $condition = null) {
-    $condition = ConditionAssignment::get($_files, $condition);
+function create_experiment(FileSystem $_files, $condition_index = null) {
+    $condition = ConditionAssignment::get($_files, $condition_index);
     
-    // @TODO: properly read a condition row
-        
-    $stimuli   = load_exp_files($_files, 'Stimuli',   $condition['Stimuli']);
-    $procedure = load_exp_files($_files, 'Procedure', $condition['Procedure']);
+    $stimuli   = load_exp_files($_files, 'Stimuli',   $condition);
+    $procedure = load_exp_files($_files, 'Procedure', $condition);
     
     return array(
         'Condition' => $condition,
@@ -45,16 +43,23 @@ function create_experiment(FileSystem $_files, $condition = null) {
  *
  * @return array the data from all the csvs, combined and shuffled
  */
-function load_exp_files($filenames, $type, FileSystem $_files) {
-    $files = explode(',', $filenames);
+function load_exp_files(FileSystem $_files, $type, $condition) {
+    $files      = array();
+    $file_index = 1;
+    
+    while (isset($condition["$type $file_index"])) {
+        $files[] = $condition["$type $file_index"];
+        ++$file_index;
+    }
     
     $all_data = array();
     
     foreach ($files as $file) {
         $file_data = $_files->read($type, array($type => $file));
-        $all_data = array2d_merge($all_data, $file_data);
+        $all_data  = array2d_merge($all_data, $file_data);
     }
     
+    require_once $_files->get_path('Shuffle Functions');
     $all_data = multiLevelShuffle($all_data);
     $all_data = shuffle2dArray($all_data);
     
@@ -71,7 +76,15 @@ function load_exp_files($filenames, $type, FileSystem $_files) {
  * @return array the two arrays combined
  */
 function array2d_merge($arr1, $arr2) {
-    $all_headers = array_keys(reset($arr1) + reset($arr2));
+    $all_headers = array();
+    
+    foreach (array($arr1, $arr2) as $arr) {
+        $first_row = reset($arr);
+        
+        if ($first_row !== false) $all_headers += $first_row;
+    }
+    
+    $all_headers = array_keys($all_headers);
     
     $all_data = array();
     

@@ -12,7 +12,7 @@ class fsDataType_JSON extends fsDataType_Abstract
         $dir = dirname($path);
         if (!is_dir($dir)) mkdir($dir, 0777, true);
 
-        $json_options = ($this->can_pretty_print()) ? JSON_PRETTY_PRINT : null;
+        $json_options = (static::can_pretty_print()) ? JSON_PRETTY_PRINT : null;
 
         return file_put_contents($path, json_encode($data, $json_options));
     }

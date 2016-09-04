@@ -15,9 +15,9 @@
 
 <script>
 var User_Data = {
-    Username:   <?= $_SESSION['Username'] ?>,
-    ID:         <?= $_SESSION['ID'] ?>,
-    Debug_Mode: <?= $_SESSION['Debug Mode'] ?>,
+    Username:   "<?= $_SESSION['Username'] ?>",
+    ID:         "<?= $_SESSION['ID'] ?>",
+    Debug_Mode: <?= $_SESSION['Debug Mode'] ? "true" : "false" ?>,
     Experiment: <?= json_encode($user_data) ?>
 }
 </script>
