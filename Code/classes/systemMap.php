@@ -67,7 +67,7 @@ return array(
 
   'JS Dir'                   => array('Dir'  , 'Code/javascript'),
     'Collector JS'           => array('File' , 'Code/javascript/Collector.js'),
-    'Jquery'                 => array('File' , 'Code/javascript/jquery.js'),
+    'Jquery'                 => array('File' , 'Code/javascript/jquery-3.1.0.min.js'),
     'Jquery UI Custom'       => array('File' , 'Code/javascript/jquery-ui-1.10.4.custom.min.js'),
     'Jquery UI'              => array('File' , 'Code/javascript/jquery-1.12.4.min.js'),
     'Login JS'               => array('File' , 'Code/javascript/loggingIn.js'),
