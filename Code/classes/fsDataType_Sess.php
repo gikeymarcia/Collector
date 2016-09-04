@@ -1,25 +1,25 @@
 <?php
 
-class fsDataType_Sess extends fsAbstractDataType
+class fsDataType_Sess extends fsDataType_Abstract
 {
     public static function read($path) {
         if (!is_file($path)) return array();
 
-        $oldSess = $_SESSION;
+        $old_session = $_SESSION;
         $_SESSION = array();
 
         session_decode(file_get_contents($path));
 
-        $requestedSession = $_SESSION;
-        $_SESSION = $oldSess;
+        $requested_session = $_SESSION;
+        $_SESSION = $old_session;
 
-        return $requestedSession;
+        return $requested_session;
     }
 
     public static function overwrite($path, $data) {
-        self::validateKeys($data);
+        self::validate_keys($data);
 
-        $realSess = $_SESSION;
+        $real_session = $_SESSION;
         $_SESSION = $data;
         $dir = dirname($path);
 
@@ -27,23 +27,23 @@ class fsDataType_Sess extends fsAbstractDataType
 
         $write = file_put_contents($path, session_encode());
 
-        $_SESSION = $realSess;
+        $_SESSION = $real_session;
 
         return $write;
     }
 
     public static function write($path, $data, $index) {
-        return self::writeMany($path, array($index => $data));
+        return self::write_many($path, array($index => $data));
     }
 
-    public static function writeMany($path, $data) {
-        self::validateKeys($data);
+    public static function write_many($path, $data) {
+        self::validate_keys($data);
 
         if (!is_file($path)) {
             return self::overwrite($path, $data);
         }
 
-        $oldSess = $_SESSION;
+        $old_session = $_SESSION;
         $_SESSION = array();
 
         session_decode(file_get_contents($path));
@@ -54,12 +54,12 @@ class fsDataType_Sess extends fsAbstractDataType
 
         $write = file_put_contents($path, session_encode());
 
-        $_SESSION = $oldSess;
+        $_SESSION = $old_session;
 
         return $write;
     }
 
-    private static function validateKeys($data) {
+    private static function validate_keys($data) {
         foreach ($data as $key => $val) {
             if ($key === null || is_numeric($key)) {
                 throw new Exception('PHP Session data must be indexed with a string key, you cannot use a number or null');

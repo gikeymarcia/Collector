@@ -71,8 +71,8 @@ class Settings
     public function __construct(\FileSystem $_files)
     {
         $this->files      = $_files;
-        $this->common     = load('Common Settings', $_files);
-        $this->experiment = load('Experiment Settings', $_files);
+        $this->common     = $this->load('Common Settings', $_files);
+        $this->experiment = $this->load('Experiment Settings', $_files);
     }
 
     /**
@@ -89,7 +89,7 @@ class Settings
     {
         $key = trim(strtolower($var));
         if ($key === 'password') {
-            $pass = $this->getPassword();
+            $pass = $this->get_password();
 
             return $pass;
         }
@@ -113,15 +113,15 @@ class Settings
 
     private function load($system_data_label)
     {
-        $data_source = ($system_map_name == 'Common Settings'
-                     || $system_map_name == 'Experiment Settings') ?
-                     $data_source : null;
+        $data_source = ($system_data_label == 'Common Settings'
+                     || $system_data_label == 'Experiment Settings') ?
+                     $system_data_label : null;
 
         if ($data_source == null
-            || $this->files->get_path($data_source, true) == false)
+            || $this->files->get_path($data_source, array(), false) == false)
             return array();
-
-        return $_files->read($data_source);
+        
+        return $this->files->read($data_source);
     }
 
 
@@ -149,12 +149,12 @@ class Settings
      *
      * @return string|null The password if it could be found, else null.
      */
-    protected function getPassword()
+    protected function get_password()
     {
-        $path = $this->files->get_path('Password', true);
+        $path = $this->files->get_path('Password', array(), false);
         if ($path === false) return null;
 
-        $pass_path = $this->files->get_path('Password');
+        $pass_path = $this->files->get_path('Password', array());
         $password = require $pass_path;
 
         if ($password == $this->default_pass) $password = null;

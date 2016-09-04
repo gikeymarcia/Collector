@@ -796,7 +796,7 @@ function datadump($data) {
  *                      replace successive instances of [var]
  * return string
  */
-function fill_template($string, $inputs) {
+function fill_template($string, $inputs, $throw_exception_on_incomplete_template = true) {
     $vars = array();
 
     foreach ($inputs as $key => $val) {
@@ -812,26 +812,38 @@ function fill_template($string, $inputs) {
     $output = $components[0];
     unset($components[0]);
 
-    foreach ($components as $varAndStaticString) {
-        $varAndStaticArray = explode(']', $varAndStaticString);
-        $varKey = $varAndStaticArray[0];
+    foreach ($components as $var_and_static_string) {
+        $var_and_static_array = explode(']', $var_and_static_string);
+        $var_key = $var_and_static_array[0];
 
-        if ($varKey === 'var') {
-            if (count($vars) < 1) throw new Exception(
-                'Not enough vars for template: ' . $string
-            );
+        if ($var_key === 'var') {
+            if (count($vars) < 1) {
+                if ($throw_exception_on_incomplete_template) {
+                    throw new Exception(
+                        'Not enough vars for template: ' . $string
+                    );
+                } else {
+                    return false;
+                }
+            }
 
             $output .= array_shift($vars);
         } else {
-            if (!isset($inputs[$varKey])) throw new Exception(
-                'Missing input with key: ' . $varKey
-            );
+            if (!isset($inputs[$var_key])) {
+                if ($throw_exception_on_incomplete_template) {
+                    throw new Exception(
+                        'Missing input with key: ' . $var_key
+                    );
+                } else {
+                    return false;
+                }
+            }
 
-            $output .= $inputs[$varKey];
+            $output .= $inputs[$var_key];
         }
 
-        if (isset($varAndStaticArray[1])) {
-            $output .= $varAndStaticArray[1];
+        if (isset($var_and_static_array[1])) {
+            $output .= $var_and_static_array[1];
         }
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-class fsDataType_JSON extends fsAbstractDataType
+class fsDataType_JSON extends fsDataType_Abstract
 {
     public static function read($path) {
         if (!is_file($path)) return null;

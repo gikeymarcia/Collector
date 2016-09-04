@@ -53,7 +53,7 @@ class FileSystem
                                      can be false to return raw path
      * @return string                relative path to source
      */
-    public function get_path($source, $variables = array())
+    public function get_path($source, $variables = array(), $throw_exception_when_path_is_incomplete = true)
     {
         $source = strtolower(trim($source));
 
@@ -68,10 +68,13 @@ class FileSystem
             }
             $variables = array_merge($this->defaults, $variables);
 
-            $varsReplaced = fill_template(
-                $this->map[$source][1], $variables
+            $var_replaced = fill_template(
+                $this->map[$source][1], $variables, $throw_exception_when_path_is_incomplete
             );
-            return $this->get_root() . "/$varsReplaced";
+            
+            if ($var_replaced === false) return false;
+            
+            return $this->get_root() . "/$var_replaced";
         }
     }
 
@@ -97,9 +100,18 @@ class FileSystem
         return isset($this->defaults[$key]) ? $this->defaults[$key] : null;
     }
 
-    private function access($source, $command, $data = null, $index = null, $path_vars = array())
-    {
-        $path = $this->get_path($source, $path_vars);
+    private function access(
+        $source,
+        $command,
+        $data = null,
+        $index = null,
+        $path_vars = array(),
+        $throw_exception_when_path_is_incomplete = true
+    ) {
+        $path = $this->get_path($source, $path_vars, $throw_exception_when_path_is_incomplete);
+        
+        if ($path === false) return false;
+        
         $class_name = 'fsDataType_' . $this->get_type($source);
         $this->validate_date_type($class_name);
 
@@ -115,15 +127,15 @@ class FileSystem
             return true;
         }
 
-        $parents = class_parents($dataType);
+        $interfaces = class_implements($dataType);
 
-        if (isset($parents['fsAbstractDataType'])) {
+        if (isset($interfaces['fsDataType_Interface'])) {
             $this->validated_data_types[$dataType] = true;
             return true;
         }
 
-        throw new Exception("System map cannot use '$dataType', as it is not "
-            . "an extension of 'fsAbstractDataType'.");
+        throw new Exception("System map cannot use '$dataType', as it does not "
+            . "implement 'fsDataType_Interface'.");
     }
 
     public function __sleep() {
@@ -140,28 +152,84 @@ class FileSystem
  * and it will enforce that all datatypes implement that method
  * read, write, writeMany, overwrite, query
  */
-    public function read($source, $path_vars = array())
-    {
-        return $this->access($source, 'read', null, null, $path_vars);
+    public function read(
+        $source,
+        $path_vars = array(),
+        $throw_exception_when_path_is_incomplete = true
+    ) {
+        return $this->access(
+            $source,
+            'read',
+            null,
+            null,
+            $path_vars,
+            $throw_exception_when_path_is_incomplete
+        );
     }
 
-    public function write($source, $data, $index = null, $path_vars = array())
-    {
-        return $this->access($source, 'write', $data, $index, $path_vars);
+    public function write(
+        $source,
+        $data,
+        $index = null,
+        $path_vars = array(),
+        $throw_exception_when_path_is_incomplete = true
+    ) {
+        return $this->access(
+            $source,
+            'write',
+            $data,
+            $index,
+            $path_vars,
+            $throw_exception_when_path_is_incomplete
+        );
     }
 
-    public function writeMany($source, $data, $path_vars = array())
-    {
-        return $this->access($source, 'writeMany', $data, null, $path_vars);
+    public function write_many(
+        $source,
+        $data,
+        $path_vars = array(),
+        $throw_exception_when_path_is_incomplete = true
+    ) {
+        return $this->access(
+            $source,
+            'write_many',
+            $data,
+            null,
+            $path_vars,
+            $throw_exception_when_path_is_incomplete
+        );
     }
 
-    public function overwrite($source, $data, $index = null, $path_vars = array())
-    {
-        return $this->access($source, 'overwrite', $data, $index, $path_vars);
+    public function overwrite(
+        $source,
+        $data,
+        $index = null,
+        $path_vars = array(),
+        $throw_exception_when_path_is_incomplete = true
+    ) {
+        return $this->access(
+            $source,
+            'overwrite',
+            $data,
+            $index,
+            $path_vars,
+            $throw_exception_when_path_is_incomplete
+        );
     }
 
-    public function query($source, $index, $path_vars = array())
-    {
-        return $this->access($source, 'query', null, $index, $path_vars);
+    public function query(
+        $source,
+        $index,
+        $path_vars = array(),
+        $throw_exception_when_path_is_incomplete = true
+    ) {
+        return $this->access(
+            $source,
+            'query',
+            null,
+            $index,
+            $path_vars,
+            $throw_exception_when_path_is_incomplete
+        );
     }
 }

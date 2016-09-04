@@ -1,6 +1,6 @@
 <?php
 
-abstract class fsDataType_CSV extends fsAbstractDataType
+abstract class fsDataType_CSV extends fsDataType_Abstract
 {
     /**
      * Things I'm trying to handle (e.g. should write tests for)
@@ -12,16 +12,16 @@ abstract class fsDataType_CSV extends fsAbstractDataType
     public static function read($path) {
         if (!is_file($path)) return array();
 
-        $fileStream = fopen($path, 'r');
+        $file_stream = fopen($path, 'r');
         $data = array();
 
-        $headers = self::readRow($fileStream);
+        $headers = self::read_row($file_stream);
 
-        while ($row = self::readRow($fileStream, $headers)) {
+        while ($row = self::read_row($file_stream, $headers)) {
             $data[] = $row;
         }
 
-        fclose($fileStream);
+        fclose($file_stream);
         return $data;
     }
 
@@ -30,8 +30,8 @@ abstract class fsDataType_CSV extends fsAbstractDataType
 
         if (!is_dir($dir)) mkdir($dir, 0777, true);
 
-        $data = self::trimHeaders($data);
-        $fileStream = fopen($path, 'w');
+        $data = self::trim_headers($data);
+        $file_stream = fopen($path, 'w');
         $headers = array();
 
         foreach ($data as $row) {
@@ -41,9 +41,9 @@ abstract class fsDataType_CSV extends fsAbstractDataType
         }
 
         $headers = array_keys($headers);
-        $written = fputcsv($fileStream, $headers);
-        $written += self::writeRows($fileStream, $headers, $data);
-        fclose($fileStream);
+        $written = fputcsv($file_stream, $headers);
+        $written += self::write_rows($file_stream, $headers, $data);
+        fclose($file_stream);
         return $written;
     }
 
@@ -61,136 +61,136 @@ abstract class fsDataType_CSV extends fsAbstractDataType
         }
 
         if (is_numeric($index)) {
-            return self::rewriteLine($path, $data, $index);
+            return self::rewrite_line($path, $data, $index);
         } else {
-            return self::writeMany($path, array($data));
+            return self::write_many($path, array($data));
         }
     }
 
-    public static function writeMany($path, $data) {
+    public static function write_many($path, $data) {
         if (!is_file($path)) {
             return self::overwrite($path, $data);
         }
 
-        $data           = self::trimHeaders($data);
-        $fileStream     = fopen($path, 'r+');
-        $oldHeaders     = fgetcsv($fileStream);
-        $oldHeadersFlip = array_flip($oldHeaders);
-        $newHeadersFlip = array();
+        $data           = self::trim_headers($data);
+        $file_stream     = fopen($path, 'r+');
+        $old_headers     = fgetcsv($file_stream);
+        $old_headers_flip = array_flip($old_headers);
+        $new_headers_flip = array();
 
         foreach ($data as $row) {
             foreach ($row as $col => $cell) {
-                if (!isset($oldHeadersFlip[$col])) {
-                    $newHeadersFlip[$col] = true;
+                if (!isset($old_headers_flip[$col])) {
+                    $new_headers_flip[$col] = true;
                 }
             }
         }
 
-        if ($newHeadersFlip !== array()) {
-            $finalHeaders = array_merge($oldHeaders, array_keys($newHeadersFlip));
-            $oldData = stream_get_contents($fileStream);
-            rewind($fileStream);
+        if ($new_headers_flip !== array()) {
+            $final_headers = array_merge($old_headers, array_keys($new_headers_flip));
+            $old_data = stream_get_contents($file_stream);
+            rewind($file_stream);
 
-            fputcsv($fileStream, $finalHeaders);
-            fwrite($fileStream, $oldData);
+            fputcsv($file_stream, $final_headers);
+            fwrite($file_stream, $old_data);
 
         } else {
-            fseek($fileStream, 0, SEEK_END);
-            $finalHeaders = $oldHeaders;
+            fseek($file_stream, 0, SEEK_END);
+            $final_headers = $old_headers;
         }
 
-        $written = self::writeRows($fileStream, $finalHeaders, $data);
-        fclose($fileStream);
+        $written = self::write_rows($file_stream, $final_headers, $data);
+        fclose($file_stream);
         return $written;
     }
 
-    private static function writeRows($fileStream, $headers, $rows) {
+    private static function write_rows($file_stream, $headers, $rows) {
         $written = 0;
 
         foreach ($rows as $row) {
-            $sortedRow = array();
+            $sorted_row = array();
 
             foreach ($headers as $header) {
-                $sortedRow[$header] = isset($row[$header]) ? $row[$header] : '';
+                $sorted_row[$header] = isset($row[$header]) ? $row[$header] : '';
             }
 
-            $written += fputcsv($fileStream, $sortedRow);
+            $written += fputcsv($file_stream, $sorted_row);
         }
 
         return $written;
     }
 
-    private static function readRow($fileStream, $headers = null) {
-        $rowIsEmpty = true;
+    private static function read_row($file_stream, $headers = null) {
+        $row_is_empty = true;
 
-        while ($rowIsEmpty) {
-            $row = fgetcsv($fileStream);
+        while ($row_is_empty) {
+            $row = fgetcsv($file_stream);
 
             if ($row === false || $row === null) return $row;
 
-            $cleanRow = array();
+            $clean_row = array();
 
             foreach ($row as $cell) {
-                if (($cleanRow[] = trim($cell)) !== '') $rowIsEmpty = false;
+                if (($clean_row[] = trim($cell)) !== '') $row_is_empty = false;
             }
         }
 
         if ($headers === null) {
             return $row;
         } else {
-            $sortedRow = array();
+            $sorted_row = array();
 
             foreach ($headers as $i => $header) {
-                $sortedRow[$header] = isset($row[$i]) ? $row[$i] : '';
+                $sorted_row[$header] = isset($row[$i]) ? $row[$i] : '';
             }
 
-            return $sortedRow;
+            return $sorted_row;
         }
     }
 
-    private static function trimHeaders($data) {
-        $trimmedData = array();
+    private static function trim_headers($data) {
+        $trimmed_data = array();
 
         foreach ($data as $i => $row) {
             foreach ($row as $header => $cell) {
-                $trimmedData[$i][trim($header)] = $cell;
+                $trimmed_data[$i][trim($header)] = $cell;
             }
         }
 
-        return $trimmedData;
+        return $trimmed_data;
     }
 
-    private static function rewriteLine($path, $data, $index) {
+    private static function rewrite_line($path, $data, $index) {
         $index = (int) $index;
-        $fileStream = fopen($path, 'r+');
-        $headers = self::readRow($fileStream);
-        $currentIndex = 0;
-        $newData = self::trimHeaders(array($data));
+        $file_stream = fopen($path, 'r+');
+        $headers = self::read_row($file_stream);
+        $current_index = 0;
+        $new_data = self::trim_headers(array($data));
 
         do {
-            if ($currentIndex === $index) {
-                $rewriteOffset = ftell($fileStream);
-                self::readRow($fileStream); // skip this row, we are about to overwrite
-                $remainingData = stream_get_contents($fileStream);
-                fseek($fileStream, $rewriteOffset, SEEK_SET); // go back to the beginning of the row we are replacing
-                $written = self::writeRows($fileStream, $headers, $newData);
-                fwrite($fileStream, $remainingData);
-                fclose($fileStream);
+            if ($current_index === $index) {
+                $rewrite_offset = ftell($file_stream);
+                self::read_row($file_stream); // skip this row, we are about to overwrite
+                $remaining_data = stream_get_contents($file_stream);
+                fseek($file_stream, $rewrite_offset, SEEK_SET); // go back to the beginning of the row we are replacing
+                $written = self::write_rows($file_stream, $headers, $new_data);
+                fwrite($file_stream, $remaining_data);
+                fclose($file_stream);
                 return $written;
             }
 
-            ++$currentIndex;
-        } while (self::readRow($fileStream));
+            ++$current_index;
+        } while (self::read_row($file_stream));
 
         // turns out, the row we are replacing doesnt exist
         // so, create some padding rows
-        $paddingContent = array_pad(array(), count($headers), '_');
-        $paddingContent = array_combine($headers, $paddingContent);
-        $paddingRowCount = $index - $currentIndex + 1;
-        $allNewData = array_pad(array(), $paddingRowCount, $paddingContent); // padding rows
-        $allNewData[] = $newData[0]; // add new row to the end of padding
-        $written = self::writeRows($fileStream, $headers, $allNewData);
-        fclose($fileStream);
+        $padding_content = array_pad(array(), count($headers), '_');
+        $padding_content = array_combine($headers, $padding_content);
+        $padding_row_count = $index - $current_index + 1;
+        $all_new_data = array_pad(array(), $padding_row_count, $padding_content); // padding rows
+        $all_new_data[] = $new_data[0]; // add new row to the end of padding
+        $written = self::write_rows($file_stream, $headers, $all_new_data);
+        fclose($file_stream);
         return $written;
     }
 }
