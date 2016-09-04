@@ -7,7 +7,7 @@
     }
 
     if (isset($_POST['pass'])) {
-        $_SETTINGS->setPassword($_POST['pass']);
+        $_SETTINGS->set_password($_POST['pass']);
         if ($_SETTINGS->password !== null) {
             $noPass = false;
             $root = $_FILES->get_path("Root");

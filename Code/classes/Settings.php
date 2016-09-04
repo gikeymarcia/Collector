@@ -15,7 +15,7 @@ class Settings
      *
      * @var string
      */
-    protected $defaultPass = 'weakpassword';
+    protected $default_pass = 'weakpassword';
 
     /**
      * The default settings in "Common Settings.json".
@@ -23,7 +23,7 @@ class Settings
      *
      * @var array
      */
-    protected $defaultCommon = array(
+    protected $default_common = array(
         'force_experiment' => '',
         'experimenter_email' => 'youremail@yourdomain.com',
         'check_all_files' => true,
@@ -40,7 +40,7 @@ class Settings
      * If "Settings.json" is not present these settings will be used
      * @var array
      */
-    protected $defaultExp = array(
+    protected $default_exp = array(
         'experiment_name' => 'Collector',
         'debug_mode' => false,
         'lenient_criteria' => 75,
@@ -59,43 +59,7 @@ class Settings
         ),
     );
 
-    /**
-     * Information about the loaded common settings file:
-     * path to the file ('loc'),
-     * and its data ('data').
-     *
-     * @var array
-     */
-    protected $common = array(
-        'loc'  => null,
-        'data' => array(),
-    );
-
-    /**
-     * Information about the loaded experiment settings file:
-     * path to the file ('loc'),
-     * and its data ('data').
-     *
-     * @var array
-     */
-    protected $experiment = array(
-        'loc'  => null,
-        'data' => array(),
-    );
-
-    /**
-     * The path to the password file.
-     *
-     * @var string
-     */
-    protected $passLoc;
-
-    /**
-     * JSON encode options.
-     *
-     * @var null|int
-     */
-    private $jsonOptions;
+    protected $files = null;
 
     /**
      * Constructor.
@@ -106,13 +70,9 @@ class Settings
      */
     public function __construct(\FileSystem $_files)
     {
-        $this->jsonOptions    = $this->canPrettyPrint() ? JSON_PRETTY_PRINT : null;
-        $this->common['data'] = $_files->read('Common Settings'    , array(), false);
-        $this->common['loc']  = $_files->get_path('Common Settings', array(), false);
-
-        $this->experiment['data'] = $_files->read('Experiment Settings', array(), false);
-        $this->experiment['loc']  = $_files->get_path('Experiment Settings', array(), false);
-        $this->passLoc = $passLoc;
+        $this->files      = $_files;
+        $this->common     = load('Common Settings', $_files);
+        $this->experiment = load('Experiment Settings', $_files);
     }
 
     /**
@@ -136,19 +96,32 @@ class Settings
 
         // return values depending on their priority
         // if no value is found then trigger error and return null
-        if (isset($this->experiment['data'][$key])) {
-            return $this->experiment['data'][$key];
-        } elseif (isset($this->common['data'][$key])) {
-            return $this->common['data'][$key];
-        } elseif (isset($this->defaultExp[$key])) {
-            return $this->defaultExp[$key];
-        } elseif (isset($this->defaultCommon[$key])) {
-            return $this->defaultCommon[$key];
+        if (isset($this->experiment[$key])) {
+            return $this->experiment[$key];
+        } elseif (isset($this->common[$key])) {
+            return $this->common[$key];
+        } elseif (isset($this->default_exp[$key])) {
+            return $this->default_exp[$key];
+        } elseif (isset($this->default_common[$key])) {
+            return $this->default_common[$key];
         } else {
             // @todo perhaps this should throw an \InvalidArgumentException instead?
             trigger_error('You have attempted to use the setting value of '
                 ."{$key} when that value is not specified", E_WARNING);
         }
+    }
+
+    private function load($system_data_label)
+    {
+        $data_source = ($system_map_name == 'Common Settings'
+                     || $system_map_name == 'Experiment Settings') ?
+                     $data_source : null;
+
+        if ($data_source == null
+            || $this->files->get_path($data_source, true) == false)
+            return array();
+
+        return $_files->read($data_source);
     }
 
 
@@ -157,9 +130,9 @@ class Settings
      *
      * @param string $input The password to store.
      */
-    public function setPassword($input = null)
+    public function set_password($input = null)
     {
-        $input = ($input === null) ? $this->defaultPass : $input;
+        $input = ($input === null) ? $this->default_pass : $input;
 
         if (!isset($input[2])) {
             return;
@@ -167,7 +140,8 @@ class Settings
 
         // @todo Perhaps this password should be sanitized? Is it from a user-input form?
         $php_string = "<?php return '$input'; ?>";
-        file_put_contents($this->passLoc, $php_string);
+
+        $this->files->overwrite("Password", $php_string);
     }
 
     /**
@@ -177,26 +151,15 @@ class Settings
      */
     protected function getPassword()
     {
-        $password = null;
-        if (file_exists($this->passLoc)) {
-            $password = (require $this->passLoc);
-            if ($password === $this->defaultPass) {
-                $password = null;
-            }
-        }
+        $path = $this->files->get_path('Password', true);
+        if ($path === false) return null;
+
+        $pass_path = $this->files->get_path('Password');
+        $password = require $pass_path;
+
+        if ($password == $this->default_pass) $password = null;
 
         return $password;
-    }
-
-
-    /**
-     * Checks the current PHP version to see if JSON pretty print is possible.
-     *
-     * @return bool True if pretty print is possible, else false.
-     */
-    protected function canPrettyPrint()
-    {
-        return (version_compare(PHP_VERSION, '5.4.0') >= 0) ? true : false;
     }
 
     /**
@@ -211,7 +174,7 @@ class Settings
     public function set($var, $val)
     {
         $key = trim(strtolower($var));
-        $location = (isset($this->defaultCommon[$key])) ? 'common' : 'experiment';
+        $location = (isset($this->default_common[$key])) ? 'common' : 'experiment';
         if ($location === 'common') {
             $source = &$this->common;
         } else {
@@ -226,9 +189,9 @@ class Settings
             // toggling the posted strings of true/false to boolean true/false
             if ($val === 'true' || $val === 'false') {
                 $val = ($val === 'true') ? true : false;
-                $source['data'][$key] = $val;
+                $source[$key] = $val;
             } elseif ($val === true || $val === false) {
-                $source['data'][$key] = $val;
+                $source[$key] = $val;
             } else {
                 trigger_error("Your setting '{$key}' should be a boolean but it is, {$val}, a ({$type}):", E_WARNING);
             }
@@ -238,10 +201,10 @@ class Settings
             $int = (int)$val;
             $float = (float)$val;
             $val = ($int == $float) ? $int : $float;
-            $source['data'][$key] = $val;
+            $source[$key] = $val;
         // allow all other types to be juggled
         } else {
-            $source['data'][$key] = $val;
+            $source[$key] = $val;
         }
     }
 
@@ -254,19 +217,13 @@ class Settings
     public function writeSettings()
     {
         // write common settings
-        $common = array_merge($this->defaultCommon, $this->common['data']);
-        $this->write_json($common, $this->common['loc']);
+        $common = array_merge($this->default_common, $this->common);
+        $this->files->overwrite('Common Settings', $common);
 
         // write experiment settings if we actually have a path to write to
-        if ($this->experiment['data'] !== array()) {
-            $experiemnt = array_merge($this->defaultExp, $this->experiment['data']);
-            $this->write_json($experiemnt, $this->experiment['loc']);
+        if ($this->experiment !== array()) {
+            $experiemnt = array_merge($this->default_exp, $this->experiment);
+            $this->files->overwrite('Experiment Settings', $experiemnt);
         }
-    }
-
-    private function write_json($data, $location)
-    {
-        $json = json_encode($data, $this->jsonOptions);
-        file_put_contents($location, $json);
     }
 }
