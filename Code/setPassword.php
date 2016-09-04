@@ -3,7 +3,7 @@
     if (!isset($_SESSION)
     ) {
         exit('You are not allowed to access this script directly. To change your
-              password delete the password file in "Experiments/Common/".');
+              password delete the password file in "Experiments/_Common/".');
     }
 
     if (isset($_POST['pass'])) {
