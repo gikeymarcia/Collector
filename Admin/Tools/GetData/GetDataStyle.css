@@ -77,9 +77,12 @@
   background-color: #eed9ff;
   padding: 10px;
   border-radius: 5px;
-  width: 75%;
-  height: 250px;
+  width: 95%;
+  height: 50%;
   overflow: auto;
+}
+#tableArea th, #tableArea td {
+    border: 1px solid #666;
 }
 #descriptive_table{
   background-color: #eed9ff;

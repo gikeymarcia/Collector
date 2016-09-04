@@ -27,14 +27,25 @@ $json_stats_options = json_encode($stats_options);
     data_by_cols[getdata_columns[j]] = [];
   }
   
-  for (var i=0; i<data.length; i++) {
+  for (var i=1; i<data.length; i++) {
     for (var j=0; j<getdata_columns.length; ++j) {
       var col = getdata_columns[j];
-      data_by_cols[col][i] = data[i][j];
+      data_by_cols[col][i-1] = data[i][j];
     }
   }
   
+  $(document).ready(function() {
+    var local_data = data;
+    var table_html = '<table><thead><tr><th>' + getdata_columns.join('</th><th>') + '</th></tr></thead><tbody>';
   
+    for (var i=1; i<local_data.length; i++) {
+      table_html += '<tr><td>' + local_data[i].join('</td><td>') + '</td></tr>';
+    }
+  
+    table_html += '</tbody></table>';
+    
+    $("#tableArea").html(table_html);
+  });
 </script>
 
 <link rel="stylesheet" type="text/css" href="GetDataStyle.css">
@@ -42,6 +53,8 @@ $json_stats_options = json_encode($stats_options);
   <h2> Using javascript from jStat (https://github.com/jstat/jstat) </h2>
   
   <script src = "//cdn.jsdelivr.net/jstat/latest/jstat.min.js" ></script>
+  
+<div id="tableArea"></div>
   
 <span> 
     <input class="interface_button" type="button" id="gui_interface_button"       value="GUI">
