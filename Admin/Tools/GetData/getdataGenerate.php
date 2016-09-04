@@ -75,7 +75,7 @@
       <thead> <tr> <th><?= implode('</th><th>', $columns) ?></th> </tr> </thead>
         <tbody>
 <?php
-    } elseif ($_POST['format'] === 'summary' || $_POST['format'] === 'stats') {
+    } elseif ($_POST['format'] === 'summary') {
         require $_PATH->get('Header');
 ?>
     <script>
@@ -91,6 +91,20 @@
 <?php
         echo json_encode(array_values($columns)), "\r\n";
     #### File Output
+    } elseif ($_POST['format'] === 'stats') {
+?>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link href="GetDataStyle.css" rel="stylesheet" type="text/css" />
+    <script src="<?= $_PATH->get('Jquery') ?>"></script>
+	<title>Get Data</title>
+</head>
+<body>
+<script>
+    var data = [
+<?php
     } else {
         ini_set('html_errors', false);
         
