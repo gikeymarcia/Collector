@@ -67,13 +67,13 @@ function verifyLogin($password) {
     }
 }
 
-function writeToolsHtmlHead(Pathfinder $_PATH, $tool = null) {
+function writeToolsHtmlHead(FileSystem $_files, $tool = null) {
     if ($tool === null) $tool = determineCurrentTool();
 
     $title = $tool ? $tool : 'Collector - Admin Menu';
-    require $_PATH->get('Header');
+    require $_files->get_path('Header');
 
-    $rootUrl = $_PATH->get('root', 'url');
+    $rootUrl = $_files->get_path('root', 'url');
 
     $adminStyle = "$rootUrl/Admin/adminStyle.css";
     echo "<link rel='stylesheet' href='$adminStyle'>";
@@ -82,10 +82,10 @@ function writeToolsHtmlHead(Pathfinder $_PATH, $tool = null) {
     echo "<script src='$adminJS'></script>";
 }
 
-function writeToolsNavBar(Pathfinder $_PATH, $tool = null) {
+function writeToolsNavBar(FileSystem $_files, $tool = null) {
     $tool      = ($tool !== null) ? $tool : determineCurrentTool();
     $tools     = getTools();
-    $logoutUrl = $_PATH->get('root') . '/Admin/logout.php';
+    $logoutUrl = $_files->get_path('root') . '/Admin/logout.php';
     $title     = $tool ? $tool : 'Collector - Admin Menu';
 
     $options = '';
@@ -94,7 +94,7 @@ function writeToolsNavBar(Pathfinder $_PATH, $tool = null) {
         $options .= '<option selected disabled hidden value="">Choose a tool</option>';
     }
 
-    $rootUrl = $_PATH->get('root', 'url');
+    $rootUrl = $_files->get_path('root', 'url');
 
     foreach ($tools as $toolOption) {
         $selected = ($tool === $toolOption) ? 'selected' : '';

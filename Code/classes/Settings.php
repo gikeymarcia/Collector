@@ -23,7 +23,7 @@ class Settings
      *
      * @var array
      */
-    protected $default_common = array(
+    protected $def_common = array(
         'force_experiment' => '',
         'experimenter_email' => 'youremail@yourdomain.com',
         'check_all_files' => true,
@@ -40,7 +40,7 @@ class Settings
      * If "Settings.json" is not present these settings will be used
      * @var array
      */
-    protected $default_exp = array(
+    protected $def_exp = array(
         'experiment_name' => 'Collector',
         'debug_mode' => false,
         'lenient_criteria' => 75,
@@ -100,10 +100,10 @@ class Settings
             return $this->experiment[$key];
         } elseif (isset($this->common[$key])) {
             return $this->common[$key];
-        } elseif (isset($this->default_exp[$key])) {
-            return $this->default_exp[$key];
-        } elseif (isset($this->default_common[$key])) {
-            return $this->default_common[$key];
+        } elseif (isset($this->def_exp[$key])) {
+            return $this->def_exp[$key];
+        } elseif (isset($this->def_common[$key])) {
+            return $this->def_common[$key];
         } else {
             // @todo perhaps this should throw an \InvalidArgumentException instead?
             trigger_error('You have attempted to use the setting value of '
@@ -117,12 +117,11 @@ class Settings
         $data_source = ($system_data_label == 'Common Settings'
                      || $system_data_label == 'Experiment Settings') ?
                      $system_data_label : null;
-
-        if ($data_source == null
-            || $this->files->get_path($data_source, array(), false) == false)
+        try {
+            return $this->files->read($data_source);
+        } catch (Exception $e) {
             return array();
-
-        return $this->files->read($data_source);
+        }
     }
 
 
@@ -139,7 +138,7 @@ class Settings
             return;
         }
 
-        $json_safe_pass = json_encode('$input');
+        $json_safe_pass = json_encode($input);
         $php_string = "<?php return json_decode($json_safe_pass) ?>";
 
         $this->files->overwrite("Password", $php_string);
@@ -156,7 +155,7 @@ class Settings
         if (!is_file($pass_path)) return null;
 
         $password = require $pass_path;
-        if ($password == $this->default_pass) $password = null;
+        if ($password == $this->default_pass) return null;
 
         return $password;
     }
@@ -173,7 +172,7 @@ class Settings
     public function set($var, $val)
     {
         $key = trim(strtolower($var));
-        $location = (isset($this->default_common[$key])) ? 'common' : 'experiment';
+        $location = (isset($this->def_common[$key])) ? 'common' : 'experiment';
         if ($location === 'common') {
             $source = &$this->common;
         } else {
@@ -216,13 +215,16 @@ class Settings
     public function write_settings()
     {
         // write common settings
-        $common = array_merge($this->default_common, $this->common);
+        $common = array_merge($this->def_common, $this->common);
         $this->files->overwrite('Common Settings', $common);
 
         // write experiment settings if we actually have a path to write to
-        if ($this->experiment !== array()) {
-            $experiemnt = array_merge($this->default_exp, $this->experiment);
+        try {
+            $experiemnt = array_merge($this->def_exp, $this->experiment);
             $this->files->overwrite('Experiment Settings', $experiemnt);
+        } catch (Exception $e) {
+            echo "Error: You cannot write experiment settings until you select "
+            . "an active experiment.<br>error_code:{$e}<br>";
         }
     }
 }

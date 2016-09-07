@@ -27,14 +27,15 @@ function scandir_recursive($dir, $max_depth = 25) {
                 }
             }
         } elseif (is_file($relative)) {
-            $output[] = $relative;  
+            $output[] = $relative;
         }
     }
     return $output;
 }
 
 $types = array("jpg","jpeg","png","gif","bmp","wav","mp3","mp4");
-$media_dir = $_PATH->get("Media");
+
+$media_dir = $_PATH->get_path("Media Dir");
 $max_depth = 50;
 
 $results = scandir_recursive($media_dir, $max_depth);
@@ -67,7 +68,7 @@ foreach ($results as $readyPath) {
     fputcsv($temp, array($readyPath, $info['filename']));
 }
 fclose($temp);
-$show = getFromFile("tempStim.csv");
+$show = fsDataType_CSV::read("tempStim.csv");
 ?>
 
 <div class="toolWidth">
@@ -84,7 +85,7 @@ $show = getFromFile("tempStim.csv");
     .display2dArray {
         font-size: 16pt;
         background-color: #dee7ec;
-        padding-bottom: 2em;    
+        padding-bottom: 2em;
     }
     td:first-child {
         font-weight:700;
@@ -94,7 +95,7 @@ $show = getFromFile("tempStim.csv");
         text-align: left;
     }
 
-    #dl {   
+    #dl {
         margin-top: 1em;
         font-size: 32pt;
         text-align: left;

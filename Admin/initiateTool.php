@@ -14,7 +14,7 @@ if ($tool === false) {
     $_DATA =& $_SESSION['admin']['tools'][$tool]['_DATA'];
 }
 
-if (!isset($_DATA['_PATH'])) $_DATA['_PATH'] = new Pathfinder();
+if (!isset($_DATA['_PATH'])) $_DATA['_PATH'] = new FileSystem();
 
 $_PATH = $_DATA['_PATH'];
 

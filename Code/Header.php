@@ -22,7 +22,7 @@
   <!-- Base styles -->
   <link rel="stylesheet" href="<?= $_FILES->get_path('Global CSS') ?>">
   <link rel="stylesheet" href="<?= $_FILES->get_path('Jquery UI Custom CSS') ?>">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   <!-- Base scripts -->
   <script>
     if (typeof jQuery === "undefined") {
@@ -32,13 +32,17 @@
 
   <!-- JS Tools -->
   <script src="<?= $_FILES->get_path('Jquery UI Custom') ?>"></script>
+<?php
+    if (isset($added_scripts) && is_array($added_scripts)) {
+        foreach ($added_scripts as $script_src) {
+          echo "<script src='{$script_src}'></script>";
+        }
+    }
+
+?>
 </head>
 
-<?php
- // if $_dataController/$_dataAction is not set set it to an empty string
-$_dataController = isset($_dataController) ? $_dataController : '';
-?>
-<body id="flexBody" data-controller="<?= $_dataController ?>" >
+<body id="flexBody">
   <!-- redirect if Javascript is disabled -->
   <noscript>
     <meta http-equiv="refresh" content="0;url=<?= $_FILES->get_path('No JS') ?>" />
