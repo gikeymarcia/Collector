@@ -37,7 +37,7 @@
 }
 </style>";
     }
-    
+
     foreach ($surveyRows as $row) {
     echo '<div>';
     $qName = htmlspecialchars($row['Question Name'], ENT_QUOTES);

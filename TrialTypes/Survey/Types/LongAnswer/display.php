@@ -18,7 +18,7 @@
 }
 </style>";
     }
-    
+
     foreach ($surveyRows as $row) {
         $qName = htmlspecialchars($row['Question Name'], ENT_QUOTES);
         $required = isRespRequired($row) ? 'required' : '';

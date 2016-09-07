@@ -10,6 +10,6 @@
 </div>
 <!-- include form to collect RT and advance page -->
 <div class="textcenter">
-  <button class="collectorButton collectorAdvance" 
+  <button class="collectorButton collectorAdvance"
   id="FormSubmitButton" type="submit" autofocus>Next</button>
 </div>

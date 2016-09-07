@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /* @TODO JS functions for seek/start/stop to set start and stop times. */
 /* @TODO JS not needed for YouTube vids, use ?start=10&end=14 */
@@ -33,7 +33,7 @@ if (!isLocal($cue)) {
 ?>
 
 <div class="textcenter">
-  <iframe width="420" height="315" frameborder="0" 
+  <iframe width="420" height="315" frameborder="0"
     webkitallowfullscreen mozallowfullscreen allowfullscreen
     src="<?= $source ?>" >
   </iframe>

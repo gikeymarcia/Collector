@@ -8,7 +8,7 @@ For formatting of surveys, look at the sample surveys. DEMOGRAPHICS and DIAGNOST
 
 FIRST - go to your STIMULI FILE and then add a new row. For example, if you'd like to add demographics and diagnostics do it like this
 
-     Cue            Answer      Shuffle 1 
+     Cue            Answer      Shuffle 1
 2  demographics.csv  off           off
 
 SECOND - go to your PROCEDURE FILE and it should look like this
@@ -32,11 +32,11 @@ Type
     You can find more details about each type by looking at
     their specific file.
 Answers
-    For survey types with limited answers, such as likert 
+    For survey types with limited answers, such as likert
     or dropdown responses, the options are defined in this
     column. Ranges can be defined, with "|" as the separator
     and "::" as the connector, so something like "1::4|10"
-    will create the answers (1, 2, 3, 4, 10). You can also 
+    will create the answers (1, 2, 3, 4, 10). You can also
     use non-numeric answers, such as "Not at all | Slightly,
     Greatly | Completely".
 Values (Optional)
@@ -73,8 +73,8 @@ Score [type]: X
     "Score Average: Depression" will create a column in the
     output called "Score_Depression" with the average value
     of the responses for this scale. In this column, a blank
-    cell means that the current question should not be 
-    considered for this score, so you can set up multiple 
+    cell means that the current question should not be
+    considered for this score, so you can set up multiple
     sub-scales to be calculated for the same survey.
 
 Certain types will use additional columns, most commonly a

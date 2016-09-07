@@ -37,7 +37,7 @@
 }
 </style>";
     }
-    
+
     echo '<div>';
     foreach ($surveyRows as $row) {
         $ans = '<option>' . implode('</option><option>', surveyRangeToArray($row['Answers'])) . '</option>';

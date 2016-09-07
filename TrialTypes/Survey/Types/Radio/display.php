@@ -43,15 +43,15 @@
 }
 </style>";
     }
-    
+
     foreach ($surveyRows as $row) {
         echo '<div>';
         $options = surveyRangeToArray($row['Answers']);
         $qName = htmlspecialchars($row['Question Name'], ENT_QUOTES);
         $required = isRespRequired($row) ? 'required' : '';
-        
+
         echo     "<div>{$row['Question']}</div>";
-        
+
         echo     '<div class="respArea">';
         foreach ($options as $opt) {
             $val = htmlspecialchars($opt, ENT_QUOTES);

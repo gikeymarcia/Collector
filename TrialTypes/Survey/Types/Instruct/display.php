@@ -9,7 +9,7 @@
 }
 </style>";
     }
-    
+
     foreach ($surveyRows as $row) {
         echo "<p>{$row['Question']}</p>";
     }

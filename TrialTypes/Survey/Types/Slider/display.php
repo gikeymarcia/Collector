@@ -56,11 +56,11 @@
     });
 </script><?php
     }
-    
+
     foreach ($surveyRows as $row) {
         $qName = htmlspecialchars($row['Question Name'], ENT_QUOTES);
         $required = isRespRequired($row) ? 'required' : '';
-        
+
         $ans = surveyRangeToArray($row['Answers']);
         $thisMin = null;
         $thisMax = null;

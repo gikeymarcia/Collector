@@ -67,20 +67,20 @@
 }
 </style>";
     }
-    
+
     $i = 0;
-    
+
     while (isset($surveyRows[$i])) {
         $currentAnswersCount = count(surveyRangeToArray($surveyRows[$i]['Answers']));
         $currentLikertRows = array();
-        
-        while (isset($surveyRows[$i]) 
+
+        while (isset($surveyRows[$i])
             && count(surveyRangeToArray($surveyRows[$i]['Answers'])) === $currentAnswersCount
         ) {
             $currentLikertRows[] = $surveyRows[$i];
             ++$i;
         }
-        
+
         echo '<div class="LikertTable">';
         foreach ($currentLikertRows as $likertRow) {
             $currentAnswers = $likertRow['Answers'];

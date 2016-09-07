@@ -1,19 +1,19 @@
 </form>
 <?php
     $item = $_EXPT->get('item');
-    
+
     if (is_array($item)) {
         $surveyFile = $_EXPT->get('cue');
     } else {
         $surveyFile = $item;
     }
-    
+
     $trialTypeDir = dirname($_TRIAL->getRelatedFile('display'));
     $surveyDir = $_PATH->get('Common') . '/Surveys';
-    
+
     require $_PATH->get('Shuffle Functions');
     require "$trialTypeDir/SurveyFunctions.php";
-    
+
     // if we haven't yet loaded up this survey, do so now
     // this way, we only shuffle once, and then go from there
     unset($_SESSION['CurrentSurvey']);
@@ -72,21 +72,21 @@
     $nextButton = '<div class="textcenter">'
                 .     '<button class="collectorButton surveyNextButton" type="submit">Next</button>'
                 . '</div>';
-                
+
     $surveyIndex = 0;
     while (isset($survey[$surveyIndex])) {
         $type = $survey[$surveyIndex]['Type'];
         $type = cleanSurveyType($type);
         $surveyRows = array($survey[$surveyIndex]);
         ++$surveyIndex;
-        
+
         while (isset($survey[$surveyIndex])
             && cleanSurveyType($survey[$surveyIndex]['Type']) === $type
         ) {
             $surveyRows[] = $survey[$surveyIndex];
             ++$surveyIndex;
         }
-        
+
         if ($type === 'page_break') {
             echo     $nextButton
                . '</form>'
@@ -100,7 +100,7 @@
             echo "</div>";
         }
     }
-    
+
     echo $nextButton;
 ?>
 </form>
@@ -109,14 +109,14 @@
 <script>
     $(document).ready(function() {
         $("form").attr("autocomplete", "off");
-        
+
         $("form").on("submit", function(e) {
             var thisForm = $(this);
             if (thisForm.hasClass("experimentForm")) {
                 $(":input").detach().appendTo(".experimentForm");
             } else {
                 e.preventDefault(); // dont submit the individual pages
-            
+
                 if (thisForm.hasClass("CurrentPage")) {
                     // work-around for safari not supporting required attribute
                     invalids = $(document.querySelectorAll(".CurrentPage :invalid"));
