@@ -136,6 +136,7 @@ class Settings
 
         if (!isset($input[2])) {
             return;
+            // @TODO: this should probably be an exception
         }
 
         $json_safe_pass = json_encode($input);

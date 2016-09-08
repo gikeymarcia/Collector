@@ -1,5 +1,5 @@
 Item,Trial Type,Max Time,Text,Settings,Procedure Notes,Shuffle 1
-2,Instruct,user,You will be asked a question with the Copy Word Pair Trial Type. ,,Basic instructions.,# fixed order
+[2-10],Instruct,user,You will be asked a question with the Copy Word Pair Trial Type. ,,Basic instructions.,# fixed order
 2,CopyWordPair,user,Copy the following pair.,,Display pair.,# fixed order
 3,CopyWordPair,user,Copy the following pair.,,Display pair.,# fixed order
 4,CopyWordPair,user,Copy the following pair.,,Display pair.,# fixed order

@@ -31,7 +31,8 @@ function create_experiment(FileSystem $_files, $condition_index = null) {
     return array(
         'Condition' => $condition,
         'Stimuli'   => $stimuli,
-        'Procedure' => $procedure
+        'Procedure' => $procedure,
+        'Position'  => array(1, 0)
     );
 }
 /**
