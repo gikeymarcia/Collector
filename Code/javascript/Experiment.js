@@ -35,7 +35,6 @@ Experiment.prototype = {
             if (typeof trials[post_number] === "undefined") {
                 trials[post_number] = {};
             }
-
             trials[post_number][column_name] = trial_row[column];
         }
 
@@ -54,7 +53,6 @@ Experiment.prototype = {
         var this_proc = this.data.Procedure[row][post_pos];
 
         var items = this.get_item(trial_set, post_pos);
-        // console.dir(items);
         var stimuli = this.get_stimuli(items);
         var responses = [];
         return {
@@ -85,9 +83,6 @@ Experiment.prototype = {
         var stimuli = [];
         var self = this;
         item_list.forEach(function(item) {
-            // console.dir(self.data.Stimuli[0]);
-            // console.dir(item);
-
             if (typeof self.data.Stimuli[item-2] !== "undefined") {
                 stimuli.push(self.data.Stimuli[item-2]);
             }
@@ -121,14 +116,6 @@ Experiment.prototype = {
     },
 
     rows_to_columns: function(list_of_stimuli) {
-        // var headers = stimuli.reduce(function(acc, current) {
-        //     for (var prop in current) {
-        //         if (typeof acc[prop] === "undefined") {
-        //             acc[prop].push("");
-        //         }
-        //         return acc;
-        //     }
-        // });
         var stim_cols = {};
 
         list_of_stimuli.forEach(function(stimuli) {
@@ -154,9 +141,9 @@ Experiment.prototype = {
 
 // polyfill for String.trim, from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/trim#Browser_compatibility
 if (!String.prototype.trim) {
-  String.prototype.trim = function () {
-    return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
-  };
+    String.prototype.trim = function () {
+        return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
+    };
 }
 
 function range_from_array(arr) {
@@ -179,18 +166,6 @@ function range_from_array(arr) {
     return range;
 }
 
-function concat_arrays(accumulator, next_array) {
-    next_array.forEach(function(val) {
-        accumulator.push(val);
-    });
-
-    return accumulator;
+function concat_arrays(array1, next_array) {
+    return array1.concat(next_array);
 }
-
-
-
-// var data = {
-//     Stimuli: {},
-//     Procedure: {},
-//     Responses: {},
-// }
