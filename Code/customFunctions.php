@@ -814,7 +814,7 @@ function data_dump($data) {
  *                      replace successive instances of [var]
  * return string
  */
-function fill_template($string, $inputs, $throw_exception_on_incomplete_template = true) {
+function fill_template($string, $inputs) {
     $vars = array();
 
     foreach ($inputs as $key => $val) {
@@ -836,25 +836,17 @@ function fill_template($string, $inputs, $throw_exception_on_incomplete_template
 
         if ($var_key === 'var') {
             if (count($vars) < 1) {
-                if ($throw_exception_on_incomplete_template) {
-                    throw new Exception(
-                        'Not enough vars for template: ' . $string
-                    );
-                } else {
-                    return false;
-                }
+                throw new Exception(
+                    'Not enough vars for template: ' . $string
+                );
             }
 
             $output .= array_shift($vars);
         } else {
             if (!isset($inputs[$var_key])) {
-                if ($throw_exception_on_incomplete_template) {
-                    throw new Exception(
-                        'Missing input with key: ' . $var_key
-                    );
-                } else {
-                    return false;
-                }
+                throw new Exception(
+                    'Missing input with key: ' . $var_key
+                );
             }
 
             $output .= $inputs[$var_key];
