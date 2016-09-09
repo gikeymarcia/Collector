@@ -119,7 +119,7 @@ class Settings
                      $system_data_label : null;
         try {
             return $this->files->read($data_source);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return array();
         }
     }
@@ -152,7 +152,7 @@ class Settings
      */
     protected function get_password()
     {
-        $pass_path = $this->files->get_path('Password', array(), false);
+        $pass_path = $this->files->get_path('Password');
         if (!is_file($pass_path)) return null;
 
         $password = require $pass_path;
@@ -223,7 +223,7 @@ class Settings
         try {
             $experiemnt = array_merge($this->def_exp, $this->experiment);
             $this->files->overwrite('Experiment Settings', $experiemnt);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             echo "Error: You cannot write experiment settings until you select "
             . "an active experiment.<br>error_code:{$e}<br>";
         }

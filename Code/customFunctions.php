@@ -870,7 +870,7 @@ function fill_template($string, $inputs, $throw_exception_on_incomplete_template
 
 
 function Collector_session_start() {
-    $sess_dir = __DIR__ . '/../../Data/sess';
+    $sess_dir = __DIR__ . '/../Data/sess';
     if (!is_dir($sess_dir)) mkdir($sess_dir, 0777, true);
 
     session_save_path($sess_dir);
