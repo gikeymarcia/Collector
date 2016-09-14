@@ -112,13 +112,14 @@ class Settings
         }
     }
 
-    private function load($system_data_label)
+
+    private function load($system_data_label, \FileSystem $_files)
     {
         $data_source = ($system_data_label == 'Common Settings'
                      || $system_data_label == 'Experiment Settings') ?
                      $system_data_label : null;
         try {
-            return $this->files->read($data_source);
+            return $_files->read($data_source);
         } catch (\Exception $e) {
             return array();
         }
@@ -126,7 +127,7 @@ class Settings
 
 
     /**
-     * Sets a new password to the password file.
+     * Saves a new password to the password file.
      *
      * @param string $input The password to store.
      */
@@ -135,8 +136,9 @@ class Settings
         $input = ($input === null) ? $this->default_pass : $input;
 
         if (!isset($input[2])) {
-            return;
-            // @TODO: this should probably be an exception
+            $msg = 'Password must be at least 3 characters. Given password is '
+                 . 'only ' . strlen($input) . ' characters.';
+            throw new \Exception ($msg);
         }
 
         $json_safe_pass = json_encode($input);
@@ -162,30 +164,27 @@ class Settings
     }
 
     /**
-     * Overwrites a setting.
-     * If this setting should be used only temporarily then simply set it as a
-     * property of the settings instance you are working with. New values set
-     * using Settings::set() will persist.
+     * Changes the values for settings (stored only in memory)
+     * If you want values to persist across pages call ->write_settings()
+     * after using this method to update values
      *
      * @param string $var The settings key to set.
      * @param mixed  $val The value to set to the property.
      */
     public function set($var, $val)
     {
-        $key = trim(strtolower($var));
+        $key      = trim(strtolower($var));
         $location = (isset($this->def_common[$key])) ? 'common' : 'experiment';
         if ($location === 'common') {
-            $source = &$this->common;
+            $source =& $this->common;
         } else {
-            $source = &$this->experiment;
+            $source =& $this->experiment;
         }
 
         $current = $this->$key;
         $type = gettype($current);
 
-        // only allow bools to replace bools
         if (is_bool($current)) {
-            // toggling the posted strings of true/false to boolean true/false
             if ($val === 'true' || $val === 'false') {
                 $val = ($val === 'true') ? true : false;
                 $source[$key] = $val;
@@ -195,13 +194,10 @@ class Settings
                 trigger_error("Your setting '{$key}' should be a boolean but it is, {$val}, a ({$type}):", E_WARNING);
             }
 
-        // save number values as numbers
         } elseif (is_numeric($val)) {
             $int = (int)$val;
             $float = (float)$val;
-            $val = ($int == $float) ? $int : $float;
-            $source[$key] = $val;
-        // allow all other types to be juggled
+            $source[$key] = ($int == $float) ? $int : $float;
         } else {
             $source[$key] = $val;
         }
@@ -209,9 +205,8 @@ class Settings
 
     /**
      * Updates the actual settings files.
-     * Will add and overwrite with any values set using Settings::set().
-     * Temporary settings set as properties (using the magic __set()) will not
-     * be written by Settings::write_settings().
+     * 1. Change values by using $this->set($var, $val)
+     * 2. Call this method ->write_settings() to save values to /Experiments/
      */
     public function write_settings()
     {
