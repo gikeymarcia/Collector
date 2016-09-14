@@ -2,6 +2,50 @@
 
 use phpbrowscap\Browscap;
 
+function get_all_trial_type_data(FileSystem $_files) {
+    $trial_types = array();
+    
+    $trial_type_categories = array(
+        'Custom Trial Types',
+        'Trial Types'
+    );
+    
+    foreach ($trial_type_categories as $category) {
+        $list = $_files->read($category);
+        
+        foreach ($list as $trial_type) {
+            $trial_types[$trial_type] = null;
+        }
+    }
+    
+    foreach ($trial_types as $trial_type => $null) {
+        $data = get_trial_type_data($_files, $trial_type);
+        
+        if ($data === null) {
+            unset($trial_types[$trial_type]);
+        } else {
+            $trial_types[$trial_type] = $data;
+        }
+    }
+    
+    return $trial_types;
+}
+
+function get_trial_type_data(FileSystem $_files, $trial_type) {    
+    if ($template = $_files->read('Custom Trial Template', $trial_type)) {
+        $scoring = $_files->read('Custom Trial Scoring', $trial_type);
+    } elseif ($template = $_files->read('Trial Template', $trial_type)) {
+        $scoring = $_files->read('Trial Scoring', $trial_type);
+    } else {
+        return null;
+    }
+    
+    return array(
+        'Template' => $template,
+        'Scoring'  => $scoring
+    );
+}
+
 /**
  *
  */

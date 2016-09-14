@@ -11,7 +11,29 @@
     $user_data['Responses'] = $responses;
     $added_scripts = array($_FILES->get_path("Experiment JS"));
     require $_FILES->get_path('Header');
+    
+    
+    $added_scripts = array($_FILES->get_path("Trial JS"));
+    ob_start();
+    require $_FILES->get_path('Header');
+    require $_FILES->get_path('Trial Content');
+    require $_FILES->get_path('Footer');
+    $trial_page = ob_get_clean();
+    
+    $trial_type_data = get_all_trial_type_data($_FILES);e
 ?>
+
+<style>
+    #ExperimentContainer, #ExperimentContainer > iframe {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        display: block;
+    }
+</style>
+
+<div id="ExperimentContainer"></div>
 
 <script>
 
@@ -21,11 +43,15 @@ var User_Data = {
     Debug_Mode: <?= $_SESSION['Debug Mode'] ? "true" : "false" ?>,
     Experiment_Data: <?= json_encode($user_data) ?>
 }
+var trial_page = <?= json_encode($trial_page) ?>;
 
-var Collector_Experiment = new Experiment(User_Data.Experiment_Data);
+var Collector_Experiment = new Experiment(
+    User_Data.Experiment_Data,
+    $("#ExperimentContainer"),
+    trial_page
+);
+
 </script>
-
-You've made it!
 
 <?php
     require $_FILES->get_path('Footer');

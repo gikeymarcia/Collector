@@ -1,4 +1,4 @@
-var Collector = {
+var Trial = {
     // inputs will hold min and max time
     inputs: {},
 
@@ -23,7 +23,7 @@ var Collector = {
             self.start_checking_focus();
         });
 
-        $(window).load(function() {
+        $(window).on('load', function() {
             self.fit_content();
             self.control_timing(
                 self.inputs.min,
@@ -152,8 +152,8 @@ var Collector = {
         return this.page_timer.elapsed();
     },
 
-    // Collector.el("property name") will return the jQuery object
-    // as specified in Collector.element_selectors
+    // Trial.el("property name") will return the jQuery object
+    // as specified in Trial.element_selectors
     el: function(element_name) {
         return $(this.element_selectors[element_name]);
     },
@@ -249,7 +249,7 @@ var Collector = {
 
 
     start_checking_focus: function() {
-        this.myFocusChecker = new Collector.FocusChecker();
+        this.myFocusChecker = new this.FocusChecker();
     },
 
     FocusChecker: function() {
@@ -257,7 +257,7 @@ var Collector = {
     }
 }
 
-Collector.Timer.prototype = {
+Trial.Timer.prototype = {
     start: function () {
         this.startTimestamp = this.now();
         this.goal           = this.startTimestamp + (this.timeUp*1000);
@@ -328,7 +328,7 @@ Collector.Timer.prototype = {
     }
 }
 
-Collector.FocusChecker.prototype = {
+Trial.FocusChecker.prototype = {
     checks: 0,
     passes: 0,
     proportion: null,
@@ -342,7 +342,7 @@ Collector.FocusChecker.prototype = {
     }
 }
 
-Collector.run();
+Trial.run();
 
 
 

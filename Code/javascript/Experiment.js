@@ -1,4 +1,4 @@
-var Experiment = function (exp_data) {
+var Experiment = function (exp_data, $container, trial_page) {
     this.data = {
         Stimuli: exp_data.Stimuli,
         Procedure: this.parse_Procedure(exp_data.Procedure),
@@ -6,6 +6,11 @@ var Experiment = function (exp_data) {
     this.position = exp_data.Position;
 
     this.exp_data = exp_data;
+    
+    this.create_iframe($container);
+    this.trial_page = trial_page;
+    
+    this.run_trial();
 }
 
 
@@ -136,6 +141,18 @@ Experiment.prototype = {
         });
 
         return stim_cols;
+    },
+    
+    create_iframe: function($container) {
+        this.iframe = $("<iframe>");
+        this.iframe.appendTo($container);
+    },
+    
+    run_trial() {
+        var doc = this.iframe[0].contentDocument;
+        doc.open();
+        doc.write(this.trial_page);
+        doc.close();
     }
 }
 

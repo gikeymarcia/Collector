@@ -1,0 +1,16 @@
+
+<form id="content" method="POST" action="javascript:submit_form()"></form>
+<script>
+    function submit_form() {
+        var data = $("#content").serialize();
+        
+        parent.Collector_Experiment.record_trial(data);
+    }
+    
+    var data = parent.Collector_Experiment.get_trial();
+    
+    $("form").html(
+        'some script will fill this in<br>'
+      + JSON.stringify(data)
+    );
+</script>
