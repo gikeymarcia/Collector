@@ -1,4 +1,3 @@
-
 <form id="content" method="POST" action="javascript:submit_form()"></form>
 <script>
     function submit_form() {
@@ -7,10 +6,9 @@
         parent.Collector_Experiment.record_trial(data);
     }
     
-    var data = parent.Collector_Experiment.get_trial();
+    var trial_data = parent.Collector_Experiment.get_trial_inputs_and_type();
     
-    $("form").html(
-        'some script will fill this in<br>'
-      + JSON.stringify(data)
-    );
+    Trial.load_inputs(trial_data.inputs);
+    Trial.load_type(trial_data.type);
+    Trial.run();
 </script>

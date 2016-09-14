@@ -31,19 +31,38 @@ function get_all_trial_type_data(FileSystem $_files) {
     return $trial_types;
 }
 
-function get_trial_type_data(FileSystem $_files, $trial_type) {    
-    if ($template = $_files->read('Custom Trial Template', $trial_type)) {
-        $scoring = $_files->read('Custom Trial Scoring', $trial_type);
-    } elseif ($template = $_files->read('Trial Template', $trial_type)) {
-        $scoring = $_files->read('Trial Scoring', $trial_type);
+function get_trial_type_data(FileSystem $_files, $trial_type) {
+    $custom_dir  = $_files->get_path('Custom Trial Type Dir', $trial_type);
+    $default_dir = $_files->get_path('Trial Type Dir',        $trial_type);
+    
+    $test_file = 'template.html';
+    
+    if (is_file("$custom_dir/$test_file")) {
+        return read_trial_type($custom_dir);
+    } elseif (is_file("$default_dir/$test_file")) {
+        return read_trial_type($default_dir);
     } else {
         return null;
     }
-    
-    return array(
-        'Template' => $template,
-        'Scoring'  => $scoring
+}
+
+function read_trial_type($trial_type_dir) {
+    $files = array(
+        'template'       => 'template.html',
+        'scoring'        => 'scoring.js',
+        'prepare_inputs' => 'prepareInputs.js'
     );
+    
+    $file_contents = array();
+    
+    foreach ($files as $name => $path) {
+        $full_path = "$trial_type_dir/$path";
+        $file_contents[$name] = is_file($full_path)
+                              ? file_get_contents($full_path) 
+                              : null;
+    }
+    
+    return $file_contents;
 }
 
 /**
@@ -73,10 +92,10 @@ function create_experiment(FileSystem $_files, $condition_index = null) {
     $procedure = load_exp_files($_files, 'Procedure', $condition);
 
     return array(
-        'Condition' => $condition,
-        'Stimuli'   => $stimuli,
-        'Procedure' => $procedure,
-        'Position'  => array(1, 0)
+        'condition' => $condition,
+        'stimuli'   => $stimuli,
+        'procedure' => $procedure,
+        'position'  => array(0, 0)
     );
 }
 /**

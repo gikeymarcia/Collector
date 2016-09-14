@@ -1,21 +1,38 @@
-var Experiment = function (exp_data, $container, trial_page) {
+var Experiment = function (exp_data, $container, trial_page, trial_types) {
     this.data = {
-        Stimuli: exp_data.Stimuli,
-        Procedure: this.parse_Procedure(exp_data.Procedure),
+        stimuli: exp_data.stimuli,
+        procedure: this.parse_procedure(exp_data.procedure),
+        responses: []
     }
-    this.position = exp_data.Position;
+    this.position = exp_data.position;
 
     this.exp_data = exp_data;
     
     this.create_iframe($container);
-    this.trial_page = trial_page;
+    
+    this.trial_page  = trial_page;
+    
+    this.load_trial_types(trial_types);
     
     this.run_trial();
 }
 
 
 Experiment.prototype = {
-    parse_Procedure: function(proc_data) {
+    load_trial_types: function(trial_types_data) {
+        this.trial_types = {};
+        
+        for (var type in trial_types_data) {
+            var lower_type = type.toLowerCase();
+            this.trial_types[lower_type] = trial_types_data[type];
+        }
+    },
+    
+    get_trial_type: function(type) {
+        return this.trial_types[type.toLowerCase()];
+    },
+    
+    parse_procedure: function(proc_data) {
         var self = this;
         return proc_data.map(function(trial_row) {
             return self.parse_trial_row_to_trial_set(trial_row);
@@ -46,23 +63,34 @@ Experiment.prototype = {
         return trials;
     },
 
-    get_trial: function(position) {
+    get_trial_inputs_and_type: function(position) {
+        var trial_inputs = this.get_trial_inputs(position);
+        
+        var type = trial_inputs.procedure["Trial Type"]; // maybe add error handling here
+        
+        return {
+            inputs: trial_inputs,
+            type: this.get_trial_type(type)
+        }
+    },
+    
+    get_trial_inputs: function(position) {
         //@TODO: handle when recieving a bad 'position'
         if (typeof position == 'undefined') {
             position = this.position;
         }
-        var row = position[0]-1;
+        var row = position[0];
         var post_pos = position[1];
 
-        var trial_set = this.data.Procedure[row];
-        var this_proc = this.data.Procedure[row][post_pos];
+        var trial_set = this.data.procedure[row];
+        var this_proc = this.data.procedure[row][post_pos];
 
         var items = this.get_item(trial_set, post_pos);
         var stimuli = this.get_stimuli(items);
-        var responses = [];
+        // var responses = [];
         return {
-            Procedure: trial_set[post_pos],
-            Stimuli: stimuli,
+            procedure: trial_set[post_pos],
+            stimuli: stimuli,
             //@TODO: return associated responses for this trial
         }
     },
@@ -88,8 +116,8 @@ Experiment.prototype = {
         var stimuli = [];
         var self = this;
         item_list.forEach(function(item) {
-            if (typeof self.data.Stimuli[item-2] !== "undefined") {
-                stimuli.push(self.data.Stimuli[item-2]);
+            if (typeof self.data.stimuli[item-2] !== "undefined") {
+                stimuli.push(self.data.stimuli[item-2]);
             }
         });
         var stimuli = this.rows_to_columns(stimuli);
@@ -153,6 +181,52 @@ Experiment.prototype = {
         doc.open();
         doc.write(this.trial_page);
         doc.close();
+    },
+    
+    record_trial: function(data) {
+        var pos = this.position;
+        var trial_set  = pos[0];
+        var post_trial = pos[1];
+        var resp = this.data.responses;
+        
+        if (typeof resp[trial_set] === "undefined") resp[trial_set] = [];
+        resp[trial_set][post_trial] = data;
+        
+        var has_next = this.advance_position();
+        
+        if (has_next) {
+            this.run_trial();
+        } else {
+            this.iframe.detach();
+            $("#ExperimentContainer").append("<h1>Done!</h1>");
+        }
+    },
+    
+    advance_position: function() {
+        var pos = this.position;
+        var trial_set  = pos[0];
+        var post_trial = pos[1];
+        var proc = this.data.procedure;
+        var trial_type;
+        ++post_trial;
+        
+        while (typeof proc[trial_set] !== "undefined") {
+            while (typeof proc[trial_set][post_trial] !== "undefined") {
+                trial_type = proc[trial_set][post_trial];
+                
+                if (trial_type !== '') {
+                    this.position = [trial_set, post_trial];
+                    return true;
+                }
+                
+                ++post_trial;
+            }
+            
+            post_trial = 0;
+            ++trial_set;
+        }
+        
+        return false;
     }
 }
 

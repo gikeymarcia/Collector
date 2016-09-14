@@ -8,7 +8,7 @@
         $responses = array();
     }
 
-    $user_data['Responses'] = $responses;
+    $user_data['responses'] = $responses;
     $added_scripts = array($_FILES->get_path("Experiment JS"));
     require $_FILES->get_path('Header');
     
@@ -20,7 +20,7 @@
     require $_FILES->get_path('Footer');
     $trial_page = ob_get_clean();
     
-    $trial_type_data = get_all_trial_type_data($_FILES);e
+    $trial_type_data = get_all_trial_type_data($_FILES);
 ?>
 
 <style>
@@ -36,19 +36,20 @@
 <div id="ExperimentContainer"></div>
 
 <script>
-
 var User_Data = {
     Username:   "<?= $_SESSION['Username'] ?>",
     ID:         "<?= $_SESSION['ID'] ?>",
     Debug_Mode: <?= $_SESSION['Debug Mode'] ? "true" : "false" ?>,
-    Experiment_Data: <?= json_encode($user_data) ?>
+    Experiment_Data: <?= json_encode($user_data) ?>,
 }
-var trial_page = <?= json_encode($trial_page) ?>;
+var trial_page  = <?= json_encode($trial_page) ?>;
+var trial_types = <?= json_encode($trial_type_data) ?>;
 
 var Collector_Experiment = new Experiment(
     User_Data.Experiment_Data,
     $("#ExperimentContainer"),
-    trial_page
+    trial_page,
+    trial_types
 );
 
 </script>

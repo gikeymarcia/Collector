@@ -1,7 +1,4 @@
 var Trial = {
-    // inputs will hold min and max time
-    inputs: {},
-
     element_selectors: {
         content:         "#content",
         duration:        "#Duration",
@@ -9,10 +6,30 @@ var Trial = {
         first_timestamp: "#First_Input_Time",
         last_timestamp:  "#Last_Input_Time",
     },
+    
+    load_inputs: function(inputs) {
+        this.inputs = {};
+        
+        for (var category in inputs) {
+            var lower_category = category.toLowerCase();
+            this.inputs[lower_category] = {};
+            
+            for (var column in inputs[category]) {
+                this.inputs[lower_category][column.toLowerCase()] = inputs[category][column];
+            }
+        }
+    },
+    
+    load_type: function(type) {
+        this.type = type;
+    },
 
 
     run: function() {
         var self = this;
+        
+        this.run_custom_inputs_calculation();
+        this.apply_trial_type_template();
 
         $(document).ready(function() {
             self.apply_force_numeric();
@@ -25,9 +42,9 @@ var Trial = {
 
         $(window).on('load', function() {
             self.fit_content();
-            self.control_timing(
-                self.inputs.min,
-                self.inputs.max
+            self.control_timing( // uses min and max time from the procedure
+                self.get_input('Min Time', 'Procedure'),
+                self.get_input('Max Time', 'Procedure')
             );
             self.page_timer = new self.Timer();
             self.page_timer.start();
@@ -39,6 +56,83 @@ var Trial = {
             }
         });
     },
+    
+    run_custom_inputs_calculation: function() {
+        this.inputs.extra = {};
+        var custom_inputs_script = this.type.prepare_inputs;
+        
+        if (custom_inputs_script !== null) {
+            var script = $("<script>");
+            script.html(custom_inputs_script);
+            $("body").append(script);
+        }
+    },
+    
+    apply_trial_type_template: function() {
+        var template = $("<div>" + this.type.template + "</div>");
+        
+        var scripts = template.find("script").replaceWith('__COLLECTOR__SCRIPT__');
+        scripts = $.makeArray(scripts);
+        
+        var content = this.fill_template(template.html());
+        
+        content = content.replace(/__COLLECTOR__SCRIPT__/g, function(match) {
+            return scripts.shift().outerHTML;
+        });
+        
+        $("#content").html(content);
+    },
+    
+    fill_template: function(template) {
+        var self = this;
+        
+        return template
+            .replace(/\[[^\]]+\]/g, function(match) { return self.replace_input(match, "procedure", "stimuli"); })
+            .replace(/{[^}]+}/g,    function(match) { return self.replace_input(match, "extra"); });
+    },
+    
+    replace_input: function(keyWithBrackets, category1, category2) {
+        var key = keyWithBrackets.substr(1, keyWithBrackets.length-2); // pull off the brackets
+        
+        var val = this.get_input(key, category1, category2);
+        
+        if (val !== null) return val;
+        
+        return keyWithBrackets;
+    },
+    
+    add_input: function(key, val, category) {
+        if (typeof category === "undefined") category = "extra";
+        
+        this.inputs[category.toLowerCase()][key.trim().toLowerCase()] = val;
+    },
+    
+    get_input: function(key, cat1, cat2, cat3) {
+        var categories = [];
+        
+        if (typeof cat1 !== "undefined") categories.push(cat1.toLowerCase());
+        if (typeof cat2 !== "undefined") categories.push(cat2.toLowerCase());
+        if (typeof cat3 !== "undefined") categories.push(cat3.toLowerCase());
+        
+        if (categories.length === 0)
+            categories = ['procedure', 'stimuli', 'extra'];
+        
+        key = key.trim().toLowerCase();
+        
+        for (var i=0; i<categories.length; ++i)
+          if (typeof this.inputs[categories[i]][key] !== "undefined")
+            return this.inputs[categories[i]][key];
+        
+        return null;
+    },
+    
+    get_stimuli:   function(key) { return this.get_input(key, 'stimuli');   },
+    get_procedure: function(key) { return this.get_input(key, 'procedure'); },
+    get_extra:     function(key) { return this.get_input(key, 'extra');     },
+    
+    
+    
+    
 
     // these functions control when submission of a trial is enabled/disabled
     submit: function() {
@@ -341,8 +435,6 @@ Trial.FocusChecker.prototype = {
         this.proportion = Math.round((this.passes/this.checks)*1000) / 1000;
     }
 }
-
-Trial.run();
 
 
 
