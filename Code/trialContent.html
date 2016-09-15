@@ -2,12 +2,12 @@
 <script>
     function submit_form() {
         var data = $("#content").serialize();
-        
+
         parent.Collector_Experiment.record_trial(data);
     }
-    
+
     var trial_data = parent.Collector_Experiment.get_trial_inputs_and_type();
-    
+
     Trial.load_inputs(trial_data.inputs);
     Trial.load_type(trial_data.type);
     Trial.run();
