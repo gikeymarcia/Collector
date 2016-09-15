@@ -11,15 +11,15 @@
     $user_data['responses'] = $responses;
     $added_scripts = array($_FILES->get_path("Experiment JS"));
     require $_FILES->get_path('Header');
-    
-    
+
+
     $added_scripts = array($_FILES->get_path("Trial JS"));
     ob_start();
     require $_FILES->get_path('Header');
     require $_FILES->get_path('Trial Content');
     require $_FILES->get_path('Footer');
     $trial_page = ob_get_clean();
-    
+
     $trial_type_data = get_all_trial_type_data($_FILES);
 ?>
 
@@ -41,6 +41,7 @@ var User_Data = {
     ID:         "<?= $_SESSION['ID'] ?>",
     Debug_Mode: <?= $_SESSION['Debug Mode'] ? "true" : "false" ?>,
     Experiment_Data: <?= json_encode($user_data) ?>,
+    Media_path: <?= $_FILES->get_path("Media Dir") ?>,
 }
 var trial_page  = <?= json_encode($trial_page) ?>;
 var trial_types = <?= json_encode($trial_type_data) ?>;

@@ -1,19 +1,17 @@
-var Experiment = function (exp_data, $container, trial_page, trial_types) {
+var Experiment = function (exp_data, $container, trial_page, trial_types, media_path) {
     this.data = {
         stimuli: exp_data.stimuli,
         procedure: this.parse_procedure(exp_data.procedure),
         responses: []
     }
-    this.position = exp_data.position;
 
-    this.exp_data = exp_data;
-    
-    this.create_iframe($container);
-    
-    this.trial_page  = trial_page;
-    
+    this.exp_data   = exp_data;
+    this.trial_page = trial_page;
+    this.media_path = media_path;
+    this.position   = exp_data.position;
     this.load_trial_types(trial_types);
-    
+    this.create_iframe($container);
+
     this.run_trial();
 }
 
@@ -21,17 +19,17 @@ var Experiment = function (exp_data, $container, trial_page, trial_types) {
 Experiment.prototype = {
     load_trial_types: function(trial_types_data) {
         this.trial_types = {};
-        
+
         for (var type in trial_types_data) {
             var lower_type = type.toLowerCase();
             this.trial_types[lower_type] = trial_types_data[type];
         }
     },
-    
+
     get_trial_type: function(type) {
         return this.trial_types[type.toLowerCase()];
     },
-    
+
     parse_procedure: function(proc_data) {
         var self = this;
         return proc_data.map(function(trial_row) {
@@ -65,15 +63,15 @@ Experiment.prototype = {
 
     get_trial_inputs_and_type: function(position) {
         var trial_inputs = this.get_trial_inputs(position);
-        
+
         var type = trial_inputs.procedure["Trial Type"]; // maybe add error handling here
-        
+
         return {
             inputs: trial_inputs,
             type: this.get_trial_type(type)
         }
     },
-    
+
     get_trial_inputs: function(position) {
         //@TODO: handle when recieving a bad 'position'
         if (typeof position == 'undefined') {
@@ -170,30 +168,30 @@ Experiment.prototype = {
 
         return stim_cols;
     },
-    
+
     create_iframe: function($container) {
         this.iframe = $("<iframe>");
         this.iframe.appendTo($container);
     },
-    
+
     run_trial() {
         var doc = this.iframe[0].contentDocument;
         doc.open();
         doc.write(this.trial_page);
         doc.close();
     },
-    
+
     record_trial: function(data) {
         var pos = this.position;
         var trial_set  = pos[0];
         var post_trial = pos[1];
         var resp = this.data.responses;
-        
+
         if (typeof resp[trial_set] === "undefined") resp[trial_set] = [];
         resp[trial_set][post_trial] = data;
-        
+
         var has_next = this.advance_position();
-        
+
         if (has_next) {
             this.run_trial();
         } else {
@@ -201,7 +199,7 @@ Experiment.prototype = {
             $("#ExperimentContainer").append("<h1>Done!</h1>");
         }
     },
-    
+
     advance_position: function() {
         var pos = this.position;
         var trial_set  = pos[0];
@@ -209,23 +207,23 @@ Experiment.prototype = {
         var proc = this.data.procedure;
         var trial_type;
         ++post_trial;
-        
+
         while (typeof proc[trial_set] !== "undefined") {
             while (typeof proc[trial_set][post_trial] !== "undefined") {
                 trial_type = proc[trial_set][post_trial];
-                
+
                 if (trial_type !== '') {
                     this.position = [trial_set, post_trial];
                     return true;
                 }
-                
+
                 ++post_trial;
             }
-            
+
             post_trial = 0;
             ++trial_set;
         }
-        
+
         return false;
     }
 }
