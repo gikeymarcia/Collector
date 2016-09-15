@@ -40,8 +40,7 @@ var User_Data = {
     Username:   "<?= $_SESSION['Username'] ?>",
     ID:         "<?= $_SESSION['ID'] ?>",
     Debug_Mode: <?= $_SESSION['Debug Mode'] ? "true" : "false" ?>,
-    Experiment_Data: <?= json_encode($user_data) ?>,
-    Media_path: <?= $_FILES->get_path("Media Dir") ?>,
+    Experiment_Data: <?= json_encode($user_data) ?>
 }
 var trial_page  = <?= json_encode($trial_page) ?>;
 var trial_types = <?= json_encode($trial_type_data) ?>;
@@ -50,7 +49,8 @@ var Collector_Experiment = new Experiment(
     User_Data.Experiment_Data,
     $("#ExperimentContainer"),
     trial_page,
-    trial_types
+    trial_types,
+    $_FILES->get_path("Media Dir")
 );
 
 </script>
