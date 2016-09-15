@@ -50,7 +50,7 @@ var Collector_Experiment = new Experiment(
     $("#ExperimentContainer"),
     trial_page,
     trial_types,
-    $_FILES->get_path("Media Dir")
+    "<?= $_FILES->get_path("Media Dir") ?>"
 );
 
 </script>
