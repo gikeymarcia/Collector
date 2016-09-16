@@ -12,7 +12,7 @@ var Experiment = function (exp_data, $container, trial_page, trial_types, media_
     this.load_trial_types(trial_types);
     this.create_iframe($container);
 
-    this.run_trial();
+    this.run_trial(this.position);
 }
 
 
@@ -122,7 +122,6 @@ Experiment.prototype = {
         return stimuli;
     },
 
-
     item_to_array: function(item_contents) {
         var range_match = item_contents.match(/\[(.+)\]/);
 
@@ -174,11 +173,32 @@ Experiment.prototype = {
         this.iframe.appendTo($container);
     },
 
-    run_trial() {
+    run_trial(position) {
+        if (typeof position == "undefined") {
+            position = this.position;
+        }
+        this.position = position;
         var doc = this.iframe[0].contentDocument;
         doc.open();
         doc.write(this.trial_page);
         doc.close();
+    },
+
+    end_trial: function(data, position) {
+        if (typeof position == 'undefined') {
+            position = this.position;
+        }
+
+        this.record_trial(data);
+
+        var next_position = this.get_next_trial_position();
+
+        if (next_position) {
+            this.run_trial(next_position);
+        } else {
+            this.iframe.detach();
+            $("#ExperimentContainer").append("<h1>Done!</h1>");
+        }
     },
 
     record_trial: function(data) {
@@ -188,19 +208,19 @@ Experiment.prototype = {
         var resp = this.data.responses;
 
         if (typeof resp[trial_set] === "undefined") resp[trial_set] = [];
-        resp[trial_set][post_trial] = data;
+        resp[trial_set][post_trial] = {
+            recorded: false,
+            position: pos,
+            data: {
+                stimuli: this.get_trial_inputs()['stimuli'],
+                procedure: this.get_trial_inputs()['procedure'],
+                responses: data,
+            }
+        };
 
-        var has_next = this.advance_position();
-
-        if (has_next) {
-            this.run_trial();
-        } else {
-            this.iframe.detach();
-            $("#ExperimentContainer").append("<h1>Done!</h1>");
-        }
     },
 
-    advance_position: function() {
+    get_next_trial_position: function() {
         var pos = this.position;
         var trial_set  = pos[0];
         var post_trial = pos[1];
@@ -213,8 +233,7 @@ Experiment.prototype = {
                 trial_type = proc[trial_set][post_trial];
 
                 if (trial_type !== '') {
-                    this.position = [trial_set, post_trial];
-                    return true;
+                    return [trial_set, post_trial];
                 }
 
                 ++post_trial;
