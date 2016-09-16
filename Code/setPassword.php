@@ -23,11 +23,11 @@
 
 <form action="" method="post" accept-charset="utf-8" id="content">
     <h3>Password:</h3>
-    <input type="password" name="pass" value="" placeholder="3 characters or more" class="collectorInput">
+    <input type="password" name="pass" value="" placeholder="3 characters or more" class="collectorInput" autofocus="">
     <button type="submit" class="collectorButton">Set Password</button>
     <p>
         <i>Note: To reset your password delete the password file in
-        <code>Experiments/Common/</code></i>
+        <code>Experiments/_Common/</code></i>
     </p>
     <p><b>Password must be 3 characters or longer</b></p>
 </form>

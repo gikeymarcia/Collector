@@ -11,13 +11,6 @@ namespace Collector;
 class Settings
 {
     /**
-     * The default password. It is stored in Password.php
-     *
-     * @var string
-     */
-    protected $default_pass = 'weakpassword';
-
-    /**
      * The default settings in "Common Settings.json".
      * If "Common Settings.json" is not present these settings will be used
      *
@@ -133,7 +126,7 @@ class Settings
      */
     public function set_password($input = null)
     {
-        $input = ($input === null) ? $this->default_pass : $input;
+        if ($input === null) return false;
 
         if (!isset($input[2])) {
             $msg = 'Password must be at least 3 characters. Given password is '
@@ -141,10 +134,10 @@ class Settings
             throw new \Exception ($msg);
         }
 
-        $json_safe_pass = json_encode($input);
-        $php_string = "<?php return json_decode($json_safe_pass) ?>";
+        $hashed_pass = hash('sha256', $input);
+        $hashed_return = "<?php return '$hashed_pass'; ?>";
 
-        $this->files->overwrite("Password", $php_string);
+        $this->files->overwrite("Password", $hashed_return);
     }
 
     /**
@@ -158,7 +151,6 @@ class Settings
         if (!is_file($pass_path)) return null;
 
         $password = require $pass_path;
-        if ($password == $this->default_pass) return null;
 
         return $password;
     }

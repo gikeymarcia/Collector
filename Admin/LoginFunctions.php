@@ -42,8 +42,6 @@ function runLogin($password) {
  * @return bool True if the password is correct.
  */
 function checkLogin($submittedPassword, $nonce, $hashedPassword, $hashIterations) {
-    $hashedPassword = hash('sha256', $hashedPassword); // password should have been saved as sha256
-
     for ($i=0; $i<$hashIterations; ++$i) {
         $hashedPassword = hash('sha256', $hashedPassword . $nonce);
     }
