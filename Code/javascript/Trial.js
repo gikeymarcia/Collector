@@ -7,6 +7,9 @@ var Trial = {
         last_timestamp:  "#Last_Input_Time",
     },
 
+    /* * * * * * * * * * *
+     * Initialization functions
+     */
     load_inputs: function(inputs) {
         this.inputs = {};
 
@@ -24,7 +27,9 @@ var Trial = {
         this.type = type;
     },
 
-
+    /* * * * * * * * * * *
+     * Trial Execution (basically, a Table of Contents)
+     */
     run: function() {
         var self = this;
 
@@ -58,6 +63,9 @@ var Trial = {
         });
     },
 
+    /* * * * * * * * * * *
+     * Page Setup
+     */
     define_defaults: function() {
         this.media_path = window.parent.Collector_Experiment.media_path;
     },
@@ -209,10 +217,9 @@ var Trial = {
     get_procedure: function(key) { return this.get_input(key, ['procedure']); },
     get_extra:     function(key) { return this.get_input(key, ['extra']);     },
 
-
-
-
-
+    /* * * * * * * * * * *
+     * Page control
+     */
     // these functions control when submission of a trial is enabled/disabled
     submit: function() {
         this.submit_conditions = {}; // wipe out all submit conditions, force submit
@@ -336,8 +343,10 @@ var Trial = {
     },
 
 
-    /* * * * Utility Functions * * * *
-     * They do what their method names suggest * */
+    /* * * * * * * * * * *
+     * Utility Functions
+     * They do what their method names suggest
+     */
     display_trial: function() {
         this.el('content').removeClass("invisible");
     },
@@ -430,6 +439,9 @@ var Trial = {
     }
 }
 
+/* * * *
+ * Trial subclasses
+ */
 Trial.Timer.prototype = {
     start: function () {
         this.startTimestamp = this.now();
@@ -516,7 +528,9 @@ Trial.FocusChecker.prototype = {
 }
 
 
-
+/* * * *
+ * jQuery Extensions
+ */
 jQuery.fn.focusWithoutScrolling = function() {
     if ($(this).length === 0) return this;
 
