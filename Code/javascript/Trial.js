@@ -44,8 +44,8 @@ var Trial = {
         $(window).on('load', function() {
             self.fit_content();
             self.control_timing( // uses min and max time from the procedure
-                self.get_input('Min Time', 'Procedure'),
-                self.get_input('Max Time', 'Procedure')
+                self.get_input('Min Time', ['Procedure']),
+                self.get_input('Max Time', ['Procedure'])
             );
             self.page_timer = new self.Timer();
             self.page_timer.start();
@@ -91,104 +91,123 @@ var Trial = {
     fill_template: function(template) {
         var self = this;
 
+        // the first replacement matches things like [Cue] and [Text]
+        // the second matches things like {custom stuff} and {my calculated value}
         return template
-            .replace(/\[[^\]]+\]/g, function(match) { return self.replace_input(match, "procedure", "stimuli"); })
-            .replace(/{[^}]+}/g,    function(match) { return self.replace_input(match, "extra"); });
+            .replace(/\[[^\]]+\]/g, function(match) { return self.replace_template_match(match, ["procedure", "stimuli"]); })
+            .replace(/{[^}]+}/g,    function(match) { return self.replace_template_match(match, ["extra"]); });
     },
 
-    replace_input: function(keyWithBrackets, category1, category2) {
+    replace_template_match: function(keyWithBrackets, categories) {
         var key = keyWithBrackets.substr(1, keyWithBrackets.length-2); // pull off the brackets
 
-        var val = this.replace_input_with_url(key);
-
-        if (val === false) {
-            val = this.get_input(key, category1, category2);
-        }
+        var val = this.get_input_as_string(key, categories);
 
         if (val !== null) return val;
 
         return keyWithBrackets;
     },
 
-    replace_input_with_url: function(key) {
-        var key_split = key.split(':');
-
-        if (key_split.length > 1) {
-            var command  = key_split.pop().toLowerCase().trim();
-            var key_main = key_split.join(':');
-
-            if (command === 'url') {
-                var val = this.get_input(key_main);
-
-                if (val.substring(0, 4) === 'http') {
-                    return val;
-                } else {
-                    return this.media_path + '/' + val;
-                }
-            }
-        }
-
-        return false;
+    prepare_media_link: function(val) {
+        return (val.substring(0, 4) === 'http')
+             ? val
+             : this.media_path + '/' + val;
     },
 
     add_input: function(key, val, category) {
         if (typeof category === "undefined") category = "extra";
+        
+        key      = key     .trim().toLowerCase();
+        category = category.trim().toLowerCase();
 
-        this.inputs[category.toLowerCase()][key.trim().toLowerCase()] = val;
+        this.inputs[category][key] = val;
     },
 
-    get_input: function(key, cat1, cat2, cat3) {
-        var categories = [];
-
-        if (typeof cat1 !== "undefined") categories.push(cat1.toLowerCase());
-        if (typeof cat2 !== "undefined") categories.push(cat2.toLowerCase());
-        if (typeof cat3 !== "undefined") categories.push(cat3.toLowerCase());
-
-        if (categories.length === 0)
+    get_input: function(key, categories) {
+        if (typeof categories === 'undefined' || categories.length === 0)
             categories = ['procedure', 'stimuli', 'extra'];
 
         key = key.trim().toLowerCase();
-        var index = null;
-        var key_split = key.split(':');
 
-        if (key_split.length > 1) {
-            index = key_split.pop();
-
-            if (index === 'all' || $.isNumeric(index)) {
-                key = key_split.join(':'); // trim off the index ("Cue:2" => "Cue")
-            } else {
-                index = null; // this wasnt an index command
+        for (var i=0; i<categories.length; ++i) {
+            var category = categories[i].trim().toLowerCase();
+            if (typeof this.inputs[category] === 'undefined') continue;
+          
+            if (typeof this.inputs[category][key] !== "undefined") {
+                return this.inputs[category][key];
             }
         }
-
-        var val = null;
-
-        for (var i=0; i<categories.length; ++i)
-          if (typeof this.inputs[categories[i]][key] !== "undefined")
-            val = this.inputs[categories[i]][key];
-
-        if (typeof val === 'string') {
-            return val;
-        } else if (val === null) {
-            return null;
-        } else {
-            if (index === null) {
-                return val[0];
-            } else if (index === 'all') {
-                return val.join(' ');
+        
+        return null;
+    },
+    
+    get_input_as_string: function(input_request_string, categories) {
+        var input_request = this.decipher_input_request(input_request_string);
+        
+        var val_raw = this.get_input(input_request.name, categories);
+        
+        var val = this.get_input_request_index(
+            val_raw,
+            input_request.index
+        );
+        
+        if (val === null) return null;
+        
+        if (typeof val === 'object') val = val.join(' ');
+        
+        return (input_request.url)
+             ? this.prepare_media_link(val)
+             : val;
+    },
+    
+    decipher_input_request(input_request) {
+        var request_split = input_request.split(':');
+        
+        var url = false, index = null, name = null
+        
+        while (request_split.length > 1) {
+            var last = request_split.pop().trim().toLowerCase();
+            
+            if (last === 'url') {
+                url = true;
+            } else if (last === 'all' || $.isNumeric(last)) {
+                index = last;
             } else {
-                if (typeof val[index] === "undefined") {
-                    return null;
-                } else {
-                    return val[index];
-                }
+                break;
+            }
+        }
+        
+        name = request_split.join(':');
+        
+        if (index === null) index = '0';
+        
+        return {
+            name:  name,
+            url:   url,
+            index: index
+        }
+    },
+    
+    get_input_request_index: function(value, index) {
+        if (value === null || typeof value === 'string')
+            return value;
+    
+        if (index === 'all') {
+            return value;
+        } else {
+            index = parseInt(index);
+            
+            if (typeof value[index] === 'undefined') {
+                return null;
+            } else {
+                return value[index];
             }
         }
     },
 
-    get_stimuli:   function(key) { return this.get_input(key, 'stimuli');   },
-    get_procedure: function(key) { return this.get_input(key, 'procedure'); },
-    get_extra:     function(key) { return this.get_input(key, 'extra');     },
+    get_stimuli:   function(key) { return this.get_input(key, ['stimuli']);   },
+    get_procedure: function(key) { return this.get_input(key, ['procedure']); },
+    get_extra:     function(key) { return this.get_input(key, ['extra']);     },
 
 
 
