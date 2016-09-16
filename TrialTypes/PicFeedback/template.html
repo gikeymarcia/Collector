@@ -1,0 +1,34 @@
+<!--
+PicFeedback
+  The settings below have not yet been implemented
+  Settings          Values
+  noHeader
+  noAnswer
+
+These settings will be implemented once we move the
+changes of the /trialSettings into /dev
+-->
+
+<!-- Show the image -->
+<div class="pic">
+    <img src="{Cue:url}">
+</div>
+
+<div class="textcenter">{feedback message}</div>
+
+<h2 class="textcenter">
+    {Answer:url}
+</h2>
+
+<!-- include form to collect RT and advance page -->
+<div class="textcenter">
+    <button class="collectorButton collectorAdvance" autofocus>Next</button>
+</div>
+
+<style>
+    #content {
+        width: 90%;
+        max-width: 850px;
+        min-width: 600px;
+    }
+</style>

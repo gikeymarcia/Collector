@@ -6,20 +6,20 @@ var Trial = {
         first_timestamp: "#First_Input_Time",
         last_timestamp:  "#Last_Input_Time",
     },
-    
+
     load_inputs: function(inputs) {
         this.inputs = {};
-        
+
         for (var category in inputs) {
             var lower_category = category.toLowerCase();
             this.inputs[lower_category] = {};
-            
+
             for (var column in inputs[category]) {
                 this.inputs[lower_category][column.toLowerCase()] = inputs[category][column];
             }
         }
     },
-    
+
     load_type: function(type) {
         this.type = type;
     },
@@ -27,7 +27,7 @@ var Trial = {
 
     run: function() {
         var self = this;
-        
+
         this.define_defaults();
         this.run_custom_inputs_calculation();
         this.apply_trial_type_template();
@@ -57,69 +57,69 @@ var Trial = {
             }
         });
     },
-    
+
     define_defaults: function() {
         this.media_path = window.parent.Collector_Experiment.media_path;
     },
-    
+
     run_custom_inputs_calculation: function() {
         this.inputs.extra = {};
         var custom_inputs_script = this.type.prepare_inputs;
-        
+
         if (custom_inputs_script !== null) {
             var script = $("<script>");
             script.html(custom_inputs_script);
             $("body").append(script);
         }
     },
-    
+
     apply_trial_type_template: function() {
         var template = $("<div>" + this.type.template + "</div>");
-        
+
         var scripts = template.find("script").replaceWith('__COLLECTOR__SCRIPT__');
         scripts = $.makeArray(scripts);
-        
+
         var content = this.fill_template(template.html());
-        
+
         content = content.replace(/__COLLECTOR__SCRIPT__/g, function(match) {
             return scripts.shift().outerHTML;
         });
-        
+
         $("#content").html(content);
     },
-    
+
     fill_template: function(template) {
         var self = this;
-        
+
         return template
             .replace(/\[[^\]]+\]/g, function(match) { return self.replace_input(match, "procedure", "stimuli"); })
             .replace(/{[^}]+}/g,    function(match) { return self.replace_input(match, "extra"); });
     },
-    
+
     replace_input: function(keyWithBrackets, category1, category2) {
         var key = keyWithBrackets.substr(1, keyWithBrackets.length-2); // pull off the brackets
-        
+
         var val = this.replace_input_with_url(key);
-        
+
         if (val === false) {
             val = this.get_input(key, category1, category2);
         }
-        
+
         if (val !== null) return val;
-        
+
         return keyWithBrackets;
     },
-    
+
     replace_input_with_url: function(key) {
         var key_split = key.split(':');
-        
+
         if (key_split.length > 1) {
             var command  = key_split.pop().toLowerCase().trim();
             var key_main = key_split.join(':');
-            
+
             if (command === 'url') {
                 var val = this.get_input(key_main);
-                
+
                 if (val.substring(0, 4) === 'http') {
                     return val;
                 } else {
@@ -127,46 +127,46 @@ var Trial = {
                 }
             }
         }
-        
+
         return false;
     },
-    
+
     add_input: function(key, val, category) {
         if (typeof category === "undefined") category = "extra";
-        
+
         this.inputs[category.toLowerCase()][key.trim().toLowerCase()] = val;
     },
-    
+
     get_input: function(key, cat1, cat2, cat3) {
         var categories = [];
-        
+
         if (typeof cat1 !== "undefined") categories.push(cat1.toLowerCase());
         if (typeof cat2 !== "undefined") categories.push(cat2.toLowerCase());
         if (typeof cat3 !== "undefined") categories.push(cat3.toLowerCase());
-        
+
         if (categories.length === 0)
             categories = ['procedure', 'stimuli', 'extra'];
-        
+
         key = key.trim().toLowerCase();
         var index = null;
         var key_split = key.split(':');
-        
+
         if (key_split.length > 1) {
             index = key_split.pop();
-            
+
             if (index === 'all' || $.isNumeric(index)) {
                 key = key_split.join(':'); // trim off the index ("Cue:2" => "Cue")
             } else {
                 index = null; // this wasnt an index command
             }
         }
-        
+
         var val = null;
-        
+
         for (var i=0; i<categories.length; ++i)
           if (typeof this.inputs[categories[i]][key] !== "undefined")
             val = this.inputs[categories[i]][key];
-        
+
         if (typeof val === 'string') {
             return val;
         } else if (val === null) {
@@ -185,14 +185,14 @@ var Trial = {
             }
         }
     },
-    
+
     get_stimuli:   function(key) { return this.get_input(key, 'stimuli');   },
     get_procedure: function(key) { return this.get_input(key, 'procedure'); },
     get_extra:     function(key) { return this.get_input(key, 'extra');     },
-    
-    
-    
-    
+
+
+
+
 
     // these functions control when submission of a trial is enabled/disabled
     submit: function() {

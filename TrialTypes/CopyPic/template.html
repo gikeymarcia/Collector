@@ -1,0 +1,35 @@
+<!-- show the image -->
+<div class="pic">
+    <img src="{Cue:url}" />
+</div>
+
+<!-- show the answer -->
+<div class="textcenter">
+    <h2>{feedback text}</h2>
+</div>
+
+<h1 class="textcenter">
+    <img src="{Answer:url}" />
+</h1>
+
+<!-- copy the answer -->
+<div class="textcenter pad">
+   <input name="Response" type="text" value="" class="copybox collectorInput" id="Response"/>
+</div>
+
+<!-- include form to collect RT and advance page -->
+<div class="textcenter">
+  <button class="collectorButton collectorAdvance">Next</button>
+</div>
+
+<!-- force participants to copy the correct answer before they can continue -->
+<script>
+
+$("form").submit(function(e) {
+    if( $('#Response').val() === '' ) {
+        e.stopImmediatePropagation();
+        alert('You MUST copy the answer to continue');
+        return false;
+    }
+});
+</script>
