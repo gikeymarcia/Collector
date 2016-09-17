@@ -1,14 +1,22 @@
 <form id="content" method="POST" action="javascript:submit_form()"></form>
+
+<input type="hidden" name="Duration"         id="Duration"         form="content">
+<input type="hidden" name="Focus"            id="Focus"            form="content">
+<input type="hidden" name="First_Input_Time" id="First_Input_Time" form="content">
+<input type="hidden" name="Last_Input_Time"  id="Last_Input_Time"  form="content">
+
 <script>
     function submit_form() {
-        var data = $("#content").serialize();
+        var serialized_data = $("#content").serialize();
+        var data = Trial.unserialize(serialized_data);
+        var scored_data = Trial.scoring(data);
 
-        parent.Collector_Experiment.end_trial(data);
+        parent.Collector_Experiment.end_trial(scored_data);
     }
 
     var trial_data = parent.Collector_Experiment.get_trial_inputs_and_type();
 
     Trial.load_inputs(trial_data.inputs);
-    Trial.load_type(trial_data.type);
+    Trial.load_trial_type(trial_data.type);
     Trial.run();
 </script>

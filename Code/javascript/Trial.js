@@ -1,4 +1,40 @@
 var Trial = {
+
+    /* * * * * * * * * * *
+     * Scoring functions
+     */
+    scoring: function(data) {
+
+        var ans = Trial.get_input('answer');
+
+        if (typeof data.Response !== 'undefined'
+            && typeof ans !== 'null'
+        ) {
+            var res = data.Response;
+            var acc = calculate_percent_similar(res, ans[0]);
+            data['Accuracy']   = acc;
+
+            // if () is true ? 'do this' : 'else do this'
+            data['strictAcc']  = (acc === 1)  ? 1 : 0;
+            data['lenientAcc'] = (acc >= .75) ? 1 : 0;
+        }
+        return data;
+    },
+
+    unserialize: function(serialized_data) {
+        data = {};
+        var list = serialized_data.split('&');
+        for (var item in list) {
+            var key_val = list[item].split("=");
+            var key = key_val[0];
+            var val = key_val[1];
+            data[key] = val;
+        }
+
+        return data;
+    },
+
+
     element_selectors: {
         content:         "#content",
         duration:        "#Duration",
@@ -23,8 +59,12 @@ var Trial = {
         }
     },
 
-    load_type: function(type) {
+    load_trial_type: function(type) {
         this.type = type;
+
+        if(this.type.scoring !== null) {
+            eval(this.type.scoring);
+        }
     },
 
     /* * * * * * * * * * *
@@ -75,9 +115,7 @@ var Trial = {
         var custom_inputs_script = this.type.prepare_inputs;
 
         if (custom_inputs_script !== null) {
-            var script = $("<script>");
-            script.html(custom_inputs_script);
-            $("body").append(script);
+            eval(custom_inputs_script);
         }
     },
 
@@ -124,7 +162,7 @@ var Trial = {
 
     add_input: function(key, val, category) {
         if (typeof category === "undefined") category = "extra";
-        
+
         key      = key     .trim().toLowerCase();
         category = category.trim().toLowerCase();
 
@@ -140,42 +178,42 @@ var Trial = {
         for (var i=0; i<categories.length; ++i) {
             var category = categories[i].trim().toLowerCase();
             if (typeof this.inputs[category] === 'undefined') continue;
-          
+
             if (typeof this.inputs[category][key] !== "undefined") {
                 return this.inputs[category][key];
             }
         }
-        
+
         return null;
     },
-    
+
     get_input_as_string: function(input_request_string, categories) {
         var input_request = this.decipher_input_request(input_request_string);
-        
+
         var val_raw = this.get_input(input_request.name, categories);
-        
+
         var val = this.get_input_request_index(
             val_raw,
             input_request.index
         );
-        
+
         if (val === null) return null;
-        
+
         if (typeof val === 'object') val = val.join(' ');
-        
+
         return (input_request.url)
              ? this.prepare_media_link(val)
              : val;
     },
-    
+
     decipher_input_request(input_request) {
         var request_split = input_request.split(':');
-        
+
         var url = false, index = null, name = null
-        
+
         while (request_split.length > 1) {
             var last = request_split.pop().trim().toLowerCase();
-            
+
             if (last === 'url') {
                 url = true;
             } else if (last === 'all' || $.isNumeric(last)) {
@@ -184,27 +222,27 @@ var Trial = {
                 break;
             }
         }
-        
+
         name = request_split.join(':');
-        
+
         if (index === null) index = '0';
-        
+
         return {
             name:  name,
             url:   url,
             index: index
         }
     },
-    
+
     get_input_request_index: function(value, index) {
         if (value === null || typeof value === 'string')
             return value;
-    
+
         if (index === 'all') {
             return value;
         } else {
             index = parseInt(index);
-            
+
             if (typeof value[index] === 'undefined') {
                 return null;
             } else {
@@ -580,3 +618,24 @@ jQuery.fn.forceNumeric = function () {
         });
     });
 };
+
+
+
+/* * * * * * * * * * *
+ * Custom Scoring functions
+ */
+function calculate_percent_similar(given, answer) {
+    // var wrong = dom_lev_text(given, answer);
+    // return wrong/(answer.length);
+    var given  = given.trim().toLowerCase();
+    var answer = answer.trim().toLowerCase();
+
+    var chars = answer.split("");
+    var wrong = 0;
+    for (var char in chars) {
+        if (answer[char] != given[char]) {
+            wrong++;
+        }
+    }
+    return wrong/(answer.length);
+}
