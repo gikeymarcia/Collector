@@ -170,6 +170,7 @@ var Trial = {
     },
 
     get_input: function(key, categories) {
+        if(typeof categories === 'string') categories = [categories.toString()];
         if (typeof categories === 'undefined' || categories.length === 0)
             categories = ['procedure', 'stimuli', 'extra'];
 
@@ -637,5 +638,10 @@ function calculate_percent_similar(given, answer) {
             wrong++;
         }
     }
-    return wrong/(answer.length);
+
+    if (wrong > 0) {
+        return wrong/(answer.length);
+    } else {
+        return 1;
+    }
 }
