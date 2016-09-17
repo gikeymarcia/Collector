@@ -514,11 +514,11 @@ Trial.Timer.prototype = {
     },
 
     remaining: function() {
-        return (this.goal - this.now());
+        return Math.floor((this.goal - this.now()));
     },
 
     elapsed: function () {
-        return (this.now() - this.startTimestamp);
+        return Math.floor((this.now() - this.startTimestamp));
     },
 
     set_timer_function: function() {
