@@ -502,8 +502,8 @@ Trial.Timer.prototype = {
             return;
         } else {
             var wait   = this.remaining()*.5;
-            var _this  = this;
-            setTimeout(function() { _this.runTimer() }, wait);
+            var self   = this;
+            setTimeout(function() { self.runTimer() }, wait);
         }
     },
 
@@ -538,9 +538,9 @@ Trial.Timer.prototype = {
         } else {
            $showElement.html( this.formatTime( this.remaining() ) );
         }
-        var _this = this;
+        var self = this;
         var waitTime = (typeof waitTime === 'undefined') ? 50 : waitTime;
-        setTimeout(function() { _this.show($showElement) }, waitTime);
+        setTimeout(function() { self.show($showElement) }, waitTime);
     },
 
     formatTime: function(rawTime) {
@@ -557,8 +557,8 @@ Trial.FocusChecker.prototype = {
     proportion: null,
 
     start: function() {
-        var _this = this;
-        setTimeout(function() { _this.start() }, 250);
+        var self = this;
+        setTimeout(function() { self.start() }, 250);
         this.checks++;
         if (document.hasFocus()) this.passes++;
         this.proportion = Math.round((this.passes/this.checks)*1000) / 1000;
