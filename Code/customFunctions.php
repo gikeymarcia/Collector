@@ -4,39 +4,39 @@ use phpbrowscap\Browscap;
 
 function get_all_trial_type_data(FileSystem $_files) {
     $trial_types = array();
-    
-    $trial_type_categories = array(
+
+    $trial_type_locations = array(
         'Custom Trial Types',
         'Trial Types'
     );
-    
-    foreach ($trial_type_categories as $category) {
+
+    foreach ($trial_type_locations as $category) {
         $list = $_files->read($category);
-        
+
         foreach ($list as $trial_type) {
             $trial_types[$trial_type] = null;
         }
     }
-    
+
     foreach ($trial_types as $trial_type => $null) {
         $data = get_trial_type_data($_files, $trial_type);
-        
+
         if ($data === null) {
             unset($trial_types[$trial_type]);
         } else {
             $trial_types[$trial_type] = $data;
         }
     }
-    
+
     return $trial_types;
 }
 
 function get_trial_type_data(FileSystem $_files, $trial_type) {
     $custom_dir  = $_files->get_path('Custom Trial Type Dir', $trial_type);
     $default_dir = $_files->get_path('Trial Type Dir',        $trial_type);
-    
+
     $test_file = 'template.html';
-    
+
     if (is_file("$custom_dir/$test_file")) {
         return read_trial_type($custom_dir);
     } elseif (is_file("$default_dir/$test_file")) {
@@ -52,16 +52,16 @@ function read_trial_type($trial_type_dir) {
         'scoring'        => 'scoring.js',
         'prepare_inputs' => 'prepareInputs.js'
     );
-    
+
     $file_contents = array();
-    
+
     foreach ($files as $name => $path) {
         $full_path = "$trial_type_dir/$path";
         $file_contents[$name] = is_file($full_path)
-                              ? file_get_contents($full_path) 
+                              ? file_get_contents($full_path)
                               : null;
     }
-    
+
     return $file_contents;
 }
 
