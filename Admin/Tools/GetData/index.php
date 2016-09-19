@@ -31,11 +31,95 @@
 
 <link rel="stylesheet" type="text/css" href="GetDataStyle.css">
 
-<div class="textcenter"><button id="GetDataDownloadButton" type="submit">Click here to download your data</button></div>
+<div class="textcenter">I hope Tyson isn't angry I moved this button :-\</div>
 
 <div class="blockRow"><div class="blockContainer">
     <h1>Main Settings <?= $expander ?></h1>
-    <div>
+    <h2 onclick="create_load('load')" class="load_create_headers">Would you like to load a PREVIOUS analysis?</h3>
+    <div id="load_div" class="load_create_divs">
+    
+    <?php
+      $path    = 'Templates/';
+      $files = scandir($path);
+            
+      $files = array_diff(scandir($path), array('.', '..'));
+      
+      $templates_array = [];
+      
+      foreach($files as $file){
+        array_push($templates_array,file_get_contents("Templates/$file"));
+      }
+      
+    
+    ?>
+
+    <select id="template_load">
+        <option>-select</option>
+        <?php
+          $option_no = -1;
+          foreach($files as $file){
+            $option_no ++;
+            echo "<option value='$option_no'>$file</option>";
+          }
+        ?>
+      </select>
+      <input type="submit" class="collectorButton" value="load">
+    </div>
+    <div id="result"></div>
+    
+    
+    <script>
+    
+      var templates_array = <?= json_encode($templates_array) ?>;
+      //templates_array     = JSON.parse(templates_array);
+      templates_array_js  = [];
+      for(i=0;i<templates_array.length;i++){
+        templates_array_js[i] = JSON.parse(templates_array[i]);
+      }
+    
+    
+      $("#template_load").change(function(){
+        
+        // clear all check boxes
+        $(':checkbox').each(function(i,item){
+          $(item).attr('checked', !$(item).is(':checked'));
+        });
+        
+        current_options_selected = templates_array_js[this.value];
+
+        options_selected_keys = Object.keys(current_options_selected);
+        
+        
+        
+        
+        for(i=1;i<options_selected_keys.length;i++){ //skipping format
+          for(j=0;j<current_options_selected[options_selected_keys[i]].length;j++){
+            var this_id = current_options_selected[options_selected_keys[i]][j].replace(/\//g,"*");            
+            
+            $("#"+options_selected_keys[i]+"_"+this_id).prop("checked",true);
+          }
+        }
+        
+        // now select and deselect appropriately //
+        $("#trialType_agecheck").prop("checked",true);
+        
+        
+      });
+        
+
+    
+
+
+
+
+      
+    </script>
+    
+    
+    
+    <h2 onclick="create_load('create')" class="load_create_headers">Would you like to start a NEW analysis?</h2>
+    <div id='create_div' class="load_create_divs">
+    
         <div class="questionField">
             <h3>What format would you like your data in?</h3>
             <div class="radioTable">
@@ -46,18 +130,32 @@
                 <label> <span><input type="radio" name="format" value="stats"></span> <span>Statistics</span> </label>
             </div>
         </div>
+    </div>
+    <hr>
+    <div>
 
         <div class="questionField">
             <h3><label class="massLabel"><?= $massChecker3 ?> Which data files do you want to select?</label></h3>
             <div class="radioTable">
-                <label> <span><input type="checkbox" name="files[]" value="exp"  checked></span> <span>Main Experiment Output</span> </label>
-                <label> <span><input type="checkbox" name="files[]" value="side" checked></span> <span>Side Data</span> </label>
-                <label> <span><input type="checkbox" name="files[]" value="beg"  checked></span> <span>Status Begin</span> </label>
-                <label> <span><input type="checkbox" name="files[]" value="end"  checked></span> <span>Status End</span> </label>
+                <label> <span><input type="checkbox" name="files[]" value="exp" id="files_exp" checked></span> <span>Main Experiment Output</span> </label>
+                <label> <span><input type="checkbox" name="files[]" value="side" id="files_side" checked></span> <span>Side Data</span> </label>
+                <label> <span><input type="checkbox" name="files[]" value="beg"  id="files_beg" checked></span> <span>Status Begin</span> </label>
+                <label> <span><input type="checkbox" name="files[]" value="end" id="files_end" checked></span> <span>Status End</span> </label>
             </div>
         </div>
+        <button id="GetDataDownloadButton" type="submit" class="collectorButton">Click here to download your data</button>
     </div>
 </div></div>
+
+<script>
+
+  $(".load_create_divs").hide();
+  
+  function create_load(x){
+    $(".load_create_divs").hide();
+    $("#"+x+"_div").show();
+  }
+</script>
 
 <div class="blockRow">
     <div id="RowFilters" class="blockContainer">
@@ -67,7 +165,7 @@
             <div class="radioTable">
                 <?php
                     foreach ($trialTypes as $type) {
-                        $checkbox = "<input type='checkbox' name='trialTypes[]' value='$type' checked>";
+                        $checkbox = "<input type='checkbox' name='trialTypes[]' value='$type' id='trialTypes_$type' checked>";
                         echo "<label> <span>$checkbox</span> <span>$type</span> </label>\r\n";
                     }
                 ?>
@@ -94,7 +192,9 @@
                         $col = htmlspecialchars($col, ENT_QUOTES);
                         $pre = $filePrefixes[$file];
                         $name = $file . '_cols[]';
-                        $checkbox = "<input type='checkbox' name='$name' value='$pre$col' checked>";
+                        $column_id = str_ireplace('[]','',$name);
+                        $column_id = $column_id."_$pre$col";
+                        $checkbox = "<input type='checkbox' name='$name' id='$column_id' value='$pre$col' checked>";
                         echo "<label> <span>$checkbox</span> <span>$col</span> </label>\r\n";
                     }
                     echo '</div>';
@@ -123,7 +223,10 @@
                             foreach ($ids as $id => $idData) {
                                 $filename = $idData['Begin']['Output_File'];
                                 $value = "$exp/$debugType/$username/$id/$filename";
-                                $checkbox = "<input type='checkbox' name='u[]' value='$value' $checked>";
+                                $column_id = "u_$value";
+
+                                $checkbox = "<input type='checkbox' name='u[]' id='$column_id' value='$value' $checked>";
+                                $checkbox = str_ireplace("/","*",$checkbox);
                                 echo "<label> <span>$checkbox</span> <span>$username ($id)</span> </label>\r\n";
                             }
                         }

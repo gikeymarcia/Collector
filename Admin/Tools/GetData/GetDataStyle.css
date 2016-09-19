@@ -65,25 +65,77 @@
   padding         :5px;
   width           :50%;
 }
-#outputArea{
+#output_area{
+  
+  
   border-color    :black;
   padding         :5px;
   background-color:#ccd9ff;
   border-radius   :10px;
   box-shadow      :2px 2px 1px #888888 inset;
-  width           :50%;
+  width           :90%;
+  height          :80%;
+  overflow        :auto;
 }
-#tableArea{
+#analysis_interface{
+  width:90%
+}
+#analysis_area{
+  display:inline-block;
+  width:100%;
+}
+#table_script_area{
   background-color: #eed9ff;
   padding: 10px;
   border-radius: 5px;
   width: 95%;
-  height: 50%;
+  height: 300px;
   overflow: auto;
 }
-#tableArea th, #tableArea td {
+#table_script_area th, #table_script_area td {
     border: 1px solid #666;
 }
 #descriptive_table{
   background-color: #eed9ff;
+}
+#manuscript_edit{
+  width :100%;
+  height:400px;
+}
+#script_area_input{
+  width :100%;
+  height:400px;
+}
+
+#variables_list_display{
+  width:20%;
+}
+
+#left_col{
+  display:inline-block;
+  width:60%
+}
+
+#right_col{
+  background-color:yellow;
+  padding         :10px;
+  border-radius   :5px;
+  position        :absolute;
+  top             :5%;
+  left            :60%;
+  width           :35%;
+  height          :90%;
+}
+.script_line{
+  background-color:white;
+  padding:5px;
+}
+.user_comment{
+  width:99%;
+}
+.load_create_headers:hover{
+  color:black;
+}
+hr{
+  background: #333;
 }

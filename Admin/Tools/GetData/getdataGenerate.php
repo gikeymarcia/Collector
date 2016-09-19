@@ -1,7 +1,13 @@
 <?php
+
+  print_r($_POST['u']);
+
     if(!isset($_SESSION)) { exit; }
     ob_end_clean();
     // ini_set('html_errors', false);
+
+      
+
     
     $requiredInputs = array('u', 'format', 'files');
     foreach ($requiredInputs as $req) {
@@ -20,9 +26,10 @@
     
     
     $dataFolders = array();
+
     
     foreach ($_POST['u'] as $userInfo) {
-        $info = explode('/', $userInfo);
+        $info = explode('*', $userInfo);
         $exp       = $info[0];
         $debugMode = $info[1];
         $username  = $info[2];
@@ -31,6 +38,9 @@
         
         $dataFolders[$exp][$debugMode][$id] = array($username, $file);
     }
+
+
+
     
     // get the columns requested from each category
     $columnCategories = array();
@@ -92,16 +102,14 @@
         echo json_encode(array_values($columns)), "\r\n";
     #### File Output
     } elseif ($_POST['format'] === 'stats') {
+        require $_PATH->get('header');
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<link href="GetDataStyle.css" rel="stylesheet" type="text/css" />
-    <script src="<?= $_PATH->get('Jquery') ?>"></script>
-	<title>Get Data</title>
-</head>
-<body>
+
+<!-- the fact the style looks weird is not a problem -->
+<style>
+    body { display:block}
+</style>
+  
 <script>
     var data = [
 <?php
@@ -277,19 +285,7 @@
                             fputcsv($outstream, $sortedRow, $d);
                         }
                         
-                        /* 
-                        $json_sorted_row=json_encode($sortedRow);
                         
-                        // Anthony injection //
-                        ?>
-                        if(typeof(row_array)=="undefined"){
-                          row_array=[<?= $json_sorted_row ?>];
-                        } else {
-                          row_array[row_array.length]=<?= $json_sorted_row ?>;
-                        }
-                        <?php
-                         */
-                        // End of Anthony injection //
                     }
                 }
             }
@@ -313,3 +309,4 @@
     } else {
         fclose($outstream);
     }
+    
