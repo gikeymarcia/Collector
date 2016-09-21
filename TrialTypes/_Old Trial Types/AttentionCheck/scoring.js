@@ -1,0 +1,3 @@
+Trial.scoring = function(data) {
+
+}

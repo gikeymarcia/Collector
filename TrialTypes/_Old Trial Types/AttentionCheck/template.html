@@ -1,0 +1,31 @@
+<!--
+Attention Check- how to use it
+- This trial is designed to be a like an 'Instruct' that verifies whether
+- or not the participant understood the question
+
+The options for the multiple choice text go into the 'Settings' column
+
+    Setting             Value
+
+    "question":         "Who watches the Watchmen?",
+    "answer":           "Text for the correction option goes here",
+    "alternatives":     ["option1", "option2", "option 3", "etc..."],
+ -->
+<div class="alert alert-instructions">Please carefully read the instructions again.</div>
+<section class="instructions">
+    <h2 class="textcenter">Task Instructions</h2>
+    [Text]
+    <div class="textcenter">
+        <button id="revealRC" class="collectorButton" type="button">Advance</button>
+    </div>
+</section>
+
+
+<div class="readcheck">
+    {question}
+    <ul>
+        {options}
+    </ul>
+</div>
+
+<input type="hidden" name="Fails" id="Fails" value="0">
