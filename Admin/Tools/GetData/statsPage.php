@@ -9,7 +9,6 @@
   //list files in Analysis folders
   
   $analyses_files = glob('Analyses/*js_script.txt');
-  print_r($analyses_files);
 
 
   if(isset($_POST['analysis_name'])){
@@ -55,8 +54,15 @@
   $template['files']              =   $_POST['files'];
   $template['trialTypes']         =   $_POST['trialTypes'];
   $template['Output_cols']        =   $_POST['Output_cols'];
-  $template['Status_Begin_cols']  =   $_POST['Status_Begin_cols'];
-  $template['Status_End_cols']    =   $_POST['Status_End_cols'];
+
+  if(isset($_POST['Status_Begin_cols'])){
+    $template['Status_Begin_cols']  =   $_POST['Status_Begin_cols'];
+  }
+
+  if(isset($_POST['Status_End_cols'])){
+    $template['Status_End_cols']    =   $_POST['Status_End_cols'];
+  }
+
   $template['u']                  =   $_POST['u'];
   
   
@@ -156,7 +162,7 @@ $json_stats_options = json_encode($stats_options);
   
     table_html += '</tbody></table>';
     
-    $("#table_area").html(table_html);
+    $("#Table_area").html(table_html);
     }
 </script>
 
@@ -177,28 +183,42 @@ $json_stats_options = json_encode($stats_options);
 
 <span id="left_col">
 <span id="table_selector">  
-  <input type="button" class="collectorButton data_script" value="table">
-  <input type="button" class="collectorButton data_script" value="script">
+  <input type="button" class="collectorButton data_script" value="Data-Selected">
+  <input type="button" class="collectorButton data_script" value="Table">
+  <input type="button" class="collectorButton data_script" value="Script">  
+  <input type="button" class="collectorButton data_script" value="Notes">
   <span id="saving_area">No changes saved yet</span>
-  <input type="button" class="collectorButton data_script" value="manuscript">
-  <input type="button" class="collectorButton data_script" value="Collect-R">
-</span>
+  
+  <!--
+    <input type="button" class="collectorButton data_script" value="Collect-R">
+  -->
+  </span>
 
   
 <div id="table_script_area"> 
-  <div class="script_table_select"  id="table_area"></div>
-    
-  <div class="script_table_select"  id="script_area">
+  <div class="script_table_select"  id="Data-Selected_area">Tyson and I will put code to allow the user to change data selected here. Maybe getData should be here anyway...? So this area will take up almost the whole screen ... ??? when selected</div>  
+  <div class="script_table_select"  id="Table_area"></div>
+  <div class="script_table_select"  id="Script_area">
     <h3>Script</h3>
     
-    <textarea id="script_area_input"><?=$js_script?></textarea>
+    <textarea id="script_area_input" ><?=$js_script?></textarea>
+    
+    <script>
+//      columns = Object.keys(data_by_cols);
+      $("#script_area_input").on("keyup",function(){
+        
+        // code for making it easier to use the script
+//        script_area_input.selectionStart
+// 
+      });
+    </script>
     
     <input id="script_button_main" type="button" class = "collector" value="run script" onclick="report_script(script_area_input.value)">
 
   </div>
 
-  <div class="script_table_select" id="manuscript_area">
-    <h3>Manuscript</h3>
+  <div class="script_table_select" id="Notes_area">
+    <h3>Notes</h3>
     <span>
       <input type="button" class="collectorButton manscript_button" value="edit">
       <input type="button" class="collectorButton manscript_button" value="preview">     
@@ -283,8 +303,6 @@ $json_stats_options = json_encode($stats_options);
     
     <script>
     
-      var selects_to_populate = ['rename_list','remove_list'];
-      update_selects(getdata_columns);
       
       function update_selects(columns_map){
         for(j=0; j<selects_to_populate.length;j++){
@@ -347,7 +365,7 @@ $json_stats_options = json_encode($stats_options);
         <input class="GUI_type_button collectorButton" type="button"    value="ANOVA">
         <input class="GUI_type_button collectorButton" type="button"    value="Regression">
         <input class="GUI_type_button collectorButton" type="button"    value="Frequencies">
-        <input class="GUI_type_button collectorButton" type="button"    value="Other">
+        <input class="GUI_type_button collectorButton" type="button"    value="Table" title="To manipulate data in the table, add columns, etc.">
       </span>  
 
       <div id="Descriptives"  class="GUI_type">
@@ -481,16 +499,145 @@ $json_stats_options = json_encode($stats_options);
       </div>
       <div id="Frequencies"   class="GUI_type">
 
+      
       NEED TO EMBED SUMMARY FUNCTIONS in here!!!
       
       
       <script src="summaryFunctions.js"></script>
       
       </div>
-      <div id="Other"         class="GUI_type">
-      sheet_management
-      </div>
+      <div id="Table"  class="GUI_type">
+        <span>
+          <input type="button" class="column_row_select collectorButton" value="Columns">
+          <input type="button" class="column_row_select collectorButton" value="Rows">
+        </span>
+        <div class="gui_table_div" id="table_Columns">
+          New Column: 
+            Name<input type="text" id="new_col_name">
+            Formula:
+              <select id="new_col_variable1">
+              </select>
+              <select id="new_col_computation_type">
+                <option>+</option>
+                <option>-</option>
+                <option>*</option>
+                <option>/</option>
+              </select>
+              <input type="number" id="new_col_number">
+              
+              <select id="new_col_variable2">                
+              </select>
+              <!-- <input type="text" placeholder="formula" id="new_col_formula"> -->
+            <input type="button" class="collectorButton" value="Create" id="new_col_button">
+        
+        <script>
+          
+          $("#new_col_button").on("click", function(){
+            // this all needs to be added to GUI script!!!
+            
+            var new_col_name = $("#new_col_name").val();
+            
+            //var formula      = $("#new_col_formula").val();
+              
+            var result = jStat(data_by_cols[$("#new_col_variable1").val()], function( x ) {
+              if($("#new_col_variable2").val()!== "-select an option-"){
+                
+                var this_script='var_by_var = true;'+
+                                'var variable_1_data = data_by_cols[$("#new_col_variable1").val()];'+
+                                'var variable_2_data = data_by_cols[$("#new_col_variable2").val()];'
 
+
+                
+                var_by_var = true;
+                
+                var variable_1_data = data_by_cols[$("#new_col_variable1").val()];
+                var variable_2_data = data_by_cols[$("#new_col_variable2").val()];
+                
+                
+                switch ($("#new_col_computation_type").val()){
+                  case "+":
+                    script += 'return jStat([variable_1_data]).add([variable_2_data]);';
+                    return jStat([variable_1_data]).add([variable_2_data]);
+
+//                  return jStat([variable_1_data,variable_2_data]).sum();
+                  break;
+                  case "-":
+                    script += 'return jStat([variable_1_data]).subtract([variable_2_data]);';
+
+                    /// resume adding stats and output here! to submit to process_stats
+                    
+                    return jStat([variable_1_data]).subtract([variable_2_data]);
+                  break;
+                  case "*":
+                    return jStat([variable_1_data]).multiply([variable_2_data]);
+
+//                    return jStat([variable_1_data,variable_2_data]).product();
+                  break;
+                  case "/":
+                    return jStat([variable_1_data]).divide([variable_2_data]);
+                  
+                  break;
+                }
+                
+              } else {
+                var_by_var = false;
+                
+                switch ($("#new_col_computation_type").val()){
+                  case "+": 
+                    return x + $("#new_col_number").val();
+                  break;
+                  case "-": 
+                    return x - $("#new_col_number").val();
+                  break;
+                  case "*": 
+                    return x * $("#new_col_number").val();
+                  break;
+                  case "/":
+                    return x / $("#new_col_number").val();
+                  break;
+                  
+                }              
+              }
+              
+            });
+            
+            
+            if(var_by_var == true){
+              data_by_cols[$("#new_col_name").val()]=result[0][0][0];  
+            } else {
+              data_by_cols[$("#new_col_name").val()]=result[0];  
+            }
+//            data_by_cols[$("#new_col_name").val()]=data_by_cols[$("#new_col_name").val()][0];  // this shouldn't be necessary!!!
+            
+            columns_map = Object.keys(data_by_cols);
+            data_by_rows = col_to_rows(data_by_cols,columns_map);
+            update_selects(columns_map);
+            load_table(data_by_rows); 
+            
+            
+          });
+  
+          $(".gui_table_div").hide();
+          $(".column_row_select").on("click",function(){
+          
+            $(".gui_table_div").hide();
+            $("#table_"+this.value).show();
+            
+          });
+          
+        </script>
+        
+        
+        
+      </div>
+        <div class="gui_table_div" id="table_Rows">
+          remove outliers<br>
+          Within participant<br>
+          Between participant
+
+        </div>        
+
+      
     </div>
     
     <div class="interface" id="Custom_interface">
@@ -541,7 +688,6 @@ $json_stats_options = json_encode($stats_options);
 <br>allow custom version of our analyses: and comparisons of whether the custom version is quicker. Test if they get the same results 1000 times. If so, then e-mail us to investigate implementing it   
 <br>allow users to use script to rerun analysis (so it's bidirectional)
 <br>create new columns in data - that are presented on the screen
-<br>a list of dataframes and variables
 <br>allow languages to be used, e.g. R syntax?
 </div>
 
@@ -673,4 +819,8 @@ $("#stats_select").on('input',function(){ // ajax in Stats tool
     alert(this_script_line);
   }
 
+      var selects_to_populate = ['rename_list','remove_list','new_col_variable1','new_col_variable2'];
+      update_selects(getdata_columns);
+
+  
 </script>
