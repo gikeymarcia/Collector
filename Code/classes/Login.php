@@ -34,6 +34,7 @@ class Login
         if ($settings->debug_mode) return true;
 
         $debug_name = $settings->debug_name;
+        if (strlen($debug_name) === 0) return false;
 
         return substr($username, 0, strlen($debug_name)) === $debug_name;
     }
