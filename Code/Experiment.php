@@ -8,6 +8,10 @@
     $user_data       = load_user_data($_FILES);
     $trial_page      = get_trial_page($_FILES);
     $trial_type_data = get_all_trial_type_data($_FILES);
+
+    //setting up varialbes new Experiment.js needs
+    $media_path = $_FILES->get_path("Media Dir");
+    $root_path  = $_FILES->get_path("Root");
 ?>
 
 <style>
@@ -29,15 +33,22 @@ var User_Data = {
     Debug_Mode: <?= $_SESSION['Debug Mode'] ? "true" : "false" ?>,
     Experiment_Data: <?= json_encode($user_data) ?>
 }
-var trial_page  = <?= json_encode($trial_page) ?>;
-var trial_types = <?= json_encode($trial_type_data) ?>;
+
+var trial_page   = <?= json_encode($trial_page) ?>;
+var trial_types  = <?= json_encode($trial_type_data) ?>;
+var server_paths = {
+    media_path: '<?= $media_path ?>',
+    root_path:  '<?= $root_path ?>',
+};
+
+
 
 var Collector_Experiment = new Experiment(
     User_Data.Experiment_Data,
     $("#ExperimentContainer"),
     trial_page,
     trial_types,
-    "<?= $_FILES->get_path("Media Dir") ?>"
+    server_paths
 );
 
 Collector_Experiment.run_trial();

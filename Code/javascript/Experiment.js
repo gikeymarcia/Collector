@@ -1,4 +1,4 @@
-var Experiment = function (exp_data, $container, trial_page, trial_types, media_path) {
+var Experiment = function (exp_data, $container, trial_page, trial_types, server_paths) {
     this.data = {
         stimuli: exp_data.stimuli,
         procedure: this.parse_procedure(exp_data.procedure),
@@ -7,7 +7,8 @@ var Experiment = function (exp_data, $container, trial_page, trial_types, media_
 
     this.exp_data   = exp_data;
     this.trial_page = trial_page;
-    this.media_path = media_path;
+    this.media_path = server_paths.media_path;
+    this.root_path  = server_paths.root_path;
     this.position   = exp_data.globals.position;
     this.load_trial_types(trial_types);
     this.create_iframe($container);
@@ -187,19 +188,43 @@ Experiment.prototype = {
             position = this.position;
         }
 
-        this.record_trial(data);
+        this.save_trial(data);
 
         var next_position = this.get_next_trial_position();
 
         if (next_position) {
+            this.record_if_ready(next_position);
             this.run_trial(next_position);
-        } else {
+        }
+        else {
+            this.record_remaining_trials();
             this.iframe.detach();
             $("#ExperimentContainer").append("<h1>Done!</h1>");
         }
     },
 
-    record_trial: function(data) {
+    record_if_ready: function(next_position) {
+        var unrecorded = get_unrecorded_trials();
+        if(unrecorded.length > 0) {
+            this.record_to_server(unrecorded);
+        }
+    },
+
+    get_unrecorded_trials: function() {
+        return this.data.responses.filter(function(trial_set, trial_set_index) {
+            if (trial_set_index !== next_position[0]) return true;
+        }).filter(function(trial_set) {
+            for (var index in trial_set) {
+                return (trial_set[index]['recorded'] === false);
+            }
+        });
+    },
+
+    record_remaining_trials: function() {
+        this.record_to_server(this.get_unrecorded_trials());
+    },
+
+    save_trial: function(data) {
         var pos = this.position;
         var trial_set  = pos[0];
         var post_trial = pos[1];
@@ -217,6 +242,25 @@ Experiment.prototype = {
         };
 
     },
+
+    record_to_server: function(trial_sets) {
+        $.ajax({
+            url: this.root_path + '/trialRecord.php',
+            type: 'POST',
+            dataType: 'default',
+            data: ,
+        })
+        .done(function() {
+            console.log("success");
+        })
+        .fail(function() {
+            console.log("error");
+        })
+        .always(function() {
+            console.log("complete");
+        });
+
+    }
 
     get_next_trial_position: function() {
         var pos = this.position;
