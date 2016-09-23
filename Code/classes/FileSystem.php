@@ -71,9 +71,9 @@ class FileSystem
             $var_replaced = fill_template(
                 $this->map[$source][1], $variables, $throw_exception_when_path_is_incomplete
             );
-            
+
             if ($var_replaced === false) return false;
-            
+
             return $this->get_root() . "/$var_replaced";
         }
     }
@@ -109,9 +109,9 @@ class FileSystem
         $throw_exception_when_path_is_incomplete = true
     ) {
         $path = $this->get_path($source, $path_vars, $throw_exception_when_path_is_incomplete);
-        
+
         if ($path === false) return false;
-        
+
         $class_name = 'fsDataType_' . $this->get_type($source);
         $this->validate_date_type($class_name);
 

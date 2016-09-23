@@ -82,23 +82,6 @@ function get_Collector_experiments(FileSystem $_files) {
     return $experiment_names;
 }
 /**
- * creates an experiment by reading the relevant stim and proc files of
- * either a given or a randomly assigned condition
- */
-function create_experiment(FileSystem $_files, $condition_index = null) {
-    $condition = ConditionAssignment::get($_files, $condition_index);
-
-    $stimuli   = load_exp_files($_files, 'Stimuli',   $condition);
-    $procedure = load_exp_files($_files, 'Procedure', $condition);
-
-    return array(
-        'condition' => $condition,
-        'stimuli'   => $stimuli,
-        'procedure' => $procedure,
-        'position'  => array(0, 0)
-    );
-}
-/**
  * reads and shuffles a string of comma-separated stimuli or procedure files
  *
  * @param string     $filenames comma-delimited filenames to load
@@ -940,3 +923,62 @@ function Collector_prepare_autoloader() {
     $autoloader->add('Collector', "$code_folder/classes");
     $autoloader->add('phpbrowscap', "$code_folder/vendor/phpbrowscap");
 }
+
+function save_user_data($data, FileSystem $_files) {
+    $global_data = array(
+        "condition" => $data['condition'],
+        "position"  => $data['position']
+    );
+    $stimuli     = $data['stimuli'];
+    $procedure   = $data['procedure'];
+
+    $_files->overwrite('User Globals',   $global_data);
+    $_files->overwrite('User Stimuli',   $stimuli);
+    $_files->overwrite('User Procedure', $procedure);
+}
+
+/**
+ * creates an experiment by reading the relevant stim and proc files of
+ * either a given or a randomly assigned condition
+ */
+function create_experiment(FileSystem $_files, $condition_index = null) {
+    $condition = ConditionAssignment::get($_files, $condition_index);
+
+    $stimuli   = load_exp_files($_files, 'Stimuli',   $condition);
+    $procedure = load_exp_files($_files, 'Procedure', $condition);
+
+    return array(
+        'condition' => $condition,
+        'stimuli'   => $stimuli,
+        'procedure' => $procedure,
+        'position'  => array(0, 0)
+    );
+}
+
+function load_user_data(FileSystem $_files) {
+    return array(
+        'stimuli'    => $_files->read('User Stimuli'),
+        'procedure'  => $_files->read('User Procedure'),
+        'globals'    => $_files->read('User Globals'),
+        'responses'  => load_responses($_files),
+    );
+}
+
+function load_responses(FileSystem $_files) {
+    // if file doesn't exist then -> read() returns null
+    return ($resp = $_files->read('User Responses'))
+         ? $resp
+         : array();
+}
+
+function get_trial_page(FileSystem $_files) {
+    ob_start();
+    // @TODO : make this pretty
+    $added_scripts = array($_files->get_path("Trial JS"));
+    require $_files->get_path('Header');
+    require $_files->get_path('Trial Content');
+    require $_files->get_path('Footer');
+    return ob_get_clean();
+}
+
+

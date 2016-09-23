@@ -8,7 +8,7 @@ var Experiment = function (exp_data, $container, trial_page, trial_types, media_
     this.exp_data   = exp_data;
     this.trial_page = trial_page;
     this.media_path = media_path;
-    this.position   = exp_data.position;
+    this.position   = exp_data.globals.position;
     this.load_trial_types(trial_types);
     this.create_iframe($container);
 }

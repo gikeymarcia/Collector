@@ -1,25 +1,12 @@
 <?php
     require __DIR__ . '/initiateCollector.php';
 
-    $user_data = $_FILES->read('User Data');
-    $responses = $_FILES->read('Output');
-
-    if ($responses === null) {
-        $responses = array();
-    }
-
-    $user_data['responses'] = $responses;
-    $added_scripts = array($_FILES->get_path("Experiment JS"));
+    $added_scripts = array($_FILES->get_path("Experiment JS"));     // header.php is loading these
     require $_FILES->get_path('Header');
 
-
-    $added_scripts = array($_FILES->get_path("Trial JS"));
-    ob_start();
-    require $_FILES->get_path('Header');
-    require $_FILES->get_path('Trial Content');
-    require $_FILES->get_path('Footer');
-    $trial_page = ob_get_clean();
-
+    // load data required for the experiment
+    $user_data       = load_user_data($_FILES);
+    $trial_page      = get_trial_page($_FILES);
     $trial_type_data = get_all_trial_type_data($_FILES);
 ?>
 

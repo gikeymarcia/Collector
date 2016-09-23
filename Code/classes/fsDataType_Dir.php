@@ -3,6 +3,7 @@
 class fsDataType_Dir extends fsDataType_Abstract
 {
     public static function read($path) {
+        if (!is_dir($path)) return null;
         $scan = scandir($path);
 
         foreach ($scan as $i => $entry) {
