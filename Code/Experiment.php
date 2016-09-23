@@ -53,6 +53,8 @@ var Collector_Experiment = new Experiment(
     "<?= $_FILES->get_path("Media Dir") ?>"
 );
 
+Collector_Experiment.run_trial();
+
 </script>
 
 <?php

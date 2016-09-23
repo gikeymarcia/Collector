@@ -11,8 +11,6 @@ var Experiment = function (exp_data, $container, trial_page, trial_types, media_
     this.position   = exp_data.position;
     this.load_trial_types(trial_types);
     this.create_iframe($container);
-
-    this.run_trial(this.position);
 }
 
 
