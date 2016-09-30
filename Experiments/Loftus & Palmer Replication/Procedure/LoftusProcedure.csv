@@ -1,0 +1,10 @@
+Item,Trial Type,Max Time,Text,Settings,Shuffle 1
+0,Instruct,user,You will now be shown a few video clips.,,off
+4,Youtube,user,,submitOnDone = false|preventEarlySubmission = false|,aa
+3,Youtube,user,,submitOnDone = false|preventEarlySubmission = false|,aa
+5,Youtube,user,,submitOnDone = false|preventEarlySubmission = false|,aa
+2,Youtube,user,,submitOnDone = false|preventEarlySubmission = false|,aa
+0,Instruct,user,You will now be asked a series of questions about the accident.,,off
+0,FreeRecall,user,Please give an account of the accident you have just seen.,,off
+6,Survey,,Please answer to the best of your recollection.,,off
+0,Instruct,user,Thank you for participating. ,,off
