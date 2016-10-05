@@ -84,14 +84,14 @@ Experiment.prototype = {
 
         var items = this.get_item(trial_set, post_pos);
         var stimuli = this.get_stimuli(items);
-        
+
         // var responses = [];
         var inputs = {
             procedure: trial_set[post_pos],
             stimuli: stimuli,
             //@TODO: return associated responses for this trial
         }
-        
+
         return inputs;
     },
 
@@ -188,7 +188,7 @@ Experiment.prototype = {
 
     end_trial: function(data, inputs) {
         position = this.position;
-        
+
         if (!Array.isArray(data)) data = [data];
 
         this.save_trial(data, inputs);
@@ -209,7 +209,7 @@ Experiment.prototype = {
     // find all the procedure rows that have all their data and havent been recorded yet
     record_if_ready: function(next_position) {
         var unrecorded = this.get_unrecorded_trials(next_position);
-        
+
         if(unrecorded.length > 1) {
             this.record_to_server(unrecorded);
         }
@@ -217,14 +217,14 @@ Experiment.prototype = {
 
     get_unrecorded_trials: function(current_row_index) {
         var responses = this.data.responses;
-        
+
         // dont try to record trial rows that we are still working on
         if (typeof current_row_index !== "undefined") {
             responses = responses.filter(function(trial_set, trial_set_index) {
                 if (trial_set_index !== current_row_index) return true;
             });
         }
-        
+
         // find all the saved responses that haven't yet been recorded to the server
         return responses.filter(function(trial_set) {
             for (var index in trial_set) {
@@ -255,7 +255,7 @@ Experiment.prototype = {
         };
 
     },
-    
+
     get_value_as_string: function(value) {
         if (value === null) {
             return '';
@@ -264,13 +264,13 @@ Experiment.prototype = {
                 return value.join('|');
             } else {
                 var obj_join = '';
-                
+
                 for (var prop in value) {
                     if (obj_join !== '') obj_join += '|';
-                    
+
                     obj_join += value[prop];
                 }
-                
+
                 return obj_join;
             }
         } else if (typeof value === 'string') {
@@ -279,62 +279,62 @@ Experiment.prototype = {
             return value.toString();
         }
     },
-    
+
     get_trial_output: function(trial) {
         var trial_info = {
             "Trial": trial.position[0] + "." + trial.position[1]
         };
-        
+
         for (var prop in trial.data.procedure) {
             trial_info["Proc_" + prop] = trial.data.procedure[prop];
         }
-        
+
         // trial.data.stimuli is an object with the keys
         // being columns in the stim file and the values
         // being the array of values used for this trial
         for (var stim_col in trial.data.stimuli) {
             trial_info["Stim_" + stim_col] = trial.data.stimuli[stim_col].join('|');
         }
-        
+
         var self = this;
-        
+
         var response_rows = trial.data.responses.map(function(responses) {
             var row = {};
-            
+
             for (var resp_col in responses) {
                 row["Resp_" + resp_col] = self.get_value_as_string(responses[resp_col]);;
             }
-            
+
             return row;
         });
-        
+
         return response_rows.map(function(responses) {
             for (var prop in trial_info) {
                 responses[prop] = trial_info[prop];
             }
-            
+
             return responses;
         });
     },
-    
+
     get_trial_set_output: function(set) {
         var self = this;
-        
+
         var trial_outputs = set.map(function(trial) {
             return self.get_trial_output(trial);
         });
-        
+
         var number_of_rows = 0;
-        
+
         for (var post_level in trial_outputs) {
             number_of_rows = Math.max(number_of_rows, trial_outputs.length);
         }
-        
+
         var rows_in_recording_form = [];
-        
+
         for (var i=0; i<number_of_rows; ++i) {
             var output_row = {};
-            
+
             for (post_level in trial_outputs) {
                 if (typeof trial_outputs[post_level][i] !== 'undefined') {
                     var response_index = i;
@@ -343,7 +343,7 @@ Experiment.prototype = {
                 } else {
                     var response_index = null;
                 }
-                
+
                 if (response_index !== null) {
                     for (var prop in trial_outputs[post_level][response_index]) {
                         if (post_level > 0) {
@@ -351,16 +351,16 @@ Experiment.prototype = {
                         } else {
                             var col = prop;
                         }
-                        
+
                         var val = trial_outputs[post_level][response_index][prop];
                         output_row[col] = val;
                     }
                 }
             }
-            
+
             rows_in_recording_form.push(output_row);
         }
-        
+
         return rows_in_recording_form;
     },
 
@@ -370,13 +370,13 @@ Experiment.prototype = {
                 trial.recorded = true;
             });
         });
-        
+
         var self = this;
-        
+
         var rows = trial_sets
                   .map(function(set) { return self.get_trial_set_output(set); })
                   .reduce(concat_arrays, []);
-      
+
         console.dir(rows);
         /*
         $.ajax({

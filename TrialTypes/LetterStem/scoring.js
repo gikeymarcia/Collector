@@ -1,11 +1,11 @@
 Trial.scoring = function(data) {
-    var answer = Trial.get_input('answer')[0];
+    var answer = Trial.get_stimuli('answer')[0];
 
     if (typeof data.Response !== 'undefined'
         && typeof answer !== 'null'
     ) {
         var resp = data.Response;
-        var stem = answer.substring(0, 2);
+        var stem = Trial.get_input('answer stem');
         var noStemAcc = calculate_percent_similar(resp       , answer);
         var StemAcc   = calculate_percent_similar(stem + resp, answer);
 
