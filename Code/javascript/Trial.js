@@ -24,11 +24,19 @@ var Trial = {
     unserialize: function(serialized_data) {
         data = {};
         var list = serialized_data.split('&');
+        
         for (var item in list) {
             var key_val = list[item].split("=");
-            var key = key_val[0];
-            var val = key_val[1];
-            data[key] = val;
+            var key = decodeURIComponent(key_val[0]);
+            var val = decodeURIComponent(key_val[1]);
+            
+            if (key.substring(key.length-2) === '[]') {
+                if (typeof data[key] === 'undefined') data[key] = [];
+                
+                data[key].push(val);
+            } else {
+                data[key] = val;
+            }
         }
 
         return data;
