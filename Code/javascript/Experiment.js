@@ -210,7 +210,7 @@ Experiment.prototype = {
     record_if_ready: function(next_position) {
         var unrecorded = this.get_unrecorded_trials(next_position);
         
-        if(unrecorded.length > 0) {
+        if(unrecorded.length > 1) {
             this.record_to_server(unrecorded);
         }
     },
@@ -255,111 +255,129 @@ Experiment.prototype = {
         };
 
     },
+    
+    get_value_as_string: function(value) {
+        if (value === null) {
+            return '';
+        } else if (typeof value === 'object') {
+            if (Array.isArray(value)) {
+                return value.join('|');
+            } else {
+                var obj_join = '';
+                
+                for (var prop in value) {
+                    if (obj_join !== '') obj_join += '|';
+                    
+                    obj_join += value[prop];
+                }
+                
+                return obj_join;
+            }
+        } else if (typeof value === 'string') {
+            return value;
+        } else {
+            return value.toString();
+        }
+    },
+    
+    get_trial_output: function(trial) {
+        var trial_info = {
+            "Trial": trial.position[0] + "." + trial.position[1]
+        };
+        
+        for (var prop in trial.data.procedure) {
+            trial_info["Proc_" + prop] = trial.data.procedure[prop];
+        }
+        
+        // trial.data.stimuli is an object with the keys
+        // being columns in the stim file and the values
+        // being the array of values used for this trial
+        for (var stim_col in trial.data.stimuli) {
+            trial_info["Stim_" + stim_col] = trial.data.stimuli[stim_col].join('|');
+        }
+        
+        var self = this;
+        
+        var response_rows = trial.data.responses.map(function(responses) {
+            var row = {};
+            
+            for (var resp_col in responses) {
+                row["Resp_" + resp_col] = self.get_value_as_string(responses[resp_col]);;
+            }
+            
+            return row;
+        });
+        
+        return response_rows.map(function(responses) {
+            for (var prop in trial_info) {
+                responses[prop] = trial_info[prop];
+            }
+            
+            return responses;
+        });
+    },
+    
+    get_trial_set_output: function(set) {
+        var self = this;
+        
+        var trial_outputs = set.map(function(trial) {
+            return self.get_trial_output(trial);
+        });
+        
+        var number_of_rows = 0;
+        
+        for (var post_level in trial_outputs) {
+            number_of_rows = Math.max(number_of_rows, trial_outputs.length);
+        }
+        
+        var rows_in_recording_form = [];
+        
+        for (var i=0; i<number_of_rows; ++i) {
+            var output_row = {};
+            
+            for (post_level in trial_outputs) {
+                if (typeof trial_outputs[post_level][i] !== 'undefined') {
+                    var response_index = i;
+                } else if (trial_outputs[post_level].length === 1) {
+                    var response_index = 0;
+                } else {
+                    var response_index = null;
+                }
+                
+                if (response_index !== null) {
+                    for (var prop in trial_outputs[post_level][response_index]) {
+                        if (post_level > 0) {
+                            var col = "Post_" + post_level + "_" + prop;
+                        } else {
+                            var col = prop;
+                        }
+                        
+                        var val = trial_outputs[post_level][response_index][prop];
+                        output_row[col] = val;
+                    }
+                }
+            }
+            
+            rows_in_recording_form.push(output_row);
+        }
+        
+        return rows_in_recording_form;
+    },
 
     record_to_server: function(trial_sets) {
-        var rows_to_record = [];
-        
-        trial_sets.forEach(function(set, set_index) {
-            var trial_outputs = [];
-            
-            set.forEach(function(trial, post_level) {
+        trial_sets.forEach(function(set) {
+            set.forEach(function(trial) {
                 trial.recorded = true;
-                
-                if (typeof trial_outputs[post_level] === 'undefined') {
-                    trial_outputs[post_level] = [];
-                }
-                
-                var trial_info = {
-                    "Trial": trial.position[0] + "." + trial.position[1]
-                };
-                
-                for (var prop in trial.data.procedure) {
-                    trial_info["Proc_" + prop] = trial.data.procedure[prop];
-                }
-                
-                // trial.data.stimuli is an object with the keys
-                // being columns in the stim file and the values
-                // being the array of values used for this trial
-                for (var stim_col in trial.data.stimuli) {
-                    trial_info["Stim_" + stim_col] = trial.data.stimuli[stim_col].join('|');
-                }
-                
-                var response_rows = trial.data.responses.map(function(responses) {
-                    var row = {};
-                    
-                    for (var resp_col in responses) {
-                        var value_as_string;
-                        
-                        if (responses[resp_col] === null) {
-                            value_as_string = '';
-                        } else if (typeof responses[resp_col] === 'object') {
-                            if (Array.isArray(responses[resp_col])) {
-                                value_as_string = responses[resp_col].join('|');
-                            } else {
-                                var obj_join = '';
-                                
-                                for (var prop in responses[resp_col]) {
-                                    if (obj_join !== '') obj_join += '|';
-                                    
-                                    obj_join += responses[resp_col][prop];
-                                }
-                                
-                                value_as_string = obj_join;
-                            }
-                        } else {
-                            value_as_string = responses[resp_col];
-                        }
-                        
-                        row["Resp_" + resp_col] = value_as_string;
-                    }
-                    
-                    return row;
-                });
-                
-                response_rows.forEach(function(row) {
-                    for (var prop in trial_info) {
-                        row[prop] = trial_info[prop];
-                    }
-                    
-                    trial_outputs[post_level].push(row);
-                });
             });
-            
-            var number_of_rows = 0;
-            
-            for (var post_level in trial_outputs) {
-                number_of_rows = Math.max(number_of_rows, trial_outputs.length);
-            }
-            
-            for (var i=0; i<number_of_rows; ++i) {
-                var output_row = {};
-                
-                for (post_level in trial_outputs) {
-                    if (typeof trial_outputs[post_level][i] !== 'undefined') {
-                        var response_index = i;
-                    } else if (trial_outputs[post_level].length === 1) {
-                        var response_index = 0;
-                    } else {
-                        var response_index = null;
-                    }
-                    
-                    if (response_index !== null) {
-                        for (var prop in trial_outputs[post_level][response_index]) {
-                            if (post_level > 0) {
-                                var col = "Post_" + post_level + "_" + prop;
-                            } else {
-                                var col = prop;
-                            }
-                            
-                            var val = trial_outputs[post_level][response_index][prop];
-                            output_row[col] = val;
-                        }
-                    }
-                }
-                
-                rows_to_record.push(output_row);
-            }
         });
+        
+        var self = this;
+        
+        var rows = trial_sets
+                  .map(function(set) { return self.get_trial_set_output(set); })
+                  .reduce(concat_arrays, []);
+      
+        console.dir(rows);
         /*
         $.ajax({
             url: this.root_path + '/Code/trialRecord.php',
