@@ -244,23 +244,22 @@ Experiment.prototype = {
     },
 
     record_to_server: function(trial_sets) {
-        $.ajax({
-            url: this.root_path + '/trialRecord.php',
-            type: 'POST',
-            dataType: 'default',
-            data: ,
-        })
-        .done(function() {
-            console.log("success");
-        })
-        .fail(function() {
-            console.log("error");
-        })
-        .always(function() {
-            console.log("complete");
-        });
-
-    }
+        // $.ajax({
+        //     url: this.root_path + '/trialRecord.php',
+        //     type: 'POST',
+        //     dataType: 'default',
+        //     data: ,
+        // })
+        // .done(function() {
+        //     console.log("success");
+        // })
+        // .fail(function() {
+        //     console.log("error");
+        // })
+        // .always(function() {
+        //     console.log("complete");
+        // });
+    },
 
     get_next_trial_position: function() {
         var pos = this.position;

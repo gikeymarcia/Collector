@@ -1,10 +1,6 @@
-// read settings column from procedure
-var settings_string = Trail.get_input("settings", "procedure");
-
-// add curly braces (so it will be a valid JSON string)
+// read settings column from procedure and turn into a JSON object
+var settings_string = Trail.get_procedure("settings");
 var json_string = "{" + settings_string + "}";
-
-// parse JSON values so we can do things like settings.question
 var settings = JSON.parse(json_string);
 
 // default values:
@@ -46,10 +42,10 @@ alts.map(function(alternative) {
         "text": alternative
     });
 });
-ops.shuffle_options();      // custom shuffle written below that
+ops.shuffle_options();      // custom shuffle written on line 54
 
 var options = "";
-for var (item in ops) {
+for (var item in ops) {
     if (ops[item]["correct"] === 1) {
         options += '<li class="MCbutton" id="correct">' + ops[item]["text"] + '</li>'
     } else {
