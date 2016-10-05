@@ -2,6 +2,7 @@ var Experiment = function (exp_data, $container, trial_page, trial_types, server
     this.data = {
         stimuli: exp_data.stimuli,
         procedure: this.parse_procedure(exp_data.procedure),
+        globals: exp_data.globals,
         responses: []
     }
 
@@ -9,7 +10,7 @@ var Experiment = function (exp_data, $container, trial_page, trial_types, server
     this.trial_page = trial_page;
     this.media_path = server_paths.media_path;
     this.root_path  = server_paths.root_path;
-    this.position   = exp_data.globals.position;
+    this.data.globals.position   = exp_data.globals.position;
     this.load_trial_types(trial_types);
     this.create_iframe($container);
 }
@@ -60,21 +61,22 @@ Experiment.prototype = {
         return trials;
     },
 
-    get_trial_inputs_and_type: function(position) {
+    get_trial_data: function(position) {
         var trial_inputs = this.get_trial_inputs(position);
 
         var type = trial_inputs.procedure["Trial Type"]; // maybe add error handling here
 
         return {
             inputs: trial_inputs,
-            type: this.get_trial_type(type)
+            type: this.get_trial_type(type),
+            globals: this.data.globals,
         }
     },
 
     get_trial_inputs: function(position) {
         //@TODO: handle when recieving a bad 'position'
         if (typeof position == 'undefined') {
-            position = this.position;
+            position = this.data.globals.position;
         }
         var row = position[0];
         var post_pos = position[1];
@@ -177,23 +179,32 @@ Experiment.prototype = {
 
     run_trial(position) {
         if (typeof position == "undefined") {
-            position = this.position;
+            position = this.data.globals.position;
         }
-        this.position = position;
+        this.data.globals.position = position;
         var doc = this.iframe[0].contentDocument;
         doc.open();
         doc.write(this.trial_page);
         doc.close();
     },
 
-    end_trial: function(data, inputs) {
-        position = this.position;
+    end_trial: function(data, inputs, globals) {
+        position = this.data.globals.position;
+        this.data.globals = globals;
 
         if (!Array.isArray(data)) data = [data];
 
         this.save_trial(data, inputs);
 
-        var next_position = this.get_next_trial_position();
+
+        // you can use this to skip trials OR
+        // if you set Trial.global_data.next_position = false
+        // it will end the experiment
+        if (typeof this.data.globals.next_position !== "undefined") {
+            var next_position = this.data.globals.next_position;
+        } else {
+            var next_position = this.get_next_trial_position();
+        }
 
         if (next_position) {
             this.record_if_ready(next_position[0]); // if we have enough completed rows of data (including post trials)
@@ -210,7 +221,7 @@ Experiment.prototype = {
     record_if_ready: function(next_position) {
         var unrecorded = this.get_unrecorded_trials(next_position);
 
-        if(unrecorded.length > 1) {
+        if(unrecorded.length > 0) {
             this.record_to_server(unrecorded);
         }
     },
@@ -238,7 +249,7 @@ Experiment.prototype = {
     },
 
     save_trial: function(data, inputs) {
-        var pos = this.position;
+        var pos = this.data.globals.position;
         var trial_set  = pos[0];
         var post_trial = pos[1];
         var resp = this.data.responses;
@@ -372,33 +383,33 @@ Experiment.prototype = {
         });
 
         var self = this;
-
         var rows = trial_sets
                   .map(function(set) { return self.get_trial_set_output(set); })
                   .reduce(concat_arrays, []);
 
-        console.dir(rows);
-        /*
+        var rows    = JSON.stringify(rows);
+        var globals = JSON.stringify(this.data.globals);
+
+
         $.ajax({
             url: this.root_path + '/Code/trialRecord.php',
             type: 'POST',
-            dataType: 'default',
-            data: trial_sets,
+            dataType: 'text',
+            data: {
+                trial_data: rows,
+                globals: globals,
+            },
         })
-        .done(function() {
-            console.log("success");
+        .fail(function(data, text, error) {
+            console.dir(data);
+            console.dir(text);
+            console.dir(error);
+            console.dir("error!");
         })
-        .fail(function() {
-            console.log("error");
-        })
-        .always(function() {
-            console.log("complete");
-        });
-        */
     },
 
     get_next_trial_position: function() {
-        var pos = this.position;
+        var pos = this.data.globals.position;
         var trial_set  = pos[0];
         var post_trial = pos[1];
         var proc = this.data.procedure;

@@ -11,14 +11,20 @@
         var data = Trial.unserialize(serialized_data);
         var scored_data = Trial.scoring(data);
 
-        parent.Collector_Experiment.end_trial(scored_data, Trial.raw_inputs);
+
+        parent.Collector_Experiment.end_trial(
+            scored_data,
+            Trial.raw_inputs,
+            Trial.global_data
+        );
     }
 
-    var trial_data = parent.Collector_Experiment.get_trial_inputs_and_type();
-    
+    var trial_data = parent.Collector_Experiment.get_trial_data();
+
     Trial.raw_inputs = trial_data.inputs;
 
     Trial.load_inputs(trial_data.inputs);
     Trial.load_trial_type(trial_data.type);
+    Trial.load_globals(trial_data.globals);
     Trial.run();
 </script>

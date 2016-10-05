@@ -24,15 +24,15 @@ var Trial = {
     unserialize: function(serialized_data) {
         data = {};
         var list = serialized_data.split('&');
-        
+
         for (var item in list) {
             var key_val = list[item].split("=");
             var key = decodeURIComponent(key_val[0]);
             var val = decodeURIComponent(key_val[1]);
-            
+
             if (key.substring(key.length-2) === '[]') {
                 if (typeof data[key] === 'undefined') data[key] = [];
-                
+
                 data[key].push(val);
             } else {
                 data[key] = val;
@@ -65,6 +65,10 @@ var Trial = {
                 this.inputs[lower_category][column.toLowerCase()] = inputs[category][column];
             }
         }
+    },
+
+    load_globals: function(global_data) {
+        this.global_data = global_data;
     },
 
     load_trial_type: function(type) {
