@@ -1,58 +1,15 @@
 var Trial = {
-
-    /* * * * * * * * * * *
-     * Scoring functions
-     */
-    scoring: function(data) {
-
-        var ans = Trial.get_input('answer');
-
-        if (typeof data.Response !== 'undefined'
-            && typeof ans !== 'null'
-        ) {
-            var res = data.Response;
-            var acc = calculate_percent_similar(res, ans[0]);
-            data['Accuracy']   = acc;
-
-            // if () is true ? 'do this' : 'else do this'
-            data['strictAcc']  = (acc === 1)  ? 1 : 0;
-            data['lenientAcc'] = (acc >= .75) ? 1 : 0;
-        }
-        return data;
-    },
-
-    unserialize: function(serialized_data) {
-        data = {};
-        var list = serialized_data.split('&');
-
-        for (var item in list) {
-            var key_val = list[item].split("=");
-            var key = decodeURIComponent(key_val[0]);
-            var val = decodeURIComponent(key_val[1]);
-
-            if (key.substring(key.length-2) === '[]') {
-                if (typeof data[key] === 'undefined') data[key] = [];
-
-                data[key].push(val);
-            } else {
-                data[key] = val;
-            }
-        }
-
-        return data;
-    },
-
-
     element_selectors: {
-        content:         "#content",
-        duration:        "#Duration",
-        focus:           "#Focus",
-        first_timestamp: "#First_Input_Time",
-        last_timestamp:  "#Last_Input_Time",
+        content:         '#content',
+        duration:        '#Duration',
+        focus:           '#Focus',
+        first_timestamp: '#First_Input_Time',
+        last_timestamp:  '#Last_Input_Time',
     },
 
     /* * * * * * * * * * *
      * Initialization functions
+     * these take inputs from /Code/trialContent.html
      */
     load_inputs: function(inputs) {
         this.inputs = {};
@@ -67,10 +24,6 @@ var Trial = {
         }
     },
 
-    load_globals: function(global_data) {
-        this.global_data = global_data;
-    },
-
     load_trial_type: function(type) {
         this.type = type;
 
@@ -79,16 +32,22 @@ var Trial = {
         }
     },
 
+    load_globals: function(global_data) {
+        this.global_data = global_data;
+    },
+
     /* * * * * * * * * * *
      * Trial Execution (basically, a Table of Contents)
      */
     run: function() {
         var self = this;
 
+        // load the trial information
         this.define_defaults();
         this.run_custom_inputs_calculation();
         this.apply_trial_type_template();
 
+        // prepare the page for display
         $(document).ready(function() {
             self.apply_force_numeric();
             self.prevent_autocomplete();
@@ -98,6 +57,7 @@ var Trial = {
             self.start_checking_focus();
         });
 
+        // start the trial
         $(window).on('load', function() {
             self.fit_content();
             self.control_timing( // uses min and max time from the procedure
@@ -109,10 +69,49 @@ var Trial = {
             self.display_trial();
             self.focus_first_input();
 
-            if (typeof self.start === "function") {
+            if (typeof self.start === 'function') {
                 self.start();
             }
         });
+    },
+
+    /* * * * * * * * * * *
+     * Scoring functions
+     */
+    scoring: function(data) {
+        var answer = Trial.get_stimuli('answer')[0];
+
+        if (typeof data.Response !== 'undefined'
+            && typeof answer !== 'null'
+        ) {
+            var response = data.Response;
+            var accuracy = calculate_percent_similar(response, answer);
+            data['Accuracy']   = accuracy;
+
+            // if () is true ? 'do this' : 'else do this'
+            data['strictAcc']  = (accuracy === 1)  ? 1 : 0;
+            data['lenientAcc'] = (accuracy >= .75) ? 1 : 0;
+        }
+        return data;
+    },
+
+    unserialize: function(serialized_data) {
+        data = {};
+        var list = serialized_data.split('&');
+
+        for (var item in list) {
+            var key_val = list[item].split('=');
+            var key = decodeURIComponent(key_val[0]);
+            var val = decodeURIComponent(key_val[1]);
+
+            if (key.substring(key.length-2) === '[]') {
+                if (typeof data[key] === 'undefined') data[key] = [];
+                data[key].push(val);
+            } else {
+                data[key] = val;
+            }
+        }
+        return data;
     },
 
     /* * * * * * * * * * *
@@ -124,26 +123,32 @@ var Trial = {
 
     run_custom_inputs_calculation: function() {
         this.inputs.extra = {};
-        var custom_inputs_script = this.type.prepare_inputs;
 
-        if (custom_inputs_script !== null) {
-            eval(custom_inputs_script);
+        // run trial's prepareInputs.js (if it exists)
+        var prepare_inputs_js = this.type.prepare_inputs;
+        if (prepare_inputs_js !== null) {
+            eval(prepare_inputs_js);
         }
     },
 
     apply_trial_type_template: function() {
-        var template = $("<div>" + this.type.template + "</div>");
+        // make a placeholder <div> containing the template.html
+        var template = $('<div>' + this.type.template + '</div>');
 
-        var scripts = template.find("script").replaceWith('__COLLECTOR__SCRIPT__');
+        // remove all script elements from template.html
+        var scripts = template.find('script').replaceWith('__COLLECTOR__SCRIPT__');
         scripts = $.makeArray(scripts);
 
+        // fill template with replacements for [values] and {custom inputs}
         var content = this.fill_template(template.html());
 
+        // put back all <script> elements in template.html
         content = content.replace(/__COLLECTOR__SCRIPT__/g, function(match) {
             return scripts.shift().outerHTML;
         });
 
-        $("#content").html(content);
+        // put the tempalte on the page.
+        $('#content').html(content);
     },
 
     fill_template: function(template) {
@@ -152,28 +157,27 @@ var Trial = {
         // the first replacement matches things like [Cue] and [Text]
         // the second matches things like {custom stuff} and {my calculated value}
         return template
-            .replace(/\[[^\]]+\]/g, function(match) { return self.replace_template_match(match, ["procedure", "stimuli"]); })
-            .replace(/{[^}]+}/g,    function(match) { return self.replace_template_match(match, ["extra"]); });
+            .replace(/\[[^\]]+\]/g, function(match) { return self.replace_template_match(match, ['procedure', 'stimuli']); })
+            .replace(/{[^}]+}/g,    function(match) { return self.replace_template_match(match, ['extra']); });
     },
 
     replace_template_match: function(keyWithBrackets, categories) {
         var key = keyWithBrackets.substr(1, keyWithBrackets.length-2); // pull off the brackets
+        var replacement = this.get_input_as_string(key, categories);
+        if (replacement !== null) return replacement;
 
-        var val = this.get_input_as_string(key, categories);
-
-        if (val !== null) return val;
-
-        return keyWithBrackets;
+        return keyWithBrackets; // if we didn't find a match just return the original [text]/{text}
     },
 
-    prepare_media_link: function(val) {
-        return (val.substring(0, 4) === 'http')
-             ? val
-             : this.media_path + '/' + val;
+    // if it doesn't begin with http then add path to media directory
+    prepare_media_link: function(value) {
+        return (value.substring(0, 4) === 'http')
+             ? value
+             : this.media_path + '/' + value;
     },
 
     add_input: function(key, val, category) {
-        if (typeof category === "undefined") category = "extra";
+        if (typeof category === 'undefined') category = 'extra';
 
         key      = key     .trim().toLowerCase();
         category = category.trim().toLowerCase();
@@ -192,7 +196,7 @@ var Trial = {
             var category = categories[i].trim().toLowerCase();
             if (typeof this.inputs[category] === 'undefined') continue;
 
-            if (typeof this.inputs[category][key] !== "undefined") {
+            if (typeof this.inputs[category][key] !== 'undefined') {
                 return this.inputs[category][key];
             }
         }
@@ -201,29 +205,27 @@ var Trial = {
     },
 
     get_input_as_string: function(input_request_string, categories) {
+        // input_request comes back with .name .url and .index
         var input_request = this.decipher_input_request(input_request_string);
 
         var val_raw = this.get_input(input_request.name, categories);
-
         var val = this.get_input_request_index(
             val_raw,
             input_request.index
         );
-
         if (val === null) return null;
-
         if (typeof val === 'object') val = val.join(' ');
 
+        // if input was in form [Cue:url] then return proper media link
         return (input_request.url)
              ? this.prepare_media_link(val)
              : val;
     },
 
     decipher_input_request(input_request) {
+        var url = false, index = null, name = null;
+
         var request_split = input_request.split(':');
-
-        var url = false, index = null, name = null
-
         while (request_split.length > 1) {
             var last = request_split.pop().trim().toLowerCase();
 
@@ -236,10 +238,8 @@ var Trial = {
             }
         }
 
-        name = request_split.join(':');
-
         if (index === null) index = '0';
-
+        name = request_split.join(':');
         return {
             name:  name,
             url:   url,
@@ -281,7 +281,7 @@ var Trial = {
 
     set_submit_condition: function(name, val) {
         this.submit_conditions[name] = val;
-        this.get_form_submits().prop("disabled", !this.ready_to_submit());
+        this.get_form_submits().prop('disabled', !this.ready_to_submit());
     },
 
     ready_to_submit: function() {
@@ -311,7 +311,7 @@ var Trial = {
                 self.myFocusChecker.proportion
             );
 
-            if (typeof self.end === "function") {
+            if (typeof self.end === 'function') {
                 self.end();
             }
         });
@@ -320,7 +320,7 @@ var Trial = {
     prepare_to_catch_action_timestamps: function() {
         var self = this;
 
-        $(":input").on("keypress click", function() {
+        $(':input').on('keypress click', function() {
             var el_first_timestamp = self.el('first_timestamp');
             var el_last_timestamp  = self.el('last_timestamp');
             var timestamp          = self.get_elapsed_time();
@@ -343,38 +343,38 @@ var Trial = {
      *
      *  min, max, behavior
      *  usr, usr, -0        // submit whenever you want (no limit)
-     *  "" , "" , -0        // submit whenever you want (no limit)
-     *  "" , usr, -0        // submit whenever you want (no limit)
+     *  '' , '' , -0        // submit whenever you want (no limit)
+     *  '' , usr, -0        // submit whenever you want (no limit)
      *
      *  005, usr, -n        // submit anytime after 5 seconds
      *  005, 010, -n -t     // submit between 5-10s (auto-submit @ 10s)
      *  usr, 010, -t        // submit whenever you want (auto-submit @ 10s)
-     *  "" , 010, -t -x     // you may not submit (auto-submit @ 10s)
+     *  '' , 010, -t -x     // you may not submit (auto-submit @ 10s)
      */
     control_timing: function(min, max) {
         var self = this;
 
-        max = $.isNumeric(max) ? parseFloat(max) : "user";
+        max = $.isNumeric(max) ? parseFloat(max) : 'user';
         min = $.isNumeric(min) ? parseFloat(min) : (min === '' ? null : 0);
 
         // max time
-        if (typeof max === "number") {
+        if (typeof max === 'number') {
             this.max_timer = this.setTimeout(max, function() {
                 self.submit();
             });
 
             if (min === null || min >= max) {
                 this.get_form_submits().hide();
-                this.set_submit_condition("Collector Timer", false);
+                this.set_submit_condition('Collector Timer', false);
             }
         }
 
         // min time
         if (min > 0) {
-            this.set_submit_condition("Collector Timer", false);
+            this.set_submit_condition('Collector Timer', false);
 
             this.min_timer = this.setTimeout(min, function() {
-                self.set_submit_condition("Collector Timer", true);
+                self.set_submit_condition('Collector Timer', true);
             });
         }
     },
@@ -383,14 +383,14 @@ var Trial = {
         return this.page_timer.elapsed();
     },
 
-    // Trial.el("property name") will return the jQuery object
+    // Trial.el('property name') will return the jQuery object
     // as specified in Trial.element_selectors
     el: function(element_name) {
         return $(this.element_selectors[element_name]);
     },
 
     get_form_submits: function(val) {
-        return this.el('content').find(":submit");
+        return this.el('content').find(':submit');
     },
 
 
@@ -399,22 +399,22 @@ var Trial = {
      * They do what their method names suggest
      */
     display_trial: function() {
-        this.el('content').removeClass("invisible");
+        this.el('content').removeClass('invisible');
     },
 
     fit_content: function() {
         var checkSize = function() {
             var window_size  = $(window).height();
             var content_size = 0;
-            $("body").children().each(function (){
+            $('body').children().each(function (){
                 content_size += $(this).height();
             });
             var flex_prop = (window_size <= content_size) ? 'flex-start' : 'center ';
-            $("body").css("justify-content", flex_prop);
+            $('body').css('justify-content', flex_prop);
         }
         checkSize();
 
-        $(window).resize( checkSize() );
+        $(window).resize( checkSize() ); // @q: should this have the ()?
     },
 
     focus_first_input: function() {
@@ -460,11 +460,11 @@ var Trial = {
     },
 
     prevent_autocomplete: function() {
-        $("form").attr('autocomplete', 'off');
+        $('form').attr('autocomplete', 'off');
     },
 
     apply_force_numeric: function() {
-        $(".forceNumeric").forceNumeric();
+        $('.forceNumeric').forceNumeric();
     },
 
 
@@ -535,9 +535,9 @@ Trial.Timer.prototype = {
     },
 
     set_timer_function: function() {
-        if (typeof performance.now === "function") {
+        if (typeof performance.now === 'function') {
             return function() { return performance.now() }
-        } else if(typeof Date.now === "function") {
+        } else if(typeof Date.now === 'function') {
             return function() { return Date.now() }
         } else {
             return function() { return new Date().getTime() }
@@ -643,7 +643,7 @@ function calculate_percent_similar(given, answer) {
     var given  = given.trim().toLowerCase();
     var answer = answer.trim().toLowerCase();
 
-    var chars = answer.split("");
+    var chars = answer.split('');
     var wrong = 0;
     for (var char in chars) {
         if (answer[char] != given[char]) {
