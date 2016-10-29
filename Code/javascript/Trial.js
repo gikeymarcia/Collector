@@ -79,10 +79,12 @@ var Trial = {
      * Scoring functions
      */
     scoring: function(data) {
-        var answer = Trial.get_stimuli('answer')[0];
+        var answer = Trial.get_stimuli('answer');
 
         if (typeof data.Response !== 'undefined'
-            && typeof answer !== 'null'
+            && answer !== null
+            && typeof answer[0] !== "undefined"
+            && answer[0] !== ''
         ) {
             var response = data.Response;
             var accuracy = calculate_percent_similar(response, answer);
