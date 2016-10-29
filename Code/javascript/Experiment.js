@@ -385,7 +385,12 @@ Experiment.prototype = {
         var self = this;
         var rows = trial_sets
                   .map(function(set) { return self.get_trial_set_output(set); })
-                  .reduce(concat_arrays, []);
+                  .reduce(concat_arrays, [])
+                  .map(function(row) {
+                    row["Username"] = User_Data.Username;
+                    row["ID"]       = User_Data.ID;
+                    return row;
+                  });
 
         var rows    = JSON.stringify(rows);
         var globals = JSON.stringify(this.data.globals);
