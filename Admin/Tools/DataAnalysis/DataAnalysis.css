@@ -9,6 +9,16 @@
 #console_area{
   width:100%;
   height:150px;
+  border: 2px inset ;
+  overflow:auto;
+  color:blue;
+}
+
+.error_code{
+  background-color:pink;
+}
+.succesfull_code{
+  background-color:#e8e8f3;
 }
 
 #javascript_script{
@@ -20,6 +30,15 @@
 #table_script_area{
   width:100%;
   height:60%;
+}
+
+#output_area{
+  border-radius     :10px;
+  height            :400px;
+  background-color  :#e8e8f3;
+  padding           :5px;
+  box-shadow      :2px 2px 1px #888888 inset;
+  
 }
 
 #analysis_area { display:block; margin:0; padding:0; width:100%; }

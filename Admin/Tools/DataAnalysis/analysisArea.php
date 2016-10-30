@@ -30,7 +30,7 @@
         <textarea id="javascript_script"></textarea>
         <button type="button" class="collectorButton" id="javascript_script_run_button">run</button>
       </div>
-      <textarea id="console_area"></textarea>
+      <div id="console_area"></div>
       
     </div>
     
@@ -186,7 +186,7 @@
     }
     
     function report(val) {
-        $("#output_area").append("<div>" + val + "</div>");
+        $("#output_area").append("<div>" + val + "</div><hr style='background-color:black'></hr>");
     }
     
     function update_var_list() {
@@ -206,9 +206,23 @@
     $("#javascript_script_run_button").on("click",function(){
       this_script = $("#javascript_script").val();
       
-      eval(this_script);
+      try{
+        eval(this_script);
+        
+        this_script_split=this_script.split("\n");
+        
+        console_log+="<pre class='succesfull_code'>"+this_script+"</pre>";
+
       
-      update_var_list();
+        update_var_list();
+            
+      } catch(err){
+
+        console_log+="<pre class='error_code'>"+err+"</pre>";
+
+      }
+      
+      $("#console_area").html(console_log);
       
       return;
       
@@ -231,7 +245,7 @@
       
         
       for(i=0;i<this_script_split.length;i++){
-        $("#console_area").val("");
+        $("#console_area").html("");
         if(this_script_split[i]!==''){
           try{
             new Function (this_script_split[i])();
@@ -247,7 +261,7 @@
         }
 
       }
-      $("#console_area").val(console_log);
+      $("#console_area").html(console_log);
       
       textarea_in_question = document.getElementById('console_area');
       textarea_in_question.scrollTop = textarea_in_question.scrollHeight; // should find a way to adjust it so they see the last few lines (rather than just the last)!!
@@ -305,7 +319,10 @@
   </script>
   
   <div id="right_col">
-    <div id="output_area">output area here</div>
+    <div id="output_area">
+      <h2>Output</h2>
+      
+    </div>
     <div id="toolbox_area">
     
     <?php require("Toolboxes.php"); ?>
