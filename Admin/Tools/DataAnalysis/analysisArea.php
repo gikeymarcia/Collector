@@ -4,38 +4,41 @@
   .column_edit_quick_analysis { display: none; }
   .column_edit_quick_analysis.allow_quick_analysis { display: block; }
   .column_name { color : #600; font-weight: bold; }
+  #analysis_table td{
+    vertical-align:top;    
+  }
+  
 </style>
 
 <div id="analysis_area">
-  <div id="variable_list_area">
-    <h3>Columns</h3>
-    <div id="column_list"></div>
-    <h3>Local Variables</h3>
-    <div id="variable_list">
-    </div>
-  </div>
-  <div id="left_col"> 
-    <span>
-      <button type="button" class="collectorButton" id="gui_button">GUI</button>
-      <button type="button" class="collectorButton" id="script_button">Script</button>
-    </span>
-    <div id="gui_area">
-    
-
-    </div>
-    
-    <div id="table_script_area">
-      <div id="table_area"></div>
-      <div id="script_area">
-        <textarea id="javascript_script"></textarea>
-        <button type="button" class="collectorButton" id="javascript_script_run_button">run</button>
-      </div>
-      <div id="console_area"></div>
-      
-    </div>
-    
-  </div>
-  
+  <table id="analysis_table" style="width:100%">
+    <tr>
+      <td>
+        <div id="variable_list_area">
+          <h3>Columns</h3>
+          <div id="column_list"></div>
+          <h3>Local Variables</h3>
+          <div id="variable_list">
+          </div>
+        </div>
+      </td>
+      <td>
+        <div id="td_left_col"> 
+          <span>
+            <button type="button" class="collectorButton" id="gui_button">GUI</button>
+            <button type="button" class="collectorButton" id="script_button">Script</button>
+          </span>
+          
+          <div id="gui_area"><?= require("gui.php") ?></div>
+          
+          <div id="script_area">
+            <textarea id="javascript_script"></textarea>
+            <button type="button" class="collectorButton" id="javascript_script_run_button">run</button>
+          </div>
+          <div id="console_area"></div>
+          
+        </div>
+      </td>
   <script src="//code.jquery.com/ui/1.12.0/jquery-ui.js"></script><!-- for jquery highlighting !-->
 
   <script>
@@ -317,18 +320,18 @@
     }
     
   </script>
-  
-  <div id="right_col">
-    <div id="output_area">
-      <h2>Output</h2>
+  <td>
+    <div id="right_col">
+      <div id="output_area">
+        <h2>Output</h2>
+        
+      </div>
+      <div id="toolbox_area">
       
-    </div>
-    <div id="toolbox_area">
-    
-    <?php require("Toolboxes.php"); ?>
-    
-    </div>      
+      <?php require("Toolboxes.php"); ?>
+      
+      </div>      
 
-  </div>
-  
+    </div>
+  </td>
 </div>

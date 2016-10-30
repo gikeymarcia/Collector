@@ -14,7 +14,13 @@
     <button type="button" class="collectorButton" id="add_toolbox_button">Include</button>
 </div>
 
-<?php $user_tools = glob('Toolboxes/User/*.txt'); ?>
+<?php 
+  if(!is_dir('Toolboxes/User/')){
+    mkdir('Toolboxes/User/',0777,true);
+  }
+  $user_tools = glob('Toolboxes/User/*.txt'); 
+
+?>
 
 <script>
 
@@ -42,7 +48,9 @@
               filename: this_user_toolbox
             },
             function(returned){
-              console.dir(returned);  
+              load_script(returned);
+
+              
             },
             "text"
           )
@@ -57,21 +65,22 @@
     var toolbox_web_address = $("#user_toolbox_web_address").val();
     var toolbox_name        = $("#user_toolbox_name").val();
   
-    $.get(
-      'AjaxUserToolbox.php',
+    $.post(
+      'UserToolboxAjax.php',
       { web_address         : toolbox_web_address,
         filename            : toolbox_name
       } , 
       function(returned_data) {
         //$("#saving_area").html("GUI Script and Output Saved"); 
           
+          user_tools.push(toolbox_name);
           
-          /* var script = document.createElement('script');
-          script.src = returned_data;
-          document.head.appendChild(script);
+          $("#user_toolbox_list").append(
+            "<div><label><input type='checkbox' value='" + toolbox_web_address + "' checked>" + toolbox_name + "</label></div>"
+          );
           
-          loaded_scripts.push(script_src);        
-         */
+          load_script(toolbox_web_address);       
+         
      }
     );
   });
