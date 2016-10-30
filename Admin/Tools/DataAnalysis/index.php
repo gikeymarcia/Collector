@@ -37,10 +37,13 @@
   }
   
   #analysis_area { display:block; margin:0; padding:0; width:100%; }
-  #variable_list { float:left; display:block; margin:0; padding:0; width:10%; }
+  #variable_list_area { float:left; display:block; margin:0; padding:0; width:10%; }
   #left_col { float:left; display:block; margin:0; padding:0; width:60%; }
   #right_col { float:left; display:block; margin:0; padding:0; width:30%;   }
   
+  #variable_list{
+    
+  }
   
 </style>
 
@@ -145,8 +148,10 @@
   <div id="data_area"></div>
   
   <div id="analysis_area">
-    <div id="variable_list">
-    <h3>Variables</h3>
+    <div id="variable_list_area">
+      <h3>Variables</h3>
+      <div id="variable_list">
+      </div>
     </div>
     <div id="left_col"> 
       <span>
@@ -155,7 +160,6 @@
       </span>
       <div id="gui_area">
       
-            <div id="toolbox_area">toolbox area here</div>      
 
       </div>
       
@@ -215,7 +219,27 @@
           return eval(this_line)+"\n";          
           
         } else {
-          return ""
+          new_variable(this_line);
+          return "";
+        }
+      }
+      
+      variable_list_items=[];
+      
+      function new_variable(this_input){
+        
+        // check if this variable already exists!!!!
+        // has the == issue been resolved!!
+          this_input_split=this_input.split("=");
+
+        if(variable_list_items.indexOf(this_input_split[0])==-1){
+
+        
+          variable_list_items[variable_list_items.length]=this_input_split[0];
+          variable_list_items = variable_list_items.sort();
+          
+          $("#variable_list").html(variable_list_items.join("<br>"));
+        
         }
       }
       
@@ -238,6 +262,12 @@
     
     <div id="right_col">
       <div id="output_area">output area here</div>
+      <div id="toolbox_area">
+      
+      <?php require("Toolboxes.php"); ?>
+      
+      </div>      
+
     </div>
     
   </div>
