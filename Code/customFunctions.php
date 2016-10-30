@@ -195,12 +195,16 @@ function display2dArray(array $array, $nonArrayCol = false)
 
     // write cell values
     foreach ($arrayNoScalars as $i => $row) {
-        $row = sortArrayLikeArray($row, array_flip($columns));
-        foreach ($row as &$field) {
-            $field = htmlspecialchars($field);
+        $sorted_row = array();
+        
+        foreach ($columns as $col) {
+            $sorted_row[$col] = isset($row[$col])
+                              ? htmlspecialchars($row[$col]. ENT_QUOTES)
+                              : '';
         }
-        echo '<tr><td>', $i, '</td><td><div>',
-            implode('</div></td><td><div>', $row),
+        
+        echo '<tr><td><div>', $i, '</div></td><td><div>',
+            implode('</div></td><td><div>', $sorted_row),
             '</div></td></tr>';
     }
     echo '</tbody></table>';
