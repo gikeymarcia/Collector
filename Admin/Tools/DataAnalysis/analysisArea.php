@@ -1,6 +1,8 @@
 <div id="analysis_area">
   <div id="variable_list_area">
-    <h3>Variables</h3>
+    <h3>Columns</h3>
+    <div id="column_list"></div>
+    <h3>Local Variables</h3>
     <div id="variable_list">
     </div>
   </div>
@@ -29,10 +31,53 @@
   <script src="//code.jquery.com/ui/1.12.0/jquery-ui.js"></script><!-- for jquery highlighting !-->
 
   <script>
+    var Defined_Vars = [];
+    
+    function save_var(name, val) {
+        window["Defined_Vars"][name] = val;
+    }
+    
+    function report(val) {
+        $("#output_area").append("<div>" + val + "</div>");
+    }
+    
+    function update_var_list() {
+        var var_list = [];
+        
+        for (var defined_var in window["Defined_Vars"]) {
+            var_list.push(defined_var);
+        }
+        
+        $("#variable_list").html(
+            "<div>" + var_list.join("</div><div>") + "</div>"
+        );
+    }
+    
     // running javascript_script
     console_log = '';
     $("#javascript_script_run_button").on("click",function(){
       this_script = $("#javascript_script").val();
+      
+      eval(this_script);
+      
+      update_var_list();
+      
+      return;
+      
+      // get the existing variables
+      
+      var existing_vars = [];
+      
+      for (var vars in window) {
+          
+      }
+      
+      // run the script
+      
+      
+      
+      
+      // check for new vars
       
       this_script_split=this_script.split("\n");// break up script by ";" and then run each line through console
       

@@ -37,6 +37,20 @@
     
     var data_by_columns = raw_table_to_columns(Collector_data_raw);
     
-    console.dir(data_by_columns);
+    function update_column_list() {
+      var list = [];
+      
+      for (var column in data_by_columns) {
+        list.push(column);
+      }
+      
+      $("#column_list").html(
+        "<div>" + list.join("</div><div>") + "</div>"
+      );
+    }
+    
+    $(document).ready(function() {
+      update_column_list();
+    });
   </script>
 </div>
