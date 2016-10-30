@@ -5,6 +5,7 @@
 ?>
 
 <link rel="stylesheet" href="DataAnalysis.css">
+<script src="jstat.min.js"></script>
 
 <div id="main_options">
 

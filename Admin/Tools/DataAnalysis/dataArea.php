@@ -35,7 +35,29 @@
       return output;
     }
     
+    function reformat_columns(columns) {
+      for (var column in columns) {
+        var is_numeric = true;
+        
+        for (var i=0; i<columns[column].length; ++i) {
+          if (!$.isNumeric(columns[column][i])) {
+            is_numeric = false;
+            break;
+          }
+        }
+        
+        if (is_numeric) {
+          console.dir(column + " is numeric");
+          for (var i=0; i<columns[column].length; ++i) {
+            columns[column][i] = parseFloat(columns[column][i]);
+          }
+        }
+      }
+    }
+    
     var data_by_columns = raw_table_to_columns(Collector_data_raw);
+    
+    reformat_columns(data_by_columns);
     
     function update_column_list() {
       var list = [];
