@@ -1,5 +1,59 @@
 <h3>Toolboxes</h3>
-    <br>
+<div id="Verified_toolboxes_area">
+    <h4>Verified toolboxes</h4>
+    <div id="verified_toolbox_list"></div>
+</div>
+<div id="User_toolboxes_area">
+    <h4>User toolboxes</h4>
+    <span><em>Beware - we have not verified whether these toolboxes are safe or not. Use at your own peril</em></span>
+    <div id="unverified_toolbox_list"></div>
+</div>
+
+<?php
+    $validated_tools = glob('Toolboxes/Validated/*.js');
+?>
+
+<script>
+    function get_script_loader() {
+        var loaded_scripts = [];
+        
+        return function(script_src) {
+            if (loaded_scripts.indexOf(script_src) === -1) {
+                var script = document.createElement('script');
+                script.src = script_src;
+                document.head.appendChild(script);
+                
+                loaded_scripts.push(script_src);
+            }
+        }
+    }
+    
+    var load_script = get_script_loader();
+
+    var validated_tools = <?= json_encode($validated_tools) ?>;
+    
+    validated_tools.forEach(function(tool_path) {
+      var name = tool_path
+                .replace('Toolboxes/Validated/', '')
+                .replace(/\.js$/, '');
+      $("#verified_toolbox_list").append(
+        "<div><label><input type='checkbox' value='" + tool_path + "'>" + name + "</label></div>"
+      );
+    });
+    
+    $("#verified_toolbox_list input").on("change", function() {
+        if (this.checked) {
+            load_script(this.value);
+        } else {
+            console.dir("deactivate: " + this.value);
+        }
+    });
+</script>
+
+<?php
+    return;
+?>
+
     <?php
     
       //read folders within "Toolboxes"
