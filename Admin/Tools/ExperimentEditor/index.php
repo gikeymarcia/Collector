@@ -1,32 +1,39 @@
 <?php
   
 /*
-  GUI
-
-  Collector
-    A program for running experiments on the web
-    Copyright 2012-2015 Mikey Garcia & Nate Kornell
-
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License version 3 as published by
-    the Free Software Foundation.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>
-
+   Experiment Editor:
+   -Open and view all stimuli and procedure files for every experiment
+   -Open condition sheet
+   -change contents of sheet
+   -copy/rename/delete sheets
+   
+   -start by scanning all experiments to find all sheets
+   -display list of experiments
+   -after experiment is selected, display list of sheets inside that experiment
+   -alternatively, let them create a new exp
+   -can open sheets, or copy to new sheet and start editing that
+   -can also copy experiment to edit that
  */
 
-  require "../../ .php";
+  require "../../initiateTool.php";
+  
+  $experiments = get_Collector_experiments($_FILES);
+  
+  $experiment_files = array();
+  
+  foreach ($experiments as $exp) {
+    $_FILES->set_default('Current Experiment', $exp);
+    $experiment_files[$exp]['Conditions'] = $_FILES->read('Conditions');
+    $experiment_files[$exp]['Stimuli']    = $_FILES->read('Stimuli Dir');
+    $experiment_files[$exp]['Procedures'] = $_FILES->read('Procedure Dir');
+  }
+  
+  
+  exit;
 
  
   
- ?>
+?>
 
 <link rel="stylesheet" href="sheetsEditor.css">
  
