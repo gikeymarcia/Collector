@@ -22,18 +22,9 @@
 
  */
 
-  require "../../initiateTool.php";
+  require "../../ .php";
 
-  // check whether the page has been refreshed //
-  
-  $oldToken = isset($_SESSION['token']) ? $_SESSION['token'] : null;
-
-  $_SESSION['token'] = chr( mt_rand( 97 ,122 ) ) .substr( md5( time( ) ) ,1 );
-  
-  $refreshSkip  = false;                                          // assume that we are not refreshing the page
-  if (isset($_POST['token']) AND $_POST['token'] !== $oldToken) { // but if we are
-    $refreshSkip  = true;                                         // skip computations that are muddled by refreshing a page
-  } 
+ 
   
  ?>
 
@@ -88,6 +79,8 @@
   }
   
   // set filename and copy if necessary
+
+/*
   if(isset($_POST['editStudy'])){
     //  if file has been selected for editing (from higher level index file in GUI folder)
     $thisDirInfo->studyDir            = $_PATH->get("Experiments")."/".$_POST['editStudyName'];    
@@ -99,8 +92,10 @@
       $thisDirInfo->studyDir            = $_PATH->get("Experiments")."/".$_POST['newStudyName'];          
     }
     else {  
+    
+      
 
-      $_DATA['guiSheets']['studyName']    = editStudy($_DATA['guiSheets']['studyName'],$_POST['currStudyName']);  //file is in the process of being edited
+      $_DATA['guiSheets']['studyName'] = editStudy($_DATA['guiSheets']['studyName'],$_POST['currStudyName']);  //file is in the process of being edited
       
       $_DATA['guiSheets']['csvSelected']  = $_POST['csvSelected'];    // in case the user is not working from the default ("conditions.csv") spreadsheet
     }
@@ -255,7 +250,9 @@
   $sheetsList=array_merge($studySheetsInfo->stimSheets,$studySheetsInfo->procSheets); //  merging the two together
   
   $jsonSheets=json_encode($sheetsList);
-   
+
+*/
+  
 ?>
 
 <form id="sheetsForm" action='index.php' method='post'>
