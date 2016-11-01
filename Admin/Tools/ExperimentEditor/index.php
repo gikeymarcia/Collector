@@ -18,6 +18,8 @@
   require "../../initiateTool.php";
   require 'fileReadingFunctions.php';
   
+
+  
   $experiments = get_Collector_experiments($_FILES);
   
   $experiment_files = array();
@@ -30,6 +32,8 @@
   }
 $new_exp_json = file_get_contents('default_new_experiment.json');
 ?>
+
+<script src="../HandsontableFunctions.js"></script>
 
 <script>
   var new_experiment_data = <?= $new_exp_json ?>;
@@ -71,7 +75,7 @@ $new_exp_json = file_get_contents('default_new_experiment.json');
     
     
     $("#new_experiment_button").on("click",function(){
-      createHoT("stimTable",)
+      createHoT("stimTable",new_experiment_data['Conditions.csv']);
     });
     $("#experiment_select_button")
     
@@ -93,8 +97,6 @@ $new_exp_json = file_get_contents('default_new_experiment.json');
 <?php
    
   // requiring files and calling in classes
-  require_once  ('../guiFunctions.php');
-  require_once  ('../guiClasses.php');
   $thisDirInfo      = new csvDirInfo(); // calling in class for directory information
   $studySheetsInfo  = new csvSheetsInfo(); // calling in class for sheets information
   

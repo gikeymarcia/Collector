@@ -2,7 +2,6 @@
 
 if(!isset($_SESSION)) { exit; }
   
-require("guiCss.php");  
   
 // this function scans a directory and returns a list of csvs found inside
 function getCsvsInDir($dir) {
