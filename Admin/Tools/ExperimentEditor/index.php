@@ -22,7 +22,7 @@
 
  */
 
-  require "../../../initiateTool.php";
+  require "../../initiateTool.php";
 
   // check whether the page has been refreshed //
   
