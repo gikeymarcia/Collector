@@ -1,6 +1,7 @@
 <?php
 
 require '../../initiateTool.php';
+require 'fileReadingFunctions.php';
 
 function read_directory($dir) {
     if (!is_dir($dir)) return false;
@@ -16,7 +17,7 @@ function read_directory($dir) {
         
         if (is_file($path)) {
             if (strtolower(substr($entry, -4)) === '.csv') {
-                $contents = fsDataType_CSV::read($path);
+                $contents = read_csv_raw($path);
             } else {
                 $contents = file_get_contents($path);
             }
