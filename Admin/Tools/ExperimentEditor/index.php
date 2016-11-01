@@ -17,22 +17,85 @@
 
   require "../../initiateTool.php";
   
+  function read_csv_raw($file) {
+    $data = array();
+    $file_resource = fopen($file, 'r');
+    
+    while ($line = fgetcsv($file_resource)) {
+      $data[] = $line;
+    }
+    fclose($file_resource);
+    return $data;
+  }
+  
   $experiments = get_Collector_experiments($_FILES);
   
   $experiment_files = array();
   
   foreach ($experiments as $exp) {
     $_FILES->set_default('Current Experiment', $exp);
-    $experiment_files[$exp]['Conditions'] = $_FILES->read('Conditions');
+    $experiment_files[$exp]['Conditions'] = read_csv_raw($_FILES->get_path('Conditions'));
     $experiment_files[$exp]['Stimuli']    = $_FILES->read('Stimuli Dir');
     $experiment_files[$exp]['Procedures'] = $_FILES->read('Procedure Dir');
   }
+$new_exp_json = file_get_contents('default_new_experiment.json');
+?>
+
+<script>
+  var new_experiment_data = <?= $new_exp_json ?>;
+</script>
+
+  <div id="load_toolbar">
+    <button type="button" id="new_experiment_button" class="collectorButton">New Experiment</button>
+    
+    <select id="experiment_select">
+      <?php 
+      foreach ($experiments as $experiment){
+        echo "<option>$experiment</option>";
+      }
+      ?>
+    </select>
+    <button type="button" id="experiment_select_button" class="collectorButton">Load</button>
+  </div>
   
+  <div id="rest_of_interface">  
+  </div>
+
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <link rel="stylesheet" href="../handsontables/handsontables.full.css">
+  <script src="../handsontables/handsontables.full.js"></script>
+
+  
+
+<div id="stimArea" class="tableArea">'
+       '<div id="stimTable"></div>'
+   '</div>'
+</div>';
+
+
+  
+  <script>
+  
+    var experiment_files = <?= json_encode($experiment_files) ?>;
+    console.dir(experiment_files);
+    
+    
+    $("#new_experiment_button").on("click",function(){
+      createHoT("stimTable",)
+    });
+    $("#experiment_select_button")
+    
+  
+  </script>
+  
+  
+  
+  <?php
+  
+  var_dump($experiments);
   
   exit;
 
- 
-  
 ?>
 
 <link rel="stylesheet" href="sheetsEditor.css">
@@ -316,10 +379,7 @@
   
   </div>    
   
-  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-  <link rel="stylesheet" href="../handsontables/handsontables.full.css">
-  <script src="../handsontables/handsontables.full.js"></script>
-
+  
   <?php
     if (strcmp("$studySheetsInfo->thisSheetName.csv","Conditions.csv")==0){ ?>
       <h2 title="You cannot edit the Conditions.csv filename or delete the file.">Conditions.csv</h2>
@@ -333,13 +393,8 @@
   <?php 
     }
 
-    // doing this in PHP to prevent whitespace
-    echo '<div id="stimArea" class="tableArea">'
-       .         '<div id="stimTable"></div>'
-       .     '</div>'
-       . '</div>';
-  ?>
-  <br>
+?>
+    <br>
 
   <input type="hidden" name="stimTableInput">
     
