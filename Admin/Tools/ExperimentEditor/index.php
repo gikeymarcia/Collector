@@ -39,32 +39,31 @@ $new_exp_json = file_get_contents('default_new_experiment.json');
   var new_experiment_data = <?= $new_exp_json ?>;
 </script>
 
-  <div id="load_toolbar">
-    <button type="button" id="new_experiment_button" class="collectorButton">New Experiment</button>
-    
-    <select id="experiment_select">
-      <?php 
-      foreach ($experiments as $experiment){
-        echo "<option>$experiment</option>";
-      }
-      ?>
-    </select>
-    <button type="button" id="experiment_select_button" class="collectorButton">Load</button>
-  </div>
+<div id="load_toolbar">
+  <button type="button" id="new_experiment_button" class="collectorButton">New Experiment</button>
   
-  <div id="rest_of_interface">  
-  </div>
+  <select id="experiment_select">
+    <?php 
+    foreach ($experiments as $experiment){
+      echo "<option>$experiment</option>";
+    }
+    ?>
+  </select>
+  <button type="button" id="experiment_select_button" class="collectorButton">Load</button>
+</div>
 
-  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-  <link rel="stylesheet" href="../handsontables/handsontables.full.css">
-  <script src="../handsontables/handsontables.full.js"></script>
+<div id="rest_of_interface">  
+</div>
+
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<link rel="stylesheet" href="../handsontables/handsontables.full.css">
+<script src="../handsontables/handsontables.full.js"></script>
 
   
 
-<div id="stimArea" class="tableArea">'
-       '<div id="stimTable"></div>'
-   '</div>'
-</div>';
+<div id="stimArea" class="tableArea">
+  <div id="stimTable"></div>
+</div>
 
 
   
@@ -75,7 +74,7 @@ $new_exp_json = file_get_contents('default_new_experiment.json');
     
     
     $("#new_experiment_button").on("click",function(){
-      createHoT("stimTable",new_experiment_data['Conditions.csv']);
+      createHoT(document.getElementById("stimTable"),new_experiment_data['Conditions.csv']);
     });
     $("#experiment_select_button")
     
