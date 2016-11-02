@@ -90,21 +90,43 @@
   
   <script>
   
+    function create_new_experiment(exp_name) {
+      $("#experiment_name").val(exp_name);
+      
+      var experiment_names = Object.keys(experiment_files);
+      experiment_names.push(exp_name);
+      
+      var options_html ="<option>"+experiment_names.join("</option><option>")+"</option>";
+      
+      $("#experiment_select").html(options_html);
+      
+      $('#experiment_select').val(exp_name);
+      
+      var procedure_options_html ="<option>- select a PROCEDURE file to load it -</option><option>"+Object.keys(new_experiment_data['Procedure']).join("</option><option>")+"</option>";
+      
+      $("#proc_list").html(procedure_options_html);
+      
+      var stimuli_options_html ="<option>- select a STIMULI file to load it -</option><option>"+Object.keys(new_experiment_data['Stimuli']).join("</option><option>")+"</option>";
+      
+      $("#stim_list").html(stimuli_options_html);
+      
+      experiment_files[exp_name] = {
+        Conditions: new_experiment_data['Conditions.csv'],
+        Stimuli: Object.keys(new_experiment_data['Stimuli']),
+        Procedures: Object.keys(new_experiment_data['Procedure'])
+      }
+    }
+  
     var experiment_files = <?= json_encode($experiment_files) ?>;
-    console.dir(experiment_files);
   
     
-    experiment_names = [];
-    
-    $("#experiment_select option").each(function(){
-      experiment_names.push(this.value);
-    });
     
     stim_list_options="<option></option>"
     
     $("#new_experiment_button").on("click",function(){
       var new_name = prompt("What do you want to call your new experient?");
-      if(experiment_names.indexOf(new_name) !== -1){
+      
+      if (typeof experiment_files[new_name] !== "undefined") {
         alert("That name already exists - choose another one");
         $("#new_experiment_button").click();
       } else {
@@ -118,22 +140,7 @@
             console.dir(returned_data);
             
             if (returned_data === 'success') {
-              $("#experiment_name").val(new_name);
-              experiment_names.push(new_name);
-              
-              var options_html ="<option>"+experiment_names.join("</option><option>")+"</option>";
-              
-              $("#experiment_select").html(options_html);
-              
-              $('#experiment_select').val(new_name);
-              
-              var procedure_options_html ="<option>- select a PROCEDURE file to load it -</option><option>"+Object.keys(new_experiment_data['Procedure']).join("</option><option>")+"</option>";
-              
-              $("#proc_list").html(procedure_options_html);
-              
-              var stimuli_options_html ="<option>- select a STIMULI file to load it -</option><option>"+Object.keys(new_experiment_data['Stimuli']).join("</option><option>")+"</option>";
-              
-              $("#stim_list").html(stimuli_options_html);
+              create_new_experiment(new_name);
             }
           }
         );
