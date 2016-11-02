@@ -39,6 +39,11 @@
     display:none;
   }
 
+  .condOption         { background-color: #DFD; }
+  .stimOptions        { background-color: #BBF; }
+  .stimOptions option { background-color: #DDF; }
+  .procOptions        { background-color: #FBB; }
+  .procOptions option { background-color: #FDD; }
 </style>
 
 <script src="../HandsontableFunctions.js"></script>
@@ -51,13 +56,13 @@
   <button type="button" id="new_experiment_button" class="collectorButton">New Experiment</button>
   
   <select id="experiment_select">
+    <option value="" hidden disabled selected>Select an experiment</option>
     <?php 
     foreach ($experiments as $experiment){
       echo "<option>$experiment</option>";
     }
     ?>
   </select>
-  <button type="button" id="experiment_select_button" class="collectorButton">Load</button>
 </div>
 
 <div id="rest_of_interface">  
@@ -71,24 +76,54 @@
 <div id="interface">
   <input type="text" id="experiment_name" placeholder="Experiment Name">
   <br>
-  <input type="text" id="sheet_name_header" readonly>
+  <select id="spreadsheet_selection"></select>
   <br>
-  <select id="stim_list">
-    <option>- select a STIMULI file to load it -</option>
-  </select>
   <button type="button" id="new_stim_button" class="collectorButton">New Stimuli Sheet</button>
-  <select id="proc_list">
-    <option>- select a PROCEDURE file to load it -</option>
-  </select>
   <button type="button" id="new_proc_button" class="collectorButton">New Procedure Sheet</button>
-  <div id="stimArea" class="tableArea">
-    <div id="stimTable"></div>
+  <div id="sheetArea">
+    <div id="sheetTable"></div>
   </div>
 </div>
 
 
   
   <script>
+  
+    var handsOnTable;
+    
+    function createExpEditorHoT(data) {
+        var container = $("#sheetTable").html("")[0];
+        
+        handsOnTable = createHoT(container, data);
+    }
+  
+    function update_spreadsheet_selection() {
+      var current_experiment = $("#experiment_name").val();
+      
+      var exp_data = experiment_files[current_experiment];
+      
+      var select_html = '<option class="condOption" value="Conditions.csv">Conditions</option>';
+      
+      select_html += '<optgroup label="Stimuli" class="stimOptions">';
+      
+      for (var i=0; i<exp_data['Stimuli'].length; ++i) {
+        var file = exp_data['Stimuli'][i];
+        select_html += '<option value="Stimuli/' + file + '">' + file + '</option>';
+      }
+      
+      select_html += '</optgroup>';
+      
+      select_html += '<optgroup label="Procedures" class="procOptions">';
+      
+      for (var i=0; i<exp_data['Procedures'].length; ++i) {
+        var file = exp_data['Procedures'][i];
+        select_html += '<option value="Procedure/' + file + '">' + file + '</option>';
+      }
+      
+      select_html += '</optgroup>';
+      
+      $("#spreadsheet_selection").html(select_html);
+    }
   
     function create_new_experiment(exp_name) {
       $("#experiment_name").val(exp_name);
@@ -115,6 +150,8 @@
         Stimuli: Object.keys(new_experiment_data['Stimuli']),
         Procedures: Object.keys(new_experiment_data['Procedure'])
       }
+      
+      update_spreadsheet_selection();
     }
   
     var experiment_files = <?= json_encode($experiment_files) ?>;
@@ -148,7 +185,7 @@
         // add new_experiment_data to experiment_files for new experiment name
       }
       
-      createHoT(document.getElementById("stimTable"),new_experiment_data['Conditions.csv']);
+      createExpEditorHoT(new_experiment_data['Conditions.csv']);
       $("#sheet_name_header").val("Conditions");
       $("#interface").show();
       
@@ -157,12 +194,52 @@
     });
     
     $("#experiment_select_button").on("click",function(){
-      
+        
     });
     
     $("#experiment_select").on("change",function(){
-      alert("hello");
+        $("#experiment_name").val(this.value);
+        update_spreadsheet_selection();
+        $("#interface").show();
+        
+        // continue updating the rest of the interface...
     });
+    
+    var spreadsheets = {};
+    
+    $("#spreadsheet_selection").on("change", function() {
+      var exp_name = $("#experiment_name").val();
+      
+      if (typeof spreadsheets[exp_name] === "undefined")
+        spreadsheets[exp_name] = {};
+      
+      var sheet_name = this.value;
+      if (typeof spreadsheets[exp_name][sheet_name] === 'undefined') {
+        $.get(
+          'spreadsheetAjax.php',
+          {
+            sheet: exp_name + '/' + sheet_name
+          },
+          function(spreadsheet_request_response) {
+            if (spreadsheet_request_response.substring(0, 9) === 'success: ') {
+              var data = spreadsheet_request_response.substring(9);
+              spreadsheets[exp_name][sheet_name] = JSON.parse(data);
+              load_spreadsheet(spreadsheets[exp_name][sheet_name]);
+            } else {
+              console.dir(spreadsheet_request_response);
+            }
+          }
+        );
+      } else {
+        console.dir("using sheet in cache");
+        console.dir(sheet_name);
+        load_spreadsheet(spreadsheets[exp_name][sheet_name]);
+      }
+    });
+    
+    function load_spreadsheet(sheet) {
+      createExpEditorHoT(sheet);
+    }
     
     
   
