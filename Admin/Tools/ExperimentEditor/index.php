@@ -92,9 +92,10 @@
     var handsOnTable;
     
     function createExpEditorHoT(data) {
-        var container = $("#sheetTable").html("")[0];
+        $("#sheetArea").html("");
+        var container = $("<div>").appendTo($("#sheetArea"))[0];
         
-        handsOnTable = createHoT(container, data);
+        handsOnTable = createHoT(container, JSON.parse(JSON.stringify(data)));
     }
   
     function update_spreadsheet_selection() {
@@ -231,8 +232,6 @@
           }
         );
       } else {
-        console.dir("using sheet in cache");
-        console.dir(sheet_name);
         load_spreadsheet(spreadsheets[exp_name][sheet_name]);
       }
     });
@@ -240,8 +239,6 @@
     function load_spreadsheet(sheet) {
       createExpEditorHoT(sheet);
     }
-    
-    
   
   </script>
   
