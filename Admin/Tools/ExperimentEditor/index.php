@@ -30,7 +30,8 @@
     $experiment_files[$exp]['Stimuli']    = $_FILES->read('Stimuli Dir');
     $experiment_files[$exp]['Procedures'] = $_FILES->read('Procedure Dir');
   }
-$new_exp_json = file_get_contents('default_new_experiment.json');
+  
+  $new_exp_json = file_get_contents('default_new_experiment.json');
 ?>
 
 <style>
@@ -107,33 +108,35 @@ $new_exp_json = file_get_contents('default_new_experiment.json');
         alert("That name already exists - choose another one");
         $("#new_experiment_button").click();
       } else {
-        $("#experiment_name").val(new_name);
-        experiment_names.push(new_name);
-        
-        var options_html ="<option>"+experiment_names.join("</option><option>")+"</option>";
-        
-        $("#experiment_select").html(options_html);
-        
-        $('#experiment_select').val(new_name);
-        
-        var procedure_options_html ="<option>- select a PROCEDURE file to load it -</option><option>"+Object.keys(new_experiment_data['Procedure']).join("</option><option>")+"</option>";
-        
-        $("#proc_list").html(procedure_options_html);
-        
-        var stimuli_options_html ="<option>- select a STIMULI file to load it -</option><option>"+Object.keys(new_experiment_data['Stimuli']).join("</option><option>")+"</option>";
-        
-        $("#stim_list").html(stimuli_options_html);
-        
         // contact server to create new structure
-        $.post{
+        $.post(
           "AjaxNewExperiment.php",
           {
             new_name: new_name
           },
           function(returned_data){
-            alert("success");
+            console.dir(returned_data);
+            
+            if (returned_data === 'success') {
+              $("#experiment_name").val(new_name);
+              experiment_names.push(new_name);
+              
+              var options_html ="<option>"+experiment_names.join("</option><option>")+"</option>";
+              
+              $("#experiment_select").html(options_html);
+              
+              $('#experiment_select').val(new_name);
+              
+              var procedure_options_html ="<option>- select a PROCEDURE file to load it -</option><option>"+Object.keys(new_experiment_data['Procedure']).join("</option><option>")+"</option>";
+              
+              $("#proc_list").html(procedure_options_html);
+              
+              var stimuli_options_html ="<option>- select a STIMULI file to load it -</option><option>"+Object.keys(new_experiment_data['Stimuli']).join("</option><option>")+"</option>";
+              
+              $("#stim_list").html(stimuli_options_html);
+            }
           }
-        }
+        );
         
         // add new_experiment_data to experiment_files for new experiment name
       }
@@ -161,8 +164,6 @@ $new_exp_json = file_get_contents('default_new_experiment.json');
   
   
   <?php
-  
-  var_dump($experiments);
   
   exit;
 
