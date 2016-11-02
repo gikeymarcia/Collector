@@ -33,6 +33,13 @@
 $new_exp_json = file_get_contents('default_new_experiment.json');
 ?>
 
+<style>
+  #interface{
+    display:none;
+  }
+
+</style>
+
 <script src="../HandsontableFunctions.js"></script>
 
 <script>
@@ -60,9 +67,22 @@ $new_exp_json = file_get_contents('default_new_experiment.json');
 <script src="../handsontables/handsontables.full.js"></script>
 
   
-
-<div id="stimArea" class="tableArea">
-  <div id="stimTable"></div>
+<div id="interface">
+  <input type="text" id="experiment_name" placeholder="Experiment Name">
+  <br>
+  <input type="text" id="sheet_name_header" readonly>
+  <br>
+  <select id="stim_list">
+    <option>- select a STIMULI file to load it -</option>
+  </select>
+  <button type="button" id="new_stim_button" class="collectorButton">New Stimuli Sheet</button>
+  <select id="proc_list">
+    <option>- select a PROCEDURE file to load it -</option>
+  </select>
+  <button type="button" id="new_proc_button" class="collectorButton">New Procedure Sheet</button>
+  <div id="stimArea" class="tableArea">
+    <div id="stimTable"></div>
+  </div>
 </div>
 
 
@@ -71,12 +91,69 @@ $new_exp_json = file_get_contents('default_new_experiment.json');
   
     var experiment_files = <?= json_encode($experiment_files) ?>;
     console.dir(experiment_files);
+  
     
+    experiment_names = [];
+    
+    $("#experiment_select option").each(function(){
+      experiment_names.push(this.value);
+    });
+    
+    stim_list_options="<option></option>"
     
     $("#new_experiment_button").on("click",function(){
+      var new_name = prompt("What do you want to call your new experient?");
+      if(experiment_names.indexOf(new_name) !== -1){
+        alert("That name already exists - choose another one");
+        $("#new_experiment_button").click();
+      } else {
+        $("#experiment_name").val(new_name);
+        experiment_names.push(new_name);
+        
+        var options_html ="<option>"+experiment_names.join("</option><option>")+"</option>";
+        
+        $("#experiment_select").html(options_html);
+        
+        $('#experiment_select').val(new_name);
+        
+        var procedure_options_html ="<option>- select a PROCEDURE file to load it -</option><option>"+Object.keys(new_experiment_data['Procedure']).join("</option><option>")+"</option>";
+        
+        $("#proc_list").html(procedure_options_html);
+        
+        var stimuli_options_html ="<option>- select a STIMULI file to load it -</option><option>"+Object.keys(new_experiment_data['Stimuli']).join("</option><option>")+"</option>";
+        
+        $("#stim_list").html(stimuli_options_html);
+        
+        // contact server to create new structure
+        $.post{
+          "AjaxNewExperiment.php",
+          {
+            new_name: new_name
+          },
+          function(returned_data){
+            alert("success");
+          }
+        }
+        
+        // add new_experiment_data to experiment_files for new experiment name
+      }
+      
       createHoT(document.getElementById("stimTable"),new_experiment_data['Conditions.csv']);
+      $("#sheet_name_header").val("Conditions");
+      $("#interface").show();
+      
+      
+      
     });
-    $("#experiment_select_button")
+    
+    $("#experiment_select_button").on("click",function(){
+      
+    });
+    
+    $("#experiment_select").on("change",function(){
+      alert("hello");
+    });
+    
     
   
   </script>
