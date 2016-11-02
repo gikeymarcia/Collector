@@ -12,7 +12,7 @@ class fsDataType_Dir extends fsDataType_Abstract
             }
         }
 
-        return $scan;
+        return array_values($scan);
     }
 
     public static function overwrite($path, $data) {
