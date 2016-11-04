@@ -36,7 +36,7 @@
       
       </script>
       
-      <button type="button" id="descriptive_button">Do descriptive!</button>
+      <button type="button" id="descriptive_button" class="collectorButton">Do descriptive!</button>
       
       <script>
       
@@ -93,6 +93,7 @@
             var row = table.insertRow(i+2);
             
           }
+          $("#output_area").html($("#output_area").html()+"<hr style='background-color:black'></hr>");
       
         });
       

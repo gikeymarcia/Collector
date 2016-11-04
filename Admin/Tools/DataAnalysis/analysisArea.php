@@ -25,17 +25,25 @@
       <td>
         <div id="td_left_col"> 
           <span>
-            <button type="button" class="collectorButton" id="gui_button">GUI</button>
-            <button type="button" class="collectorButton" id="script_button">Script</button>
+            <button type="button" class="gui_script_button collectorButton" id="gui_button" value="gui">GUI</button>
+            <button type="button" class="gui_script_button collectorButton" id="script_button" value="script">Script</button>
           </span>
           
-          <div id="gui_area"><?= require("gui.php") ?></div>
+          <script>
+              
+            $(".gui_script_button").on("click",function(){
+              $(".gui_script_areas").hide();
+              $("#"+this.value+"_area").show();              
+            });
+          </script>
           
-          <div id="script_area">
+          <div id="gui_area" class="gui_script_areas"><?= require("gui.php") ?></div>
+          
+          <div id="script_area" class="gui_script_areas">
             <textarea id="javascript_script"></textarea>
             <button type="button" class="collectorButton" id="javascript_script_run_button">run</button>
+            <div id="console_area"></div>
           </div>
-          <div id="console_area"></div>
           
         </div>
       </td>
@@ -322,11 +330,21 @@
   </script>
   <td>
     <div id="right_col">
-      <div id="output_area">
-        <h2>Output</h2>
-        
+      <span>
+        <button class="output_toolbox_buttons collectorButton" type="button" value="output">Output</button>
+        <button class="output_toolbox_buttons collectorButton" type="button" value="toolbox">Toolbox</button>
+      </span>
+      
+      <script>
+        $(".output_toolbox_buttons").on("click",function(){
+          $(".output_toolbox_areas").hide();
+          $("#"+this.value+"_area").show();
+        });
+      </script>
+      
+      <div id="output_area" class="output_toolbox_areas">     
       </div>
-      <div id="toolbox_area">
+      <div id="toolbox_area" class="output_toolbox_areas">
       
       <?php require("Toolboxes.php"); ?>
       

@@ -21,6 +21,15 @@
 .error_code{
   background-color:pink;
 }
+
+.gui_script_areas{
+  display:none;
+}
+
+.output_toolbox_areas{
+  display:none;
+}
+
 .succesfull_code{
   background-color:#e8e8f3;
 }
@@ -38,10 +47,11 @@
 
 #output_area{
   border-radius     :10px;
-  height            :400px;
+  height            :600px;
   background-color  :#e8e8f3;
   padding           :5px;
-  box-shadow      :2px 2px 1px #888888 inset;
+  box-shadow        :2px 2px 1px #888888 inset;
+  overflow          :auto;
   
 }
 
