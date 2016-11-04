@@ -196,8 +196,15 @@
         window["Defined_Vars"][name] = val;
     }
     
+    
     function report(val) {
-        $("#output_area").append("<div>" + val + "</div><hr style='background-color:black'></hr>");
+     
+      if(val == eval(val)){
+        alert("I think you missed out the quotes for the input");
+      }
+     
+      $("#output_area").append("<div>" + val+ "<br>" + eval(val) + "</div><hr style='background-color:black'></hr>");
+     
     }
     
     function update_var_list() {
@@ -218,6 +225,7 @@
       this_script = $("#javascript_script").val();
       
       try{
+                  
         eval(this_script);
         
         this_script_split=this_script.split("\n");
