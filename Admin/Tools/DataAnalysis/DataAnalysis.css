@@ -23,11 +23,11 @@
 }
 
 .gui_script_areas{
-  display:none;
+  width:60%
 }
 
 .output_toolbox_areas{
-  display:none;
+  min-width:30%
 }
 
 .succesfull_code{
@@ -45,14 +45,26 @@
   height:60%;
 }
 
+#toolbox_area{
+  display:none;
+}
+
 #output_area{
   border-radius     :10px;
   height            :600px;
+  width             :400px;
   background-color  :#e8e8f3;
   padding           :5px;
   box-shadow        :2px 2px 1px #888888 inset;
   overflow          :auto;
   
+}
+
+#script_area{
+  width:100%;
+}
+#gui_area{
+  display:none;
 }
 
 #analysis_area { display:block; margin:0; padding:0; width:100%; }
