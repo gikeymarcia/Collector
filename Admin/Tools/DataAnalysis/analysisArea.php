@@ -338,6 +338,13 @@
     $("#javascript_script").on("input",function(){
       analysis_json['javascript_script']=$("#javascript_script").val();
       update_json();
+      
+      if($("#analysis_name").val()==""){
+        $("#saving_area").html("Analyses has no name - not saving").fadeIn(400);  
+      } else {
+        update_analysis();
+      }
+      
     });
     
     function update_json(){

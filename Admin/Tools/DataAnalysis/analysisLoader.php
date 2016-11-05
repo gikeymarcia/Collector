@@ -58,6 +58,7 @@
       // check if option is on list or not yet.
     });
     
+    
     function update_analysis_list(list_of_analyses){
       var options = "<option>-Select Analysis-</option>";
       
