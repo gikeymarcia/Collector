@@ -42,6 +42,7 @@
           <div id="script_area" class="gui_script_areas">
             <textarea id="javascript_script"></textarea>
             <button type="button" class="collectorButton" id="javascript_script_run_button">run</button>
+            <button type="button" class="collectorButton" id="javascript_script_clear_output_run_button">clear output and run</button>
             <br>
             <textarea id="single_line_console" rows=1></textarea>
             <div id="console_area"></div>
@@ -56,9 +57,10 @@
     function script_to_console(this_script){
       
       try{                  
-        eval(this_script);
-        this_script_split=this_script.split("\n");
-        console_log+="<pre class='succesfull_code'>"+this_script+"</pre>";
+        this_script_eval= eval(this_script);
+        console_log+="<pre class='succesfull_code'>"+this_script+"</pre>"+
+                     "<pre class='succesfull_eval'>"+this_script_eval+"</pre>";
+        
         update_var_list();
             
       } catch(err){
@@ -306,6 +308,16 @@
     
     // running javascript_script
     console_log = '';
+    
+    
+    $("#javascript_script_clear_output_run_button").on("click",function(){
+      
+      $("#output_area").html("");
+      
+      $("#javascript_script_run_button").click();
+    });
+    
+    
     $("#javascript_script_run_button").on("click",function(){
       
       this_script = $("#javascript_script").val();
@@ -313,82 +325,10 @@
       script_to_console(this_script);
 
       return;
-      
-      // get the existing variables
-      
-      var existing_vars = [];
-      
-      for (var vars in window) {
-          
-      }
-      
-      // run the script
-      
-      
-      
-      
-      // check for new vars
-      
-      this_script_split=this_script.split("\n");// break up script by ";" and then run each line through console
-      
-        
-      for(i=0;i<this_script_split.length;i++){
-        $("#console_area").html("");
-        if(this_script_split[i]!==''){
-          try{
-            new Function (this_script_split[i])();
-            var this_output=process_line(this_script_split[i]);
-
-            console_log+=this_script_split[i]+"\n"+this_output;
-
-            
-          } catch(err){
-            console_log+="line "+(i+1)+"->"+err+"\n";
-            
-          }
-        }
-
-      }
-      $("#console_area").html(console_log);
-      
-      textarea_in_question = document.getElementById('console_area');
-      textarea_in_question.scrollTop = textarea_in_question.scrollHeight; // should find a way to adjust it so they see the last few lines (rather than just the last)!!
-      
-      $('#console_area').effect("highlight", {}, 3000); 
-
+   
       
     });  
-    function process_line(this_line){
-      
-      // check if there's anything to evaluate
-      if(this_line.indexOf("=")==-1){
-        return eval(this_line)+"\n";          
-        
-      } else {
-        new_variable(this_line);
-        return "";
-      }
-    }
-    
-    variable_list_items=[];
-    
-    function new_variable(this_input){
-      
-      // check if this variable already exists!!!!
-      // has the == issue been resolved!!
-        this_input_split=this_input.split("=");
-
-      if(variable_list_items.indexOf(this_input_split[0])==-1){
-
-      
-        variable_list_items[variable_list_items.length]=this_input_split[0];
-        variable_list_items = variable_list_items.sort();
-        
-        $("#variable_list").html(variable_list_items.join("<br>"));
-      
-      }
-    }
-    
+   
     
     
     var analysis_json = {

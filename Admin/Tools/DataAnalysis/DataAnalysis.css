@@ -38,6 +38,11 @@
   background-color:#e8e8f3;
 }
 
+.succesfull_eval{
+  background-color:#ADD;
+}
+
+
 #javascript_script{
   width:   100%;
   height:  400px;
