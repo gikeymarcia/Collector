@@ -4,7 +4,12 @@
     // default not to load any data
 ?>
 
-<link rel="stylesheet" href="DataAnalysis.css">
+<?php
+  $file = 'DataAnalysis.css';
+  $v    = filemtime('DataAnalysis.css');
+?>
+<link rel="stylesheet" href="<?= $file ?>?v=<?= $v ?>">
+
 <script src="jstat.min.js"></script>
 <script src="DataAnalysisFunctions.js"></script>
 

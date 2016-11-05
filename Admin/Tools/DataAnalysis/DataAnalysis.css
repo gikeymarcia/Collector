@@ -26,7 +26,9 @@
   width:60%
 }
 
-
+#single_line_console{
+  width: 100%;
+}
 
 .output_toolbox_areas{
   min-width:30%
@@ -69,7 +71,24 @@
   display:none;
 }
 
+
+
 #analysis_area { display:block; margin:0; padding:0; width:100%; }
-#variable_list_area { float:left; display:block; margin:0; padding:0; max-width:10% }
+#variable_list_td { width: 20%; }
+#variable_list_area { max-width: 300px; }
+#column_list { word-break: break-word; }
+#column_list > div {
+    border: 1px solid white;
+    border-radius: 6px;
+    background-color: white;
+    margin: 1px;
+    padding: 1px;
+}
+#column_list > div:hover, 
+#column_list > .selected_column {
+    background-color: #c0c0ff;
+    border-color: #0404a0;
+}
 #left_col { float:left; display:block; margin:0; padding:0;  }
 #right_col { float:left; display:block; margin:0; padding:25px; }
+

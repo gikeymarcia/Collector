@@ -7,6 +7,7 @@
       for(i=0;i<columns.length;i++){
         descriptive_html+="<div><label>"+columns[i]+"<input type='checkbox' name='columns_descriptive' value='"+columns[i]+"' </label></div>";
       }
+      
       $("#Descriptives_area").html(descriptive_html);
       
       </script>
@@ -17,16 +18,56 @@
       
       var descriptive_no=0;
       
-      $("#descriptive_button").on("click",function(){
-        var selected_columns=[];
-
-        $("input[name='columns_descriptive']:checked").each(function(){
-          selected_columns.push(this.value);
-        });
+      function create_descriptive_output (selected_columns){
         
         descriptive_no++;
+        selected_array = "[\'";
+        for(i=0; i<selected_columns.length;i++){
+          selected_array = selected_array + selected_columns[i] +"\',\'";
+        }
+        selected_array = selected_array + "\']";
+        
       
-        $("#output_area").html($("#output_area").html() + '<table id="descriptive_table'+descriptive_no+'"></table>' ); 
+        var this_script = "selected_array = " + selected_array + ";"+
+                      "create_descriptive_output(selected_array)";
+                      
+        console.dir(this_script);
+
+                      
+        console.dir("<button type='button' onclick='add_to_script(\""+this_script+"\")'>Add to script</button>");
+                      
+        new_content_for_output_area = // $("#output_area").html() +
+        
+        '<div id="'+        
+        'descriptive_table'+descriptive_no+"_div"+        
+        '"><table id="descriptive_table'+descriptive_no+'"></table>' +
+          "<button type='button'>Add to script</button>"+
+          "<button type='button' onclick='remove_from_output(\"descriptive_table"+descriptive_no+"_div\")'>Remove from output</button>"+
+          "<hr style='background-color:black'></hr></div>";
+
+
+          /////////// CODE HERE FOR FIXING BUTTONS!!! ///////    
+
+    
+      $("#output_area").append(new_content_for_output_area).find("button").last().on("click", function() {
+            alert(this_script);
+      });
+    
+    var button_function = function() {
+        alert("jello");
+    };
+    
+    $("#output_area button").last().on("click", function() {
+        button_function();
+    });
+     
+/////////// CODE HERE FOR FIXING BUTTONS!!! ///////    
+
+
+          
+        $("#output_area").html(new_content_for_output_area);
+                
+        // convert this into a content string -
       
         
         var table = document.getElementById("descriptive_table"+descriptive_no);
@@ -68,14 +109,20 @@
             var row = table.insertRow(i+2);
             
           }
-          
-          this_script = "test - duh"; // ask tyson before implementing :-/
-          
-          $("#output_area").html($("#output_area").html()+
-          "<button type='button' onclick='add_to_script(\""+this_script+"\")'>Add to script</button>"+
-          "<hr style='background-color:black'></hr>");
       
-        });
+      }
+      
+      $("#descriptive_button").on("click",function(){
+        
+          var selected_columns=[];
+
+          $("input[name='columns_descriptive']:checked").each(function(){
+            selected_columns.push(this.value);
+          });
+
+          create_descriptive_output (selected_columns);
+        
+      });
         
         
       
