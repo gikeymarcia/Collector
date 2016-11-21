@@ -87,7 +87,7 @@ var Trial = {
             && answer[0] !== ''
         ) {
             var response = data.Response;
-            var accuracy = calculate_percent_similar(response, answer);
+            var accuracy = calculate_percent_similar(response, answer[0]);
             data['Accuracy']   = accuracy;
 
             // if () is true ? 'do this' : 'else do this'
