@@ -13,7 +13,7 @@
 <div id="analysis_area">
   <table id="analysis_table" style="width:100%">
     <tr>
-      <td>
+       <td id="variable_list_td">
         <div id="variable_list_area">
           <h3>Columns</h3>
           <div id="column_list"></div>
@@ -42,6 +42,9 @@
           <div id="script_area" class="gui_script_areas">
             <textarea id="javascript_script"></textarea>
             <button type="button" class="collectorButton" id="javascript_script_run_button">run</button>
+            <button type="button" class="collectorButton" id="javascript_script_clear_output_run_button">clear output and run</button>
+            <br>
+            <textarea id="single_line_console" rows=1></textarea>
             <div id="console_area"></div>
           </div>
           
@@ -50,20 +53,108 @@
   <script src="//code.jquery.com/ui/1.12.0/jquery-ui.js"></script><!-- for jquery highlighting !-->
 
   <script>
+
+    function script_to_console(this_script){
+      
+      try{                  
+        this_script_eval= eval(this_script);
+        console_log+="<pre class='succesfull_code'>"+this_script+"</pre>"+
+                     "<pre class='succesfull_eval'>"+this_script_eval+"</pre>";
+        
+        update_var_list();
+            
+      } catch(err){
+        console_log+="<pre class='error_code'>"+err+"</pre>";
+      }
+      
+      $("#console_area").html(console_log);
+    }
+  
+  
+  //default variables
+		var ctrPressed;
+		var map = []; // Or you could call it "key"
+    
+    onkeydown = function(event){
+      if(event.which == 13){
+//        var input_console = $("#single_line_console");
+
+        if (event.ctrlKey || event.metaKey) { // if SHIFT ENTER
+          
+          var textComponent = document.getElementById('javascript_script');
+          ctrPressed=0;
+          var selectedText;
+          // IE version
+          if (document.selection != undefined){
+            textComponent.focus();
+            var sel = document.selection.createRange();
+            selectedText = sel.text;
+          }
+          
+          // Mozilla version
+          else if (textComponent.selectionStart !=  undefined){
+            var startPos = textComponent.selectionStart;
+            var endPos = textComponent.selectionEnd;
+            selectedText = textComponent.value.substring(startPos, endPos)
+          }
+          
+          script_to_console(selectedText);
+        }
+      }
+    }
+    
+  
+    $("#single_line_console").keyup(function(event){
+      
+      if(event.which == 13){
+        var input_console = $("#single_line_console");
+
+        if (event.shiftKey || event.metaKey) { // if SHIFT ENTER
+    
+          event.preventDefault();
+          
+          var current_rows = input_console.prop("rows");
+          input_console.prop("rows",current_rows+1);
+          
+        } else { // no shift key
+        
+          var this_script = $("#single_line_console").val();
+
+          script_to_console(this_script);
+          $("#single_line_console").val("");
+          input_console.prop("rows",1);
+        }
+      }
+
+    });
+  
+  
+  
     $("#column_list").on("click", "div", function() {
+      var clicked_column = $(this);
+      if (clicked_column.hasClass("selected_column")) {
+        clicked_column.removeClass("selected_column");
+        remove_column_menu();
+        return;
+      }
+      
       $(".selected_column").removeClass("selected_column");
-      $(this).addClass("selected_column");
+      clicked_column.addClass("selected_column");
       create_column_edit_menu(this);
     });
     
     $("body").on("click", function(e) {
       if ($(e.target).closest(".column_menu").length < 1) {
-        $(".column_menu:not(.appearing)").hide(100, function() {
-          $(".selected_column").removeClass("selected_column");
-          $(this).remove();
-        });
+        remove_column_menu();
       };
     });
+    
+    function remove_column_menu() {
+      $(".column_menu:not(.appearing)").hide(100, function() {
+        $(".selected_column").removeClass("selected_column");
+        $(this).remove();
+      });
+    }
     
     function get_offset(elem) {
       var body_coords = document.body.getBoundingClientRect();
@@ -197,13 +288,9 @@
     }
     
     
-    function report(val) {
+    function report(val,user_label) {
      
-      if(val == eval(val)){
-        alert("I think you missed out the quotes for the input");
-      }
-     
-      $("#output_area").append("<div>" + val+ "<br>" + eval(val) + "</div><hr style='background-color:black'></hr>");
+      $("#output_area").append("<div>" + user_label+ "<br>" + val + "</div><hr style='background-color:black'></hr>");
      
     }
     
@@ -221,105 +308,27 @@
     
     // running javascript_script
     console_log = '';
+    
+    
+    $("#javascript_script_clear_output_run_button").on("click",function(){
+      
+      $("#output_area").html("");
+      
+      $("#javascript_script_run_button").click();
+    });
+    
+    
     $("#javascript_script_run_button").on("click",function(){
+      
       this_script = $("#javascript_script").val();
       
-      try{
-                  
-        eval(this_script);
-        
-        this_script_split=this_script.split("\n");
-        
-        console_log+="<pre class='succesfull_code'>"+this_script+"</pre>";
+      script_to_console(this_script);
 
-      
-        update_var_list();
-            
-      } catch(err){
-
-        console_log+="<pre class='error_code'>"+err+"</pre>";
-
-      }
-      
-      $("#console_area").html(console_log);
-      
       return;
-      
-      // get the existing variables
-      
-      var existing_vars = [];
-      
-      for (var vars in window) {
-          
-      }
-      
-      // run the script
-      
-      
-      
-      
-      // check for new vars
-      
-      this_script_split=this_script.split("\n");// break up script by ";" and then run each line through console
-      
-        
-      for(i=0;i<this_script_split.length;i++){
-        $("#console_area").html("");
-        if(this_script_split[i]!==''){
-          try{
-            new Function (this_script_split[i])();
-            var this_output=process_line(this_script_split[i]);
-
-            console_log+=this_script_split[i]+"\n"+this_output;
-
-            
-          } catch(err){
-            console_log+="line "+(i+1)+"->"+err+"\n";
-            
-          }
-        }
-
-      }
-      $("#console_area").html(console_log);
-      
-      textarea_in_question = document.getElementById('console_area');
-      textarea_in_question.scrollTop = textarea_in_question.scrollHeight; // should find a way to adjust it so they see the last few lines (rather than just the last)!!
-      
-      $('#console_area').effect("highlight", {}, 3000); 
-
+   
       
     });  
-    function process_line(this_line){
-      
-      // check if there's anything to evaluate
-      if(this_line.indexOf("=")==-1){
-        return eval(this_line)+"\n";          
-        
-      } else {
-        new_variable(this_line);
-        return "";
-      }
-    }
-    
-    variable_list_items=[];
-    
-    function new_variable(this_input){
-      
-      // check if this variable already exists!!!!
-      // has the == issue been resolved!!
-        this_input_split=this_input.split("=");
-
-      if(variable_list_items.indexOf(this_input_split[0])==-1){
-
-      
-        variable_list_items[variable_list_items.length]=this_input_split[0];
-        variable_list_items = variable_list_items.sort();
-        
-        $("#variable_list").html(variable_list_items.join("<br>"));
-      
-      }
-    }
-    
+   
     
     
     var analysis_json = {
@@ -329,6 +338,13 @@
     $("#javascript_script").on("input",function(){
       analysis_json['javascript_script']=$("#javascript_script").val();
       update_json();
+      
+      if($("#analysis_name").val()==""){
+        $("#saving_area").html("Analyses has no name - not saving").fadeIn(400);  
+      } else {
+        update_analysis();
+      }
+      
     });
     
     function update_json(){
