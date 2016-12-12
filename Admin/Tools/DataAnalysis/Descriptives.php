@@ -20,15 +20,6 @@
   
   script_array=[];
   
-  function add_to_script(script_no){
-    if($("#javascript_script").val()==''){
-      new_line='';
-    } else {
-      new_line='\n';
-    }
-    var new_script = $("#javascript_script").val() + new_line + script_array[script_no];
-    $("#javascript_script").val(new_script);
-  }
   
   function create_descriptive_output (selected_columns){
     
@@ -55,7 +46,7 @@
       "<button type='button' onclick='remove_from_output(\"descriptive_table"+descriptive_no+"_div\")'>Remove from output</button>"+
       "<hr style='background-color:black'></hr></div>";
 
-  $("#output_area").append(new_content_for_output_area);
+    $("#output_area").append(new_content_for_output_area);
 
     
     var table = document.getElementById("descriptive_table"+descriptive_no);

@@ -57,9 +57,20 @@
     function script_to_console(this_script){
       
       try{                  
-        this_script_eval= eval(this_script);
-        console_log+="<pre class='succesfull_code'>"+this_script+"</pre>"+
-                     "<pre class='succesfull_eval'>"+this_script_eval+"</pre>";
+        
+        if(typeof eval(this_script)== "undefined"){
+          console_log+="<pre class='succesfull_code'>"+
+                        this_script+
+                        "</pre>";
+          
+        } else {
+          console_log+="<pre class='succesfull_code'>"+
+                        this_script+
+                        "</pre>"+
+                        "<pre class='succesfull_eval'>"+
+                        eval(this_script)+
+                        "</pre>";
+        }            
         
         update_var_list();
             
@@ -68,6 +79,7 @@
       }
       
       $("#console_area").html(console_log);
+      $('#console_area').scrollTop($('#console_area')[0].scrollHeight);
     }
   
   
@@ -289,8 +301,11 @@
     
     
     function report(val,user_label) {
-     
+      var missing_input_message = "You did not put in a second input, i.e. <em> report("+val+",'<b>[variable_name]</b>')</em>";
+      user_label = typeof user_label !== 'undefined' ? user_label : missing_input_message;
       $("#output_area").append("<div>" + user_label+ "<br>" + val + "</div><hr style='background-color:black'></hr>");
+      $('#output_area').scrollTop($('#output_area')[0].scrollHeight);
+
      
     }
     
@@ -350,6 +365,20 @@
     function update_json(){
       $("#analysis_json_textarea").val(JSON.stringify(analysis_json));
     }
+    
+    
+  function add_to_script(script_no){
+    if($("#javascript_script").val()==''){
+      new_line='';
+    } else {
+      new_line='\n';
+    }
+    var new_script = $("#javascript_script").val() + new_line + script_array[script_no];
+    $("#javascript_script").val(new_script);
+    
+    $("#script_button").click();// open script editor!!!  
+    
+  }
     
   </script>
   <td>

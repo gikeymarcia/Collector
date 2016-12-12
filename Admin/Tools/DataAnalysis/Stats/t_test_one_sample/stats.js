@@ -21,21 +21,14 @@
       }
     }
     
-    sample_mean           = calculate_mean(input_array);
-    sample_se             = calculate_se(input_array);
-    adjusted_sample_mean  = sample_mean-baseline;
-    var df                = input_array.length - 1;
-    t_score               = adjusted_sample_mean/sample_se;
-    p_value               = jStat.ttest(t_score,input_array.length,1); // assuming its a one-sided test
+    var t_score  = jStat.tscore(baseline,data_by_columns['Resp_Duration']);
+    var p_value = jStat.ttest(t_score,input_array.length,2); // 2-tailed
+    var df      = input_array.length - 1;
     
-    /* - can I make use of the jstat;
-      t_score = jStat.tscore(input_array);
-      p_value = jstat.ttest(t_score,1);
-    */
+    sample_mean = calculate_mean(input_array);
+    descriptives  = "mean="+sample_mean+"; SD="+calculate_sd(input_array);
     
-    return [t_score,df,p_value];
-    
-    // above code might be simplified by calling jStats//
+    return [t_score,df,p_value,descriptives];
     
   }
   

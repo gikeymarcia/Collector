@@ -1,8 +1,9 @@
 <br>
 <span id="gui_types_buttons">
   <input class="GUI_type_button collectorButton" type="button"    value="Descriptives">
-  <!-- not yet implemented
   <input class="GUI_type_button collectorButton" type="button"    value="T-Tests">
+  <!-- not yet implemented
+
   <input class="GUI_type_button collectorButton" type="button"    value="ANOVA">
   <input class="GUI_type_button collectorButton" type="button"    value="Regression">
   <input class="GUI_type_button collectorButton" type="button"    value="Frequencies">
@@ -25,5 +26,6 @@
   <span class="interface" id="GUI_interface">
     
     <?php require("Descriptives.php") ?>
+    <?php require("TTests.php")       ?>
     
   </span>
