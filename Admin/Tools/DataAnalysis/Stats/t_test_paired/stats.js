@@ -1,8 +1,4 @@
 
-
-
-  
-
   /* dependencies
   
   - t_test_one_sample
@@ -14,8 +10,6 @@
   scrpt.src='Stats/t_test_one_sample/stats.js';
   document.head.appendChild(scrpt);
   
-  
-
   function calculate_t_test_paired(input_array1,input_array2){
     
     //cleaning
@@ -44,9 +38,5 @@
 
   }
 
-  function report_t_test_paired(input_variable1,input_variable2){
-    var input_array1  = data_by_cols[input_variable1];
-    var input_array2  = data_by_cols[input_variable2];
-    outputArea.innerHTML += "<br> paired t-test("+ input_variable1+","+ input_variable2 +") <br> "+  calculate_t_test_paired(input_array1,input_array2);
-  } 
+  
   

@@ -21,12 +21,17 @@
     
     var sum_array = data_by_columns[input_variable];
     t_test_results = calculate_t_test_one_sample(sum_array,baseline);
+        
+    bold_p_value(t_test_results[2]);
     
-    var output = "<br> t_test_one_sample("+ input_variable +") <br> t("+ t_test_results[1] +") = " + t_test_results[0] +
-                            ", p = "+t_test_results[2]+
-                            "<br>"+t_test_results[3];// descriptives
+    var output = "<br>" +script + 
+                  "<br> t("+ t_test_results[1] +") = " + t_test_results[0] +
+                  ", p = "+bold_sig_on+t_test_results[2]+bold_sig_off+" (2-tailed)"+
+                  // descriptives
+                  "<br> mean = "+ jStat.mean(sum_array) +"; "+
+                  "sd = "+ jStat.stdev(sum_array);
     
-    var graph='[ figure not coded yet!]';
+    var graph='[ figure not coded yet! - this will be a histogram with a normal distribution] - could also be good to test assumptions of normality';
         
     if(typeof one_sample_ttest_no == "undefined"){
       one_sample_ttest_no=0;
