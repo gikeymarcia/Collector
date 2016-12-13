@@ -26,49 +26,58 @@
     // clear NaN
     input_array1 = input_array1.filter(Boolean);
     input_array2 = input_array2.filter(Boolean);
+        
+    var this_N1 =  input_array1.length;
+    var df1 = this_N1 - 1;
+    var mean1 = jStat.mean(input_array1);
     
-    var t_score = (calculate_mean(input_array1)-calculate_mean(input_array2))/(Math.sqrt(calculate_se(input_array1)+calculate_se(input_array2)));
+    var SS1 = 0;
+    for(var i=0;i<input_array1.length;i++){
+      SS1 += Math.pow(input_array1[i]-jStat.mean(input_array1),2);
+    }
+    
+    var s21 = SS1/(this_N1 - 1);
+
+// resume here!!
+    
+    //treament 2
+    
+    var this_N2 =  input_array2.length;
+    var df2 = this_N2 - 1;
+    var mean2 = jStat.mean(input_array2);
+    
+    var SS2 = 0;
+    for(var i=0;i<input_array2.length;i++){
+      SS2 += Math.pow(input_array2[i]-jStat.mean(input_array2),2);
+    }
+    
+    var s22 = SS2/(this_N2 - 1);
+    
+    
+    var s2p = ((df1/(df1 + df2)) * s21) + ((df2/(df1 + df2)) * s22)
+    
+    var s2m1 = s2p/this_N1;
+    var s2m2 = s2p/this_N2;
+    t_score = (mean1 - mean2)/Math.sqrt(s2m1 + s2m2);
+
+    
     var df      = input_array1.length + input_array2.length -2;
-    var p_value = jStat.ttest(t_score,df+2,1); // assuming its a one-sided test
     
-    return [t_score,df,p_value];
+    console.dir(t_score);
+    console.dir(df);
+    
+    var p_value = jStat.ttest(t_score,df+1,2); // assuming its a two-sided test
+        
+    var sd1 = jStat.stdev(input_array1);
+    var sd2 = jStat.stdev(input_array2);
+    
+    
+    return [t_score,df,p_value,mean1,sd1,mean2,sd2];
     
   }
 
   // this should be part of a staple of JS functions//
   
-  function onlyUnique(value, index, self) { //on http://stackoverflow.com/questions/1960473/unique-values-in-an-array by TLindig and nus
-    return self.indexOf(value) === index;
-  }
-
-  // usage example:
-  var a = ['a', 1, 'a', 2, '1'];
-  var unique = a.filter( onlyUnique ); // returns ['a', 1, 2, '1']
-  
-  
-  function report_t_test_independent(grouping_variable,dependent_variable){
-    
-    var dependent_array = data_by_cols[dependent_variable];
-    var grouping_array  = data_by_cols[grouping_variable];
-    
-    grouping_array_short  = grouping_array.filter(onlyUnique);
-    
-    if (grouping_array_short.length >2){
-      alert("more than 2 variables included, use ANOVA!")
-    } else {
-      
-      input_array1=[];
-      input_array2=[];
-      
-      for(i=0;i<dependent_array.length;i++){
-        if(grouping_array[i]==grouping_array_short[0]){
-          input_array1[input_array1.length]=dependent_array[i];
-        } else {
-          input_array2[input_array2.length]=dependent_array[i];
-        }
-      }
-      
-      outputArea.innerHTML += "<br> independent samples t-test("+ grouping_array_short[0]+","+ grouping_array_short[1] +") <br> "+  calculate_t_test_independent(input_array1,input_array2);
-    }
-  } 
+ 
+   
   

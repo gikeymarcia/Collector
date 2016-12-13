@@ -12,6 +12,8 @@
     
     <div class="t_test_div" id="t_test_paired"><?php require ("Stats/t_test_paired/display.html"); ?></div>
 
+    <div class="t_test_div" id="t_test_independent"><?php require ("Stats/t_test_independent/display.html"); ?></div>
+
     
   </div>
   
@@ -20,7 +22,7 @@
     
     //call js files for each t-test
     
-    var t_tests=['t_test_one_sample','t_test_paired']; //'t_test_independent',
+    var t_tests=['t_test_one_sample','t_test_paired','t_test_independent'];
     
     
     for(i=0;i<t_tests.length;i++){
