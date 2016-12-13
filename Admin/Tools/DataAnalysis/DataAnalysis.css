@@ -18,6 +18,10 @@
   padding:5px;
 }
 
+correlation_tables_class td{
+  padding:5px;
+}
+
 .error_code{
   background-color:pink;
 }
