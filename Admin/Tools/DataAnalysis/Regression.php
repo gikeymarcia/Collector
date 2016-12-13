@@ -9,7 +9,7 @@
     
     <h3>Coefficients</h3>
     <label>Pearson's R<input type="checkbox" value="Pearson_R" checked name="coefficients_correlation"></label><br>
-    <label>Spearman's Rho<input type="checkbox" value="Spearman" name="coefficients_correlation"></label><br>
+    <label>Spearman's Rho<input type="checkbox" value="Spearman_R" name="coefficients_correlation"></label><br>
     <label>Kendall's Tau-B<input type="checkbox" value="Kendall" name="coefficients_correlation"></label><br>
    
     <input id="correlation_button" type="button" class="collectorButton" value="Correlate!">
@@ -26,7 +26,7 @@
     $("#correlation_variables").html(variables_list);
     
     
-    coefficients=['Pearson_R'];// Spearman, Kendall
+    coefficients=['Pearson_R','Spearman_R'];// Kendall
     
     for(i=0;i<coefficients.length;i++){
       scrpt = document.createElement('script');
@@ -46,10 +46,19 @@
         selected_array = selected_array + selected_columns[i] +"\',\'";
       }
       selected_array = selected_array + "\']";
-    
+      selected_array=selected_array.replace(",''","");
+      
+      selected_coefficients_list = "[\'";
+        
+      for(i=0; i<selected_coefficients.length;i++){
+        selected_coefficients_list = selected_coefficients_list + selected_coefficients[i] +"\',\'";
+      }
+      selected_coefficients_list = selected_coefficients_list + "\']";
+      selected_coefficients_list=selected_coefficients_list.replace(",''","");
       
       var this_script = "selected_array = " + selected_array + ";\n"+
-                    "create_correlational_output(selected_array);\n";
+                        "selected_coefficients = " + selected_coefficients_list + ";\n"+
+                    "create_correlational_output("+selected_array+","+selected_coefficients_list+");\n";
                     
       script_array.push(this_script);              
                     
@@ -94,19 +103,30 @@
           table_cells_array[0].innerHTML = selected_columns[i];
           
           for(j=0; j<selected_columns.length;j++){
-            for(k=0;k<selected_coefficients.length;k++){
-              if(data_by_columns[selected_columns[i]]==data_by_columns[selected_columns[j]]){
-                report_from_test="";
-              } else {
+            report_from_test="";
+            if(data_by_columns[selected_columns[i]]!==data_by_columns[selected_columns[j]]){
+              if(selected_coefficients.indexOf("Pearson_R")!=-1){
                 output_from_test = calculate_Pearson_R(data_by_columns[selected_columns[i]],data_by_columns[selected_columns[j]]);
-                report_from_test =  "<em>Pearson R</em><br>"+
+                report_from_test +=  "<em>Pearson R</em><br>"+
                                     "r("+output_from_test[1]+") = "+
                                        output_from_test[0] +
-                                    "; p="+output_from_test[2];
+                                    "; p="+output_from_test[2]+"<br>";
+                
               }
-              this["cell"+1] = row.insertCell(1);
-              this["cell"+1].innerHTML = (report_from_test);
-            }
+              if(selected_coefficients.indexOf("Spearman_R")!=-1){
+                output_from_test = calculate_Spearman_R(data_by_columns[selected_columns[i]],data_by_columns[selected_columns[j]]);
+                report_from_test +=  "<em>Spearman R</em><br>"+
+                                    "r("+output_from_test[1]+") = "+
+                                       output_from_test[0] +
+                                    "; p="+output_from_test[2]+"<br>";
+                
+              }
+              
+              
+            } 
+            this["cell"+1] = row.insertCell(1);
+            this["cell"+1].innerHTML = (report_from_test);
+          
         }
         var row = table.insertRow(i+2);
       } 
