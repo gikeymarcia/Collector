@@ -12,11 +12,29 @@
   
   
   function get_ranks(arr){ // solution based on Denys Séguret answer at http://stackoverflow.com/questions/14834571/ranking-array-elements
-    // rank each array
-    // var arr = [79, 5, 18, 5, 32, 1, 16, 1, 82, 13];
     var sorted = arr.slice().sort(function(a,b){return b-a})
-    var ranks = arr.slice().map(function(v){ return sorted.indexOf(v)+1 });
+    ranks = arr.slice().map(function(v){ return sorted.indexOf(v)+1 });
     
+    counts = {};
+    
+    for(var i=0;i<ranks.length;i++){
+      //count number of occurrences of the rank
+      var num = ranks[i];
+      counts[num] = counts[num] ? counts[num]+1 : 1;
+    }
+
+    console.dir(counts);    
+    for(var i=0;i<Object.keys(counts).length;i++){
+      console.dir(i);
+      if(typeof counts[i] !== "undefined"){
+        if(counts[i]>1){
+          var replacement_no = i + (counts[i]-1)*.5;
+          console.dir("hello");
+          ranks.forEach(function(item, i) { if (item == 3) ranks[i] = 3.5; });
+        }        
+      }
+    }
+//    console.dir(ranks);
     return ranks;
   }  
   

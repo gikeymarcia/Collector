@@ -1,6 +1,6 @@
 Resp_Duration,Resp_Focus,Resp_First_Input_Time,Resp_Last_Input_Time,Trial,Proc_Item,Proc_Trial Type,Proc_Max Time,Proc_Text,Proc_Procedure Notes,Proc_Shuffle 1,Username,ID
-735,1,,734,0,0,Instruct,user,This is how you show instructions.,Show instructions.,,username-test,MXQVDV2CN6
-744,1,,743,1,1,Instruct,user,Show a paragraph break using HTML paragraph tags: <p>&ltp&gt First Paragraph &lt/p&gt</p> <p>&ltp&gt Second Paragraph &lt/p&gt</p>,Show new paragraph.,,username-test,MXQVDV2CN6
+734,1,,734,0,0,Instruct,user,This is how you show instructions.,Show instructions.,,username-test,MXQVDV2CN6
+734,1,,743,1,1,Instruct,user,Show a paragraph break using HTML paragraph tags: <p>&ltp&gt First Paragraph &lt/p&gt</p> <p>&ltp&gt Second Paragraph &lt/p&gt</p>,Show new paragraph.,,username-test,MXQVDV2CN6
 526.7166777048,1,,525.7166777048,2,2,Instruct,user,Show a paragraph break using HTML paragraph tags: <p>&ltp&gt First Paragraph &lt/p&gt</p> <p>&ltp&gt Second Paragraph &lt/p&gt</p>,Show new paragraph.,,username-test,MXQVDV2CN6
 998.3531786129,1,,997.3531786129,3,3,Instruct,user,Show a paragraph break using HTML paragraph tags: <p>&ltp&gt First Paragraph &lt/p&gt</p> <p>&ltp&gt Second Paragraph &lt/p&gt</p>,Show new paragraph.,,username-test,MXQVDV2CN6
 95.4446492251,1,,94.4446492251,4,4,Instruct,user,Show a paragraph break using HTML paragraph tags: <p>&ltp&gt First Paragraph &lt/p&gt</p> <p>&ltp&gt Second Paragraph &lt/p&gt</p>,Show new paragraph.,,username-test,MXQVDV2CN6
