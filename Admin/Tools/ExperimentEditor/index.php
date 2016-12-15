@@ -80,6 +80,7 @@
   <br>
   <button type="button" id="new_stim_button" class="collectorButton">New Stimuli Sheet</button>
   <button type="button" id="new_proc_button" class="collectorButton">New Procedure Sheet</button>
+  <div><button id="save_btn" class="collectorButton">Save Current Sheet</button></div>
   <div id="sheetArea">
     <div id="sheetTable"></div>
   </div>
@@ -96,6 +97,107 @@
         var container = $("<div>").appendTo($("#sheetArea"))[0];
         
         handsOnTable = createHoT(container, JSON.parse(JSON.stringify(data)));
+    }
+    
+    function get_HoT_data() {
+        var data = JSON.parse(JSON.stringify(handsOnTable.getData()));
+        
+        // remove last column and last row
+        data.pop();
+        
+        for (var i=0; i<data.length; ++i) {
+            data[i].pop();
+            
+            for (var j=0; j<data[i].length; ++j) {
+                if (data[i][j] === null) {
+                    data[i][j] = '';
+                }
+            }
+        }
+        
+        // check for unique headers
+        var unique_headers = [];
+        
+        for (var i=0; i<data[0].length; ++i) {
+            while (unique_headers.indexOf(data[0][i]) > -1) {
+                data[0][i] += '*';
+            }
+            
+            unique_headers.push(data[0][i]);
+        }
+        
+        return data;
+    }
+    
+    function get_current_sheet_path() {
+        return $("#experiment_select").val() 
+             + '/' 
+             + $("#spreadsheet_selection").val();
+    }
+    
+    function custom_alert(msg) {
+        create_alerts_container();
+        
+        var el = $("<div>");
+        el.html(msg);
+        
+        el.css("opacity", "0");
+        
+        $("#alerts").append(el).show();
+        
+        el.animate({opacity: "1"}, 600, "swing", function() {
+            $(this).delay(5600).animate({height: "0px"}, 800, "swing", function() {
+                $(this).remove();
+                
+                if ($("#alerts").html() === '') {
+                    $("#alerts").hide();
+                }
+            });
+        });
+    }
+    
+    var alerts_ready = false;
+    
+    function create_alerts_container() {
+        if (alerts_ready) return;
+        
+        var el = $("<div>");
+        el.css({
+            position: "fixed",
+            top: "10px",
+            left: "10px",
+            right: "10px",
+            backgroundColor: "#ffc8c8",
+            borderRadius: "6px",
+            border: "1px solid #DAA",
+            color: "#800"
+        });
+        
+        el.attr("id", "alerts");
+        
+        $("body").append(el);
+        
+        var style = $("<style>");
+        style.html("#alerts > div { margin: 10px 5px; }");
+        
+        $("body").append(style);
+        
+        alerts_ready = true;
+    }
+    
+    function save_current_sheet() {
+        var data = JSON.stringify(get_HoT_data());
+        var file = get_current_sheet_path();
+        
+        $.post(
+            'saveSpreadsheet.php',
+            {
+                file: file,
+                data: data
+            },
+            custom_alert,
+            'text'
+        );
     }
   
     function update_spreadsheet_selection() {
@@ -205,6 +307,8 @@
         
         // continue updating the rest of the interface...
     });
+    
+    $("#save_btn").on("click", save_current_sheet);
     
     var spreadsheets = {};
     
