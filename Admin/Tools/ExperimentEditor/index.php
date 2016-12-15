@@ -296,14 +296,13 @@
       
     });
     
-    $("#experiment_select_button").on("click",function(){
-        
-    });
-    
     $("#experiment_select").on("change",function(){
         $("#experiment_name").val(this.value);
         update_spreadsheet_selection();
         $("#interface").show();
+        
+        $("#spreadsheet_selection").val("Conditions.csv");
+        $("#spreadsheet_selection").change();
         
         // continue updating the rest of the interface...
     });
