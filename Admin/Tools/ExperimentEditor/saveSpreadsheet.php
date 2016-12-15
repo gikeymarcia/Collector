@@ -44,4 +44,18 @@ foreach ($data as $row) {
     }
 }
 
-echo 'So far so good';
+$dir = dirname($file_path);
+
+if (!is_dir($dir)) mkdir($dir, 0777, true);
+
+$file_full_path = $_FILES->get_path('Experiments') . '/' . $file_path;
+
+$file_resource = fopen($file_full_path, 'w');
+
+foreach ($data as $row) {
+    fputcsv($file_resource, $row);
+}
+
+fclose($file_resource);
+
+echo '<b>Success!</b> File saved';
