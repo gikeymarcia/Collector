@@ -56,6 +56,17 @@
                     "<br> group 2 mean = "+t_test_results[5]+
                          "; sd = "+t_test_results[6];
 
+      var col_data = {"group1":{"height":t_test_results[3],
+                                "error":t_test_results[4]},
+                      "group2":{"height":t_test_results[5],
+                                "error":t_test_results[6]}}
+      var y_axis = "response DV";
+          
+      col_data=JSON.stringify(col_data);
+                       
+                         
+       
+       
       
       var graph='[ figure not coded yet! - this will be histograms with normal distribution curves] - could also be good to test assumptions of normality';
           
@@ -65,19 +76,34 @@
         one_sample_ttest_no++;
       }
       
-      new_content_for_output_area = 
-    
-    '<div id="'+        
-    'one_sample_ttest'+one_sample_ttest_no+"_div"+        
-    '">'+output+"<br>"+graph+    
-    "<br><button type='button' id='one_sample_ttest"+one_sample_ttest_no+"' onclick='add_to_script("+(script_array.length-1)+")'>Add to script</button>"+
+      var container = $("<div>");
+      var id = 'one_sample_ttest' + one_sample_ttest_no;
+      
+      container.attr('id', id);
+            
+      container.html( output+"<br><div class='graphArea'></div><br><button type='button' id='one_sample_ttest"+one_sample_ttest_no+"' onclick='add_to_script("+(script_array.length-1)+")'>Add to script</button>"+
       "<button type='button' onclick='remove_from_output(\"one_sample_ttest"+one_sample_ttest_no+"_div\")'>Remove from output</button>"+
-      "<hr style='background-color:black'></hr></div>";
-      
-      
-      $("#output_area").append(new_content_for_output_area);
-      
-      
+      "<hr style='background-color:black'></hr>");     
+    
+      $.post(
+            'barGenerate.php',
+            {
+                data: col_data,
+                yAxis: y_axis
+            },
+            function(img_url) {
+                if (img_url.substring(0, 5) === 'Error') {
+                  container.find(".graphArea").html(img_url);
+                    
+                } else {
+                  container.find(".graphArea").html('<img src="' + img_url + '">');
+
+                }
+            },
+            'text'
+        );
+        
+      container.appendTo("#output_area");
       
     }
   }
