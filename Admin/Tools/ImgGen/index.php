@@ -21,7 +21,7 @@
         var y_axis   = $("#y_axis_label").val();
         
         $.post(
-            'imgGenerate.php',
+            'histGenerate.php',
             {
                 data: col_data,
                 yAxis: y_axis
