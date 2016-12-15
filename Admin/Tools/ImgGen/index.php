@@ -27,11 +27,11 @@
                 yAxis: y_axis
             },
             function(img_url) {
-                var img_area = $("#img_area");
-                img_area.find("img").remove();
-                
-                var img = $("<img src='" + img_url + "'>");
-                img_area.append(img);
+                if (img_url.substring(0, 5) === 'Error') {
+                    $("#img_area").html(img_url);
+                } else {
+                    $("#img_area").html("<img src='" + img_url + "'>");
+                }
             },
             'text'
         );

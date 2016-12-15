@@ -1,4 +1,6 @@
 <?php
+    ob_start();
+    
     if (!isset($_POST['data'], $_POST['yAxis'])) {
         echo 'missing data';
         exit;
@@ -266,7 +268,15 @@
      * Save Image to File
      */
     
-    if (!is_dir($imgDir)) mkdir($imgDir, 0777, true);
-    imagejpeg($img, $filePath);
+    if (error_get_last() === null) {
+        if (!is_dir($imgDir)) mkdir($imgDir, 0777, true);
+        imagejpeg($img, $filePath);
+        
+        echo $filePath;
+    } else {
+        $error_messages = ob_get_contents();
+        ob_end_clean();
+        echo 'Error: ';
+        echo $error_messages;
+    }
     
-    echo $filePath;
