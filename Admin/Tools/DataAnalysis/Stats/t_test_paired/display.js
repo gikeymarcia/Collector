@@ -40,7 +40,14 @@
       paired_sample_ttest_no++;
     }
     
-    console.dir(t_test_results);
+    var these_results = {
+      p_value : t_test_results[2],
+      t_value : t_test_results[0],
+      df      : t_test_results[1]
+    }
+
+    store_results(these_results);
+    
     
       anObjectName_1 = input_variable1;
       this[anObjectName_1] = {"height":t_test_results[3],

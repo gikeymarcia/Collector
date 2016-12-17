@@ -58,6 +58,15 @@
                     "<br> group 2 mean = "+t_test_results[5]+
                          "; sd = "+t_test_results[6];
      
+    var these_results = {
+      p_value : t_test_results[2],
+      t_value : t_test_results[0],
+      df      : t_test_results[1]
+    }
+
+    store_results(these_results);
+     
+     
       anObjectName_1 = grouping_array_short[0];
       this[anObjectName_1] = {"height":t_test_results[3],
                             "error" :t_test_results[7]}
