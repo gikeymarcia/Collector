@@ -16,7 +16,7 @@
 
   function report_t_test_one_sample(input_variable,baseline,one_sample_dv_unit){
   
-    var script    = "report_t_test_one_sample('"+input_variable+"',"+baseline+")";
+    var script    = "report_t_test_one_sample('"+input_variable+"',"+baseline+",'"+one_sample_dv_unit+"')";
     script_array[script_array.length]=script;
     
     var sum_array = data_by_columns[input_variable];
