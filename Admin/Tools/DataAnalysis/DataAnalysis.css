@@ -52,6 +52,10 @@
   height:  400px;
 }
 
+#notes_script{
+  width: 100%;
+  height: 400px;
+}
 
 #table_script_area{
   width:100%;
@@ -73,10 +77,14 @@
   
 }
 
+#notes_area{
+  width:100%;
+}
 #script_area{
   width:100%;
 }
 #gui_area{
+  width:100%;
   display:none;
 }
 

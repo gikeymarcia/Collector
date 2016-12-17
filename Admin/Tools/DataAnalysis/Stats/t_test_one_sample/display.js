@@ -27,7 +27,14 @@
     var this_mean = jStat.mean(sum_array)
     var this_sd = jStat.stdev(sum_array)
     var this_se = this_sd/Math.sqrt(sum_array.length-1)
+    
+    var these_results = {
+      p_value : t_test_results[2],
+      t_value : t_test_results[0],
+      df      : t_test_results[1]
+    }
 
+    store_results(these_results);
     
     var output = "<br>" +script + 
                   "<br> t("+ t_test_results[1] +") = " + t_test_results[0] +
@@ -57,11 +64,14 @@
       var id = 'one_sample_ttest' + one_sample_ttest_no;
       
       container.attr('id', id);
-            
-      container.html( output+"<br><div class='graphArea'></div><br><button type='button' id='one_sample_ttest"+one_sample_ttest_no+"' onclick='add_to_script("+(script_array.length-1)+")'>Add to script</button>"+
+      
+      var this_title = "<h2>Output "+ (Object.keys(report_output).length-1)+"</h2>";
+      
+      container.html(this_title+ output+"<br><div class='graphArea'></div><br>"+
+      "<button type='button' id='one_sample_ttest"+one_sample_ttest_no+"' onclick='add_to_script("+(script_array.length-1)+")'>Add to script</button>"+
       "<button type='button' onclick='remove_from_output(\"one_sample_ttest"+one_sample_ttest_no+"_div\")'>Remove from output</button>"+
       "<hr style='background-color:black'></hr>");     
-    
+      
       $.post(
             'barGenerate.php',
             {
