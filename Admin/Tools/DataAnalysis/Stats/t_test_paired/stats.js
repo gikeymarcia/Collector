@@ -34,7 +34,18 @@
     }
     console.dir(paired_array);
     
-    return calculate_t_test_one_sample(paired_array,0);
+    mean1 = jStat.mean(input_array1);
+    mean2 = jStat.mean(input_array2);
+    se1   = jStat.stdev(input_array1)/Math.sqrt(input_array1.length-1);
+    se2   = jStat.stdev(input_array2)/Math.sqrt(input_array2.length-1);
+    
+    var one_sample_values = calculate_t_test_one_sample(paired_array,0);
+    
+    return [one_sample_values[0],
+            one_sample_values[1],
+            one_sample_values[2],
+            mean1,se1,mean2,se2];
+    
 
   }
 

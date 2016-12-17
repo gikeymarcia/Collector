@@ -1,6 +1,6 @@
 <?php
 
-  require "../../../initiateTool.php";
+  require "../../initiateTool.php";
   require_once("../guiFunctions.php");
   
   

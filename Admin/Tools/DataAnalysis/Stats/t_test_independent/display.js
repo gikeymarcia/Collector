@@ -16,7 +16,7 @@
   }
 
   
-  function report_t_test_independent(grouping_variable,dependent_variable){
+  function report_t_test_independent(grouping_variable,dependent_variable,DV_units){
     
     var dependent_array = data_by_columns[dependent_variable];
     var grouping_array  = data_by_columns[grouping_variable];
@@ -44,9 +44,11 @@
       
       bold_p_value(t_test_results[2]);
     
-      var script = "report_t_test_independent('"+grouping_variable+"','"+dependent_variable+"')";
+      var script = "report_t_test_independent('"+grouping_variable+"','"+dependent_variable+"','"+DV_units+"')";
       script_array[script_array.length]=script;
-        
+      
+      var testName = "theNewName";
+      
       var output = "<br>" +script + 
                     "<br> t("+ t_test_results[1] +") = " + t_test_results[0] +
                     ", p = "+bold_sig_on+t_test_results[2]+bold_sig_off+" (2-tailed)"+
@@ -55,34 +57,37 @@
                          "; sd = "+t_test_results[4]+
                     "<br> group 2 mean = "+t_test_results[5]+
                          "; sd = "+t_test_results[6];
+     
+      anObjectName_1 = grouping_array_short[0];
+      this[anObjectName_1] = {"height":t_test_results[3],
+                            "error" :t_test_results[7]}
 
-      var col_data = {"group1":{"height":t_test_results[3],
-                                "error":t_test_results[4]},
-                      "group2":{"height":t_test_results[5],
-                                "error":t_test_results[6]}}
-      var y_axis = "response DV";
-          
-      col_data=JSON.stringify(col_data);
-                       
-                         
-       
-       
+      anObjectName_2 = grouping_array_short[1];
+      this[anObjectName_2] = {"height":t_test_results[5],
+                            "error" :t_test_results[8]}
+
       
-      var graph='[ figure not coded yet! - this will be histograms with normal distribution curves] - could also be good to test assumptions of normality';
+      col_data = {};
+      col_data[grouping_array_short[0]]=this[anObjectName_1];
+      col_data[grouping_array_short[1]]=this[anObjectName_2];
+      col_data=JSON.stringify(col_data);
+                         
+      var y_axis = DV_units;
           
-      if(typeof one_sample_ttest_no == "undefined"){
-        one_sample_ttest_no=0;
+
+      if(typeof independent_sample_ttest_no == "undefined"){
+        independent_sample_ttest_no=0;
       } else {
-        one_sample_ttest_no++;
+        independent_sample_ttest_no++;
       }
       
       var container = $("<div>");
-      var id = 'one_sample_ttest' + one_sample_ttest_no;
+      var id = 'independent_sample_ttest' + independent_sample_ttest_no;
       
       container.attr('id', id);
             
-      container.html( output+"<br><div class='graphArea'></div><br><button type='button' id='one_sample_ttest"+one_sample_ttest_no+"' onclick='add_to_script("+(script_array.length-1)+")'>Add to script</button>"+
-      "<button type='button' onclick='remove_from_output(\"one_sample_ttest"+one_sample_ttest_no+"_div\")'>Remove from output</button>"+
+      container.html( output+"<br><div class='graphArea'></div><br><button type='button' id='independent_sample_ttest"+independent_sample_ttest_no+"' onclick='add_to_script("+(script_array.length-1)+")'>Add to script</button>"+
+      "<button type='button' onclick='remove_from_output(\"independent_sample_ttest"+independent_sample_ttest_no+"_div\")'>Remove from output</button>"+
       "<hr style='background-color:black'></hr>");     
     
       $.post(

@@ -38,9 +38,6 @@
     
     var s21 = SS1/(this_N1 - 1);
 
-// resume here!!
-    
-    //treament 2
     
     var this_N2 =  input_array2.length;
     var df2 = this_N2 - 1;
@@ -63,16 +60,16 @@
     
     var df      = input_array1.length + input_array2.length -2;
     
-    console.dir(t_score);
-    console.dir(df);
     
     var p_value = jStat.ttest(t_score,df+1,2); // assuming its a two-sided test
         
     var sd1 = jStat.stdev(input_array1);
     var sd2 = jStat.stdev(input_array2);
+    var se1 = sd1/Math.sqrt(input_array1.length-1);
+    var se2 = sd2/Math.sqrt(input_array2.length-1);
     
     
-    return [t_score,df,p_value,mean1,sd1,mean2,sd2];
+    return [t_score,df,p_value,mean1,sd1,mean2,sd2,se1,se2];
     
   }
 
