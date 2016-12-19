@@ -1,6 +1,6 @@
 <?php
 
-  require "../../../initiateTool.php";
+  require "../../initiateTool.php";
 
 
 /*
@@ -97,7 +97,6 @@
   // requiring files and calling in classes
   require_once ('../guiFunctions.php');
   require('../guiClasses.php');
-  require("../guiCss.php"); 
   $surveySheetsInfo = new surveySheetsInfo(); // calling in class for sheets information
 
 
@@ -125,7 +124,7 @@
   * * * * * * * * * */
 
   // List csv files in the directories
-  $surveySheetsInfo->surveySheets=getCsvsInDir($_PATH->get('Common')."/Surveys");
+  $surveySheetsInfo->surveySheets=getCsvsInDir($_FILES->get_path('Common')."/Surveys"); 
  
  // jumping in from index page //
   
@@ -196,12 +195,12 @@
   // use demo survey if working from scratch 
   if($surveySheetsInfo->thisSurveyFilename=="to be declared" ||  $surveySheetsInfo->thisSurveyFilename=='[No survey Selected]'){
     $surveySheetsInfo->thisSurveyFilename=="newSurvey.csv";
-    $stimuli=getFromFile($_PATH->get('Common')."/Surveys/SurveyDemo.csv",false,','); // this can be integrated with later code for tidying
+    $stimuli=getFromFile($_FILES->get_path('Common')."/Surveys/SurveyDemo.csv",false,','); // this can be integrated with later code for tidying
   } 
   
   else // load current survey
   {
-    $stimuli=getFromFile($_PATH->get('Common')."/Surveys/$surveySheetsInfo->thisSurveyFilename",false,',');
+    $stimuli=getFromFile($_FILES->get_path('Common')."/Surveys/$surveySheetsInfo->thisSurveyFilename",false,',');
   }
 
   //preparing Stim data
