@@ -512,9 +512,68 @@
       within_subject_outlier_removal(participant_column,sd_multiplier,dependent_variable_col);
       
     });
-    /* 
-    function reduce_data_to_means(participant_column,dependent_variable_col){
+    
+    function reduce_data_to_average(participant_column,dependent_variable_col,mean_median){
+      
+      var script    = "reduce_data_to_average('"+participant_column+"','"+dependent_variable_col+"','"+mean_median+"')";
+      
+      script_array[script_array.length]=script;      
+    
+      if(typeof mean_median_no == "undefined"){
+        mean_median_no=0;
+      } else {
+        mean_median_no++;
+      }
+        
+      var container = $("<div>");
+      var id="mean_median"+mean_median_no;
+      container.attr('id',id);
+      
+      container.html("<b>"+dependent_variable_col+"</b> reduced to <b>"+mean_median+"s</b> <button type='button' id='mean_median_no"+mean_median_no+"' onclick='add_to_script("+(script_array.length-1)+")'>Add to script</button>"+
+      "<button type='button' onclick='remove_from_output(\"mean_median"+mean_median_no+"\")'>Remove from output</button>"+
+      "<hr style='background-color:black'></hr>");
+        
+      container.appendTo("#output_area");
+      
+      
+      
+      participant_column_array = data_by_columns[participant_column];
+      
       var unique_participant_column_array = participant_column_array.filter(onlyUnique);
+      
+      var dv_data = data_by_columns[dependent_variable_col];
+      
+      var these_averages = [];
+      var new_data_by_columns = {};
+      for(i=0;i<columns.length;i++){
+        new_data_by_columns[columns[i]]=[];
+      }
+      
+      for(i=0;i<unique_participant_column_array.length;i++){
+        data_for_average=[];
+        for(j=0;j<dv_data.length;j++){
+          if(data_by_columns[participant_column][j]==  unique_participant_column_array[i]){
+            if(data_for_average.length<1){ // i.e. if first row
+              for(k=0;k<columns.length;k++){
+                new_data_by_columns[columns[k]].push(data_by_columns[columns[k]][j]);
+              }
+            }
+            data_for_average.push(dv_data[j]);
+          }
+        }
+        if(mean_median=="mean"){
+          these_averages.push(jStat.mean(data_for_average));  
+        } 
+        if(mean_median=="median"){
+          these_averages.push(jStat.median(data_for_average));  
+        } 
+      }
+      new_data_by_columns[dependent_variable_col]=these_averages;
+      console.dir(new_data_by_columns);
+      data_by_columns = new_data_by_columns;
+      
+      // processing to update table of data;
+      
     }
     
     $("#reduce_to_means").on("click",function(){
@@ -522,7 +581,20 @@
       var participant_column      = $("#participant_column").val();
       var dependent_variable_col  = $("#between_outlier_variable").val();
       
-    }); */
+      reduce_data_to_average(participant_column,dependent_variable_col,"mean");
+      
+    });
+    
+    $("#reduce_to_medians").on("click",function(){
+      
+      var participant_column      = $("#participant_column").val();
+      var dependent_variable_col  = $("#between_outlier_variable").val();
+      
+      reduce_data_to_average(participant_column,dependent_variable_col,"median");
+      
+    });
+    
+    
 
     
     $("#outlier_between_button").on("click",function(){
