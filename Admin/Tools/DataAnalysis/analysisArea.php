@@ -27,7 +27,7 @@
           <span>
             <button type="button" class="gui_script_button collectorButton" id="gui_button" value="gui">GUI</button>
             <button type="button" class="gui_script_button collectorButton" id="script_button" value="script">Script</button>
-            <button type="button" class="gui_script_button collectorButton" id="notes_button" value="notes">Notes</button>
+            <button type="button" class="gui_script_button collectorButton" id="notes_button" value="notes">Write-Up</button>
           </span>
           
           <script>

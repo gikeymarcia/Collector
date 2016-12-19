@@ -69,7 +69,7 @@
       
       container.html(this_title+ output+"<br><div class='graphArea'></div><br>"+
       "<button type='button' id='one_sample_ttest"+one_sample_ttest_no+"' onclick='add_to_script("+(script_array.length-1)+")'>Add to script</button>"+
-      "<button type='button' onclick='remove_from_output(\"one_sample_ttest"+one_sample_ttest_no+"_div\")'>Remove from output</button>"+
+      "<button type='button' onclick='remove_from_output(\"one_sample_ttest"+one_sample_ttest_no+"\")'>Remove from output</button>"+
       "<hr style='background-color:black'></hr>");     
       
       $.post(

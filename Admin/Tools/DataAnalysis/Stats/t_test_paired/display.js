@@ -71,7 +71,7 @@
       container.attr('id', id);
             
       container.html( output+"<br><div class='graphArea'></div><br><button type='button' id='paired_sample_ttest"+paired_sample_ttest_no+"' onclick='add_to_script("+(script_array.length-1)+")'>Add to script</button>"+
-      "<button type='button' onclick='remove_from_output(\"paired_sample_ttest"+paired_sample_ttest_no+"_div\")'>Remove from output</button>"+
+      "<button type='button' onclick='remove_from_output(\"paired_sample_ttest"+paired_sample_ttest_no+"\")'>Remove from output</button>"+
       "<hr style='background-color:black'></hr>");     
     
       $.post(
