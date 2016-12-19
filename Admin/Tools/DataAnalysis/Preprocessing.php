@@ -328,228 +328,265 @@
   
     update_selects(columns_map);
 
+    function remove_empty_rows(emptying_array_name){
+
+      var script = "remove_empty_rows('"+emptying_array_name+"')";
+      script_array[script_array.length]=script;
+    
+      if(typeof remove_empty_rows_no == "undefined"){
+        remove_empty_rows_no=0;
+      } else {
+        remove_empty_rows_no++;
+      }
+    
+      var output = "Rows with missing values in <b>"+emptying_array_name+"</b> removed.";
+      var container = $("<div>");
+      var id = 'remove_empty_rows' + remove_empty_rows_no;
+      
+      container.attr('id', id);
+            
+      container.html( output+"<br><div class='graphArea'></div><br><button type='button' id='remove_empty_rows"+remove_empty_rows_no+"' onclick='add_to_script("+(script_array.length-1)+")'>Add to script</button>"+
+      "<button type='button' onclick='remove_from_output(\"remove_empty_rows"+remove_empty_rows_no+"\")'>Remove from output</button>"+
+      "<hr style='background-color:black'></hr>");
+    
+      container.appendTo("#output_area");
+    
+    
+      emptying_array = data_by_columns[emptying_array_name];
+
+      empty_rows = [];
+      for(i =0; i<emptying_array.length; i++){
+          //console.dir(i);
+        if(emptying_array[i] == ""){
+        console.dir("empty");
+        empty_rows[empty_rows.length]=i;
+        }
+      }
+
+      empty_rows = empty_rows.reverse(); //to make it easier to loop through
+
+      columns_to_loop = Object.keys(data_by_columns);
+
+      for(j = 0; j<columns_to_loop.length; j++){
+        for(i = 0; i<empty_rows.length; i++){                              
+        data_by_columns[columns_to_loop[j]].splice(empty_rows[i],1);
+        }
+      }
+      
+      
+      /* process_stats(this_script,this_output,this_graph);
+      
+      data_by_rows = col_to_rows(data_by_columns,columns_to_loop);
+      load_table(data_by_rows);
+       */
+    }
+    
     $("#remove_empty_button").on("click", function(){
 
-    emptying_array = data_by_columns[$("#emptying_column").val()];
-
-    empty_rows = [];
-    for(i =0; i<emptying_array.length; i++){
-      //console.dir(i);
-      if(emptying_array[i] == ""){
-      console.dir("empty");
-      empty_rows[empty_rows.length]=i;
+      emptying_array_name = $("#emptying_column").val();      
+      remove_empty_rows(emptying_array_name);
+      
+    });
+      
+    // removing outliers
+      
+    $("#participant_dependent_outlier_removal").hide();
+    
+    $("#participant_column").on("change",function(){
+      if($("#participant_column").val() !== "blah"){
+        $("#participant_dependent_outlier_removal").show(500);
       }
-    }
-
-    empty_rows = empty_rows.reverse(); //to make it easier to loop through
-
-    columns_to_loop = Object.keys(data_by_columns);
-
-    for(j = 0; j<columns_to_loop.length; j++){
-      for(i = 0; i<empty_rows.length; i++){                              
-      data_by_columns[columns_to_loop[j]].splice(empty_rows[i],1);
-      }
+    })
+    
+    function onlyUnique(value, index, self) { // by TLindig on http://stackoverflow.com/questions/1960473/unique-values-in-an-array
+      return self.indexOf(value) === index;
     }
     
-    var this_output = 'clearing empty rows based on '+$("#emptying_column").val()+' column';
-    var this_graph  = '';
-    
-    /* process_stats(this_script,this_output,this_graph);
-    
-    data_by_rows = col_to_rows(data_by_columns,columns_to_loop);
-    load_table(data_by_rows);
-     */
-  });
+    function within_subject_outlier_removal(participant_column,sd_multiplier,dependent_variable_col){
+
+      var script    = "within_subject_outlier_removal('"+participant_column+"','"+sd_multiplier+"','"+dependent_variable_col+"')";
       
+      script_array[script_array.length]=script;      
+    
+      if(typeof within_outlier_removal_no == "undefined"){
+        within_outlier_removal_no=0;
+      } else {
+        within_outlier_removal_no++;
+      }
+        
+      var container = $("<div>");
+      var id="within_outlier_removal"+within_outlier_removal_no;
+      container.attr('id',id);
       
-        $("#participant_dependent_outlier_removal").hide();
+      container.html("<b>Within subject</b> outliers  from <b>"+dependent_variable_col+"</b> removed <button type='button' id='within_outlier_removal_no"+within_outlier_removal_no+"' onclick='add_to_script("+(script_array.length-1)+")'>Add to script</button>"+
+      "<button type='button' onclick='remove_from_output(\"within_outlier_removal"+within_outlier_removal_no+"\")'>Remove from output</button>"+
+      "<hr style='background-color:black'></hr>");
         
-        $("#participant_column").on("change",function(){
-          if($("#participant_column").val() !== "blah"){
-            $("#participant_dependent_outlier_removal").show(500);
-          }
-        })
+      container.appendTo("#output_area");
+      
+    
+      var participant_column_array = data_by_columns[participant_column];
+
+      var unique_participant_column_array = participant_column_array.filter(onlyUnique);
+      
+      // don't do outlier removal on participant data which has less than three values
+      
+      if(participant_column_array.length == unique_participant_column_array.length){
+        alert ("Only one value per participant - <b>Within</b> participant outlier removal is impossible. You may want to run <b>between</b> participant outlier removal?");
         
-        function onlyUnique(value, index, self) { // by TLindig on http://stackoverflow.com/questions/1960473/unique-values-in-an-array
-          return self.indexOf(value) === index;
+      } else {
+        
+        // identify the number of rows for each participant - i think
+                        
+        var within_pp_candidates = { }; // based on fcalderan's solution on http://stackoverflow.com/questions/11649255/how-to-count-the-number-of-occurences-of-each-item-in-an-array
+        for (var i = 0, j = participant_column_array.length; i < j; i++) {
+          within_pp_candidates[participant_column_array[i]] = (within_pp_candidates[participant_column_array[i]] || 0) + 1;
         }
         
-        
-        $("#outlier_within_button").on("click",function(){
-          var participant_column_array = data_by_columns[$("#participant_column").val()];
-
-          var unique_participant_column_array = participant_column_array.filter(onlyUnique);
-          
-          // don't do outlier removal on participant data which has less than three values
-          
-          if(participant_column_array.length == unique_participant_column_array.length){
-            alert ("Only one value per participant - <b>Within</b> participant outlier removal is impossible. You may want to run <b>between</b> participant outlier removal?");
-          } else {
-                            
-            var within_pp_candidates = { }; // based on fcalderan's solution on http://stackoverflow.com/questions/11649255/how-to-count-the-number-of-occurences-of-each-item-in-an-array
-            for (var i = 0, j = participant_column_array.length; i < j; i++) {
-              within_pp_candidates[participant_column_array[i]] = (within_pp_candidates[participant_column_array[i]] || 0) + 1;
-            }
-            
-            var within_pp_to_process = [];
-            for (var key in within_pp_candidates) { //based on levik's solution on http://stackoverflow.com/questions/684672/how-do-i-loop-through-or-enumerate-a-javascript-object
-              if (within_pp_candidates.hasOwnProperty(key)) {
-                if(within_pp_candidates[key]>2){
-                  within_pp_to_process[within_pp_to_process.length]=key;
-                };
-              }
-            }
-            
-            //now let's loop through the data that needs to have outlier removal
-            
-            
-            var user_upper_lower_outlier_limit = {};
-            
-            for(i=0; i<within_pp_to_process.length;i++){
-              var rows_to_compare=[]; // to create index
-              for(j=0;j<participant_column_array.length;j++){
-                if(within_pp_to_process[i]==participant_column_array[j]){
-                  rows_to_compare[rows_to_compare.length]=j;
-                }
-              }
-              var within_subject_outlier_data = [];
-              var outlier_sds = $("#outlier_between_SDs").val();
-              var outlier_data_col = $("#between_outlier_variable").val();
-              
-              for(j=0;j<rows_to_compare.length;j++){
-                within_subject_outlier_data[within_subject_outlier_data.length]=parseFloat(data_by_columns[outlier_data_col][rows_to_compare[i]]);
-              }
-              var upper_limit = jStat.mean(within_subject_outlier_data) + outlier_sds * jStat.stdev(within_subject_outlier_data);
-              var lower_limit = jStat.mean(within_subject_outlier_data) - outlier_sds * jStat.stdev(within_subject_outlier_data);
-              user_upper_lower_outlier_limit[within_pp_to_process[i]]= {  upper_limit:upper_limit,
-                                                                          lower_limit:lower_limit};
-              
-            }
-            
-            //now identify which are outliers, and their location!
-            
-            var outlier_rows = [];
-
-            for(i=0;i<participant_column_array.length;i++){
-              for (var key in user_upper_lower_outlier_limit) { 
-                if(typeof participant_column_array[user_upper_lower_outlier_limit[key]] !== "undefined"){
-                  var row_outlier_parameters =  participant_column_array[user_upper_lower_outlier_limit[key]];
-                  if( parseFloat(data_by_columns[$("#between_outlier_variable").val()][i])>row_outlier_parameters['upper_limit'] |
-                      parseFloat(data_by_columns[$("#between_outlier_variable").val()][i])<row_outlier_parameters['lower_limit']){
-                        outlier_rows[outlier_rows.length]=i;
-                      }
-                }
-              }
-            }
-              
-            
-            
-
-            //console.log(within_pp_candidates);
-          
-            //loop through candidates
-            
-            
-          
-          
+        var within_pp_to_process = [];
+        for (var key in within_pp_candidates) { //based on levik's solution on http://stackoverflow.com/questions/684672/how-do-i-loop-through-or-enumerate-a-javascript-object
+          if (within_pp_candidates.hasOwnProperty(key)) {
+            if(within_pp_candidates[key]>2){
+              within_pp_to_process[within_pp_to_process.length]=key;
+            };
           }
-          
-          // under developement
-          
-          
-        });
+        }
         
-        $("#outlier_between_button").on("click",function(){
-          var participant_column_array = data_by_columns[$("#participant_column").val()];
+        //now let's loop through the data that needs to have outlier removal
         
-          var unique_participant_column_array = participant_column_array.filter(onlyUnique);
-          
-          if(participant_column_array.length != unique_participant_column_array.length){
-            alert ("Participant rows have more than one value - please reduce rows by means or medians within participant data");
-          } else {
-            
-            var this_data = data_by_columns[$("#between_outlier_variable").val()];
-                            
-            for(i=0;i<this_data.length; i++){
-              
-              this_data[i]=parseFloat(this_data[i]);
-              
+        
+        var user_upper_lower_outlier_limit  = {};
+        
+        for(i=0; i<within_pp_to_process.length;i++){
+          var rows_to_compare=[]; // to create index
+          for(j=0;j<participant_column_array.length;j++){
+            if(within_pp_to_process[i]==participant_column_array[j]){
+              rows_to_compare[rows_to_compare.length]=j;
             }
-            
-            var group_mean  = jStat.mean(this_data);
-            var group_SD    = jStat.stdev(this_data);
+          }
+          var within_subject_outlier_data = [];
+          
+          for(j=0;j<rows_to_compare.length;j++){
+            within_subject_outlier_data[within_subject_outlier_data.length]=parseFloat(data_by_columns[dependent_variable_col][rows_to_compare[j]]);
+          }
+          var upper_limit = jStat.mean(within_subject_outlier_data) + sd_multiplier * jStat.stdev(within_subject_outlier_data);
+          var lower_limit = jStat.mean(within_subject_outlier_data) - sd_multiplier * jStat.stdev(within_subject_outlier_data);
+          user_upper_lower_outlier_limit[within_pp_to_process[i]]= {  upper_limit:upper_limit,lower_limit:lower_limit};
+          
+        }
+        
+        //now identify which are outliers, and their location!
+        
+        var outlier_rows = [];
 
-              outlier_rows = [];
-              for(i =0; i<this_data.length; i++){
-                //console.dir(i);
-                if(Math.abs(this_data[i] - group_mean) > 3*group_SD){
-                  console.dir("outlier");
+        for(i=0;i<participant_column_array.length;i++){
+          if(typeof user_upper_lower_outlier_limit[key] !== "undefined"){
+            var row_outlier_parameters = user_upper_lower_outlier_limit[participant_column_array[i]];
+            if( parseFloat(data_by_columns[dependent_variable_col][i])>row_outlier_parameters['upper_limit'] |
+                parseFloat(data_by_columns[dependent_variable_col][i])<row_outlier_parameters['lower_limit']){
                   outlier_rows[outlier_rows.length]=i;
-                }
-              }
-              
-              outlier_rows = outlier_rows.reverse(); //to make it easier to loop through
-              
-              columns_to_loop = Object.keys(data_by_columns);
-              
-              for(j = 0; j<columns_to_loop.length; j++){
-                for(i = 0; i<outlier_rows.length; i++){
-                              
-                  data_by_columns[columns_to_loop[j]].splice(outlier_rows[i],1);
-                }
-              }
-
-          var this_script = 'var this_data = data_by_columns['+$("#between_outlier_variable").val()+'];          '+
-                            '                                                                                 '+
-                            'for(i=0;i<this_data.length; i++){                                                '+
-                            '                                                                                 '+
-                            '  this_data[i]=parseFloat(this_data[i]);                                         '+
-                            '                                                                                 '+
-                            '}                                                                                '+
-                            '                                                                                 '+
-                            'var group_mean  = jStat.mean(this_data);                                         '+
-                            'var group_SD    = jStat.stdev(this_data);                                        '+
-                            '                                                                                 '+
-                            '  outlier_rows = [];                                                             '+
-                            '  for(i =0; i<this_data.length; i++){                                            '+
-                            '    //console.dir(i);                                                            '+
-                            '    if(Math.abs(this_data[i] - group_mean) > 3*group_SD){                        '+
-                            '      console.dir("outlier");                                                    '+
-                            '      outlier_rows[outlier_rows.length]=i;                                       '+
-                            '    }                                                                            '+
-                            '  }                                                                              '+
-                            '                                                                                 '+
-                            '  outlier_rows = outlier_rows.reverse(); //to make it easier to loop through     '+
-                            '                                                                                 '+
-                            '  columns_to_loop = Object.keys(data_by_columns);                                   '+
-                            '                                                                                 '+
-                            '  for(j = 0; j<columns_to_loop.length; j++){                                     '+
-                            '    for(i = 0; i<outlier_rows.length; i++){                                      '+
-                            '                                                                                 '+
-                            '      data_by_columns[columns_to_loop[j]].splice(outlier_rows[i],1);                '+
-                            '    }                                                                           ';
-                           
-                            
-          
-          var this_output = 'clearing outliers rows based on '+$("#between_outlier_variable").val()+' column';
-          var this_graph  = '';
-          
-          process_stats(this_script,this_output,this_graph);
-
-              
-              
-              
-          
-            data_by_rows = col_to_rows(data_by_columns,columns_to_loop);
-            load_table(data_by_rows);                
-          
+            }
           }
+        }         
+      }
+      
+      // remove outlier_rows
+      outlier_rows = outlier_rows.reverse(); //to make it easier to loop through
+          
+      columns_to_loop = Object.keys(data_by_columns);
+      
+      for(j = 0; j<columns_to_loop.length; j++){
+        for(i = 0; i<outlier_rows.length; i++){
+                      
+          data_by_columns[columns_to_loop[j]].splice(outlier_rows[i],1);
+        }
+      }
+    }
+    
         
-        });
+    $("#outlier_within_button").on("click",function(){
+      
+      var participant_column      = $("#participant_column").val();
+      var sd_multiplier           = $("#outlier_between_SDs").val();
+      var dependent_variable_col  = $("#between_outlier_variable").val();
+      within_subject_outlier_removal(participant_column,sd_multiplier,dependent_variable_col);
+      
+    });
+    /* 
+    function reduce_data_to_means(participant_column,dependent_variable_col){
+      var unique_participant_column_array = participant_column_array.filter(onlyUnique);
+    }
+    
+    $("#reduce_to_means").on("click",function(){
+      
+      var participant_column      = $("#participant_column").val();
+      var dependent_variable_col  = $("#between_outlier_variable").val();
+      
+    }); */
+
+    
+    $("#outlier_between_button").on("click",function(){
+      var participant_column_array = data_by_columns[$("#participant_column").val()];
+    
+      var unique_participant_column_array = participant_column_array.filter(onlyUnique);
+      
+      if(participant_column_array.length != unique_participant_column_array.length){
+        alert ("Participant rows have more than one value - please reduce rows by means or medians within participant data");
+      } else {
         
-        // detect whether there are repetitions within the participant column
+        var this_data = data_by_columns[$("#between_outlier_variable").val()];
+                        
+        for(i=0;i<this_data.length; i++){
+          
+          this_data[i]=parseFloat(this_data[i]);
+          
+        }
+        
+        var group_mean  = jStat.mean(this_data);
+        var group_SD    = jStat.stdev(this_data);
+
+          outlier_rows = [];
+          for(i =0; i<this_data.length; i++){
+            //console.dir(i);
+            if(Math.abs(this_data[i] - group_mean) > 3*group_SD){
+              console.dir("outlier");
+              outlier_rows[outlier_rows.length]=i;
+            }
+          }
+          
+          outlier_rows = outlier_rows.reverse(); //to make it easier to loop through
+          
+          columns_to_loop = Object.keys(data_by_columns);
+          
+          for(j = 0; j<columns_to_loop.length; j++){
+            for(i = 0; i<outlier_rows.length; i++){
+                          
+              data_by_columns[columns_to_loop[j]].splice(outlier_rows[i],1);
+            }
+          }
+
+           
+                        
+      
+      var this_output = 'clearing outliers rows based on '+$("#between_outlier_variable").val()+' column';
+      var this_graph  = '';
+      
+      process_stats(this_script,this_output,this_graph);
+
+          
+          
+          
+      
+        data_by_rows = col_to_rows(data_by_columns,columns_to_loop);
+        load_table(data_by_rows);                
+      
+      }
+    
+    });
+        
+  // detect whether there are repetitions within the participant column
         
         
-      </script>
+</script>
       
       
