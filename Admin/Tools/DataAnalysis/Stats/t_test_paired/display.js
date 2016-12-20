@@ -40,13 +40,7 @@
       paired_sample_ttest_no++;
     }
     
-    var these_results = {
-      p_value : t_test_results[2],
-      t_value : t_test_results[0],
-      df      : t_test_results[1]
-    }
-
-    store_results(these_results);
+    
     
     
       anObjectName_1 = input_variable1;
@@ -75,6 +69,14 @@
       "<hr style='background-color:black'></hr>");     
     
       container.appendTo("#output_area");
+      var image_url;
+      
+      var these_results = {
+        p_value : t_test_results[2],
+        t_value : t_test_results[0],
+        df      : t_test_results[1],
+        
+      }
       
       $.post(
         'barGenerate.php',
@@ -90,18 +92,22 @@
               container.find(".graphArea").html('<img src="' + img_url + '">');
 
             }
+            window.image_url = img_url;
+            these_results['t_test_plot'] = window.image_url;
         },
         'text'
       );
         
-     
-    
-      var histrogram_divs = [".histArea1",".histArea2"];
+       
+
+      var plot_names      = ["hist1","hist2"];
+      var histogram_divs  = [".histArea1",".histArea2"];
       var sum_arrays      = [input_array1,input_array2];
       
-      create_histogram(sum_arrays,histrogram_divs,container);
+      create_histogram(sum_arrays,histogram_divs,container,plot_names,these_results);
     
-    
+      store_results(these_results);
+      
     /*
     
     new_content_for_output_area = 

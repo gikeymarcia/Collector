@@ -17,8 +17,14 @@
     for(i=0;i<this_manuscript_script.length;i++){
       try{
         var this_subsection = eval(this_manuscript_script[i]);
+        console.dir(this_subsection.indexOf("imgs/")); //.indexOf("imgs/") == 0
+          if(this_subsection.indexOf("imgs/") == 0){
+          this_subsection = "<img src='"+this_subsection+ "'>";
+        }
+        
         this_manuscript_script[i] = "<b>"+this_subsection+"</b>";
-      }
+        
+       }
       catch (err){
         // Do nothing - right?
       }

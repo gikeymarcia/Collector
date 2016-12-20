@@ -29,11 +29,12 @@ function remove_from_output(output_id){
 }
 
 
-function create_histogram(sum_arrays,histrogram_divs,container){
+function create_histogram(sum_arrays,histogram_divs,container,plot_names,these_results){
   for(var h =0; h<sum_arrays.length; h++){
     
+    var this_plotname      = plot_names[h];
     var this_sum_array     = sum_arrays[h];
-    var this_histogram_div = histrogram_divs[h];
+    var this_histogram_div = histogram_divs[h];
     var hist_min           = jStat.min(this_sum_array);
     var hist_max           = jStat.max(this_sum_array);
     var hist_range         = hist_max - hist_min;
@@ -71,6 +72,8 @@ function create_histogram(sum_arrays,histrogram_divs,container){
               container.find(this_histogram_div).html('<img src="' + img_url + '">');
 
             }
+            window.image_url = img_url;
+            these_results[this_plotname] = window.image_url;
         },
         'text'
     );
