@@ -27,3 +27,52 @@ function remove_from_output(output_id){
 //  descriptive_table1
   
 }
+
+
+function create_histogram(sum_arrays,histrogram_divs,container){
+  for(var h =0; h<sum_arrays.length; h++){
+    
+    var this_sum_array     = sum_arrays[h];
+    var this_histogram_div = histrogram_divs[h];
+    var hist_min           = jStat.min(this_sum_array);
+    var hist_max           = jStat.max(this_sum_array);
+    var hist_range         = hist_max - hist_min;
+    var hist_bin_width     = hist_range/10;
+    
+    col_data={};
+    for(i=0;i<10;i++){
+      var this_bin_min = i*hist_bin_width+hist_min;
+      var this_bin_max = (i+1)*hist_bin_width+hist_min;
+      var valid_rows   = 0;
+      for(j=0;j<this_sum_array.length;j++){
+        if(this_sum_array[j] <= this_bin_max &
+           this_sum_array[j] >= this_bin_min){
+           valid_rows++;
+           console.dir(this_sum_array[j]+"-"+this_bin_min+"-"+this_bin_max);
+         }
+      }
+      col_data[this_bin_min+"-"+this_bin_max]={height:valid_rows};
+    }
+    col_data=JSON.stringify(col_data);
+    
+    y_axis = "Frequency";
+    
+    $.post(
+        'histGenerate.php',
+        {
+            data: col_data,
+            yAxis: y_axis
+        },
+        function(img_url) {
+            if (img_url.substring(0, 5) === 'Error') {
+              container.find(this_histogram_div).html(img_url);
+                
+            } else {
+              container.find(this_histogram_div).html('<img src="' + img_url + '">');
+
+            }
+        },
+        'text'
+    );
+  }  
+}

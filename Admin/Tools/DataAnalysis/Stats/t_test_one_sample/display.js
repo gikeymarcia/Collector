@@ -91,52 +91,12 @@
             },
             'text'
         );
-        
-        
-        console.dir(sum_array);
-        this_sum_array= sum_array;
-        hist_min      = jStat.min(this_sum_array);
-        hist_max      = jStat.max(this_sum_array);
-        hist_range    = hist_max - hist_min;
-        hist_bin_width= hist_range/10;
-        
-        col_data={};
-        for(i=0;i<10;i++){
-          var this_bin_min = i*hist_bin_width+hist_min;
-          var this_bin_max = (i+1)*hist_bin_width+hist_min;
-          var valid_rows   = 0;
-          for(j=0;j<this_sum_array.length;j++){
-            if(this_sum_array[j] <= this_bin_max &
-               this_sum_array[j] >= this_bin_min){
-               valid_rows++;
-               console.dir(this_sum_array[j]+"-"+this_bin_min+"-"+this_bin_max);
-             }
-          }
-          col_data[this_bin_min+"-"+this_bin_max]={height:valid_rows};
-        }
-        col_data=JSON.stringify(col_data);
-        
-        y_axis = "Frequency";
-        
-        $.post(
-            'histGenerate.php',
-            {
-                data: col_data,
-                yAxis: y_axis
-            },
-            function(img_url) {
-                if (img_url.substring(0, 5) === 'Error') {
-                  container.find(".histArea").html(img_url);
-                    
-                } else {
-                  container.find(".histArea").html('<img src="' + img_url + '">');
-
-                }
-            },
-            'text'
-        );
-        
-        
-     // container.appendTo("#output_area");
+      
+      var histrogram_divs = [".histArea"];
+      var sum_arrays      = [sum_array];
+      
+      create_histogram(sum_arrays,histrogram_divs,container);
+      
+      
     
   }  

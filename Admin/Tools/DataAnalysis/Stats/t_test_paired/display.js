@@ -70,29 +70,36 @@
       
       container.attr('id', id);
             
-      container.html( output+"<br><div class='graphArea'></div><br><button type='button' id='paired_sample_ttest"+paired_sample_ttest_no+"' onclick='add_to_script("+(script_array.length-1)+")'>Add to script</button>"+
+      container.html( output+"<br><div class='graphArea'></div><br><div class='histArea1'>Histogram 1</div><br><div class='histArea2'>Histogram 2</div><br><button type='button' id='paired_sample_ttest"+paired_sample_ttest_no+"' onclick='add_to_script("+(script_array.length-1)+")'>Add to script</button>"+
       "<button type='button' onclick='remove_from_output(\"paired_sample_ttest"+paired_sample_ttest_no+"\")'>Remove from output</button>"+
       "<hr style='background-color:black'></hr>");     
     
-      $.post(
-            'barGenerate.php',
-            {
-                data: col_data,
-                yAxis: y_axis
-            },
-            function(img_url) {
-                if (img_url.substring(0, 5) === 'Error') {
-                  container.find(".graphArea").html(img_url);
-                    
-                } else {
-                  container.find(".graphArea").html('<img src="' + img_url + '">');
-
-                }
-            },
-            'text'
-        );
-        
       container.appendTo("#output_area");
+      
+      $.post(
+        'barGenerate.php',
+        {
+            data: col_data,
+            yAxis: y_axis
+        },
+        function(img_url) {
+            if (img_url.substring(0, 5) === 'Error') {
+              container.find(".graphArea").html(img_url);
+                
+            } else {
+              container.find(".graphArea").html('<img src="' + img_url + '">');
+
+            }
+        },
+        'text'
+      );
+        
+     
+    
+      var histrogram_divs = [".histArea1",".histArea2"];
+      var sum_arrays      = [input_array1,input_array2];
+      
+      create_histogram(sum_arrays,histrogram_divs,container);
     
     
     /*
