@@ -24,6 +24,8 @@ return array(
       'Stimuli'              => array('CSV'  , 'Experiments/[Current Experiment]/Stimuli/[Stimuli]'),
     'Procedure Dir'          => array('Dir'  , 'Experiments/[Current Experiment]/Procedure'),
       'Procedure'            => array('CSV'  , 'Experiments/[Current Experiment]/Procedure/[Procedure]'),
+    'Surveys'                => array('Dir'  , 'Experiments/_Common/Surveys'),
+    'Survey'                 => array('CSV'  , 'Experiments/_Common/Surveys/[var]'),
 
 'Code'                       => array('Dir'  , 'Code'),
   'Welcome'                  => array('File' , 'Code/Welcome.php'),

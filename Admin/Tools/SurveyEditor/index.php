@@ -195,7 +195,7 @@
   // use demo survey if working from scratch 
   if($surveySheetsInfo->thisSurveyFilename=="to be declared" ||  $surveySheetsInfo->thisSurveyFilename=='[No survey Selected]'){
     $surveySheetsInfo->thisSurveyFilename=="newSurvey.csv";
-    $stimuli=getFromFile($_FILES->get_path('Common')."/Surveys/SurveyDemo.csv",false,','); // this can be integrated with later code for tidying
+    $stimuli=$_FILES->read('Survey', "SurveyDemo.csv"); // this can be integrated with later code for tidying
   } 
   
   else // load current survey
@@ -214,16 +214,17 @@
   $_DATA['guiSheets']['surveyName']=$surveySheetsInfo->thisSurveyFilename; //once page decided
 
   // update list of files after all file processing
-  $surveySheetsInfo->surveySheets=getCsvsInDir($_PATH->get('Common')."/Surveys");
+  $surveySheetsInfo->surveySheets=$_FILES->read("Surveys");
   $jsonSheets=json_encode($surveySheetsInfo->sheetsList); 
 ?>
 
 
-<!-- Bootstrap alerts !-->
+<?php
+/* <!-- Bootstrap alerts !-->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> */
+?>
 
 <form action='surveyEditor.php' method='post' id="TableForm">
  <input type="button" id="indexButton" class="collectorButton" value="Go back to Index" onclick="document.location.href = '../';" style=" position:absolute;
