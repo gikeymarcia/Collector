@@ -595,10 +595,9 @@
     });
     
     
-
-    
-    $("#outlier_between_button").on("click",function(){
-      var participant_column_array = data_by_columns[$("#participant_column").val()];
+    function between_subject_outlier_removal(this_participant_column,this_data_column,number_of_SDs){
+      
+      var participant_column_array = data_by_columns[this_participant_column];
     
       var unique_participant_column_array = participant_column_array.filter(onlyUnique);
       
@@ -606,54 +605,76 @@
         alert ("Participant rows have more than one value - please reduce rows by means or medians within participant data");
       } else {
         
-        var this_data = data_by_columns[$("#between_outlier_variable").val()];
-                        
-        for(i=0;i<this_data.length; i++){
-          
-          this_data[i]=parseFloat(this_data[i]);
-          
-        }
+        var this_data     = data_by_columns[this_data_column];
+        var number_of_SDs = $("#outlier_between_SDs").val();
         
+        var script = "between_subject_outlier_removal('"+this_participant_column+"','"+this_data_column+"','"+number_of_SDs+"');";
+      script_array[script_array.length]=script;
+      
+        if(typeof between_subject_outlier_removal_no == "undefined"){
+          between_subject_outlier_removal_no=0;
+        } else {
+          between_subject_outlier_removal_no++;
+        }
+          
+        var container = $("<div>");
+        var id="between_outlier_removal"+between_subject_outlier_removal_no;
+        container.attr('id',id);
+        
+        container.html("<b>Between subject</b> outliers  from <b>"+this_data_column+"</b> removed <button type='button' id='between_subject_outlier_removal_no"+between_subject_outlier_removal_no+"' onclick='add_to_script("+(script_array.length-1)+")'>Add to script</button>"+
+        "<button type='button' onclick='remove_from_output(\"between_outlier_removal"+between_subject_outlier_removal_no+"\")'>Remove from output</button>"+
+        "<hr style='background-color:black'></hr>");
+          
+        container.appendTo("#output_area");
+        
+        for(i=0;i<this_data.length; i++){
+            
+          this_data[i]=parseFloat(this_data[i]);
+            
+        }
+          
         var group_mean  = jStat.mean(this_data);
         var group_SD    = jStat.stdev(this_data);
 
-          outlier_rows = [];
-          for(i =0; i<this_data.length; i++){
-            //console.dir(i);
-            if(Math.abs(this_data[i] - group_mean) > 3*group_SD){
-              console.dir("outlier");
-              outlier_rows[outlier_rows.length]=i;
-            }
+        outlier_rows = [];
+        for(i =0; i<this_data.length; i++){
+          //console.dir(i);
+          if(Math.abs(this_data[i] - group_mean) > number_of_SDs*group_SD){
+            console.dir("outlier");
+            outlier_rows[outlier_rows.length]=i;
           }
+        }
           
-          outlier_rows = outlier_rows.reverse(); //to make it easier to loop through
-          
-          columns_to_loop = Object.keys(data_by_columns);
-          
-          for(j = 0; j<columns_to_loop.length; j++){
-            for(i = 0; i<outlier_rows.length; i++){
-                          
-              data_by_columns[columns_to_loop[j]].splice(outlier_rows[i],1);
-            }
-          }
-
-           
+        outlier_rows = outlier_rows.reverse(); //to make it easier to loop through
+        
+        columns_to_loop = Object.keys(data_by_columns);
+        
+        for(j = 0; j<columns_to_loop.length; j++){
+          for(i = 0; i<outlier_rows.length; i++){
                         
+            data_by_columns[columns_to_loop[j]].splice(outlier_rows[i],1);
+          }
+        }
+      }
+                  
       
-      var this_output = 'clearing outliers rows based on '+$("#between_outlier_variable").val()+' column';
+      /* var this_output = 'clearing outliers rows based on '+$("#between_outlier_variable").val()+' column';
       var this_graph  = '';
       
       process_stats(this_script,this_output,this_graph);
+      data_by_rows = col_to_rows(data_by_columns,columns_to_loop);
+      load_table(data_by_rows);    */             
+      
+    }
 
-          
-          
-          
-      
-        data_by_rows = col_to_rows(data_by_columns,columns_to_loop);
-        load_table(data_by_rows);                
-      
-      }
     
+    $("#outlier_between_button").on("click",function(){
+      
+      var this_participant_column  = $("#participant_column").val();
+      var this_data_column    = $("#between_outlier_variable").val();
+      
+      between_subject_outlier_removal(this_participant_column,this_data_column);
+          
     });
         
   // detect whether there are repetitions within the participant column

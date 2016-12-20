@@ -34,7 +34,6 @@
       df      : t_test_results[1]
     }
 
-    store_results(these_results);
     
     var output = "<br>" +script + 
                   "<br> t("+ t_test_results[1] +") = " + t_test_results[0] +
@@ -88,15 +87,19 @@
                   container.find(".graphArea").html('<img src="' + img_url + '">');
 
                 }
+                window.image_url = img_url;
+                these_results['t_test_plot'] = window.image_url;
             },
             'text'
         );
       
+      var plot_names      = ["hist1"];
       var histrogram_divs = [".histArea"];
       var sum_arrays      = [sum_array];
       
-      create_histogram(sum_arrays,histrogram_divs,container);
+      create_histogram(sum_arrays,histrogram_divs,container,plot_names,these_results);
       
-      
+      store_results(these_results);
+    
     
   }  
