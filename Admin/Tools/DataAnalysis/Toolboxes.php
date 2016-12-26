@@ -13,6 +13,10 @@
     <input type="text" id="user_toolbox_name" placeholder="name">
     <button type="button" class="collectorButton" id="add_toolbox_button">Include</button>
 </div>
+<div>
+  <h3>Toolbox help</h3>
+  <div id="toolbox_helper">Click on a toolbox "help" button to activate</div>
+</div>
 
 <?php 
   if(!is_dir('Toolboxes/User/')){
@@ -97,12 +101,30 @@
     var validated_tools = <?= json_encode($validated_tools) ?>;
     
     validated_tools.forEach(function(tool_path) {
-      var name = tool_path
+      var name  = tool_path
                 .replace('Toolboxes/Validated/', '')
                 .replace(/\.js$/, '');
+      var help  = tool_path
+                .replace(/\.js$/, '_help.txt');
       $("#verified_toolbox_list").append(
-        "<div><label><input type='checkbox' value='" + tool_path + "'>" + name + "</label></div>"
+        "<div><label><input type='checkbox' value='" + tool_path + "'>" + name + "</label><button class='toolbox_help_button' value='"+help+"'>Help</button></div>"
       );
+    });
+    
+    $(".toolbox_help_button").on("click",function(){
+      //alert(this.value);
+      var this_url = this.value;
+      $.post(
+      'AjaxLoadHelp.php',
+      { web_address         : this_url
+      } , 
+      function(returned_data) {
+        //$("#saving_area").html("GUI Script and Output Saved"); 
+          
+        $("#toolbox_helper").html(returned_data);      
+       
+     });
+      
     });
     
     $("#verified_toolbox_list input").on("change", function() {

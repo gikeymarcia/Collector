@@ -28,6 +28,7 @@
             <button type="button" class="gui_script_button collectorButton" id="gui_button" value="gui">GUI</button>
             <button type="button" class="gui_script_button collectorButton" id="script_button" value="script">Script</button>
             <button type="button" class="gui_script_button collectorButton" id="notes_button" value="notes">Write-Up</button>
+            <button type="button" class="gui_script_button collectorButton" id="data_button" value="data">Data</button>
           </span>
           
           <script>
@@ -41,7 +42,12 @@
           <div id="gui_area" class="gui_script_areas"><?= require("gui.php") ?></div>
           
           <div id="script_area" class="gui_script_areas"><?= require("script.php") ?></div>
+          
           <div id="notes_area" class="gui_script_areas"><?= require("Notes.php") ?></div>
+          
+          <div id="data_area" class="gui_script_areas"><?= require("dataArea.php") ?></div>
+
+          
         </div>
       </td>
   <script src="//code.jquery.com/ui/1.12.0/jquery-ui.js"></script><!-- for jquery highlighting !-->

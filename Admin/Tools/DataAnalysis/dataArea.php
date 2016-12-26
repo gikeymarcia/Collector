@@ -1,78 +1,41 @@
-<div id="data_area">
-  <?php
-    function get_data() {
-      $csv_data = fsDataType_CSV::read('temp/responses.csv');
-      $raw_data = array();
-      $raw_data[] = array_keys($csv_data[0]);
-      
-      foreach ($csv_data as $row) {
-        $raw_data[] = array_values($row);
-      }
-      
-      return json_encode($raw_data);
+<style>
+  td{
+    padding:5px;
+  }
+  .top_row{
+    font-weight:bold;
+    border: 1px solid black;
+    background-color:#B0ACE8;
+  }
+  .middle_rows{
+    border: 1px solid black;
+    background-color:#CECDE2;
+  }
+  #data_table_properties{
+  
+  }
+</style>
+
+<div id="data_table"></div>
+<script>
+  
+  var top_row="<table id='data_table_properties'><tr>";
+  for(var i=0;i<Collector_data_raw[0].length;i++){
+    top_row += "<td class='top_row'>"+Collector_data_raw[0][i] +"</td>";
+  }
+  top_row += "</tr>";
+  middle_rows = '';
+  for(var h=1;h<Collector_data_raw.length;h++){
+    middle_rows+='<tr>';
+    for(var i=0;i<Collector_data_raw[h].length;i++){
+    middle_rows += "<td class='middle_rows'>"+Collector_data_raw[h][i] +"</td>";
     }
-  ?>
-  <table id="data_table"></table>
-  <script>
-    var Collector_data_raw = <?= get_data(); ?>
-    
-    function raw_table_to_columns(data) {
-      var output = {};
-      var headers = data[0];
-      
-      // create empty arrays for each column header
-      for (var col_index=0; col_index<headers.length; ++col_index) {
-        // for example, set output["Username"] to empty array
-        output[headers[col_index]] = [];
-      }
-      
-      for (var row_index=1; row_index<data.length; ++row_index) {
-        for (var col_index=0; col_index<headers.length; ++col_index) {
-          output[headers[col_index]].push(data[row_index][col_index])
-        }
-      }
-      
-      return output;
-    }
-    
-    function reformat_columns(columns) {
-      for (var column in columns) {
-        var is_numeric = true;
-        
-        for (var i=0; i<columns[column].length; ++i) {
-          if (!$.isNumeric(columns[column][i])) {
-            is_numeric = false;
-            break;
-          }
-        }
-        
-        if (is_numeric) {
-          console.dir(column + " is numeric");
-          for (var i=0; i<columns[column].length; ++i) {
-            columns[column][i] = parseFloat(columns[column][i]);
-          }
-        }
-      }
-    }
-    
-    var data_by_columns = raw_table_to_columns(Collector_data_raw);
-    
-    reformat_columns(data_by_columns);
-    
-    function update_column_list() {
-      var list = [];
-      
-      for (var column in data_by_columns) {
-        list.push(column);
-      }
-      
-      $("#column_list").html(
-        "<div>" + list.join("</div><div>") + "</div>"
-      );
-    }
-    
-    $(document).ready(function() {
-      update_column_list();
-    });
-  </script>
-</div>
+    middle_rows+='</tr>';
+  }
+
+  complete_table = top_row + middle_rows+ "</table>";
+
+  $("#data_table").html(complete_table);
+  
+  
+</script>
