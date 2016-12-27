@@ -13,42 +13,7 @@
 <div id="analysis_area">
   <table id="analysis_table" style="width:100%">
     <tr>
-      <td id="variable_list_td">
-        <div id="variable_list_area">
-          <h3>Data Frames</h3>
-          <select>
-            <option>Practice_Data</option>
-          </select>
-          <br>
-          <button type="button" id="load_data_frame">Load Data</button>
-          <div id="data_frame_variable">
-            <h3>Columns</h3>
-            <div id="column_list"></div>
-            <h3>Local Variables</h3>
-            <div id="variable_list">
-            </div>
-          </div>
-          <div id="new_data_frame" style="display:none">
-            Select data:
-            <select id="user_data">
-            </select>
-            <button id="load_user_data">Load</button>
-            <br>
-            Load data from web:
-            <input type="text" id="web_data_to_load" placeholder="url of data/csv file">
-            <button id="load_web_data">Load</button>
-          </div>
-        </div>
-      </td>
-      
-      <script>
-        $("#load_data_frame").on("click",function(){
-          $("#data_frame_variable").hide();
-          $("#new_data_frame").show();
-        });
-      
-      </script>
-      
+      <?= require("DataFrames.php") ?>
       
       <td>
         <div id="td_left_col"> 
