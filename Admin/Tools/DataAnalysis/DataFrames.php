@@ -64,7 +64,7 @@
   }
   
   
-  var user_data_files = ['responses.csv'];
+  var user_data_files = ['responses.csv']; // should be reading this using php once new_structure is in place
   
   var user_data_select = '<select id="user_data">';
 
@@ -77,19 +77,27 @@
   
   $("#load_user_data_button").on("click",function(){
     csv_file_location="temp/"+$("#user_data").val();
-    new_data_frame_array = ajax_data(csv_file_location);
+    create_new_data_frame(csv_file_location);    
   });
   
   $("#load_web_data_button").on("click",function(){
     csv_file_location = $("#web_data_to_load").val();
-    ajax_data(csv_file_location);
-    
+    create_new_data_frame(csv_file_location);
   });
+  
+  function create_new_data_frame(){
+    var new_data_frame_name = prompt("What name do you want to give your new data frame?");
+    if(all_data_arrays[new_data_frame_name] == undefined){
+      ajax_data(csv_file_location,new_data_frame_name);
+    } else {
+      alert("select a unique name for your new dataFrame");
+    }
+  }
   
   all_data_arrays = {};
   all_data_arrays['Practice Data'] = data_by_columns;
   
-  function ajax_data(csv_file_location){
+  function ajax_data(csv_file_location,new_data_frame_name){
     console.dir(csv_file_location);
     $.post(
       'AjaxData.php',
@@ -102,9 +110,31 @@
       }
        
     )
-    var new_data_frame_name = prompt("What name do you want to give your new data frame?");
     data_frame_list.push(new_data_frame_name);
     update_data_frame_list(data_frame_list);
+    
+    var script = "ajax_data('"+csv_file_location+"','"+new_data_frame_name+"')";
+    console.dir(script);
+    script_array.push(script);
+    
+    if(typeof data_frame_no == "undefined"){
+      data_frame_no=0;
+    } else {
+      data_frame_no++;
+    }
+    var container = $("<div>");
+    var id = 'data_frame' + data_frame_no;
+    
+    container.attr('id', id);
+    
+    var this_title = "<h2>Output </h2>";
+    
+    container.html(this_title+"<br><div class='graphArea'></div><br><div class='histArea'></div><br>"+
+    "<button type='button' id='data_frame"+data_frame_no+"' onclick='add_to_script("+(script_array.length-1)+")'>Add to script</button>"+
+    "<button type='button' onclick='remove_from_output(\"data_frame"+data_frame_no+"\")'>Remove from output</button>"+
+    "<hr style='background-color:black'></hr>");     
+    
+    container.appendTo("#output_area");
     
   }
   
