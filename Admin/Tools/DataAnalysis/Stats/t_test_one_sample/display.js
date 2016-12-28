@@ -60,46 +60,46 @@
     var y_axis = one_sample_dv_unit;
     
     var container = $("<div>");
-      var id = 'one_sample_ttest' + one_sample_ttest_no;
-      
-      container.attr('id', id);
-      
-      var this_title = "<h2>Output "+ (Object.keys(report_output).length-1)+"</h2>";
-      
-      container.html(this_title+ output+"<br><div class='graphArea'></div><br><div class='histArea'></div><br>"+
-      "<button type='button' id='one_sample_ttest"+one_sample_ttest_no+"' onclick='add_to_script("+(script_array.length-1)+")'>Add to script</button>"+
-      "<button type='button' onclick='remove_from_output(\"one_sample_ttest"+one_sample_ttest_no+"\")'>Remove from output</button>"+
-      "<hr style='background-color:black'></hr>");     
-      
-      container.appendTo("#output_area");
-      
-      $.post(
-            'barGenerate.php',
-            {
-                data: col_data,
-                yAxis: y_axis
-            },
-            function(img_url) {
-                if (img_url.substring(0, 5) === 'Error') {
-                  container.find(".graphArea").html(img_url);
-                    
-                } else {
-                  container.find(".graphArea").html('<img src="' + img_url + '">');
+    var id = 'one_sample_ttest' + one_sample_ttest_no;
+    
+    container.attr('id', id);
+    
+    var this_title = "<h2>Output "+ (Object.keys(report_output).length-1)+"</h2>";
+    
+    container.html(this_title+ output+"<br><div class='graphArea'></div><br><div class='histArea'></div><br>"+
+    "<button type='button' id='one_sample_ttest"+one_sample_ttest_no+"' onclick='add_to_script("+(script_array.length-1)+")'>Add to script</button>"+
+    "<button type='button' onclick='remove_from_output(\"one_sample_ttest"+one_sample_ttest_no+"\")'>Remove from output</button>"+
+    "<hr style='background-color:black'></hr>");     
+    
+    container.appendTo("#output_area");
+    
+    $.post(
+      'barGenerate.php',
+      {
+          data    : col_data,
+          yAxis   : y_axis
+      },
+      function(img_url) {
+          if (img_url.substring(0, 5) === 'Error') {
+            container.find(".graphArea").html(img_url);
+              
+          } else {
+            container.find(".graphArea").html('<img src="' + img_url + '">');
 
-                }
-                window.image_url = img_url;
-                these_results['t_test_plot'] = window.image_url;
-            },
-            'text'
-        );
-      
-      var plot_names      = ["hist1"];
-      var histrogram_divs = [".histArea"];
-      var sum_arrays      = [sum_array];
-      
-      create_histogram(sum_arrays,histrogram_divs,container,plot_names,these_results);
-      
-      store_results(these_results);
+          }
+          window.image_url = img_url;
+          these_results['t_test_plot'] = window.image_url;
+      },
+      'text'
+    );
+    
+    var plot_names      = ["hist1"];
+    var histrogram_divs = [".histArea"];
+    var sum_arrays      = [sum_array];
+    
+    create_histogram(sum_arrays,histrogram_divs,container,plot_names,these_results);
+    
+    store_results(these_results);
     
     
   }  
