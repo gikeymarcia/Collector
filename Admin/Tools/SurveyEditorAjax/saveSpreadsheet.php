@@ -22,8 +22,7 @@ $file_path_parts = explode('/', $file_path);
 $survey = $file_path_parts[0];
 $surveys = getCsvsInDir($_FILES->get_path('Common')."/Surveys");
 
-echo $survey;
-print_r ($surveys);
+
 
 if (!in_array($survey, $surveys)) {
     exit('Bad file path provided, experiment "' . $survey . '" invalid.');
