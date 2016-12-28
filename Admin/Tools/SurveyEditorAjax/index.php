@@ -1,18 +1,16 @@
 <?php
   
 /*
-   Experiment Editor:
-   -Open and view all stimuli and procedure files for every experiment
-   -Open condition sheet
+   Survey Editor:
+   -Open and view all surveys
    -change contents of sheet
    -copy/rename/delete sheets
    
    -start by scanning all surveys to find all sheets
    -display list of surveys
-   -after experiment is selected, display list of sheets inside that experiment
-   -alternatively, let them create a new exp
+   -alternatively, let them create a new survey
    -can open sheets, or copy to new sheet and start editing that
-   -can also copy experiment to edit that
+   -can also copy survey to edit that
  */
 
   require "../../initiateTool.php";
@@ -118,58 +116,57 @@
     }
     
     function get_current_sheet_path() {
-        return $("#survey_select").val() 
-             
+        return $("#survey_select").val()              
     }
     
     function custom_alert(msg) {
-        create_alerts_container();
-        
-        var el = $("<div>");
-        el.html(msg);
-        
-        el.css("opacity", "0");
-        
-        $("#alerts").append(el).show();
-        
-        el.animate({opacity: "1"}, 600, "swing", function() {
-            $(this).delay(5600).animate({height: "0px"}, 800, "swing", function() {
-                $(this).remove();
-                
-                if ($("#alerts").html() === '') {
-                    $("#alerts").hide();
-                }
-            });
-        });
+      create_alerts_container();
+      
+      var el = $("<div>");
+      el.html(msg);
+      
+      el.css("opacity", "0");
+      
+      $("#alerts").append(el).show();
+      
+      el.animate({opacity: "1"}, 600, "swing", function() {
+          $(this).delay(5600).animate({height: "0px"}, 800, "swing", function() {
+              $(this).remove();
+              
+              if ($("#alerts").html() === '') {
+                  $("#alerts").hide();
+              }
+          });
+      });
     }
     
     var alerts_ready = false;
     
     function create_alerts_container() {
-        if (alerts_ready) return;
-        
-        var el = $("<div>");
-        el.css({
-            position: "fixed",
-            top: "10px",
-            left: "10px",
-            right: "10px",
-            backgroundColor: "#ffc8c8",
-            borderRadius: "6px",
-            border: "1px solid #DAA",
-            color: "#800"
-        });
-        
-        el.attr("id", "alerts");
-        
-        $("body").append(el);
-        
-        var style = $("<style>");
-        style.html("#alerts > div { margin: 10px 5px; }");
-        
-        $("body").append(style);
-        
-        alerts_ready = true;
+      if (alerts_ready) return;
+      
+      var el = $("<div>");
+      el.css({
+        position: "fixed",
+        top: "10px",
+        left: "10px",
+        right: "10px",
+        backgroundColor: "#ffc8c8",
+        borderRadius: "6px",
+        border: "1px solid #DAA",
+        color: "#800"
+      });
+      
+      el.attr("id", "alerts");
+      
+      $("body").append(el);
+      
+      var style = $("<style>");
+      style.html("#alerts > div { margin: 10px 5px; }");
+      
+      $("body").append(style);
+      
+      alerts_ready = true;
     }
     
     function save_current_sheet() {

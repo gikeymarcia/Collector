@@ -3,6 +3,10 @@
 require '../../initiateTool.php';
 ob_end_clean(); // no need to transmit useless data
 
+require 'fileReadingFunctions.php';
+require_once ('../guiFunctions.php');
+
+
 if (!isset($_POST['file'], $_POST['data'])) {
     exit('Missing filename or data');
 }
@@ -15,14 +19,17 @@ if (strpos($file_path, '..') !== false) {
 
 $file_path_parts = explode('/', $file_path);
 
-$exp = $file_path_parts[0];
-$experiments = get_Collector_experiments($_FILES);
+$survey = $file_path_parts[0];
+$surveys = getCsvsInDir($_FILES->get_path('Common')."/Surveys");
 
-if (!in_array($exp, $experiments)) {
-    exit('Bad file path provided, experiment "' . $exp . '" invalid.');
+echo $survey;
+print_r ($surveys);
+
+if (!in_array($survey, $surveys)) {
+    exit('Bad file path provided, experiment "' . $survey . '" invalid.');
 }
 
-if (count($file_path_parts) > 2) {
+/* if (count($file_path_parts) > 2) {
     if (    $file_path_parts[1] !== 'Procedure'
         AND $file_path_parts[1] !== 'Stimuli'
     ) {
@@ -30,7 +37,7 @@ if (count($file_path_parts) > 2) {
     }
 } elseif ($file_path_parts[1] !== 'Conditions.csv') {
     exit('Bad file path provided, filename besides Conditions.csv without subfolder is not allowed.');
-}
+} */
 
 $data = json_decode($_POST['data'], true);
 
@@ -48,7 +55,7 @@ $dir = dirname($file_path);
 
 if (!is_dir($dir)) mkdir($dir, 0777, true);
 
-$file_full_path = $_FILES->get_path('Experiments') . '/' . $file_path;
+$file_full_path = $_FILES->get_path('Surveys') . '/' . $file_path;
 
 $file_resource = fopen($file_full_path, 'w');
 
