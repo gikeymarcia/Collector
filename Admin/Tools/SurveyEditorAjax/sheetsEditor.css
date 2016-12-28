@@ -1,0 +1,41 @@
+#csvSelected{
+  padding : 5px;
+  border-radius: 10px;
+}
+
+#header { 
+  font-size   : 180%; 
+  text-align  : center; 
+  margin      : 10px 0 40px; 
+}  
+
+#indexButton {
+  position:absolute;
+  right:20px;
+}
+.tableArea {
+  display         : block;
+  width           : 100%;
+  box-sizing      : border-box;
+  padding         : 10px 30px;
+  vertical-align  : top;
+}
+
+body { 
+  color             : black; 
+  background-color  : white; 
+}
+
+form {
+  text-align  : left; 
+}
+
+#sheetsForm {
+  width: auto;
+  padding: 0 30px;
+}
+
+textarea { 
+  border-radius : 5px;
+  border-color  : #E8E8E8  ;
+}
