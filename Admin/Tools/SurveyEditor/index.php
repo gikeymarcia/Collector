@@ -20,7 +20,9 @@
   require('../guiClasses.php');
 
 
-  
+  $archived_surveys = file_get_contents("archived_files.txt");
+  $archived_surveys = explode(",",$archived_surveys);
+  $archived_surveys_json = json_encode($archived_surveys);
   
   $surveys = getCsvsInDir($_FILES->get_path('Common')."/Surveys"); 
   
@@ -49,6 +51,9 @@
   }
 
   .condOption         { background-color: #DFD; }
+  .archived_survey{
+    display:none;
+  }
   
 </style>
 
@@ -63,15 +68,44 @@
   
   <select id="survey_select">
     <option value="" hidden disabled selected>Select a Survey</option>
-    <?php 
+    <?php    
     foreach ($surveys as $survey){
-      echo "<option>$survey</option>";
+      if(in_array($survey,$archived_surveys)){
+        echo "<option class='archived_survey'>$survey</option>";
+      } else {
+        echo "<option>$survey</option>";
+      }
     }
     ?>
   </select>
   
-  <button type="button" id="copy_survey_button" class="collectorButton">Copy Survey</button>
+  
+  <button type="button" id="copy_survey_button" class="collectorButton">Copy</button>
+  <button type="button" id="archive_survey_button" class="collectorButton">Archive</button>
+  <button type="button" id="delete_survey_button" class="collectorButton">Delete</button>
+  <label>
+    Show archived files
+    <input type="radio" class="archive_radio" value="show_archive" name="show_hide_archive">
+  </label>
+  <label>
+    Hide archived files
+    <input type="radio" class="archive_radio" value="hide_archive" name="show_hide_archive">
+  </label>
 </div>
+
+<script>
+
+  $(".archive_radio").on("click",function(){
+    console.dir(this.value);
+    if(this.value=="show_archive"){
+      $(".archived_survey").show();
+    } else {
+      $(".archived_survey").hide();
+    }
+  });
+  
+  
+  </script>
 
 <div id="rest_of_interface">  <!-- delete??? -->
 </div>
@@ -93,6 +127,9 @@
 <div> <?php require("HelperBar.php"); ?> </div>
   
   <script>
+  
+    var archived_surveys = <?= $archived_surveys_json ?>;
+    console.dir(archived_surveys);
   
     var handsOnTable;
     
@@ -270,7 +307,6 @@
       
     });
     
-    copy_survey_button
     
     $("#copy_survey_button").on("click",function(){
       var new_name = prompt("What do you want to call your new experient?");
@@ -309,6 +345,36 @@
       }
       
     });
+    
+    
+    
+    $("#archive_survey_button").on("click",function(){
+      if($("#survey_select").val()==null){
+        
+        alert("Please select a survey to archive");
+        
+      } else {
+        
+        archived_survey = $("#survey_select").val();
+
+        // contact server to create new structure
+        $.post(
+          "Archive_Survey.php",
+          {
+            archived_survey: archived_survey
+          },
+          function(returned_data){
+            console.dir(returned_data);
+            
+          }
+        );
+      
+      }
+
+    
+      
+    });
+    
     
     
     $("#survey_select").on("change",function(){
