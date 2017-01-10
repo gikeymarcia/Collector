@@ -71,7 +71,7 @@
   <button type="button" id="copy_survey_button" class="collectorButton">Copy</button>
   <button type="button" id="archive_survey_button" class="collectorButton">Archive</button>
   <button type="button" id="unarchive_survey_button" class="collectorButton" style="display:none">Unarchive</button>
-  <button type="button" id="delete_survey_button" class="collectorButton">Delete</button>
+  <button type="button" id="delete_survey_button" class="collectorButton" style="display:none">Delete</button>
   <label>
     Show archived files
     <input type="radio" class="archive_radio" value="show_archive" name="show_hide_archive">
@@ -172,6 +172,7 @@
   
   <script>
 
+  
     var handsOnTable;
     
     function createExpEditorHoT(data) {
@@ -403,6 +404,7 @@
       archived_surveys.splice(splice_index,1);
       $("#unarchive_survey_button").hide();
       $("#archive_survey_button").show();
+      $("#delete_survey_button").show();
       update_survey_span();
 
     });
@@ -428,12 +430,29 @@
         archived_surveys.push(archived_survey)
         $("#unarchive_survey_button").show();
         $("#archive_survey_button").hide();
+        $("#delete_survey_button").show();
         update_survey_span();
       }
       
     });
     
-    
+    $("#delete_survey_button").on("click",function(){
+      var confirm_delete = confirm("Are you sure you want to delete this survey? This cannot be reversed!");
+      if(confirm_delete == true){
+        var deleted_survey = $("#survey_select").val();
+        $.post(
+          "DeleteSurvey.php",
+          {
+            deleted_survey: deleted_survey
+          },
+          function(returned_data){
+            console.dir(returned_data);
+            
+          }
+        );
+      }
+    });
+
     
     
     
