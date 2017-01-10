@@ -19,6 +19,9 @@ if (strpos($file_path, '..') !== false) {
 
 $file_path_parts = explode('/', $file_path);
 
+$survey_name = $_POST["survey_name"];
+
+
 $survey = $file_path_parts[0];
 $surveys = getCsvsInDir($_FILES->get_path('Common')."/Surveys");
 
@@ -27,16 +30,6 @@ $surveys = getCsvsInDir($_FILES->get_path('Common')."/Surveys");
 if (!in_array($survey, $surveys)) {
     exit('Bad file path provided, experiment "' . $survey . '" invalid.');
 }
-
-/* if (count($file_path_parts) > 2) {
-    if (    $file_path_parts[1] !== 'Procedure'
-        AND $file_path_parts[1] !== 'Stimuli'
-    ) {
-        exit('Bad file path provided, subfolder "' . $file_path_parts[1] . '" invalid');
-    }
-} elseif ($file_path_parts[1] !== 'Conditions.csv') {
-    exit('Bad file path provided, filename besides Conditions.csv without subfolder is not allowed.');
-} */
 
 $data = json_decode($_POST['data'], true);
 
@@ -52,9 +45,24 @@ foreach ($data as $row) {
 
 $dir = dirname($file_path);
 
-if (!is_dir($dir)) mkdir($dir, 0777, true);
+if (!is_dir($dir)) mkdir($dir, 0777, true); // this seems wrong, but redundant
 
-$file_full_path = $_FILES->get_path('Surveys') . '/' . $file_path;
+
+
+if($survey_name !== $file_path){
+  // code for renaming file
+  
+  $file_full_path = $_FILES->get_path('Surveys') . '/' . $survey_name;
+  $delete_path = $_FILES->get_path('Surveys') . '/' . $file_path;
+  $delete_original = TRUE;
+  //new name
+  //delete original file?
+} else {
+  $file_full_path = $_FILES->get_path('Surveys') . '/' . $file_path;
+  
+  $delete_original = FALSE;
+
+}
 
 $file_resource = fopen($file_full_path, 'w');
 
@@ -63,5 +71,9 @@ foreach ($data as $row) {
 }
 
 fclose($file_resource);
+
+if($delete_original == TRUE){
+  unlink($delete_path);
+}
 
 echo '<b>Success!</b> File saved';

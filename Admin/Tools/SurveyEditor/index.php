@@ -190,12 +190,14 @@
     function save_current_sheet() {
         var data = JSON.stringify(get_HoT_data());
         var file = get_current_sheet_path();
+        var filename = $("#survey_name").val();
         
         $.post(
             'saveSpreadsheet.php',
             {
                 file: file,
-                data: data
+                data: data,
+                survey_name: filename
             },
             custom_alert,
             'text'
@@ -280,7 +282,7 @@
       } else {
         if($("#survey_select").val()==null){
           
-          alert("Please select a survey to copy from")
+          alert("Please select a survey to copy from");
           
         } else {
 
