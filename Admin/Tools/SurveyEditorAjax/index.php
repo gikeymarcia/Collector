@@ -19,6 +19,8 @@
   require_once ('../guiFunctions.php');
   require('../guiClasses.php');
 
+
+  
   
   $surveys = getCsvsInDir($_FILES->get_path('Common')."/Surveys"); 
   
@@ -28,6 +30,22 @@
 <style>
   #interface{
     display:none;
+    width: 70%;
+  }
+  
+  #helperBar {
+    position: absolute;
+    left: 75%;
+    top: 0%;
+    display: inline-block;
+    width: 20%;
+    background-color: #EFE;
+    border: 2px solid #6D6;
+    border-radius: 8px;
+    box-sizing: border-box;
+    padding: 10px;
+    vertical-align: top;
+    margin-top: 180px;
   }
 
   .condOption         { background-color: #DFD; }
@@ -68,7 +86,9 @@
   <div id="sheetArea">
     <div id="sheetTable"></div>
   </div>
+  
 </div>
+<div> <?php require("HelperBar.php"); ?> </div>
   
   <script>
   

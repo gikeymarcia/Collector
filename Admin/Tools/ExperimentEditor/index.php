@@ -44,6 +44,22 @@
   .stimOptions option { background-color: #DDF; }
   .procOptions        { background-color: #FBB; }
   .procOptions option { background-color: #FDD; }
+  
+  #helperBar {
+    position: absolute;
+    left: 75%;
+    top: 0%;
+    display: inline-block;
+    width: 20%;
+    background-color: #EFE;
+    border: 2px solid #6D6;
+    border-radius: 8px;
+    box-sizing: border-box;
+    padding: 10px;
+    vertical-align: top;
+    margin-top: 180px;
+  }
+  
 </style>
 
 <script src="../HandsontableFunctions.js"></script>
@@ -86,6 +102,7 @@
   </div>
 </div>
 
+<div> <?php require("HelperBar.php"); ?> </div>
 
   
   <script>

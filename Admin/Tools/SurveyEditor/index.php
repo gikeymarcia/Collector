@@ -67,17 +67,7 @@
   .helpType_Col { display: none; }
   #helpTypeDefault { display: block; }
   
-  #helperBar {
-    display: inline-block;
-    width: 20%;
-    background-color: #EFE;
-    border: 2px solid #6D6;
-    border-radius: 8px;
-    box-sizing: border-box;
-    padding: 10px;
-    vertical-align: top;
-    margin-top: 180px;
-  }
+  
   
   #TableForm {
     display: inline-block;

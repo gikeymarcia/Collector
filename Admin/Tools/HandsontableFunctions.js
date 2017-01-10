@@ -172,6 +172,17 @@ function isTrialTypeHeader(colHeader) {
       afterRemoveRow: function() {
           updateDimensionsDelayed(this);
       },
+      
+      afterSelectionEnd: function(){
+        var coords        = this.getSelected();
+        var column        = this.getDataAtCell(0,coords[1]);//stimTable.getDataAtCell(0,1); 
+        var thisCellValue = this.getDataAtCell(coords[0],coords[1]);
+        window['Current HoT Coordinates'] = coords;
+        
+        helperActivate(column, thisCellValue);
+      //         alert(stimTable.getDataAtCell(0,1));
+      },
+      
       rowHeaders: false,
       contextMenu: true,
       cells: function(row, col, prop) {
