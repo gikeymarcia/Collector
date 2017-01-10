@@ -57,82 +57,13 @@
     return  $trialTypeElementsPhp;
   }
 
-  // save function  //
-  
-  function saveTrialType($elementArray,$trialTypeName){
-  
-    global $_PATH;
-    
-    $trialTypeElementsPhp=json_decode($elementArray);  
-            
-    // Renaming files if task name has changed 
-    if($trialTypeName !== ''){   // checking if there is there a long term value for the name to check against
-      /* does the new name match the old name*/
-      if($trialTypeName !== $trialTypeElementsPhp->trialTypeName){                          //i.e. a new trialType name
-        if(file_exists(TRIAL_DIR."/"           .     $trialTypeName . ".txt")){
-          unlink(TRIAL_DIR."/"                 .     $trialTypeName . ".txt");              //Delete original file here            
-          unlink($_PATH->get('Custom Trial Types')."/". $trialTypeName . "/display.php");   //deleting php file
-          $trialTypeCodeDir=$_PATH->get('Custom Trial Types')."/". $trialTypeName;          
-          if(count(scandir($trialTypeCodeDir)) <= 2){                                       //if empty
-            rmdir($_PATH->get('Custom Trial Types') ."/". $trialTypeName);                  //deleting directory. Don't do this if score.php or other file present.
-          }
-        }
-        $trialTypeName  = $trialTypeElementsPhp->trialTypeName;                             //identify correct name here
-      }  
-    }
-    
-    // saving schematic of task (.txt) and task (.php)
-    if(!is_dir(TRIAL_DIR)) mkdir($dir, 0777, true);
-    
-    file_put_contents(TRIAL_DIR."/".$trialTypeName.'.txt',$elementArray); //actual act of saving
-    
-    if(!isset($_DATA['trialTypeEditor']['currentTrialTypeName'])){
-      $_DATA['trialTypeEditor']['currentTrialTypeName']=$trialTypeName;
-    }      
-    
-    require('createTrialType.php');                                      //php file
-    
-    return $trialTypeElementsPhp;
-  }
-  
+   
   
   /*sorting out whether we are working from scratch, have just saved a file, or are loading a file */
   
-  /* loading */
-  if(isset($_POST['loadButton']) || isset($_POST['editTrialType'])){   //load first
-
-    if(isset($_POST['loadButton'])){
-      $trialTypeElementsPhp   = loadTrialType($_POST['trialTypeLoaded']);
-      $trialTypeName          = str_replace('.txt','',$_POST['trialTypeLoaded']);
-    } 
-    if(isset($_POST['editTrialType'])) {
-      $trialTypeElementsPhp   = loadTrialType($_POST['editTrialTypeName']);
-      $trialTypeName          = str_replace('.txt','',$_POST['editTrialTypeName']); 
-    }
       
-  } else {
-    /* saving */
-    if(!empty($_POST['elementArray'])){ // have just saved
-       
-      $trialTypeElementsPhp = saveTrialType($_POST['elementArray'],$trialTypeName);
-
-    } else { 
-      // creating a new file //
-      if($_POST['createTrialTypeName']=="[Blank]"){
-        require ("guiClasses.php"); //not sure we need this;  maybe the guiClasses can be tidied up  
-        $trialTypeElementsPhp = new trialTypeElements();
-        
-      } else {
-        // creating from template
-        
-        
-      }
-      
-      $trialTypeName        = $_POST['newTrialTypeName'];
-    }
-  }    
-  $jsontrialTypeElements  =   json_encode($trialTypeElementsPhp);   //to use for javascript manipulations
-     
+/*   $jsontrialTypeElements  =   json_encode($trialTypeElementsPhp);   //to use for javascript manipulations
+ */     
   // list of trial types the user can edit
   if (!is_dir(TRIAL_DIR)) {
       $trialTypesList = array();
@@ -367,6 +298,6 @@ echo $trialTypeName
 <script src="trialTypeEditor.js"></script>
 <script>
 
-  var trialTypeElements   =   <?= $jsontrialTypeElements ?>;                  //the object containing all the trialTypeInformation
+  /* var trialTypeElements   =   <?= $jsontrialTypeElements ?>;                  //the object containing all the trialTypeInformation */
 
 </script>
