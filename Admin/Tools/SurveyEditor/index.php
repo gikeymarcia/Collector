@@ -59,7 +59,7 @@
 </script>
 
 <div id="load_toolbar">
-  <button type="button" id="new_experiment_button" class="collectorButton">New Survey</button>
+  <button type="button" id="new_survey_button" class="collectorButton">New Survey</button>
   
   <select id="survey_select">
     <option value="" hidden disabled selected>Select a Survey</option>
@@ -69,6 +69,8 @@
     }
     ?>
   </select>
+  
+  <button type="button" id="copy_survey_button" class="collectorButton">Copy Survey</button>
 </div>
 
 <div id="rest_of_interface">  <!-- delete??? -->
@@ -235,12 +237,12 @@
     
     stim_list_options="<option></option>"
     
-    $("#new_experiment_button").on("click",function(){
+    $("#new_survey_button").on("click",function(){
       var new_name = prompt("What do you want to call your new experient?");
       
       if (typeof survey_files[new_name] !== "undefined") {
         alert("That name already exists - choose another one");
-        $("#new_experiment_button").click();
+        $("#new_survey_button").click();
       } else {
         // contact server to create new structure
         $.post(
@@ -264,9 +266,48 @@
       $("#sheet_name_header").val("Conditions");
       $("#interface").show();
       
+    });
+    
+    copy_survey_button
+    
+    $("#copy_survey_button").on("click",function(){
+      var new_name = prompt("What do you want to call your new experient?");
+      var old_survey = $("#survey_select").val();
       
+      if (typeof survey_files[new_name] !== "undefined") {
+        alert("That name already exists - choose another one");
+        $("#copy_survey_button").click();
+      } else {
+        if($("#survey_select").val()==null){
+          
+          alert("Please select a survey to copy from")
+          
+        } else {
+
+          // contact server to create new structure
+          $.post(
+            "AjaxCopySurvey.php",
+            {
+              new_name: new_name,
+              old_survey: old_survey
+            },
+            function(returned_data){
+              console.dir(returned_data);
+              
+              if (returned_data === 'success') {
+                create_new_experiment(new_name);
+              }
+            }
+          );
+        
+        }
+
+        
+        // add new_experiment_data to survey_files for new experiment name
+      }
       
     });
+    
     
     $("#survey_select").on("change",function(){
         $("#survey_name").val(this.value);
