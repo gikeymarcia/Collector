@@ -82,6 +82,7 @@
   
   <button type="button" id="copy_survey_button" class="collectorButton">Copy</button>
   <button type="button" id="archive_survey_button" class="collectorButton">Archive</button>
+  <button type="button" id="unarchive_survey_button" class="collectorButton" style="display:none">Unarchive</button>
   <button type="button" id="delete_survey_button" class="collectorButton">Delete</button>
   <label>
     Show archived files
@@ -89,12 +90,21 @@
   </label>
   <label>
     Hide archived files
-    <input type="radio" class="archive_radio" value="hide_archive" name="show_hide_archive">
+    <input type="radio" class="archive_radio" value="hide_archive" name="show_hide_archive" checked>
   </label>
 </div>
 
 <script>
 
+  function archive_unarchive_buttons_show_hide(current_survey){
+    if(archived_surveys.indexOf(current_survey) !== -1){
+      $("#unarchive_survey_button").show();
+      $("#archive_survey_button").hide();
+    } else {
+      $("#archive_survey_button").show();
+      $("#unarchive_survey_button").hide();
+    }
+  }
   $(".archive_radio").on("click",function(){
     console.dir(this.value);
     if(this.value=="show_archive"){
@@ -347,16 +357,31 @@
     });
     
     
+    $("#unarchive_survey_button").on("click",function(){
+      if($("#survey_select").val()==null){
+        alert("Please select a survey to unarchive");
+      } else {
+        archived_survey = $("#survey_select").val();
+        // contact server to create new structure
+        $.post(
+          "Unarchive_Survey.php",
+          {
+            archived_survey: archived_survey
+          },
+          function(returned_data){
+            console.dir(returned_data);
+            
+          }
+        );
+      }
+    });
+
     
     $("#archive_survey_button").on("click",function(){
       if($("#survey_select").val()==null){
-        
         alert("Please select a survey to archive");
-        
       } else {
-        
         archived_survey = $("#survey_select").val();
-
         // contact server to create new structure
         $.post(
           "Archive_Survey.php",
@@ -368,11 +393,7 @@
             
           }
         );
-      
       }
-
-    
-      
     });
     
     
@@ -382,6 +403,8 @@
         $("#interface").show();
         
         sheet_selection_function();
+        
+        archive_unarchive_buttons_show_hide(this.value);
        
         // continue updating the rest of the interface...
     });
