@@ -1,1 +1,1 @@
-deletingFile.csv,
+deletingFile.csv,deletable.csv,deleting.csv,deleted.csv,deleteeable.csv,new_survey.csv,new_name_blah.csv,

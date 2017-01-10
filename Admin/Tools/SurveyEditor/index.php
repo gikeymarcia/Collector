@@ -133,9 +133,13 @@
       if(archived_surveys.indexOf(current_survey) !== -1){
         $("#unarchive_survey_button").show();
         $("#archive_survey_button").hide();
+        $("#delete_survey_button").show();
+        
       } else {
         $("#archive_survey_button").show();
         $("#unarchive_survey_button").hide();
+        $("#delete_survey_button").hide();
+        
       }
     }
   
@@ -359,24 +363,34 @@
           alert("Please select a survey to copy from");
           
         } else {
-
-          // contact server to create new structure
-          $.post(
-            "AjaxCopySurvey.php",
-            {
-              new_name: new_name,
-              old_survey: old_survey
-            },
-            function(returned_data){
-              console.dir(returned_data);
-              
-              if (returned_data === 'success') {
-                create_new_experiment(new_name);
+          console.dir(new_name);
+          if(new_name == ""){ 
+            
+          } else {
+          
+            // checks here that name is acceptable assuming they are:
+          
+              survey_files.push(new_name+".csv"); // unless they were giving an unnacceptable name
+            update_survey_span();
+          
+            // contact server to create new structure
+            $.post(
+              "AjaxCopySurvey.php",
+              {
+                new_name: new_name,
+                old_survey: old_survey
+              },
+              function(returned_data){
+                console.dir(returned_data);
+                
+                if (returned_data === 'success') {
+                  create_new_experiment(new_name);
+                }
               }
-            }
-          );
-        
+            );
+          }
         }
+        
       }
       
       
@@ -404,7 +418,7 @@
       archived_surveys.splice(splice_index,1);
       $("#unarchive_survey_button").hide();
       $("#archive_survey_button").show();
-      $("#delete_survey_button").show();
+      $("#delete_survey_button").hide();
       update_survey_span();
 
     });
@@ -446,10 +460,20 @@
             deleted_survey: deleted_survey
           },
           function(returned_data){
-            console.dir(returned_data);
-            
+            console.dir(returned_data);            
           }
+          
         );
+        var archive_splice_index = archived_surveys.indexOf(deleted_survey);
+        archived_surveys.splice(archive_splice_index,1);
+
+        var delete_splice_index = survey_files.indexOf(deleted_survey);
+        survey_files.splice(delete_splice_index,1);
+          
+        update_survey_span('<option value="" hidden disabled selected>Select a Survey</option>');
+        $("#survey_name").val("");
+        $("#sheetArea").hide();
+
       }
     });
 
@@ -493,6 +517,7 @@
       } else {
         load_spreadsheet(spreadsheets[survey_name]);
       }
+      $("#sheetArea").show();
     }
     
     
