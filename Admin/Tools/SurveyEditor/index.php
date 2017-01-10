@@ -65,20 +65,8 @@
 
 <div id="load_toolbar">
   <button type="button" id="new_survey_button" class="collectorButton">New Survey</button>
-  
-  <select id="survey_select">
-    <option value="" hidden disabled selected>Select a Survey</option>
-    <?php    
-    foreach ($surveys as $survey){
-      if(in_array($survey,$archived_surveys)){
-        echo "<option class='archived_survey'>$survey</option>";
-      } else {
-        echo "<option>$survey</option>";
-      }
-    }
-    ?>
-  </select>
-  
+  <span id="survey_span">    
+  </span>
   
   <button type="button" id="copy_survey_button" class="collectorButton">Copy</button>
   <button type="button" id="archive_survey_button" class="collectorButton">Archive</button>
@@ -96,15 +84,61 @@
 
 <script>
 
-  function archive_unarchive_buttons_show_hide(current_survey){
-    if(archived_surveys.indexOf(current_survey) !== -1){
-      $("#unarchive_survey_button").show();
-      $("#archive_survey_button").hide();
-    } else {
-      $("#archive_survey_button").show();
-      $("#unarchive_survey_button").hide();
+  
+  var survey_files = <?= json_encode($surveys) ?>;
+  console.dir(survey_files);
+  var archived_surveys = <?= $archived_surveys_json ?>;
+  console.dir(archived_surveys);
+
+  
+  update_survey_span('<option value="" hidden disabled selected>Select a Survey</option>');
+  
+  function update_survey_span(default_option){
+    var current_survey = $("#survey_select").val();
+    survey_span_content = "<select id='survey_select'>"+default_option;
+    for(i=0; i<survey_files.length;i++){
+      
+      //$("input[name=show_hide_archive]:checked").val()== "show_archive"
+      
+      
+      if(archived_surveys.indexOf(survey_files[i]) == -1){ 
+        survey_span_content += "<option>"+survey_files[i]+"</option>";
+      } else {
+        if($("input[name=show_hide_archive]:checked").val()== "show_archive"){
+          survey_span_content += "<option class='archived_survey' style='display:initial'>"+survey_files[i]+"</option>"; 
+        } else {
+          survey_span_content += "<option class='archived_survey' >"+survey_files[i]+"</option>"; 
+          
+        }
+      }
     }
+    survey_span_content += "</select>";
+    $("#survey_span").html(survey_span_content);
+    $("#survey_select").val(current_survey);
+    $("#survey_select").on("change",function(){
+        $("#survey_name").val(this.value);
+        $("#interface").show();
+        
+        sheet_selection_function();
+        
+        archive_unarchive_buttons_show_hide(this.value);
+       
+        // continue updating the rest of the interface...
+    });
+    
   }
+
+
+  function archive_unarchive_buttons_show_hide(current_survey){
+      if(archived_surveys.indexOf(current_survey) !== -1){
+        $("#unarchive_survey_button").show();
+        $("#archive_survey_button").hide();
+      } else {
+        $("#archive_survey_button").show();
+        $("#unarchive_survey_button").hide();
+      }
+    }
+  
   $(".archive_radio").on("click",function(){
     console.dir(this.value);
     if(this.value=="show_archive"){
@@ -137,10 +171,7 @@
 <div> <?php require("HelperBar.php"); ?> </div>
   
   <script>
-  
-    var archived_surveys = <?= $archived_surveys_json ?>;
-    console.dir(archived_surveys);
-  
+
     var handsOnTable;
     
     function createExpEditorHoT(data) {
@@ -279,10 +310,6 @@
       
     }
   
-    var survey_files = <?= json_encode($surveys) ?>;
-    console.dir(survey_files);
-  
-    
     
     stim_list_options="<option></option>"
     
@@ -349,10 +376,8 @@
           );
         
         }
-
-        
-        // add new_experiment_data to survey_files for new experiment name
       }
+      
       
     });
     
@@ -374,6 +399,12 @@
           }
         );
       }
+      var splice_index = archived_surveys.indexOf(archived_survey);
+      archived_surveys.splice(splice_index,1);
+      $("#unarchive_survey_button").hide();
+      $("#archive_survey_button").show();
+      update_survey_span();
+
     });
 
     
@@ -382,6 +413,7 @@
         alert("Please select a survey to archive");
       } else {
         archived_survey = $("#survey_select").val();
+        console.dir(archived_survey);
         // contact server to create new structure
         $.post(
           "Archive_Survey.php",
@@ -393,21 +425,17 @@
             
           }
         );
+        archived_surveys.push(archived_survey)
+        $("#unarchive_survey_button").show();
+        $("#archive_survey_button").hide();
+        update_survey_span();
       }
+      
     });
     
     
     
-    $("#survey_select").on("change",function(){
-        $("#survey_name").val(this.value);
-        $("#interface").show();
-        
-        sheet_selection_function();
-        
-        archive_unarchive_buttons_show_hide(this.value);
-       
-        // continue updating the rest of the interface...
-    });
+    
     
     $("#save_btn").on("click", save_current_sheet);
     

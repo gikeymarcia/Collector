@@ -6,7 +6,7 @@
     file_put_contents("archived_files.txt",$archived_survey);
   } else {
     $archived_files = file_get_contents("archived_files.txt");
-    $archived_files += ",$archived_survey";
+    $archived_files .= "$archived_survey,";
     file_put_contents("archived_files.txt",$archived_files);    
   }
   
