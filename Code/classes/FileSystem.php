@@ -232,4 +232,19 @@ class FileSystem
             $throw_exception_when_path_is_incomplete
         );
     }
+    
+    public function get_columns(
+        $source,
+        $path_vars = array(),
+        $throw_exception_when_path_is_incomplete = true
+    ) {
+        return $this->access(
+            $source,
+            'get_columns',
+            null,
+            null,
+            $path_vars,
+            $throw_exception_when_path_is_incomplete
+        );
+    }
 }

@@ -193,4 +193,15 @@ abstract class fsDataType_CSV extends fsDataType_Abstract
         fclose($file_stream);
         return $written;
     }
+    
+    public static function get_columns($path) {
+        if (!is_file($path)) return array();
+
+        $file_stream = fopen($path, 'r');
+
+        $columns = self::read_row($file_stream);
+
+        fclose($file_stream);
+        return $columns;
+    }
 }
