@@ -115,26 +115,27 @@
         // Conditions
         $("#conditionsArea").html("");
         var container = $("<div>").appendTo($("#conditionsArea"))[0];
-        handsOnTable = createHoT(container, JSON.parse(JSON.stringify(sheet)));        
+        handsOnTable_Conditions = createHoT(container, JSON.parse(JSON.stringify(sheet)));        
       }
       if(selected_handsonTable == "Stimuli"){
         // Stim
         $("#stimsArea").html("");
         var container = $("<div>").appendTo($("#stimsArea"))[0];
-        handsOnTable = createHoT(container, JSON.parse(JSON.stringify(sheet)));        
+        handsOnTable_Stimuli = createHoT(container, JSON.parse(JSON.stringify(sheet)));        
       }
       if(selected_handsonTable == "Procedure"){
         // Proc
         $("#procsArea").html("");
         var container = $("<div>").appendTo($("#procsArea"))[0];
-        handsOnTable = createHoT(container, JSON.parse(JSON.stringify(sheet)));
+        handsOnTable_Procedure = createHoT(container, JSON.parse(JSON.stringify(sheet)));
         
       }
         
     }
     
-    function get_HoT_data() {
-        var data = JSON.parse(JSON.stringify(handsOnTable.getData()));
+    function get_HoT_data(current_sheet) {
+        
+        var data = JSON.parse(JSON.stringify(current_sheet.getData()));
         
         // remove last column and last row
         data.pop();

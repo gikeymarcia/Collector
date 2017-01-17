@@ -107,14 +107,14 @@
             <label>
               
               
-              <input class='show_hide_checkbox show_hide_checkboxes show_hide_button' type='checkbox' id='hide_show_".$hide_show_element."_check' name='hide_show_check' value='$hide_show_element' checked>
+              <input class='show_hide_checkbox show_hide_button' type='checkbox' id='hide_show_".$hide_show_element."_check' name='hide_show_check' value='$hide_show_element' checked>
               <span id='show_hide_check_unselect_$hide_show_element' class='show_hide_span'>Include</span>
             </label>
           </td>
           <td>
             <label>
             
-              <input class='hide_show_radio_choices ' type='radio' id='hide_show_".$hide_show_element."_radio' name='hide_show_radio' value='$hide_show_element'>
+              <input class='hide_show_radio_choices show_hide_button' type='radio' id='hide_show_".$hide_show_element."_radio' name='hide_show_radio' value='$hide_show_element'>
               <span id='show_hide_radio_select_$hide_show_element' class='show_hide_span'>Only</span>
             </label>
           </td>
@@ -133,20 +133,18 @@
     
     
     $(".show_hide_button").on("change",function(){
-      console.dir(this.type);
+      
       if (this.type === "radio"){
         $(".show_hide_checkbox").prop("checked",false);
-        console.dir("hello world");
+        
         
         $(this).closest("tr").find("input[type='checkbox']").
         prop("checked",true);
         
       }
-      $(".show_hide_checkboxes").each(function(){
+      $(".show_hide_checkbox").each(function(){
         var target = $("#" + this.value);
         
-        console.dir(this.value);
-        console.dir(this);
         
         if(this.checked){
           target.show();
@@ -252,19 +250,7 @@ $("#helpActivateButton").on("click",function(){
 //importing json encoded lists from php
 var surveyVector=<?=$jsonSurveyVector?>;
 
-//removing the current study's name from the list (because this list is to prevent duplication)
-// studyIndex=listStudyNames.indexOf(currSurveyName.value);
-// listStudyNames.splice(studyIndex,1);
 
-// Checks for preventing repeating study names
-
-
-
-//checks for preventing repeating sheet names
-
-
-
-// var perVar = {}; - probably can delete
 
 function helperActivate(columnName, cellValue){
   $("#helpType").html(columnName);

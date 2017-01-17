@@ -94,6 +94,7 @@
 </tr></table> -->
 
 <div id="TrialTypes" class="hide_show_elements">
+  <select id="trial_type_select"></select>
     <div id="trial_type_data" class="custom_table">
         <div> <div>Trial Type</div> <div>Template</div> <div>Scoring</div> <div>Prepare Inputs</div> </div>
     </div>
@@ -114,6 +115,15 @@ var server_paths = {
     media_path: '<?= $media_path ?>',
     root_path:  '<?= $root_path ?>',
 };
+
+upate_trialtype_select();
+function upate_trialtype_select(){
+   $("#trial_type_select").html(
+    "<option>" + Object.keys(trial_types).join("</option><option>") + "</option>"
+   ); 
+}
+
+
 
 
 // use the normal Experiment object as a prototype so we can modify
@@ -178,8 +188,13 @@ function exp_is_ready_to_simulate() {
 
 
 function get_exp_data() {
-    var stim = get_table_data($("#stim_data")[0]);
-    var proc = get_table_data($("#proc_data")[0]);
+  
+    var stim = get_HoT_data(handsOnTable_Stimuli); // 
+    stim = associate_data(stim_data);
+    
+    var proc = get_HoT_data(handsOnTable_Procedure); // 
+    proc = associate_data(proc_data);
+    
     var glob = {
         position: [0,0]
     };
