@@ -95,12 +95,20 @@
 
 <div id="TrialTypes" class="hide_show_elements">
   <select id="trial_type_select"></select>
+  <select id="trial_type_file_select">
+    <option value='template'>Template</option>
+    <option value='scoring'>Scoring</option>
+    <option value='prepare_inputs'>Prepare Inputs</option>
+ </select>
+  
     <div id="trial_type_data" class="custom_table">
         <div> <div>Trial Type</div> <div>Template</div> <div>Scoring</div> <div>Prepare Inputs</div> </div>
     </div>
 </div>
 
 <script>
+
+
 // set up default information for the experiment object to use
 var User_Data = {
     Username:   "Admin",
@@ -118,9 +126,12 @@ var server_paths = {
 
 upate_trialtype_select();
 function upate_trialtype_select(){
-   $("#trial_type_select").html(
-    "<option>" + Object.keys(trial_types).join("</option><option>") + "</option>"
-   ); 
+  $("#trial_type_select").html(
+  "<option>" + Object.keys(trial_types).join("</option><option>") + "</option>"
+  ); 
+  var current_trial_type = $("trial_type_select").val();
+  show_trial_type(current_trial_type,"template");
+
 }
 
 
@@ -238,12 +249,17 @@ for (var trial_type in trial_types) {
         
         if (val === null) val = '';
         
-        row.append("<div class='textareaDiv'><textarea>" + val.replace(/</g, '&lt;') + "</textarea></div>");
+        row.append("<div class='textareaDiv' id='"+trial_type+file+"_id'><textarea>" + val.replace(/</g, '&lt;') + "</textarea></div>");
     }
     
     $("#trial_type_data").append(row);
 }
 
+
+function show_trial_type(trial_type,file){
+  //$("#trial_type_data > div > div").hide();
+  $("#"+trial_type+file+"_id").hide();
+}
 
 // Sample Data
 var raw_stim_data = [
