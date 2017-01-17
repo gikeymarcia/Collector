@@ -26,6 +26,7 @@
   #helpTypeDefault { display: block; }
   
   #helperBar {
+    position: fixed;
     display: inline-block;
     width: 20%;
     background-color: #EFE;
@@ -34,7 +35,7 @@
     box-sizing: border-box;
     padding: 10px;
     vertical-align: top;
-    margin-top: 180px;
+    margin-top: 80px ;
   }
   
   #TableForm {
@@ -48,60 +49,67 @@
   .typeHeader:hover{
     color:green ;
   }
+  #minHelpButton{
+    position:fixed;
+    right: 100px;
+    font-size:15px;
+  }
 </style>
 
 
 <!-- the helper bar !-->
   
 <div id="helperBar">
-  <h1> Helper </h1>
-  <h2 id="helpType">Select Cell</h2>
-  
-  <!-- Help Types -->
-  <div class="helpType_Col" id="helpType_Description">
-    This is what the name of the conditions the participant/experimentor will be able to see when loading an experiment.
+  <button id="minHelpButton" class="collectorButton"> _ </button>
+  <button class="collectorButton" id="helpActivateButton" style="display:none"> Help! </button>
+  <div id="helperArea">
+    <h1> Helper </h1>
+    <h2 id="helpType">Select Cell</h2>
     
-  </div>
-  
-  <div class="helpType_Col" id="helpType_Notes">
-    Write notes here. The participants will not be able to see these.
-    
-  </div>
-  
-  <div class="helpType_Col" id="helpType_Stimuli1">
-    Identify which <b>Stimuli</b> sheet you will be referring to in the procedure.
-    
-  </div>
-
-  <div class="helpType_Col" id="helpType_Procedure1">
-    Identify which <b>Procedure</b> sheet you are running for this condition.
-    
-  </div>
-  
-  
-  
-
-  <div class="helpType_Col" id="helpType_Type">
-    <?php
-      $surveyTypes=fsDataType_CSV::read("surveyTypes.csv"); //not working
-      $surveyTypes=array_slice($surveyTypes,2);
+    <!-- Help Types -->
+    <div class="helpType_Col" id="helpType_Description">
+      This is what the name of the conditions the participant/experimentor will be able to see when loading an experiment.
       
-      $surveyTypeVector=[];
-      foreach($surveyTypes as $surveyType){
-        array_push($surveyTypeVector,$surveyType["surveyType"]);
-        ?>
-        <h3 class="typeHeader" id='header<?=$surveyType["surveyType"]?>' onclick='hideShow("detail<?=$surveyType["surveyType"]?>")'><?=$surveyType["surveyType"]?></h3>
-        <div id='detail<?=$surveyType["surveyType"]?>' style='display:none'><?=$surveyType["surveyDetail"]?></div>
-        <?php
-      }
-        $jsonSurveyVector=json_encode($surveyTypeVector);
-    ?>
-  </div>
+    </div>
+    
+    <div class="helpType_Col" id="helpType_Notes">
+      Write notes here. The participants will not be able to see these.
+      
+    </div>
+    
+    <div class="helpType_Col" id="helpType_Stimuli1">
+      Identify which <b>Stimuli</b> sheet you will be referring to in the procedure.
+      
+    </div>
 
+    <div class="helpType_Col" id="helpType_Procedure1">
+      Identify which <b>Procedure</b> sheet you are running for this condition.
+      
+    </div>
   
-  <div class="helpType_Col" id="helpTypeDefault">
-    Select a cell to see more information about that column.
-  </div>
+    <div class="helpType_Col" id="helpType_Type">
+      <?php
+        $surveyTypes=fsDataType_CSV::read("surveyTypes.csv"); //not working
+        $surveyTypes=array_slice($surveyTypes,2);
+        
+        $surveyTypeVector=[];
+        foreach($surveyTypes as $surveyType){
+          array_push($surveyTypeVector,$surveyType["surveyType"]);
+          ?>
+          <h3 class="typeHeader" id='header<?=$surveyType["surveyType"]?>' onclick='hideShow("detail<?=$surveyType["surveyType"]?>")'><?=$surveyType["surveyType"]?></h3>
+          <div id='detail<?=$surveyType["surveyType"]?>' style='display:none'><?=$surveyType["surveyDetail"]?></div>
+          <?php
+        }
+          $jsonSurveyVector=json_encode($surveyTypeVector);
+      ?>
+    </div>
+
+    
+    <div class="helpType_Col" id="helpTypeDefault">
+      Select a cell to see more information about that column.
+    </div>
+  </div>  
+
   
 </div>
 
@@ -129,6 +137,18 @@ function hideShow(x){
     $('#'+x).show();
   }
 }
+
+$("#minHelpButton").on("click",function(){
+  $("#minHelpButton").hide();
+  $("#helperArea").hide();
+  $("#helpActivateButton").show();
+});
+
+$("#helpActivateButton").on("click",function(){
+  $("#minHelpButton").show();
+  $("#helperArea").show();
+  $("#helpActivateButton").hide();
+});
 
 //importing json encoded lists from php
 var surveyVector=<?=$jsonSurveyVector?>;
