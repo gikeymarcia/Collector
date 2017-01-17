@@ -43,15 +43,15 @@
         
     .custom_table { display: table; margin: auto; border-collapse: collapse; }
     .custom_table > div { display: table-row; }
-    .custom_table > div > div { display: table-cell; padding: 2px 4px; border: 1px solid #999; max-width: 320px; vertical-align: top; }
+    .custom_table > div > div { display: table-cell; padding: 2px 4px; max-width: 320px; vertical-align: top; }
     
-    .custom_table > div > .textareaDiv { padding: 0; width: 500px; max-width: 1200px; }
+    .custom_table > div > .textareaDiv { padding: 10px; width: 500px; max-width: 1200px; height: 20em; }
     .custom_table > div > .textareaDiv > textarea {
         padding: 1px;
         width: 100%;
         min-width: 100%;
         max-width: 100%;
-        height: 5em;
+        height: 20em;
         box-sizing: border-box;
         border: 0; margin: 0;
         vertical-align: bottom;
@@ -62,6 +62,10 @@
     .custom_table > div.headers > div { text-align: center; font-weight: bold; }
     
     #exp_data td { text-align: center; padding: 15px; }
+    #trial_type_selectors {
+      text-align:center;
+      
+    }
 </style>
 
 <div id="ExperimentContainer" class="hide_show_elements">Select your stim and proc files below to start the stimulation.</div>
@@ -94,19 +98,28 @@
 </tr></table> -->
 
 <div id="TrialTypes" class="hide_show_elements">
-  <select id="trial_type_select"></select>
-  <select id="trial_type_file_select">
-    <option value='template'>Template</option>
-    <option value='scoring'>Scoring</option>
-    <option value='prepare_inputs'>Prepare Inputs</option>
- </select>
   
+  <div id="trial_type_selectors">
+    <select id="trial_type_select"></select>
+    <select id="trial_type_file_select">
+      <option value='template'>Template</option>
+      <option value='scoring'>Scoring</option>
+      <option value='prepare_inputs'>Prepare Inputs</option>
+   </select>
+  </div>
     <div id="trial_type_data" class="custom_table">
         <div> <div>Trial Type</div> <div>Template</div> <div>Scoring</div> <div>Prepare Inputs</div> </div>
     </div>
 </div>
 
 <script>
+
+  $("#trial_type_select,#trial_type_file_select").on("change",function(){
+    var trial_type = $("#trial_type_select").val();
+    var file = $("#trial_type_file_select").val();
+    
+    show_trial_type(trial_type,file);
+  });
 
 
 // set up default information for the experiment object to use
@@ -124,12 +137,12 @@ var server_paths = {
     root_path:  '<?= $root_path ?>',
 };
 
-upate_trialtype_select();
+
 function upate_trialtype_select(){
   $("#trial_type_select").html(
   "<option>" + Object.keys(trial_types).join("</option><option>") + "</option>"
   ); 
-  var current_trial_type = $("trial_type_select").val();
+  var current_trial_type = $("#trial_type_select").val();
   show_trial_type(current_trial_type,"template");
 
 }
@@ -257,9 +270,14 @@ for (var trial_type in trial_types) {
 
 
 function show_trial_type(trial_type,file){
-  //$("#trial_type_data > div > div").hide();
-  $("#"+trial_type+file+"_id").hide();
+  $("#trial_type_data > div > div").hide();
+  console.dir(trial_type);
+  console.dir(file);
+  $("#"+trial_type+file+"_id").show();
 }
+
+upate_trialtype_select();
+
 
 // Sample Data
 var raw_stim_data = [
