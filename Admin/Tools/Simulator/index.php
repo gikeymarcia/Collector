@@ -170,7 +170,7 @@ $("#stim_data, #proc_data, #trial_type_data").on("change input", "div", function
  
 $("#run_button").on("click", function() {
     // check to make sure that a stim and proc file have been selected before trying to simulate an experiment
-    if (!exp_is_ready_to_simulate()) return;
+    //if (!exp_is_ready_to_simulate()) return;
     
     simulate_experiment();
 });
@@ -190,10 +190,10 @@ function exp_is_ready_to_simulate() {
 function get_exp_data() {
   
     var stim = get_HoT_data(handsOnTable_Stimuli); // 
-    stim = associate_data(stim_data);
+    stim = associate_data(stim);
     
     var proc = get_HoT_data(handsOnTable_Procedure); // 
-    proc = associate_data(proc_data);
+    proc = associate_data(proc);
     
     var glob = {
         position: [0,0]
