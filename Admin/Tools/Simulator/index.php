@@ -12,7 +12,10 @@
     //setting up varialbes new Experiment.js needs
     $media_path = $_FILES->get_path("Media Dir");
     $root_path  = $_FILES->get_path("Root");
-?>
+
+    require("../ExperimentEditor/LoadExperiment.php");
+    
+    ?>
 
 <style>
     #ToolsNavBar { margin: 0; }
@@ -61,11 +64,13 @@
     #exp_data td { text-align: center; padding: 15px; }
 </style>
 
-<div id="ExperimentContainer">Select your stim and proc files below to start the stimulation.</div>
+<div id="ExperimentContainer" class="hide_show_elements">Select your stim and proc files below to start the stimulation.</div>
 
 <div class="textcenter"><button type="button" id="run_button">Run Simulation</button></div>
 
-<table id="exp_data"><tr>
+<?php require ("../ExperimentEditor/index.php"); ?>
+
+<!-- <table id="exp_data"><tr>
     <td id="stim_area">
         <select id="stim_select">
             <option>Stimuli</option>
@@ -86,9 +91,9 @@
         <select style="visibility: hidden"><option>Select</option></select>
         <div id="resp_data" class="custom_table"></div>
     </td>
-</tr></table>
+</tr></table> -->
 
-<div id="trial_types_area">
+<div id="TrialTypes" class="hide_show_elements">
     <div id="trial_type_data" class="custom_table">
         <div> <div>Trial Type</div> <div>Template</div> <div>Scoring</div> <div>Prepare Inputs</div> </div>
     </div>

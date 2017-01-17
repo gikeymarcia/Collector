@@ -1,85 +1,3 @@
-<?php
-  
-/*
-   Experiment Editor:
-   -Open and view all stimuli and procedure files for every experiment
-   -Open condition sheet
-   -change contents of sheet
-   -copy/rename/delete sheets
-   
-   -start by scanning all experiments to find all sheets
-   -display list of experiments
-   -after experiment is selected, display list of sheets inside that experiment
-   -alternatively, let them create a new exp
-   -can open sheets, or copy to new sheet and start editing that
-   -can also copy experiment to edit that
- */
-
-  require "../../initiateTool.php";
-  require 'fileReadingFunctions.php';
-  
-
-  
-  $experiments = get_Collector_experiments($_FILES);
-  
-  $experiment_files = array();
-  
-  foreach ($experiments as $exp) {
-    $_FILES->set_default('Current Experiment', $exp);
-    $experiment_files[$exp]['Conditions'] = read_csv_raw($_FILES->get_path('Conditions'));
-    $experiment_files[$exp]['Stimuli']    = $_FILES->read('Stimuli Dir');
-    $experiment_files[$exp]['Procedures'] = $_FILES->read('Procedure Dir');
-  }
-  
-  $new_exp_json = file_get_contents('default_new_experiment.json');
-?>
-
-<style>
-  #interface{
-    display:none;
-  }
-
-  .condOption         { background-color: #DFD; }
-  .stimOptions        { background-color: #BBF; }
-  .stimOptions option { background-color: #DDF; }
-  .procOptions        { background-color: #FBB; }
-  .procOptions option { background-color: #FDD; }
-  
-  #helperBar {
-    position: absolute;
-    left: 75%;
-    top: 0%;
-    display: inline-block;
-    width: 20%;
-    background-color: #EFE;
-    border: 2px solid #6D6;
-    border-radius: 8px;
-    box-sizing: border-box;
-    padding: 10px;
-    vertical-align: top;
-    margin-top: 180px;
-  }
-  
-</style>
-
-<script src="../HandsontableFunctions.js"></script>
-
-<script>
-  var new_experiment_data = <?= $new_exp_json ?>;
-</script>
-
-<div id="load_toolbar">
-  <button type="button" id="new_experiment_button" class="collectorButton">New Experiment</button>
-  
-  <select id="experiment_select">
-    <option value="" hidden disabled selected>Select an experiment</option>
-    <?php 
-    foreach ($experiments as $experiment){
-      echo "<option>$experiment</option>";
-    }
-    ?>
-  </select>
-</div>
 
 <div id="rest_of_interface">  
 </div>
@@ -88,19 +6,99 @@
 <link rel="stylesheet" href="../handsontables/handsontables.full.css">
 <script src="../handsontables/handsontables.full.js"></script>
 
-  
+ 
+
+<table id="exp_data">
+  <tr>
+    <div id="Conditions" class="hide_show_elements"> 
+      <h3>Conditions</h3>
+      <div id="conditionsArea">
+        <div id="sheetTable"></div>
+      </div>
+    </div>
+  </tr>
+  <tr>
+    <td id="Stimuli" class="hide_show_elements">
+      <h3>Stimuli</h3>
+      <span id="stim_select"></span>
+      <button type="button" id="new_stim_button" class="collectorButton">New Stimuli Sheet</button>
+
+        
+      <span id="stimsArea">
+        <div id="stimsheetTable"></div> 
+      </span>
+
+    </td>
+    
+    <td id="Procedure" class="hide_show_elements">
+      <h3>Procedure</h3>
+      <span id="proc_select"></span>
+      <button type="button" id="new_proc_button" class="collectorButton">New Procedure Sheet</button>
+    
+      <span id="procsArea">
+      <div id="procSheetTable"></div>
+      </span>
+    </td>
+    
+    <td id="resp_area">
+        <select style="visibility: hidden"><option>Select</option></select>
+        <div id="resp_data" class="custom_table"></div>
+    </td>
+  </tr>
+</table>
+
+ 
 <div id="interface">
-  <input type="text" id="experiment_name" placeholder="Experiment Name">
-  <br>
-  <select id="spreadsheet_selection"></select>
-  <br>
-  <button type="button" id="new_stim_button" class="collectorButton">New Stimuli Sheet</button>
-  <button type="button" id="new_proc_button" class="collectorButton">New Procedure Sheet</button>
-  <div><button id="save_btn" class="collectorButton">Save Current Sheet</button></div>
-  <div id="sheetArea">
-    <div id="sheetTable"></div>
+  
+  
+  
+  <div id="stim_proc_area">
+    
+    
+    
   </div>
 </div>
+
+<script>
+
+  var experiment_files = <?= json_encode($experiment_files) ?>;
+
+  $("#experiment_select").on("change",function(){
+    current_stim_list = experiment_files[this.value]['Stimuli'];
+    var stim_select_span = "<select id='stim_select_select'>";
+    for(i=0; i<current_stim_list.length;i++){
+      stim_select_span += "<option>"+current_stim_list[i]+"</option>";
+    }
+    stim_select_span += "</select>";
+    $("#stim_select").html(stim_select_span);
+    $("#stim_select_select").on("change",function(){
+      stim_proc_selection("Stimuli",this.value);
+    });
+    
+
+    current_proc_list = experiment_files[this.value]['Procedures'];
+    var proc_select_span = "<select id='proc_select_select'>";
+    for(i=0; i<current_proc_list.length;i++){
+      proc_select_span += "<option>"+current_proc_list[i]+"</option>";
+    }
+    proc_select_span += "</select>";
+    
+    
+    $("#proc_select").html(proc_select_span);
+    $("#proc_select_select").on("change",function(){
+      stim_proc_selection("Procedure",this.value);
+    });
+
+           
+    stim_proc_selection("Conditions","Conditions.csv");
+    stim_proc_selection("Stimuli",current_stim_list[0]); //  auto open first file in stim list
+    stim_proc_selection("Procedure",current_proc_list[0]); //  auto open first file in proc list
+    
+  });
+
+
+</script>
+ 
 
 <div> <?php require("HelperBar.php"); ?> </div>
 
@@ -109,11 +107,30 @@
   
     var handsOnTable;
     
-    function createExpEditorHoT(data) {
-        $("#sheetArea").html("");
-        var container = $("<div>").appendTo($("#sheetArea"))[0];
+    
+    function createExpEditorHoT(sheet,selected_handsonTable) {
+      
+      
+      if(selected_handsonTable == "Conditions"){
+        // Conditions
+        $("#conditionsArea").html("");
+        var container = $("<div>").appendTo($("#conditionsArea"))[0];
+        handsOnTable = createHoT(container, JSON.parse(JSON.stringify(sheet)));        
+      }
+      if(selected_handsonTable == "Stimuli"){
+        // Stim
+        $("#stimsArea").html("");
+        var container = $("<div>").appendTo($("#stimsArea"))[0];
+        handsOnTable = createHoT(container, JSON.parse(JSON.stringify(sheet)));        
+      }
+      if(selected_handsonTable == "Procedure"){
+        // Proc
+        $("#procsArea").html("");
+        var container = $("<div>").appendTo($("#procsArea"))[0];
+        handsOnTable = createHoT(container, JSON.parse(JSON.stringify(sheet)));
         
-        handsOnTable = createHoT(container, JSON.parse(JSON.stringify(data)));
+      }
+        
     }
     
     function get_HoT_data() {
@@ -151,6 +168,7 @@
              + '/' 
              + $("#spreadsheet_selection").val();
     }
+    
     
     function custom_alert(msg) {
         create_alerts_container();
@@ -207,7 +225,7 @@
         var file = get_current_sheet_path();
         
         $.post(
-            'saveSpreadsheet.php',
+            '../ExperimentEditor/saveSpreadsheet.php',
             {
                 file: file,
                 data: data
@@ -274,9 +292,6 @@
       update_spreadsheet_selection();
     }
   
-    var experiment_files = <?= json_encode($experiment_files) ?>;
-  
-    
     
     stim_list_options="<option></option>"
     
@@ -289,7 +304,7 @@
       } else {
         // contact server to create new structure
         $.post(
-          "AjaxNewExperiment.php",
+          "../ExperimentEditor/AjaxNewExperiment.php",
           {
             new_name: new_name
           },
@@ -305,8 +320,20 @@
         // add new_experiment_data to experiment_files for new experiment name
       }
       
-      createExpEditorHoT(new_experiment_data['Conditions.csv']);
-      $("#sheet_name_header").val("Conditions");
+      var conditions_data = new_experiment_data['Conditions.csv'];
+      console.dir(new_experiment_data['Conditions.csv']);
+      var stim_data       = new_experiment_data['Stimuli']['Stimuli.csv']; // this needs to just open the first sheet in list
+      
+      console.dir(new_experiment_data['Stimuli']['Stimuli.csv']);
+      var proc_data       = new_experiment_data['Procedure']['Stimuli.csv']; // this needs to just open the first sheet in list
+      
+      console.dir(new_experiment_data['Procedure']['Procedure.csv']);
+      
+        
+      createExpEditorHoT(conditions_data,"Conditions");
+      createExpEditorHoT(stim_data,"Stimuli");      
+      createExpEditorHoT(proc_data,"Procedure");
+      
       $("#interface").show();
       
       
@@ -317,7 +344,7 @@
         $("#experiment_name").val(this.value);
         update_spreadsheet_selection();
         $("#interface").show();
-        
+         
         $("#spreadsheet_selection").val("Conditions.csv");
         $("#spreadsheet_selection").change();
         
@@ -328,16 +355,21 @@
     
     var spreadsheets = {};
     
-    $("#spreadsheet_selection").on("change", function() {
-      var exp_name = $("#experiment_name").val();
+    function stim_proc_selection(stim_proc,sheet_selected){
+      var exp_name = $("#experiment_select").val();
       
       if (typeof spreadsheets[exp_name] === "undefined")
         spreadsheets[exp_name] = {};
       
-      var sheet_name = this.value;
+      if(stim_proc == "Conditions"){
+        sheet_name = sheet_selected;
+      } else {
+        var sheet_name = stim_proc+"/"+sheet_selected;
+      }
+      console.dir(sheet_name);
       if (typeof spreadsheets[exp_name][sheet_name] === 'undefined') {
         $.get(
-          'spreadsheetAjax.php',
+          '../ExperimentEditor/spreadsheetAjax.php',
           {
             sheet: exp_name + '/' + sheet_name
           },
@@ -345,19 +377,27 @@
             if (spreadsheet_request_response.substring(0, 9) === 'success: ') {
               var data = spreadsheet_request_response.substring(9);
               spreadsheets[exp_name][sheet_name] = JSON.parse(data);
-              load_spreadsheet(spreadsheets[exp_name][sheet_name]);
+              load_spreadsheet(spreadsheets[exp_name][sheet_name],stim_proc);
+              console.dir(spreadsheets[exp_name][sheet_name]);
+              
+              
             } else {
               console.dir(spreadsheet_request_response);
             }
           }
         );
       } else {
-        load_spreadsheet(spreadsheets[exp_name][sheet_name]);
+        load_spreadsheet(spreadsheets[exp_name],stim_proc);
+      
       }
-    });
+    }
     
-    function load_spreadsheet(sheet) {
-      createExpEditorHoT(sheet);
+    function load_spreadsheet(sheet,selected_handsonTable) {
+      
+      // this function appears to be mostly redundant, and only relaying to another function
+      
+      createExpEditorHoT(sheet,selected_handsonTable);
+      
     }
   
   </script>
