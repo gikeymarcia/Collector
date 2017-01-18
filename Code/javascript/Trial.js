@@ -480,7 +480,11 @@ var Trial = {
         this.callback = callback;
         this.timeUp = timeUp;
         this.now = this.set_timer_function();
+        
+        window.Trial.all_timers.push(this);
     },
+    
+    all_timers: [],
 
 
     start_checking_focus: function() {

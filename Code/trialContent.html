@@ -7,6 +7,14 @@
 
 <script>
     function submit_form() {
+        var all_timers = window.Trial.all_timers;
+        
+        for (var i=0; i<all_timers.length; ++i) {
+            all_timers[i].stop();
+        }
+        
+        console.dir ("timers stopped: " + i);
+        
         var serialized_data = $("#content").serialize();
         var data = Trial.unserialize(serialized_data);
         var scored_data = Trial.scoring(data);
