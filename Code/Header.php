@@ -35,6 +35,7 @@
 <?php
     if (isset($added_scripts) && is_array($added_scripts)) {
         foreach ($added_scripts as $script_src) {
+          if (is_file($script_src)) $script_src .= "?m=" . filemtime($script_src);
           echo "<script src='{$script_src}'></script>";
         }
     }
