@@ -21,7 +21,7 @@
     #ToolsNavBar { margin: 0; }
     
     #ExperimentContainer {
-        height: 50%;
+        height: 100%;
         
         border: 0px solid black;
         border-width: 2px 0 2px;
@@ -39,6 +39,9 @@
         margin: 0;
         padding: 0;
         display: block;
+    }
+    #Preview {
+      height: 50%;
     }
         
     .custom_table { display: table; margin: auto; border-collapse: collapse; }
@@ -68,34 +71,13 @@
     }
 </style>
 
-<div id="ExperimentContainer" class="hide_show_elements">Select your stim and proc files below to start the stimulation.</div>
+<div id="Preview">
+  <div id="ExperimentContainer" class="hide_show_elements">Select your stim and proc files below to start the stimulation.</div>
 
-<div class="textcenter"><button type="button" id="run_button">Run Simulation</button></div>
-
+  <div class="textcenter"><button type="button" id="run_button">Run Simulation</button></div>
+</div>
+  
 <?php require ("ExperimentEditor/index.php"); ?>
-
-<!-- <table id="exp_data"><tr>
-    <td id="stim_area">
-        <select id="stim_select">
-            <option>Stimuli</option>
-        </select>
-        
-        <div id="stim_data" class="custom_table"></div>
-    </td>
-    
-    <td id="proc_area">
-        <select id="proc_select">
-            <option>Procedure</option>
-        </select>
-        
-        <div id="proc_data" class="custom_table"></div>
-    </td>
-    
-    <td id="resp_area">
-        <select style="visibility: hidden"><option>Select</option></select>
-        <div id="resp_data" class="custom_table"></div>
-    </td>
-</tr></table> -->
 
 <div id="TrialTypes" class="hide_show_elements">
   
@@ -107,9 +89,14 @@
       <option value='prepare_inputs'>Prepare Inputs</option>
    </select>
   </div>
-    <div id="trial_type_data" class="custom_table">
-        <div> <div>Trial Type</div> <div>Template</div> <div>Scoring</div> <div>Prepare Inputs</div> </div>
+  <div id="trial_type_data" class="custom_table">
+    <div> 
+      <div>Trial Type</div> 
+      <div>Template</div> 
+      <div>Scoring</div> 
+      <div>Prepare Inputs</div> 
     </div>
+  </div>
 </div>
 
 <script>

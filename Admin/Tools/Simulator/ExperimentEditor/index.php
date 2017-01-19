@@ -12,8 +12,8 @@
   <tr>
     <div id="Conditions" class="hide_show_elements"> 
       <h3>Conditions</h3>
-      <div id="conditionsArea">
-        <div id="sheetTable"></div>
+      <div id="conditionsArea"> Select study
+        <!-- <div id="sheetTable"></div> -->
       </div>
     </div>
   </tr>
@@ -258,6 +258,9 @@
       for(i=0;i<handsontables_list.length;i++){
         var data = JSON.stringify(get_HoT_data(handsontables_list[i]));
         
+        console.dir(selected_stim);
+        console.dir(selected_proc);
+        
         var file = get_current_sheet_path(handsontables_list[i],selected_stim,selected_proc);
         
         console.dir(file);
@@ -392,8 +395,8 @@
     });
     
     $("#save_btn").on("click", function(){
-      var current_stim_sheet = $("stim_select_select");
-      var current_proc_sheet = $("proc_select_select");
+      var current_stim_sheet = $("#stim_select_select").val();
+      var current_proc_sheet = $("#proc_select_select").val();
       save_current_sheet(current_stim_sheet,current_proc_sheet);
     });
     

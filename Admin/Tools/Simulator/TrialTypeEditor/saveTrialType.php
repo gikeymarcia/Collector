@@ -1,12 +1,12 @@
 <?php
 
-require '../../../initiateTool.php';
+require '../../initiateTool.php';
 ob_end_clean(); // no need to transmit useless data
 
 if (!isset($_POST['file'], $_POST['data'])) {
     exit('Missing filename or data');
 }
-
+/* 
 $file_path = strtr($_POST['file'], '\\', '/');
 
 if (strpos($file_path, '..') !== false) {
@@ -58,4 +58,5 @@ foreach ($data as $row) {
 
 fclose($file_resource);
 
-echo "<b>Success!</b> $file_path saved";
+echo '<b>Success!</b> File saved';
+ */
