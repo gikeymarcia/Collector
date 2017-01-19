@@ -83,22 +83,23 @@
       
       experiment_files[exp_name]["Stimuli"].push(file+".csv");
       
-      stim_proc_selection("Stimuli",file); // check
+      stim_proc_selection("Stimuli",file+".csv"); 
       
       $("#stim_select").val(file+".csv");
       
       //load_spreadsheet(stim_spreadsheet,"Stimuli");
+    } else if (filetype == "Procedure"){
+      $("#proc_select").append("<option>"+file+".csv</option>");
+      
+      experiment_files[exp_name]["Procedures"].push(file+".csv");
+      
+      stim_proc_selection("Procedure",file+".csv"); 
+      
+      $("#proc_select").val(file+".csv");
     } else {
-      if(filetype == "Procedure"){
-        $("#proc_select").append("<option>"+file+".csv</option>");
-        
-        experiment_files[exp_name]["Procedure"].push(file+".csv");
-        
-        $("#proc_select").val(file+".csv");
-      } else {
         // something has gone wrong
-      }
     }
+    
     
     
   }
