@@ -94,6 +94,21 @@
     stim_proc_selection("Stimuli",current_stim_list[0]); //  auto open first file in stim list
     stim_proc_selection("Procedure",current_proc_list[0]); //  auto open first file in proc list
     
+    
+    (function (){
+        
+      $("#stim_select_select, #proc_select_select").on("focus",function(){
+        
+        previous_stim = $("#stim_select_select").val();
+        previous_proc = $("#proc_select_select").val();
+      }).change(function(){
+        
+        save_current_sheet(previous_stim,previous_proc);      
+      
+      });
+      
+    })();
+    
   });
 
 
@@ -164,16 +179,16 @@
         return data;
     }
     
-    function get_current_sheet_path(sheet_type) {
+    function get_current_sheet_path(sheet_type,selected_stim,selected_proc) {
       var sheet_path;
       if(sheet_type == handsOnTable_Conditions){
         sheet_path = "Conditions.csv";
       }
       if(sheet_type == handsOnTable_Stimuli){
-        sheet_path = "Stimuli/"+$("#stim_select_select").val();
+        sheet_path = "Stimuli/"+selected_stim;
       }
       if(sheet_type == handsOnTable_Procedure){
-        sheet_path = "Procedure/"+$("#proc_select_select").val();        
+        sheet_path = "Procedure/"+selected_proc;        
       }
       
       
@@ -182,6 +197,8 @@
              + sheet_path;
     }
     
+    
+
     
     function custom_alert(msg) {
         create_alerts_container();
@@ -233,20 +250,15 @@
         alerts_ready = true;
     }
     
-    function save_current_sheet() {
+    function save_current_sheet(selected_stim,selected_proc) {
       // loop through all open sheets
       
       var handsontables_list = [handsOnTable_Conditions,handsOnTable_Stimuli,handsOnTable_Procedure];
-      
-      /* conditions_sheet = $("#conditionsArea").children()[0].id;
-      $("#stimsArea").children()[0].id
-      $("#procsArea").children()[0].id
-       */
-      
+            
       for(i=0;i<handsontables_list.length;i++){
         var data = JSON.stringify(get_HoT_data(handsontables_list[i]));
         
-        var file = get_current_sheet_path(handsontables_list[i]);
+        var file = get_current_sheet_path(handsontables_list[i],selected_stim,selected_proc);
         
         console.dir(file);
         
@@ -379,7 +391,11 @@
         // continue updating the rest of the interface...
     });
     
-    $("#save_btn").on("click", save_current_sheet);
+    $("#save_btn").on("click", function(){
+      var current_stim_sheet = $("stim_select_select");
+      var current_proc_sheet = $("proc_select_select");
+      save_current_sheet(current_stim_sheet,current_proc_sheet);
+    });
     
     var spreadsheets = {};
     
