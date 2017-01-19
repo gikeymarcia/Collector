@@ -1,6 +1,6 @@
 <?php
 
-require '../../initiateTool.php';
+require '../../../initiateTool.php';
 ob_end_clean(); // no need to transmit useless data
 ini_set('html_errors', false);
 require 'fileReadingFunctions.php';

@@ -13,7 +13,7 @@
     $media_path = $_FILES->get_path("Media Dir");
     $root_path  = $_FILES->get_path("Root");
 
-    require("../ExperimentEditor/LoadExperiment.php");
+    require("ExperimentEditor/LoadExperiment.php");
     
     ?>
 
@@ -72,7 +72,7 @@
 
 <div class="textcenter"><button type="button" id="run_button">Run Simulation</button></div>
 
-<?php require ("../ExperimentEditor/index.php"); ?>
+<?php require ("ExperimentEditor/index.php"); ?>
 
 <!-- <table id="exp_data"><tr>
     <td id="stim_area">

@@ -263,7 +263,7 @@
         console.dir(file);
         
         $.post(
-            '../ExperimentEditor/saveSpreadsheet.php',
+            'ExperimentEditor/saveSpreadsheet.php',
             {
                 file: file,
                 data: data
@@ -344,7 +344,7 @@
       } else {
         // contact server to create new structure
         $.post(
-          "../ExperimentEditor/AjaxNewExperiment.php",
+          "ExperimentEditor/AjaxNewExperiment.php",
           {
             new_name: new_name
           },
@@ -413,7 +413,7 @@
       console.dir(sheet_name);
       if (typeof spreadsheets[exp_name][sheet_name] === 'undefined') {
         $.get(
-          '../ExperimentEditor/spreadsheetAjax.php',
+          'ExperimentEditor/spreadsheetAjax.php',
           {
             sheet: exp_name + '/' + sheet_name
           },
