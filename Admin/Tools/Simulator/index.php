@@ -100,70 +100,6 @@
 </div>
 
 <script>
-
-  (function (){
-        
-      $("#trial_type_select, #trial_type_file_select").on("focus",function(){
-        
-        previous_trial_type = $("#trial_type_select").val();
-        previous_trial_type_file = $("#trial_type_file_select").val();
-      
-      
-      }).change(function(){
-        
-        
-        // save trial type from sheet changing away from
-        
-        
-        var current_trial_type_script = $("#"+previous_trial_type+previous_trial_type_file+"_textarea").val(); // resume here
-        
-        console.dir(current_trial_type_script);
-
-        save_current_trial_type(previous_trial_type,previous_trial_type_file,current_trial_type_script);
-
-      
-        var trial_type = $("#trial_type_select").val();
-        var file = $("#trial_type_file_select").val();
-        
-        show_trial_type(trial_type,file);
-            
-        //unfocus 
-        $("#trial_type_select").blur();
-        $("#trial_type_file_select").blur();
-        
-        
-/*         save_current_sheet(previous_stim,previous_proc);      
- */      
-      });
-      
-    })();
-
-
-    function save_current_trial_type(previous_trial_type,previous_trial_type_file,current_trial_type_script){
-      
-// sort out file path here //
-      var file = previous_trial_type +
-                 "/" +
-                 previous_trial_type_file;
-      
-      $.post(
-            'TrialTypeEditor/saveTrialType.php',
-            {
-                file: file,
-                data: current_trial_type_script
-            },
-            custom_alert,
-            'text'
-        );
-    };
-    
-  /* $("#trial_type_select,#trial_type_file_select").on("change",function(){
-    
-    
-    
-  }); */
-
-
 // set up default information for the experiment object to use
 var User_Data = {
     Username:   "Admin",
@@ -179,8 +115,47 @@ var server_paths = {
     root_path:  '<?= $root_path ?>',
 };
 
+function save_trial_types() {
+    $("#trial_type_data .modified").each(function() {
+        var trial_type = $(this).closest(".trial_type_row").find(".trial_type_name").html();
+        var file = $(this).data("file");
+        var code = this.value;
+        
+        save_trial_type(trial_type, file, code);
+        
+        $(this).removeClass("modified");
+    });
+}
 
-function upate_trialtype_select(){
+function save_trial_type(trial_type, file, script){
+    $.post(
+        'TrialTypeEditor/saveTrialType.php',
+        {
+            file: trial_type + "/" + file,
+            data: script
+        },
+        custom_alert,
+        'text'
+    );
+};
+
+$("#trial_type_data").on("input", "textarea", function() {
+    $(this).addClass("modified");
+});
+
+$("#trial_type_select, #trial_type_file_select").on("change", function() {
+    save_trial_types();
+    
+    var trial_type = $("#trial_type_select").val();
+    var file       = $("#trial_type_file_select").val();
+    
+    show_trial_type(trial_type,file);
+});
+
+$("#save_btn").on("click", save_trial_types);
+
+
+function update_trialtype_select(){
   $("#trial_type_select").html(
   "<option>" + Object.keys(trial_types).join("</option><option>") + "</option>"
   ); 
@@ -294,17 +269,21 @@ function get_trial_types() {
 // load the data onto the tables
 
 for (var trial_type in trial_types) {
-    var row = $("<div>");
+    var row = $("<div class='trial_type_row'>");
     
-    row.append("<div>" + trial_type + "</div>");
-    row.children("div").prop("contenteditable", true);
+    row.append("<div class='trial_type_name'>" + trial_type + "</div>");
+    // row.children("div").prop("contenteditable", true);
     
     for (var file in trial_types[trial_type]) {
         var val = trial_types[trial_type][file];
         
         if (val === null) val = '';
         
-        row.append("<div class='textareaDiv' id='"+trial_type+file+"_id'><textarea id= '"+trial_type+file+"_textarea'>" + val.replace(/</g, '&lt;') + "</textarea></div>");
+        row.append("<div class='textareaDiv' id='"+trial_type+file+"_id'>"
+            + "<textarea id='"+trial_type+file+"_textarea' data-file='"+file+"'>"
+                + val.replace(/</g, '&lt;')
+            + "</textarea></div>"
+        );
     }
     
     $("#trial_type_data").append(row);
@@ -313,12 +292,10 @@ for (var trial_type in trial_types) {
 
 function show_trial_type(trial_type,file){
   $("#trial_type_data > div > div").hide();
-  console.dir(trial_type);
-  console.dir(file);
   $("#"+trial_type+file+"_id").show();
 }
 
-upate_trialtype_select();
+update_trialtype_select();
 
 
 // Sample Data
