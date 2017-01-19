@@ -20,7 +20,7 @@
   <tr>
     <td id="Stimuli" class="hide_show_elements">
       <h3>Stimuli</h3>
-      <span id="stim_select"></span>
+      <select id="stim_select"></select>
       <button type="button" id="new_stim_button" class="collectorButton">New Stimuli Sheet</button>
 
         
@@ -32,7 +32,7 @@
     
     <td id="Procedure" class="hide_show_elements">
       <h3>Procedure</h3>
-      <span id="proc_select"></span>
+      <select id="proc_select"></select>
       <button type="button" id="new_proc_button" class="collectorButton">New Procedure Sheet</button>
     
       <span id="procsArea">
@@ -49,12 +49,21 @@
 
 <script>
   $("#new_proc_button").on("click",function(){
+    var data = new_experiment_data["Procedure"]["Procedure.csv"];
+    var filetype = "Procedure";
+    new_proc_stim_sheet(data,filetype);
+  });  
+  
+  $("#new_stim_button").on("click",function(){
+    var data = new_experiment_data["Stimuli"]["Stimuli.csv"];
+    var filetype = "Stimuli";
+    new_proc_stim_sheet(data,filetype);
+  });
+  
+  function new_proc_stim_sheet(data,filetype){
     var file = prompt("What would you like the name of the new procedure sheet to be?");
     
     var exp_name = $("#experiment_select").val();
-    
-    var data = new_experiment_data["Procedure"]["Procedure.csv"];
-    var filetype = "Procedure";
     
     console.dir(data);
     
@@ -69,8 +78,30 @@
         custom_alert,
         'text'
     );
+    if(filetype == "Stimuli"){
+      $("#stim_select").append("<option>"+file+".csv</option>");
+      
+      experiment_files[exp_name]["Stimuli"].push(file+".csv");
+      
+      stim_proc_selection("Stimuli",file); // check
+      
+      $("#stim_select").val(file+".csv");
+      
+      //load_spreadsheet(stim_spreadsheet,"Stimuli");
+    } else {
+      if(filetype == "Procedure"){
+        $("#proc_select").append("<option>"+file+".csv</option>");
+        
+        experiment_files[exp_name]["Procedure"].push(file+".csv");
+        
+        $("#proc_select").val(file+".csv");
+      } else {
+        // something has gone wrong
+      }
+    }
     
-  });
+    
+  }
 
 </script>
 
@@ -92,28 +123,26 @@
   var experiment_files = <?= json_encode($experiment_files) ?>;
 
   $("#experiment_select").on("change",function(){
+    
     current_stim_list = experiment_files[this.value]['Stimuli'];
-    var stim_select_span = "<select id='stim_select_select'>";
+    $("#stim_select").html('');
     for(i=0; i<current_stim_list.length;i++){
-      stim_select_span += "<option>"+current_stim_list[i]+"</option>";
+      $("#stim_select").append("<option>"+current_stim_list[i]+"</option>");      
     }
-    stim_select_span += "</select>";
-    $("#stim_select").html(stim_select_span);
-    $("#stim_select_select").on("change",function(){
+    
+    $("#stim_select").on("change",function(){
       stim_proc_selection("Stimuli",this.value);
     });
     
-
+    
+    
     current_proc_list = experiment_files[this.value]['Procedures'];
-    var proc_select_span = "<select id='proc_select_select'>";
+    $("#proc_select").html('');
     for(i=0; i<current_proc_list.length;i++){
-      proc_select_span += "<option>"+current_proc_list[i]+"</option>";
+      $("#proc_select").append("<option>"+current_proc_list[i]+"</option>");      
     }
-    proc_select_span += "</select>";
     
-    
-    $("#proc_select").html(proc_select_span);
-    $("#proc_select_select").on("change",function(){
+    $("#proc_select").on("change",function(){
       stim_proc_selection("Procedure",this.value);
     });
 
@@ -125,10 +154,10 @@
     
     (function (){
         
-      $("#stim_select_select, #proc_select_select").on("focus",function(){
+      $("#stim_select, #proc_select").on("focus",function(){
         
-        previous_stim = $("#stim_select_select").val();
-        previous_proc = $("#proc_select_select").val();
+        previous_stim = $("#stim_select").val();
+        previous_proc = $("#proc_select").val();
       }).change(function(){
         
         save_current_sheet(previous_stim,previous_proc);      
@@ -418,8 +447,8 @@
     });
     
     $("#save_btn").on("click", function(){
-      var current_stim_sheet = $("#stim_select_select").val();
-      var current_proc_sheet = $("#proc_select_select").val();
+      var current_stim_sheet = $("#stim_select").val();
+      var current_proc_sheet = $("#proc_select").val();
       save_current_sheet(current_stim_sheet,current_proc_sheet);
     });
     
@@ -446,8 +475,9 @@
           function(spreadsheet_request_response) {
             if (spreadsheet_request_response.substring(0, 9) === 'success: ') {
               var data = spreadsheet_request_response.substring(9);
-              spreadsheets[exp_name][sheet_name] = JSON.parse(data);
-              load_spreadsheet(spreadsheets[exp_name][sheet_name],stim_proc);
+              //spreadsheets[exp_name][sheet_name] = JSON.parse(data);
+              //load_spreadsheet(spreadsheets[exp_name][sheet_name],stim_proc);
+              load_spreadsheet(JSON.parse(data),stim_proc);
               console.dir(spreadsheets[exp_name][sheet_name]);
               
               
