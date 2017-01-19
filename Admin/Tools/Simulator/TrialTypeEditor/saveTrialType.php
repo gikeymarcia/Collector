@@ -23,10 +23,19 @@ $custom_trial_types = $_FILES->read('Custom Trial Types');
 $default_trial_types = $_FILES->read('Trial Types');
 $trial_types = array_merge($custom_trial_types,$default_trial_types);
 
+$default_trial_types_path = $_FILES->get_path('Trial Types');
+$custom_trial_types_path = $_FILES->get_path('Custom Trial Types');
+
 
 if (!in_array($trial_type, $trial_types)) {
+  // creating custom folder for new trial type
+  if(strpos($trial_type,".") !== false){
     exit('Bad file path provided, trial type "' . $trial_type . '" invalid.');
+  } else {
+    mkdir("$custom_trial_types_path/$trial_type",0777,true);    
+  }
 }
+    
 
 if (count($file_path_parts) > 2) {
     
@@ -41,8 +50,7 @@ if (count($file_path_parts) > 2) {
   }
 }
 
-  $default_trial_types_path = $_FILES->get_path('Trial Types');
-  $custom_trial_types_path = $_FILES->get_path('Custom Trial Types');
+  
 
   // check if the directory is already in the custom one
   $filetypes = ['template.html','scoring.js','prepareInputs.js'];
@@ -72,10 +80,6 @@ if (count($file_path_parts) > 2) {
       echo "Unknown problem";
   }
     
-    
-    
-    
-  
   file_put_contents($save_file_path,$_POST['data']);
 
 echo '<b>Success!</b> Trial type file saved';

@@ -69,6 +69,11 @@
       text-align:center;
       
     }
+    
+    #trial_type_data > div > div{
+      display:none;
+    }
+    
 </style>
 
 <div id="Preview">
@@ -82,12 +87,15 @@
 <div id="TrialTypes" class="hide_show_elements">
   
   <div id="trial_type_selectors">
-    <select id="trial_type_select"></select>
+    <select id="trial_type_select">
+      <option hidden disabled selected>Select a trial type</option>
+    </select>
     <select id="trial_type_file_select">
       <option value='template'>Template</option>
       <option value='scoring'>Scoring</option>
       <option value='prepare_inputs'>Prepare Inputs</option>
-   </select>
+    </select>
+    <button id="new_trial_type_button" class="collectorButton">New Trial Type</button>
   </div>
   <div id="trial_type_data" class="custom_table">
     <div> 
@@ -100,6 +108,23 @@
 </div>
 
 <script>
+
+$("#new_trial_type_button").on("click",function(){
+  var new_trial_type_name = prompt("What do you want to call your new trial type?");
+  
+  create_trial_type(new_trial_type_name);
+  
+  // add trial type name to the select box-sizing
+  
+ /*  var current_trial_type = $("#trial_type_select").val();
+  show_trial_type(current_trial_type,"template"); */
+  
+  
+  
+  // ajax new template etc.
+  
+});
+
 // set up default information for the experiment object to use
 var User_Data = {
     Username:   "Admin",
@@ -155,14 +180,7 @@ $("#trial_type_select, #trial_type_file_select").on("change", function() {
 $("#save_btn").on("click", save_trial_types);
 
 
-function update_trialtype_select(){
-  $("#trial_type_select").html(
-  "<option>" + Object.keys(trial_types).join("</option><option>") + "</option>"
-  ); 
-  var current_trial_type = $("#trial_type_select").val();
-  show_trial_type(current_trial_type,"template");
 
-}
 
 
 
@@ -268,34 +286,48 @@ function get_trial_types() {
 
 // load the data onto the tables
 
-for (var trial_type in trial_types) {
+
+// load the data onto the tables
+
+function create_trial_type(name, data) {
+    data = data || { template: "", scoring: "", prepare_inputs: "" };
+    
     var row = $("<div class='trial_type_row'>");
     
-    row.append("<div class='trial_type_name'>" + trial_type + "</div>");
-    // row.children("div").prop("contenteditable", true);
+    row.append("<div class='trial_type_name'>" + name + "</div>");
     
-    for (var file in trial_types[trial_type]) {
-        var val = trial_types[trial_type][file];
+    for (var file in data) {
+        var val = data[file];
         
         if (val === null) val = '';
         
-        row.append("<div class='textareaDiv' id='"+trial_type+file+"_id'>"
-            + "<textarea id='"+trial_type+file+"_textarea' data-file='"+file+"'>"
+        row.append("<div class='textareaDiv' id='"+name+file+"_id'>"
+            + "<textarea id='"+name+file+"_textarea' data-file='"+file+"'>"
                 + val.replace(/</g, '&lt;')
             + "</textarea></div>"
         );
     }
     
     $("#trial_type_data").append(row);
+    
+    $("#trial_type_select").append("<option>"+name+"</option>");
+    
+    
+}
+
+for (var trial_type in trial_types) {
+    create_trial_type(trial_type, trial_types[trial_type]);
 }
 
 
 function show_trial_type(trial_type,file){
   $("#trial_type_data > div > div").hide();
   $("#"+trial_type+file+"_id").show();
+  console.dir(trial_type);
+  console.dir(file);
+  
 }
 
-update_trialtype_select();
 
 
 // Sample Data
