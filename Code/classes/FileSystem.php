@@ -203,7 +203,6 @@ class FileSystem
     public function overwrite(
         $source,
         $data,
-        $index = null,
         $path_vars = array(),
         $throw_exception_when_path_is_incomplete = true
     ) {
@@ -211,7 +210,7 @@ class FileSystem
             $source,
             'overwrite',
             $data,
-            $index,
+            null,
             $path_vars,
             $throw_exception_when_path_is_incomplete
         );

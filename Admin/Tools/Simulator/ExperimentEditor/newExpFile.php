@@ -27,9 +27,12 @@ if($_POST['filetype'] == "Stimuli"){
   exit ("invalid filetype submitted");
 }
 
+$headers = array_shift($_POST['data']);
+$data    = array();
 
-
-$data  = $_POST['data'];
+foreach ($_POST['data'] as $line) {
+    $data[] = array_combine($headers, $line);
+}
 
 $valid_experiments = get_Collector_experiments($_FILES);
 
@@ -40,11 +43,10 @@ $exp_name = $_POST['exp_name'];
 
 
 $system_map_values = array(
-    'Current Experiment' => "Demo", //$exp_name,
-    $filetype           => "test.csv"//$filename
+    'Current Experiment' => $exp_name,
+    $filetype            => "$filename.csv"
 );
 
-$_FILES->write($filetype, $data, $system_map_values);
+$_FILES->overwrite($filetype, $data, $system_map_values);
 
-
-?>
+echo "New $filetype file created: $filename";
