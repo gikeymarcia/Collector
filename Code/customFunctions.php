@@ -894,6 +894,7 @@ function fill_template($string, $inputs) {
             $output .= array_shift($vars);
         } else {
             if (!isset($inputs[$var_key])) {
+              var_dump($var_key,$inputs);
                 throw new Exception(
                     'Missing input with key: ' . $var_key
                 );

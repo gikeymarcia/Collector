@@ -47,7 +47,35 @@
   </tr>
 </table>
 
- 
+<script>
+  $("#new_proc_button").on("click",function(){
+    var file = prompt("What would you like the name of the new procedure sheet to be?");
+    
+    var exp_name = $("#experiment_select").val();
+    
+    var data = new_experiment_data["Procedure"]["Procedure.csv"];
+    var filetype = "Procedure";
+    
+    console.dir(data);
+    
+    $.post(
+      'ExperimentEditor/newExpFile.php',
+        {
+          file: file,
+          data: data,
+          filetype: filetype,
+          exp_name: exp_name
+        },
+        custom_alert,
+        'text'
+    );
+    
+  });
+
+</script>
+
+
+<!-- can delete following divs?? --> 
 <div id="interface">
   
   
@@ -119,6 +147,7 @@
 
   
   <script>
+  
   
     var handsOnTable;
     
@@ -364,13 +393,9 @@
       }
       
       var conditions_data = new_experiment_data['Conditions.csv'];
-      console.dir(new_experiment_data['Conditions.csv']);
       var stim_data       = new_experiment_data['Stimuli']['Stimuli.csv']; // this needs to just open the first sheet in list
       
-      console.dir(new_experiment_data['Stimuli']['Stimuli.csv']);
-      var proc_data       = new_experiment_data['Procedure']['Stimuli.csv']; // this needs to just open the first sheet in list
-      
-      console.dir(new_experiment_data['Procedure']['Procedure.csv']);
+      var proc_data       = new_experiment_data['Procedure']['Procedure.csv']; // this needs to just open the first sheet in list
       
         
       createExpEditorHoT(conditions_data,"Conditions");
@@ -378,8 +403,6 @@
       createExpEditorHoT(proc_data,"Procedure");
       
       $("#interface").show();
-      
-      
       
     });
     
