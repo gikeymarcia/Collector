@@ -3,10 +3,10 @@
 require '../../initiateTool.php';
 ob_end_clean(); // no need to transmit useless data
 
-if (!isset($_POST['file'], $_POST['data'])) {
+if (!isset($_POST['file'], $_POST['data'], $_POST['trialtype'])) {
     exit('Missing filename or data');
 }
-/* 
+
 $file_path = strtr($_POST['file'], '\\', '/');
 
 if (strpos($file_path, '..') !== false) {
@@ -15,8 +15,11 @@ if (strpos($file_path, '..') !== false) {
 
 $file_path_parts = explode('/', $file_path);
 
-$exp = $file_path_parts[0];
-$experiments = get_Collector_experiments($_FILES);
+$trialType = $file_path_parts[0];
+$trialTypes = get_Collector_experiments($_FILES);
+
+/*
+
 
 if (!in_array($exp, $experiments)) {
     exit('Bad file path provided, experiment "' . $exp . '" invalid.');

@@ -101,12 +101,67 @@
 
 <script>
 
-  $("#trial_type_select,#trial_type_file_select").on("change",function(){
-    var trial_type = $("#trial_type_select").val();
-    var file = $("#trial_type_file_select").val();
+  (function (){
+        
+      $("#trial_type_select, #trial_type_file_select").on("focus",function(){
+        
+        previous_trial_type = $("#trial_type_select").val();
+        previous_trial_type_file = $("#trial_type_file_select").val();
+      
+      
+      }).change(function(){
+        
+        
+        // save trial type from sheet changing away from
+        
+        
+        var current_trial_type_script = $("#"+previous_trial_type+previous_trial_type_file+"_textarea").val(); // resume here
+        
+        console.dir(current_trial_type_script);
+
+        save_current_trial_type(previous_trial_type,previous_trial_type_file,current_trial_type_script);
+
+      
+        var trial_type = $("#trial_type_select").val();
+        var file = $("#trial_type_file_select").val();
+        
+        show_trial_type(trial_type,file);
+            
+        //unfocus 
+        $("#trial_type_select").blur();
+        $("#trial_type_file_select").blur();
+        
+        
+/*         save_current_sheet(previous_stim,previous_proc);      
+ */      
+      });
+      
+    })();
+
+
+    function save_current_trial_type(previous_trial_type,previous_trial_type_file,current_trial_type_script){
+      
+// sort out file path here //
+      var file = previous_trial_type +
+                 "/" +
+                 previous_trial_type_file;
+      
+      $.post(
+            'saveTrialType.php',
+            {
+                file: file,
+                data: current_trial_type_script
+            },
+            custom_alert,
+            'text'
+        );
+    };
     
-    show_trial_type(trial_type,file);
-  });
+  /* $("#trial_type_select,#trial_type_file_select").on("change",function(){
+    
+    
+    
+  }); */
 
 
 // set up default information for the experiment object to use
@@ -249,7 +304,7 @@ for (var trial_type in trial_types) {
         
         if (val === null) val = '';
         
-        row.append("<div class='textareaDiv' id='"+trial_type+file+"_id'><textarea>" + val.replace(/</g, '&lt;') + "</textarea></div>");
+        row.append("<div class='textareaDiv' id='"+trial_type+file+"_id'><textarea id= '"+trial_type+file+"_textarea'>" + val.replace(/</g, '&lt;') + "</textarea></div>");
     }
     
     $("#trial_type_data").append(row);
