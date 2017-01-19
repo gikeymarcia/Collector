@@ -147,7 +147,7 @@
                  previous_trial_type_file;
       
       $.post(
-            'saveTrialType.php',
+            'TrialTypeEditor/saveTrialType.php',
             {
                 file: file,
                 data: current_trial_type_script

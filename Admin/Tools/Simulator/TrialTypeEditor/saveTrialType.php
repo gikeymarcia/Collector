@@ -1,9 +1,10 @@
 <?php
 
-require '../../initiateTool.php';
+require '../../../initiateTool.php';
 ob_end_clean(); // no need to transmit useless data
+ini_set('html_errors', false);
 
-if (!isset($_POST['file'], $_POST['data'], $_POST['trialtype'])) {
+if (!isset($_POST['file'], $_POST['data'])) {
     exit('Missing filename or data');
 }
 
@@ -15,51 +16,66 @@ if (strpos($file_path, '..') !== false) {
 
 $file_path_parts = explode('/', $file_path);
 
-$trialType = $file_path_parts[0];
-$trialTypes = get_Collector_experiments($_FILES);
+$trial_type = $file_path_parts[0];
+//$trialTypes = get_all_trial_type_data($_FILES); // get Collector trial types
 
-/*
+$custom_trial_types = $_FILES->read('Custom Trial Types');
+$default_trial_types = $_FILES->read('Trial Types');
+$trial_types = array_merge($custom_trial_types,$default_trial_types);
 
 
-if (!in_array($exp, $experiments)) {
-    exit('Bad file path provided, experiment "' . $exp . '" invalid.');
+if (!in_array($trial_type, $trial_types)) {
+    exit('Bad file path provided, trial type "' . $trial_type . '" invalid.');
 }
 
 if (count($file_path_parts) > 2) {
-    if (    $file_path_parts[1] !== 'Procedure'
-        AND $file_path_parts[1] !== 'Stimuli'
-    ) {
-        exit('Bad file path provided, subfolder "' . $file_path_parts[1] . '" invalid');
+    
+  exit ("invalid path given");
+    
+} else  {
+    if (    $file_path_parts[1] !== 'template'
+      AND $file_path_parts[1] !== 'scoring'
+      AND $file_path_parts[1] !== 'prepare_inputs'
+  ) {
+      exit('Bad file path provided, subfolder "' . $file_path_parts[1] . '" invalid');
+  }
+}
+
+  $default_trial_types_path = $_FILES->get_path('Trial Types');
+  $custom_trial_types_path = $_FILES->get_path('Custom Trial Types');
+
+  // check if the directory is already in the custom one
+  $filetypes = ['template.html','scoring.js','prepareInputs.js'];
+  if(!in_array($trial_type,$custom_trial_types)){
+    if(!is_dir("$custom_trial_types_path/$trial_type")){
+      mkdir("$custom_trial_types_path/$trial_type",0777,true);
     }
-} elseif ($file_path_parts[1] !== 'Conditions.csv') {
-    exit('Bad file path provided, filename besides Conditions.csv without subfolder is not allowed.');
-}
-
-$data = json_decode($_POST['data'], true);
-
-if (!is_array($data)) {
-    exit('Bad data provided, not in array format');
-}
-
-foreach ($data as $row) {
-    if (!is_array($row)) {
-        exit('Bad data provided, data rows not in array format');
+    foreach($filetypes as $filetype){
+      $this_file_path = "$default_trial_types_path/$trial_type/$filetype";
+      if(file_exists($this_file_path)){
+        $this_destination_path = "$custom_trial_types_path/$trial_type/$filetype";
+        copy($this_file_path,$this_destination_path);
+      }
     }
-}
+  }
+  switch ($file_path_parts[1]){
+    case "template":
+      $save_file_path = "$custom_trial_types_path/$trial_type/template.html";
+      break;
+    case "scoring":
+      $save_file_path = "$custom_trial_types_path/$trial_type/scoring.js";
+      break;
+    case "prepare_inputs":
+      $save_file_path = "$custom_trial_types_path/$trial_type/prepareInputs.js";
+      break;
+    default:
+      echo "Unknown problem";
+  }
+    
+    
+    
+    
+  
+  file_put_contents($save_file_path,$_POST['data']);
 
-$dir = dirname($file_path);
-
-if (!is_dir($dir)) mkdir($dir, 0777, true);
-
-$file_full_path = $_FILES->get_path('Experiments') . '/' . $file_path;
-
-$file_resource = fopen($file_full_path, 'w');
-
-foreach ($data as $row) {
-    fputcsv($file_resource, $row);
-}
-
-fclose($file_resource);
-
-echo '<b>Success!</b> File saved';
- */
+echo '<b>Success!</b> Trial type file saved';
