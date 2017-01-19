@@ -164,10 +164,22 @@
         return data;
     }
     
-    function get_current_sheet_path() {
+    function get_current_sheet_path(sheet_type) {
+      var sheet_path;
+      if(sheet_type == handsOnTable_Conditions){
+        sheet_path = "Conditions.csv";
+      }
+      if(sheet_type == handsOnTable_Stimuli){
+        sheet_path = "Stimuli/"+$("#stim_select_select").val();
+      }
+      if(sheet_type == handsOnTable_Procedure){
+        sheet_path = "Procedure/"+$("#proc_select_select").val();        
+      }
+      
+      
         return $("#experiment_select").val() 
              + '/' 
-             + $("#spreadsheet_selection").val();
+             + sheet_path;
     }
     
     
@@ -222,8 +234,21 @@
     }
     
     function save_current_sheet() {
-        var data = JSON.stringify(get_HoT_data());
-        var file = get_current_sheet_path();
+      // loop through all open sheets
+      
+      var handsontables_list = [handsOnTable_Conditions,handsOnTable_Stimuli,handsOnTable_Procedure];
+      
+      /* conditions_sheet = $("#conditionsArea").children()[0].id;
+      $("#stimsArea").children()[0].id
+      $("#procsArea").children()[0].id
+       */
+      
+      for(i=0;i<handsontables_list.length;i++){
+        var data = JSON.stringify(get_HoT_data(handsontables_list[i]));
+        
+        var file = get_current_sheet_path(handsontables_list[i]);
+        
+        console.dir(file);
         
         $.post(
             '../ExperimentEditor/saveSpreadsheet.php',
@@ -234,6 +259,8 @@
             custom_alert,
             'text'
         );
+      }
+        
     }
   
     function update_spreadsheet_selection() {
