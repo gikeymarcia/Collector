@@ -76,8 +76,8 @@
     
 </style>
 
-<div id="Preview">
-  <div id="ExperimentContainer" class="hide_show_elements">Select your stim and proc files below to start the stimulation.</div>
+<div id="Preview" class="hide_show_elements">
+  <div id="ExperimentContainer" >Select your stim and proc files below to start the stimulation.</div>
 
   <div class="textcenter"><button type="button" id="run_button">Run Simulation</button></div>
 </div>
