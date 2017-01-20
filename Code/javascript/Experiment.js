@@ -394,8 +394,7 @@ Experiment.prototype = {
 
         var rows    = JSON.stringify(rows);
         var globals = JSON.stringify(this.data.globals);
-
-
+        
         $.ajax({
             url: this.root_path + '/Code/trialRecord.php',
             type: 'POST',
@@ -411,6 +410,11 @@ Experiment.prototype = {
             console.dir(error);
             console.dir("error!");
         })
+        .done(function(data, textStatus, jqXHR) {
+            if (data !== 'success') {
+                console.dir(data);
+            }
+        });
     },
 
     get_next_trial_position: function() {

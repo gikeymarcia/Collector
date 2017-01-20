@@ -17,7 +17,7 @@ class fsDataType_JSON extends fsDataType_Abstract
         return file_put_contents($path, json_encode($data, $json_options));
     }
 
-    private function can_pretty_print()
+    private static function can_pretty_print()
     {
         return (version_compare(PHP_VERSION, '5.4.0') >= 0) ? true : false;
     }

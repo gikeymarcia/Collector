@@ -1,15 +1,17 @@
 <?php
-    if (!isset($_POST['trial_data'], $_POST['globals'])) exit;
 
-    require 'initiateCollector.php';
+if (!isset($_POST['trial_data'], $_POST['globals'])) exit;
 
-    $trial_data = $_POST['trial_data'];
-    $trial_data = json_decode($trial_data);
+require 'initiateCollector.php';
+ini_set('html_errors', false);
 
-    $globals    = $_POST['globals'];
-    $globals    = json_decode($globals);
+$trial_data = $_POST['trial_data'];
+$trial_data = json_decode($trial_data);
 
+$globals    = $_POST['globals'];
+$globals    = json_decode($globals);
 
-    $_FILES->write_many('User Responses', $trial_data);
-    $_FILES->overwrite('User Globals',    $globals);
-?>
+$_FILES->write_many('User Responses', $trial_data);
+$_FILES->overwrite('User Globals',    $globals);
+
+echo 'success';
