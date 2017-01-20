@@ -127,8 +127,8 @@ $("#new_trial_type_button").on("click",function(){
 
 // set up default information for the experiment object to use
 var User_Data = {
-    Username:   "Admin",
-    ID:         "Admin",
+    Username:   "Admin:Simulator",
+    ID:         "Admin:Simulator",
     Debug_Mode: true,
     Experiment_Data: {stimuli: {}, procedure: {}, globals: {}, responses: {}}
 }
@@ -187,16 +187,21 @@ $("#save_btn").on("click", save_trial_types);
 
 // use the normal Experiment object as a prototype so we can modify
 // how the object saves data to the server
-/* 
-var Gui_Experiment = function() {}
-
-Gui_Experiment.prototype = Experiment.prototype;
-
-Gui_Experiment.prototype.record_to_server = function() {
-    // do nothing
-    // make this add the new data to #resp_data
+var Gui_Experiment = function() {
+    Experiment.apply(this, arguments);
 }
- */
+
+Gui_Experiment.prototype = Object.create(Experiment.prototype);
+
+Gui_Experiment.prototype.record_to_server = function(trial_sets) {
+    trial_sets.forEach(function(set) {
+        set.forEach(function(trial) {
+            trial.recorded = true;
+        });
+    });
+    
+    // do nothing else, do not actually ajax data to server
+}
 
 // re-run the experiment every time a relevant table is changed
 var Collector_Experiment = null;
@@ -205,7 +210,7 @@ function simulate_experiment() {
     container = $("#ExperimentContainer");
     container.html("");
     // collect the current definitions of the experiment data and trial types, and create an experiment
-    Collector_Experiment = new Experiment(
+    Collector_Experiment = new Gui_Experiment(
         get_exp_data(),
         container,
         trial_page,
