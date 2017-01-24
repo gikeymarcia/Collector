@@ -26,18 +26,12 @@
   #helpTypeDefault { display: block; }
   
   #helperBar {
-    position: fixed;
-    right: 0%;
-    top: 0%;
-    display: inline-block;
-    max-width: 20%;
     background-color: #EFE;
     border: 2px solid #6D6;
     border-radius: 8px;
     box-sizing: border-box;
     padding: 2px;
-    vertical-align: top;
-    margin-top: 80px;
+    
   }
   
   #TableForm {
@@ -53,7 +47,6 @@
   }
   #minHelpButton{
     position:fixed;
-    right: 10px;
     font-size:15px;
   }
   #hide_show_table td{
@@ -80,87 +73,26 @@
     padding: 2px;
     color:white;
   }
+  
+  
+  #helper_title:hover{
+    font-weight:      bold;
+    cursor:pointer;
+  }
+
 </style>
 
 
 <!-- the helper bar !-->
   
 <div id="helperBar">
-  <button id="minHelpButton" class="collectorButton"> _ </button>
-  <button class="collectorButton" id="helpActivateButton" style="display:none"> Help! </button>
+  <button class="collectorButton" id="helpActivateButton"> Help! </button>
   
 
   
-  <div id="helperArea">
-    <h1> Helper </h1>
+  <div id="helperArea" style="display:none">
+    <h1 id="helper_title"> Helper </h1>
 
-    <div id="hide_show_control">
-      <table id="hide_show_table">
-      <?php
-      
-        $hide_show_elements = ["Preview","Conditions","Stimuli","Procedure","TrialTypes"];
-      
-        foreach($hide_show_elements as $hide_show_element){
-          echo "<tr>
-          <td>$hide_show_element</td>
-          <td>
-            <label>
-              
-              
-              <input class='show_hide_checkbox show_hide_button' type='checkbox' id='hide_show_".$hide_show_element."_check' name='hide_show_check' value='$hide_show_element' checked>
-              <span id='show_hide_check_unselect_$hide_show_element' class='show_hide_span'>Include</span>
-            </label>
-          </td>
-          <td>
-            <label>
-            
-              <input class='hide_show_radio_choices show_hide_button' type='radio' id='hide_show_".$hide_show_element."_radio' name='hide_show_radio' value='$hide_show_element'>
-              <span id='show_hide_radio_select_$hide_show_element' class='show_hide_span'>Only</span>
-            </label>
-          </td>
-        </tr>";
-        }
-        
-      ?>
-        
-        
-      </table>
-    </div>  
-    
-    <script>
-    
-      var element_show_list = <?= json_encode ($hide_show_elements) ?>;
-    
-    
-    $(".show_hide_button").on("change",function(){
-      
-      if (this.type === "radio"){
-        $(".show_hide_checkbox").prop("checked",false);
-        
-        
-        $(this).closest("tr").find("input[type='checkbox']").
-        prop("checked",true);
-        
-      }
-      $(".show_hide_checkbox").each(function(){
-        var target = $("#" + this.value);
-        
-        
-        if(this.checked){
-          target.show();
-        } else {
-          target.hide();
-        }
-      });
-    });
-      
-      $(".hide_show_radio_choices").on("change",function(){
-        $(".hide_show_elements").hide();
-        $("#"+this.value).show();
-      });
-    
-    </script>
-    
     <h2 id="helpType">Select Cell</h2>
     
     <!-- Help Types -->
@@ -235,14 +167,14 @@ function hideShow(x){
   }
 }
 
-$("#minHelpButton").on("click",function(){
-  $("#minHelpButton").hide();
+$("#helper_title").on("click",function(){
+  $("#helper_title").hide();
   $("#helperArea").hide();
   $("#helpActivateButton").show();
 });
 
 $("#helpActivateButton").on("click",function(){
-  $("#minHelpButton").show();
+  $("#helper_title").show();
   $("#helperArea").show();
   $("#helpActivateButton").hide();
 });
