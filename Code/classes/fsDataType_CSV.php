@@ -10,6 +10,7 @@ abstract class fsDataType_CSV extends fsDataType_Abstract
      * 3. dont give an error for different length rows
      */
     public static function read($path) {
+    	ini_set("auto_detect_line_endings", true);
         if (!is_file($path)) return array();
 
         $file_stream = fopen($path, 'r');
@@ -26,6 +27,7 @@ abstract class fsDataType_CSV extends fsDataType_Abstract
     }
 
     public static function overwrite($path, $data) {
+    	ini_set("auto_detect_line_endings", true);
         $dir = dirname($path);
 
         if (!is_dir($dir)) mkdir($dir, 0777, true);
@@ -56,6 +58,7 @@ abstract class fsDataType_CSV extends fsDataType_Abstract
      * 4. make sure I'm not allowing characters that break formatting when file is opened in Excel
      */
     public static function write($path, $data, $index = null) {
+    	ini_set("auto_detect_line_endings", true);
         if ($index !== null && (!is_numeric($index) || $index < 0)) {
             throw new Exception('Csv append index must be null or non-negative number');
         }
@@ -72,6 +75,8 @@ abstract class fsDataType_CSV extends fsDataType_Abstract
             return self::overwrite($path, $data);
         }
 
+		ini_set("auto_detect_line_endings", true);
+		
         $data           = self::trim_headers($data);
         $file_stream     = fopen($path, 'r+');
         $old_headers     = fgetcsv($file_stream);
@@ -196,6 +201,8 @@ abstract class fsDataType_CSV extends fsDataType_Abstract
     
     public static function get_columns($path) {
         if (!is_file($path)) return array();
+
+		ini_set("auto_detect_line_endings", true);
 
         $file_stream = fopen($path, 'r');
 
