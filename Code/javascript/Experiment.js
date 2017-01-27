@@ -12,7 +12,7 @@ var Experiment = function (exp_data, $container, trial_page, trial_types, server
     this.root_path  = server_paths.root_path;
     this.data.globals.position   = exp_data.globals.position;
     this.load_trial_types(trial_types);
-    this.create_iframe($container);
+    this.container = $container;
 }
 
 
@@ -172,22 +172,23 @@ Experiment.prototype = {
         return stim_cols;
     },
 
-    create_iframe: function($container) {
-        this.iframe = $("<iframe>");
-        this.iframe.appendTo($container);
-    },
 
-    run_trial(position) {
+	run_trial(position) {
         if (typeof position == "undefined") {
             position = this.data.globals.position;
         }
         this.data.globals.position = position;
-        var doc = this.iframe[0].contentDocument;
-        doc.open();
-        doc.write(this.trial_page);
-        doc.close();
-    },
 
+		$("#ExperimentContainer").children().remove();
+    	var new_iframe = $("<iframe>");
+    	new_iframe.appendTo("#ExperimentContainer");
+    	var doc = new_iframe[0].contentDocument;
+    
+    	doc.open();
+    	doc.write(this.trial_page);
+    	doc.close();
+    },
+    
     end_trial: function(data, inputs, globals) {
         position = this.data.globals.position;
         this.data.globals = globals;
@@ -212,8 +213,7 @@ Experiment.prototype = {
         }
         else {
             this.record_remaining_trials();
-            this.iframe.detach();
-            $("#ExperimentContainer").append("<h1>Done!</h1>");
+            $("#ExperimentContainer").html("<h1>Done!</h1>");
         }
     },
 
