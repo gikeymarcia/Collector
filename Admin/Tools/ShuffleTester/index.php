@@ -2,13 +2,13 @@
 // access control: disable access to non-admin
 require '../../initiateTool.php';
 
-$_root = $_PATH->get('root');
+$_root = $_FILES->get_path('root');
 
 // load shuffle functions needed for this tool
-require_once $_PATH->get('Shuffle Functions');
+require_once $_FILES->get_path('Shuffle Functions');
 
 // find all available experiments
-$experiments = array_flip(getCollectorExperiments());
+$experiments = array_flip(get_Collector_experiments($_FILES));
 
 // save selected experimet if available and valid
 $exp = filter_input(INPUT_GET, 'exp', FILTER_SANITIZE_STRING);
@@ -28,15 +28,16 @@ if (!empty($_DATA['exp'])) {
         $searching = scandir("{$_root}/Experiments/$exp/$type/");
         foreach ($searching as $item => $path) {
             // remove files that aren't .csv
-            if (!inString('.csv', $path, true)) {
+            if (strpos($path,'.csv')===false) {
                 unset($searching[$item]);
             }
-            $ShuffleFolders[$type] = $searching;
         }
+        $ShuffleFolders[$type] = $searching;
     }
 
     // save selected file if in URL
     $shuffleFile = filter_input(INPUT_GET, 'shuffleFile', FILTER_SANITIZE_STRING);
+    
     if ($shuffleFile !== null) {
         $_DATA['get'] = $shuffleFile;
         $_DATA['name'] = substr($_DATA['loc'], strrpos($_DATA['loc'], '/') + 1);
@@ -126,25 +127,45 @@ $val = ($zoom !== null) ? $zoom : 'default';
 <?php
 // if a shuffle file has been choosen and it is a csv file
 if (($_DATA['loc'] !== '') && ($_DATA['exp'] !== '')
-    && inString('.csv', $_DATA['loc']) === true
+    && (strpos($_DATA['loc'],'.csv')!==false)
 ) {
     // grab file to shuffle
-    $before = getFromFile($_DATA['loc']);
+    
+    $file_parts = explode('/', $shuffleFile);
+    $file_type  = array_shift($file_parts);
+    $filename   = implode('/', $file_parts);
+    
+    // input validation
+    if ($file_type !== 'Stimuli' AND $file_type !== 'Procedure') {
+        exit('bad file request: file type incorrect');
+    }
+    
+    if (strpos($filename, '/') !== false
+        and strpos($filename, '\\') !== false) {
+        exit('bad file request: file name not allowed');
+    }
+    
+    $system_map_values = array(
+        'Current Experiment' => $exp,
+        $file_type           => $filename
+    );
+    
+    $unshuffled_file = $_FILES->read($file_type, $system_map_values);
 
     // start a timer
-    $shufflestart = microtime(true);
+    $shuffle_start = microtime(true);
 
     // run basic shuffles
-    $basic = multiLevelShuffle($before);
+    $basic_shuffled_file = multiLevelShuffle($unshuffled_file);
 
     // run advanced shuffles
-    $after = shuffle2dArray($basic);
+    $shuffled_file = shuffle2dArray($basic_shuffled_file);
 
     // calculate shuffle time and round to nearest microsecond
-    $timer = round((microtime(true) - $shufflestart) * 1000000, 0);
+    $timer = round((microtime(true) - $shuffle_start) * 1000000, 0);
 
     // start time for table creation
-    $tableStart = microtime(true);
+    $table_start = microtime(true);
 
     // display HTML
     ?>
@@ -152,20 +173,37 @@ if (($_DATA['loc'] !== '') && ($_DATA['exp'] !== '')
 <div class="before">
   <div id="RF">
     <h2>Before</h2>
-    <?= display2dArray($before) ?>
+    <?= display2dArray($unshuffled_file) ?>
   </div>
 </div>
 <!-- version after shuffling -->
 <div class="after">
   <h2>After</h2>
-  <?= display2dArray($after) ?>
+  <?= display2dArray($shuffled_file) ?>
 </div>
 
     <?php
     // calculate table creation time round to nearest microsecond
-    $tableTimer = round((microtime(true) - $tableStart) * 1000000, 0);
+    $table_timer = round((microtime(true) - $table_start) * 1000000, 0);
 }
 ?>
+
+<!-- Debug to make sure I'm getting the right stuff back -->
+<dl class="brand">
+  <dt>Filename</dt>
+  <dd><code><?= $_DATA['name'] ?></code></dd>
+
+  <dt>File location</dt>
+  <dd><code><?= $_DATA['loc']  ?></code></dd>
+
+  <?php if (isset($timer)): // only show duration when a file was actually shuffled ?>
+  <dt>Time to shuffle</dt>
+  <dd><?= number_format($timer) ?> microseconds</dd>
+
+  <dt>Time to build display tables</dt>
+  <dd><?= number_format($table_timer) ?> microseconds</dd>
+  <?php endif; ?>
+</dl>
 
 <!-- Debug to make sure I'm getting the right stuff back -->
 <dl class="brand">

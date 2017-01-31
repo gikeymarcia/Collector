@@ -199,7 +199,7 @@ function display2dArray(array $array, $nonArrayCol = false)
         
         foreach ($columns as $col) {
             $sorted_row[$col] = isset($row[$col])
-                              ? htmlspecialchars($row[$col]. ENT_QUOTES)
+                              ? htmlspecialchars($row[$col], ENT_QUOTES)
                               : '';
         }
         
