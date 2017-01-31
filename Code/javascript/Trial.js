@@ -159,8 +159,8 @@ var Trial = {
         // the first replacement matches things like [Cue] and [Text]
         // the second matches things like {custom stuff} and {my calculated value}
         return template
-            .replace(/\[[^\]]+\]/g, function(match) { return self.replace_template_match(match, ['procedure', 'stimuli']); })
-            .replace(/{[^}]+}/g,    function(match) { return self.replace_template_match(match, ['extra']); });
+            .replace(/\[[^\[\]]+\]/g, function(match) { return self.replace_template_match(match, ['procedure', 'stimuli']); })
+            .replace(/{[^{}]+}/g,    function(match) { return self.replace_template_match(match, ['extra']); });
     },
 
     replace_template_match: function(keyWithBrackets, categories) {
