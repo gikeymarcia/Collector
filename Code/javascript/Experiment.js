@@ -389,6 +389,7 @@ Experiment.prototype = {
                   .map(function(row) {
                     row["Username"] = User_Data.Username;
                     row["ID"]       = User_Data.ID;
+                    row["Exp_Name"] = User_Data.Exp_Name;
                     return row;
                   });
 
