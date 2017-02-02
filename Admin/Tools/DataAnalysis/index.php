@@ -20,7 +20,9 @@
   
 </div>
 
-<br>
+<?php require 'AccessAllData.php'; ?>
+
+
 <?php
     function get_data() {
       $csv_data = fsDataType_CSV::read('temp/responses.csv');
@@ -78,8 +80,6 @@
     }
     
     data_by_columns = raw_table_to_columns(Collector_data_raw);
-    
-    reformat_columns(data_by_columns);
     
     function update_column_list() {
       var list = [];
