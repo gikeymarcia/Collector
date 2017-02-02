@@ -30,6 +30,7 @@
 var User_Data = {
     Username:   "<?= $_SESSION['Username'] ?>",
     ID:         "<?= $_SESSION['ID'] ?>",
+    Exp_Name:   "<?= $_FILES->get_default('Current Experiment') ?>",
     Debug_Mode: <?= $_SESSION['Debug Mode'] ? "true" : "false" ?>,
     Experiment_Data: <?= json_encode($user_data) ?>
 }
