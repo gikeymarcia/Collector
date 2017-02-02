@@ -76,11 +76,25 @@
     
 </style>
 
-<div id="Preview" class="hide_show_elements">
-  <div id="ExperimentContainer" >Select your stim and proc files below to start the stimulation.</div>
 
-  <div class="textcenter"><button type="button" id="run_button">Run Simulation</button></div>
+<div id="Preview" class="hide_show_elements" >
+  <div id="ExperimentContainer">Select your stim and proc files below to start the stimulation.</div>
+
+  <div id="run_stop_buttons" class="textcenter" style="display:none">
+    <button type="button" id="run_button" class="collectorButton">Run Simulation</button>
+    <button type="button" id="stop_button" class="collectorButton">Stop Simulation</button>
+  </div>
 </div>
+
+<script>
+  
+  function show_run_stop_buttons(){
+    $("#run_stop_buttons").show();    
+  }
+  $("#stop_button").on("click",function(){
+    $("#ExperimentContainer").html("Simulation Stopped. Click 'Run Simulation' to restart.");
+  });
+</script>
   
 <?php require ("ExperimentEditor/index.php"); ?>
 
@@ -102,7 +116,7 @@
       <div>Trial Type</div> 
       <div>Template</div> 
       <div>Scoring</div> 
-      <div>Prepare Inputs</div> 
+      <div>Prepare Inputs</div>
     </div>
   </div>
 </div>
@@ -113,15 +127,6 @@ $("#new_trial_type_button").on("click",function(){
   var new_trial_type_name = prompt("What do you want to call your new trial type?");
   
   create_trial_type(new_trial_type_name);
-  
-  // add trial type name to the select box-sizing
-  
- /*  var current_trial_type = $("#trial_type_select").val();
-  show_trial_type(current_trial_type,"template"); */
-  
-  
-  
-  // ajax new template etc.
   
 });
 
