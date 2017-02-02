@@ -1,0 +1,55 @@
+#ToolsNavBar { margin: 0; }
+    
+#ExperimentContainer {
+    height: 100%;
+    
+    border: 0px solid black;
+    border-width: 2px 0 2px;
+    
+    background-color: #DDD;
+}
+
+#ExperimentContainer > iframe {
+    background-color: #FFF;
+    height: 100%;
+}
+
+#ExperimentContainer, #ExperimentContainer > iframe {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: block;
+}
+#Preview {
+  height: 50%;
+}
+    
+.custom_table { display: table; margin: auto; border-collapse: collapse; }
+.custom_table > div { display: table-row; }
+.custom_table > div > div { display: table-cell; padding: 2px 4px; max-width: 320px; vertical-align: top; }
+
+.custom_table > div > .textareaDiv { padding: 10px; width: 500px; max-width: 1200px; height: 20em; }
+.custom_table > div > .textareaDiv > textarea {
+    padding: 1px;
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    height: 20em;
+    box-sizing: border-box;
+    border: 0; margin: 0;
+    vertical-align: bottom;
+    background-color: #E0E0E0;
+}
+
+.custom_table > div:not(.headers):hover { background-color: #CFC; }
+.custom_table > div.headers > div { text-align: center; font-weight: bold; }
+
+#exp_data td { text-align: center; padding: 15px; }
+#trial_type_selectors {
+  text-align:center;
+  
+}
+
+#trial_type_data > div > div{
+  display:none;
+}
