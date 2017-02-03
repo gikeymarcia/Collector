@@ -1,0 +1,118 @@
+<style>
+  .likertArea {
+      text-align:center;
+  }
+    
+  .likertQuestion {
+    margin:0 0 30px 0;
+    font-size:1.3em;
+  }
+    
+  .likertLabels {
+  	text-align:center;
+  	padding: 0px 0px 0px 80px;
+    display:table;
+    margin:10px 0;
+    color:#666;
+    width:90%;
+  }
+  
+  .likertLabel {
+    display:table-cell;
+    padding:8px;
+    vertical-align:bottom;
+    width:{labelWidth}%;
+  }
+   
+  .likertOptions {
+    display:table;
+    margin:10px 0;
+    width:100%;
+  }
+  
+  .likertOption {
+    display:table-cell;
+    text-align:center;
+    padding:14px 8px 28px 86px;
+    vertical-align:bottom;
+	width:{optionWidth}%;
+  }
+  		
+  .likertOption input {
+    margin: 3px;
+    padding: 2px;
+  }
+</style>
+  	
+  	
+<script>
+	for (var i = 0; i < 10; i++) {
+		if (Trial.get_input('label' + i.toString()) != null) {
+			document.getElementById('label' + i.toString()).innerHTML = Trial.get_input('label' + i.toString());
+		}
+	}
+	
+	function checkOption(i) {
+		if (Trial.get_input('option' + i.toString()) != null) {
+			document.getElementById('option' + i.toString()).innerHTML = Trial.get_input('option' + i.toString());
+		}
+		else {
+			document.getElementById('radio' + i.toString()).style.display = 'none';
+		}
+	}
+
+</script>
+
+
+<div class="likertArea">
+  <div class="likertQuestion">{question}</div>
+
+  <div class="likertLabels">
+  	<div class="likertLabel" id="label0"></div>
+  	<div class="likertLabel" id="label1"></div>
+  	<div class="likertLabel" id="label2"></div>
+  	<div class="likertLabel" id="label3"></div>
+  	<div class="likertLabel" id="label4"></div>
+  	<div class="likertLabel" id="label5"></div>
+  	<div class="likertLabel" id="label6"></div>
+  	<div class="likertLabel" id="label7"></div>
+  	<div class="likertLabel" id="label8"></div>
+  	<div class="likertLabel" id="label9"></div>
+  </div>
+  
+  
+	<div class="likertOptions">
+		<label class="likertOption"> <div id="option0"><script>checkOption(0)</script></div><br><input type="radio" name="Response" value="{option0}" id="radio0"></label>
+		<label class="likertOption"> <div id="option1"><script>checkOption(1)</script></div><br><input type="radio" name="Response" value="{option1}" id="radio1"></label>
+		<label class="likertOption"> <div id="option2"><script>checkOption(2)</script></div><br><input type="radio" name="Response" value="{option2}" id="radio2"></label>
+		<label class="likertOption"> <div id="option3"><script>checkOption(3)</script></div><br><input type="radio" name="Response" value="{option3}" id="radio3"></label>
+		<label class="likertOption"> <div id="option4"><script>checkOption(4)</script></div><br><input type="radio" name="Response" value="{option4}" id="radio4"></label>
+		<label class="likertOption"> <div id="option5"><script>checkOption(5)</script></div><br><input type="radio" name="Response" value="{option5}" id="radio5"></label>
+		<label class="likertOption"> <div id="option6"><script>checkOption(6)</script></div><br><input type="radio" name="Response" value="{option6}" id="radio6"></label>
+		<label class="likertOption"> <div id="option7"><script>checkOption(7)</script></div><br><input type="radio" name="Response" value="{option7}" id="radio7"></label>
+		<label class="likertOption"> <div id="option8"><script>checkOption(8)</script></div><br><input type="radio" name="Response" value="{option8}" id="radio8"></label>
+		<label class="likertOption"> <div id="option9"><script>checkOption(9)</script></div><br><input type="radio" name="Response" value="{option9}" id="radio9"></label>
+
+	</div>
+</div>
+
+
+
+
+
+
+<!--
+<?php foreach ($texts as $i => $label): ?>
+    <div class='likertLabel <?= $determineClass($texts, $i) ?>'>
+      <?= $label ?>
+ -->
+<!-- 
+<?php foreach ($likertOptions as $option): ?>
+    <label class="likertOption"><?= $option ?><br><input type="radio" name="Response" value="<?= $option ?>"></label>
+    <?php endforeach ?>
+ -->
+ 
+
+<div class="collector-form-element textcenter">
+  <button type="submit" class="collectorButton collectorAdvance">Submit</button>
+</div>

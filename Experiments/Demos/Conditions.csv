@@ -1,20 +1,1 @@
-Description,Notes,"Stimuli 1","Procedure 1"
-Audio,"How to use the Audio trial type.",AudioDemo.csv,Audio.csv
-CaptionedPic,"How to use CaptionedPic trial type.",ImageDemo.csv,CaptionedPic.csv
-CopyPic,"How to use Copy Pic trial type.",CopyPicStim.csv,CopyPic.csv
-CopyWordPair,"How to use the Copy Word Pair Trial type",CopyWordPairStim.csv,CopyWordPairProc.csv
-CopyWordPairDelayed,"How to use the Copy Word Pair Delayed Trial type",CopyWordPairDelayedStim.csv,CopyWordPairDelayedProc.csv
-Cue,"How to use Cue Trial Type",CueStim.csv,CueProc.csv
-CuedRecall,"How to use Cue",CuedRecallStim.csv,CuedRecallProc.csv
-CuePic,"How to use the Cue Pic Trial Type",CuePicStim.csv,CuePicProc.csv
-DigitSpan,"How to use the forward and backward DigitSpan trials",DigitSpanDemo.csv,DigitSpan.csv
-"Passages Trial Type","How to use Passages Trial type :)",PassagesStim.csv,PassagesProc.csv
-FreeRecall,"How to use Free Recall Trial type",FreeRecallStim.csv,FreeRecallProc.csv
-Instruct,"How to Use Instruct Trial Type","Word Pairs.csv",InstructProc.csv
-Likert,"How to use the Likert trial type. ",LikertDemo.csv,Likert.csv
-"Multiple Choice","How to use multiple choice",MultipleChoiceStim.csv,MultipleChoiceProc.csv
-FontSize,"How to use font size",FontSizeStim.csv,FontSizeProc.csv
-MultipleChoicePic,"How to use multiple choice with pictures",MultipleChoicePicStim.csv,MultipleChoicePicProc.csv
-Survey,"How to use the Survey Trial type",Survey.csv,Survey.csv
-Youtube,"How to use the Youtube trial type.",YoutubeDemo.csv,YoutubeProc.csv
-CuedRecallPic,"How to use the Cued Recall Pic Trial Type.",CuedRecallPicStim.csv,CuedRecallPicProc.csv
+Description,Notes,Stimuli 1,Procedure 1Audio,How to use the Audio trial type.,AudioDemo.csv,Audio.csvCaptionedPic,How to use CaptionedPic trial type.,ImageDemo.csv,CaptionedPic.csvCopyPic,How to use Copy Pic trial type.,CopyPicStim.csv,CopyPic.csvCopyWordPair,How to use the Copy Word Pair Trial type,CopyWordPairStim.csv,CopyWordPairProc.csvCopyWordPairDelayed,How to use the Copy Word Pair Delayed Trial type,CopyWordPairDelayedStim.csv,CopyWordPairDelayedProc.csvCue,How to use Cue Trial Type,CueStim.csv,CueProc.csvCuedRecall,How to use Cue,CuedRecallStim.csv,CuedRecallProc.csvCuePic,How to use the Cue Pic Trial Type,CuePicStim.csv,CuePicProc.csvDigitSpan,How to use the forward and backward DigitSpan trials,DigitSpanDemo.csv,DigitSpan.csvPassages Trial Type,How to use Passages Trial type :),PassagesStim.csv,PassagesProc.csvFreeRecall,How to use Free Recall Trial type,FreeRecallStim.csv,FreeRecallProc.csvInstruct,How to Use Instruct Trial Type,Word Pairs.csv,InstructProc.csvLikert,How to use the Likert trial type. ,LikertDemo.csv,Likert.csvMultiple Choice,How to use multiple choice,MultipleChoiceStim.csv,MultipleChoiceProc.csvFontSize,How to use font size,FontSizeStim.csv,FontSizeProc.csvMultipleChoicePic,How to use multiple choice with pictures,MultipleChoicePicStim.csv,MultipleChoicePicProc.csvSurvey,How to use the Survey Trial type,Survey.csv,Survey.csvYouTube,How to use the Youtube trial type.,YoutubeDemo.csv,YoutubeProc.csvCuedRecallPic,How to use the Cued Recall Pic Trial Type.,CuedRecallPicStim.csv,CuedRecallPicProc.csv
