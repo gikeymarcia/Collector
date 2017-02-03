@@ -1,0 +1,93 @@
+<div class="textcenter">
+  <div id="player"></div>
+    <script>
+        var player;
+        /* set up defaults */
+        var playerVars = {
+            "modestbranding": "1",
+            "controls": "0",
+            "rel": "0",
+            "showinfo": "1",
+            "iv_load_policy": "3"
+        };
+
+
+		playerVars['end time'] = parseFloat(Trial.get_input('end time'));
+		playerVars['playback rate'] = parseFloat(Trial.get_input('playback rate'));
+		
+		
+		if (Trial.get_input('start time') == 'default' ) {
+			playerVars['start time'] = 0;
+		}
+		else {
+			playerVars['start time'] = parseFloat(Trial.get_input('start time'));
+		}
+		
+		
+		if (Trial.get_input('frame width') == 'default' ) {
+			playerVars['width'] = 640;
+		}
+		else {
+			playerVars['width'] = Trial.get_input('frame width');
+		}
+		
+		if (Trial.get_input('frame height') == 'default' ) {
+			playerVars['height'] = 390;
+		}
+		else {
+			playerVars['height'] = Trial.get_input('frame height');
+		}
+		
+		if (Trial.get_input('autoplay') == 'on') {
+			playerVars['autoplay'] = 1;
+		}
+		else {
+			playerVars['autoplay'] = 0;
+		}
+
+
+        
+        /* this function executes as soon as the youtube API becomes available*/
+        function onYouTubeIframeAPIReady() {
+          player = new YT.Player("player", {
+            height  : playerVars['height'],
+            width   : playerVars['width'],
+            videoId : Trial.get_input('videoID'),
+            events  : {
+              "onReady": onPlayerReady,
+              "onStateChange" : onPlayerStateChange,
+              "onError": onPlayerError
+            },
+            playerVars : playerVars
+          });
+        }
+        
+        function onPlayerReady(e) {
+        	e.target.setVolume(100);
+        	player.seekTo(playerVars['start time']);
+        	setTimeout(stop(), playerVars['end time']);
+        	e.target.setPlaybackRate(playerVars['playback rate']);
+        	e.target.playVideo();
+      	}
+        function onPlayerStateChange(e) {
+			if (e.data == YT.PlayerState.PAUSED || e.data == YT.PlayerState.ENDED) {
+				Trial.submit();
+        	}
+        }
+        function onPlayerError(e) {
+        	console.log("There was an error playing this video.");
+        	Trial.submit();
+        }
+        
+
+        function stop() {
+        	player.stopVideo();
+        }
+    </script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+</div>
+
+
+<div class="textcenter">
+  <button class="collectorButton collectorAdvance" id="FormSubmitButton">Next</button>
+</div>
