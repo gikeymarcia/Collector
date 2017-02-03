@@ -173,13 +173,13 @@ Experiment.prototype = {
     },
 
 
-	run_trial(position) {
+    run_trial(position) {
         if (typeof position == "undefined") {
             position = this.data.globals.position;
         }
         this.data.globals.position = position;
-
-		$("#ExperimentContainer").children().remove();
+       	
+       	$("#ExperimentContainer").children().remove();
     	var new_iframe = $("<iframe>");
     	new_iframe.appendTo("#ExperimentContainer");
     	var doc = new_iframe[0].contentDocument;
@@ -188,7 +188,7 @@ Experiment.prototype = {
     	doc.write(this.trial_page);
     	doc.close();
     },
-    
+
     end_trial: function(data, inputs, globals) {
         position = this.data.globals.position;
         this.data.globals = globals;
@@ -213,7 +213,7 @@ Experiment.prototype = {
         }
         else {
             this.record_remaining_trials();
-            $("#ExperimentContainer").html("<h1>Done!</h1>");
+            $("#ExperimentContainer").append("<h1>Done!</h1>");
         }
     },
 
