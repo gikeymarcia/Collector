@@ -138,8 +138,6 @@ for (var trial_type in trial_types) {
 function show_trial_type(trial_type,file){
   $("#trial_type_data > div > div").hide();
   $("#"+trial_type+file+"_id").show();
-  console.dir(trial_type);
-  console.dir(file);
   
 }
 

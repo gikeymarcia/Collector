@@ -8,13 +8,13 @@ var Experiment = function (exp_data, $container, trial_page, trial_types, server
 
     this.exp_data   = exp_data;
     this.trial_page = trial_page;
+    this.ajax_tools_path = server_paths.ajax_tools;    
     this.media_path = server_paths.media_path;
     this.root_path  = server_paths.root_path;
     this.data.globals.position   = exp_data.globals.position;
     this.load_trial_types(trial_types);
     this.container = $container;
 }
-
 
 Experiment.prototype = {
     load_trial_types: function(trial_types_data) {

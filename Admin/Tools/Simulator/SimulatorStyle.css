@@ -23,6 +23,17 @@
 #Preview {
   height: 50%;
 }
+.gui_preview_buttons{
+  background-color:blue;
+  height: 100px;
+  width: 5px;
+
+  -webkit-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+}
     
 .custom_table { display: table; margin: auto; border-collapse: collapse; }
 .custom_table > div { display: table-row; }

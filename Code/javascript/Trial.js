@@ -663,3 +663,27 @@ function calculate_percent_similar(given, answer) {
         return 1;
     }
 }
+
+
+/* * * * * * * * * * *
+* Ajaxing Json files
+*/
+
+function ajax_json_read_write(file,data,experiment_name,read_write){
+  var ajax_path = parent.Collector_Experiment['ajax_tools_path'];
+  
+  $.post(
+        ajax_path,
+        {
+            file:             file,
+            data:             data,
+            experiment_name:  experiment_name,
+            read_write:       read_write
+        },
+        function(returned_data){
+          console.dir(returned_data);
+        },
+        'text'
+    );
+}
+

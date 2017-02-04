@@ -12,22 +12,34 @@
     //setting up varialbes new Experiment.js needs
     $media_path = $FILE_SYS->get_path("Media Dir");
     $root_path  = $FILE_SYS->get_path("Root");
-
+    $ajax_json_path = $FILE_SYS->get_path("Ajax Json");
+    
+    
     require("ExperimentEditor/LoadExperiment.php");
     
     ?>
 
 <link rel="stylesheet" type="text/css" href="SimulatorStyle.css" media="screen" />
 
-<div id="Preview" class="hide_show_elements" >
-  <div id="ExperimentContainer">Select your stim and proc files below to start the stimulation.</div>
+<div id="preview_gui">
+  <table>
+    <tr>
+      <td><input type="button" class="gui_preview_buttons" value="preview"></td>
+      <td rowspan="2">
+        <div id="Preview" class="hide_show_elements" >
+          <div id="ExperimentContainer">Select your stim and proc files below to start the stimulation.</div>
 
-  <div id="run_stop_buttons" class="textcenter" style="display:none">
-    <button type="button" id="run_button" class="collectorButton">Run Simulation</button>
-    <button type="button" id="stop_button" class="collectorButton">Stop Simulation</button>
-  </div>
+          <div id="run_stop_buttons" class="textcenter" style="display:none">
+            <button type="button" id="run_button" class="collectorButton">Run Simulation</button>
+            <button type="button" id="stop_button" class="collectorButton">Stop Simulation</button>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr><td><input type="button" class="gui_preview_buttons" value="GUI"></td></tr>
+  </table>
 </div>
-
+  
 <script>
   
   function show_run_stop_buttons(){
@@ -54,6 +66,7 @@ var trial_types  = <?= json_encode($trial_type_data) ?>;
 var server_paths = {
     media_path: '<?= $media_path ?>',
     root_path:  '<?= $root_path ?>',
+    ajax_tools: '<?= $ajax_json_path ?>'
 };
 
 

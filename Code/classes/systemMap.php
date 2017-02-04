@@ -52,6 +52,7 @@ return array(
     'CSS Images'             => array('Dir'  , 'Code/css/images'),
 
   'Classes'                  => array('Dir'  , 'Code/classes'),
+    'Ajax Json'              => array('File' , 'Code/classes/Ajax_Json.php'),
     'Conditions Class'       => array('File' , 'Code/classes/ConditionController.php'),
     'Control Files Class'    => array('File' , 'Code/classes/ControlFile.php'),
     'Debug Class'            => array('File' , 'Code/classes/DebugController.php'),
