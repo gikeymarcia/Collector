@@ -16,7 +16,7 @@ if (strpos($file_path, '..') !== false) {
 $file_path_parts = explode('/', $file_path);
 
 $exp = $file_path_parts[0];
-$experiments = get_Collector_experiments($_FILES);
+$experiments = get_Collector_experiments($FILE_SYS);
 
 if (!in_array($exp, $experiments)) {
     exit('Bad file path provided, experiment "' . $exp . '" invalid.');
@@ -48,7 +48,7 @@ $dir = dirname($file_path);
 
 if (!is_dir($dir)) mkdir($dir, 0777, true);
 
-$file_full_path = $_FILES->get_path('Experiments') . '/' . $file_path;
+$file_full_path = $FILE_SYS->get_path('Experiments') . '/' . $file_path;
 
 $file_resource = fopen($file_full_path, 'w');
 

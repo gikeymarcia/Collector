@@ -1,17 +1,17 @@
 <?php
     require '../../initiateTool.php';
 
-    $exp_js = $_FILES->get_path("Experiment JS");     // header.php is loading these
+    $exp_js = $FILE_SYS->get_path("Experiment JS");     // header.php is loading these
     echo "<script src='$exp_js'></script>";
 
     // load data required for the experiment
-    // $user_data       = load_user_data($_FILES); this will be filled out or selected later on the actual page
-    $trial_page      = get_trial_page($_FILES);
-    $trial_type_data = get_all_trial_type_data($_FILES);
+    // $user_data       = load_user_data($FILE_SYS); this will be filled out or selected later on the actual page
+    $trial_page      = get_trial_page($FILE_SYS);
+    $trial_type_data = get_all_trial_type_data($FILE_SYS);
 
     //setting up varialbes new Experiment.js needs
-    $media_path = $_FILES->get_path("Media Dir");
-    $root_path  = $_FILES->get_path("Root");
+    $media_path = $FILE_SYS->get_path("Media Dir");
+    $root_path  = $FILE_SYS->get_path("Root");
 
     require("ExperimentEditor/LoadExperiment.php");
     

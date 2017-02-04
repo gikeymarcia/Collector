@@ -16,16 +16,16 @@ $sheet_info = explode('/', $_GET['sheet']);
 $exp_name = array_shift($sheet_info);
 $exp_file = implode('/', $sheet_info);
 
-$experiments = get_Collector_experiments($_FILES);
+$experiments = get_Collector_experiments($FILE_SYS);
 
 if (!in_array($exp_name, $experiments)) {
     exit("bad request: '$exp_name' is not an existing experiment");
 }
 
-$_FILES->set_default('Current Experiment', $exp_name);
+$FILE_SYS->set_default('Current Experiment', $exp_name);
 
 if ($exp_file === 'Conditions.csv') {
-    $sheet_path = $_FILES->get_path('Conditions');
+    $sheet_path = $FILE_SYS->get_path('Conditions');
 } else {
     $sheet_type = null;
     $filename   = '';
@@ -45,7 +45,7 @@ if ($exp_file === 'Conditions.csv') {
         exit('bad file request');
     }
     
-    $sheet_dir  = $_FILES->get_path("$sheet_type Dir");
+    $sheet_dir  = $FILE_SYS->get_path("$sheet_type Dir");
     $sheet_path = "$sheet_dir/$filename";
 }
 

@@ -2,13 +2,13 @@
 // access control: disable access to non-admin
 require '../../initiateTool.php';
 
-$_root = $_FILES->get_path('root');
+$_root = $FILE_SYS->get_path('root');
 
 // load shuffle functions needed for this tool
-require_once $_FILES->get_path('Shuffle Functions');
+require_once $FILE_SYS->get_path('Shuffle Functions');
 
 // find all available experiments
-$experiments = array_flip(get_Collector_experiments($_FILES));
+$experiments = array_flip(get_Collector_experiments($FILE_SYS));
 
 // save selected experimet if available and valid
 $exp = filter_input(INPUT_GET, 'exp', FILTER_SANITIZE_STRING);
@@ -150,7 +150,7 @@ if (($_DATA['loc'] !== '') && ($_DATA['exp'] !== '')
         $file_type           => $filename
     );
     
-    $unshuffled_file = $_FILES->read($file_type, $system_map_values);
+    $unshuffled_file = $FILE_SYS->read($file_type, $system_map_values);
 
     // start a timer
     $shuffle_start = microtime(true);

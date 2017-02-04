@@ -18,7 +18,7 @@ if ($new_name === '' OR preg_match('/[^a-zA-Z0-9._ -]/', $new_name) !== 0) {
 
 $default_files = json_decode(file_get_contents('default_new_experiment.json'), true);
 
-$exp_root_path = $_FILES->get_path('Surveys');
+$exp_root_path = $FILE_SYS->get_path('Surveys');
 
 $exp_dir = "$exp_root_path/$new_name";
 echo $exp_dir;

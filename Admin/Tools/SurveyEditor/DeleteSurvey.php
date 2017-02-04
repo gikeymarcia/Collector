@@ -12,7 +12,7 @@
   
   $deleted_survey = $_POST['deleted_survey'];
 
-  $file_full_path  = $_FILES->get_path('Surveys') . '/' . $deleted_survey;
+  $file_full_path  = $FILE_SYS->get_path('Surveys') . '/' . $deleted_survey;
 
   unlink($file_full_path);
 

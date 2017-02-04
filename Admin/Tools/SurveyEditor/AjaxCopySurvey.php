@@ -4,7 +4,7 @@ require '../../initiateTool.php';
 ob_end_clean(); // no need to transmit useless data
 ini_set('html_errors', false);
 
-$root_path = $_FILES->get_path('Surveys');
+$root_path = $FILE_SYS->get_path('Surveys');
 
 
 //safety checks

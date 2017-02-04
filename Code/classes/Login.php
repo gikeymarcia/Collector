@@ -5,7 +5,7 @@ class Login
     public static function run($username_raw, Collector\Settings $settings) {
         $login = array();
 
-        $_files = $login['_FILES'] = new FileSystem();
+        $file_sys = $login['_FILES'] = new FileSystem();
 
         $username     = self::clean_and_validate_username($username_raw);
         $debug_mode   = self::determine_debug_mode($settings, $username);
@@ -16,9 +16,9 @@ class Login
         $login['ID']         = $id;
         $login['Debug Mode'] = $debug_mode;
 
-        $_files->set_default('Username',     $username);
-        $_files->set_default('ID',           $id);
-        $_files->set_default('Data Sub Dir', $data_sub_dir);
+        $file_sys->set_default('Username',     $username);
+        $file_sys->set_default('ID',           $id);
+        $file_sys->set_default('Data Sub Dir', $data_sub_dir);
 
         return $login;
     }

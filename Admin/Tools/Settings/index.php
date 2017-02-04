@@ -3,7 +3,7 @@
 require '../../initiateTool.php';
 
 // make a temporary pathfinder to get us to the right settings
-$_FILES = new FileSystem();
+$FILE_SYS = new FileSystem();
 $exps   = array_flip(getCollectorExperiments());
 
 // change experiment if one is selected
@@ -11,18 +11,18 @@ if (isset($_GET['Exp'])
     && isset($exps[$_GET['Exp']])
 ) {
     $_DATA['exp'] = $_GET['Exp'];
-    $_FILES->set_default('Current Experiment', $_GET['Exp']);
+    $FILE_SYS->set_default('Current Experiment', $_GET['Exp']);
 }
 $_DATA['exp'] = (isset($_DATA['exp'])) ? $_DATA['exp'] : "";
 if (!empty($_DATA['exp'])) {
-    $_FILES->set_default('Current Experiment', $_DATA['exp']);
+    $FILE_SYS->set_default('Current Experiment', $_DATA['exp']);
 }
 
 // make a new instance of the settings class
 $yourSettings = new Collector\Settings(
-    $_FILES->get_path('Common Settings'),
-    $_FILES->get_path('Experiment Settings'),
-    $_FILES->get_path('Password')
+    $FILE_SYS->get_path('Common Settings'),
+    $FILE_SYS->get_path('Experiment Settings'),
+    $FILE_SYS->get_path('Password')
 );
 
 require __DIR__ . '/saveSettings.php';

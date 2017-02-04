@@ -32,8 +32,6 @@ return array(
   'Custom Functions'         => array('File' , 'Code/customFunctions.php'),
   'Login'                    => array('File' , 'Code/login.php'),
   'Experiment Page'          => array('File' , 'Code/Experiment.php'),
-  'Footer'                   => array('File' , 'Code/footer.php'),
-  'Header'                   => array('File' , 'Code/Header.php'),
   'Trial Content'            => array('File' , 'Code/trialContent.html'),
   'Initiate Collector'       => array('File' , 'Code/initiateCollector.php'),
   'Trial Validator Require'  => array('File' , 'Code/trialValidator.require.php'),

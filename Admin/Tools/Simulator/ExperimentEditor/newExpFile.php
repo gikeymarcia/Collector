@@ -34,7 +34,7 @@ foreach ($_POST['data'] as $line) {
     $data[] = array_combine($headers, $line);
 }
 
-$valid_experiments = get_Collector_experiments($_FILES);
+$valid_experiments = get_Collector_experiments($FILE_SYS);
 
 if(!in_array($_POST['exp_name'],$valid_experiments)){
   exit ("not valid experiment name");
@@ -47,6 +47,6 @@ $system_map_values = array(
     $filetype            => "$filename.csv"
 );
 
-$_FILES->overwrite($filetype, $data, $system_map_values);
+$FILE_SYS->overwrite($filetype, $data, $system_map_values);
 
 echo "New $filetype file created: $filename";

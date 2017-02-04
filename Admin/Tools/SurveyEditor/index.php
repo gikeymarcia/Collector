@@ -24,7 +24,7 @@
   $archived_surveys = explode(",",$archived_surveys);
   $archived_surveys_json = json_encode($archived_surveys);
   
-  $surveys = getCsvsInDir($_FILES->get_path('Common')."/Surveys"); 
+  $surveys = getCsvsInDir($FILE_SYS->get_path('Common')."/Surveys"); 
   
   $new_exp_json = file_get_contents('default_new_experiment.json'); // may delete
 ?>

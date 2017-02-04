@@ -90,16 +90,14 @@ function checkLoginStatus($password, $hashIterations) {
 }
 
 function createPasswordForm($errorMessage, $hashIterations) {
-    $_files = new FileSystem();
+    $file_sys = new FileSystem();
 
     $added_scripts = array(
-        $_files->get_path('Sha256 JS'),
-        $_files->get_path('root') . '/Admin/Login.js'
+        $file_sys->get_path('Sha256 JS'),
+        $file_sys->get_path('root') . '/Admin/Login.js'
     );
 
-    $title = 'Collector - Login';
-
-    require $_files->get_path('Header');
+    output_page_header($file_sys, 'Collector - Login', $added_scripts);
 
     ?>
     <div id="PaswordInputArea">
@@ -128,5 +126,5 @@ function createPasswordForm($errorMessage, $hashIterations) {
     </style>
     <?php
 
-    require $_files->get_path('Footer');
+    output_page_footer($file_sys);
 }

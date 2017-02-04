@@ -29,22 +29,21 @@ $path_parts = explode('/', $script_name);
 $current_exp = $path_parts[count($path_parts) - 2];
 
 // Set default path for the Current Experiment
-$_FILES->set_default('Current Experiment', $current_exp);
+$FILE_SYS->set_default('Current Experiment', $current_exp);
 
 // Set default path for the Data directory
 // the conditions class will automatically create a login counter dir, and it needs this value
-$_FILES->set_default('Data Sub Dir', '');
+$FILE_SYS->set_default('Data Sub Dir', '');
 
 
-$conditions = $_FILES->read('Conditions');
+$conditions = $FILE_SYS->read('Conditions');
 
 /*
  * Display
  */
 // load page header
-$title = 'Experiment Login Page';
-require $_FILES->get_path('Header');
-$action = $_FILES->get_path('Login');
+output_page_header($FILE_SYS, 'Experiment Login Page');
+$action = $FILE_SYS->get_path('Login');
 
 // modify condition option tag attributes according to Settings
 $options = array();
@@ -138,4 +137,4 @@ if ($_SETTINGS->show_condition_selector == true && !$is_returning_user) {
 </form>
 
 <?php
-require $_FILES->get_path('Footer');
+output_page_footer($FILE_SYS);

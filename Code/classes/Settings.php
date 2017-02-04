@@ -61,11 +61,11 @@ class Settings
      * @param string $expLoc    The path to the experiment specific settings file.
      * @param string $passLoc   The path to the password.
      */
-    public function __construct(\FileSystem $_files)
+    public function __construct(\FileSystem $file_sys)
     {
-        $this->files      = $_files;
-        $this->common     = $this->load('Common Settings', $_files);
-        $this->experiment = $this->load('Experiment Settings', $_files);
+        $this->files      = $file_sys;
+        $this->common     = $this->load('Common Settings', $file_sys);
+        $this->experiment = $this->load('Experiment Settings', $file_sys);
     }
 
     /**
@@ -106,13 +106,13 @@ class Settings
     }
 
 
-    private function load($system_data_label, \FileSystem $_files)
+    private function load($system_data_label, \FileSystem $file_sys)
     {
         $data_source = ($system_data_label == 'Common Settings'
                      || $system_data_label == 'Experiment Settings') ?
                      $system_data_label : null;
         try {
-            return $_files->read($data_source);
+            return $file_sys->read($data_source);
         } catch (\Exception $e) {
             return array();
         }
