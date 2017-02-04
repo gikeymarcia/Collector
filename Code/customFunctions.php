@@ -2,7 +2,7 @@
 
 use phpbrowscap\Browscap;
 
-function get_all_trial_type_data(FileSystem $_files) {
+function get_all_trial_type_data(FileSystem $file_sys) {
     $trial_types = array();
 
     $trial_type_locations = array(
@@ -11,7 +11,7 @@ function get_all_trial_type_data(FileSystem $_files) {
     );
 
     foreach ($trial_type_locations as $category) {
-        $list = $_files->read($category);
+        $list = $file_sys->read($category);
 
         foreach ($list as $trial_type) {
             $trial_types[$trial_type] = null;
@@ -19,7 +19,7 @@ function get_all_trial_type_data(FileSystem $_files) {
     }
 
     foreach ($trial_types as $trial_type => $null) {
-        $data = get_trial_type_data($_files, $trial_type);
+        $data = get_trial_type_data($file_sys, $trial_type);
 
         if ($data === null) {
             unset($trial_types[$trial_type]);
@@ -31,9 +31,9 @@ function get_all_trial_type_data(FileSystem $_files) {
     return $trial_types;
 }
 
-function get_trial_type_data(FileSystem $_files, $trial_type) {
-    $custom_dir  = $_files->get_path('Custom Trial Type Dir', $trial_type);
-    $default_dir = $_files->get_path('Trial Type Dir',        $trial_type);
+function get_trial_type_data(FileSystem $file_sys, $trial_type) {
+    $custom_dir  = $file_sys->get_path('Custom Trial Type Dir', $trial_type);
+    $default_dir = $file_sys->get_path('Trial Type Dir',        $trial_type);
 
     $test_file = 'template.html';
 
@@ -68,13 +68,13 @@ function read_trial_type($trial_type_dir) {
 /**
  *
  */
-function get_Collector_experiments(FileSystem $_files) {
-    $experiment_names = $_files->read('Experiments');
+function get_Collector_experiments(FileSystem $file_sys) {
+    $experiment_names = $file_sys->read('Experiments');
 
     foreach ($experiment_names as $i => $exp) {
         $temp_defaults = array('Current Experiment' => $exp);
 
-        if ($_files->read('Conditions', $temp_defaults) === array()) {
+        if ($file_sys->read('Conditions', $temp_defaults) === array()) {
             unset($experiment_names[$i]);
         }
     }
@@ -86,11 +86,11 @@ function get_Collector_experiments(FileSystem $_files) {
  *
  * @param string     $filenames comma-delimited filenames to load
  * @param string     $type      "Stimuli" or "Procedure"
- * @param FileSystem $_files    the method of locating and loading files
+ * @param FileSystem $file_sys    the method of locating and loading files
  *
  * @return array the data from all the csvs, combined and shuffled
  */
-function load_exp_files(FileSystem $_files, $type, $condition) {
+function load_exp_files(FileSystem $file_sys, $type, $condition) {
     $files      = array();
     $file_index = 1;
 
@@ -102,11 +102,11 @@ function load_exp_files(FileSystem $_files, $type, $condition) {
     $all_data = array();
 
     foreach ($files as $file) {
-        $file_data = $_files->read($type, array($type => $file));
+        $file_data = $file_sys->read($type, array($type => $file));
         $all_data  = array2d_merge($all_data, $file_data);
     }
 
-    require_once $_files->get_path('Shuffle Functions');
+    require_once $file_sys->get_path('Shuffle Functions');
     $all_data = multiLevelShuffle($all_data);
     $all_data = shuffle2dArray($all_data);
 
@@ -928,7 +928,7 @@ function Collector_prepare_autoloader() {
     $autoloader->add('phpbrowscap', "$code_folder/vendor/phpbrowscap");
 }
 
-function save_user_data($data, FileSystem $_files) {
+function save_user_data($data, FileSystem $file_sys) {
     $global_data = array(
         "condition" => $data['condition'],
         "position"  => $data['position']
@@ -936,20 +936,20 @@ function save_user_data($data, FileSystem $_files) {
     $stimuli     = $data['stimuli'];
     $procedure   = $data['procedure'];
 
-    $_files->overwrite('User Globals',   $global_data);
-    $_files->overwrite('User Stimuli',   $stimuli);
-    $_files->overwrite('User Procedure', $procedure);
+    $file_sys->overwrite('User Globals',   $global_data);
+    $file_sys->overwrite('User Stimuli',   $stimuli);
+    $file_sys->overwrite('User Procedure', $procedure);
 }
 
 /**
  * creates an experiment by reading the relevant stim and proc files of
  * either a given or a randomly assigned condition
  */
-function create_experiment(FileSystem $_files, $condition_index = null) {
-    $condition = ConditionAssignment::get($_files, $condition_index);
+function create_experiment(FileSystem $file_sys, $condition_index = null) {
+    $condition = ConditionAssignment::get($file_sys, $condition_index);
 
-    $stimuli   = load_exp_files($_files, 'Stimuli',   $condition);
-    $procedure = load_exp_files($_files, 'Procedure', $condition);
+    $stimuli   = load_exp_files($file_sys, 'Stimuli',   $condition);
+    $procedure = load_exp_files($file_sys, 'Procedure', $condition);
 
     return array(
         'condition' => $condition,
@@ -959,30 +959,89 @@ function create_experiment(FileSystem $_files, $condition_index = null) {
     );
 }
 
-function load_user_data(FileSystem $_files) {
+function load_user_data(FileSystem $file_sys) {
     return array(
-        'stimuli'    => $_files->read('User Stimuli'),
-        'procedure'  => $_files->read('User Procedure'),
-        'globals'    => $_files->read('User Globals'),
-        'responses'  => load_responses($_files),
+        'stimuli'    => $file_sys->read('User Stimuli'),
+        'procedure'  => $file_sys->read('User Procedure'),
+        'globals'    => $file_sys->read('User Globals'),
+        'responses'  => load_responses($file_sys),
     );
 }
 
-function load_responses(FileSystem $_files) {
+function load_responses(FileSystem $file_sys) {
     // if file doesn't exist then -> read() returns null
-    return ($resp = $_files->read('User Responses'))
+    return ($resp = $file_sys->read('User Responses'))
          ? $resp
          : array();
 }
 
-function get_trial_page(FileSystem $_files) {
+function get_trial_page(FileSystem $file_sys) {
     ob_start();
     // @TODO : make this pretty
-    $added_scripts = array($_files->get_path("Trial JS"));
-    require $_files->get_path('Header');
-    require $_files->get_path('Trial Content');
-    require $_files->get_path('Footer');
+    $added_scripts = array($file_sys->get_path("Trial JS"));
+    
+    output_page_header($file_sys, 'Trial', $added_scripts, false);
+    require $file_sys->get_path('Trial Content');
+    output_page_footer($file_sys);
+    
     return ob_get_clean();
+}
+
+function output_page_header(FileSystem $file_sys, $title = 'Collector', $added_scripts = array(), $send_headers = true) {
+    if ($send_headers) header('Content-Type: text/html; charset=utf-8');
+    
+?><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Page title -->
+  <title><?= $title ?></title>
+  
+  <!-- Icons -->
+  <link rel="icon" href="<?= $file_sys->get_path('Icon') ?>" type="image/png">
+  <link rel="shortcut icon" href="<?= $file_sys->get_path('Icon') ?>" type="image/png">
+
+  <!-- Custom fonts: Roboto (headers), Open Sans (body), Inconsolata (monospace) -->
+  <link href='http://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
+
+  <!-- Base styles -->
+  <link rel="stylesheet" href="<?= $file_sys->get_path('Global CSS') ?>">
+  <link rel="stylesheet" href="<?= $file_sys->get_path('Jquery UI Custom CSS') ?>">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <!-- Base scripts -->
+  <script>
+    if (typeof jQuery === "undefined") {
+      document.write("<script src='<?= $file_sys->get_path('Jquery') ?>'><\/script>");
+    }
+  </script>
+  
+  <!-- JS Tools -->
+  <script src="<?= $file_sys->get_path('Jquery UI Custom') ?>"></script>
+  
+  <?php
+    foreach ($added_scripts as $src) {
+      if (is_file($src)) $src .= "?m=" . filemtime($src);
+      echo "<script src='{$src}'></script>";
+    }
+  ?>
+</head>
+
+<body id="flexBody">
+  <!-- redirect if Javascript is disabled -->
+  <noscript>
+    <meta http-equiv="refresh" content="0;url=<?= $file_sys->get_path('No JS') ?>" />
+  </noscript>
+
+<?php
+}
+
+function output_page_footer(FileSystem $file_sys) {
+?></body></html>
+<?php
 }
 
 

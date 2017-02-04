@@ -11,12 +11,12 @@ Collector_session_start();
 
 // load file locations
 if (!isset($_SESSION['_FILES'])) $_SESSION['_FILES'] = new FileSystem();
-$_FILES = $_SESSION['_FILES'];
+$FILE_SYS = $_SESSION['_FILES'];
 
 // load settings
-$_SESSION['settings'] = new Collector\Settings($_FILES);
+$_SESSION['settings'] = new Collector\Settings($FILE_SYS);
 $_SETTINGS = $_SESSION['settings'];
 
 if ($_SETTINGS->password === null) {
-    require $_FILES->get_path("Set Password");
+    require $FILE_SYS->get_path("Set Password");
 }

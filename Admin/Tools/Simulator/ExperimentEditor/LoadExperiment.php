@@ -20,15 +20,15 @@
   
 
   
-  $experiments = get_Collector_experiments($_FILES);
+  $experiments = get_Collector_experiments($FILE_SYS);
   
   $experiment_files = array();
   
   foreach ($experiments as $exp) {
-    $_FILES->set_default('Current Experiment', $exp);
-    $experiment_files[$exp]['Conditions'] = read_csv_raw($_FILES->get_path('Conditions'));
-    $experiment_files[$exp]['Stimuli']    = $_FILES->read('Stimuli Dir');
-    $experiment_files[$exp]['Procedures'] = $_FILES->read('Procedure Dir');
+    $FILE_SYS->set_default('Current Experiment', $exp);
+    $experiment_files[$exp]['Conditions'] = read_csv_raw($FILE_SYS->get_path('Conditions'));
+    $experiment_files[$exp]['Stimuli']    = $FILE_SYS->read('Stimuli Dir');
+    $experiment_files[$exp]['Procedures'] = $FILE_SYS->read('Procedure Dir');
   }
   
   $new_exp_json = file_get_contents('ExperimentEditor/default_new_experiment.json');

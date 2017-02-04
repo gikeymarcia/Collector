@@ -2,21 +2,21 @@
 
 class ConditionAssignment
 {
-    public static function get(FileSystem $_files, $condition = null) {
-        if ($_files->get_default('Current Experiment') === null) {
+    public static function get(FileSystem $file_sys, $condition = null) {
+        if ($file_sys->get_default('Current Experiment') === null) {
             throw new Exception('Cannot assign condition with FileSystem provided,' .
                                 ' because it does not know the current condition.');
         }
 
         if (is_numeric($condition)) {
-            return self::get_specific_condition($_files, $condition);
+            return self::get_specific_condition($file_sys, $condition);
         } else {
-            return self::get_random_assignment($_files);
+            return self::get_random_assignment($file_sys);
         }
     }
 
-    private static function get_specific_condition(FileSystem $_files, $condition) {
-        $conditions = $_files->read('Conditions');
+    private static function get_specific_condition(FileSystem $file_sys, $condition) {
+        $conditions = $file_sys->read('Conditions');
 
         if (!isset($conditions[$condition])) {
             throw new Exception('We attempted to load condition "' .
@@ -27,10 +27,10 @@ class ConditionAssignment
         }
     }
 
-    private static function get_random_assignment(FileSystem $_files) {
-        $conditions = $_files->read('Conditions');
+    private static function get_random_assignment(FileSystem $file_sys) {
+        $conditions = $file_sys->read('Conditions');
 
-        $random_assignments = $_files->read('Random Assignments');
+        $random_assignments = $file_sys->read('Random Assignments');
         $random_assignments = explode(',', $random_assignments);
 
         while ($assignment = array_pop($random_assignments)) {
@@ -45,7 +45,7 @@ class ConditionAssignment
             $condition = $conditions[array_pop($random_assignments)];
         }
 
-        $_files->overwrite('Random Assignments', implode(',', $random_assignments));
+        $file_sys->overwrite('Random Assignments', implode(',', $random_assignments));
 
         return $condition;
     }

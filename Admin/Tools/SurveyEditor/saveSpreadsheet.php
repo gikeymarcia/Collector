@@ -23,7 +23,7 @@ $survey_name = $_POST["survey_name"];
 
 
 $survey = $file_path_parts[0];
-$surveys = getCsvsInDir($_FILES->get_path('Common')."/Surveys");
+$surveys = getCsvsInDir($FILE_SYS->get_path('Common')."/Surveys");
 
 
 
@@ -52,13 +52,13 @@ if (!is_dir($dir)) mkdir($dir, 0777, true); // this seems wrong, but redundant
 if($survey_name !== $file_path){
   // code for renaming file
   
-  $file_full_path = $_FILES->get_path('Surveys') . '/' . $survey_name;
-  $delete_path = $_FILES->get_path('Surveys') . '/' . $file_path;
+  $file_full_path = $FILE_SYS->get_path('Surveys') . '/' . $survey_name;
+  $delete_path = $FILE_SYS->get_path('Surveys') . '/' . $file_path;
   $delete_original = TRUE;
   //new name
   //delete original file?
 } else {
-  $file_full_path = $_FILES->get_path('Surveys') . '/' . $file_path;
+  $file_full_path = $FILE_SYS->get_path('Surveys') . '/' . $file_path;
   
   $delete_original = FALSE;
 

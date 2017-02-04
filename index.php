@@ -20,13 +20,12 @@ require 'Code/initiateCollector.php';
 
 // get possible experiments to choose from
 $experiments = array();
-$exp_folder  = $_FILES->get_path('Experiments');
-foreach (get_Collector_experiments($_FILES) as $exp_name) {
+$exp_folder  = $FILE_SYS->get_path('Experiments');
+foreach (get_Collector_experiments($FILE_SYS) as $exp_name) {
     $experiments[$exp_name] = "$exp_folder/$exp_name";
 }
 
-$title = 'Collector Homepage';
-require $_FILES->get_path('Header');
+output_page_header($FILE_SYS, 'Collector Homepage');
 ?>
 
 <style>
@@ -47,9 +46,9 @@ require $_FILES->get_path('Header');
     </ul>
 
     <p>Otherwise, you can access one of the other tools
-       <a href="<?= $_FILES->get_path('Admin') ?>">here</a>.
+       <a href="<?= $FILE_SYS->get_path('Admin') ?>">here</a>.
     </p>
 </div>
 
 <?php
-require $_FILES->get_path('Footer');
+output_page_footer($FILE_SYS);

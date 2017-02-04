@@ -13,15 +13,15 @@ $input_condition = filter_input(INPUT_GET, 'Condition');
 $_SESSION = Login::run($input_username, $_SETTINGS);
 
 // restore FileSystem alias
-$_FILES = $_SESSION['_FILES'];
+$FILE_SYS = $_SESSION['_FILES'];
 
-$_FILES->set_default('Current Experiment', $input_exp);
+$FILE_SYS->set_default('Current Experiment', $input_exp);
 
 // if data doesn't exist for this user, create it
-if ($_FILES->read('User Data') === null) {
-    $user_data = create_experiment($_FILES, $input_condition);
-    save_user_data($user_data, $_FILES);
+if ($FILE_SYS->read('User Data') === null) {
+    $user_data = create_experiment($FILE_SYS, $input_condition);
+    save_user_data($user_data, $FILE_SYS);
 }
 
-header('Location: ' . $_FILES->get_path('Experiment Page'));
+header('Location: ' . $FILE_SYS->get_path('Experiment Page'));
 exit;

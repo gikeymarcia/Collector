@@ -10,14 +10,14 @@
         $_SETTINGS->set_password($_POST['pass']);
         if ($_SETTINGS->password !== null) {
             $noPass = false;
-            $root = $_FILES->get_path("Root");
+            $root = $FILE_SYS->get_path("Root");
             header("Location: $root");
             exit;
         }
     }
 
     $title = "Initial Setup";
-    require $_FILES->get_path("Header");
+    require $FILE_SYS->get_path("Header");
 
  ?>
 
@@ -46,4 +46,4 @@
 </style>
 
 
-<?php require $_FILES->get_path("Footer"); exit;?>
+<?php require $FILE_SYS->get_path("Footer"); exit;?>

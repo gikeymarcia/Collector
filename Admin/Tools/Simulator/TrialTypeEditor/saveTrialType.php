@@ -17,14 +17,14 @@ if (strpos($file_path, '..') !== false) {
 $file_path_parts = explode('/', $file_path);
 
 $trial_type = $file_path_parts[0];
-//$trialTypes = get_all_trial_type_data($_FILES); // get Collector trial types
+//$trialTypes = get_all_trial_type_data($FILE_SYS); // get Collector trial types
 
-$custom_trial_types = $_FILES->read('Custom Trial Types');
-$default_trial_types = $_FILES->read('Trial Types');
+$custom_trial_types = $FILE_SYS->read('Custom Trial Types');
+$default_trial_types = $FILE_SYS->read('Trial Types');
 $trial_types = array_merge($custom_trial_types,$default_trial_types);
 
-$default_trial_types_path = $_FILES->get_path('Trial Types');
-$custom_trial_types_path = $_FILES->get_path('Custom Trial Types');
+$default_trial_types_path = $FILE_SYS->get_path('Trial Types');
+$custom_trial_types_path = $FILE_SYS->get_path('Custom Trial Types');
 
 
 if (!in_array($trial_type, $trial_types)) {

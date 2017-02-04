@@ -18,16 +18,16 @@ $sheet_info = explode('/', $_GET['sheet']);
 $survey_name = array_shift($sheet_info);
 //$exp_file = implode('/', $sheet_info);
 
-$surveys = getCsvsInDir($_FILES->get_path('Common')."/Surveys");
+$surveys = getCsvsInDir($FILE_SYS->get_path('Common')."/Surveys");
 
 if (!in_array($survey_name, $surveys)) {
     exit("bad request: '$survey_name' is not an existing experiment");
 }
 
-//$_FILES->set_default('Current Experiment', $survey_name);
+//$FILE_SYS->set_default('Current Experiment', $survey_name);
 
 
-$sheet_path = $_FILES->get_path('Common')."/Surveys/$survey_name";
+$sheet_path = $FILE_SYS->get_path('Common')."/Surveys/$survey_name";
 
 
 
@@ -35,7 +35,7 @@ $sheet_path = $_FILES->get_path('Common')."/Surveys/$survey_name";
 
 
 if ($exp_file === 'Conditions.csv') {
-    $sheet_path = $_FILES->get_path('Conditions');
+    $sheet_path = $FILE_SYS->get_path('Conditions');
 } else {
     $sheet_type = null;
     $filename   = '';
@@ -55,7 +55,7 @@ if ($exp_file === 'Conditions.csv') {
         exit('bad file request');
     }
     
-    $sheet_dir  = $_FILES->get_path("$sheet_type Dir");
+    $sheet_dir  = $FILE_SYS->get_path("$sheet_type Dir");
     $sheet_path = "$sheet_dir/$filename";
 }
  */

@@ -65,26 +65,26 @@ class CollectorData
     }
     
     public static function get_data($usernames, $columns, $output_function) {
-        $_files = new FileSystem();
+        $file_sys = new FileSystem();
         
         self::output_columns($columns, $output_function);
         
         foreach ($usernames as $exp_name => $user_list) {
             foreach ($user_list as $username) {
-                self::output_user($_files, $username, $exp_name, $output_function, $columns);
+                self::output_user($file_sys, $username, $exp_name, $output_function, $columns);
             }
         }
     }
     
-    public static function output_user(FileSystem $_files, $username, $exp_name, $output_function, $columns) {
+    public static function output_user(FileSystem $file_sys, $username, $exp_name, $output_function, $columns) {
         $system_map_values = array(
             'Current Experiment' => $exp_name,
             'Data Sub Dir'       => '',
             'Username'           => $username
         );
         
-        $responses = $_files->read('User Responses', $system_map_values);
-        $globals   = $_files->read('User Globals',   $system_map_values);
+        $responses = $file_sys->read('User Responses', $system_map_values);
+        $globals   = $file_sys->read('User Globals',   $system_map_values);
         $globals   = self::format_globals($globals);
         
         foreach ($responses as $row) {
@@ -139,10 +139,10 @@ class CollectorData
     }
     
     public static function find_available_data() {
-        $_files = new FileSystem();
+        $file_sys = new FileSystem();
         
-        $usernames = self::get_usernames_in_each_exp($_files);
-        $columns   = self::get_columns_of_users_in_each_exp($_files, $usernames);
+        $usernames = self::get_usernames_in_each_exp($file_sys);
+        $columns   = self::get_columns_of_users_in_each_exp($file_sys, $usernames);
         
         return array(
             'Usernames' => $usernames,
@@ -150,20 +150,20 @@ class CollectorData
         );
     }
     
-    public static function get_usernames_in_each_exp(FileSystem $_files) {
-        $data_dirs = self::get_data_dirs($_files);
+    public static function get_usernames_in_each_exp(FileSystem $file_sys) {
+        $data_dirs = self::get_data_dirs($file_sys);
         $usernames = array();
         
         foreach ($data_dirs as $dir) {
             $exp_name = substr($dir, 0, -5);
-            $usernames[$exp_name] = self::get_usernames_in_exp($_files, $exp_name);
+            $usernames[$exp_name] = self::get_usernames_in_exp($file_sys, $exp_name);
         }
         
         return $usernames;
     }
     
-    public static function get_data_dirs(FileSystem $_files) {
-        $data_root = $_files->get_path('Data');
+    public static function get_data_dirs(FileSystem $file_sys) {
+        $data_root = $file_sys->get_path('Data');
         
         if (!is_dir($data_root)) mkdir($data_root, 0777, true);
         
@@ -182,13 +182,13 @@ class CollectorData
         return array_values($data_dirs);
     }
     
-    public static function get_usernames_in_exp(FileSystem $_files, $exp_name) {
+    public static function get_usernames_in_exp(FileSystem $file_sys, $exp_name) {
         $system_map_values = array(
             'Current Experiment' => $exp_name,
             'Data Sub Dir'       => ''
         );
         
-        $data_dir_path = $_files->get_path('Current Data Dir', $system_map_values);
+        $data_dir_path = $file_sys->get_path('Current Data Dir', $system_map_values);
         
         $users = scandir($data_dir_path);
         
@@ -201,14 +201,14 @@ class CollectorData
         return array_values($users);
     }
     
-    public static function get_columns_of_users_in_each_exp(FileSystem $_files, $usernames_in_exps) {
+    public static function get_columns_of_users_in_each_exp(FileSystem $file_sys, $usernames_in_exps) {
         $columns = array();
         
         $system_map_values = array();
         
         foreach ($usernames_in_exps as $exp_name => $user_list) {
             foreach ($user_list as $username) {
-                $user_columns = self::get_columns_of_user($_files, $exp_name, $username);
+                $user_columns = self::get_columns_of_user($file_sys, $exp_name, $username);
                 
                 foreach ($user_columns as $column) {
                     $columns[$column] = true;
@@ -219,15 +219,15 @@ class CollectorData
         return array_keys($columns);
     }
     
-    public static function get_columns_of_user(FileSystem $_files, $exp_name, $username) {
+    public static function get_columns_of_user(FileSystem $file_sys, $exp_name, $username) {
         $system_map_values = array(
             'Current Experiment' => $exp_name,
             'Data Sub Dir'       => '',
             'Username'           => $username
         );
         
-        $resp_columns = $_files->get_columns('User Responses', $system_map_values);
-        $globals      = $_files->read(       'User Globals',   $system_map_values);
+        $resp_columns = $file_sys->get_columns('User Responses', $system_map_values);
+        $globals      = $file_sys->read(       'User Globals',   $system_map_values);
         $globals      = self::format_globals($globals);
         $glob_columns = array_keys($globals);
         
