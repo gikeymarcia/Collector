@@ -236,3 +236,57 @@ function associate_data(data) {
     
     return output;
 }
+
+function trialtype_to_canvas(current_trialtype_template){
+  
+  // capture globals
+   
+  var new_iframe = $("<iframe>");
+  new_iframe.id="canvas_iframe";
+  $("#canvas").html(""); //wipe canvas
+  new_iframe.appendTo("#canvas");
+  
+  // detect and remove scripts here
+  
+  scriptless_trialtype_template = current_trialtype_template.replace(/<script>/g,"<script>___script___")
+  
+  scriptless_trialtype_template = scriptless_trialtype_template.split(/<script>|<\/script>/g);
+  
+  console.dir(scriptless_trialtype_template);
+  
+  current_trial_types_array = [];
+  
+  for(var i=0;i<scriptless_trialtype_template.length;i++){
+    if(scriptless_trialtype_template[i].indexOf("___script___")!==-1){
+      console.dir(scriptless_trialtype_template[i].indexOf("___script___"));
+      var this_script = scriptless_trialtype_template[i].replace("___script___","");
+      current_trial_types_array.push(this_script);
+      // the first part of this string includes script
+      var script_no = current_trial_types_array.length;
+      scriptless_trialtype_template[i] = "<span onclick='edit_script("+script_no+")'>___script"+script_no+"___</span>";
+      
+    }
+  }
+  
+  scriptless_trialtype_template = scriptless_trialtype_template.join("");
+  
+  console.dir(scriptless_trialtype_template);
+  
+  var doc = new_iframe[0].contentDocument;
+
+  var header =  '<!DOCTYPE html>'+
+                '<html>'+
+                '<head>'+
+                 ' <title>Tests</title>'+
+                 ' <meta charset="utf-8">'+
+                 ' <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>'+
+                 '</head>'+
+                 '<div id="canvas_in_iframe">';
+  var footer = '</div>';
+  var canvas_script = '<script src="GUI/canvas_iframe.js"></script>'
+  doc.open();
+  doc.write(header+scriptless_trialtype_template+footer+canvas_script);
+  doc.close();
+   
+  
+}

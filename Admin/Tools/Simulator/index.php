@@ -21,22 +21,29 @@
 
 <link rel="stylesheet" type="text/css" href="SimulatorStyle.css" media="screen" />
 
-<div id="preview_gui">
-  <table>
+<div id="preview_gui" class="hide_show_elements">
+  <table id="preview_gui_table">
     <tr>
-      <td><input type="button" class="gui_preview_buttons" value="preview"></td>
-      <td rowspan="2">
-        <div id="Preview" class="hide_show_elements" >
-          <div id="ExperimentContainer">Select your stim and proc files below to start the stimulation.</div>
+      <td style="vertical-align:middle;">
+        <input type="button" class="collectorButton gui_preview_buttons" value="Preview">
+        <br>
+        <input type="button" class="collectorButton gui_preview_buttons" value="GUI">
+      </td>
+      
+      <td>
+        <div id="Preview_area" class="preview_gui_class">
+          <div id="ExperimentContainer">Select an experiment to be able to start a preview.</div>
 
           <div id="run_stop_buttons" class="textcenter" style="display:none">
             <button type="button" id="run_button" class="collectorButton">Run Simulation</button>
             <button type="button" id="stop_button" class="collectorButton">Stop Simulation</button>
           </div>
         </div>
+        <div id="GUI_area" class="preview_gui_class">
+          <?= require("GUI/index.php") ?>
+        </div>
       </td>
     </tr>
-    <tr><td><input type="button" class="gui_preview_buttons" value="GUI"></td></tr>
   </table>
 </div>
   
@@ -47,6 +54,10 @@
   }
   $("#stop_button").on("click",function(){
     $("#ExperimentContainer").html("Simulation Stopped. Click 'Run Simulation' to restart.");
+  });
+  $(".gui_preview_buttons").on("click",function(){
+    $(".preview_gui_class").hide();
+    $("#"+this.value+"_area").show();
   });
 </script>
   

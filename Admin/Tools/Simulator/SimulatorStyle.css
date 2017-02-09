@@ -1,5 +1,12 @@
 #ToolsNavBar { margin: 0; }
     
+
+#canvas{
+  width:400px;
+  height:400px;
+  
+}
+    
 #ExperimentContainer {
     height: 100%;
     
@@ -20,13 +27,33 @@
     padding: 0;
     display: block;
 }
-#Preview {
-  height: 50%;
+
+#gui_interface_add_element{
 }
+#gui_interface_edit_element{
+  display:none;
+}
+#gui_interface_add_element_table td {
+  text-align: center;
+  padding:5px;
+}
+#GUI_area{
+  display:none;
+}
+#Preview_area,#GUI_area{
+  height: 400px;
+  width:  600px;
+}
+#preview_gui{
+  width: 100%;
+}
+#preview_gui > tr {
+  width:100%;
+}
+
 .gui_preview_buttons{
-  background-color:blue;
-  height: 100px;
-  width: 5px;
+  width: 100px;
+  margin-bottom: 5em;
 
   -webkit-transform: rotate(-90deg);
   -moz-transform: rotate(-90deg);
