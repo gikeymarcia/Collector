@@ -1,87 +1,64 @@
-var texts = Trial.get_procedure('Text');
-Trial.add_input('question', texts);
-
-
-
-
-
 var labels = Trial.get_procedure('Labels');
 var label = labels.split('|');
-for (var i = 0, n = label.length; i < n; i++) {
-		Trial.add_input(('label' + i.toString()), label[i]);
+var label_html = "";
+
+for (var i=0; i<label.length; ++i) {
+    label_html += "<div class='likertLabel'>" + label[i] + "</div>";
 }
-
-
-
+Trial.add_input('label', label_html);
 
 
 var settings = Trial.get_procedure('Options');
 var setting = settings.split('::');
 
-var likertStart = parseFloat(setting[0].substr(-1));
-var likertEnd = parseFloat(setting[1]);
+var likert_start = parseFloat(setting[0].substr(-1));
+var likert_end = parseFloat(setting[1]);
 
 
-if (likertStart == null) {
-	likertStart = 1.0;
+if (likert_start == null) {
+	likert_start = 1.0;
 }
-if (likertEnd == null) {
-	likertEnd = 7.0;
+if (likert_end == null) {
+	likert_end = 7.0;
 }
 
-// Surround this in a try-catch
-var extraSettings = settings.split(',');
-if (extraSettings[1] == null) {
-	var stepSize = 1.0;
+var extra_settings = settings.split('#');
+if (extra_settings[1] == null) {
+	var step_size = 1.0;
 }
 else {
-	var stepSize = parseFloat(extraSettings[1]);
+	var step_size = parseFloat(extra_settings[1]);
 }
 
+var options_html = "<div class='likertOption'>";
+for (i = likert_start; i <= likert_end; i+=step_size) {
+	options_html += "<label>" + i + "<input type=\"radio\" name=\"Response\"" + "</label>";
+}
+options_html += "</div>";
+Trial.add_input('option', options_html);
+
+
+var total_options = (((likert_end+1)-likert_start)/step_size);
+var label_width = (Math.floor(1000 / Math.max(1, label.length)) / 10);
+var option_width = (Math.floor(1000 / total_options) / 10);
+var options_width = 90 + total_options*1.4;
+
+Trial.add_input('label_width', label_width.toString());
+Trial.add_input('option_width', option_width.toString());
+Trial.add_input('options_width', options_width.toString());
+
+
+var option_pad = 92;
+var reduce = 0;
 var j = 0;
-for (i = likertStart, n = likertEnd; i <= n; i+=stepSize) {
-	Trial.add_input(('option' + j.toString()), i.toString());
-	++j;
+for (i = likert_start;i < likert_end/step_size ; i+=2) {
+	reduce += Math.pow((i*j),j) +1;
+	j+= 0.8;
+}
+option_pad -= reduce;
+if (option_pad < 0) {
+	option_pad = 50;
 }
 
+Trial.add_input('option_pad', option_pad.toString());
 
-
-
-labelWidth = (Math.floor(1000 / Math.max(1, label.length)) / 10);
-optionWidth = (Math.floor(1000 / setting.length) / 10);
-
-Trial.add_input('labelWidth', labelWidth.toString());
-Trial.add_input('optionWidth', optionWidth.toString());
-
-
-
-/*
- * Determines which text-alignment class to use during the display of the Likert
- * labels.
- * 
- * @param array $texts
- * @param int   $i     Current iteration in the foreach loop.
- * 
- * @return string The class name to use.
- */
-// $determineClass = function ($texts, $i) {
-//     if (text.length == 2) {
-//         if (i == 0) {
-//             class = 'textleft';
-//         } else {
-//             class = 'textright';
-//         }
-//     } elseif (text.length == 3) {
-//         if ($i === 0) {
-//             $class = 'textleft';
-//         } elseif ($i === 1) {
-//             $class = 'textcenter';
-//         } else {
-//             $class = 'textright';
-//         }
-//     } else {
-//         $class = 'textcenter';
-//     }
-// 
-//     return $class;
-// }
