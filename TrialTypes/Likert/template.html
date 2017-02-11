@@ -18,9 +18,9 @@
   
   .likertLabel {
     display:table-cell;
-    width:{labelWidth}%;
+    width:{label_width}%;
   }
-   
+  
   .likertOptions {
     width:{options_width}%;
     display:table;
@@ -28,22 +28,22 @@
   
   .likertOption {
     display:table-cell;
-    width:{optionWidth}%;
+    width:{option_width}%;
   }
   
   .likertOption label {
   	padding: 0 8px 0 {option_pad}px;
   }
   
-  .likertOptions label input {
-  	margin: 60px 0 0 -10px;
+  .likertOption label input {
+  	margin: 60px 0 0 -11px;
     padding: 2px;
   }
 </style>
 
 
 <div class="likertArea">
-  <div class="likertQuestions">[Text]</div>
+  	<div class="likertQuestions">[Text]</div>
 	<div class="likertLabels">{label}</div>
 	<div class="likertOptions">{option}</div>
 </div>

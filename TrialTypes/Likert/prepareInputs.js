@@ -48,16 +48,23 @@ Trial.add_input('option_width', option_width.toString());
 Trial.add_input('options_width', options_width.toString());
 
 
-var option_pad = 92;
-var reduce = 0;
+var option_pad = 93;
 var j = 0;
-for (i = likert_start;i < likert_end/step_size ; i+=2) {
-	reduce += Math.pow((i*j),j) +1;
-	j+= 0.8;
+var e = 2.7182818284590452353602874713527;
+for (i = likert_start; i < likert_end; i+=step_size) {
+	if (j+1 <= 7) {
+		window.alert(option_pad);
+		option_pad += (-0.9) * Math.pow(e,j);
+	}
+	else {
+		option_pad = 92;
+		option_pad += (-0.9) * Math.pow(e,j);
+	}
+	j++;
 }
-option_pad -= reduce;
+
 if (option_pad < 0) {
-	option_pad = 50;
+	option_pad = 40;
 }
 
 Trial.add_input('option_pad', option_pad.toString());
