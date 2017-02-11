@@ -65,8 +65,8 @@
         }
         function onPlayerReady(e) {
         	e.target.setVolume(100);
-        	//e.target.playVideo();
         	e.target.loadVideoById(Trial.get_input('videoID'), start_time, end_time);
+        	e.target.playVideo();
         	e.target.setPlaybackRate(playback_rate);
       	}
         function onPlayerStateChange(e) {
