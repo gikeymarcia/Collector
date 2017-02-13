@@ -49,11 +49,10 @@ Trial.add_input('options_width', options_width.toString());
 
 
 var option_pad = 93;
-var j = 0;
+var j = 1;
 var e = 2.7182818284590452353602874713527;
-for (i = likert_start; i < likert_end; i+=step_size) {
+for (i = likert_start; i < likert_end; i+=(step_size*2)) {
 	if (j+1 <= 7) {
-		window.alert(option_pad);
 		option_pad += (-0.9) * Math.pow(e,j);
 	}
 	else {
