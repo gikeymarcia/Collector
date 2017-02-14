@@ -10,31 +10,36 @@
             "showinfo": "1",
             "iv_load_policy": "3"
         };
-
-
+		
+		
 		if (Trial.get_input('start time') == 'default' ) {
-			var start_time = 0;
+			playerVars['start'] = 0
 		}
 		else {
-			var start_time = parseInt(Trial.get_input('start time'));
+			playerVars['start'] = parseInt(Trial.get_input('start time'));
 		}
-		var end_time = parseInt(Trial.get_input('end time'));
+		if (Trial.get_input('end time') != 'default' ) {
+			playerVars['end'] = parseInt(Trial.get_input('end time'));
+		}
 		var playback_rate = parseFloat(Trial.get_input('playback rate'));
 		
 		
+		var width = 0;
+		var height = 0;
 		if (Trial.get_input('frame width') == 'default' ) {
-			playerVars['width'] = 640;
+			width = 640;
 		}
 		else {
-			playerVars['width'] = Trial.get_input('frame width');
+			width = parseInt(Trial.get_input('frame width'));
 		}
 		
 		if (Trial.get_input('frame height') == 'default' ) {
-			playerVars['height'] = 390;
+			height = 390;
 		}
 		else {
-			playerVars['height'] = Trial.get_input('frame height');
+			height = parseInt(Trial.get_input('frame height'));
 		}
+		
 		
 		if (Trial.get_input('autoplay') == 'on') {
 			playerVars['autoplay'] = 1;
@@ -54,8 +59,9 @@
         /* this function executes as soon as the youtube API becomes available*/
         function onYouTubeIframeAPIReady() {
           player = new YT.Player("player", {
-            height  : playerVars['height'],
-            width   : playerVars['width'],
+            height  : height,
+            width   : width,
+            videoId : Trial.get_input('videoID'),
             events  : {
               "onReady": onPlayerReady,
               "onStateChange" : onPlayerStateChange,
@@ -65,7 +71,6 @@
         }
         function onPlayerReady(e) {
         	e.target.setVolume(100);
-        	e.target.loadVideoById(Trial.get_input('videoID'), start_time, end_time);
         	e.target.playVideo();
         	e.target.setPlaybackRate(playback_rate);
       	}
@@ -75,9 +80,6 @@
 					Trial.submit();
         		}
         	}
-        }
-        function pause_at_endtime() {
-        	player.pauseVideo();
         }
     </script>
     <script src="https://www.youtube.com/iframe_api"></script>

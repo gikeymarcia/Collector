@@ -15,27 +15,37 @@
     color:#666;
     width:80%;
   }
-  
+
   .likertLabel {
     display:table-cell;
     width:{label_width}%;
   }
   
   .likertOptions {
-    width:{options_width}%;
-    display:table;
+  	padding: 0 0 0 80px;
   }
   
-  .likertOption {
-    display:table-cell;
-    width:{option_width}%;
+  #main {
+  	width: auto; 
+  	margin: auto;
   }
   
-  .likertOption label {
-  	padding: 0 8px 0 {option_pad}px;
+  #table {
+  	display: table;
+  	width: 90%;
   }
   
-  .likertOption label input {
+  #row {
+  	display: table-row;
+  }
+  
+  .cell {
+  	display: table-cell;
+  	vertical-align: middle;
+  	text-align: center;
+  }
+  
+  .cell label input {
   	margin: 60px 0 0 -11px;
     padding: 2px;
   }

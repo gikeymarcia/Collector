@@ -213,7 +213,7 @@ Experiment.prototype = {
         }
         else {
             this.record_remaining_trials();
-            $("#ExperimentContainer").append("<h1>Done!</h1>");
+            $("#ExperimentContainer").html("<h1>Done!</h1>");
         }
     },
 
