@@ -17,7 +17,7 @@
     }
 
     $title = "Initial Setup";
-    require $FILE_SYS->get_path("Header");
+    output_page_header($FILE_SYS);
 
  ?>
 
@@ -46,4 +46,4 @@
 </style>
 
 
-<?php require $FILE_SYS->get_path("Footer"); exit;?>
+<?php output_page_footer($FILE_SYS); exit;?>
