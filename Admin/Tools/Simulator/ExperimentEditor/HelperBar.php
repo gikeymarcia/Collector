@@ -88,11 +88,17 @@
 <div id="helperBar">
   <button class="collectorButton" id="helpActivateButton"> Help! </button>
   
+  
 
   
   <div id="helperArea" style="display:none">
     <h1 id="helper_title"> Helper </h1>
 
+    <div>
+      Click <a href="https://docs.google.com/document/d/1OCtDrv7VNu8-nD6Pt1FnGSuKkqil2Onm4PVWOL3NthY/edit?usp=sharing" target="_blank"> here</a> for a list of <b>Collector specific</b> javascript functions
+    </div>
+
+    
     <h2 id="helpType">Select Cell</h2>
     
     <!-- Help Types -->
@@ -137,7 +143,7 @@
     <div class="helpType_Col" id="helpTypeDefault">
       Select a cell to see more information about that column.
     </div>
-  </div>  
+  </div> 
 
   
 </div>

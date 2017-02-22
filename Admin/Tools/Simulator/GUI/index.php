@@ -9,11 +9,24 @@
         #canvas *:active { pointer-events: none; }
         
         .canvasHighlight { outline: 2px solid #2222FF; background-color: #9999FF !important; }
+        #raw_script{
+          width: 400px;
+          height: 300px;
+        }
+        #gui_table td{
+          vertical-align:top;
+          
+        }
+        .interactive_divs{
+          display:none;
+        }
+        
+        
     </style>
 </head>
 <body>
 
-<table>
+<table id="gui_table">
   <tr>
     <td>
       <div id="canvas">
@@ -34,6 +47,46 @@
           <input type="button" value="Edit" id="edit_element_button" class="collectorButton" style="display:none">
         </h4>
         <br>
+        <div id="gui_edit_script">
+          <h4> Script interface </h4>
+          <textarea id="raw_script"></textarea> 
+          <script>
+
+          </script>
+          <div id="gui_script_editor">
+            <?php 
+              $dir = "GUI/Interactive";
+              $interactive_functions = array_diff(scandir($dir), array('.', '..'));
+              
+              print_r($interactive_functions);
+            echo "<select id='select_interactive_function'>";
+            echo "<option>--- select a function ---</option>";
+            foreach ($interactive_functions as $interactive_function){
+              $interactive_function = str_ireplace(".php","",$interactive_function);
+              echo "<option>$interactive_function</option>";
+            }
+            echo "</select>";
+            foreach ($interactive_functions as $interactive_function){
+              $this_div_name = str_ireplace(".php","",$interactive_function);
+              echo "<div id='interactive_$this_div_name' class='interactive_divs'>";
+                require("GUI/Interactive/$interactive_function");
+              echo "</div>";
+            }
+             
+            ?>
+          </div>
+          
+        </div>
+        
+        <script>
+          $("#select_interactive_function").on("change",function(){
+            console.dir(this);
+            console.dir(this.value);
+            $("#interactive_"+this.value).show();            
+          });
+        
+        </script>
+        
         <div id="gui_interface_add_element">
           <table id="gui_interface_add_element_table">
             <tr>
@@ -119,10 +172,43 @@
     
     //console.dir($(target).css("color"));
     
-    
   });;;
+  
+  function gui_script_read(script_received){
+    $("#raw_script").val(script_received);
+    if(script_received.indexOf("GUI_FUNCTIONS") == -1){
+    
+        // missing GUI file - do appropriate actions
+    } else {
+      first_split= script_received.split("// --- START GUI FUNCTION ---");
+      second_split= first_split[1].split("// --- END GUI FUNCTION ---");
+      gui_script = second_split[0];
+      
+      gui_script=gui_script.replace("GUI_FUNCTIONS.settings","temp_GUI_Var");
+      gui_script=gui_script.replace("GUI_FUNCTIONS.run();","//GUI_FUNCTIONS.run();");
+      
+      //// note that i need to reimplement GUI_FUNCTIONS.run(); after all is done ///
+
+      eval(gui_script);
+    }
+    //console.dir(split_script_received);
+    global_script_received = script_received;
     
     
+    if(script_received.indexOf("detect experiment name") == -1){
+      alert("no script");
+    } else {
+            
+    }
+    
+    
+  }
+  
+
+/* $(window).on("load", function() {
+    GUI_FUNCTIONS.run();
+}); */
+     
 </script>
 
 </body>

@@ -1,0 +1,38 @@
+<input type="text" id="json_value">
+<input type="button" id="process_json_value" value="process">
+<button>Proceed</button>
+
+<textarea id="return_textarea"></textarea>
+
+<script>
+
+
+// --- START GUI FUNCTION ---
+
+GUI_FUNCTIONS.settings = [
+    {
+        type: 'event',
+        target: 'json_value',
+        gui_function: 'hide'
+    },
+   {
+        type: 'timer',
+        msg:  'hello'
+    }
+];
+GUI_FUNCTIONS.run();
+
+// --- END GUI FUNCTION ---
+
+//detect experiment name
+
+  $("#process_json_value").on("click",function(){
+  yourmom = ajax_json_read_write("file_name.json","reading","Ajax_Pilot","Read","return_textarea");
+  
+
+    pilot_json={ data:"you suck" };  
+    pilot_json=JSON.stringify(pilot_json);     ajax_json_read_write("file_name.json",pilot_json,"Ajax_Pilot","Write");
+});
+</script>
+<script>
+</script>

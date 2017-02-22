@@ -669,21 +669,67 @@ function calculate_percent_similar(given, answer) {
 * Ajaxing Json files
 */
 
-function ajax_json_read_write(file,data,experiment_name,read_write){
+function ajax_json_read_write(file,data,experiment_name,read_write,ajax_textarea){
   var ajax_path = parent.Collector_Experiment['ajax_tools_path'];
-  
+  data_read = [];
   $.post(
         ajax_path,
         {
             file:             file,
             data:             data,
             experiment_name:  experiment_name,
-            read_write:       read_write
+            read_write:       read_write            
         },
-        function(returned_data){
-          console.dir(returned_data);
+        //callback_function,
+        function (returned_data){
+          yourmom = returned_data;
+          console.dir(yourmom);
+          callback_function(returned_data,ajax_textarea)
         },
+        //document.getElementById(ajax_textarea).value=return_data,
         'text'
     );
+  return data_read;
 }
 
+// Anthony's attempt at functions
+
+function callback_function(data,ajax_textarea){
+  $("#"+ajax_textarea).val(data);
+} 
+
+GUI_FUNCTIONS = { // well, in this case Anthony's vandalism of Tyson's function
+    hide: function(hide_info) {
+        $("#"+hide_info["target"]).hide();
+    },
+    
+    alert: function(msg) {
+        
+    }, 
+    
+    settings: [],
+    
+    run: function() {
+        var self = this;
+        console.dir(this.settings);
+        
+        this.settings.forEach(function(e) {
+            self.run_command(e);
+        });
+    },
+    
+    run_command: function(info) {
+        if (info.type === 'timer') {
+            
+        }
+        
+        if (info.type === 'event') {
+          console.dir(info);
+           this.hide(info);
+/*
+            var func = this[info.gui_function];
+            $("#" + info.target).on("click", func);
+*/
+        }
+    }
+}

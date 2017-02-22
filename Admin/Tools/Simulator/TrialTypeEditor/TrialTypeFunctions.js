@@ -254,15 +254,15 @@ function trialtype_to_canvas(current_trialtype_template){
   
   console.dir(scriptless_trialtype_template);
   
-  current_trial_types_array = [];
+  current_trial_types_script_array = [];
   
   for(var i=0;i<scriptless_trialtype_template.length;i++){
     if(scriptless_trialtype_template[i].indexOf("___script___")!==-1){
       console.dir(scriptless_trialtype_template[i].indexOf("___script___"));
       var this_script = scriptless_trialtype_template[i].replace("___script___","");
-      current_trial_types_array.push(this_script);
-      // the first part of this string includes script
-      var script_no = current_trial_types_array.length;
+      var script_no = current_trial_types_script_array.length;
+      current_trial_types_script_array.push(this_script);
+      // the first part of this string includes script      
       scriptless_trialtype_template[i] = "<span onclick='edit_script("+script_no+")'>___script"+script_no+"___</span>";
       
     }
@@ -287,6 +287,5 @@ function trialtype_to_canvas(current_trialtype_template){
   doc.open();
   doc.write(header+scriptless_trialtype_template+footer+canvas_script);
   doc.close();
-   
   
 }

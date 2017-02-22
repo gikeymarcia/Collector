@@ -72,5 +72,8 @@ $("#canvas_in_iframe").on("mouseenter", "*", function() {
     return false;
 }); 
 function edit_script(x){
-  console.dir(x);
+//  console.dir(parent.current_trial_types_script_array[x]);
+  parent.gui_script_read(parent.current_trial_types_script_array[x]);
+  
 }
+
