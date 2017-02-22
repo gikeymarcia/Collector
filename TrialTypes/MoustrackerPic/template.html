@@ -1,0 +1,60 @@
+<style>
+  #mousetracker_area{
+    width:600px;
+    height:600px;
+  }
+</style>
+
+<img id="mousetracker_area" onMouseMove="getPositions()" src="[Cue:url]">
+
+<textarea name="x_array" id="x_array_textarea"></textarea>
+<textarea name="y_array" id="y_array_textarea"></textarea>
+<textarea name="timestamps" id="timestamp_textarea"></textarea>
+
+<script>
+  $("#mousetracker_area").mouseover(function(){
+    getMousePosition();
+  });
+
+/*
+function getMousePosition(e){
+    var mouseX = e.clientX;
+    var mouseY = e.clientY;
+    console.log("mouseX = " + mouseX);
+    console.log("mouseY = " + mouseY);
+}
+_mousemove: function(evt) {
+  getMousePosition(e)
+}
+*/
+
+x_array=[];
+y_array=[];
+timestamp_array=[];
+baseline_time=(new Date()).getTime();
+
+
+
+
+function getPositions(ev) { 
+  if (ev == null) { ev = window.event }
+    var offset = $("#mousetracker_area").offset(); 
+    _mouseX = ev.pageX;
+    _mouseY = ev.pageY;
+    _mouseX -= offset.left;
+    _mouseY -= offset.top;
+    console.dir( _mouseX);
+    console.dir( _mouseY);
+    x_array.push(_mouseX);
+    y_array.push(_mouseY);
+    this_timestamp = (new Date()).getTime()-baseline_time;
+    timestamp_array.push(this_timestamp);
+    $("#x_array_textarea").val(x_array);
+    $("#y_array_textarea").val(y_array);
+    $("#timestamp_textarea").val(timestamp_array);
+
+
+  }
+
+
+</script>
