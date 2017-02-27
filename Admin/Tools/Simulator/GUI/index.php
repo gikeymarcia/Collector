@@ -131,6 +131,18 @@
 
 <script>
 
+update_all_lists = {
+  lists_to_update : [],
+  elements_to_add_to_list: [],
+  new_item: function(new_list){
+    this.lists_to_update.push(new_list);
+  }
+}
+
+$("#trial_type_select").on("change",function(){
+  update_all_lists.elem
+});
+
   $("#add_element_button").on("click",function(){
     $("#gui_interface_add_element").show();
     $("#gui_interface_edit_element").hide();
