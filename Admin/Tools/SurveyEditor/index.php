@@ -287,31 +287,15 @@
         );
     }
   
-    function create_new_experiment(survey_name) {
+    function create_new_survey(survey_name) {
       $("#survey_name").val(survey_name);
+      survey_files.push(survey_name);
       
-      var survey_names = Object.keys(survey_files);
-      survey_names.push(survey_name);
-      
-      var options_html ="<option>"+survey_names.join("</option><option>")+"</option>";
+      var options_html ="<option>"+survey_files.join("</option><option>")+"</option>";
       
       $("#survey_select").html(options_html);
       
       $('#survey_select').val(survey_name);
-      
-      var procedure_options_html ="<option>- select a PROCEDURE file to load it -</option><option>"+Object.keys(new_experiment_data['Procedure']).join("</option><option>")+"</option>";
-      
-      $("#proc_list").html(procedure_options_html);
-      
-      var stimuli_options_html ="<option>- select a STIMULI file to load it -</option><option>"+Object.keys(new_experiment_data['Stimuli']).join("</option><option>")+"</option>";
-      
-      $("#stim_list").html(stimuli_options_html);
-      
-      survey_files[survey_name] = {
-        /* Conditions: new_experiment_data['Conditions.csv'],
-        Stimuli: Object.keys(new_experiment_data['Stimuli']),
-        Procedures: Object.keys(new_experiment_data['Procedure']) */
-      }
       
     }
   
@@ -332,20 +316,18 @@
             new_name: new_name
           },
           function(returned_data){
-            console.dir(returned_data);
-            
-            if (returned_data === 'success') {
-              create_new_experiment(new_name);
+            console.dir(returned_data);            
+            if (returned_data.indexOf("success") === 0) {
+              var new_survey_name = returned_data.replace("success:","");
+              create_new_survey(new_survey_name);
+              $("#interface").show();
+              sheet_selection_function();
+
             }
           }
         );
         
-        // add new_experiment_data to survey_files for new experiment name
       }
-      
-      createExpEditorHoT(new_experiment_data['Conditions.csv']);
-      $("#sheet_name_header").val("Conditions");
-      $("#interface").show();
       
     });
     

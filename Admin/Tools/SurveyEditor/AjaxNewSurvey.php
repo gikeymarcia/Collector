@@ -16,10 +16,26 @@ if ($new_name === '' OR preg_match('/[^a-zA-Z0-9._ -]/', $new_name) !== 0) {
     exit('error: invalid experiment name: "' . $new_name . '"');
 }
 
-$default_files = json_decode(file_get_contents('default_new_experiment.json'), true);
+$new_name = str_ireplace(".csv","",$new_name);
+
+$temp_split = explode(".",$new_name);
+if(count($temp_split) > 1){
+  exit("illegal filetype");
+}
+
+$new_name = $new_name.".csv";
+
+// copy a .csv file rather than use a json decode - right???
+
+
+//$default_files = json_decode(file_get_contents('default_new_experiment.json'), true);
 
 $exp_root_path = $FILE_SYS->get_path('Surveys');
+$template_survey = file_get_contents("$exp_root_path/SurveyDemo.csv");
+file_put_contents("$exp_root_path/$new_name",$template_survey);
+echo "success:$new_name";
 
+/*
 $exp_dir = "$exp_root_path/$new_name";
 echo $exp_dir;
 
@@ -62,3 +78,4 @@ if (error_get_last() === null) {
     $errors = ob_get_clean();
     echo 'error: PHP error: ' . $errors;
 }
+*/
