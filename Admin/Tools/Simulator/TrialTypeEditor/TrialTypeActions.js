@@ -21,7 +21,7 @@ $("#trial_type_select, #trial_type_file_select").on("change", function() {
     var current_trialtype_template=$("#"+trial_type+"template_textarea").val();
     
     trialtype_to_canvas(current_trialtype_template);
-    
+        
 });
 
 $("#save_btn").on("click", save_trial_types);

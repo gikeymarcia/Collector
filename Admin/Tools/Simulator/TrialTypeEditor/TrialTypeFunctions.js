@@ -252,13 +252,10 @@ function trialtype_to_canvas(current_trialtype_template){
   
   scriptless_trialtype_template = scriptless_trialtype_template.split(/<script>|<\/script>/g);
   
-  console.dir(scriptless_trialtype_template);
-  
   current_trial_types_script_array = [];
   
   for(var i=0;i<scriptless_trialtype_template.length;i++){
     if(scriptless_trialtype_template[i].indexOf("___script___")!==-1){
-      console.dir(scriptless_trialtype_template[i].indexOf("___script___"));
       var this_script = scriptless_trialtype_template[i].replace("___script___","");
       var script_no = current_trial_types_script_array.length;
       current_trial_types_script_array.push(this_script);
@@ -270,7 +267,6 @@ function trialtype_to_canvas(current_trialtype_template){
   
   scriptless_trialtype_template = scriptless_trialtype_template.join("");
   
-  console.dir(scriptless_trialtype_template);
   
   var doc = new_iframe[0].contentDocument;
 
@@ -284,8 +280,26 @@ function trialtype_to_canvas(current_trialtype_template){
                  '<div id="canvas_in_iframe">';
   var footer = '</div>';
   var canvas_script = '<script src="GUI/canvas_iframe.js"></script>'
-  doc.open();
-  doc.write(header+scriptless_trialtype_template+footer+canvas_script);
-  doc.close();
+  
+  // insert promise here
+  
+  function write_canvas(){
+    doc.open();
+    doc.write(header+scriptless_trialtype_template+footer+canvas_script);
+    doc.close();    
+  }
+  
+  function after_write_canvas(){
+    element_management.canvas_elements_update();
+    element_management.update_lists(); // rename object and function    
+  }
+  
+  // following use of Ajax only runs after_write_canvas AFTER the canvas has been written. Solution by Kio2212 on http://stackoverflow.com/questions/5000415/call-a-function-after-previous-function-is-complete
+  $.ajax({
+    url:write_canvas(),
+    success:function(){
+      after_write_canvas();
+    }
+  })
   
 }

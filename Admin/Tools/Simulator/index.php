@@ -85,3 +85,4 @@ var server_paths = {
 
 <?php require ("TrialTypeEditor/index.php"); ?>
 
+<script src="JavascriptActions.js"></script>

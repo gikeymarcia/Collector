@@ -26,6 +26,8 @@
 </head>
 <body>
 
+<script src="GUI/GuiFunctions.js"></script>
+
 <table id="gui_table">
   <tr>
     <td>
@@ -48,24 +50,36 @@
         </h4>
         <br>
         <div id="gui_edit_script">
-          <h4> Script interface </h4>
+          <h4> Interactive interface </h4>
+          <div id="interactive_gui"></div>
+          <input id="add_interactive_button" type='button' class='collectorButton' value='Add'>          
           <textarea id="raw_script"></textarea> 
           <script>
-
+            $("#add_interactive_button").on("click",function(){
+              $("#select_interactive_function").val("--- select a function ---");
+              $("#select_interactive_function").show();
+              $(".interactive_divs").hide();
+              // create a new button below the lowest;
+              // buttons should be highlighted depending on which script is being edited!
+              
+            });
           </script>
+          <select id='select_interactive_function' style="display:none">
           <div id="gui_script_editor">
             <?php 
               $dir = "GUI/Interactive";
               $interactive_functions = array_diff(scandir($dir), array('.', '..'));
               
               print_r($interactive_functions);
-            echo "<select id='select_interactive_function'>";
             echo "<option>--- select a function ---</option>";
             foreach ($interactive_functions as $interactive_function){
               $interactive_function = str_ireplace(".php","",$interactive_function);
               echo "<option>$interactive_function</option>";
             }
-            echo "</select>";
+            ?>
+          </select>            
+            
+            <?php
             foreach ($interactive_functions as $interactive_function){
               $this_div_name = str_ireplace(".php","",$interactive_function);
               echo "<div id='interactive_$this_div_name' class='interactive_divs'>";
@@ -131,18 +145,6 @@
 
 <script>
 
-update_all_lists = {
-  lists_to_update : [],
-  elements_to_add_to_list: [],
-  new_item: function(new_list){
-    this.lists_to_update.push(new_list);
-  }
-}
-
-$("#trial_type_select").on("change",function(){
-  update_all_lists.elem
-});
-
   $("#add_element_button").on("click",function(){
     $("#gui_interface_add_element").show();
     $("#gui_interface_edit_element").hide();
@@ -170,7 +172,6 @@ $("#trial_type_select").on("change",function(){
     this_class = this_class.replace(" canvasHighlight","");
     var target = $("iFrame").contents().find("#"+this_class);
     
-    temp_clob_trget = target;
     
     selected_element_id = target[0].id;      
     $("#selected_element_id").html(selected_element_id);
@@ -186,35 +187,7 @@ $("#trial_type_select").on("change",function(){
     
   });;;
   
-  function gui_script_read(script_received){
-    $("#raw_script").val(script_received);
-    if(script_received.indexOf("GUI_FUNCTIONS") == -1){
-    
-        // missing GUI file - do appropriate actions
-    } else {
-      first_split= script_received.split("// --- START GUI FUNCTION ---");
-      second_split= first_split[1].split("// --- END GUI FUNCTION ---");
-      gui_script = second_split[0];
-      
-      gui_script=gui_script.replace("GUI_FUNCTIONS.settings","temp_GUI_Var");
-      gui_script=gui_script.replace("GUI_FUNCTIONS.run();","//GUI_FUNCTIONS.run();");
-      
-      //// note that i need to reimplement GUI_FUNCTIONS.run(); after all is done ///
-
-      eval(gui_script);
-    }
-    //console.dir(split_script_received);
-    global_script_received = script_received;
-    
-    
-    if(script_received.indexOf("detect experiment name") == -1){
-      alert("no script");
-    } else {
-            
-    }
-    
-    
-  }
+  
   
 
 /* $(window).on("load", function() {
