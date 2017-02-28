@@ -6,6 +6,7 @@ function sort_gui_info() {
       var children = gui_info.children().detach().each(function() {
           children_array.push(this);
       });
+      console.dir(children_array);
       
       children_array.sort(function(a, b) {
           return $(a).data("parent_count") - $(b).data("parent_count");

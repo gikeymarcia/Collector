@@ -700,7 +700,14 @@ function callback_function(data,ajax_textarea){
 
 GUI_FUNCTIONS = { // well, in this case Anthony's vandalism of Tyson's function
     hide: function(hide_info) {
-        $("#"+hide_info["target"]).hide();
+      if(hide_info["trigger"]=="---none---"){
+        var delay = hide_info["delay"]-0; 
+        $("#"+hide_info["target"]).delay(hide_info["delay"]).hide(0);  
+      } else { 
+        $("#"+hide_info["trigger"]).on("click",function(){
+          $("#"+hide_info["target"]).delay(hide_info["delay"]).hide(0);  
+        });
+      }      
     },
     
     alert: function(msg) {
