@@ -11,14 +11,19 @@
 
 GUI_FUNCTIONS.settings = [
     {
-        type: 'event',
+        type:'event',
+        trigger: 'process_json_value',
         target: 'json_value',
-        gui_function: 'hide'
-    },
-   {
-        type: 'timer',
-        msg:  'hello'
-    }
+        gui_function: 'hide',
+        delay:0,
+    },   
+  {
+        type:'event',
+        trigger: '---none---',
+        target: 'process_json_value',
+        gui_function: 'hide',
+        delay:5000,
+    }, 
 ];
 GUI_FUNCTIONS.run();
 
