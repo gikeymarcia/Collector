@@ -277,16 +277,16 @@ function trialtype_to_canvas(current_trialtype_template){
                  ' <title>Tests</title>'+
                  ' <meta charset="utf-8">'+
                  ' <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>'+
-                 '</head>'+
-                 '<div id="canvas_in_iframe">';
-  var footer = '</div>';
+                 '</head>';//+
+//                 '<div id="canvas_in_iframe">';
+//  var footer = '</div>';
   var canvas_script = '<script src="GUI/canvas_iframe.js"></script>'
   
   // insert promise here
   
   function write_canvas(){
     doc.open();
-    doc.write(header+scriptless_trialtype_template+footer+canvas_script);
+    doc.write(header+scriptless_trialtype_template+canvas_script); //+footer
     doc.close();    
   }
   

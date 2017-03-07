@@ -125,11 +125,18 @@
               var iframepos = $("iFrame").position(); 
 
               $('iFrame').contents().find('html').on('mousemove', function (e) { 
-                this.current_x_co = e.clientX; 
-                this.current_y_co = e.clientY;
-                //console.log(x + " " + y);
-              })          
+                canvas_drawing.current_x_co = e.clientX; 
+                canvas_drawing.current_y_co = e.clientY;
+                console.log(canvas_drawing.current_x_co + " " + canvas_drawing.current_y_co);
+              });         
+           
+              $('iFrame').contents().find('html').on('click', function (e) { 
+                console.dir(canvas_drawing.current_x_co + " " + canvas_drawing.current_y_co);
+                canvas_drawing.draw_new_element();
+              });
+    
             },
+            
             draw_new_element:function(){
               
               // needs to redraw the image
@@ -137,10 +144,15 @@
               // test to check whether we should proceed;
               if(this.new_element_type !== ""){
                 
-                // use co-ordinates to control location where it is placed!!!
+                console.dir("trying to draw");
+                
+                
+                
+                var this_location = 'position:absolute; left:'+this.current_x_co+'px; top:'+this.current_y_co+'px;';
+                
                 // create pipeline for creating different elements depending on what the button said
-                var location = "style='position:absolute; left:"+this.current_x_co+"; top:"+this.current_y_co+"'";
-                var new_element_content = "<div id='exampleElementNo'"+location+">"+this.new_element_type+"</div>";  
+                
+                var new_element_content = "<div id='exampleElementNo' style='"+this_location+"'>"+this.new_element_type+"</div>";  
                 
                 var iframeBody = $("#canvas_iframe").contents().find("body");
                 var testingthis = iframeBody.append(new_element_content);                
