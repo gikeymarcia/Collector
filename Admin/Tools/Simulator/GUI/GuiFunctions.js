@@ -77,11 +77,12 @@ function gui_script_read(script_received){
 
     eval(gui_script); // creating temp_GUI_Var
     
-    //wipe the interactive_gui
-    $("#interactive_gui").html("");
+    $("#interactive_gui").html("");     //wipe the interactive_gui
+
     var interactive_gui_html = '';
     for(i=0;i<temp_GUI_Var.length;i++){
-      interactive_gui_html += i+"<input class='collectorButton' type='button' onclick='interactive_gui_button_click(\""+[i]+"\")' value="+temp_GUI_Var[i]['gui_function']+">"+
+      interactive_gui_html += i+"<span id='gui_button"+i+"' class='gui_button_unclicked' onclick='interactive_gui_button_click(\""+[i]+"\")'>"+temp_GUI_Var[i]['gui_function']+" : "+temp_GUI_Var[i]['target']+"</span>"+      
+//      i+"<input class='collectorButton' type='button' onclick='interactive_gui_button_click(\""+[i]+"\")' value='"+temp_GUI_Var[i]['gui_function']+" : "+temp_GUI_Var[i]['target']+"'>"+
       "<input type='button' class='collectorButton' value='delete'>"+
       "<br>";
     }
@@ -107,6 +108,8 @@ interaction_manager = {
       this_var = this_var.replace("_list","");
       this_var = this_var.replace("_element_","");
       this_var = this_var.replace(curr_int_funcs,"");
+      console.dir("update temp console dir");
+      
       console.dir(this_list);
       console.dir(this_var);
       console.dir(temp_GUI_Var[this.curr_int_no][this_var]);
@@ -118,6 +121,11 @@ interaction_manager = {
 }
 
 function interactive_gui_button_click(interactive_no){
+  
+  //remove clicked class from all elements with unclicked class
+  $(".gui_button_unclicked").removeClass("gui_button_clicked");
+  
+  $("#gui_button"+interactive_no).toggleClass("gui_button_clicked");
   $("#select_interactive_function").show();
   var this_function = temp_GUI_Var[interactive_no]['gui_function'];
   $("#select_interactive_function").val(this_function);

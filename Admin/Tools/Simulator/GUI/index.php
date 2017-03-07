@@ -1,28 +1,9 @@
 <head>
     <title>Tests</title>
     <meta charset="utf-8">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <style>
-        #canvas { border: 1px solid black; margin-bottom: 30px; }
-        #gui_info { border: 1px solid black; padding: 5px; }
-        
-        #canvas *:active { pointer-events: none; }
-        
-        .canvasHighlight { outline: 2px solid #2222FF; background-color: #9999FF !important; }
-        #raw_script{
-          width: 400px;
-          height: 300px;
-        }
-        #gui_table td{
-          vertical-align:top;
-          
-        }
-        .interactive_divs{
-          display:none;
-        }
-        
-        
-    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>    
+    <link rel="stylesheet" type="text/css" href="GUI/GuiStyle.css" media="screen" />               
+
 </head>
 <body>
 
@@ -32,12 +13,7 @@
   <tr>
     <td>
       <div id="canvas">
-        <iframe id="canvas_iframe">
-          <div id="mainDiv">i am the parent!
-              <div id="sub1">i am sub1
-                  <div id="sub2">and im the child <button onclick="alert('you turd');">Click me!</button></div>
-              </div>
-          </div>
+        <iframe id="canvas_iframe">          
         </iframe>
       </div>
     </td>
@@ -45,8 +21,8 @@
       <div id="gui_interface">
         <h3> Interface </h3>
         <h4>
-          <input type="button" value="Add" id="add_element_button" class="collectorButton" style="display:none">
-          <input type="button" value="Edit" id="edit_element_button" class="collectorButton" style="display:none">
+          <input type="button" value="Add" id="add_element_button" class="collectorButton">
+          <input type="button" value="Edit" id="edit_element_button" class="collectorButton">
         </h4>
         <br>
         <div id="gui_edit_script">
@@ -101,36 +77,97 @@
         
         </script>
         
-        <div id="gui_interface_add_element">
+        <div id="gui_interface_add_element" style="display:none">
           <table id="gui_interface_add_element_table">
             <tr>
               <td colspan="4"><h4>Stimuli</h5></td>
             </tr>
             <tr>
-              <td><input type="button" value="Text"  class="collectorButton"></td>
-              <td><input type="button" value="Image" class="collectorButton"></td>
-              <td><input type="button" value="Audio" class="collectorButton"></td>
-              <td><input type="button" value="Video" class="collectorButton"></td>
+              <td><span class="gui_button_unclicked new_element_button" id="gui_button_new_text">Text</span></td>
+              <td><span class="gui_button_unclicked new_element_button" id="gui_button_new_Image">Image</span></td>
+              <td><span class="gui_button_unclicked new_element_button" id="gui_button_new_Audio">Audio</span></td>
+              <td><span class="gui_button_unclicked new_element_button" id="gui_button_new_Video">Video</span></td>              
             </tr>
             <tr>
               <td colspan="4"><h4>Inputs</h5></td>
             </tr>
             <tr>
-              <td><input type="button" value="Button" class="collectorButton"></td>
-              <td><input type="button" value="Text" class="collectorButton">  </td>
-              <td><input type="button" value="Number" class="collectorButton"></td>
-              <td><input type="button" value="Date" class="collectorButton">  </td>
+              <td><span class="gui_button_unclicked new_element_button" id="gui_button_new_Button">Button</span></td>
+              <td><span class="gui_button_unclicked new_element_button" id="gui_button_new_String">String</span></td>
+              <td><span class="gui_button_unclicked new_element_button" id="gui_button_new_Number">Number</span></td>
+              <td><span class="gui_button_unclicked new_element_button" id="gui_button_new_Date">Date</span></td>              
             </tr>
             <tr>
               <td colspan="4"><h4>Survey buttons</h5></td>
             </tr>
             <tr>
               <td></td>
-              <td><input type="button" value="Likert" class="collectorButton"></td>
-              <td><input type="button" value="Radio" class="collectorButton"></td>
+              <td><span class="gui_button_unclicked new_element_button" id="gui_button_new_Likert">Likert</span></td>
+              <td><span class="gui_button_unclicked new_element_button" id="gui_button_new_Radio">Radio</span></td>
+              
             </tr>
           </table>          
         </div>
+        
+        <script>
+          $(".new_element_button").on("click",function(){
+            //console.dir(this.textContent);
+            canvas_drawing.new_element_type = this.textContent;
+            
+          });
+          
+          canvas_drawing = {
+            new_element_type:'',
+            current_x_co:-1,
+            current_y_co:-1,
+            
+            activate_canvas_mouseframe:function(){
+              var iframepos = $("iFrame").position(); 
+
+              $('iFrame').contents().find('html').on('mousemove', function (e) { 
+                this.current_x_co = e.clientX; 
+                this.current_y_co = e.clientY;
+                //console.log(x + " " + y);
+              })          
+            },
+            draw_new_element:function(){
+              
+              // needs to redraw the image
+
+              // test to check whether we should proceed;
+              if(this.new_element_type !== ""){
+                
+                // use co-ordinates to control location where it is placed!!!
+                // create pipeline for creating different elements depending on what the button said
+                var location = "style='position:absolute; left:"+this.current_x_co+"; top:"+this.current_y_co+"'";
+                var new_element_content = "<div id='exampleElementNo'"+location+">"+this.new_element_type+"</div>";  
+                
+                var iframeBody = $("#canvas_iframe").contents().find("body");
+                var testingthis = iframeBody.append(new_element_content);                
+              }
+
+              
+              //var new_element_content = this.new_element_type;
+              //$("#canvas_iframe").append(new_element_content);
+            }
+          };
+          
+          var iframepos = $("#canvas_iframe").position(); 
+
+          $('#canvas_iframe').contents().find('html').on('mousemove', function (e) { 
+            canvas_drawing.current_x_co = e.clientX;// + iframepos.left; 
+            canvas_drawing.current_y_co = e.clientY;// + iframepos.top;
+            //console.log(x + " " + y);
+          });
+          
+          $('#canvas_iframe').contents().find('html').on('click', function (e) { 
+            console.dir(canvas_drawing.current_x_co + " " + canvas_drawing.current_y_co);
+            canvas_drawing.draw_new_element();
+          });
+          
+          
+        </script>
+        
         <div id="gui_interface_edit_element">
           <div id="gui_style">
             <h3 id="selected_element_id"></h3>

@@ -241,8 +241,9 @@ function trialtype_to_canvas(current_trialtype_template){
   
   // capture globals
    
-  var new_iframe = $("<iframe>");
-  new_iframe.id="canvas_iframe";
+   
+   
+  var new_iframe = $("<iframe id='canvas_iframe'>");  
   $("#canvas").html(""); //wipe canvas
   new_iframe.appendTo("#canvas");
   
@@ -301,5 +302,7 @@ function trialtype_to_canvas(current_trialtype_template){
       after_write_canvas();
     }
   })
+  
+  canvas_drawing.activate_canvas_mouseframe();
   
 }

@@ -1,0 +1,47 @@
+#canvas { border: 1px solid black; margin-bottom: 30px; }
+#canvas_mouseframe {
+  position:absolute;
+  width:400px;
+  height:400px;
+  display:none;
+  background-color:blue;
+}
+#gui_info { border: 1px solid black; padding: 5px; }
+
+#canvas_iframe{
+  width:400px;
+  height:400px;
+}
+
+#canvas *:active { pointer-events: none; }
+
+.canvasHighlight { outline: 2px solid #2222FF; background-color: #9999FF !important; }
+#raw_script{
+  width: 400px;
+  height: 300px;
+}
+
+#gui_table td{
+  vertical-align:top;
+  
+}
+
+.gui_button_unclicked{
+  background-color:blue;  
+  color:white;
+  padding:10px;
+  border-radius:5px;
+}
+.gui_button_unclicked:hover{
+  background-color:green;  
+  color:white;
+}
+.gui_button_clicked{
+  background-color:red;  
+  color:white;
+}
+
+
+.interactive_divs{
+  display:none;
+}

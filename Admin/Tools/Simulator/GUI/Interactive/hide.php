@@ -14,13 +14,14 @@ Which element do you want to click to hide the element?
 </select>
 
 After how much time do you want the element to be hidden?
-  <input type="number" id="interactive_hide_element_time">
+  <input type="number" id="interactive_hide_element_delay">
 
 <script>
   var hide_lists = ['interactive_hide_element_target_list',"interactive_hide_element_trigger_list"];
-
+  
   var hide_inputs = hide_lists;
-  hide_inputs = hide_inputs.push("interactive_hide_element_time");
+  
+  hide_inputs.push("interactive_hide_element_delay");
   
   element_management.new_item(hide_lists);
   
