@@ -109,6 +109,8 @@
           </table>          
         </div>
         
+        
+        <script src="GUI/GUINewElements.js"></script>
         <script>
           $(".new_element_button").on("click",function(){
             //console.dir(this.textContent);
@@ -126,12 +128,10 @@
 
               $('iFrame').contents().find('html').on('mousemove', function (e) { 
                 canvas_drawing.current_x_co = e.clientX; 
-                canvas_drawing.current_y_co = e.clientY;
-                console.log(canvas_drawing.current_x_co + " " + canvas_drawing.current_y_co);
+                canvas_drawing.current_y_co = e.clientY;                
               });         
            
               $('iFrame').contents().find('html').on('click', function (e) { 
-                console.dir(canvas_drawing.current_x_co + " " + canvas_drawing.current_y_co);
                 canvas_drawing.draw_new_element();
               });
     
@@ -152,7 +152,15 @@
                 
                 // create pipeline for creating different elements depending on what the button said
                 
-                var new_element_content = "<div id='exampleElementNo' style='"+this_location+"'>"+this.new_element_type+"</div>";  
+                
+                console.dir(this.new_element_type);
+                var element_type = this.new_element_type;
+                
+                new_element_content = new_element_template[element_type].create_element(1,this_location); //"<div id='exampleElementNo' style='"+this_location+"'>"+this.new_element_type+"</div>";  
+                
+                
+                
+                
                 
                 var iframeBody = $("#canvas_iframe").contents().find("body");
                 var testingthis = iframeBody.append(new_element_content);                

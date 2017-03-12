@@ -35,8 +35,10 @@
           <div id="ExperimentContainer">Select an experiment to be able to start a preview.</div>
 
           <div id="run_stop_buttons" class="textcenter" style="display:none">
-            <button type="button" id="run_button" class="collectorButton">Run Simulation</button>
+            <button type="button" id="run_button" class="collectorButton">Run Simulation</button>            
             <button type="button" id="stop_button" class="collectorButton">Stop Simulation</button>
+            <button type="button" id="largescreen_button" class="collectorButton">Enlarge Screen Size</button>
+            <button type="button" id="smallscreen_button" class="collectorButton" style="display:none">Shrink Screen Size</button>
           </div>
         </div>
         <div id="GUI_area" class="preview_gui_class">
@@ -52,6 +54,18 @@
   function show_run_stop_buttons(){
     $("#run_stop_buttons").show();    
   }
+  $("#largescreen_button").on("click",function(){
+    $("#Preview_area").height($("#Preview_area").height()*2);
+    $("#Preview_area").width($("#Preview_area").width()*2);
+    $("#smallscreen_button").show();
+    $("#largescreen_button").hide();
+  });
+  $("#smallscreen_button").on("click",function(){
+    $("#Preview_area").height($("#Preview_area").height()/2);
+    $("#Preview_area").width($("#Preview_area").width()/2);
+    $("#largescreen_button").show();
+    $("#smallscreen_button").hide();
+  });
   $("#stop_button").on("click",function(){
     $("#ExperimentContainer").html("Simulation Stopped. Click 'Run Simulation' to restart.");
   });
