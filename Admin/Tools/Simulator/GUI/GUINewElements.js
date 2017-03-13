@@ -58,10 +58,16 @@ new_element_template = {
     }
   },
   Checkbox:{
-    placeholder:0
+    create_element:function(elementNumber,this_location){
+      var new_text_element = "<label style='"+this_location+"'><span id='element"+elementNumber+"_span'>element"+elementNumber+"</span><input type='Checkbox' id='element"+elementNumber+"'></label>";
+      return new_text_element;
+    }
   },
   Radio:{
-    placeholder:0
+    create_element:function(elementNumber,this_location){
+      var new_text_element = "<label style='"+this_location+"'><span id='element"+elementNumber+"_span'>element"+elementNumber+"</span><input type='radio' id='element"+elementNumber+"'></label>";
+      return new_text_element;
+    }
   }
   
   

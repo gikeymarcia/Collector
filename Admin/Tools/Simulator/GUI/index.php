@@ -102,7 +102,7 @@
             </tr>
             <tr>
               <td></td>
-              <td><span class="gui_button_unclicked new_element_button" id="gui_button_new_Likert">Likert</span></td>
+              <td><span class="gui_button_unclicked new_element_button" id="gui_button_new_Likert">Checkbox</span></td>
               <td><span class="gui_button_unclicked new_element_button" id="gui_button_new_Radio">Radio</span></td>
               
             </tr>
