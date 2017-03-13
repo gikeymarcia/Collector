@@ -277,16 +277,16 @@ function trialtype_to_canvas(current_trialtype_template){
                  ' <title>Tests</title>'+
                  ' <meta charset="utf-8">'+
                  ' <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>'+
-                 '</head>';//+
-//                 '<div id="canvas_in_iframe">';
-//  var footer = '</div>';
-  var canvas_script = '<script src="GUI/canvas_iframe.js"></script>'
+                 '</head>'+
+                 '<div id="canvas_in_iframe">';
+  var footer = '</div>';
+  var canvas_script = '<script src="GUI/canvas_iframe.js"></script>';
   
   // insert promise here
   
   function write_canvas(){
     doc.open();
-    doc.write(header+scriptless_trialtype_template+canvas_script); //+footer
+    doc.write(header+scriptless_trialtype_template+canvas_script+footer); 
     doc.close();    
   }
   
@@ -300,9 +300,17 @@ function trialtype_to_canvas(current_trialtype_template){
     url:write_canvas(),
     success:function(){
       after_write_canvas();
+      for(i=0;i<element_management.canvas_elements.length;i++){
+        console.dir(element_management.canvas_elements[i].id);
+        if(element_management.canvas_elements[i].id == ""){
+          element_management.canvas_elements[i].id = $("iFrame")[0].contentWindow.generate_new_id();
+        }
+      }
     }
   })
   
   canvas_drawing.activate_canvas_mouseframe();
+  
+  // give all elements element_numbers
   
 }

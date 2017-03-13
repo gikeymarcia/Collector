@@ -30,8 +30,7 @@
 
 #gui_interface_add_element{
 }
-#gui_interface_edit_element{
-  display:none;
+#gui_interface_edit_element{  
 }
 #gui_interface_add_element_table td {
   text-align: center;

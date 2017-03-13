@@ -156,13 +156,17 @@
                 console.dir(this.new_element_type);
                 var element_type = this.new_element_type;
                 
-                new_element_content = new_element_template[element_type].create_element(1,this_location); //"<div id='exampleElementNo' style='"+this_location+"'>"+this.new_element_type+"</div>";  
+                // safe way to work out number
+                
+                               
+                var new_element_id = $("iFrame")[0].contentWindow.generate_new_id();
+                new_element_content = new_element_template[element_type].create_element(new_element_id,this_location); 
+                element_management.canvas_elements_update();
                 
                 
                 
                 
-                
-                var iframeBody = $("#canvas_iframe").contents().find("body");
+                var iframeBody = $("#canvas_iframe").contents().find("#canvas_in_iframe");
                 var testingthis = iframeBody.append(new_element_content);                
               }
 
@@ -193,7 +197,8 @@
             <h3 id="selected_element_id"></h3>
             <?= require("Interfaces/span_div_present.php") ?>          
           </div>
-          <div id="gui_info"></div>        
+          <div id="gui_info">
+          </div>        
         </div>
       </div>
     </td>
@@ -213,6 +218,15 @@
    
     
   $("#gui_info").on("mouseenter", "*", function() {
+
+
+  // fix the bug that stops this being read!!! //
+
+
+
+
+
+  
     var this_class = $(this)[0].className;
     $("."+this_class).addClass("canvasHighlight");
       
@@ -252,5 +266,6 @@
 }); */
      
 </script>
+
 
 </body>
