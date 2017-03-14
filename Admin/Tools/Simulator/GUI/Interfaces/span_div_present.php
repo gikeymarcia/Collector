@@ -1,4 +1,4 @@
-<div id="div_span_table"></div>
+<div id="div_span_table" class="element_table"></div>
 
 <script>
 
@@ -9,7 +9,7 @@
   } 
   element_gui['span_or_div'] = {
     
-    my_arr : ["html","color","background-color","font-size","width","height","border-radius"],
+    my_arr : ["html","color","background-color","font-size","width","height","padding","border-radius"],
     
     write_html: function() {
       $("#div_span_table").append("<table>");
@@ -26,18 +26,20 @@
         $("#text_"+this.my_arr[i]).on("input",function(){
           var new_style = $(this).val();
           var property_selected = this.id.replace("text_","");
-          $("iFrame").contents().find("#"+selected_element_id).css(property_selected,new_style);            
+          $("iFrame").contents().find("#"+selected_element_id).css(property_selected,new_style); 
+          trial_management.update_temp_trial_type_template();          
         }); 
       };
       
       $("#text_"+this.my_arr[0]).on("input",function(){
         var new_string = $(this).val();
         var property_selected = this.id.replace("text_","");
-        $("iFrame").contents().find("#"+selected_element_id).html(new_string);            
+        $("iFrame").contents().find("#"+selected_element_id).html(new_string);trial_management.update_temp_trial_type_template();                
       });      
     },
     
     process_text_style: function(this_input) {
+      $("#div_span_table").show();
       for (var i=0; i<this.my_arr.length; ++i) {
         if(this.my_arr[i] == "html"){
           global_var = this_input;

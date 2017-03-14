@@ -32,8 +32,6 @@ var lock_gui_info = false;
 
 $("#canvas_in_iframe").on("mouseenter", "*", function() {
   
-  console.dir("hello");
-  
   if (lock_gui_info) return;
   
   if (this.id === "") this.id = generate_new_id();
@@ -60,7 +58,6 @@ $("#canvas_in_iframe").on("mouseenter", "*", function() {
         parent.$("." + class_name).remove();
     }, 50);
 }).on("contextmenu", function() {
-  alert("whoop");
   //window.parent.$("#gui_interface_edit_element").show();
   
     lock_gui_info = !lock_gui_info;

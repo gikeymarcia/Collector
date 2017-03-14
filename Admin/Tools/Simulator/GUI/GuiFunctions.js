@@ -59,6 +59,19 @@ element_management = {
   },  
 }
 
+trial_management = {
+  update_temp_trial_type_template:function (){
+    var trial_type_html = $("iFrame").contents().find("#canvas_in_iframe").html();
+    $("#temp_trial_type_template").val(trial_type_html);
+  },
+  temp_trial_type_to_actual_trial_type:function(){
+    // rules here for re_integrating scripts
+    // rules here for replacing images from stimuli with values in stimuli column
+  }
+}
+
+
+
 
 function gui_script_read(script_received){
   $("#raw_script").val(script_received);

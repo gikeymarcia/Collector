@@ -267,7 +267,7 @@ function trialtype_to_canvas(current_trialtype_template){
   }
   
   scriptless_trialtype_template = scriptless_trialtype_template.join("");
-  
+  $("#temp_trial_type_template").val(scriptless_trialtype_template);
   
   var doc = new_iframe[0].contentDocument;
 

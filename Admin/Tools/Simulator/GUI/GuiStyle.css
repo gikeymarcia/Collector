@@ -21,6 +21,11 @@
   height: 300px;
 }
 
+#temp_trial_type_template{
+  width: 400px;
+  height: 300px;
+}
+
 #gui_table td{
   vertical-align:top;
   

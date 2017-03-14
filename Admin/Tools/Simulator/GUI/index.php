@@ -29,8 +29,12 @@
           <h4> Interactive interface </h4>
           <div id="interactive_gui"></div>
           <input id="add_interactive_button" type='button' class='collectorButton' value='Add'>          
-          <textarea id="raw_script"></textarea> 
+          <textarea id="raw_script" style="display:none"></textarea> <!-- perhaps can remove this and related code -->
+          <textarea id="temp_trial_type_template" readonly></textarea>
+          
           <script>
+          
+          
             $("#add_interactive_button").on("click",function(){
               $("#select_interactive_function").val("--- select a function ---");
               $("#select_interactive_function").show();
@@ -196,6 +200,7 @@
           <div id="gui_style">
             <h3 id="selected_element_id"></h3>
             <?= require("Interfaces/span_div_present.php") ?>          
+            <?= require("Interfaces/images_present.php") ?>          
           </div>
           <div id="gui_info">
           </div>        
@@ -219,14 +224,6 @@
     
   $("#gui_info").on("mouseenter", "*", function() {
 
-
-  // fix the bug that stops this being read!!! //
-
-
-
-
-
-  
     var this_class = $(this)[0].className;
     $("."+this_class).addClass("canvasHighlight");
       
@@ -249,7 +246,12 @@
     $(target).removeClass("canvasHighlight");
     
     if(target.is("div")|target.is("span")){
-      element_gui.span_or_div.process_text_style(target);  
+      $(".element_table").hide();
+      element_gui.span_or_div.process_text_style(target); 
+    }
+    if(target.is("img")){
+      $(".element_table").hide();
+      element_gui.image.process_image_style(target);  
     }
      
     // here is where the identification process is
