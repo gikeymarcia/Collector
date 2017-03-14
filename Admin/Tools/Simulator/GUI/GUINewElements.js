@@ -4,6 +4,8 @@ new_element_template = {
     
   },
   
+  stimuli_style: "width:200px;height:100px; border-color:blue;border-style:solid;border-width:2px;",
+  
   Text: {
     create_element:function(element_name,this_location){
       var new_text_element = "<div id='"+element_name+"' style='"+this_location+"'>This is a text div</div>";
@@ -14,12 +16,18 @@ new_element_template = {
   Image: {
     create_element:function(element_name,this_location){
       
-      //use generic image like e-prime does          
+      //use generic image like e-prime does       
       
-      var new_img_element = "<img id='"+element_name+"' src='https://dl.dropbox.com/s/m5g0e6zfk1kiqwb/Picture.png?dl=0' style='"+this_location+"width:100px;height:100px;'>";
+
+//background: color url('https://dl.dropbox.com/s/m5g0e6zfk1kiqwb/Picture.png?dl=0') others;      
+//
+      
+      var new_img_element = "<div id='"+element_name+"' style='"+new_element_template.stimuli_style+this_location+"' class='image_element' ></div>";
       return new_img_element;
     }
   },
+  
+  
   Audio: {
     create_element:function(element_name,this_location){
       

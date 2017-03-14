@@ -266,8 +266,6 @@ function trialtype_to_canvas(current_trialtype_template){
     }
   }
   
-  scriptless_trialtype_template = scriptless_trialtype_template.join("");
-  $("#temp_trial_type_template").val(scriptless_trialtype_template);
   
   var doc = new_iframe[0].contentDocument;
 
@@ -295,6 +293,40 @@ function trialtype_to_canvas(current_trialtype_template){
     element_management.update_lists(); // rename object and function    
   }
   
+  // could store everything into a temp div, use javascript to replace pics etc. with divs, capture everything in the div and then proceed
+  
+  $("#preprocessing_trialType").html(scriptless_trialtype_template);
+  
+  var these_images = $("#preprocessing_trialType").find("img")
+  
+  
+  var relevant_image_properties = ["src","height","width"];
+  for(i=0;i<these_images.length;i++){
+    var this_image_props = {
+      src:"-",
+      height:"-",
+      width:"-"
+    };
+    for(j=1;j<relevant_image_properties;j++){
+      this_image_props[relevant_image_properties[j]]=these_images[i].style[relevant_image_properties[j]];
+    }
+    
+    console.dir(this_image_props);
+  }
+  
+  
+  
+  
+  
+  
+  // check for images
+  var preprocessing_elements =  $("#preprocessing_trialType").children();
+  for(i=0;i<preprocessing_elements.length;i++){
+    console.dir(preprocessing_elements[i].type);
+  }
+  
+  
+  
   // following use of Ajax only runs after_write_canvas AFTER the canvas has been written. Solution by Kio2212 on http://stackoverflow.com/questions/5000415/call-a-function-after-previous-function-is-complete
   $.ajax({
     url:write_canvas(),
@@ -304,10 +336,21 @@ function trialtype_to_canvas(current_trialtype_template){
         console.dir(element_management.canvas_elements[i].id);
         if(element_management.canvas_elements[i].id == ""){
           element_management.canvas_elements[i].id = $("iFrame")[0].contentWindow.generate_new_id();
-        }
+        }        
       }
+      trial_management.update_temp_trial_type_template();
+      
     }
   })
+  
+  
+  
+  
+  
+  //scriptless_trialtype_template = scriptless_trialtype_template.join("");
+  
+  //$("#temp_trial_type_template").val(scriptless_trialtype_template);
+  
   
   canvas_drawing.activate_canvas_mouseframe();
   

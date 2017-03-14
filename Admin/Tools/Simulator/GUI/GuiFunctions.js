@@ -62,9 +62,16 @@ element_management = {
 trial_management = {
   update_temp_trial_type_template:function (){
     var trial_type_html = $("iFrame").contents().find("#canvas_in_iframe").html();
+    this.temp_trial_type_to_actual_trial_type();
     $("#temp_trial_type_template").val(trial_type_html);
   },
   temp_trial_type_to_actual_trial_type:function(){
+    
+    // detect images
+
+    // detect videos
+    
+    
     // rules here for re_integrating scripts
     // rules here for replacing images from stimuli with values in stimuli column
   }

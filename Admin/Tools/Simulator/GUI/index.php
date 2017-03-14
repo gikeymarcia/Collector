@@ -30,6 +30,7 @@
           <div id="interactive_gui"></div>
           <input id="add_interactive_button" type='button' class='collectorButton' value='Add'>          
           <textarea id="raw_script" style="display:none"></textarea> <!-- perhaps can remove this and related code -->
+          <div id="preprocessing_trialType"></div>
           <textarea id="temp_trial_type_template" readonly></textarea>
           
           <script>
@@ -245,14 +246,24 @@
     $("#selected_element_id").html(selected_element_id);
     $(target).removeClass("canvasHighlight");
     
+    // check the classes first -- in the case of stimuli
+    console.dir("detecting target class");
+    console.dir(target[0]);
+//    console.dir(target.class());
+    console.dir(target[0].className);
+    
+    if(target[0].className == "image_element"){
+      $(".element_table").hide();
+      element_gui.image.process_image_style(target);  
+    }
+   /*  
     if(target.is("div")|target.is("span")){
       $(".element_table").hide();
       element_gui.span_or_div.process_text_style(target); 
     }
     if(target.is("img")){
-      $(".element_table").hide();
-      element_gui.image.process_image_style(target);  
-    }
+      
+    } */
      
     // here is where the identification process is
     

@@ -31,6 +31,16 @@
   
 }
 
+.pic_element{
+  background-color:blue;
+  width:150px;
+  height:150px;
+  position:absolute;
+  left:25px;
+  top:25px;
+}
+
+
 .gui_button_unclicked{
   background-color:blue;  
   color:white;
