@@ -62,7 +62,8 @@ element_management = {
 trial_management = {
   update_temp_trial_type_template:function (){
     var trial_type_html = $("iFrame").contents().find("#canvas_in_iframe").html();
-    this.temp_trial_type_to_actual_trial_type();
+    trial_type_html = this.reintegrate_script(trial_type_html);
+    this.temp_trial_type_to_actual_trial_type(); // doing nothing at the moment
     $("#temp_trial_type_template").val(trial_type_html);
   },
   temp_trial_type_to_actual_trial_type:function(){
@@ -74,8 +75,23 @@ trial_management = {
     
     // rules here for re_integrating scripts
     // rules here for replacing images from stimuli with values in stimuli column
+  },
+  reintegrate_script:function(trial_type_html){
+    for(var i=0;i<current_trial_types_script_array.length;i++){
+      var script_placeholder = "___script"+i+"___";      
+      console.dir(script_placeholder);
+      console.dir(current_trial_types_script_array[i]);      
+      
+      ///////////////////////////////////////
+      //delete the span around the script ///
+      ///////////////////////////////////////
+      
+      trial_type_html = trial_type_html.replace(script_placeholder,"<script>"+current_trial_types_script_array[i]+"</script>");      
+    }
+    return trial_type_html;
   }
 }
+
 
 
 
@@ -128,15 +144,19 @@ interaction_manager = {
       this_var = this_var.replace("_list","");
       this_var = this_var.replace("_element_","");
       this_var = this_var.replace(curr_int_funcs,"");
-      console.dir("update temp console dir");
-      
-      console.dir(this_list);
-      console.dir(this_var);
-      console.dir(temp_GUI_Var[this.curr_int_no][this_var]);
+//      console.dir("update temp console dir");
+    
+//      console.dir(this_list);
+//      console.dir(this_var);
+//      console.dir(temp_GUI_Var[this.curr_int_no][this_var]);
 
       $("#"+this_list).val(temp_GUI_Var[this.curr_int_no][this_var]);
       
     }
+  },
+  update_to_temp_GUI_Var: function(){
+    console.dir(this.curren_int_no);
+    console.dir(this);
   }
 }
 

@@ -1,4 +1,4 @@
-<div id="div_span_table" class="element_table"></div>
+<div id="text_table" class="element_table" style="display:none"></div>
 
 <script>
 
@@ -12,15 +12,15 @@
     my_arr : ["html","color","background-color","font-size","width","height","padding","border-radius"],
     
     write_html: function() {
-      $("#div_span_table").append("<table>");
+      $("#text_table").append("<table>");
       for (var i=0; i<this.my_arr.length; ++i) {
-        $("#div_span_table").append(
+        $("#text_table").append(
           "<tr>"+
             "<td>"+this.my_arr[i]+"</td>"+
             "<td><input id='text_"+this.my_arr[i]+"'></td>"+
           "</tr>");
       }
-      $("#div_span_table").append("</table>");
+      $("#text_table").append("</table>");
       
       for (var i=1; i<this.my_arr.length; i++){ // skip html
         $("#text_"+this.my_arr[i]).on("input",function(){
@@ -39,7 +39,7 @@
     },
     
     process_text_style: function(this_input) {
-      $("#div_span_table").show();
+      $("#text_table").show();
       for (var i=0; i<this.my_arr.length; ++i) {
         if(this.my_arr[i] == "html"){
           global_var = this_input;

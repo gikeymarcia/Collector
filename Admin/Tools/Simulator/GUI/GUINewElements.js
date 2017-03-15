@@ -82,7 +82,4 @@ new_element_template = {
       return new_text_element;
     }
   }
-  
-  
-  
 }

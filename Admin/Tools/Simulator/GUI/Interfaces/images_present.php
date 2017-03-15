@@ -1,4 +1,4 @@
-<div id="images_table" class="element_table"></div>
+<div id="images_table" class="element_table" style="display:none"></div>
 
 <script>
 if(typeof(element_gui) == "undefined"){
@@ -7,7 +7,7 @@ if(typeof(element_gui) == "undefined"){
   } 
   element_gui['image'] = {
     
-    my_arr : ["stimuli","width","height"],
+    my_arr : ["stimuli","position","left","top","width","height"],
     
     write_html: function() {
       
@@ -37,8 +37,7 @@ if(typeof(element_gui) == "undefined"){
         // check whether this is a valid image using ajax
         // solution by 
         
-        $("iFrame").contents().find("#"+selected_element_id).html("image:"+new_string);
-        console.dir("hello hello");
+        $("iFrame").contents().find("#"+selected_element_id).html("image:"+new_string);        
         
         trial_management.update_temp_trial_type_template();                
       });      
@@ -47,9 +46,11 @@ if(typeof(element_gui) == "undefined"){
     process_image_style: function(this_input) {
       $("#images_table").show();
       for (var i=0; i<this.my_arr.length; ++i) {
-        if(this.my_arr[i] == "html"){
-          global_var = this_input;
-          $("#image_stimuli").val(this_input[0].html);  
+        console.dir(this.my_arr[i]);
+        if(this.my_arr[i] == "stimuli"){
+          global_var = this_input;          
+          var clean_stim = this_input[0].innerHTML.replace("image:","");                    
+          $("#image_stimuli").val(clean_stim);
         } else {
           $("#image_" + this.my_arr[i]).val(this_input.css(this.my_arr[i]));
         }
