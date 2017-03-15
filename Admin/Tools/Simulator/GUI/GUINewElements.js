@@ -4,7 +4,9 @@ new_element_template = {
     
   },
   
-  stimuli_style: "width:200px;height:100px; border-color:blue;border-style:solid;border-width:2px;",
+  image_style: "width:50px;height:50px; border-color:blue;border-style:solid;border-width:2px;",
+  video_style: "width:50px;height:50px; border-color:purple;border-style:solid;border-width:2px;",
+  
   
   Text: {
     create_element:function(element_name,this_location){
@@ -22,8 +24,8 @@ new_element_template = {
 //background: color url('https://dl.dropbox.com/s/m5g0e6zfk1kiqwb/Picture.png?dl=0') others;      
 //
       
-      var new_img_element = "<div id='"+element_name+"' style='"+new_element_template.stimuli_style+this_location+"' class='image_element' ></div>";
-      return new_img_element;
+      var new_stim_element = "<div id='"+element_name+"' style='"+new_element_template.image_style+this_location+"' class='image_element' ></div>";
+      return new_stim_element;
     }
   },
   
@@ -33,8 +35,8 @@ new_element_template = {
       
       //use generic image like e-prime does          
       
-      var new_img_element = "<img id='"+element_name+"' src='https://dl.dropbox.com/s/1ayf8oyr31qbn5q/Audio.png?dl=0' style='"+this_location+"width:100px;height:100px;'>";
-      return new_img_element;
+      var new_stim_element = "<img id='"+element_name+"' src='https://dl.dropbox.com/s/1ayf8oyr31qbn5q/Audio.png?dl=0' style='"+this_location+"width:100px;height:100px;'>";
+      return new_stim_element;
     }
   },
   Video: {
@@ -42,8 +44,8 @@ new_element_template = {
       
       //use generic image like e-prime does          
       
-      var new_img_element = "<img id='"+element_name+"' src='https://dl.dropbox.com/s/ilssbb4a5ikmn6i/Movie.png?dl=0' style='"+this_location+"width:100px;height:100px;'>";
-      return new_img_element;
+      var new_stim_element = "<div id='"+element_name+"' style='"+new_element_template.video_style+this_location+"' class='video_element' ></div>";
+      return new_stim_element;
     }
   },
   Button: {    

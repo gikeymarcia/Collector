@@ -3,6 +3,7 @@
   <h3 id="selected_element_id"></h3>
   <?= require("Interfaces/span_div_present.php") ?>          
   <?= require("Interfaces/images_present.php") ?>          
+  <?= require("Interfaces/video.php") ?>          
 </div>
 <div id="gui_info"></div>  
 
@@ -39,12 +40,17 @@
     if(target[0].className == "text_element"){
       $(".element_table").hide();
       element_gui.span_or_div.process_text_style(target);  
-      $("#text_table").show();
+      $("#text_table").show();      
     }
     if(target[0].className == "image_element"){
       $(".element_table").hide();
-      element_gui.image.process_image_style(target);  
-      $("#images_table").show();
+      element_gui.image.process_style(target);  
+      $("#images_table").show();      
+    }
+    if(target[0].className == "video_element"){
+      $(".element_table").hide();
+      element_gui.video.process_style(target);  
+      $("#images_table").show();      
     }
 
     

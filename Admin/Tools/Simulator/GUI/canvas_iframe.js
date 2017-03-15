@@ -68,6 +68,7 @@ $("#canvas_in_iframe").on("mouseenter", "*", function() {
       parent.$("#gui_interface_add_element").show();
       parent.$("#gui_interface_edit_element").hide();
     } else {
+      $(".GUI_divs").hide();
       parent.$("#gui_interface_add_element").hide();
       parent.$("#gui_interface_edit_element").show();  
     }        

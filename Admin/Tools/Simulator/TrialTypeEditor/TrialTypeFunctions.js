@@ -338,7 +338,7 @@ function trialtype_to_canvas(current_trialtype_template){
   
 }
 
-function trialtype_to_canvas_images(){
+function trialtype_to_canvas_images(these_images){
   var relevant_image_properties = ["src","position","left","top","height","width"];
   
   var default_image_properties = {
@@ -365,18 +365,11 @@ function trialtype_to_canvas_images(){
     if(these_images[i].id==""){
       these_images[i].id = generate_new_id();
     }     
-    
-    
-    // now that I have the relevant properties, replace the image with a div with these properties
-    
-    // draw the div with the properties
-   
-    // append the new div to the temp_trial_type_template
-   
-    
-    var image_x = document.getElementById(these_images[i].id); // make it more specific to preprocessing_trialType???
-    image_x.parentNode.removeChild(image_x);
-    
+    $("#preprocessing_trialType").find(these_images[i]).remove();
+    /* 
+    var stimuli_x = document.getElementById(these_images[i].id); // make it more specific to preprocessing_trialType???
+    stimuli_x.parentNode.removeChild(stimuli_x);
+     */
     var clean_source = these_images[i]["src"].replace(window.location.href,"");
     
     var new_span ="<span id='"+these_images[i].id+"' class='image_element' "+
@@ -390,8 +383,55 @@ function trialtype_to_canvas_images(){
                                                            "border-width:     2px;"+                                                           
                                                            "'>image:"+clean_source+"</span>";
                                                            
-   //                                                        clean_stim = clean_stim.replace(window.location.href,""); // this should go to an earlier point in the pipeline...
-                                                           
+   $("#preprocessing_trialType").append(new_span);
+  }
+}
+
+function trialtype_to_canvas_videos(these_videos){
+  var relevant_video_properties = ["src","position","left","top","height","width"];
+  
+  var default_image_properties = {
+    src:      "none",
+    position: "absolute",
+    left:     "0px",
+    top:      "0px",
+    height:   "50px",
+    width:    "50px"
+  }
+  
+  for(i=0;i<these_videos.length;i++){    
+    this_video_props = {};
+    for(j=1;j<relevant_video_properties.length;j++){
+      this_relevant_video_property = relevant_video_properties[j];
+      if(these_videos[i].style[this_relevant_video_property]==""){ // i.e. nothing is set
+        these_videos[i].style[this_relevant_video_property] = default_image_properties[this_relevant_video_property];
+      }
+      this_video_props[this_relevant_video_property]=these_videos[i].style[this_relevant_video_property];
+    }
+    
+    this_video_props["src"]=these_videos[i].src;
+    
+    if(these_videos[i].id==""){
+      these_videos[i].id = generate_new_id();
+    }     
+    
+    $("#preprocessing_trialType").find(these_videos[i]).remove();
+/*     
+    var stimuli_x = document.getElementById(these_videos[i].id); // make it more specific to preprocessing_trialType???
+    stimuli_x.parentNode.removeChild(stimuli_x);
+ */    
+    var clean_source = these_videos[i]["src"].replace(window.location.href,"");
+    
+    var new_span ="<span id='"+these_videos[i].id+"' class='image_element' "+
+                                                           "style='position:"+this_video_props["position"] +";"+
+                                                           "left:"+           this_video_props["left"]     +";"+
+                                                           "top:"+            this_video_props["top"]      +";"+
+                                                           "height:"+         this_video_props["height"]   +";"+
+                                                           "width:"+          this_video_props["width"]    +";"+  
+                                                           "border-color:     purple;"+  
+                                                           "border-style:     solid;"+
+                                                           "border-width:     2px;"+                                                           
+                                                           "'>image:"+clean_source+"</span>";                                                           
    $("#preprocessing_trialType").append(new_span);
   }
 }
