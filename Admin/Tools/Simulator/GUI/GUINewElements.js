@@ -6,6 +6,7 @@ new_element_template = {
   
   image_style: "width:50px;height:50px; border-color:blue;border-style:solid;border-width:2px;",
   video_style: "width:50px;height:50px; border-color:purple;border-style:solid;border-width:2px;",
+  audio_style: "width:50px;height:50px; border-color:red;border-style:solid;border-width:2px;",
   
   
   Text: {
@@ -35,7 +36,7 @@ new_element_template = {
       
       //use generic image like e-prime does          
       
-      var new_stim_element = "<img id='"+element_name+"' src='https://dl.dropbox.com/s/1ayf8oyr31qbn5q/Audio.png?dl=0' style='"+this_location+"width:100px;height:100px;'>";
+      var new_stim_element = "<div id='"+element_name+"' style='"+new_element_template.audio_style+this_location+"' class='audio_element' ></div>";
       return new_stim_element;
     }
   },

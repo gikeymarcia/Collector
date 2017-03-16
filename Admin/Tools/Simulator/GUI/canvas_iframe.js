@@ -59,19 +59,21 @@ $("#canvas_in_iframe").on("mouseenter", "*", function() {
     }, 50);
 }).on("contextmenu", function() {
   //window.parent.$("#gui_interface_edit_element").show();
-  
     lock_gui_info = !lock_gui_info;
     
     if (!lock_gui_info) $("#gui_info").html("");
     
     if($("#gui_info").html()==""){
-      parent.$("#gui_interface_add_element").show();
+      parent.$("#gui_add_element_div").hide();
       parent.$("#gui_interface_edit_element").hide();
+      
     } else {
-      $(".GUI_divs").hide();
-      parent.$("#gui_interface_add_element").hide();
+      parent.$(".GUI_divs").hide();
+      parent.$("#gui_add_element_div").hide();
       parent.$("#gui_interface_edit_element").show();  
     }        
+    
+    
     
     return false;
 }); 
