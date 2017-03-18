@@ -1,12 +1,18 @@
 <div id="buttons_table" class="element_table" style="display:none"></div>
 
 <script>
-if(typeof(element_gui) == "undefined"){
-    element_gui={};
-  } 
+  new_element_template["Button"]= {    
+    create_element:function(element_name,this_location){
+      var new_text_element = "<input type='button' id='"+element_name+"' style='"+this_location+"' class='button_element' value='Button'>";
+      return new_text_element;
+    }
+  };
+  
+  
+  /*
   element_gui['button'] = {
     
-    my_arr : ["stimuli","position","left","top"],
+     my_arr : ["stimuli","position","left","top","color","background-color"],
     
     write_html: function() {
       
@@ -36,7 +42,7 @@ if(typeof(element_gui) == "undefined"){
         
         trial_management.update_temp_trial_type_template();                
       });      
-    },
+    }, 
     
     process_style: function(this_input) {
       $("#buttons_table").show();
@@ -51,7 +57,7 @@ if(typeof(element_gui) == "undefined"){
       }
     },
   };
-  
-  element_gui.button.write_html();
+  */
+  //element_gui.button.write_html();
 </script>
 

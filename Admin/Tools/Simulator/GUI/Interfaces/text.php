@@ -7,9 +7,10 @@
     //console.dir(typeof(element_gui));
     element_gui={};
   } 
-  element_gui['span_or_div'] = {
+  /*
+  element_gui['text'] = {
     
-    my_arr : ["html","color","background-color","font-size","width","height","padding","border-radius"],
+     my_arr : ["html","color","background-color","font-size","width","height","padding","border-radius"],
     
     write_html: function() {
       $("#text_table").append("<table>");
@@ -36,9 +37,9 @@
         var property_selected = this.id.replace("text_","");
         $("iFrame").contents().find("#"+selected_element_id).html(new_string);trial_management.update_temp_trial_type_template();                
       });      
-    },
+    }, 
     
-    process_text_style: function(this_input) {
+    process_style: function(this_input) {
       $("#text_table").show();
       for (var i=0; i<this.my_arr.length; ++i) {
         if(this.my_arr[i] == "html"){
@@ -50,8 +51,8 @@
       }
     },
   };
-
-  element_gui.span_or_div.write_html();
+*/
+  //element_gui.text.write_html();
 
   
   

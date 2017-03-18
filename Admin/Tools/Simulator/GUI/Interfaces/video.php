@@ -4,9 +4,10 @@
 if(typeof(element_gui) == "undefined"){
     element_gui={};
   } 
+  /*
   element_gui['video'] = {
     
-    my_arr : ["stimuli","position","left","top","width","height"],
+     my_arr : ["stimuli","position","left","top","width","height"],
     
     write_html: function() {
       
@@ -40,7 +41,7 @@ if(typeof(element_gui) == "undefined"){
         
         trial_management.update_temp_trial_type_template();                
       });      
-    },
+    }, 
     
     process_style: function(this_input) {
       $("#videos_table").show();
@@ -56,7 +57,7 @@ if(typeof(element_gui) == "undefined"){
       }
     },
   };
-  
-  element_gui.video.write_html();
+  */
+  //element_gui.video.write_html();
 </script>
 

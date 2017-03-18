@@ -38,7 +38,7 @@
   ?>
 
 <script>
-    Collector_data_raw = <?= get_data(); ?>;
+    Collector_data_raw = <?php get_data(); ?>;
     
     function raw_table_to_columns(data) {
       var output = {};

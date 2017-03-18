@@ -42,7 +42,7 @@
 
 <script>
 
-var experiment_files = <?= json_encode($experiment_files) ?>;
+var experiment_files = <?= json_encode($experiment_files); ?>;
 var spreadsheets = {};
 var alerts_ready = false;
 

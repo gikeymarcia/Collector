@@ -1,15 +1,15 @@
-<div id="images_table" class="element_table" style="display:none"></div>
 
 <script>
 if(typeof(element_gui) == "undefined"){
     //console.dir(typeof(element_gui));
     element_gui={};
   } 
+  /*
   element_gui['image'] = {
     
     my_arr : ["stimuli","position","left","top","width","height"],
     
-    write_html: function() {
+     write_html: function() {
       
       for (var i=0; i<this.my_arr.length; ++i) {
         $("#images_table").append(
@@ -42,7 +42,7 @@ if(typeof(element_gui) == "undefined"){
         trial_management.update_temp_trial_type_template();                
       });      
     },
-    
+     
     process_style: function(this_input) {
       $("#images_table").show();
       for (var i=0; i<this.my_arr.length; ++i) {
@@ -57,7 +57,7 @@ if(typeof(element_gui) == "undefined"){
       }
     },
   };
-  
-  element_gui.image.write_html();
+  */
+  //element_gui.image.write_html();
 </script>
 

@@ -48,15 +48,16 @@
         </table>
         
         <div id="gui_add_element_div" class="GUI_divs" style="display:none">                  
-          <?= require("AddElement.php") ?>   
+          <?php require("AddElement.php") ?>   
         </div>
+        
         <div id="gui_interface_edit_element">
-          <?= require("EditElement.php") ?> <!-- better place to put this? -->
+          <?php require("EditElement.php") ?> <!-- better place to put this? -->
         </div>
 
           
         <div id="gui_edit_script_div" class="GUI_divs">                  
-          <?= require("Interactive.php") ?>
+          <?php require("Interactive.php") ?>
         </div>
         <div id="gui_code_preview_div" class="GUI_divs">
           <textarea id="temp_trial_type_template" readonly></textarea>
@@ -68,7 +69,6 @@
 </table>
 
 </body>
-<script src="GUI/GUINewElements.js"></script>
 <script>        
 
 $(".GUI_headers").on("click",function(){

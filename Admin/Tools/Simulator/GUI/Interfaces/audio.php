@@ -1,14 +1,12 @@
 <div id="audios_table" class="element_table" style="display:none"></div>
 
 <script>
-if(typeof(element_gui) == "undefined"){
-    element_gui={};
-  } 
+ /*
   element_gui['audio'] = {
     
     my_arr : ["stimuli","position","left","top"],
     
-    write_html: function() {
+     write_html: function() {
       
       for (var i=0; i<this.my_arr.length; ++i) {
         $("#audios_table").append(
@@ -36,7 +34,7 @@ if(typeof(element_gui) == "undefined"){
         
         trial_management.update_temp_trial_type_template();                
       });      
-    },
+    }, 
     
     process_style: function(this_input) {
       $("#audios_table").show();
@@ -51,7 +49,7 @@ if(typeof(element_gui) == "undefined"){
       }
     },
   };
-  
-  element_gui.audio.write_html();
+  */
+  //element_gui.audio.write_html();
 </script>
 

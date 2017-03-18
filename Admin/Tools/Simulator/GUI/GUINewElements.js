@@ -11,7 +11,7 @@ new_element_template = {
   
   Text: {
     create_element:function(element_name,this_location){
-      var new_text_element = "<div id='"+element_name+"' style='"+this_location+"'>This is a text div</div>";
+      var new_text_element = "<div id='"+element_name+"' style='"+this_location+"' class='text_element'>This is a text div</div>";
       return new_text_element;
     }
   },
@@ -19,11 +19,7 @@ new_element_template = {
   Image: {
     create_element:function(element_name,this_location){
       
-      //use generic image like e-prime does       
-      
-
-//background: color url('https://dl.dropbox.com/s/m5g0e6zfk1kiqwb/Picture.png?dl=0') others;      
-//
+      //use generic image like e-prime does?
       
       var new_stim_element = "<div id='"+element_name+"' style='"+new_element_template.image_style+this_location+"' class='image_element' ></div>";
       return new_stim_element;
@@ -49,24 +45,23 @@ new_element_template = {
       return new_stim_element;
     }
   },
+    
   Button: {    
     create_element:function(element_name,this_location){
-      var new_text_element = "<input type='button' id='"+element_name+"' style='"+this_location+"' value='Button'>";
+      var new_text_element = "<input type='button' id='"+element_name+"' style='"+this_location+"' class='button_element' value='Button'>";
       return new_text_element;
     }
   },
+  
   String: {
     create_element:function(element_name,this_location){
       var new_text_element = "<input type='string' id='"+element_name+"' style='"+this_location+"' placeholder='Text/String'>";
       return new_text_element;
     }
   },
-  Number: {
-    create_element:function(element_name,this_location){
-      var new_text_element = "<input type='string' id='"+element_name+"' style='"+this_location+"'>";
-      return new_text_element;
-    }
-  },
+  
+  
+  
   Date: {
     create_element:function(element_name,this_location){
       var new_text_element = "<input type='Date' id='"+element_name+"' style='"+this_location+"'>";

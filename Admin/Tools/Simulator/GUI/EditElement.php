@@ -1,21 +1,9 @@
+<script src="GUI/GUINewElements.js"></script>
 
 <div id="gui_style">
   <h3 id="selected_element_id"></h3>
-  <!-- stimuli -->
-  <?= require("Interfaces/span_div_present.php") ?>          
-  <?= require("Interfaces/images_present.php") ?>          
-  <?= require("Interfaces/video.php") ?>          
-  <?= require("Interfaces/audio.php") ?>          
-  
-  <!-- Inputs -->
-  <?= require("Interfaces/button.php") ?>          
-  <?= require("Interfaces/string.php") ?>          
-  <?= require("Interfaces/number.php") ?>          
-  <?= require("Interfaces/date.php") ?>          
-  
-  <!-- Survey buttons-->
-  <?= require("Interfaces/checkbox.php") ?>          
-  <?= require("Interfaces/radio.php") ?>          
+  <?php require("Interfaces/all.php"); ?>
+           
 </div>
 <div id="gui_info"></div>  
 
@@ -49,30 +37,21 @@
     console.dir(target[0]);
     console.dir(target[0].className);
     
-    if(target[0].className == "text_element"){
+    
+    // try to collapse these into a single if statement
+    
+    
+    if(element_gui.accepted_classes.indexOf(target[0].className) !== -1){
+      var clean_class = target[0].className.replace("_element","");
       $(".element_table").hide();
-      element_gui.span_or_div.process_text_style(target);  
-      $("#text_table").show();  
-      $(".GUI_divs").hide();        
+      element_gui.process_style(target,clean_class);  
+      $("#"+[clean_class]+"_table").show();  
+      $(".GUI_divs").hide(); 
+    } else {
+      alert("Error: not recognising the type of element you are trying to edit.");
     }
-    if(target[0].className == "image_element"){
-      $(".element_table").hide();
-      element_gui.image.process_style(target);  
-      $("#images_table").show();   
-      $(".GUI_divs").hide();      
-    }
-    if(target[0].className == "video_element"){
-      $(".element_table").hide();
-      element_gui.video.process_style(target);  
-      $("#videos_table").show();
-      $(".GUI_divs").hide();      
-    }
-    if(target[0].className == "audio_element"){
-      $(".element_table").hide();
-      element_gui.audio.process_style(target);  
-      $("#audios_table").show();
-      $(".GUI_divs").hide();      
-    }
+    
+    
 
     
     ///////
