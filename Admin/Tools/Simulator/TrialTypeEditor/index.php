@@ -21,5 +21,18 @@
   </div>
 </div>
 
-<script src="TrialTypeEditor/TrialTypeFunctions.js"></script>
-<script src="TrialTypeEditor/TrialTypeActions.js"></script>
+<?php
+
+
+    $js_files = array('TrialTypeEditor/TrialTypeFunctions.js', 'TrialTypeEditor/TrialTypeActions.js');
+    
+    foreach ($js_files as $file) {
+        $file_mod_time = filemtime($file);
+        echo "<script src='$file?v=$file_mod_time'></script>";
+    }
+
+/* 
+  $script_mod_time  = filemtime("TrialTypeFunctions.js");
+  $script_src       = "TrialTypeFunctions.js?v=$script_mod_time"; */
+?>
+

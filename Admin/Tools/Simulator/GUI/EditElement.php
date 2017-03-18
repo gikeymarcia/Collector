@@ -47,6 +47,11 @@
       element_gui.process_style(target,clean_class);  
       $("#"+[clean_class]+"_table").show();  
       $(".GUI_divs").hide(); 
+      
+      //turn off "adding" of elements
+      
+      
+      
     } else {
       alert("Error: not recognising the type of element you are trying to edit.");
     }

@@ -278,7 +278,10 @@ function trialtype_to_canvas(current_trialtype_template){
                  '</head>'+
                  '<div id="canvas_in_iframe">';
   var footer = '</div>';
-  var canvas_script = '<script src="GUI/canvas_iframe.js"></script>';
+  var file_version = (typeof canvas_file_mod === "undefined")
+                    ? Date.now() //
+                    : canvas_file_mode; //
+  var canvas_script = '<script src="GUI/canvas_iframe.js?v='+file_version+'"></script>';
   
   // insert promise here
   

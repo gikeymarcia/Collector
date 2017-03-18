@@ -7,7 +7,6 @@ function sort_gui_info() {
       var children = gui_info.children().detach().each(function() {
           children_array.push(this);
       });
-      console.dir(children_array);
       
       children_array.sort(function(a, b) {
           return $(a).data("parent_count") - $(b).data("parent_count");
@@ -31,7 +30,7 @@ function generate_new_id() {
 var lock_gui_info = false;
 
 $("#canvas_in_iframe").on("mouseenter", "*", function() {
-  
+
   if (lock_gui_info) return;
   
   if (this.id === "") this.id = generate_new_id();
@@ -58,8 +57,11 @@ $("#canvas_in_iframe").on("mouseenter", "*", function() {
         parent.$("." + class_name).remove();
     }, 50);
 }).on("contextmenu", function() {
-  //window.parent.$("#gui_interface_edit_element").show();
-    lock_gui_info = !lock_gui_info;
+  
+  lock_gui_info = !lock_gui_info;
+
+  parent.canvas_drawing.new_element_type='';    
+
     
     if (!lock_gui_info) $("#gui_info").html("");
     
@@ -70,7 +72,8 @@ $("#canvas_in_iframe").on("mouseenter", "*", function() {
     } else {
       parent.$(".GUI_divs").hide();
       parent.$("#gui_add_element_div").hide();
-      parent.$("#gui_interface_edit_element").show();  
+      parent.$("#gui_interface_edit_element").show();
+      
     }        
     
     
@@ -78,7 +81,6 @@ $("#canvas_in_iframe").on("mouseenter", "*", function() {
     return false;
 }); 
 function edit_script(x){
-//  console.dir(parent.current_trial_types_script_array[x]);
   parent.gui_script_read(parent.current_trial_types_script_array[x]);
   
 }

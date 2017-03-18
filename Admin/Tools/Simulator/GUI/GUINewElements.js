@@ -55,29 +55,47 @@ new_element_template = {
   
   String: {
     create_element:function(element_name,this_location){
-      var new_text_element = "<input type='string' id='"+element_name+"' style='"+this_location+"' placeholder='Text/String'>";
+      var new_text_element = "<input type='string' id='"+element_name+"' style='"+this_location+"' class='string_element' placeholder='Text/String'>";
       return new_text_element;
     }
   },
   
-  
+  Number: {
+    create_element:function(element_name,this_location){
+      var new_text_element = "<input type='number' id='"+element_name+"' style='"+this_location+"' class='number_element' placeholder='Text/String'>";
+      return new_text_element;
+    }
+  },
   
   Date: {
     create_element:function(element_name,this_location){
-      var new_text_element = "<input type='Date' id='"+element_name+"' style='"+this_location+"'>";
+      var new_text_element = "<input type='Date' id='"+element_name+"' style='"+this_location+"' class='date_element'>";
       return new_text_element;
     }
   },
+  /*
+  Questionnaire buttons will be included in later release
+  
   Checkbox:{
     create_element:function(element_name,this_location){
-      var new_text_element = "<label style='"+this_location+"'><span id='"+element_name+"_span'>"+element_name+"</span><input type='Checkbox' id='"+element_name+"'></label>";
+      var new_text_element = "<input type='Checkbox' style='"+this_location+"' id='"+element_name+"' class='checkbox_element'>";
       return new_text_element;
+      
+      
+      //these labels can be implemented later
+      
+      // <label style='"+this_location+"'><span id='"+element_name+"_span'>"+element_name+"</span>
+      //</label>
     }
   },
   Radio:{
     create_element:function(element_name,this_location){
-      var new_text_element = "<label style='"+this_location+"'><span id='"+element_name+"_span'>"+element_name+"</span><input type='radio' id='"+element_name+"'></label>";
+      var new_text_element = "<input type='radio' style='"+this_location+"' id='"+element_name+"' class='radio_element'>";
       return new_text_element;
+      //<label style='"+this_location+"'><span id='"+element_name+"_span'>"+element_name+"</span>
+      //these labels can be implemented later
+      //</label>
     }
   }
+  */
 }

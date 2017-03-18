@@ -18,6 +18,7 @@
       <td><span class="gui_button_unclicked new_element_button" id="gui_button_new_Number">Number</span></td>
       <td><span class="gui_button_unclicked new_element_button" id="gui_button_new_Date">Date</span></td>              
     </tr>
+    <!-- questionnaire buttons will be added in a later release 
     <tr>
       <td colspan="4"><h4>Survey buttons</h5></td>
     </tr>
@@ -27,4 +28,5 @@
       <td><span class="gui_button_unclicked new_element_button" id="gui_button_new_Radio">Radio</span></td>
       
     </tr>
+    -->
   </table>          

@@ -26,6 +26,8 @@
     <td id="current_trial_type_name">
       <h3 id="gui_trialtype_header">[Select a trialtype to edit or create a trialtype]</h3>
       <input type="button" value="Create" class="collectorButton" id="gui_create_trialtype_button">
+      <input type="button" value="Apply" class="collectorButton" id="gui_to_trialtype_button">
+      <input type="button" value="Apply and Save" class="collectorButton" id="gui_to_trialtype_save_button">
     
     </td>
   </tr>
@@ -61,6 +63,7 @@
         </div>
         <div id="gui_code_preview_div" class="GUI_divs">
           <textarea id="temp_trial_type_template" readonly></textarea>
+          <br>
           
         </div>        
       </div>
@@ -70,6 +73,16 @@
 
 </body>
 <script>        
+
+$("#gui_to_trialtype_button").on("click",function(){
+  var current_trial_type = $("#trial_type_select").val();
+  var gui_content = $("#temp_trial_type_template").val();
+  $("#"+current_trial_type+"template_textarea").val(gui_content);
+});
+
+$("#gui_to_trialtype_save_button").on("click",function(){
+  $("#gui_to_trialtype_button").click();
+});
 
 $(".GUI_headers").on("click",function(){
   $(".GUI_divs").hide();
@@ -153,7 +166,9 @@ $("#gui_create_trialtype_button").on("click",function(){
         
         
         var iframeBody = $("#canvas_iframe").contents().find("#canvas_in_iframe");
-        var testingthis = iframeBody.append(new_element_content);                
+        var testingthis = iframeBody.append(new_element_content); 
+
+        canvas_drawing.new_element_type='';            
       }
 
       
