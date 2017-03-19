@@ -261,7 +261,7 @@ function trialtype_to_canvas(current_trialtype_template){
       var script_no = current_trial_types_script_array.length;
       current_trial_types_script_array.push(this_script);
       // the first part of this string includes script      
-      scriptless_trialtype_template[i] = "<span onclick='edit_script("+script_no+")'>___script"+script_no+"___</span>";
+      scriptless_trialtype_template[i] = "<span onclick='edit_script("+script_no+")' class='script_element'>___script"+script_no+"___</span>";
       
     }
   }
@@ -309,7 +309,17 @@ function trialtype_to_canvas(current_trialtype_template){
   }
   these_spans = $("#preprocessing_trialType").find("span");
   for(var i=0;i<these_spans.length;i++){
-    these_spans[i].className = "text_element";
+    
+    if(these_spans[i].className !== "script_element"){
+      //detect whether this is a script yet!!
+      console.dir("look here");
+      
+      hello_global_var = these_spans[i];
+      console.dir(these_spans[i].className);
+      //if()
+      
+      these_spans[i].className = "text_element";
+    }
   }
   
   

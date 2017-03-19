@@ -64,11 +64,13 @@ trial_management = {
       
     trial_type_children=$("iFrame").contents().find("#canvas_in_iframe").children();
     preview_trial="";
+    
+    current_script_no=-1;
     for(var i=0;i<trial_type_children.length;i++){
       
-      if(trial_type_children[i].nodeName !== "SCRIPT"){
+      if(trial_type_children[i].nodeName !== "SCRIPT"){ // this may be redundant and need tidying.
         console.dir(trial_type_children[i].nodeName);
-        preview_trial += this.processing_canvas_children(trial_type_children[i])+"\r\n";        
+        preview_trial += this.processing_canvas_children(trial_type_children[i])+"\r\n \r\n";        
       }
     }
     $("#temp_trial_type_template").val(preview_trial);
@@ -77,11 +79,21 @@ trial_management = {
   },
   processing_canvas_children: function(child){     
     
-    var stim_style=this.process_element_style(child);
     
+    
+    if(child.className == "script_element"){  
+      current_script_no++;
+      // code for replacing span with script //
+      
+      var this_script = current_trial_types_script_array[current_script_no];
+    
+      return "<script>"+this_script+"</script>";
+    } else {
+      var stim_style=this.process_element_style(child);
+    }
     if(child.className == "text_element"){        
       return "<span id='"+child.id+"' style='"+stim_style+"'>"+child.innerHTML+"'</span>";
-    }
+    } 
     if(child.className == "image_element"){        
       return "<img id='"+child.id+"' src='"+child.innerHTML+"' style='"+stim_style+"'>";
     }
@@ -96,9 +108,11 @@ trial_management = {
       return "<input id='"+child.id+"' type='button' name='"+child.name+"' value='"+child.value+"' style='"+stim_style+"'>";
     }
     
-    if(child.className == "string_element"){        
+    if(child.type == "text"){        
       return "<input type='text' id='"+child.id+"' name='"+child.name+"' placeholder='"+child.placeholder+"' style='"+stim_style+"'>";
-    }    
+    }
+    
+     
     if(child.className == "number_element"){        
       return "<input type='number' id='"+child.id+"' name='"+child.name+"' style='"+stim_style+"'>";
     }    
@@ -121,7 +135,7 @@ trial_management = {
       global_child = child;
       clean_classname = child.type;
     }
-    
+    console.dir(these_props);
     var these_props = element_gui.properties[clean_classname];
     var stim_style='';
     if(these_props[0]=="stimuli"){
