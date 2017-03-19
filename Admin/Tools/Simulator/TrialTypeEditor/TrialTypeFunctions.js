@@ -314,8 +314,12 @@ function trialtype_to_canvas(current_trialtype_template){
   
   
   these_images = $("#preprocessing_trialType").find("img");  
-  trialtype_to_canvas_images(these_images);
+  these_videos = $("#preprocessing_trialType").find("video");  
   
+  trialtype_to_canvas_stimuli(these_images,"image");
+  trialtype_to_canvas_stimuli(these_videos,"video");
+  // audio 
+  // necessary for other element types...?
   
   
   
@@ -341,10 +345,11 @@ function trialtype_to_canvas(current_trialtype_template){
   
 }
 
-function trialtype_to_canvas_images(these_images){
-  var relevant_image_properties = ["src","position","left","top","height","width"];
+
+function trialtype_to_canvas_stimuli(these_stimuli,stimuli_type){
+  var relevant_stimuli_properties = ["src","position","left","top","height","width"];
   
-  var default_image_properties = {
+  var default_properties = {
     src:      "none",
     position: "absolute",
     left:     "0px",
@@ -353,91 +358,53 @@ function trialtype_to_canvas_images(these_images){
     width:    "50px"
   }
   
-  for(i=0;i<these_images.length;i++){    
-    this_image_props = {};
-    for(j=1;j<relevant_image_properties.length;j++){
-      this_relevant_image_property = relevant_image_properties[j];
-      if(these_images[i].style[this_relevant_image_property]==""){ // i.e. nothing is set
-        these_images[i].style[this_relevant_image_property] = default_image_properties[this_relevant_image_property];
+  for(i=0;i<these_stimuli.length;i++){    
+    this_stimuli_props = {};
+    for(j=1;j<relevant_stimuli_properties.length;j++){
+      this_relevant_property = relevant_stimuli_properties[j];
+      if(these_stimuli[i].style[this_relevant_property]==""){ // i.e. nothing is set
+        these_stimuli[i].style[this_relevant_property] = default_properties[this_relevant_property];
       }
-      this_image_props[this_relevant_image_property]=these_images[i].style[this_relevant_image_property];
+      this_stimuli_props[this_relevant_property]=these_stimuli[i].style[this_relevant_property];
     }
     
-    this_image_props["src"]=these_images[i].src;
+    this_stimuli_props["src"]=these_stimuli[i].src;
     
-    if(these_images[i].id==""){
-      these_images[i].id = generate_new_id();
+    if(these_stimuli[i].id==""){
+      these_stimuli[i].id = generate_new_id();
     }     
-    $("#preprocessing_trialType").find(these_images[i]).remove();
-    /* 
-    var stimuli_x = document.getElementById(these_images[i].id); // make it more specific to preprocessing_trialType???
-    stimuli_x.parentNode.removeChild(stimuli_x);
-     */
-    var clean_source = these_images[i]["src"].replace(window.location.href,"");
+    $("#preprocessing_trialType").find(these_stimuli[i]).remove();
     
-    var new_span ="<span id='"+these_images[i].id+"' class='image_element' "+
-                                                           "style='position:"+this_image_props["position"] +";"+
-                                                           "left:"+           this_image_props["left"]     +";"+
-                                                           "top:"+            this_image_props["top"]      +";"+
-                                                           "height:"+         this_image_props["height"]   +";"+
-                                                           "width:"+          this_image_props["width"]    +";"+  
-                                                           "border-color:     blue;"+  
-                                                           "border-style:     solid;"+
-                                                           "border-width:     2px;"+                                                           
-                                                           "'>image:"+clean_source+"</span>";
-                                                           
+    var clean_source = these_stimuli[i]["src"].replace(window.location.href,"");
+    
+    if(stimuli_type == "image"){
+      this_border_color="blue";
+    }
+    if(stimuli_type == "video"){
+      this_border_color="purple";
+    }
+    if(stimuli_type == "audio"){
+      this_border_color="red";
+    }
+    
+    var this_style = "style=  'position:"+this_stimuli_props["position"] +";"+
+                                           "left:"+    this_stimuli_props["left"]     +";"+
+                                           "top:"+     this_stimuli_props["top"]      +";"+
+                                           "height:"+  this_stimuli_props["height"]   +";"+
+                                           "width:"+   this_stimuli_props["width"]    +";"+  
+                                           "border-color:"+ this_border_color         +";"+  
+                                           "border-style:     solid;"+
+                                           "border-width:     2px;'";
+    var new_span ="<span id='"+ these_stimuli[i].id         +
+                  "'class='"  + stimuli_type  +"_element' " +
+                  this_style  +">"+clean_source+"</span>";
+                                           
    $("#preprocessing_trialType").append(new_span);
   }
 }
 
-function trialtype_to_canvas_videos(these_videos){
-  var relevant_video_properties = ["src","position","left","top","height","width"];
-  
-  var default_image_properties = {
-    src:      "none",
-    position: "absolute",
-    left:     "0px",
-    top:      "0px",
-    height:   "50px",
-    width:    "50px"
-  }
-  
-  for(i=0;i<these_videos.length;i++){    
-    this_video_props = {};
-    for(j=1;j<relevant_video_properties.length;j++){
-      this_relevant_video_property = relevant_video_properties[j];
-      if(these_videos[i].style[this_relevant_video_property]==""){ // i.e. nothing is set
-        these_videos[i].style[this_relevant_video_property] = default_image_properties[this_relevant_video_property];
-      }
-      this_video_props[this_relevant_video_property]=these_videos[i].style[this_relevant_video_property];
-    }
-    
-    this_video_props["src"]=these_videos[i].src;
-    
-    if(these_videos[i].id==""){
-      these_videos[i].id = generate_new_id();
-    }     
-    
-    $("#preprocessing_trialType").find(these_videos[i]).remove();
-/*     
-    var stimuli_x = document.getElementById(these_videos[i].id); // make it more specific to preprocessing_trialType???
-    stimuli_x.parentNode.removeChild(stimuli_x);
- */    
-    var clean_source = these_videos[i]["src"].replace(window.location.href,"");
-    
-    var new_span ="<span id='"+these_videos[i].id+"' class='image_element' "+
-                                                           "style='position:"+this_video_props["position"] +";"+
-                                                           "left:"+           this_video_props["left"]     +";"+
-                                                           "top:"+            this_video_props["top"]      +";"+
-                                                           "height:"+         this_video_props["height"]   +";"+
-                                                           "width:"+          this_video_props["width"]    +";"+  
-                                                           "border-color:     purple;"+  
-                                                           "border-style:     solid;"+
-                                                           "border-width:     2px;"+                                                           
-                                                           "'>image:"+clean_source+"</span>";                                                           
-   $("#preprocessing_trialType").append(new_span);
-  }
-}
+
+
 
 
 function generate_new_id() { // this function is duplicated in canvas_iframe.js

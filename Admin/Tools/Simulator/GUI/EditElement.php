@@ -32,14 +32,6 @@
     $("#selected_element_id").html(selected_element_id);
     $(target).removeClass("canvasHighlight");
     
-    // check the classes first -- in the case of stimuli
-    console.dir("detecting target class");
-    console.dir(target[0]);
-    console.dir(target[0].className);
-    
-    
-    // try to collapse these into a single if statement
-    
     
     if(element_gui.accepted_classes.indexOf(target[0].className) !== -1){
       var clean_class = target[0].className.replace("_element","");
@@ -48,7 +40,7 @@
       $("#"+[clean_class]+"_table").show();  
       $(".GUI_divs").hide(); 
       
-      //turn off "adding" of elements
+      //turn off "adding" of elements??
       
       
       

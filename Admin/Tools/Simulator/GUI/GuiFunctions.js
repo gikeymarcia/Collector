@@ -61,26 +61,86 @@ element_management = {
 
 trial_management = {
   update_temp_trial_type_template:function (){
-    var trial_type_html = $("iFrame").contents().find("#canvas_in_iframe").html();
-    trial_type_html = this.reintegrate_script(trial_type_html);
-    this.temp_trial_type_to_actual_trial_type(); // doing nothing at the moment
-    $("#temp_trial_type_template").val(trial_type_html);
-  },
-  temp_trial_type_to_actual_trial_type:function(){
+      
+    trial_type_children=$("iFrame").contents().find("#canvas_in_iframe").children();
+    preview_trial="";
+    for(var i=0;i<trial_type_children.length;i++){
+      
+      if(trial_type_children[i].nodeName !== "SCRIPT"){
+        console.dir(trial_type_children[i].nodeName);
+        preview_trial += this.processing_canvas_children(trial_type_children[i])+"\r\n";        
+      }
+    }
+    $("#temp_trial_type_template").val(preview_trial);
     
-    // detect images
+    
+  },
+  processing_canvas_children: function(child){     
+    
+    var stim_style=this.process_element_style(child);
+    
+    if(child.className == "text_element"){        
+      return "<span id='"+child.id+"' style='"+stim_style+"'>"+child.innerHTML+"'</span>";
+    }
+    if(child.className == "image_element"){        
+      return "<img id='"+child.id+"' src='"+child.innerHTML+"' style='"+stim_style+"'>";
+    }
+    if(child.className == "video_element"){    
+      return "<video id='"+child.id+"' src='"+child.innerHTML+"' style='"+stim_style+"'>";
+    }    
+    if(child.className == "audio_element"){
+      return "<audio id='"+child.id+"' src='"+child.innerHTML+"' style='"+stim_style+"'>";
+    }
+    
+    if(child.type == "button"){        
+      return "<input id='"+child.id+"' type='button' name='"+child.name+"' value='"+child.value+"' style='"+stim_style+"'>";
+    }
+    
+    if(child.className == "string_element"){        
+      return "<input type='text' id='"+child.id+"' name='"+child.name+"' placeholder='"+child.placeholder+"' style='"+stim_style+"'>";
+    }    
+    if(child.className == "number_element"){        
+      return "<input type='number' id='"+child.id+"' name='"+child.name+"' style='"+stim_style+"'>";
+    }    
+    if(child.className == "date_element"){        
+      return "<input type='date' id='"+child.id+"' name='"+child.name+"' style='"+stim_style+"'>";
+    }     
 
-    // detect videos
     
     
     // rules here for re_integrating scripts
     // rules here for replacing images from stimuli with values in stimuli column
+    
+    
+  },
+  process_element_style:function(child){
+    clean_classname=child.className.replace("_element","");
+    console.dir(clean_classname);
+    //if the clean_classname == ""
+    if(clean_classname==""){ // then this is an input?
+      global_child = child;
+      clean_classname = child.type;
+    }
+    
+    var these_props = element_gui.properties[clean_classname];
+    var stim_style='';
+    if(these_props[0]=="stimuli"){
+      start_i=1;
+    } else {
+      start_i=2;
+    }
+    for(var i=start_i;i<these_props.length;i++){
+      stim_style += these_props[i]+":"+child.style[these_props[i]]+";";
+    }
+    return stim_style;
+  },
+  temp_trial_type_to_actual_trial_type:function(){
+    
+    
   },
   reintegrate_script:function(trial_type_html){
     for(var i=0;i<current_trial_types_script_array.length;i++){
       var script_placeholder = "___script"+i+"___";      
-      console.dir(script_placeholder);
-      console.dir(current_trial_types_script_array[i]);      
       
       ///////////////////////////////////////
       //delete the span around the script ///
@@ -144,20 +204,10 @@ interaction_manager = {
       this_var = this_var.replace("_list","");
       this_var = this_var.replace("_element_","");
       this_var = this_var.replace(curr_int_funcs,"");
-//      console.dir("update temp console dir");
-    
-//      console.dir(this_list);
-//      console.dir(this_var);
-//      console.dir(temp_GUI_Var[this.curr_int_no][this_var]);
-
       $("#"+this_list).val(temp_GUI_Var[this.curr_int_no][this_var]);
       
     }
   },
-  update_to_temp_GUI_Var: function(){
-    console.dir(this.curren_int_no);
-    console.dir(this);
-  }
 }
 
 function interactive_gui_button_click(interactive_no){

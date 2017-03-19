@@ -33,15 +33,16 @@
       audio:    ["stimuli","position","left","top"],
       
       //inputs
-      button:   ["value","position","left","top","color","background-color","width","height"],
-      string:   ["value","position","left","top","color","background-color","width","height"],
-      number:   ["value","position","left","top","color","background-color","width","height"],
-      date:     ["value","position","left","top","color","background-color","width","height"],
+      button:   ["value","name","position","left","top","color","background-color","width","height"],
+      string:   ["value","name","position","left","top","color","background-color","width","height"],
+      number:   ["value","name","position","left","top","color","background-color","width","height"],
+      date:     ["value","name","position","left","top","color","background-color","width","height"],
       
-      //questionnaire
+      //questionnaire  - next release
+/*
       radio:    ["value"],
       checkbox: ["value"],
-      
+*/      
     },
     accepted_classes:["text_element","image_element","video_element","audio_element","button_element","string_element","number_element","date_element","radio_element","checkbox_element"],
     
@@ -55,7 +56,39 @@
       }
       $("#"+element_type+"_table").append("</table>");
       
-      for (var i=1; i<element_gui.properties[element_type].length; i++){ // skip src
+      if(element_gui.properties[element_type][0]=="stimuli"){
+        start_i = 1;
+        $("#"+element_type+"_stimuli").on("input",function(){
+        
+          var new_string = $(this).val();
+                  
+          $("iFrame").contents().find("#"+selected_element_id).html(new_string);
+          
+          trial_management.update_temp_trial_type_template();                
+        });
+      
+      } else {
+        start_i = 2;
+        $("#"+element_type+"_value").on("input",function(){
+        
+          var new_string = $(this).val();
+                  
+          $("iFrame").contents().find("#"+selected_element_id)[0].value=new_string;
+          
+          trial_management.update_temp_trial_type_template();                
+        });
+        $("#"+element_type+"_name").on("input",function(){
+        
+          var new_string = $(this).val();
+                  
+          $("iFrame").contents().find("#"+selected_element_id)[0].name=new_string;
+          
+          trial_management.update_temp_trial_type_template();                
+        });
+      }
+      
+      
+      for (var i=start_i; i<element_gui.properties[element_type].length; i++){ // skip src
         $("#"+element_type+"_"+element_gui.properties[element_type][i]).on("input",function(){
           var new_style = $(this).val();
           var property_selected = this.id.replace(element_type+"_","");
@@ -64,19 +97,9 @@
         }); 
       };
       
-      if(element_gui.properties[element_type][0]=="stimuli"){
-        $("#"+element_type+"_stimuli").on("input",function(){
-        
-          var new_string = $(this).val();
-                  
-          $("iFrame").contents().find("#"+selected_element_id).html(element_type+":"+new_string);
-          
-          trial_management.update_temp_trial_type_template();                
-        });
-      
-      } 
+       
       /* 
-      placeholder code here
+      placeholder code in next release
       
       if(element_gui.properties[element_type][0]=="value"){
         
@@ -96,16 +119,6 @@
         
       } */
       
-      
-      
-      // code here to deal with "stimuli" vs. "input"
-      
-      
-      
-      
-      
-      
-      
     },
     
     process_style: function(this_input,this_class) {
@@ -117,14 +130,20 @@
       if(element_gui.properties[this_class][0] == "stimuli"){
         var clean_stim = this_input[0].innerHTML.replace(this_class+":","");
         $("#"+this_class+"_stimuli").val(clean_stim);
+        
+        start_i=1;
       } else { // assuming that it is VALUE
         global_var = this_input;          
         var clean_stim = this_input[0].value.replace(this_class+":","");
         $("#"+this_class+"_value").val(clean_stim);
+        var this_name = this_input[0].name;
+        
+        $("#"+this_class+"_name").val(this_name);
+        start_i=2;
       }
       
       
-      for (var i=1; i<element_gui.properties[this_class].length; ++i) {
+      for (var i=start_i; i<element_gui.properties[this_class].length; ++i) {
         $("#"+this_class+"_" + element_gui.properties[this_class][i]).val(this_input.css(element_gui.properties[this_class][i]));
       }
     },
