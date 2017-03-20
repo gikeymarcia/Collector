@@ -82,6 +82,8 @@ $("#canvas_in_iframe").on("mouseenter", "*", function() {
 }); 
 function edit_script(x){
   parent.gui_script_read(parent.current_trial_types_script_array[x]);
+  parent.$("#gui_edit_script_header").click();
+  
   
 }
 

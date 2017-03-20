@@ -4,17 +4,17 @@
 ?>
 
 
-<select id="interactive_hide_element_target_list">
+<select onchange='interaction_manager.update_temp_GUI_Var("interactive_hide_element_target_list")' id="interactive_hide_element_target_list">
   <option>-- select an element to hide --</option>
 </select>
 <br>
 Which element do you want to click to hide the element?
   
-<select id="interactive_hide_element_trigger_list">
+<select onchange='interaction_manager.update_temp_GUI_Var("interactive_hide_element_trigger_list")' id="interactive_hide_element_trigger_list">
 </select>
 
 After how much time do you want the element to be hidden?
-  <input type="number" id="interactive_hide_element_delay">
+  <input oninput='interaction_manager.update_temp_GUI_Var("interactive_hide_element_delay")' type="number" id="interactive_hide_element_delay">
 
 <script>
   var hide_lists = ['interactive_hide_element_target_list',"interactive_hide_element_trigger_list"];

@@ -45,7 +45,24 @@
       
       
     } else {
-      alert("Error: not recognising the type of element you are trying to edit.");
+      console.dir(target[0]);
+      var this_target_type = target[0].type+"_element";
+      if(element_gui.accepted_classes.indexOf(this_target_type) !== -1){
+        // processing here
+        
+        var clean_class = target[0].type;
+        clean_class = clean_class.replace("text","string"); // as this as an input
+        
+        $(".element_table").hide();
+        element_gui.process_style(target,clean_class);  
+        $("#"+[clean_class]+"_table").show();  
+        $(".GUI_divs").hide();
+        
+        
+      } else {
+        alert("Error: not recognising the type of element you are trying to edit.");
+      }
+      
     }
     
     

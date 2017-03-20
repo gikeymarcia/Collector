@@ -113,10 +113,10 @@ trial_management = {
     }
     
      
-    if(child.className == "number_element"){        
+    if(child.type == "number"){        
       return "<input type='number' id='"+child.id+"' name='"+child.name+"' style='"+stim_style+"'>";
     }    
-    if(child.className == "date_element"){        
+     if(child.type == "date"){
       return "<input type='date' id='"+child.id+"' name='"+child.name+"' style='"+stim_style+"'>";
     }     
 
@@ -211,17 +211,44 @@ function gui_script_read(script_received){
 interaction_manager = {
   int_funcs: {},
   curr_int_no: -1,
-  update_temp_GUI_Var: function(curr_int_funcs){
+  update_interfaces: function(curr_int_funcs){
     for(var i=0;i<this.int_funcs[curr_int_funcs].length;i++){
-      var this_list = this.int_funcs[curr_int_funcs][i];      
-      var this_var  = this_list.replace("interactive_","");
-      this_var = this_var.replace("_list","");
-      this_var = this_var.replace("_element_","");
-      this_var = this_var.replace(curr_int_funcs,"");
+      var this_list = this.int_funcs[curr_int_funcs][i]; 
+      var this_var = this.clean_variable(this_list,curr_int_funcs);
       $("#"+this_list).val(temp_GUI_Var[this.curr_int_no][this_var]);
       
     }
   },
+  update_temp_GUI_Var: function(current_input){ //hard coded!!
+    console.dir(current_input);
+    clean_current_input=this.clean_variable(current_input,"hide"); 
+    console.dir(clean_current_input);
+    temp_GUI_Var[this.curr_int_no][clean_current_input] = $("#"+current_input).val();
+    this.update_current_script();
+  },
+  clean_variable:function(input_variable,curr_int_funcs){
+    var this_var  = input_variable;
+      this_var = this_var.replace("_list","");
+      this_var = this_var.replace("_element_","");
+      this_var = this_var.replace("interactive_","");
+      this_var = this_var.replace(curr_int_funcs,"");
+      return this_var;
+  },
+  update_current_script:function(){
+    // replace GUI_FUNCTIONS.setting with new script.
+    // delete everything between // --- START GUI FUNCTION --- and // --- END GUI FUNCTION ---
+    console.dir(temp_GUI_Var);
+    console.dir(current_trial_types_script_array[this.curr_int_no]);
+    var start_splitter = "// --- START GUI FUNCTION ---";
+    var end_splitter   = "// --- END GUI FUNCTION ---";
+    var these_splitters= [start_splitter,end_splitter];
+    var this_split_script = current_trial_types_script_array[this.curr_int_no].split(new RegExp(these_splitters.join("|"), "g"));
+    this_split_script[1] = "GUI_FUNCTIONS.settings = "+JSON.stringify(temp_GUI_Var, null, 2)+"\n\r  GUI_FUNCTIONS.run()";
+    var first_merge = this_split_script[0] + "\n\r // --- START GUI FUNCTION --- \n\r" + this_split_script[1];
+    var complete_script = first_merge + "\n\r // --- END GUI FUNCTION ---" +this_split_script[2];
+    current_trial_types_script_array[this.curr_int_no]=complete_script;
+    
+  }
 }
 
 function interactive_gui_button_click(interactive_no){
@@ -237,7 +264,7 @@ function interactive_gui_button_click(interactive_no){
   $("#interactive_"+this_function).show();
   
   interaction_manager.curr_int_no = interactive_no;
-  interaction_manager.update_temp_GUI_Var(this_function);
+  interaction_manager.update_interfaces(this_function);
   
   //update values depending on which function
   
