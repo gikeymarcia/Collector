@@ -79,7 +79,7 @@
 .custom_table > div:not(.headers):hover { background-color: #CFC; }
 .custom_table > div.headers > div { text-align: center; font-weight: bold; }
 
-#exp_data td { text-align: center; padding: 15px; }
+#exp_data > tbody > tr > td { text-align: center; padding: 15px; }
 #trial_type_selectors {
   text-align:center;
   

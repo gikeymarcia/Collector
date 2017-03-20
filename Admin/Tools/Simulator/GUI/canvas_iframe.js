@@ -43,7 +43,12 @@ $("#canvas_in_iframe").on("mouseenter", "*", function() {
   var parent_count = parent.$(this).parents().length;
   gui_info_el.data("parent_count", parent_count);
   
-  parent.$("#gui_info").append(gui_info_el);
+  if(this.id !== "gui_script"){
+    block_click = false;
+    parent.$("#gui_info").append(gui_info_el);  
+  } else {
+    block_click = true;
+  }
   
   sort_gui_info();
 }).on("mouseleave", "*", function() {
@@ -57,10 +62,11 @@ $("#canvas_in_iframe").on("mouseenter", "*", function() {
         parent.$("." + class_name).remove();
     }, 50);
 }).on("contextmenu", function() {
-  
-  lock_gui_info = !lock_gui_info;
+  console.dir(this.id); 
+  if(block_click == false){
+    lock_gui_info = !lock_gui_info;
 
-  parent.canvas_drawing.new_element_type='';    
+    parent.canvas_drawing.new_element_type='';    
 
     
     if (!lock_gui_info) $("#gui_info").html("");
@@ -76,9 +82,8 @@ $("#canvas_in_iframe").on("mouseenter", "*", function() {
       
     }        
     
-    
-    
     return false;
+  }
 }); 
 function edit_script(x){
   parent.gui_script_read(parent.current_trial_types_script_array[x]);

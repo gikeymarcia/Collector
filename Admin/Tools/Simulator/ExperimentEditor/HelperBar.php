@@ -192,7 +192,7 @@ var surveyVector=<?=$jsonSurveyVector?>;
 
 function helperActivate(columnName, cellValue){
   $("#helpType").html(columnName);
-  
+  columnName = columnName || '';
   var columnCodeName = columnName.replace(/ /g, '');
   
   $("#helperBar").find(".helpType_Col").hide();

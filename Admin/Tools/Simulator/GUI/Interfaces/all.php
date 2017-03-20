@@ -44,7 +44,7 @@
       checkbox: ["value"],
 */      
     },
-    accepted_classes:["text_element","image_element","video_element","audio_element","button_element","string_element","number_element","date_element","radio_element","checkbox_element"],
+    accepted_classes:["text_element","image_element","video_element","audio_element","button_element","string_element","number_element","date_element"], //,"radio_element","checkbox_element"
     
     write_html:function(element_type){
       for (var i=0; i<element_gui.properties[element_type].length; ++i) {

@@ -114,8 +114,15 @@ $("#gui_create_trialtype_button").on("click",function(){
   $(".new_element_button").on("click",function(){
     //console.dir(this.textContent);
     canvas_drawing.new_element_type = this.textContent;
+    add_buttons_reset();    
+    this.className = "gui_button_clicked new_element_button";
     
   });
+  
+  function add_buttons_reset(){
+    $(".new_element_button").removeClass("gui_button_clicked");
+    $(".new_element_button").addClass("gui_button_unclicked");
+  }
   
   canvas_drawing = {
     new_element_type:'',
@@ -133,6 +140,9 @@ $("#gui_create_trialtype_button").on("click",function(){
       $('iFrame').contents().find('html').on('click', function (e) { 
         canvas_drawing.draw_new_element();
       });
+      
+      
+      
 
     },
     
@@ -169,6 +179,7 @@ $("#gui_create_trialtype_button").on("click",function(){
         var testingthis = iframeBody.append(new_element_content); 
 
         canvas_drawing.new_element_type='';            
+        add_buttons_reset();
       }
 
       

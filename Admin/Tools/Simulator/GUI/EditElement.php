@@ -1,7 +1,12 @@
 <script src="GUI/GUINewElements.js"></script>
 
 <div id="gui_style">
-  <h3 id="selected_element_id"></h3>
+  <table>
+    <tr>
+      <td><h3 id="selected_element_id"></h3></td>
+      <td><input id="delete_element_button" type="button" class="collectorButton" value="delete" style="display:none"></td>
+    </tr>
+  </table>
   <?php require("Interfaces/all.php"); ?>
            
 </div>
@@ -9,7 +14,28 @@
 
 
 <script>
-    
+  
+  $("#delete_element_button").on("click",function(){
+    var sel_elem = element_management.selected_element;
+    delete_confirm = confirm("Are you sure you want to delete: "+element_management.selected_element);
+    if(delete_confirm == true){
+      alert ("deleting");
+      
+      $("iFrame").contents().find("#"+sel_elem).remove();
+      $(".element_table").hide();
+      
+      // wipe the editing table for the deleted element.
+      
+      
+      
+      ///
+      
+      
+    } else {
+      alert ("not deleting");
+    }
+  });
+  
   $("#gui_info").on("mouseenter", "*", function() {    
     var this_class = $(this)[0].className;
     $("."+this_class).addClass("canvasHighlight");
@@ -28,8 +54,8 @@
     var target = $("iFrame").contents().find("#"+this_class);
     
     
-    selected_element_id = target[0].id;      
-    $("#selected_element_id").html(selected_element_id);
+    element_management.selected_element = target[0].id;      
+    $("#selected_element_id").html(element_management.selected_element);
     $(target).removeClass("canvasHighlight");
     
     
@@ -39,7 +65,7 @@
       element_gui.process_style(target,clean_class);  
       $("#"+[clean_class]+"_table").show();  
       $(".GUI_divs").hide(); 
-      
+      $("#delete_element_button").show();
       //turn off "adding" of elements??
       
       
@@ -57,6 +83,7 @@
         element_gui.process_style(target,clean_class);  
         $("#"+[clean_class]+"_table").show();  
         $(".GUI_divs").hide();
+        $("#delete_element_button").show();
         
         
       } else {

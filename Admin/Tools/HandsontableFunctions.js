@@ -76,7 +76,7 @@ function isTrialTypeHeader(colHeader) {
       var thisArea = $(container).closest(".tableArea");
       
       thisWidth  = Math.min(thisWidth,  thisArea.width());
-      thisHeight = Math.min(thisHeight, 600);
+      thisHeight = Math.min(thisHeight, thisArea.height());
       
       hot.updateSettings({
         width:  thisWidth,
@@ -92,11 +92,11 @@ function isTrialTypeHeader(colHeader) {
     function createHoT(container, data) {
         var table = new Handsontable(container, {
             data: data,
-            width: 1,
-            height: 1,
+            //width: 1,
+            //height: 1,
       
             afterChange: function(changes, source) {
-                updateDimensions(this);  
+                //updateDimensions(this);  
         
         var middleColEmpty=0;
         var middleRowEmpty=0;

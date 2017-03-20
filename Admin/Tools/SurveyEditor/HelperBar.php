@@ -175,6 +175,9 @@ var surveyVector=<?=$jsonSurveyVector?>;
 // var perVar = {}; - probably can delete
 
 function helperActivate(columnName, cellValue){
+  
+  columnName = columnName || "";
+  
   $("#helpType").html(columnName);
   
   var columnCodeName = columnName.replace(/ /g, '');

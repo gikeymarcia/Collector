@@ -1,5 +1,6 @@
 element_management = {
   
+  selected_element : '',
   lists_to_update : [],
   canvas_elements: {},
   new_item: function(new_list){
@@ -92,7 +93,7 @@ trial_management = {
       var stim_style=this.process_element_style(child);
     }
     if(child.className == "text_element"){        
-      return "<span id='"+child.id+"' style='"+stim_style+"'>"+child.innerHTML+"'</span>";
+      return "<span id='"+child.id+"' style='"+stim_style+"'>"+child.innerHTML+"</span>";
     } 
     if(child.className == "image_element"){        
       return "<img id='"+child.id+"' src='"+child.innerHTML+"' style='"+stim_style+"'>";
