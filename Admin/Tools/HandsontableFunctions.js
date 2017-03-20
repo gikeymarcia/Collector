@@ -90,137 +90,137 @@ function isTrialTypeHeader(colHeader) {
         }, 0);
     }
     function createHoT(container, data) {
+        //console.dir("here");
         var table = new Handsontable(container, {
             data: data,
-            //width: 1,
-            //height: 1,
+            colHeaders: true,
+            rowHeaders: true,
+            height: 100,
+            width: 600,
+            minSpareCols: 1,
+            minSpareRows: 1,
+            manualColumnFreeze: true,
+            fixedRowsTop: 1,
+            contextMenu: true,
       
             afterChange: function(changes, source) {
-                //updateDimensions(this);  
+                // updateDimensions(this);  
         
-        var middleColEmpty=0;
-        var middleRowEmpty=0;
-        var postEmptyCol=0; //identify if there is a used col after empty one
-        var postEmptyRow=0; // same for rows
+                var middleColEmpty=0;
+                var middleRowEmpty=0;
+                var postEmptyCol=0; //identify if there is a used col after empty one
+                var postEmptyRow=0; // same for rows
 
-        //identify if repetition has occurred and adjusting value
-        var topRow=[];
-        for (var k=0; k<this.countCols()-1; k++){
-          var cellValue=this.getDataAtCell(0,k);
-          topRow[k]=this.getDataAtCell(0,k);
-          for (l=0; l<k; l++){
-            if (this.getDataAtCell(0,k)==this.getDataAtCell(0,l)){
-              alert ('repetition has occurred!');
-              this.setDataAtCell(0,k,this.getDataAtCell(0,k)+'*');
-            }
-          }
-                  
-        }
-        
-        //Removing Empty middle columns
-        for (var k=0; k<this.countCols()-1; k++){
-          if (this.isEmptyCol(k)){
-            if (middleColEmpty==0){
-              middleColEmpty=1;
-            }
-          }            
-          if (!this.isEmptyCol(k) & middleColEmpty==1){
-            postEmptyCol =1;
-            alert ("You have an empty column in the middle - Being removed from table!");
-            this.alter("remove_col",k-1); //delete column that is empty 
-            middleColEmpty=0;
-          }            
-        }
-        
-        //Same thing for rows
-        for (var k=0; k<this.countRows()-1; k++){
-          if (this.isEmptyRow(k)){
-            if (middleRowEmpty==0){
-              middleRowEmpty=1;
-            }
-          }            
-          if (!this.isEmptyRow(k) & middleRowEmpty==1){
-            postEmptyRow =1;
-            alert ("You have an empty row in the middle - Being removed from table!");
-            this.alter("remove_row",k-1); //delete column that is empty
-            middleRowEmpty=0;
-          }            
-        }        
-        if(postEmptyCol != 1 ){
-          while(this.countEmptyCols()>1){  
-            this.alter("remove_col",this.countCols); //delete the last col
-          }
-        }
-        if(postEmptyRow != 1){
-          while(this.countEmptyRows()>1){  
-            this.alter("remove_row",this.countRows);//delete the last row
-          }
-        }
-      },
-      afterInit: function() {
-          updateDimensions(this);
-      },
-      afterCreateCol: function() {
-          updateDimensionsDelayed(this, 55, 0);
-      },
-      afterCreateRow: function() {
-          updateDimensionsDelayed(this, 0, 28);
-      },
-      afterRemoveCol: function() {
-          updateDimensionsDelayed(this);
-      },
-      afterRemoveRow: function() {
-          updateDimensionsDelayed(this);
-      },
-      
-      afterSelectionEnd: function(){
-        var coords        = this.getSelected();
-        var column        = this.getDataAtCell(0,coords[1]);//stimTable.getDataAtCell(0,1); 
-        var thisCellValue = this.getDataAtCell(coords[0],coords[1]);
-        window['Current HoT Coordinates'] = coords;
-        
-        helperActivate(column, thisCellValue);
-      //         alert(stimTable.getDataAtCell(0,1));
-      },
-      
-      rowHeaders: false,
-      contextMenu: true,
-      cells: function(row, col, prop) {
-        var cellProperties = {};        
-        if (row === 0) {
-            // header row
-            cellProperties.renderer = firstRowRenderer;
-        } else {
-            var thisHeader = this.instance.getDataAtCell(0,col);
-            if (typeof thisHeader === 'string' && thisHeader != '') {
-                if (isTrialTypeHeader(thisHeader)) {
-                    cellProperties.type = 'dropdown';
-                    cellProperties.source = trialTypes;
-                    cellProperties.renderer = trialTypesRenderer;
-                } else {
-                    cellProperties.type = 'text';
-                    if (isNumericHeader(thisHeader)) {
-                        cellProperties.renderer = numericRenderer;
-                    } else if (isShuffleHeader(thisHeader)) {
-                        cellProperties.renderer = shuffleRenderer;
-                    } else {
-                        cellProperties.renderer = Handsontable.renderers.TextRenderer;
+                //identify if repetition has occurred and adjusting value
+                var topRow=[];
+                for (var k=0; k<this.countCols()-1; k++){
+                  var cellValue=this.getDataAtCell(0,k);
+                  topRow[k]=this.getDataAtCell(0,k);
+                  for (l=0; l<k; l++){
+                    if (this.getDataAtCell(0,k)==this.getDataAtCell(0,l)){
+                      alert ('repetition has occurred!');
+                      this.setDataAtCell(0,k,this.getDataAtCell(0,k)+'*');
                     }
+                  }
+                          
                 }
-            } else {
-                cellProperties.renderer = Handsontable.renderers.TextRenderer;
-            }
-        }                
-        return cellProperties;
-      },
-      minSpareCols: 1,
-      minSpareRows: 1,
-      manualColumnFreeze: true,
-      fixedRowsTop: 0,
-      colHeaders: false,
-      cells: function (row, col, prop) {
-      }
+                
+                //Removing Empty middle columns
+                for (var k=0; k<this.countCols()-1; k++){
+                  if (this.isEmptyCol(k)){
+                    if (middleColEmpty==0){
+                      middleColEmpty=1;
+                    }
+                  }            
+                  if (!this.isEmptyCol(k) & middleColEmpty==1){
+                    postEmptyCol =1;
+                    alert ("You have an empty column in the middle - Being removed from table!");
+                    this.alter("remove_col",k-1); //delete column that is empty 
+                    middleColEmpty=0;
+                  }            
+                }
+                
+                //Same thing for rows
+                for (var k=0; k<this.countRows()-1; k++){
+                  if (this.isEmptyRow(k)){
+                    if (middleRowEmpty==0){
+                      middleRowEmpty=1;
+                    }
+                  }            
+                  if (!this.isEmptyRow(k) & middleRowEmpty==1){
+                    postEmptyRow =1;
+                    alert ("You have an empty row in the middle - Being removed from table!");
+                    this.alter("remove_row",k-1); //delete column that is empty
+                    middleRowEmpty=0;
+                  }            
+                }        
+                if(postEmptyCol != 1 ){
+                  while(this.countEmptyCols()>1){  
+                    this.alter("remove_col",this.countCols); //delete the last col
+                  }
+                }
+                if(postEmptyRow != 1){
+                  while(this.countEmptyRows()>1){  
+                    this.alter("remove_row",this.countRows);//delete the last row
+                  }
+                }
+            },
+            afterInit: function() {
+                updateDimensions(this);
+            },
+            afterCreateCol: function() {
+                updateDimensionsDelayed(this, 55, 0);
+            },
+            afterCreateRow: function() {
+                updateDimensionsDelayed(this, 0, 28);
+            },
+            afterRemoveCol: function() {
+                updateDimensionsDelayed(this);
+            },
+            afterRemoveRow: function() {
+                updateDimensionsDelayed(this);
+            },
+            
+            afterSelectionEnd: function(){
+              var coords        = this.getSelected();
+              var column        = this.getDataAtCell(0,coords[1]);//stimTable.getDataAtCell(0,1); 
+              var thisCellValue = this.getDataAtCell(coords[0],coords[1]);
+              window['Current HoT Coordinates'] = coords;
+              
+              helperActivate(column, thisCellValue);
+            //         alert(stimTable.getDataAtCell(0,1));
+            },
+            cells: function(row, col, prop) {
+              var cellProperties = {};        
+              if (row === 0) {
+                  // header row
+                  cellProperties.renderer = firstRowRenderer;
+              } else {
+                  var thisHeader = this.instance.getDataAtCell(0,col);
+                  if (typeof thisHeader === 'string' && thisHeader != '') {
+                      if (isTrialTypeHeader(thisHeader)) {
+                          cellProperties.type = 'dropdown';
+                          cellProperties.source = trialTypes;
+                          cellProperties.renderer = trialTypesRenderer;
+                      } else {
+                          cellProperties.type = 'text';
+                          if (isNumericHeader(thisHeader)) {
+                              cellProperties.renderer = numericRenderer;
+                          } else if (isShuffleHeader(thisHeader)) {
+                              cellProperties.renderer = shuffleRenderer;
+                          } else {
+                              cellProperties.renderer = Handsontable.renderers.TextRenderer;
+                          }
+                      }
+                  } else {
+                      cellProperties.renderer = Handsontable.renderers.TextRenderer;
+                  }
+              }                
+              return cellProperties;
+            },
+            cells: function(row, col, prop) {}
         });
+        
         return table;
     }
     
