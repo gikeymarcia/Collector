@@ -21,6 +21,14 @@
 
 <link rel="stylesheet" type="text/css" href="SimulatorStyle.css" media="screen" />
 
+  <table id="support_bar"> 
+    <tr>
+      <td><?php require("SupportBars/tutorial.php");   ?></td>
+      <td><?php require("SupportBars/Interfaces.php"); ?></td>
+      <td><?php require("SupportBars/HelperBar.php");  ?></td>
+    </tr>
+  </table>
+
 <div id="preview_gui" class="hide_show_elements">
   <table id="preview_gui_table">
     <tr>

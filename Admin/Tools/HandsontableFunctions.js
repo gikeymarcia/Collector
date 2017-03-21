@@ -93,16 +93,23 @@ function isTrialTypeHeader(colHeader) {
         //console.dir("here");
         var table = new Handsontable(container, {
             data: data,
-            colHeaders: true,
-            rowHeaders: true,
-            height: 100,
-            width: 600,
             minSpareCols: 1,
             minSpareRows: 1,
-            manualColumnFreeze: true,
-            fixedRowsTop: 1,
-            contextMenu: true,
+
+            /* next release - make these properties work without problems with scrollbar
+            
+          //  colHeaders: true,  
+          //  rowHeaders: true,
+          //  height: 100,
+          //  width: 600,
       
+            - to keep top row in view
+          //  manualColumnFreeze: true, 
+          //  fixedRowsTop: 1,
+          //  contextMenu: true,     
+          
+          */
+          
             afterChange: function(changes, source) {
                 // updateDimensions(this);  
         
@@ -183,12 +190,12 @@ function isTrialTypeHeader(colHeader) {
             
             afterSelectionEnd: function(){
               var coords        = this.getSelected();
-              var column        = this.getDataAtCell(0,coords[1]);//stimTable.getDataAtCell(0,1); 
+              var column        = this.getDataAtCell(0,coords[1]); 
               var thisCellValue = this.getDataAtCell(coords[0],coords[1]);
               window['Current HoT Coordinates'] = coords;
               
               helperActivate(column, thisCellValue);
-            //         alert(stimTable.getDataAtCell(0,1));
+            
             },
             cells: function(row, col, prop) {
               var cellProperties = {};        
@@ -226,8 +233,8 @@ function isTrialTypeHeader(colHeader) {
     
     
     $(window).resize(function() {
-        window.clearTimeout(resizeTimer);
         resizeTimer = window.setTimeout(function() {
             updateDimensions(stimTable);
         }, 100);
+        window.clearTimeout(resizeTimer);        
     });

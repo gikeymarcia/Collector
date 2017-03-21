@@ -254,6 +254,7 @@ function stim_proc_selection(stim_proc,sheet_selected){
     sheet_name = sheet_selected;
   } else {
     var sheet_name = stim_proc+"/"+sheet_selected;
+    console.dir(sheet_name);
   }
   if (typeof spreadsheets[exp_name][sheet_name] === 'undefined') {
     $.get(

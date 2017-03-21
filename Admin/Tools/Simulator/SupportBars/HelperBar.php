@@ -95,7 +95,8 @@
     <h1 id="helper_title"> Helper </h1>
 
     <div>
-      Click <a href="https://docs.google.com/document/d/1OCtDrv7VNu8-nD6Pt1FnGSuKkqil2Onm4PVWOL3NthY/edit?usp=sharing" target="_blank"> here</a> for a list of <b>Collector specific</b> javascript functions
+      Click <a href="https://docs.google.com/document/d/1OCtDrv7VNu8-nD6Pt1FnGSuKkqil2Onm4PVWOL3NthY/edit?usp=sharing" target="_blank"> here</a> to read <b>FAQs</b><br>
+      Click <a href="https://docs.google.com/document/d/1kTNbjrysMZipINbpewg1AYhEo_4WPR5ABwqxjUYMLMU/edit?usp=sharing" target="_blank"> here</a> to ask a <b>Question</b><br>
     </div>
 
     

@@ -48,12 +48,7 @@
   .procOptions        { background-color: #FBB; }
   .procOptions option { background-color: #FDD; }
   
-  #support_bar{    
-    position:fixed;
-    top:70px;
-    right: 0px;
-    z-index:5;
-  }
+  
   
   
   
@@ -79,11 +74,4 @@
   <input type="text" id="experiment_name" placeholder="Experiment Name">
   <button id="save_btn" class="collectorButton">Save</button>
 
-  <table id="support_bar"> 
-    <tr>
-      <td><?php require("tutorial.php"); ?>                   </td>
-      <td><?php require("Interfaces.php"); ?>                 </td>
-      <td><?php require("ExperimentEditor/HelperBar.php"); ?> </td>
-    </tr>
-  </table>
 </div>
