@@ -86,12 +86,15 @@ trial_management = {
       current_script_no++;
       // code for replacing span with script //
       
-      var this_script = current_trial_types_script_array[current_script_no];
+      var this_script = interaction_manager.current_trial_type_script;
     
       return "<script>"+this_script+"</script>";
     } else {
       var stim_style=this.process_element_style(child);
     }
+    
+    // stimuli
+    
     if(child.className == "text_element"){        
       return "<span id='"+child.id+"' style='"+stim_style+"'>"+child.innerHTML+"</span>";
     } 
@@ -105,6 +108,8 @@ trial_management = {
       return "<audio id='"+child.id+"' src='"+child.innerHTML+"' style='"+stim_style+"'>";
     }
     
+    //inputs
+    
     if(child.type == "button"){        
       return "<input id='"+child.id+"' type='button' name='"+child.name+"' value='"+child.value+"' style='"+stim_style+"'>";
     }
@@ -112,8 +117,6 @@ trial_management = {
     if(child.type == "text"){        
       return "<input type='text' id='"+child.id+"' name='"+child.name+"' placeholder='"+child.placeholder+"' style='"+stim_style+"'>";
     }
-    
-     
     if(child.type == "number"){        
       return "<input type='number' id='"+child.id+"' name='"+child.name+"' style='"+stim_style+"'>";
     }    
@@ -154,15 +157,9 @@ trial_management = {
     
   },
   reintegrate_script:function(trial_type_html){
-    for(var i=0;i<current_trial_types_script_array.length;i++){
-      var script_placeholder = "___script"+i+"___";      
-      
-      ///////////////////////////////////////
-      //delete the span around the script ///
-      ///////////////////////////////////////
-      
-      trial_type_html = trial_type_html.replace(script_placeholder,"<script>"+current_trial_types_script_array[i]+"</script>");      
-    }
+    
+    var script_placeholder = "___script___";      
+    trial_type_html = trial_type_html.replace(script_placeholder,"<script>"+interaction_manager.current_trial_type_script+"</script>");           
     return trial_type_html;
   }
 }
@@ -192,9 +189,16 @@ function gui_script_read(script_received){
 
     var interactive_gui_html = '';
     for(i=0;i<temp_GUI_Var.length;i++){
-      interactive_gui_html += i+"<span id='gui_button"+i+"' class='gui_button_unclicked' onclick='interactive_gui_button_click(\""+[i]+"\")'>"+temp_GUI_Var[i]['gui_function']+" : "+temp_GUI_Var[i]['target']+"</span>"+      
-//      i+"<input class='collectorButton' type='button' onclick='interactive_gui_button_click(\""+[i]+"\")' value='"+temp_GUI_Var[i]['gui_function']+" : "+temp_GUI_Var[i]['target']+"'>"+
-      "<input type='button' class='collectorButton' value='delete'>"+
+        
+        // code here to add spans
+        
+        
+        
+        
+      interactive_gui_html +=   "<span id='gui_interactive_span_"+i+"'>"+i+
+                                    "<span id='gui_button"+i+"' class='gui_button_unclicked' onclick='interactive_gui_button_click(\""+[i]+"\")'>"+temp_GUI_Var[i]['gui_function']+" : "+temp_GUI_Var[i]['target']+"</span>"+      
+                                    "<input type='button' class='collectorButton' value='delete'>"+
+                                "</span>"+
       "<br>";
     }
     $("#interactive_gui").html(interactive_gui_html);
@@ -210,8 +214,14 @@ function gui_script_read(script_received){
 }
 
 interaction_manager = {
-  int_funcs: {},
-  curr_int_no: -1,
+    current_trial_type_script:'',
+    int_funcs: {},
+    curr_int_no: -1,
+    update_int_target: function(int_function,input_id){        
+        $("#gui_button"+interaction_manager.curr_int_no).html(int_function+" : "+$("#"+input_id).val());          
+    },
+  
+  
   update_interfaces: function(curr_int_funcs){
     for(var i=0;i<this.int_funcs[curr_int_funcs].length;i++){
       var this_list = this.int_funcs[curr_int_funcs][i]; 
@@ -226,6 +236,7 @@ interaction_manager = {
     console.dir(clean_current_input);
     temp_GUI_Var[this.curr_int_no][clean_current_input] = $("#"+current_input).val();
     this.update_current_script();
+    
   },
   clean_variable:function(input_variable,curr_int_funcs){
     var this_var  = input_variable;
@@ -239,16 +250,15 @@ interaction_manager = {
     // replace GUI_FUNCTIONS.setting with new script.
     // delete everything between // --- START GUI FUNCTION --- and // --- END GUI FUNCTION ---
     console.dir(temp_GUI_Var);
-    console.dir(current_trial_types_script_array[this.curr_int_no]);
+    console.dir(this.current_trial_type_script);
     var start_splitter = "// --- START GUI FUNCTION ---";
     var end_splitter   = "// --- END GUI FUNCTION ---";
     var these_splitters= [start_splitter,end_splitter];
-    var this_split_script = current_trial_types_script_array[this.curr_int_no].split(new RegExp(these_splitters.join("|"), "g"));
+    var this_split_script = this.current_trial_type_script.split(new RegExp(these_splitters.join("|"), "g"));
     this_split_script[1] = "GUI_FUNCTIONS.settings = "+JSON.stringify(temp_GUI_Var, null, 2)+"\n\r  GUI_FUNCTIONS.run()";
     var first_merge = this_split_script[0] + "\n\r // --- START GUI FUNCTION --- \n\r" + this_split_script[1];
-    var complete_script = first_merge + "\n\r // --- END GUI FUNCTION ---" +this_split_script[2];
-    current_trial_types_script_array[this.curr_int_no]=complete_script;
-    
+    this.current_trial_type_script = first_merge + "\n\r // --- END GUI FUNCTION ---" +this_split_script[2];    
+    trial_management.update_temp_trial_type_template(); //update preview of code
   }
 }
 

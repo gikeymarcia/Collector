@@ -3,7 +3,7 @@
 <div id="gui_style">
   <table>
     <tr>
-      <td><h3 id="selected_element_id"></h3></td>
+      <td><h3 id="selected_element_test"></h3></td>
       <td><input id="delete_element_button" type="button" class="collectorButton" value="delete" style="display:none"></td>
     </tr>
   </table>
@@ -55,7 +55,7 @@
     
     
     element_management.selected_element = target[0].id;      
-    $("#selected_element_id").html(element_management.selected_element);
+    $("#selected_element_test").html(element_management.selected_element);
     $(target).removeClass("canvasHighlight");
     
     

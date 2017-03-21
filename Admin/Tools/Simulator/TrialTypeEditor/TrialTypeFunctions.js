@@ -239,8 +239,11 @@ function associate_data(data) {
 
 function trialtype_to_canvas(current_trialtype_template){
   
-  // capture globals
-   
+    // wipe temp_GUI_Var details from previous trialtype
+    if(typeof(temp_GUI_Var) !== "undefined"){
+        console.dir(temp_GUI_Var);
+        temp_GUI_Var='';            
+    }
    
    
   var new_iframe = $("<iframe id='canvas_iframe'>");  
@@ -252,8 +255,6 @@ function trialtype_to_canvas(current_trialtype_template){
   scriptless_trialtype_template = current_trialtype_template.replace(/<script>/g,"<script>___script___")
   
   scriptless_trialtype_template = scriptless_trialtype_template.split(/<script>|<\/script>/g);
-  
-  current_trial_types_script_array = [];
   
   var iframe_width = $("iFrame").width();
   var mouseover_mouseout = "onmouseover='this.style.color=\"black\"' "+
@@ -268,8 +269,8 @@ function trialtype_to_canvas(current_trialtype_template){
       if(no_scripts == 0){
         no_scripts++;
         var this_script = scriptless_trialtype_template[i].replace("___script___","");
-        var script_no = current_trial_types_script_array.length;
-        current_trial_types_script_array.push(this_script);
+        var script_no = 0; // though this can be tidied up also
+        interaction_manager.current_trial_type_script=this_script;
         // the first part of this string includes script      
         scriptless_trialtype_template[i] = "<span "+mouseover_mouseout+" "+script_style+" onclick='edit_script("+script_no+")' class='script_element' id='gui_script'>___script"+script_no+"___</span>";
       } else {
@@ -373,7 +374,6 @@ function trialtype_to_canvas(current_trialtype_template){
   })
   
   canvas_drawing.activate_canvas_mouseframe();
-  
 }
 
 

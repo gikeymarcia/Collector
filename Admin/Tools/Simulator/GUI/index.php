@@ -78,10 +78,12 @@ $("#gui_to_trialtype_button").on("click",function(){
   var current_trial_type = $("#trial_type_select").val();
   var gui_content = $("#temp_trial_type_template").val();
   $("#"+current_trial_type+"template_textarea").val(gui_content);
+  $("#"+current_trial_type+"template_textarea").addClass("modified");
 });
 
 $("#gui_to_trialtype_save_button").on("click",function(){
   $("#gui_to_trialtype_button").click();
+  save_trial_types();
 });
 
 $(".GUI_headers").on("click",function(){
@@ -101,14 +103,65 @@ $("#gui_interface_add_element").on("click",function(){
  */
 
 $("#gui_create_trialtype_button").on("click",function(){
-  $("#new_trial_type_button").click();
+    $("#new_trial_type_button").click();
 });
 
-  $("#select_interactive_function").on("change",function(){
-    console.dir(this);
-    console.dir(this.value);
-    $("#interactive_"+this.value).show();            
-  });
+$("#select_interactive_function").on("change",function(){
+    $("#interactive_"+this.value).show(); 
+    
+    console.dir(typeof(temp_GUI_Var));
+    console.dir(temp_GUI_Var[0]["gui_function"]);
+    console.dir("look up");
+    if(typeof(temp_GUI_Var[0]["gui_function"]) == "undefined"){
+        interaction_manager.curr_int_no=0;
+        
+        temp_GUI_Var = {
+        }
+        temp_GUI_Var[0] = {
+            gui_function:"",
+        }    
+        
+    // need to draw in span to alert the task that there is script to be written in!
+    
+    $("#canvas")
+    
+    var iframe_width = $("iFrame").width();
+    var mouseover_mouseout = "onmouseover='this.style.color=\"black\"' "+
+                               "onmouseout='this.style.color=\"white\"' ";
+      
+    script_style="style='position:absolute;bottom:0px;left:0px;width:"+iframe_width+"px;background-color:blue;color:white;opacity:90%;padding:0px;text-align:center'";
+    
+    
+    var script_span = "<span "+mouseover_mouseout+" "+script_style+" onclick='edit_script(0)' class='script_element' id='gui_script'>___script0___</span>";
+    
+    var iframeBody = $("#canvas_iframe").contents().find("#canvas_in_iframe");
+    iframeBody.append(script_span);
+    
+    
+    $("iFrame").append("<div>hello</div>");
+        
+    }
+    console.dir(temp_GUI_Var[0]["gui_function"]);
+    
+    var this_script_no = interaction_manager.curr_int_no;
+    console.dir("scrip no = "+this_script_no);
+    
+    
+    temp_GUI_Var[this_script_no]["gui_function"] = this.value;
+    
+    // create new row in table above
+    new_int_row =   "<span id='gui_interactive_span_"+this_script_no+"'>"+this_script_no+
+                        "<span id='gui_button"+this_script_no+"' class='gui_button_unclicked' onclick='interactive_gui_button_click(\""+[this_script_no]+"\")'>"+temp_GUI_Var[this_script_no]['gui_function']+" : "+temp_GUI_Var[this_script_no]['target']+"</span>"+      
+                            "<input type='button' class='collectorButton' value='delete'>"+
+                    "</span>"+
+                    "<br>";
+    
+    
+    $("#interactive_gui").append(new_int_row);
+
+    
+    interaction_manager.update_current_script();
+});
 
 
   $(".new_element_button").on("click",function(){
@@ -176,11 +229,12 @@ $("#gui_create_trialtype_button").on("click",function(){
         
         
         var iframeBody = $("#canvas_iframe").contents().find("#canvas_in_iframe");
-        var testingthis = iframeBody.append(new_element_content); 
+        iframeBody.append(new_element_content); 
 
         canvas_drawing.new_element_type='';            
         add_buttons_reset();
       }
+      trial_management.update_temp_trial_type_template();
 
       
       //var new_element_content = this.new_element_type;

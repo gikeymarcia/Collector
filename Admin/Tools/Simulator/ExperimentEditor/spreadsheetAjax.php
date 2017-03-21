@@ -81,8 +81,7 @@ if (error_get_last() === null) {
       }
     
 //    $clean_sheet_data = clean_string($sheet_data);
-    echo json_encode($sheet_data);    
-    file_put_contents("inspecting_json.txt",json_last_error_msg().print_r($sheet_data,true)); // remove after debugging
+    echo json_encode($sheet_data);
 } else {
     echo 'unknown error: ' . ob_get_clean();
 }

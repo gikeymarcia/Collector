@@ -7,21 +7,21 @@
 <script>
 
 $("#add_interactive_button").on("click",function(){
-  $("#select_interactive_function").val("--- select a function ---");
-  $("#select_interactive_function").show();
+    $("#select_interactive_function").val("--- select a function ---");
+    $("#select_interactive_function").show();
+
+    //update temp_gui_var
   
-  //update temp_gui_var
-  
-  if(typeof(temp_GUI_Var)=="undefined"){
-    temp_GUI_Var = {
-      0: {}
+    if(typeof(temp_GUI_Var)=="undefined"){
+        temp_GUI_Var = {
+            0: {}
+        }
+    } else {
+        interaction_manager.curr_int_no = Object.keys(temp_GUI_Var).length;
+        //    var this_index = Object.keys(temp_GUI_Var).length;
+        temp_GUI_Var[interaction_manager.curr_int_no]={        
     }
-  } else {
-    interaction_manager.curr_int_no = Object.keys(temp_GUI_Var).length;
-//    var this_index = Object.keys(temp_GUI_Var).length;
-    temp_GUI_Var[interaction_manager.curr_int_no]={}
-  }
-    
+  } 
   
   $(".interactive_divs").hide();
   // create a new button below the lowest;
