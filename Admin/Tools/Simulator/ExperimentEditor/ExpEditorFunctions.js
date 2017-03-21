@@ -37,28 +37,28 @@ function new_proc_stim_sheet(data,filetype){
   }
 }
 
-function createExpEditorHoT(sheet,selected_handsonTable) {
+function createExpEditorHoT(sheet,selected_handsonTable, sheet_name) {
+  if (selected_handsonTable == "Conditions") {
+    var area = $("#conditionsArea");
+    var table_name = 'handsOnTable_Conditions';
+  } else if (selected_handsonTable == "Stimuli") {
+    var area = $("#stimsArea");
+    var table_name = 'handsOnTable_Stimuli';
+  } else {
+    var area = $("#procsArea");
+    var table_name = 'handsOnTable_Procedure';
+  }
   
-  if(selected_handsonTable == "Conditions"){
-    // Conditions
-    $("#conditionsArea").html("");
-    var container = $("<div>").appendTo($("#conditionsArea"))[0];
-    handsOnTable_Conditions = createHoT(container, JSON.parse(JSON.stringify(sheet)));        
+  if (window[table_name] !== null) {
+    save_current_sheet(
+        area.find(".sheet_name").html(),
+        get_HoT_data(window[table_name])
+    );
   }
-  if(selected_handsonTable == "Stimuli"){
-    // Stim
-    $("#stimsArea").html("");
-    var container = $("<div>").appendTo($("#stimsArea"))[0];
-    handsOnTable_Stimuli = createHoT(container, JSON.parse(JSON.stringify(sheet)));        
-  }
-  if(selected_handsonTable == "Procedure"){
-    // Proc
-    $("#procsArea").html("");
-    var container = $("<div>").appendTo($("#procsArea"))[0];
-    handsOnTable_Procedure = createHoT(container, JSON.parse(JSON.stringify(sheet)));
-    
-  }
-    
+  
+  area.html("<span class='sheet_name' style='display: none'>" + sheet_name + "</span>");
+  var container = $("<div>").appendTo(area)[0];
+  window[table_name] = createHoT(container, JSON.parse(JSON.stringify(sheet)));
 }
 
 function get_HoT_data(current_sheet) { // needs to be adjusted for 
@@ -90,22 +90,6 @@ function get_HoT_data(current_sheet) { // needs to be adjusted for
     }
     
     return data;
-}
-
-function get_current_sheet_path(sheet_type,selected_stim,selected_proc) {
-  var sheet_path;
-  if(sheet_type == handsOnTable_Conditions){
-    sheet_path = "Conditions.csv";
-  }
-  if(sheet_type == handsOnTable_Stimuli){
-    sheet_path = "Stimuli/"+selected_stim;
-  }
-  if(sheet_type == handsOnTable_Procedure){
-    sheet_path = "Procedure/"+selected_proc;        
-  }
-  return $("#experiment_select").val() 
-       + '/' 
-       + sheet_path;
 }
 
 function custom_alert(msg) {
@@ -155,29 +139,6 @@ function create_alerts_container() {
     $("body").append(style);
     
     alerts_ready = true;
-}
-
-function save_current_sheet(selected_stim,selected_proc) {
-  // loop through all open sheets
-  
-  var handsontables_list = [handsOnTable_Conditions,handsOnTable_Stimuli,handsOnTable_Procedure];
-        
-  for(i=0;i<handsontables_list.length;i++){
-    var data = JSON.stringify(get_HoT_data(handsontables_list[i]));
-    
-    var file = get_current_sheet_path(handsontables_list[i],selected_stim,selected_proc);
-    
-    $.post(
-        'ExperimentEditor/saveSpreadsheet.php',
-        {
-            file: file,
-            data: data
-        },
-        custom_alert,
-        'text'
-    );
-  }
-    
 }
 
 function update_spreadsheet_selection() {
@@ -238,9 +199,33 @@ function create_new_experiment(exp_name) {
 }
 
 function save_current_sheets(){
-  var current_stim_sheet = $("#stim_select").val();
-  var current_proc_sheet = $("#proc_select").val();
-  save_current_sheet(current_stim_sheet,current_proc_sheet); 
+  var files = {
+    "Conditions": ["#conditionsArea", handsOnTable_Conditions],
+    "Stimuli":    ["#stimsArea",      handsOnTable_Stimuli],
+    "Procedure":  ["#procsArea",      handsOnTable_Procedure]
+  }
+  
+  for (var file_type in files) {
+    var selector = files[file_type][0];
+    var table    = files[file_type][1];
+    
+    var file_path = $(selector).find(".sheet_name").html();
+    var file_data = get_HoT_data(table);
+    
+    save_current_sheet(file_path, file_data);
+  }
+}
+
+function save_current_sheet(file_path, file_data) {
+  $.post(
+    'ExperimentEditor/saveSpreadsheet.php',
+    {
+      file: file_path,
+      data: JSON.stringify(file_data)
+    },
+    custom_alert,
+    'text'
+  );
 }
 
 
@@ -254,24 +239,22 @@ function stim_proc_selection(stim_proc,sheet_selected){
     sheet_name = sheet_selected;
   } else {
     var sheet_name = stim_proc+"/"+sheet_selected;
-    console.dir(sheet_name);
   }
-  if (typeof spreadsheets[exp_name][sheet_name] === 'undefined') {
-    $.get(
-      'ExperimentEditor/spreadsheetAjax.php',
-      {
-        sheet: exp_name + '/' + sheet_name
-      },
-      function(spreadsheet_request_response) {
-        if (spreadsheet_request_response.substring(0, 9) === 'success: ') {
-          var data = spreadsheet_request_response.substring(9);
-          createExpEditorHoT(JSON.parse(data),stim_proc);              
-        } else {
-          console.dir(spreadsheet_request_response);
-        }
+  
+  sheet_name = exp_name + '/' + sheet_name;
+  
+  $.get(
+    'ExperimentEditor/spreadsheetAjax.php',
+    {
+      sheet: sheet_name
+    },
+    function(spreadsheet_request_response) {
+      if (spreadsheet_request_response.substring(0, 9) === 'success: ') {
+        var data = spreadsheet_request_response.substring(9);
+        createExpEditorHoT(JSON.parse(data),stim_proc, sheet_name);              
+      } else {
+        console.dir(spreadsheet_request_response);
       }
-    );
-  } else {
-    createExpEditorHoT(spreadsheets[exp_name],stim_proc);
-  }
+    }
+  );
 }

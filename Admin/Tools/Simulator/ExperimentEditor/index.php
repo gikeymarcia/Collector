@@ -46,5 +46,9 @@ var experiment_files = <?= json_encode($experiment_files); ?>;
 var spreadsheets = {};
 var alerts_ready = false;
 
+var handsOnTable_Conditions = null;
+var handsOnTable_Stimuli    = null;
+var handsOnTable_Procedure  = null;
+
 </script>
 
