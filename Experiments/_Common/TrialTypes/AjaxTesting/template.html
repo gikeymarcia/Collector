@@ -1,31 +1,35 @@
-<input type="text" id="json_value" value="hello1">
-<input type="button" id="process_json_value" value="process">
+<input type='text' id='json_value' name='' placeholder='' style='position:;left:;top:;color:;background-color:;font-size:;width:;height:;padding:;border-radius:;'>
+ 
+<input id='process_json_value' type='button' name='' value='process' style='position:;left:;top:;color:;background-color:;width:;height:;'>
+ 
+<script> 
 
-
-<script>
-
-
-// --- START GUI FUNCTION ---
+ // --- START GUI FUNCTION --- 
 
 GUI_FUNCTIONS.settings = [
-    {
-        type:'event',
-        trigger: 'process_json_value',
-        target: 'json_value',
-        gui_function: 'hide',
-        delay:0,
-    },   
   {
-        type:'event',
-        trigger: '---none---',
-        target: 'process_json_value',
-        gui_function: 'hide',
-        delay:5000,
-    }, 
-];
-GUI_FUNCTIONS.run();
+    "type": "event",
+    "trigger": "process_json_value",
+    "target": "json_value",
+    "gui_function": "hide",
+    "delay": 0
+  },
+  {
+    "type": "event",
+    "trigger": "---none---",
+    "target": "process_json_value",
+    "gui_function": "hide",
+    "delay": 5000
+  },
+  {
+    "gui_function": "hide",
+    "target": "json_value"
+  }
+]
 
-// --- END GUI FUNCTION ---
+  GUI_FUNCTIONS.run()
+
+ // --- END GUI FUNCTION ---
 
 //detect experiment name
 
@@ -37,5 +41,4 @@ GUI_FUNCTIONS.run();
     pilot_json=JSON.stringify(pilot_json);     ajax_json_read_write("file_name.json",pilot_json,"Ajax_Pilot","Write");
 });
 </script>
-<script>
-</script>
+ 

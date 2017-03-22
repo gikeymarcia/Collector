@@ -169,48 +169,44 @@ trial_management = {
 
 
 function gui_script_read(script_received){
-  $("#raw_script").val(script_received);
-  if(script_received.indexOf("GUI_FUNCTIONS") == -1){
-  
-      // missing GUI file - do appropriate actions
-  } else {
-    first_split= script_received.split("// --- START GUI FUNCTION ---");
-    second_split= first_split[1].split("// --- END GUI FUNCTION ---");
-    gui_script = second_split[0];
-    
-    gui_script=gui_script.replace("GUI_FUNCTIONS.settings","temp_GUI_Var");
-    gui_script=gui_script.replace("GUI_FUNCTIONS.run();","//GUI_FUNCTIONS.run();");
-    
-    //// note that i need to reimplement GUI_FUNCTIONS.run(); after all is done ///
+    $("#raw_script").val(script_received);
+    if(script_received.indexOf("GUI_FUNCTIONS") == -1){
+        
+        // missing GUI file - do appropriate actions
+    } else {      
+        first_split= script_received.split("// --- START GUI FUNCTION ---");
+        second_split= first_split[1].split("// --- END GUI FUNCTION ---");
+        gui_script = second_split[0];
+        
+        gui_script=gui_script.replace("GUI_FUNCTIONS.settings","temp_GUI_Var");
+        gui_script=gui_script.replace("GUI_FUNCTIONS.run()","//GUI_FUNCTIONS.run()");
+        
+        //// note that i need to reimplement GUI_FUNCTIONS.run(); after all is done ///
 
-    eval(gui_script); // creating temp_GUI_Var
-    
-    $("#interactive_gui").html("");     //wipe the interactive_gui
+        eval(gui_script); // creating temp_GUI_Var
+        
+        
+        $("#interactive_gui").html("");     //wipe the interactive_gui
 
-    var interactive_gui_html = '';
-    for(i=0;i<temp_GUI_Var.length;i++){
-        
-        // code here to add spans
-        
-        
-        
-        
-      interactive_gui_html +=   "<span id='gui_interactive_span_"+i+"'>"+i+
-                                    "<span id='gui_button"+i+"' class='gui_button_unclicked' onclick='interactive_gui_button_click(\""+[i]+"\")'>"+temp_GUI_Var[i]['gui_function']+" : "+temp_GUI_Var[i]['target']+"</span>"+      
-                                    "<input type='button' class='collectorButton' value='delete'>"+
-                                "</span>"+
-      "<br>";
-    }
-    $("#interactive_gui").html(interactive_gui_html);
-  }
-  global_script_received = script_received;
+        var interactive_gui_html = '';
+        console.dir("script length:" +temp_GUI_Var.length);
+
+        for(i=0;i<temp_GUI_Var.length;i++){
+            
+            // code here to add spans
+            
+            
+            interactive_gui_html +=   "<span id='gui_interactive_span_"+i+"'>"+i+
+                                        "<span id='gui_button"+i+"' class='gui_button_unclicked' onclick='interactive_gui_button_click(\""+[i]+"\")'>"+temp_GUI_Var[i]['gui_function']+" : "+temp_GUI_Var[i]['target']+"</span>"+      
+                                        "<input type='button' class='collectorButton' value='delete' onclick='interaction_manager.delete_script("+i+")'>"+
+                                    "</span>"+
+          "<br>";
+        }
+            $("#interactive_gui").html(interactive_gui_html);
+      }
+      global_script_received = script_received;
   
-  
-  if(script_received.indexOf("detect experiment name") == -1){
-    alert("no script");
-  } else {
-          
-  }
+    
 }
 
 interaction_manager = {
@@ -220,19 +216,28 @@ interaction_manager = {
     update_int_target: function(int_function,input_id){        
         $("#gui_button"+interaction_manager.curr_int_no).html(int_function+" : "+$("#"+input_id).val());          
     },
+    
+    delete_script:function(this_id){
+        
+        temp_GUI_Var.splice(this_id,1);                           
+        this.update_current_script();                       
+        gui_script_read(this.current_trial_type_script);       
+        
+        $("#gui_interactive")
+    },
   
-  
-  update_interfaces: function(curr_int_funcs){
-    for(var i=0;i<this.int_funcs[curr_int_funcs].length;i++){
-      var this_list = this.int_funcs[curr_int_funcs][i]; 
-      var this_var = this.clean_variable(this_list,curr_int_funcs);
-      $("#"+this_list).val(temp_GUI_Var[this.curr_int_no][this_var]);
-      
-    }
-  },
-  update_temp_GUI_Var: function(current_input){ //hard coded!!
+    update_interfaces: function(curr_int_funcs){
+        for(var i=0;i<this.int_funcs[curr_int_funcs].length;i++){
+            var this_list = this.int_funcs[curr_int_funcs][i]; 
+            var this_var = this.clean_variable(this_list,curr_int_funcs);
+            $("#"+this_list).val(temp_GUI_Var[this.curr_int_no][this_var]);      
+        }
+    },
+  update_temp_GUI_Var: function(current_input){
     console.dir(current_input);
-    clean_current_input=this.clean_variable(current_input,"hide"); 
+    console.dir(this.curr_int_no);
+    var curr_int_func = temp_GUI_Var[this.curr_int_no]["gui_function"];
+    clean_current_input=this.clean_variable(current_input,curr_int_func); 
     console.dir(clean_current_input);
     temp_GUI_Var[this.curr_int_no][clean_current_input] = $("#"+current_input).val();
     this.update_current_script();
