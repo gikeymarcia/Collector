@@ -1,3 +1,0 @@
-hello, here's some advice how to use the "test" toolbox.
-
-Don't.
