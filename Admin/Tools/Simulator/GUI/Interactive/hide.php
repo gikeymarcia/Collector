@@ -6,7 +6,7 @@ Which element do you want to click to hide the element?
   
 <select onchange='interaction_manager.update_temp_GUI_Var("interactive_hide_element_trigger_list")' id="interactive_hide_element_trigger_list">
 </select>
-
+<br>
 After how much time do you want the element to be hidden?
   <input oninput='interaction_manager.update_temp_GUI_Var("interactive_hide_element_delay")' type="number" id="interactive_hide_element_delay">
 

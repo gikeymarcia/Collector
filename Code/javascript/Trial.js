@@ -682,8 +682,6 @@ function ajax_json_read_write(file,data,experiment_name,read_write,ajax_textarea
         },
         //callback_function,
         function (returned_data){
-          yourmom = returned_data;
-          console.dir(yourmom);
           callback_function(returned_data,ajax_textarea)
         },
         //document.getElementById(ajax_textarea).value=return_data,
@@ -698,17 +696,7 @@ function callback_function(data,ajax_textarea){
   $("#"+ajax_textarea).val(data);
 } 
 
-GUI_FUNCTIONS = { // well, in this case Anthony's vandalism of Tyson's function
-    hide: function(hide_info) {
-      if(hide_info["trigger"]=="---none---"){
-        var delay = hide_info["delay"]-0; 
-        $("#"+hide_info["target"]).delay(hide_info["delay"]).hide(0);  
-      } else { 
-        $("#"+hide_info["trigger"]).on("click",function(){
-          $("#"+hide_info["target"]).delay(hide_info["delay"]).hide(0);  
-        });
-      }      
-    },
+GUI_FUNCTIONS = {     
     
     alert: function(msg) {
         
@@ -726,17 +714,75 @@ GUI_FUNCTIONS = { // well, in this case Anthony's vandalism of Tyson's function
     },
     
     run_command: function(info) {
-        if (info.type === 'timer') {
-            
-        }
         
-        if (info.type === 'event') {
-          console.dir(info);
-           this.hide(info);
-/*
-            var func = this[info.gui_function];
-            $("#" + info.target).on("click", func);
-*/
-        }
+        var info_type = this[info.gui_function]["detect_info_type"](info);
+        this[info.gui_function][info_type](info);
     }
 }
+
+GUI_FUNCTIONS['hide']= {    
+    detect_info_type:function(info){
+        if(info.trigger == "None"){
+            return "timer";
+        } else {
+            return "event";
+        }
+    },
+    "event":function(info) {
+        $("#"+info["trigger"]).on("click",function(){                
+          $("#"+info["target"]).delay(info["delay"]).hide(0);  
+        });
+    },
+    "timer":function(info){
+        var delay = info["delay"]-0; // to ensure it is treated as a number (e.g. not as a string) 
+        setTimeout(function(){
+            $("#"+info["target"]).delay(info["delay"]).hide(0);  
+        }, 1000);  
+    }
+}
+
+GUI_FUNCTIONS['show']= {
+    detect_info_type:function(info){
+        if(info.trigger == "None"){
+            return "timer";
+        } else {
+            return "event";
+        }
+    },
+    "event":function(info) {
+        $("#"+info["trigger"]).on("click",function(){                
+          $("#"+info["target"]).delay(info["delay"]).show(0);  
+        });
+    },
+    "timer":function(info){
+        var delay = info["delay"]-0; // to ensure it is treated as a number (e.g. not as a string) 
+        setTimeout(function(){
+            $("#"+info["target"]).delay(info["delay"]).show(0);  
+        }, 1000);  
+    }
+}
+
+GUI_FUNCTIONS['proceed']= {
+    detect_info_type:function(info){
+        if(info.trigger == "None"){
+            return "timer";
+        } else {
+            return "event";
+        }
+    },
+    "event":function(info) {
+        $("#"+info["trigger"]).on("click",function(){ 
+            var delay = info["delay"]-0; // to ensure it is treated as a number (e.g. not as a string) 
+            setTimeout(function(){
+                Trial.submit();
+            }, info["delay"]);                      
+        });
+    },
+    "timer":function(info){
+        var delay = info["delay"]-0; // to ensure it is treated as a number (e.g. not as a string) 
+        setTimeout(function(){
+            Trial.submit();
+        }, info["delay"]);  
+    }
+}
+

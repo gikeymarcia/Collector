@@ -6,24 +6,54 @@
  
 <script>
 
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
  // --- START GUI FUNCTION --- 
 
 GUI_FUNCTIONS.settings = [
   {
     "gui_function": "hide",
+    "target": "element1",
+    "trigger": "element2",
+    "delay": "150"
+  },
+  {
+    "gui_function": "hide",
     "target": "element2",
-    "delay": "500"
+    "trigger": "None",
+    "delay": "2000"
   },
   {
     "gui_function": "show",
     "target": "element2",
-    "delay": "2000"
+    "trigger": "element3"
+  },
+  {
+    "gui_function": "proceed",
+    "trigger": "element4",
+    "delay": "1500"
   }
 ]
 
   GUI_FUNCTIONS.run()
 
- // --- END GUI FUNCTION ---
-
-</script>
+ // --- END GUI FUNCTION ---undefined</script>
+ 
+<input id='element4' type='button' name='' value='Proceed' style='position:absolute;left:183px;top:262px;color:;background-color:;width:;height:;'>
  

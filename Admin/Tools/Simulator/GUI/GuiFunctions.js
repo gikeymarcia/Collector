@@ -45,7 +45,7 @@ element_management = {
     for (i=0;i<lists_to_update.length; i++){
       $("#"+lists_to_update[i]).empty();
       
-      var this_option = $('<option></option>').attr("value", "option value").text("--select an option--");
+      var this_option = $('<option></option>').attr("value", "None").text("None");
       $("#"+lists_to_update[i]).append(this_option); 
       
       for(j=0; j<this.canvas_elements.length;j++){
@@ -227,10 +227,21 @@ interaction_manager = {
     },
   
     update_interfaces: function(curr_int_funcs){
-        for(var i=0;i<this.int_funcs[curr_int_funcs].length;i++){
-            var this_list = this.int_funcs[curr_int_funcs][i]; 
-            var this_var = this.clean_variable(this_list,curr_int_funcs);
-            $("#"+this_list).val(temp_GUI_Var[this.curr_int_no][this_var]);      
+        if(typeof(this.int_funcs[curr_int_funcs]) == "undefined"){
+            // wipe all interfaces???
+            console.dir(this.int_funcs_list);
+            for(h=0; h<this.int_funcs_list.length;h++){
+                for(var i=0;i<this.int_funcs[this.int_funcs_list[h]].length;i++){
+                    var this_list = this.int_funcs[this.int_funcs_list[h]][i]; 
+                    $("#"+this_list).val("");                      
+                }             
+            }
+        } else {
+            for(var i=0;i<this.int_funcs[curr_int_funcs].length;i++){
+                var this_list = this.int_funcs[curr_int_funcs][i]; 
+                var this_var = this.clean_variable(this_list,curr_int_funcs);
+                $("#"+this_list).val(temp_GUI_Var[this.curr_int_no][this_var]);                      
+            }
         }
     },
   update_temp_GUI_Var: function(current_input){
