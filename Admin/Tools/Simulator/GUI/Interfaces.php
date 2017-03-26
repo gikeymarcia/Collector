@@ -13,7 +13,6 @@
     echo "<div id='".$element_types[$i]."_table' class='element_table' style='display:none'></div>";
   }
 ?>
-
 <script>
   
   element_gui={
@@ -47,13 +46,14 @@
     accepted_classes:["text_element","image_element","video_element","audio_element","button_element","string_element","number_element","date_element"], //,"radio_element","checkbox_element"
     
     write_html:function(element_type){
-      for (var i=0; i<element_gui.properties[element_type].length; ++i) {
-        $("#"+element_type+"_table").append(
-          "<tr>"+
-            "<td>"+element_gui.properties[element_type][i]+"</td>"+
-            "<td><input id='"+element_type+"_"+element_gui.properties[element_type][i]+"'></td>"+
-          "</tr>");
-      }
+        var this_header = "<tr><td colspan='2'><h4>"+element_type+"</h4></td></tr>";
+        $("#"+element_type+"_table").append(this_header);for (var i=0; i<element_gui.properties[element_type].length; ++i) {
+            $("#"+element_type+"_table").append(
+                "<tr>"+
+                    "<td>"+element_gui.properties[element_type][i]+"</td>"+
+                    "<td><input id='"+element_type+"_"+element_gui.properties[element_type][i]+"'></td>"+
+                "</tr>");
+        }
       $("#"+element_type+"_table").append("</table>");
       
       if(element_gui.properties[element_type][0]=="stimuli"){

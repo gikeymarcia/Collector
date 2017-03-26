@@ -329,41 +329,40 @@ function trialtype_to_canvas(current_trialtype_template){
   }
   
   
-  these_images = $("#preprocessing_trialType").find("img");  
-  these_videos = $("#preprocessing_trialType").find("video");  
+    // processing media which are converted into spans
+
+    these_images = $("#preprocessing_trialType").find("img");  
+    these_videos = $("#preprocessing_trialType").find("video");  
+    these_audios = $("#preprocessing_trialType").find("audio");  
+
+    trialtype_to_canvas_stimuli(these_images,"image");
+    trialtype_to_canvas_stimuli(these_videos,"video");
+    trialtype_to_canvas_stimuli(these_audios,"audio");
+    
+    processed_template=$("#preprocessing_trialType").html();
   
-  trialtype_to_canvas_stimuli(these_images,"image");
-  trialtype_to_canvas_stimuli(these_videos,"video");
-  // audio 
-  // necessary for other element types...?
-  
-  
-  
-  
-  processed_template=$("#preprocessing_trialType").html();
-  
-  // following use of Ajax only runs after_write_canvas AFTER the canvas has been written. Solution by Kio2212 on http://stackoverflow.com/questions/5000415/call-a-function-after-previous-function-is-complete
-  $.ajax({
-    url:write_canvas(processed_template),
-    success:function(){
-      after_write_canvas();
-      for(i=0;i<element_management.canvas_elements.length;i++){
-        if(element_management.canvas_elements[i].id == ""){
-          element_management.canvas_elements[i].id = $("iFrame")[0].contentWindow.generate_new_id();
-        }        
-      }
-      trial_management.update_temp_trial_type_template();
-      //load contents for script editor
-      if($('iFrame').contents().find('#gui_script').length !== 0){
-        $('iFrame').contents().find('#gui_script').click();
-      } else {
-        // what to do if there's no script
-        $("#interactive_gui").html("");
-      }
-      $(".GUI_divs").hide();
-      interaction_manager.update_buttons();
-    }
-  })
+    // following use of Ajax only runs after_write_canvas AFTER the canvas has been written. Solution by Kio2212 on http://stackoverflow.com/questions/5000415/call-a-function-after-previous-function-is-complete
+    $.ajax({
+        url:write_canvas(processed_template),
+        success:function(){
+            after_write_canvas();
+            for(i=0;i<element_management.canvas_elements.length;i++){
+                if(element_management.canvas_elements[i].id == ""){
+                  element_management.canvas_elements[i].id = $("iFrame")[0].contentWindow.generate_new_id();
+                }        
+            }
+            trial_management.update_temp_trial_type_template();
+            //load contents for script editor
+            if($('iFrame').contents().find('#gui_script').length !== 0){
+                $('iFrame').contents().find('#gui_script').click();
+            } else {
+                // what to do if there's no script
+                $("#interactive_gui").html("");
+            }
+            $(".GUI_divs").hide();
+            interaction_manager.update_buttons();
+        }
+    })
   
   canvas_drawing.activate_canvas_mouseframe();
   

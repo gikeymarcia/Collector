@@ -46,9 +46,9 @@ $("#add_interactive_button").on("click",function(){
 //    temp_GUI_Var[this_script_no]['target']          =   "tbc";
     
     new_int_row =   "<span id='gui_interactive_span_"+this_script_no+"'><input type='button' id='gui_button"+this_script_no+"' class='gui_button_unclicked int_button' onclick='interaction_manager.gui_button_click(\""+[this_script_no]+"\")'value ='"+temp_GUI_Var[this_script_no]['gui_function']+" : "+temp_GUI_Var[this_script_no]['target']+"'>"+      
-            "<input type='button' class='collectorButton' value='delete' onclick='interaction_manager.delete_script("+this_script_no+")'>"+
-        "</span>"+
-        "<br>";
+        "<input type='button' class='collectorButton' value='delete' onclick='interaction_manager.delete_script("+this_script_no+")'>"+
+    "</span>"+
+    "<br>";
     
     // remove color from all buttons
         

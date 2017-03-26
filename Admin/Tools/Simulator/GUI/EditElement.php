@@ -7,7 +7,7 @@
       <td><input id="delete_element_button" type="button" class="collectorButton" value="delete" style="display:none"></td>
     </tr>
   </table>
-  <?php require("Interfaces/all.php"); ?>
+  <?php require("Interfaces.php"); ?>
            
 </div>
 <div id="gui_info"></div>  
@@ -15,26 +15,22 @@
 
 <script>
   
-  $("#delete_element_button").on("click",function(){
+$("#delete_element_button").on("click",function(){
     var sel_elem = element_management.selected_element;
     delete_confirm = confirm("Are you sure you want to delete: "+element_management.selected_element);
     if(delete_confirm == true){
-      alert ("deleting");
+        alert ("deleting");
       
-      $("iFrame").contents().find("#"+sel_elem).remove();
-      $(".element_table").hide();
-      
-      // wipe the editing table for the deleted element.
-      
-      
-      
-      ///
-      
+        $("iFrame").contents().find("#"+sel_elem).remove();
+        $(".element_table").hide();
+        $("#gui_info").html("");        
+        interaction_manager.update_current_script();                       
+        gui_script_read(interaction_manager.current_trial_type_script);
       
     } else {
       alert ("not deleting");
     }
-  });
+});
   
   $("#gui_info").on("mouseenter", "*", function() {    
     var this_class = $(this)[0].className;
@@ -92,25 +88,6 @@
     }
     
     
-
-    
-    ///////
-    // Do the same for other element types, e.g. span_element, div_element, etc.
-    //////
-    
-    
-   /*  
-    if(target.is("div")|target.is("span")){
-      $(".element_table").hide();
-      element_gui.span_or_div.process_text_style(target); 
-    }
-    if(target.is("img")){
-      
-    } */
-     
-    // here is where the identification process is
-    
-    //console.dir($(target).css("color"));
     
   });;;
   

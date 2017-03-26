@@ -24,15 +24,17 @@ $("#gui_create_trialtype_button").on("click",function(){
 
  
 $("#select_interactive_function").on("change",function(){
-    
     $(".interactive_divs").hide();
     $("#interactive_"+this.value).show(); 
     
     var this_script_no = interaction_manager.curr_int_no;
     
     temp_GUI_Var[this_script_no]["gui_function"] = this.value;
-    
     // create new row in table above
+    
+    
+    interaction_manager.update_int_target(this.value,"none");
+    
     
     interaction_manager.update_current_script();
 });

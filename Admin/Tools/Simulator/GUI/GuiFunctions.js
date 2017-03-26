@@ -213,22 +213,23 @@ interaction_manager = {
     current_trial_type_script:'',
     int_funcs: {},
     curr_int_no: -1,
-    update_int_target: function(int_function,input_id){        
-        $("#gui_button"+interaction_manager.curr_int_no).html(int_function+" : "+$("#"+input_id).val());          
+    update_int_target: function(int_function,input_id){
+        
+        $("#gui_button"+interaction_manager.curr_int_no).val(int_function+" : "+$("#"+input_id).val());          
     },    
     delete_script:function(this_id){
         
         temp_GUI_Var.splice(this_id,1);                           
         this.update_current_script();                       
-        gui_script_read(this.current_trial_type_script);       
+        gui_script_read(this.current_trial_type_script);  
         
     },
     gui_button_click: function(interactive_no){
-  
         //remove clicked class from all elements with unclicked class
-        $(".gui_button_unclicked").removeClass("gui_button_clicked");
-
-        $("#gui_button"+interactive_no).toggleClass("gui_button_clicked");
+        $(".int_button").removeClass("gui_button_clicked");
+        $(".int_button").addClass("gui_button_unclicked");
+        $("#gui_button"+interactive_no).addClass("gui_button_clicked");
+        
         $("#select_interactive_function").show();
         var this_function = temp_GUI_Var[interactive_no]['gui_function'];
         $("#select_interactive_function").val(this_function);
