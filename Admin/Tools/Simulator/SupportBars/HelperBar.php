@@ -91,12 +91,17 @@
   
 
   
-  <div id="helperArea" style="display:none">
-    <h1 id="helper_title"> Helper </h1>
+    <div id="helperArea" style="display:none">
+        <h1 id="helper_title"> Helper </h1>
 
-    <div>
-      Click <a href="https://docs.google.com/document/d/1OCtDrv7VNu8-nD6Pt1FnGSuKkqil2Onm4PVWOL3NthY/edit?usp=sharing" target="_blank"> here</a> to read <b>FAQs</b><br>
-      Click <a href="https://docs.google.com/document/d/1kTNbjrysMZipINbpewg1AYhEo_4WPR5ABwqxjUYMLMU/edit?usp=sharing" target="_blank"> here</a> to ask a <b>Question</b><br>
+        <div>
+        Click <a href="https://docs.google.com/document/d/1OCtDrv7VNu8-nD6Pt1FnGSuKkqil2Onm4PVWOL3NthY/edit?usp=sharing" target="_blank"> here</a> to read <b>FAQs</b><br>
+        Click <a href="https://docs.google.com/document/d/1kTNbjrysMZipINbpewg1AYhEo_4WPR5ABwqxjUYMLMU/edit?usp=sharing" target="_blank"> here</a> to ask a <b>Question</b><br>
+    
+        Click <a href="https://docs.google.com/document/d/1rvcOoh2BoTXkPXALmXyiQL4czRCq1SVq78MbKoyGcsY/edit?usp=sharing" target="_blank"> here</a> to request a <b>Feature</b><br>
+    
+    
+    
     </div>
 
     

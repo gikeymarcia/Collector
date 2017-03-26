@@ -1,22 +1,25 @@
-
+<br><br><br>
   <table id="gui_interface_add_element_table">
     <tr>
-      <td colspan="4"><h4>Stimuli</h5></td>
+      <td colspan="4"><h4><b>Stimuli</b></h4></td>
+    </tr>
+    <tr style="padding:100px;">
+      <td><input type="button" class="gui_button_unclicked new_element_button" id="gui_button_new_text" value="Text"></td>
+      <td><input type="button" class="gui_button_unclicked new_element_button" id="gui_button_new_Image" value="Image"></td>
+      <td><input type="button" class="gui_button_unclicked new_element_button" id="gui_button_new_Audio" value="Audio"></td>
+      <td><input type="button" class="gui_button_unclicked new_element_button" id="gui_button_new_Video" value="Video"></td>              
     </tr>
     <tr>
-      <td><span class="gui_button_unclicked new_element_button" id="gui_button_new_text">Text</span></td>
-      <td><span class="gui_button_unclicked new_element_button" id="gui_button_new_Image">Image</span></td>
-      <td><span class="gui_button_unclicked new_element_button" id="gui_button_new_Audio">Audio</span></td>
-      <td><span class="gui_button_unclicked new_element_button" id="gui_button_new_Video">Video</span></td>              
+        <td><br></td>
     </tr>
     <tr>
-      <td colspan="4"><h4>Inputs</h5></td>
+      <td colspan="4"><h4><b>Inputs<b></h4></td>
     </tr>
     <tr>
-      <td><span class="gui_button_unclicked new_element_button" id="gui_button_new_Button">Button</span></td>
-      <td><span class="gui_button_unclicked new_element_button" id="gui_button_new_String">String</span></td>
-      <td><span class="gui_button_unclicked new_element_button" id="gui_button_new_Number">Number</span></td>
-      <td><span class="gui_button_unclicked new_element_button" id="gui_button_new_Date">Date</span></td>              
+      <td><input type="button" class="gui_button_unclicked new_element_button" id="gui_button_new_Button" value="Button"></td>
+      <td><input type="button" class="gui_button_unclicked new_element_button" id="gui_button_new_String" value="String"></td>
+      <td><input type="button" class="gui_button_unclicked new_element_button" id="gui_button_new_Number" value ="Number"></td>
+      <td><input type="button" class="gui_button_unclicked new_element_button" id="gui_button_new_Date" value="Date"></td>
     </tr>
     <!-- questionnaire buttons will be added in a later release 
     <tr>
@@ -29,4 +32,10 @@
       
     </tr>
     -->
-  </table>          
+  </table> 
+
+<script>
+    
+    
+    
+</script>  

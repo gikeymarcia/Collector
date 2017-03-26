@@ -706,7 +706,6 @@ GUI_FUNCTIONS = {
     
     run: function() {
         var self = this;
-        console.dir(this.settings);
         
         this.settings.forEach(function(e) {
             self.run_command(e);
@@ -786,3 +785,89 @@ GUI_FUNCTIONS['proceed']= {
     }
 }
 
+
+GUI_FUNCTIONS['change_value']= {
+    detect_info_type:function(info){
+        if(info.trigger == "None"){
+            return "timer";
+        } else {
+            return "event";
+        }
+    },
+    "event":function(info) {
+        $("#"+info["trigger"]).on("click",function(){
+            var target_id="#"+info["target"];
+            if( $(target_id)[0].nodeName == "INPUT"){      
+                $(target_id).val(info["new_value"]); 
+            } else {
+                $(target_id).html(info["new_value"]);
+            }
+            
+            // test if this is a form of input
+            
+            
+            
+        });
+    },
+    /* // timer not coded - may include it in next release //
+    "timer":function(info){
+        var delay = info["delay"]-0; // to ensure it is treated as a number (e.g. not as a string) 
+        setTimeout(function(){
+            Trial.submit();
+        }, info["delay"]);  
+    }
+    */
+}
+
+GUI_FUNCTIONS['keyboard_response']= {
+    detect_info_type:function(info){
+        return "event";
+    },
+    "event":function(info) {
+        
+        var accepted_keys = info.accepted_keys;
+        accepted_keys = accepted_keys.split(""); //split string into array
+        accepted_keys.forEach(function (accepted_key){
+            var this_key = accepted_key;
+            var this_name = info.response_name;
+            document.addEventListener('keydown', function(event) {
+                switch (String.fromCharCode(event.which).toLowerCase()) {
+                    case this_key:
+                    // store here
+                    
+                    $.ajax({url:store_response(this_key,this_name),
+                        success:function(){
+                            if(info.keyboard_proceed == "Yes"){
+                                Trial.submit();
+                            }
+                        }
+                    });
+                     
+                }
+            });
+                   
+        });
+    },
+}
+
+GUI_FUNCTIONS['click_response']= {
+    detect_info_type:function(info){
+        return "event";
+    },
+    "event":function(info) {
+        $("#"+info["trigger"]).on("click",function(){ 
+            $.ajax({url:store_response(info.response_value,info.response_name),
+                success:function(){
+                    if(info.click_proceed == "Yes"){
+                        Trial.submit();
+                    }
+                }
+            });
+        });
+    },
+}
+
+
+function store_response(this_value,this_name){
+    $("form").append("<input type='text' value='"+this_value+"' name='"+this_name+"'>");
+}

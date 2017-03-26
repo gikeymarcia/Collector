@@ -241,7 +241,6 @@ function trialtype_to_canvas(current_trialtype_template){
   
     // wipe temp_GUI_Var details from previous trialtype
     if(typeof(temp_GUI_Var) !== "undefined"){
-        console.dir(temp_GUI_Var);
         temp_GUI_Var='';            
     }
    
@@ -260,7 +259,7 @@ function trialtype_to_canvas(current_trialtype_template){
   var mouseover_mouseout = "onmouseover='this.style.color=\"black\"' "+
                            "onmouseout='this.style.color=\"white\"' ";
   
-  script_style="style='position:absolute;bottom:0px;left:0px;width:"+iframe_width+"px;background-color:blue;color:white;opacity:90%;padding:0px;text-align:center'";
+  script_style="style='position:absolute;bottom:0px;left:0px;width:"+iframe_width+"px;background-color:blue;color:white;opacity:90%;padding:0px;text-align:center;display:none'";
   
   var no_scripts = 0;
   
@@ -325,13 +324,6 @@ function trialtype_to_canvas(current_trialtype_template){
   for(var i=0;i<these_spans.length;i++){
     
     if(these_spans[i].className !== "script_element"){
-      //detect whether this is a script yet!!
-      console.dir("look here");
-      
-      hello_global_var = these_spans[i];
-      console.dir(these_spans[i].className);
-      //if()
-      
       these_spans[i].className = "text_element";
     }
   }
@@ -369,11 +361,12 @@ function trialtype_to_canvas(current_trialtype_template){
         $("#interactive_gui").html("");
       }
       $(".GUI_divs").hide();
-      
+      interaction_manager.update_buttons();
     }
   })
   
   canvas_drawing.activate_canvas_mouseframe();
+  
 }
 
 
@@ -431,11 +424,8 @@ function trialtype_to_canvas_stimuli(these_stimuli,stimuli_type){
                   this_style  +">"+clean_source+"</span>";
                                            
    $("#preprocessing_trialType").append(new_span);
-  }
+  }  
 }
-
-
-
 
 
 function generate_new_id() { // this function is duplicated in canvas_iframe.js

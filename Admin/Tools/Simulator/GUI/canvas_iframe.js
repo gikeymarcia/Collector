@@ -62,25 +62,24 @@ $("#canvas_in_iframe").on("mouseenter", "*", function() {
         parent.$("." + class_name).remove();
     }, 50);
 }).on("contextmenu", function() {
-  console.dir(this.id); 
-  if(block_click == false){
-    lock_gui_info = !lock_gui_info;
+    if(block_click == false){
+        lock_gui_info = !lock_gui_info;
 
-    parent.canvas_drawing.new_element_type='';    
+        parent.canvas_drawing.new_element_type='';    
 
     
-    if (!lock_gui_info) $("#gui_info").html("");
-    
-    if($("#gui_info").html()==""){
-      parent.$("#gui_add_element_div").hide();
-      parent.$("#gui_interface_edit_element").hide();
-      
-    } else {
-      parent.$(".GUI_divs").hide();
-      parent.$("#gui_add_element_div").hide();
-      parent.$("#gui_interface_edit_element").show();
-      
-    }        
+        if (!lock_gui_info) $("#gui_info").html("");
+        
+        if($("#gui_info").html()==""){
+          parent.$("#gui_add_element_div").hide();
+          parent.$("#gui_interface_edit_element").hide();
+          
+        } else {
+          parent.$(".GUI_divs").hide();
+          parent.$("#gui_add_element_div").hide();
+          parent.$("#gui_interface_edit_element").show();
+          
+        }        
     
     return false;
   }

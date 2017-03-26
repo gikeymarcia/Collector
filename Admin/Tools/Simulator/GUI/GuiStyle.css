@@ -24,7 +24,7 @@
 }
 
 #temp_trial_type_template{
-  width: 400px;
+  width: 600px;
   height: 300px;
 }
 
@@ -42,20 +42,24 @@
   top:25px;
 }
 
-
+.new_element_button{
+    display :  block; /* or inline-block */
+    width   :  100px;
+}
 .gui_button_unclicked{
-  background-color:blue;  
-  color:white;
-  padding:10px;
-  border-radius:5px;
+    background-color    :blue;
+    color               :white;    
+    padding             :10px;
+    border-radius       :5px;  
 }
 .gui_button_unclicked:hover{
   background-color:green;  
   color:white;
 }
 .gui_button_clicked{
-  background-color:red;  
-  color:white;
+    background-color    :red;
+    padding             :10px;  
+    color               :white;
 }
 
 

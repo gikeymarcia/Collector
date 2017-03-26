@@ -106,7 +106,7 @@
       <table id="hide_show_table">
       <?php
       
-        $hide_show_elements = ["Preview","Conditions","Stimuli","Procedure","TrialTypes"];
+        $hide_show_elements = ["Presentation","Conditions","Stimuli","Procedure","TrialTypes"];
       
         foreach($hide_show_elements as $hide_show_element){
           echo "<tr>

@@ -13,7 +13,7 @@ After how much time do you want the trial to proceed?
   
   element_management.new_item(proceed_lists);
   
-  interaction_manager.int_funcs.hide=proceed_inputs;
+  interaction_manager.int_funcs.proceed=proceed_inputs;
 
   // actions depending on what was 
   

@@ -32,10 +32,10 @@ $("#add_interactive_button").on("click",function(){
         var mouseover_mouseout = "onmouseover='this.style.color=\"black\"' "+
                                    "onmouseout='this.style.color=\"white\"' ";
           
-        script_style="style='position:absolute;bottom:0px;left:0px;width:"+iframe_width+"px;background-color:blue;color:white;opacity:90%;padding:0px;text-align:center'";
+        script_style="style='position:absolute;bottom:0px;left:0px;width:"+iframe_width+"px;background-color:blue;color:white;opacity:90%;padding:0px;text-align:center;display:none'";
         
         
-        var script_span = "<span "+mouseover_mouseout+" "+script_style+" onclick='edit_script(0)' class='script_element' id='gui_script'>___script0___</span>";
+        var script_span = "<span "+mouseover_mouseout+" "+script_style+" onclick='edit_script(0)' class='script_element' id='gui_script' >___script0___</span>";
         
         var iframeBody = $("#canvas_iframe").contents().find("#canvas_in_iframe");
         iframeBody.append(script_span);
@@ -45,15 +45,24 @@ $("#add_interactive_button").on("click",function(){
     temp_GUI_Var[this_script_no]['gui_function']    =   "tbc";
 //    temp_GUI_Var[this_script_no]['target']          =   "tbc";
     
-    new_int_row =   "<span id='gui_interactive_span_"+this_script_no+"'>"+this_script_no+
-        "<span id='gui_button"+this_script_no+"' class='gui_button_unclicked' onclick='interactive_gui_button_click(\""+[this_script_no]+"\")'>"+temp_GUI_Var[this_script_no]['gui_function']+" : "+temp_GUI_Var[this_script_no]['target']+"</span>"+      
+    new_int_row =   "<span id='gui_interactive_span_"+this_script_no+"'><input type='button' id='gui_button"+this_script_no+"' class='gui_button_unclicked int_button' onclick='interaction_manager.gui_button_click(\""+[this_script_no]+"\")'value ='"+temp_GUI_Var[this_script_no]['gui_function']+" : "+temp_GUI_Var[this_script_no]['target']+"'>"+      
             "<input type='button' class='collectorButton' value='delete' onclick='interaction_manager.delete_script("+this_script_no+")'>"+
         "</span>"+
         "<br>";
+    
+    // remove color from all buttons
         
     $("#interactive_gui").append(new_int_row);
     $("#select_interactive_function").val("--- select a function ---");
     $("#select_interactive_function").show();
+    
+    // update max width
+    interaction_manager.update_buttons(); 
+    $(".int_button").removeClass("gui_button_clicked");
+    $(".int_button").addClass("gui_button_unclicked");
+    $("#gui_button"+this_script_no).removeClass("gui_button_unclicked");
+    $("#gui_button"+this_script_no).addClass("gui_button_clicked");
+    
     
   $(".interactive_divs").hide();
 });

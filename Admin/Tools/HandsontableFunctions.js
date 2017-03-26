@@ -90,7 +90,6 @@ function isTrialTypeHeader(colHeader) {
         }, 0);
     }
     function createHoT(container, data) {
-        //console.dir("here");
         var table = new Handsontable(container, {
             data: data,
             minSpareCols: 1,

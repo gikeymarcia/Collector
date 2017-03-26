@@ -71,7 +71,6 @@
       
       
     } else {
-      console.dir(target[0]);
       var this_target_type = target[0].type+"_element";
       if(element_gui.accepted_classes.indexOf(this_target_type) !== -1){
         // processing here

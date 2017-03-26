@@ -70,8 +70,7 @@ trial_management = {
     for(var i=0;i<trial_type_children.length;i++){
       
       if(trial_type_children[i].nodeName !== "SCRIPT"){ // this may be redundant and need tidying.
-        console.dir(trial_type_children[i].nodeName);
-        preview_trial += this.processing_canvas_children(trial_type_children[i])+"\r\n \r\n";        
+        preview_trial += this.processing_canvas_children(trial_type_children[i])+"\r\n";        
       }
     }
     $("#temp_trial_type_template").val(preview_trial);
@@ -133,13 +132,11 @@ trial_management = {
   },
   process_element_style:function(child){
     clean_classname=child.className.replace("_element","");
-    console.dir(clean_classname);
     //if the clean_classname == ""
     if(clean_classname==""){ // then this is an input?
       global_child = child;
       clean_classname = child.type;
     }
-    console.dir(these_props);
     var these_props = element_gui.properties[clean_classname];
     var stim_style='';
     if(these_props[0]=="stimuli"){
@@ -196,17 +193,20 @@ function gui_script_read(script_received){
             // code here to add spans
             
             
-            interactive_gui_html +=   "<span id='gui_interactive_span_"+i+"'>"+i+
-                                        "<span id='gui_button"+i+"' class='gui_button_unclicked' onclick='interactive_gui_button_click(\""+[i]+"\")'>"+temp_GUI_Var[i]['gui_function']+" : "+temp_GUI_Var[i]['target']+"</span>"+      
+            interactive_gui_html +=   "<span id='gui_interactive_span_"+i+"'><input type='button' id='gui_button"+i+"' class='gui_button_unclicked int_button' onclick='interaction_manager.gui_button_click(\""+[i]+"\")' value='"+temp_GUI_Var[i]['gui_function']+" : "+temp_GUI_Var[i]['target']+"'>"+      
                                         "<input type='button' class='collectorButton' value='delete' onclick='interaction_manager.delete_script("+i+")'>"+
                                     "</span>"+
           "<br>";
+          // update max width
+            
         }
-            $("#interactive_gui").html(interactive_gui_html);
-      }
-      global_script_received = script_received;
-  
+        
+        $("#interactive_gui").html(interactive_gui_html);
+        
+    }
+    global_script_received = script_received;
     
+    interaction_manager.update_buttons("temp_fix");
 }
 
 interaction_manager = {
@@ -215,21 +215,44 @@ interaction_manager = {
     curr_int_no: -1,
     update_int_target: function(int_function,input_id){        
         $("#gui_button"+interaction_manager.curr_int_no).html(int_function+" : "+$("#"+input_id).val());          
-    },
-    
+    },    
     delete_script:function(this_id){
         
         temp_GUI_Var.splice(this_id,1);                           
         this.update_current_script();                       
         gui_script_read(this.current_trial_type_script);       
         
-        $("#gui_interactive")
     },
+    gui_button_click: function(interactive_no){
   
+        //remove clicked class from all elements with unclicked class
+        $(".gui_button_unclicked").removeClass("gui_button_clicked");
+
+        $("#gui_button"+interactive_no).toggleClass("gui_button_clicked");
+        $("#select_interactive_function").show();
+        var this_function = temp_GUI_Var[interactive_no]['gui_function'];
+        $("#select_interactive_function").val(this_function);
+        $(".interactive_divs").hide();
+        $("#interactive_"+this_function).show();
+
+        interaction_manager.curr_int_no = interactive_no;
+        interaction_manager.update_interfaces(this_function);
+
+        //update values depending on which function
+    },   
+    update_buttons:function(temp_fix){
+        var new_max_width = Math.max.apply(Math, $('.int_button').map(function(){ return $(this).width(); }).get());
+        if(temp_fix == "temp_fix"){
+            new_max_width = 500;
+        }        
+        if(new_max_width < 300){
+            $(".int_button").width(new_max_width);
+        } else {
+            $(".int_button").width(300);
+        }
+    },  
     update_interfaces: function(curr_int_funcs){
         if(typeof(this.int_funcs[curr_int_funcs]) == "undefined"){
-            // wipe all interfaces???
-            console.dir(this.int_funcs_list);
             for(h=0; h<this.int_funcs_list.length;h++){
                 for(var i=0;i<this.int_funcs[this.int_funcs_list[h]].length;i++){
                     var this_list = this.int_funcs[this.int_funcs_list[h]][i]; 
@@ -237,63 +260,95 @@ interaction_manager = {
                 }             
             }
         } else {
+            
+            console.dir(curr_int_funcs);
+            console.dir(this.curr_int_no);
+        
             for(var i=0;i<this.int_funcs[curr_int_funcs].length;i++){
                 var this_list = this.int_funcs[curr_int_funcs][i]; 
                 var this_var = this.clean_variable(this_list,curr_int_funcs);
+                console.dir("----");
+                console.dir(this_list);
+                console.dir(this_var);
+                console.dir(temp_GUI_Var[this.curr_int_no][this_var]);
                 $("#"+this_list).val(temp_GUI_Var[this.curr_int_no][this_var]);                      
             }
         }
     },
-  update_temp_GUI_Var: function(current_input){
-    console.dir(current_input);
-    console.dir(this.curr_int_no);
-    var curr_int_func = temp_GUI_Var[this.curr_int_no]["gui_function"];
-    clean_current_input=this.clean_variable(current_input,curr_int_func); 
-    console.dir(clean_current_input);
-    temp_GUI_Var[this.curr_int_no][clean_current_input] = $("#"+current_input).val();
-    this.update_current_script();
-    
-  },
-  clean_variable:function(input_variable,curr_int_funcs){
-    var this_var  = input_variable;
-      this_var = this_var.replace("_list","");
-      this_var = this_var.replace("_element_","");
-      this_var = this_var.replace("interactive_","");
-      this_var = this_var.replace(curr_int_funcs,"");
-      return this_var;
-  },
-  update_current_script:function(){
-    // replace GUI_FUNCTIONS.setting with new script.
-    // delete everything between // --- START GUI FUNCTION --- and // --- END GUI FUNCTION ---
-    console.dir(temp_GUI_Var);
-    console.dir(this.current_trial_type_script);
-    var start_splitter = "// --- START GUI FUNCTION ---";
-    var end_splitter   = "// --- END GUI FUNCTION ---";
-    var these_splitters= [start_splitter,end_splitter];
-    var this_split_script = this.current_trial_type_script.split(new RegExp(these_splitters.join("|"), "g"));
-    this_split_script[1] = "GUI_FUNCTIONS.settings = "+JSON.stringify(temp_GUI_Var, null, 2)+"\n\r  GUI_FUNCTIONS.run()";
-    var first_merge = this_split_script[0] + "\n\r // --- START GUI FUNCTION --- \n\r" + this_split_script[1];
-    this.current_trial_type_script = first_merge + "\n\r // --- END GUI FUNCTION ---" +this_split_script[2];    
-    trial_management.update_temp_trial_type_template(); //update preview of code
-  }
+    update_temp_GUI_Var: function(current_input){
+        var curr_int_func = temp_GUI_Var[this.curr_int_no]["gui_function"];
+        clean_current_input=this.clean_variable(current_input,curr_int_func); 
+        temp_GUI_Var[this.curr_int_no][clean_current_input] = $("#"+current_input).val();
+        this.update_current_script();
+    },
+    clean_variable:function(input_variable,curr_int_funcs){
+        var this_var  = input_variable;
+        this_var = this_var.replace("_list","");
+        this_var = this_var.replace("_element_","");
+        this_var = this_var.replace("interactive_","");
+        this_var = this_var.replace(curr_int_funcs,"");
+        return this_var;      
+    },
+    update_current_script:function(){
+        var start_splitter = "// --- START GUI FUNCTION ---";
+        var end_splitter   = "// --- END GUI FUNCTION ---";
+        var these_splitters= [start_splitter,end_splitter];
+        var this_split_script = this.current_trial_type_script.split(new RegExp(these_splitters.join("|"), "g"));
+        this_split_script[1] = "GUI_FUNCTIONS.settings = "+JSON.stringify(temp_GUI_Var, null, 2)+"\n\r  GUI_FUNCTIONS.run()";
+        var first_merge = this_split_script[0] + "// --- START GUI FUNCTION --- \n\r" + this_split_script[1];
+        if(typeof(this_split_script[2] == "undefined")){
+            this_split_script[2]='';
+        }
+        this.current_trial_type_script = first_merge + "\n\r // --- END GUI FUNCTION ---" +this_split_script[2];    
+        trial_management.update_temp_trial_type_template(); //update preview of code
+    }
 }
 
-function interactive_gui_button_click(interactive_no){
-  
-  //remove clicked class from all elements with unclicked class
-  $(".gui_button_unclicked").removeClass("gui_button_clicked");
-  
-  $("#gui_button"+interactive_no).toggleClass("gui_button_clicked");
-  $("#select_interactive_function").show();
-  var this_function = temp_GUI_Var[interactive_no]['gui_function'];
-  $("#select_interactive_function").val(this_function);
-  $(".interactive_divs").hide();
-  $("#interactive_"+this_function).show();
-  
-  interaction_manager.curr_int_no = interactive_no;
-  interaction_manager.update_interfaces(this_function);
-  
-  //update values depending on which function
-  
-  
+canvas_drawing = {
+    new_element_type:'',
+    current_x_co:-1,
+    current_y_co:-1,
+    
+    activate_canvas_mouseframe:function(){
+      var iframepos = $("iFrame").position(); 
+
+      $('iFrame').contents().find('html').on('mousemove', function (e) { 
+        canvas_drawing.current_x_co = e.clientX; 
+        canvas_drawing.current_y_co = e.clientY;                
+      });         
+   
+      $('iFrame').contents().find('html').on('click', function (e) { 
+        canvas_drawing.draw_new_element();
+      });
+    },
+    
+    draw_new_element:function(){
+      // needs to redraw the image
+
+      // test to check whether we should proceed;
+        if(this.new_element_type !== ""){
+            
+            console.dir("trying to draw");
+            
+            
+            
+            var this_location = 'position:absolute; left:'+this.current_x_co+'px; top:'+this.current_y_co+'px;';
+            
+            // create pipeline for creating different elements depending on what the button said
+            
+            var element_type = this.new_element_type;
+                           
+            var new_element_id = $("iFrame")[0].contentWindow.generate_new_id();
+            new_element_content = new_element_template[element_type].create_element(new_element_id,this_location); 
+            element_management.canvas_elements_update();
+            
+            var iframeBody = $("#canvas_iframe").contents().find("#canvas_in_iframe");
+            iframeBody.append(new_element_content); 
+
+            canvas_drawing.new_element_type='';            
+            add_buttons_reset();
+        }
+        trial_management.update_temp_trial_type_template();
+
+    }
 };
