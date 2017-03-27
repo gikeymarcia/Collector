@@ -1,3 +1,5 @@
 Item,"Trial Type","Max Time",Text,Settings,"Shuffle 1"
-2,GUI_Instructions,user,"This is the start of a new experiment.",,off
-3,GUI_Instructions,user,"This is the start of a new experiment.",,off
+2,GUI_Instructions,1,"This is the start of a new experiment.",,off
+3,GUI_Instructions,1,"This is the start of a new experiment.",,off
+2,GUI_Recall,user,"This is the start of a new experiment.",,off
+3,GUI_Recall,user,"This is the start of a new experiment.",,off

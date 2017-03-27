@@ -763,14 +763,14 @@ GUI_FUNCTIONS['show']= {
 
 GUI_FUNCTIONS['proceed']= {
     detect_info_type:function(info){
-        if(info.trigger == "None"){
+        if(info.target == "None"){
             return "timer";
         } else {
             return "event";
         }
     },
     "event":function(info) {
-        $("#"+info["trigger"]).on("click",function(){ 
+        $("#"+info["target"]).on("click",function(){ 
             var delay = info["delay"]-0; // to ensure it is treated as a number (e.g. not as a string) 
             setTimeout(function(){
                 Trial.submit();
