@@ -11,7 +11,7 @@ new_element_template = {
   
   Text: {
     create_element:function(element_name,this_location){
-      var new_text_element = "<div id='"+element_name+"' style='"+this_location+"' class='text_element'>This is a text div</div>";
+      var new_text_element = "<div id='"+element_name+"' style='"+this_location+"' class='text_element'>This is text</div>";
       return new_text_element;
     }
   },

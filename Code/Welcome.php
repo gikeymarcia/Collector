@@ -35,6 +35,14 @@ $FILE_SYS->set_default('Current Experiment', $current_exp);
 // the conditions class will automatically create a login counter dir, and it needs this value
 $FILE_SYS->set_default('Data Sub Dir', '');
 
+require_once 'Mobile-Detect-2.8.22/Mobile_Detect.php';
+$detect = new Mobile_Detect;
+ 
+// Any mobile device (phones or tablets).
+if ( $detect->isMobile() ) {
+  echo "<h1>It appears you are using a mobile device</h1>";
+}
+
 
 $conditions = $FILE_SYS->read('Conditions');
 
