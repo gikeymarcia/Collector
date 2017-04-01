@@ -32,7 +32,7 @@
         var editor = ace.edit("ACE_editor");
         editor.setTheme("ace/theme/chrome");       
         editor.getSession().setMode("ace/mode/php");
-        $("#ACE_editor").on("input",function(){
+        $("#ACE_editor").on("keyup input",function(){
             var ace_content = editor.getValue();
             $("#"+trial_management.current_trialtype_textarea).val(ace_content);
             // add the class "modified"
