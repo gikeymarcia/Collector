@@ -1,24 +1,48 @@
 <div id="TrialTypes" class="hide_show_elements">
   
-  <div id="trial_type_selectors">
-    <select id="trial_type_select">
-      <option hidden disabled selected>Select a trial type</option>
-    </select>
-    <select id="trial_type_file_select">
-      <option value='template'>Template</option>
-      <option value='scoring'>Scoring</option>
-      <option value='prepare_inputs'>Prepare Inputs</option>
-    </select>
-    <button id="new_trial_type_button" class="collectorButton">New Trial Type</button>
-  </div>
-  <div id="trial_type_data" class="custom_table">
-    <div> 
-      <div>Trial Type</div> 
-      <div>Template</div> 
-      <div>Scoring</div> 
-      <div>Prepare Inputs</div>
+    <div id="trial_type_selectors">
+        <select id="trial_type_select">
+            <option hidden disabled selected>Select a trial type</option>
+        </select>
+        <select id="trial_type_file_select">
+            <option value='template'>Template</option>
+            <option value='scoring'>Scoring</option>
+            <option value='prepare_inputs'>Prepare Inputs</option>
+        </select>
+        <button id="new_trial_type_button" class="collectorButton">New Trial Type</button>
     </div>
-  </div>
+    <div id="trial_type_data" class="custom_table">
+        <div> 
+          <div>Trial Type</div> 
+          <div>Template</div> 
+          <div>Scoring</div> 
+          <div>Prepare Inputs</div>
+        </div>
+    </div>
+    <style type="text/css" media="screen">
+        #ACE_editor { 
+            height:500px;
+        }
+    </style>
+    <h6><em>ACE (https://ace.c9.io/)</em> is used for editing code</h6>  
+    <div id="ACE_editor"></div>
+    
+    <script src="https://cdn.jsdelivr.net/ace/1.2.6/min/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+        var editor = ace.edit("ACE_editor");
+        editor.setTheme("ace/theme/chrome");       
+        editor.getSession().setMode("ace/mode/php");
+        $("#ACE_editor").on("input",function(){
+            var ace_content = editor.getValue();
+            $("#"+trial_management.current_trialtype_textarea).val(ace_content);
+            // add the class "modified"
+            $("#"+trial_management.current_trialtype_textarea).addClass("modified");
+            
+        });
+    </script>
+
+  
+  
 </div>
 
 <!-- Create a simple CodeMirror instance -->

@@ -13,6 +13,7 @@ $("#trial_type_data").on("input", "textarea", function() {
 });
 
 $("#trial_type_select, #trial_type_file_select").on("change", function() {
+    console.dir("hey hey");
     save_trial_types();
     load_trial_type();
     
