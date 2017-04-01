@@ -124,6 +124,7 @@ function create_trial_type(name, data) {
                 + val.replace(/</g, '&lt;')
             + "</textarea></div>"
         );
+        
     }
     
     $("#trial_type_data").append(row);
@@ -294,7 +295,7 @@ function trialtype_to_canvas(current_trialtype_template){
   var file_version = (typeof canvas_file_mod === "undefined")
                     ? Date.now() //
                     : canvas_file_mode; //
-  var canvas_script = '<script src="GUI/canvas_iframe.js?v='+file_version+'"></script>';
+  var canvas_script = '<script src="GUI/canvas_iframe.js?v='+file_version+'"></script>'; 
   
   // insert promise here
   

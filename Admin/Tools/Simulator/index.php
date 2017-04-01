@@ -130,5 +130,27 @@ var server_paths = {
 
 </script>
 
+<style type="text/css" media="screen">
+    #ACE_editor { 
+        height:50%;
+    }
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/ace/1.2.6/min/ace.js" type="text/javascript" charset="utf-8"></script>
+
 <?php require ("TrialTypeEditor/index.php"); ?>
+<div id="ACE_editor"></div>
+<script>
+    var editor = ace.edit("ACE_editor");
+    editor.setTheme("ace/theme/monokai");       
+    editor.getSession().setMode("ace/mode/php");
+    $("#ACE_editor").on("input",function(){
+       var ace_content = editor.getValue();
+       $("#"+trial_management.current_trialtype_textarea).val(ace_content);
+       // add the class "modified"
+       $("#"+trial_management.current_trialtype_textarea).addClass("modified");
+       
+    });
+</script>
 <script src="GUI/GUIActions.js"></script>

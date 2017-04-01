@@ -68,11 +68,15 @@
   transform: rotate(-90deg);
 }
     
-.custom_table { display: table; border-collapse: collapse; }
+.custom_table { display: none; border-collapse: collapse; }
 .custom_table > div { display: table-row; }
 .custom_table > div > div { display: table-cell; padding: 2px 4px; max-width: 320px; vertical-align: top; }
 
-.custom_table > div > .textareaDiv { padding: 10px; width: 500px; max-width: 1200px; height: 20em; }
+.custom_table > div > .textareaDiv { 
+    padding: 10px; 
+    width: 500px; 
+    max-width: 1200px; 
+    height: 20em; }
 .custom_table > div > .textareaDiv > textarea {
     padding: 5px;
     width: 1300px;

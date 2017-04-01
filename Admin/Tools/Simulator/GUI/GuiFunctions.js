@@ -61,6 +61,8 @@ element_management = {
 }
 
 trial_management = {
+    current_trialtype_textarea : '',
+    
   update_temp_trial_type_template:function (){
       
     trial_type_children=$("iFrame").contents().find("#canvas_in_iframe").children();
@@ -148,11 +150,7 @@ trial_management = {
       stim_style += these_props[i]+":"+child.style[these_props[i]]+";";
     }
     return stim_style;
-  },
-  temp_trial_type_to_actual_trial_type:function(){
-    
-    
-  },
+  },  
   reintegrate_script:function(trial_type_html){
     
     var script_placeholder = "___script___";      

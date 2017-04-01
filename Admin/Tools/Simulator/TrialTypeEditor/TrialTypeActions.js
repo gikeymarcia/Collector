@@ -16,7 +16,12 @@ $("#trial_type_select, #trial_type_file_select").on("change", function() {
     save_trial_types();
     load_trial_type();
     
-        
+    var trial_type = $("#trial_type_select").val();
+    var trial_type_file_select = $("#trial_type_file_select").val();
+    var editor_content = $("#"+trial_type+trial_type_file_select+"_textarea").val();
+    editor.setValue(editor_content);
+    trial_management.current_trialtype_textarea = trial_type+trial_type_file_select+"_textarea";
+    
 });
 
 function load_trial_type(){
@@ -30,6 +35,7 @@ function load_trial_type(){
   var current_trialtype_template=$("#"+trial_type+"template_textarea").val();
   
   trialtype_to_canvas(current_trialtype_template);
+  
 }
 
 $("#save_btn").on("click", save_trial_types);

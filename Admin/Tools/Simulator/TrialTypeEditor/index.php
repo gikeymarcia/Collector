@@ -21,6 +21,10 @@
   </div>
 </div>
 
+<!-- Create a simple CodeMirror instance -->
+<link rel="stylesheet" href="http://www.uoropen.org/Software/codemirror-5.25.0/lib/codemirror.css">
+<script src="http://www.uoropen.org/Software/codemirror-5.25.0/lib/codemirror.js"></script>
+
 <?php
 
 
