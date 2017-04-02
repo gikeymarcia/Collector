@@ -75,3 +75,20 @@
   <button id="save_btn" class="collectorButton">Save</button>
 
 </div>
+
+<script>
+
+$(window).bind('keydown', function(event) {
+    if (event.ctrlKey || event.metaKey) {
+        switch (String.fromCharCode(event.which).toLowerCase()) {
+            case 's':
+                event.preventDefault();
+                $("#save_btn").click();
+            break;
+        }
+    }
+  
+});
+
+</script>
+

@@ -1,19 +1,26 @@
 $("#new_trial_type_button").on("click",function(){
-  var new_trial_type_name = prompt("What do you want to call your new trial type?");
+    var new_trial_type_name = prompt("What do you want to call your new trial type?");
+
+    create_trial_type(new_trial_type_name);
+
+    //load the trialtype
+    $("#trial_type_select").val(new_trial_type_name);
+    load_trial_type();
   
-  create_trial_type(new_trial_type_name);
+    var trial_type = $("#trial_type_select").val();
+    var trial_type_file_select = $("#trial_type_file_select").val();
+    var editor_content = $("#"+trial_type+trial_type_file_select+"_textarea").val();
+    editor.setValue("");
+    trial_management.current_trialtype_textarea = trial_type+trial_type_file_select+"_textarea";
   
-  //load the trialtype
-  $("#trial_type_select").val(new_trial_type_name);
-  load_trial_type();
 });
 
 $("#trial_type_data").on("input", "textarea", function() {
-    $(this).addClass("modified");
+    $(this).addClass("modified");   
+    
 });
 
 $("#trial_type_select, #trial_type_file_select").on("change", function() {
-    console.dir("hey hey");
     save_trial_types();
     load_trial_type();
     
@@ -36,6 +43,7 @@ function load_trial_type(){
   var current_trialtype_template=$("#"+trial_type+"template_textarea").val();
   
   trialtype_to_canvas(current_trialtype_template);
+  
   
 }
 

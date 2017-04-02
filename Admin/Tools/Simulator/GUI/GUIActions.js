@@ -3,6 +3,8 @@ $("#gui_to_trialtype_button").on("click",function(){
   var gui_content = $("#temp_trial_type_template").val();
   $("#"+current_trial_type+"template_textarea").val(gui_content);
   $("#"+current_trial_type+"template_textarea").addClass("modified");
+  editor.setValue(gui_content);
+  
 });
 
 

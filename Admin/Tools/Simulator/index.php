@@ -24,7 +24,7 @@
   <table id="support_bar"> 
     <tr>
       <td><?php require("SupportBars/tutorial.php");   ?></td>
-      <td><?php require("SupportBars/Interfaces.php"); ?></td>
+      <td><?php require("SupportBars/interfaces.php"); ?></td>
       <td><?php require("SupportBars/HelperBar.php");  ?></td>
     </tr>
   </table>

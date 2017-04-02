@@ -106,7 +106,7 @@ trial_management = {
       return "<video id='"+child.id+"' src='"+child.innerHTML+"' style='"+stim_style+"'>";
     }    
     if(child.className == "audio_element"){
-      return "<audio id='"+child.id+"' src='"+child.innerHTML+"' style='"+stim_style+"'>";
+      return "<audio id='"+child.id+"' src='"+child.innerHTML+"' style='"+stim_style+"' autoplay>";
     }
     
     //inputs
