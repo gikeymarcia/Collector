@@ -1,0 +1,63 @@
+<style>
+  .likertArea {
+    text-align:center;
+  }
+    
+  .likertQuestion {
+    margin:0 0 30px 0;
+    font-size:1.3em;
+  }
+    
+  .likertLabels {
+  	padding: 0px 0px 0px 80px;
+    display:table;
+    margin:50px 0 0 0;
+    color:#666;
+    width:80%;
+  }
+
+  .likertLabel {
+    display:table-cell;
+    width:{label_width}%;
+  }
+  
+  .likertOptions {
+  	padding: 0 0 0 80px;
+  }
+  
+  #main {
+  	width: auto; 
+  	margin: auto;
+  }
+  
+  #table {
+  	display: table;
+  	width: 90%;
+  }
+  
+  #row {
+  	display: table-row;
+  }
+  
+  .cell {
+  	display: table-cell;
+  	vertical-align: middle;
+  	text-align: center;
+  }
+  
+  .cell label input {
+  	margin: 60px 0 0 -11px;
+    padding: 2px;
+  }
+</style>
+
+
+<div class="likertArea">
+  	<div class="likertQuestions">[Text]</div>
+	<div class="likertLabels">{label}</div>
+	<div class="likertOptions">{option}</div>
+</div>
+
+<div class="collector-form-element textcenter">
+  <button type="submit" class="collectorButton collectorAdvance">Submit</button>
+</div>
