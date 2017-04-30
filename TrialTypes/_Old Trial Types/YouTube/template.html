@@ -1,0 +1,91 @@
+<div class="textcenter">
+  <div id="player"></div>
+    <script>
+        var player;
+        /* set up defaults */
+        var playerVars = {
+            "modestbranding": "1",
+            "controls": "0",
+            "rel": "0",
+            "showinfo": "1",
+            "iv_load_policy": "3"
+        };
+		
+		
+		if (Trial.get_input('start time') == 'default' ) {
+			playerVars['start'] = 0
+		}
+		else {
+			playerVars['start'] = parseInt(Trial.get_input('start time'));
+		}
+		if (Trial.get_input('end time') != 'default' ) {
+			playerVars['end'] = parseInt(Trial.get_input('end time'));
+		}
+		var playback_rate = parseFloat(Trial.get_input('playback rate'));
+		
+		
+		var width = 0;
+		var height = 0;
+		if (Trial.get_input('frame width') == 'default' ) {
+			width = 640;
+		}
+		else {
+			width = parseInt(Trial.get_input('frame width'));
+		}
+		
+		if (Trial.get_input('frame height') == 'default' ) {
+			height = 390;
+		}
+		else {
+			height = parseInt(Trial.get_input('frame height'));
+		}
+		
+		
+		if (Trial.get_input('autoplay') == 'on') {
+			playerVars['autoplay'] = 1;
+		}
+		else {
+			playerVars['autoplay'] = 0;
+		}
+		
+		if (Trial.get_input('submit when finished') == 'no') {
+			var submit_when_finished = false;
+		}
+		else {
+			var submit_when_finished = true;
+		}
+
+
+        /* this function executes as soon as the youtube API becomes available*/
+        function onYouTubeIframeAPIReady() {
+          player = new YT.Player("player", {
+            height  : height,
+            width   : width,
+            videoId : Trial.get_input('videoID'),
+            events  : {
+              "onReady": onPlayerReady,
+              "onStateChange" : onPlayerStateChange,
+            },
+            playerVars : playerVars
+          });
+        }
+        function onPlayerReady(e) {
+        	e.target.setVolume(100);
+        	e.target.playVideo();
+        	e.target.setPlaybackRate(playback_rate);
+      	}
+        function onPlayerStateChange(e) {
+        	if (submit_when_finished) {
+				if (e.data == YT.PlayerState.ENDED) {
+					Trial.submit();
+        		}
+        	}
+        }
+    </script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+</div>
+
+
+<div class="textcenter">
+  <button class="collectorButton collectorAdvance" id="FormSubmitButton">Next</button>
+</div>
