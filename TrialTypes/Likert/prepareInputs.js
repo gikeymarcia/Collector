@@ -1,3 +1,9 @@
+/* 
+	* Transferring information to the html file with the data from excel Procedure/Stimuli flies
+	* Using Trial object add_input function to transfer parameter values
+	* Options parameter in Procedure/Stimuli file determines Likert scale values
+*/
+
 var labels = Trial.get_procedure('Labels');
 var label = labels.split('|');
 var label_html = "";

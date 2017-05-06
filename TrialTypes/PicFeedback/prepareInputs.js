@@ -1,3 +1,8 @@
+/* 
+	* Transferring information to the html file with the data from excel Procedure/Stimuli flies
+	* Using Trial object add_input function to transfer parameter values
+*/
+
 var text = Trial.get_input('text');
 
 if (text == null || text == '') {

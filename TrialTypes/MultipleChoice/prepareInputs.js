@@ -1,11 +1,13 @@
-// Read text value and split it into a list by | character
+/* 
+	* Transferring information to the html file with the data from excel Procedure/Stimuli flies
+	* Using Trial object add_input function to transfer parameter values
+*/
+
 var text = Trial.get_input('Text').split('|');
 
-// take the first item of the list as the {main text}
 var main = text.shift().trim();
 Trial.add_input('main text', main);
 
-// calculate options, add as {options}
 var ops = '';
 if (main.length > 0) {
     for (var option in text) {

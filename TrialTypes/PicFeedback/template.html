@@ -1,4 +1,10 @@
 <!--
+	* Provides feedback from the assessment
+	* Presents an image, then a feedback message underneath, and finally the answer under the feedback message
+	* Prints a 'Next' button at the bottom of the screen to advance
+-->
+
+<!--
 PicFeedback
   The settings below have not yet been implemented
   Settings          Values
@@ -9,7 +15,14 @@ These settings will be implemented once we move the
 changes of the /trialSettings into /dev
 -->
 
-<!-- Show the image -->
+<style>
+    #content {
+        width: 90%;
+        max-width: 850px;
+        min-width: 600px;
+    }
+</style>
+
 <div class="pic">
     <img src="[Cue:url]">
 </div>
@@ -20,15 +33,6 @@ changes of the /trialSettings into /dev
     {Answer:url}
 </h2>
 
-<!-- include form to collect RT and advance page -->
 <div class="textcenter">
     <button class="collectorButton collectorAdvance" autofocus>Next</button>
 </div>
-
-<style>
-    #content {
-        width: 90%;
-        max-width: 850px;
-        min-width: 600px;
-    }
-</style>
