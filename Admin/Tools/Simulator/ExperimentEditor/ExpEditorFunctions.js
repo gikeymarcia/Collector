@@ -205,15 +205,19 @@ function save_current_sheets(){
     "Procedure":  ["#procsArea",      handsOnTable_Procedure]
   }
   
-  for (var file_type in files) {
-    var selector = files[file_type][0];
-    var table    = files[file_type][1];
-    
-    var file_path = $(selector).find(".sheet_name").html();
-    var file_data = get_HoT_data(table);
-    
-    save_current_sheet(file_path, file_data);
-  }
+    if(files["Conditions"][1] !== null){
+        for (var file_type in files) {
+            var selector = files[file_type][0];
+            var table    = files[file_type][1];
+            
+            var file_path = $(selector).find(".sheet_name").html();
+            var file_data = get_HoT_data(table);
+            
+            save_current_sheet(file_path, file_data);
+        }      
+    } else {
+        custom_alert("You don't have an experiment loaded to save");
+    }
 }
 
 function save_current_sheet(file_path, file_data) {
