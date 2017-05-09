@@ -32,7 +32,7 @@
       audio:    ["stimuli","position","left","top"],
       
       //inputs
-      button:   ["value","name","position","left","top","color","background-color","width","height"],
+      button:   ["value","name","position","left","top","color","background-color","font-size","width","height"],
       string:   ["value","name","position","left","top","color","background-color","width","height"],
       number:   ["value","name","position","left","top","color","background-color","width","height"],
       date:     ["value","name","position","left","top","color","background-color","width","height"],

@@ -869,5 +869,5 @@ GUI_FUNCTIONS['click_response']= {
 
 
 function store_response(this_value,this_name){
-    $("form").append("<input type='text' value='"+this_value+"' name='"+this_name+"'>");
+    $("form").append("<input type='hidden' value='"+this_value+"' name='"+this_name+"'>");
 }

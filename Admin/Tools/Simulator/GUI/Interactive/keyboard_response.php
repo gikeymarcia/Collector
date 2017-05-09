@@ -1,7 +1,6 @@
 Which keys do you want to be valid? <input type="text" id="interactive_keyboard_response_element_accepted_keys" oninput='interaction_manager.update_temp_GUI_Var("interactive_keyboard_response_element_accepted_keys")'><br>
 What do you want the name of the variable to store the keyboard response in?
 <input type="text" id="interactive_keyboard_response_element_response_name" oninput='interaction_manager.update_temp_GUI_Var("interactive_keyboard_response_element_response_name")'>
-What is the value you want to store?
 
 Do you want the task the task to proceed once you've pressed a key response?
 <label>

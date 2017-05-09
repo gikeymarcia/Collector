@@ -10,6 +10,9 @@ require 'initiateTool.php';
 $tools = getTools();
 
 ?>
+
+
+
 <div class="toolWidth">
     <h2>Welcome to the Admin page for the Collector</h2>
     <p>To use one of our tools, select from the options below.</p>
