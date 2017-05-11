@@ -31,7 +31,7 @@
     $experiment_files[$exp]['Procedures'] = $FILE_SYS->read('Procedure Dir');
   }
   
-  $new_exp_json = file_get_contents('ExperimentEditor/default_new_experiment.json');
+  $new_exp_json = file_get_contents('../ExperimentEditor/default_new_experiment.json');
 ?>
 
 <style>

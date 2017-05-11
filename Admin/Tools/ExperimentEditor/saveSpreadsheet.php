@@ -1,6 +1,6 @@
 <?php
 
-require '../../../initiateTool.php';
+require '../../initiateTool.php';
 ob_end_clean(); // no need to transmit useless data
 
 if (!isset($_POST['file'], $_POST['data'])) {

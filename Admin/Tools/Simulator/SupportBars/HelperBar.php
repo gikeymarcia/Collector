@@ -66,19 +66,19 @@
   }
   
 
-  input:checked + .show_hide_span {background-color : blue;}
-  .show_hide_span{
-    background-color:green;
-    border-radius:3px;
-    padding: 2px;
-    color:white;
-  }
   
   
-  #helper_title:hover{
-    font-weight:      bold;
-    cursor:pointer;
-  }
+    #helper_title:hover{
+        font-weight:      bold;
+        cursor:pointer;
+    }
+    #support_bar{    
+        position:fixed;
+        top:70px;
+        right: 0px;
+        z-index:5;
+        max-width:500px;
+    }
 
 </style>
 
@@ -110,22 +110,18 @@
     <!-- Help Types -->
     <div class="helpType_Col" id="helpType_Description">
       This is what the name of the conditions the participant/experimentor will be able to see when loading an experiment.
-      
     </div>
     
     <div class="helpType_Col" id="helpType_Notes">
-      Write notes here. The participants will not be able to see these.
-      
+      Write notes here. The participants will not be able to see these.   
     </div>
     
     <div class="helpType_Col" id="helpType_Stimuli1">
       Identify which <b>Stimuli</b> sheet you will be referring to in the procedure.
-      
     </div>
 
     <div class="helpType_Col" id="helpType_Procedure1">
-      Identify which <b>Procedure</b> sheet you are running for this condition.
-      
+      Identify which <b>Procedure</b> sheet you are running for this condition.      
     </div>
   
     <div class="helpType_Col" id="helpType_Type">

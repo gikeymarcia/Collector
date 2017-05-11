@@ -4,7 +4,7 @@ function new_proc_stim_sheet(data,filetype){
   var exp_name = $("#experiment_select").val();
   
   $.post(
-    'ExperimentEditor/newExpFile.php',
+    '../ExperimentEditor/newExpFile.php',
       {
         file: file,
         data: data,
@@ -222,7 +222,7 @@ function save_current_sheets(){
 
 function save_current_sheet(file_path, file_data) {
   $.post(
-    'ExperimentEditor/saveSpreadsheet.php',
+    '../ExperimentEditor/saveSpreadsheet.php',
     {
       file: file_path,
       data: JSON.stringify(file_data)
@@ -248,7 +248,7 @@ function stim_proc_selection(stim_proc,sheet_selected){
   sheet_name = exp_name + '/' + sheet_name;
   
   $.get(
-    'ExperimentEditor/spreadsheetAjax.php',
+    '../ExperimentEditor/spreadsheetAjax.php',
     {
       sheet: sheet_name
     },
@@ -261,4 +261,10 @@ function stim_proc_selection(stim_proc,sheet_selected){
       }
     }
   );
+}
+
+function show_run_stop_buttons(){
+    if(simulator_on_off == "on"){
+        $("#run_stop_buttons").show();
+    }
 }

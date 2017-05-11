@@ -1,4 +1,30 @@
-<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<?php
+    require_once '../../initiateTool.php';
+    
+    //need to distinguish between when this is being run as an add on to simulator and an independent tool
+    
+    $current_address = $_SERVER['REQUEST_URI'];
+    if(strpos($current_address,"Simulator") >0){
+        $simulator_on_off="on";
+    } else {
+        // not in simulator, add LoadExperiment.php
+        require("LoadExperiment.php");
+        $simulator_on_off="off";
+        //helper bar
+        ?>
+        <table id="support_bar"> 
+            <tr>
+                <td><?php require("../Simulator/SupportBars/tutorial.php");   ?></td>
+                <td><?php require("../Simulator/SupportBars/interfaces.php"); ?></td>
+                <td><?php require("../Simulator/SupportBars/HelperBar.php");  ?></td>
+            </tr>
+        </table>   
+        <?php        
+    }
+?>
+
+
+
 <link rel="stylesheet" href="../handsontables/handsontables.full.css">
 <script src="../handsontables/handsontables.full.js"></script>
 
@@ -37,11 +63,12 @@
   </tr>
 </table>
 
-<script src="ExperimentEditor/ExpEditorActions.js"></script>
-<script src="ExperimentEditor/ExpEditorFunctions.js"></script>
+<script src="../ExperimentEditor/ExpEditorActions.js"></script>
+<script src="../ExperimentEditor/ExpEditorFunctions.js"></script>
 
 <script>
 
+var simulator_on_off = "<?= $simulator_on_off; ?>";
 var experiment_files = <?= json_encode($experiment_files); ?>;
 var spreadsheets = {};
 var alerts_ready = false;

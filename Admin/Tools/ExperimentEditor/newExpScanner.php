@@ -1,6 +1,6 @@
 <?php
 
-require '../../../initiateTool.php';
+require '../../initiateTool.php';
 require 'fileReadingFunctions.php';
 
 function read_directory($dir) {

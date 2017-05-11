@@ -49,12 +49,7 @@
 #preview_gui > tr {
   width:100%;
 }
-#support_bar{    
-    position:fixed;
-    top:70px;
-    right: 0px;
-    z-index:5;
-  }
+
 
 
 .gui_preview_buttons{

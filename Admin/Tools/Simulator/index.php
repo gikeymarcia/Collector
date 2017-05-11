@@ -15,7 +15,7 @@
     $ajax_json_path = $FILE_SYS->get_path("Ajax Json");
     
     
-    require("ExperimentEditor/LoadExperiment.php");
+    require("../ExperimentEditor/LoadExperiment.php");
     
     ?>
 
@@ -64,10 +64,6 @@
   
 <script>
   
-  function show_run_stop_buttons(){
-    $("#run_stop_buttons").show();    
-  }
-  
   $("#largescreen_button").on("click",function(){
     $("#Preview_area").height($("#Preview_area").height()*2);
     $("#Preview_area").width($("#Preview_area").width()*2);
@@ -109,7 +105,7 @@
   });
 </script>
 
-<?php require ("ExperimentEditor/index.php"); ?>
+<?php require ("../ExperimentEditor/index.php"); ?>
 
 <script>
 

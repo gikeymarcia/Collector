@@ -131,19 +131,32 @@ function isTrialTypeHeader(colHeader) {
                           
                 }
                 
-                //Removing Empty middle columns
                 for (var k=0; k<this.countCols()-1; k++){
-                  if (this.isEmptyCol(k)){
-                    if (middleColEmpty==0){
-                      middleColEmpty=1;
+                    //checking for invalid item number (1)
+                    if(this.getDataAtCell(0,k).toLowerCase()=="item"){
+                        // check if there's a console.dir("looking here");
+                        console.dir(this.countRows());
+                        for(m=0;m<this.countRows();m++){
+                            console.dir(this);
+                            console.dir(this.getDataAtCell(m,k)); 
+                            if(this.getDataAtCell(m,k)==1){
+                                alert("Warning v1: 1 does not refer to any row in the Stimuli sheet! The first row is row 2 (as row 1 is the header). Fix row "+(m+1)+" in your Procedure's Item column.");
+                            }
+                        }
                     }
-                  }            
-                  if (!this.isEmptyCol(k) & middleColEmpty==1){
-                    postEmptyCol =1;
-                    alert ("You have an empty column in the middle - Being removed from table!");
-                    this.alter("remove_col",k-1); //delete column that is empty 
-                    middleColEmpty=0;
-                  }            
+                    
+                    //Removing Empty middle columns
+                    if (this.isEmptyCol(k)){
+                        if (middleColEmpty==0){
+                            middleColEmpty=1;
+                        }
+                    }            
+                    if (!this.isEmptyCol(k) & middleColEmpty==1){
+                        postEmptyCol =1;
+                        alert ("You have an empty column in the middle - Being removed from table!");
+                        this.alter("remove_col",k-1); //delete column that is empty 
+                        middleColEmpty=0;
+                    }            
                 }
                 
                 //Same thing for rows
@@ -170,6 +183,7 @@ function isTrialTypeHeader(colHeader) {
                     this.alter("remove_row",this.countRows);//delete the last row
                   }
                 }
+
             },
             afterInit: function() {
                 updateDimensions(this);

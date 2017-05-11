@@ -20,7 +20,7 @@ $("#new_experiment_button").on("click",function(){
   } else {
     // contact server to create new structure
     $.post(
-      "ExperimentEditor/AjaxNewExperiment.php",
+      "../ExperimentEditor/AjaxNewExperiment.php",
       {
         new_name: new_name
       },
