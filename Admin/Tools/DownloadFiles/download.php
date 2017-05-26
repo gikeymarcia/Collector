@@ -2,9 +2,7 @@
 
     
     $file_url = $_POST['fileurl'];
-    echo $file_url;
     $file_split = explode('/',$file_url);
-    echo"<br>";
     $pp = $file_split[count($file_split)-2];
     $experiment = $file_split[count($file_split)-3];
     
