@@ -10,7 +10,10 @@
             <option value='prepare_inputs'>Prepare Inputs</option>
         </select>
         <button id="new_trial_type_button" class="collectorButton">New Trial Type</button>
+        <button id="rename_trial_type_button" class="collectorButton">Rename Trial Type</button>
     </div>
+        
+    
     <div id="trial_type_data" class="custom_table">
         <div> 
           <div>Trial Type</div> 

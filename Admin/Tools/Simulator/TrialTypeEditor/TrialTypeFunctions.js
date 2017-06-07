@@ -1,3 +1,19 @@
+
+function load_trial_type(){
+  var trial_type = $("#trial_type_select").val();
+  var file       = $("#trial_type_file_select").val();
+  
+  show_trial_type(trial_type,file);
+  $("#gui_trialtype_header").html(trial_type);
+  $("#entire_gui_interface").show();
+  
+  var current_trialtype_template=$("#"+trial_type+"template_textarea").val();
+  
+  trialtype_to_canvas(current_trialtype_template);
+  
+  
+}
+
 function save_trial_types() {
     $("#trial_type_data .modified").each(function() {
         var trial_type = $(this).closest(".trial_type_row").find(".trial_type_name").html();
@@ -21,6 +37,31 @@ function save_trial_type(trial_type, file, script){
         'text'
     );
 };
+
+function rename_trial_type(original_name,valid){
+    if(valid=="invalid"){
+        this_prompt = "This trialtype name already exists, what should the new name be?";
+    } else {
+        this_prompt = "What should the new name be?";
+    }
+    new_name = prompt(this_prompt); 
+
+    // check if new_name is in array of trialtypes
+    if(typeof(trial_types[new_name]) == "undefined"){    
+        $.post(
+            'TrialTypeEditor/renameTrialType.php',
+            {
+                original_name   :   original_name,
+                new_name        :   new_name
+            },
+             custom_alert,
+            'text'
+        );        
+    } else {
+        rename_trial_type(original_name,"invalid");
+    }
+
+}
 
 // use the normal Experiment object as a prototype so we can modify
 // how the object saves data to the server

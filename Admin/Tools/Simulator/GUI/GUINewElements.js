@@ -32,7 +32,7 @@ new_element_template = {
       
       //use generic image like e-prime does          
       
-      var new_stim_element = "<div id='"+element_name+"' style='"+new_element_template.audio_style+this_location+"' class='audio_element' ></div>";
+      var new_stim_element = "<div id='"+element_name+"' style='"+new_element_template.audio_style+this_location+"' class='audio_element' >♪</div>";
       return new_stim_element;
     }
   },
