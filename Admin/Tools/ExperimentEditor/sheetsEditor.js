@@ -66,11 +66,10 @@ $("#deleteSheetButton").on("click", function() {
 });
 
 var stimContainer = document.getElementById("stimTable");
-  stimTable = createHoT(stimContainer, stimData);
-    
-    // limit resize events to once every 100 ms
-    var resizeTimer;
-  
+stimTable = createHoT(stimContainer, stimData);
+
+// limit resize events to once every 100 ms
+var resizeTimer;
 
 
 // saving code //

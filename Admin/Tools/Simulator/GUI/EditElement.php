@@ -91,8 +91,6 @@ $("#delete_element_button").on("click",function(){
     
   });;;
   
-  
-  
 
 /* $(window).on("load", function() {
     GUI_FUNCTIONS.run();

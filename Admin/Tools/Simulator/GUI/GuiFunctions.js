@@ -103,10 +103,10 @@ trial_management = {
       return "<img id='"+child.id+"' src='"+child.innerHTML+"' style='"+stim_style+"'>";
     }
     if(child.className == "video_element"){    
-      return "<video id='"+child.id+"' src='"+child.innerHTML+"' style='"+stim_style+"'>";
+      return "<video id='"+child.id+"' src='"+child.innerHTML+"' style='"+stim_style+"'></video>";
     }    
     if(child.className == "audio_element"){
-      return "<audio id='"+child.id+"' src='"+child.innerHTML+"' style='"+stim_style+"' autoplay>";
+      return "<audio id='"+child.id+"' src='"+child.innerHTML+"' style='"+stim_style+"' autoplay></audio>";
     }
     
     //inputs
