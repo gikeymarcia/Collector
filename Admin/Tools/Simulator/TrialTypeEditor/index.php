@@ -4,13 +4,13 @@
         <select id="trial_type_select">
             <option hidden disabled selected>Select a trial type</option>
         </select>
-        <select id="trial_type_file_select">
+        <select id="trial_type_file_select" style="display:none">
             <option value='template'>Template</option>
             <option value='scoring'>Scoring</option>
             <option value='prepare_inputs'>Prepare Inputs</option>
         </select>
         <button id="new_trial_type_button" class="collectorButton">New Trial Type</button>
-        <button id="rename_trial_type_button" class="collectorButton">Rename Trial Type</button>
+        <button id="rename_trial_type_button" class="collectorButton" style="display:none">Rename Trial Type</button>
     </div>
         
     
@@ -28,10 +28,18 @@
         }
     </style>
     <h6><em>ACE (https://ace.c9.io/)</em> is used for editing code</h6>  
-    <div id="ACE_editor"></div>
+    <div id="ACE_editor" style="display:none"></div>
     
     <script src="https://cdn.jsdelivr.net/ace/1.2.6/min/ace.js" type="text/javascript" charset="utf-8"></script>
     <script>
+    
+        $("#trial_type_select").on("change",function(){
+           $("#ACE_editor").show(); 
+           $("#trial_type_file_select").show(500); 
+           $("#rename_trial_type_button").show(500); 
+        });
+        
+    
         var editor = ace.edit("ACE_editor");
         editor.setTheme("ace/theme/chrome");       
         editor.getSession().setMode("ace/mode/html");
@@ -42,6 +50,7 @@
             $("#"+trial_management.current_trialtype_textarea).addClass("modified");
             
         });
+        
     </script>
 
   

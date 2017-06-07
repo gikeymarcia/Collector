@@ -1,17 +1,21 @@
 $("#new_trial_type_button").on("click",function(){
-    var new_trial_type_name = prompt("What do you want to call your new trial type?");
+    new_trial_type_name = prompt("What do you want to call your new trial type?");
+    if(new_trial_type_name !== null & new_trial_type_name !== ''){
 
-    create_trial_type(new_trial_type_name);
+        create_trial_type(new_trial_type_name);
 
-    //load the trialtype
-    $("#trial_type_select").val(new_trial_type_name);
-    load_trial_type();
-  
-    var trial_type = $("#trial_type_select").val();
-    var trial_type_file_select = $("#trial_type_file_select").val();
-    var editor_content = $("#"+trial_type+trial_type_file_select+"_textarea").val();
-    editor.setValue("");
-    trial_management.current_trialtype_textarea = trial_type+trial_type_file_select+"_textarea";
+        //load the trialtype
+        $("#trial_type_select").val(new_trial_type_name);
+        load_trial_type();
+      
+        var trial_type = $("#trial_type_select").val();
+        var trial_type_file_select = $("#trial_type_file_select").val();
+        var editor_content = $("#"+trial_type+trial_type_file_select+"_textarea").val();
+        editor.setValue("");
+        trial_management.current_trialtype_textarea = trial_type+trial_type_file_select+"_textarea";
+        $("#ACE_editor").show();     
+    }
+
   
 });
 
