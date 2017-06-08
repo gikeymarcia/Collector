@@ -41,8 +41,7 @@ $("#trial_type_select, #trial_type_file_select").on("change", function() {
     
     // detect if warn code is here.
     console.dir(editor_content.indexOf(trial_management.warning_code));
-    if(editor_content.indexOf(trial_management.warning_code) !== -1){
-        editor_content = editor_content.replace(trial_management.warning_code,"");
+    if(editor_content.indexOf(trial_management.warning_code) !== -1){        
         trial_management.gui_edit_warning = true;
     }
     

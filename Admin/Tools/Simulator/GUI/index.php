@@ -61,7 +61,7 @@
           <?php require("Interactive.php") ?>
         </div>
         <div id="gui_code_preview_div" class="GUI_divs">
-          <textarea id="temp_trial_type_template" readonly></textarea>
+          <div id="temp_trial_type_template"></div>
           <br>
           
         </div>        

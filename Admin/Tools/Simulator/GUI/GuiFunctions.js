@@ -63,22 +63,26 @@ element_management = {
 trial_management = {
     current_trialtype_textarea : '',
     
-  update_temp_trial_type_template:function (){
+    update_temp_trial_type_template:function (){
       
-    trial_type_children=$("iFrame").contents().find("#canvas_in_iframe").children();
-    preview_trial="";
+        trial_type_children=$("iFrame").contents().find("#canvas_in_iframe").children();
+        preview_trial="";
+        
+        current_script_no=-1;
+        for(var i=0;i<trial_type_children.length;i++){
+          
+            if(trial_type_children[i].nodeName !== "SCRIPT"){ // this may be redundant and need tidying.
+                preview_trial += this.processing_canvas_children(trial_type_children[i])+"\r\n";        
+            }
+        }
+        //$("#temp_trial_type_template").val(preview_trial);
+       
+        code_preview_editor = ace.edit("temp_trial_type_template");
+        code_preview_editor.setTheme("ace/theme/chrome");       
+        code_preview_editor.getSession().setMode("ace/mode/html");        
+        code_preview_editor.setValue(preview_trial);
     
-    current_script_no=-1;
-    for(var i=0;i<trial_type_children.length;i++){
-      
-      if(trial_type_children[i].nodeName !== "SCRIPT"){ // this may be redundant and need tidying.
-        preview_trial += this.processing_canvas_children(trial_type_children[i])+"\r\n";        
-      }
-    }
-    $("#temp_trial_type_template").val(preview_trial);
-    
-    
-  },
+    },
   processing_canvas_children: function(child){     
     
     
