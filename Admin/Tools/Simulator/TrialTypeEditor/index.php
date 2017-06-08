@@ -31,6 +31,10 @@
     <div id="ACE_editor" style="display:none"></div>
     
     <script src="https://cdn.jsdelivr.net/ace/1.2.6/min/ace.js" type="text/javascript" charset="utf-8"></script>
+    
+    <style>    
+    </style>
+    
     <script>
     
         $("#trial_type_select").on("change",function(){
@@ -40,16 +44,32 @@
         });
         
     
+    trial_management.gui_edit_warning = false;
+    trial_management.warning_code = "<!-- Warn if try to edit with GUI !-->";
         var editor = ace.edit("ACE_editor");
         editor.setTheme("ace/theme/chrome");       
         editor.getSession().setMode("ace/mode/html");
         $("#ACE_editor").on("keyup input",function(){
             var ace_content = editor.getValue();
+            // identify it's been edited            
+            ace_content.replace(trial_management.warning_code,'');
+            ace_content += trial_management.warning_code;
+            
+            trial_management.gui_edit_warning = true;
+            
             $("#"+trial_management.current_trialtype_textarea).val(ace_content);
             // add the class "modified"
             $("#"+trial_management.current_trialtype_textarea).addClass("modified");
             
+            
         });
+        
+        
+        $("#gui_table").on("mouseenter",function(){
+            if(trial_management.gui_edit_warning == true){
+                custom_alert("<b> WARNING </b> This trial has edits in the script editor. Any edits you make to this trialtype using the GUI will delete the edits made in the script editor.");trial_management.gui_edit_warning = false ;                   
+            }
+        });    
         
     </script>
 

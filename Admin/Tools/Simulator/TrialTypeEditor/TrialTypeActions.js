@@ -14,9 +14,7 @@ $("#new_trial_type_button").on("click",function(){
         editor.setValue("");
         trial_management.current_trialtype_textarea = trial_type+trial_type_file_select+"_textarea";
         $("#ACE_editor").show();     
-    }
-
-  
+    }  
 });
 
 $("#rename_trial_type_button").on("click",function(){
@@ -39,8 +37,19 @@ $("#trial_type_select, #trial_type_file_select").on("change", function() {
     var trial_type = $("#trial_type_select").val();
     var trial_type_file_select = $("#trial_type_file_select").val();
     var editor_content = $("#"+trial_type+trial_type_file_select+"_textarea").val();
+    
+    
+    // detect if warn code is here.
+    console.dir(editor_content.indexOf(trial_management.warning_code));
+    if(editor_content.indexOf(trial_management.warning_code) !== -1){
+        editor_content = editor_content.replace(trial_management.warning_code,"");
+        trial_management.gui_edit_warning = true;
+    }
+    
     editor.setValue(editor_content);
     trial_management.current_trialtype_textarea = trial_type+trial_type_file_select+"_textarea";
+    
+    
     
 });
 
