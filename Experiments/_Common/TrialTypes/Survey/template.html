@@ -1,0 +1,59 @@
+<div id="this_survey_id">
+    
+</div>
+
+
+<script>
+alert(survey_address);
+parent.Papa.parse(survey_address, { //"https://dl.dropbox.com/s/b00w7ysovtwd3b2/demographics.csv?dl=0"
+	download: true,
+	complete: function(results) {
+		this_survey = (results);
+		write_survey(this_survey,"this_survey_id");
+	}
+});
+
+function write_survey(this_survey,this_id){
+	this_survey_html='<table>';
+	for(i=1;i<this_survey.data.length;i++){
+	    this_survey_html += "<tr>";
+	    this_row=rename_indexes(this_survey.data[i],this_survey.data[0]);
+	    for(j=0;j<this_survey.data[i].length;j++){
+	        this_header=this_survey.data[0][j];
+	        var this_input = this_survey.data[i][j];
+	        this_row=rename_index(this_row);
+	        
+	        if(this_header == "Question Name"){
+	            this_row["Question Name"]==this_input;
+	          this_row[0]="name='"+this_input+"'";  
+	        }
+
+	        if(this_header == "Question Name"){
+	          this_row[0]="name='"+this_input+"'";  
+	        }
+	        
+	        this_survey_html += this_header+"->"+this_survey.data[i][j];
+	        
+	    }
+	    
+	    this_survey_html += this_survey.data[i];
+	}
+	$("#"+this_id).html(this_survey_html); //
+}
+
+
+function rename_indexes(this_row,header_row){
+    
+    this_header=header_row[j];
+    this_row=[];
+    for(var i=0;i<this_row.length;i++){
+        var this_header=header_row[i];
+        var this_input = this_row[i];
+        this_row[this_header]==this_input;
+    }
+    return this_row;
+}
+
+
+
+</script><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !-->
