@@ -28,6 +28,8 @@
 
 <div id="ExperimentContainer"></div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.3.3/papaparse.min.js"></script>
+
 <script>
 var User_Data = {
     Username:   "<?= $_SESSION['Username'] ?>",
