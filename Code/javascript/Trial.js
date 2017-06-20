@@ -867,6 +867,13 @@ GUI_FUNCTIONS['click_response']= {
     },
 }
 
+function set_trial_positon(position){
+    parent.set_position={
+        on_off:'on',
+        position:position,
+    }
+    parent.User_Data.Experiment_Data.globals.position=position; // to prevent ending experiment if run on final trial.
+}
 
 function store_response(this_value,this_name){
     $("form").append("<input type='hidden' value='"+this_value+"' name='"+this_name+"'>");
