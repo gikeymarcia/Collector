@@ -16,6 +16,11 @@ var Experiment = function (exp_data, $container, trial_page, trial_types, server
     this.container = $container;
 }
 
+parent.set_position={ //function to control position of the experiment.
+    on_off:'off',
+    position:[0,0],
+}
+
 Experiment.prototype = {
     load_trial_types: function(trial_types_data) {
         this.trial_types = {};
@@ -74,6 +79,13 @@ Experiment.prototype = {
     },
 
     get_trial_inputs: function(position) {
+        
+        if(parent.set_position.on_off=="on"){
+            position=parent.set_position.position;
+            parent.User_Data.Experiment_Data.globals.position=parent.set_position.position;
+            parent.set_position.on_off="off";
+        }
+        
         //@TODO: handle when recieving a bad 'position'
         if (typeof position == 'undefined') {
             position = this.data.globals.position;
