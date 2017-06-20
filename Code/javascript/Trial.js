@@ -867,7 +867,7 @@ GUI_FUNCTIONS['click_response']= {
     },
 }
 
-function set_trial_positon(position){
+function set_trial_position(position){
     parent.set_position={
         on_off:'on',
         position:position,
