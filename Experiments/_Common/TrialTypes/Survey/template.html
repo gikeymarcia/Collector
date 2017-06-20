@@ -1,10 +1,30 @@
-<div id="this_survey_id">
-    
-</div>
+<style>
+    td{
+        padding:10px;
+    }
+    #this_survey_id{
+        border-style:       solid;
+        border-color:       #517cc1;
+        border-width:       2px;
+        border-radius:      20px;
+        padding:            20px;
+        background-color:   white;
+        color:              #0a3272;
+        display:            none;
+    }
+</style>
 
+<div id="this_survey_id"></div>
+<br><br>
+<input type="button" value="Proceed" class="collectorButton" id="proceed_button">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.3.3/papaparse.min.js"></script>
 
 <script>
-alert(survey_address);
+
+$("#proceed_button").on("click",function(){
+    Trial.submit();
+});
+
 parent.Papa.parse(survey_address, { //"https://dl.dropbox.com/s/b00w7ysovtwd3b2/demographics.csv?dl=0"
 	download: true,
 	complete: function(results) {
@@ -18,42 +38,82 @@ function write_survey(this_survey,this_id){
 	for(i=1;i<this_survey.data.length;i++){
 	    this_survey_html += "<tr>";
 	    this_row=rename_indexes(this_survey.data[i],this_survey.data[0]);
-	    for(j=0;j<this_survey.data[i].length;j++){
-	        this_header=this_survey.data[0][j];
-	        var this_input = this_survey.data[i][j];
-	        this_row=rename_index(this_row);
-	        
-	        if(this_header == "Question Name"){
-	            this_row["Question Name"]==this_input;
-	          this_row[0]="name='"+this_input+"'";  
-	        }
-
-	        if(this_header == "Question Name"){
-	          this_row[0]="name='"+this_input+"'";  
-	        }
-	        
-	        this_survey_html += this_header+"->"+this_survey.data[i][j];
-	        
-	    }
-	    
-	    this_survey_html += this_survey.data[i];
+	    console.dir(this_row);
+	    row_html = process_survey_question(this_row);
+	    console.dir(row_html);
+	    this_survey_html += row_html + "</tr>";
 	}
-	$("#"+this_id).html(this_survey_html); //
+	this_survey_html += "</table>";
+	$("#"+this_id).html(this_survey_html); 
+	$("#"+this_id).show(200);
+}
+
+function process_survey_question(this_row){
+    switch(this_row["type"]){
+        case "radio":
+            var options = this_row["answers"].split("|");
+            var question_td='<td>';
+            for(var i=0; i<options.length;i++){
+                question_td += "<label>"+options[i] +"<input type='radio' name='survey_"+this_row["question"]+"' value='"+options[i]+"'></label>";
+            }
+            question_td += '</td>';
+        break;
+
+        case "checkbox":
+            var options = this_row["answers"].split("|");
+            var question_td='<td>';
+            for(var i=0; i<options.length;i++){
+                question_td += "<label>"+options[i] +"<input type='checkbox' name='survey_"+this_row["question"]+"' value='"+options[i]+"'></label>";
+            }
+            question_td += '</td>';
+        break;
+        
+        case "dropdownspaced":
+            var options = this_row["answers"].split("|");
+            var question_td='<td><select name="'+this_row["question name"]+'">';
+            for(var i=0; i<options.length;i++){
+                question_td += "<option>"+options[i]+"</option>";
+            }
+            question_td += '</select></td>';
+        break;
+        
+        case "number":
+            var question_td="<td><input type= 'number' name='"+this_row['question name']+"'></td>";
+        break;
+        
+        case "text":
+            var question_td="<td><input type= 'text' name='"+this_row['question name']+"'></td>";
+        break;
+
+    }
+    if(typeof(this_row["type"])== "undefined"){
+        return '';
+    } else {
+        var this_row_html="<td><b>"+this_row["question"]+"</b></td>"+question_td+"</label></td>";
+        return this_row_html;
+    }
+
+    
+    
 }
 
 
 function rename_indexes(this_row,header_row){
     
-    this_header=header_row[j];
-    this_row=[];
+    // this_header=header_row[j];
+    new_row=[]; 
     for(var i=0;i<this_row.length;i++){
-        var this_header=header_row[i];
+        var this_header=header_row[i].toLowerCase(); //to avoid caps issues
         var this_input = this_row[i];
-        this_row[this_header]==this_input;
+        if(this_header == "type"){
+            new_row[this_header]=this_input.toLowerCase();   
+        } else {
+            new_row[this_header]=this_input;
+        }
     }
-    return this_row;
+    return new_row;
 }
 
 
 
-</script><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !-->
+</script><!-- Warn if try to edit with GUI !-->
