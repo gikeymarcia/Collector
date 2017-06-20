@@ -12,11 +12,20 @@
         color:              #0a3272;
         display:            none;
     }
+    .unselected_likert_button{
+        background-color:red;
+    }
+    .selected_likert_button{
+        background-color: blue;
+    }
 </style>
+
 
 <div id="this_survey_id"></div>
 <br><br>
 <input type="button" value="Proceed" class="collectorButton" id="proceed_button">
+<input type="button" value="Restart" class="collectorButton" id="restart_button">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.3.3/papaparse.min.js"></script>
 
 <script>
@@ -24,6 +33,14 @@
 $("#proceed_button").on("click",function(){
     Trial.submit();
 });
+
+
+$("#restart_button").on("click",function(){
+
+    set_trial_position([0,0]);
+    Trial.submit();
+});
+
 
 parent.Papa.parse(survey_address, { //"https://dl.dropbox.com/s/b00w7ysovtwd3b2/demographics.csv?dl=0"
 	download: true,
@@ -54,7 +71,7 @@ function process_survey_question(this_row){
             var options = this_row["answers"].split("|");
             var question_td='<td>';
             for(var i=0; i<options.length;i++){
-                question_td += "<label>"+options[i] +"<input type='radio' name='survey_"+this_row["question"]+"' value='"+options[i]+"'></label>";
+                question_td += "<label>"+options[i] +"<input type='radio' name='survey_"+this_row["question"]+"' value='"+options[i]+"'></label><br>";
             }
             question_td += '</td>';
         break;
@@ -63,7 +80,7 @@ function process_survey_question(this_row){
             var options = this_row["answers"].split("|");
             var question_td='<td>';
             for(var i=0; i<options.length;i++){
-                question_td += "<label>"+options[i] +"<input type='checkbox' name='survey_"+this_row["question"]+"' value='"+options[i]+"'></label>";
+                question_td += "<label>"+options[i] +"<input type='checkbox' name='survey_"+this_row["question"]+"' value='"+options[i]+"'></label><br>";
             }
             question_td += '</td>';
         break;
@@ -77,6 +94,25 @@ function process_survey_question(this_row){
             question_td += '</select></td>';
         break;
         
+        /* tidy up this code for nice looking buttons
+        likert_array = [];
+        case "likert":
+            var options = this_row["answers"].split("|");
+            var question_td='<td>';
+            for(var i=0; i<options.length;i++){
+                current_likert_row=likert_array.length-1;
+                if(i<likert_array[current_likert_row].length-1){
+                    //new row needed
+                } else {
+                    //add to_row
+                }
+                question_td +=  "<input type='button' class='unselected_likert_button' value='"+options[i]+"' id='likert"+this_row+"'>"+
+                                "<input type='radio' name='survey_"+this_row["question"]+"' value='"+options[i]+"'>";
+            }
+            question_td += '</td>';
+        break;
+        */
+
         case "number":
             var question_td="<td><input type= 'number' name='"+this_row['question name']+"'></td>";
         break;
@@ -92,11 +128,7 @@ function process_survey_question(this_row){
         var this_row_html="<td><b>"+this_row["question"]+"</b></td>"+question_td+"</label></td>";
         return this_row_html;
     }
-
-    
-    
 }
-
 
 function rename_indexes(this_row,header_row){
     
@@ -113,7 +145,5 @@ function rename_indexes(this_row,header_row){
     }
     return new_row;
 }
-
-
 
 </script><!-- Warn if try to edit with GUI !-->
