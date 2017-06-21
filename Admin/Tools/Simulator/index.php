@@ -61,6 +61,7 @@
   </table>
 </div>
 
+
   
 <script>
   
@@ -127,6 +128,9 @@ var server_paths = {
 
 </script>
 
+
+<!-- Scripts needed for simulator -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.3.3/papaparse.min.js"></script>
 <script src="https://cdn.jsdelivr.net/ace/1.2.6/min/ace.js" type="text/javascript" charset="utf-8"></script>
 
 <?php require ("TrialTypeEditor/index.php"); ?>

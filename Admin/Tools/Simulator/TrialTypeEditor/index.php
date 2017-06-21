@@ -51,7 +51,8 @@
     
     var editor = ace.edit("ACE_editor");
     editor.setTheme("ace/theme/chrome");       
-    editor.getSession().setMode("ace/mode/html");
+    editor.getSession().setMode("ace/mode/html");        
+    
     $("#ACE_editor").on("keyup input",function(){
         var ace_content = editor.getValue();
         // identify it's been edited            
@@ -68,7 +69,7 @@
     editor.setOptions({
         enableBasicAutocompletion: true,
         enableSnippets: false,
-        enableLiveAutocompletion: true
+        enableLiveAutocompletion: true,        
     });
     
     langTools = ace.require('ace/ext/language_tools'); 

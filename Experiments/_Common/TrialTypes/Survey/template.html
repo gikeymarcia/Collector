@@ -12,34 +12,48 @@
         color:              #0a3272;
         display:            none;
     }
-    .unselected_likert_button{
-        background-color:red;
-    }
-    .selected_likert_button{
-        background-color: blue;
-    }
 </style>
 
 
 <div id="this_survey_id"></div>
 <br><br>
+<button>Click to proceed</button>
 <input type="button" value="Proceed" class="collectorButton" id="proceed_button">
-<input type="button" value="Restart" class="collectorButton" id="restart_button">
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.3.3/papaparse.min.js"></script>
+<!-- <input type="button" value="Restart" class="collectorButton" id="restart_button"> -->
 
 <script>
 
 $("#proceed_button").on("click",function(){
-    Trial.submit();
+    console.dir("proceed array upcoming");
+    console.dir(proceed_array);
+    proceed_checks();
+    invalid_array = proceed_checks();
+    if (invalid_array.length == 0){
+        Trial.submit();
+    } else {
+        alert("you have at least one incomplete input:"+invalid_array);
+    }
 });
 
-
+function proceed_checks(){
+    var invalid_array=[];
+    for(var i=0; i<proceed_array.length;i++){
+        var this_input_response = $( 'input[name="survey_'+proceed_array[i].toLowerCase()+'"]' ).val();
+        var this_select_response = $('select[name="survey_gender"]' ).val();
+        if(this_input_response == "" | this_select_response == null){ //| typeof(this_input_response) == "undefined"|
+            console.dir("not valid!");
+            invalid_array.push(proceed_array[i]);
+        } 
+    }
+    return(invalid_array);
+}
+proceed_array = [];
+/*
 $("#restart_button").on("click",function(){
 
     set_trial_position([0,0]);
     Trial.submit();
-});
+}); */
 
 
 parent.Papa.parse(survey_address, { //"https://dl.dropbox.com/s/b00w7ysovtwd3b2/demographics.csv?dl=0"
@@ -71,7 +85,7 @@ function process_survey_question(this_row){
             var options = this_row["answers"].split("|");
             var question_td='<td>';
             for(var i=0; i<options.length;i++){
-                question_td += "<label>"+options[i] +"<input type='radio' name='survey_"+this_row["question"]+"' value='"+options[i]+"'></label><br>";
+                question_td += "<label>"+options[i] +"<input type='radio' name='survey_"+this_row["question name"].toLowerCase()+"' value='"+options[i]+"'></label><br>";
             }
             question_td += '</td>';
         break;
@@ -80,14 +94,15 @@ function process_survey_question(this_row){
             var options = this_row["answers"].split("|");
             var question_td='<td>';
             for(var i=0; i<options.length;i++){
-                question_td += "<label>"+options[i] +"<input type='checkbox' name='survey_"+this_row["question"]+"' value='"+options[i]+"'></label><br>";
+                question_td += "<label>"+options[i] +"<input type='checkbox' name='survey_"+this_row["question name"].toLowerCase()+"' value='"+options[i]+"'></label><br>";
             }
             question_td += '</td>';
         break;
         
         case "dropdownspaced":
             var options = this_row["answers"].split("|");
-            var question_td='<td><select name="'+this_row["question name"]+'">';
+            var question_td='<td><select name="survey_'+this_row["question name"].toLowerCase()+'">'+
+                            '<option selected disabled hidden>Please choose an option</option>';
             for(var i=0; i<options.length;i++){
                 question_td += "<option>"+options[i]+"</option>";
             }
@@ -114,11 +129,14 @@ function process_survey_question(this_row){
         */
 
         case "number":
-            var question_td="<td><input type= 'number' name='"+this_row['question name']+"'></td>";
+            var question_td="<td><input type= 'number' name='survey_"+this_row['question name'].toLowerCase()+"'></td>";
         break;
         
         case "text":
-            var question_td="<td><input type= 'text' name='"+this_row['question name']+"'></td>";
+            var question_td="<td><input type= 'text' name='survey_"+this_row['question name'].toLowerCase()+"'></td>";
+        break;
+        case "para":
+            var question_td="<td><textarea name='survey_"+this_row['question name'].toLowerCase()+"' style='width:200px;height:100px'></textarea></td>";
         break;
 
     }
@@ -126,6 +144,11 @@ function process_survey_question(this_row){
         return '';
     } else {
         var this_row_html="<td><b>"+this_row["question"]+"</b></td>"+question_td+"</label></td>";
+        console.dir(this_row["optional"].toLowerCase());
+        if(this_row["optional"].toLowerCase() == "no"){
+            console.dir("hello there");
+            proceed_array.push(this_row["question name"]);    
+        }
         return this_row_html;
     }
 }
@@ -146,4 +169,4 @@ function rename_indexes(this_row,header_row){
     return new_row;
 }
 
-</script><!-- Warn if try to edit with GUI !-->
+</script><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !-->

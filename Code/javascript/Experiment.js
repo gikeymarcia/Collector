@@ -16,11 +16,6 @@ var Experiment = function (exp_data, $container, trial_page, trial_types, server
     this.container = $container;
 }
 
-parent.set_position={ //function to control position of the experiment.
-    on_off:'off',
-    position:[0,0],
-}
-
 Experiment.prototype = {
     load_trial_types: function(trial_types_data) {
         this.trial_types = {};

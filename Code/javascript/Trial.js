@@ -867,6 +867,13 @@ GUI_FUNCTIONS['click_response']= {
     },
 }
 
+
+parent.set_position={ //function to control position of the experiment.
+    on_off:'off',
+    position:[0,0],
+}
+
+
 function set_trial_position(position){
     parent.set_position={
         on_off:'on',
