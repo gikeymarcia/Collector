@@ -180,20 +180,46 @@ Experiment.prototype = {
     },
 
 
-	run_trial(position) {
+	run_trial(position,buffer) {
         if (typeof position == "undefined") {
-            position = this.data.globals.position;
+            position = this.data.globals.position;           
         }
-        this.data.globals.position = position;
+        
+        if(typeof buffer == "undefined"){
+            buffer = 1;
+        }
+        console.dir(position);
+        buffer_positions=[];
+        buffer_positions[0]=position;
+        console.dir(buffer_positions);
+        
+        /*
+        
+        for(var i=0; i<buffer; i++){
+            buffer_positions[i+1]= JSON.parse(JSON.stringify(buffer_positions[i]));
+            buffer_positions[i][0]++;
+//            this_position = buffer_positions[i]; //one too few - right?
+        } 
+        console.dir(buffer_positions);
+        */
+        
+        
+        for(var i=0; i<buffer; i++){
+            this_position = position;
 
-		$("#ExperimentContainer").children().remove();
-    	var new_iframe = $("<iframe>");
-    	new_iframe.appendTo("#ExperimentContainer");
-    	var doc = new_iframe[0].contentDocument;
-    
-    	doc.open();
-    	doc.write(this.trial_page);
-    	doc.close();
+            $("#ExperimentContainer").children().remove();
+            var new_iframe = $("<iframe>");
+            new_iframe.appendTo("#ExperimentContainer");
+            var doc = new_iframe[0].contentDocument;
+        
+            this.data.globals.position = this_position;
+            
+            
+        
+            doc.open();
+            doc.write(this.trial_page);
+            doc.close();
+        }
     },
     
     end_trial: function(data, inputs, globals) {
