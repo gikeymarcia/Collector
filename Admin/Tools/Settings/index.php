@@ -4,7 +4,10 @@ require '../../initiateTool.php';
 
 // make a temporary pathfinder to get us to the right settings
 $FILE_SYS = new FileSystem();
-$exps   = array_flip(getCollectorExperiments());
+//$experiments = get_Collector_experiments($FILE_SYS);
+$exps   = get_Collector_experiments($FILE_SYS);
+//$exps   = array_flip(get_Collector_experiments($FILE_SYS));
+
 
 // change experiment if one is selected
 if (isset($_GET['Exp'])
@@ -18,6 +21,9 @@ if (!empty($_DATA['exp'])) {
     $FILE_SYS->set_default('Current Experiment', $_DATA['exp']);
 }
 
+
+
+
 // make a new instance of the settings class
 $yourSettings = new Collector\Settings(
     $FILE_SYS->get_path('Common Settings'),
@@ -25,8 +31,12 @@ $yourSettings = new Collector\Settings(
     $FILE_SYS->get_path('Password')
 );
 
+
+/*
 require __DIR__ . '/saveSettings.php';
 require __DIR__ . '/makeSettingOptions.php';
+*/
+
 
 ?>
 <link rel="stylesheet" type="text/css" href="styles.css">
@@ -126,3 +136,4 @@ require __DIR__ . '/makeSettingOptions.php';
         }
     });
 </script>
+*/

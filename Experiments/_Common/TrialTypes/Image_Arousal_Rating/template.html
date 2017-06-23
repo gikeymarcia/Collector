@@ -1,0 +1,93 @@
+<style>
+  .manikin{
+    height:100px;
+    width:100px;
+  }
+  .click_button{
+      padding:15px;
+      color:white;
+      background-color:red;
+      border-radius:5px;
+  }
+  .click_button:hover{
+      background-color:LightRed;
+      color:black;
+  }
+  td{
+      padding:30px;
+  }
+    #loading_screen{
+        font-weight: bold;
+        width: 900px;
+        text-align: center;
+    }
+</style>
+<div id="loading_screen">Image Loading. If it doesn't load after a minute please refresh the page.</div>
+<table id="arousal_table" style="display:none">
+  <tr>
+
+    <td> <label> <input type="radio" class="response_no" name="arousal" value="1" style="display:none"> <span class="click_button">1</span><br><br> Not all all </label> </td>
+    <td> <label> <input type="radio" class="response_no" name="arousal" value="2" style="display:none"> <span class="click_button">2</span><br></label> </td>
+    <td> <label> <input type="radio" class="response_no" name="arousal" value="3" style="display:none"> <span class="click_button">3</span><br></label> </td>
+    <td> <label> <input type="radio" class="response_no" name="arousal" value="4" style="display:none"> <span class="click_button">4</span><br></label> </td>
+    <td> <label> <input type="radio" class="response_no" name="arousal" value="5" style="display:none"> <span class="click_button">5</span><br></label> </td>
+    <td> <label> <input type="radio" class="response_no" name="arousal" value="6" style="display:none"> <span class="click_button">6</span><br></label> </td>
+    <td> <label> <input type="radio" class="response_no" name="arousal" value="7" style="display:none"> <span class="click_button">7</span><br></label> </td>
+    <td> <label> <input type="radio" class="response_no" name="arousal" value="8" style="display:none"> <span class="click_button">8</span><br></label> </td>
+    <td> <label> <input type="radio" class="response_no" name="arousal" value="9" style="display:none"> <span class="click_button">9</span><br><br>Extremely arousing </label> </td>
+    
+    
+  </tr>
+</table>
+
+<img id="trial_image" src="[Cue]" width="900" height="400"> <br><br>
+
+<script>
+
+
+$("#trial_image").on("load",function(){
+    $("#arousal_table").show(500);
+    $("#loading_screen").hide(0);
+});
+
+$(".manikin,.response_no").on("click",function(){
+    proceed_trial();
+})
+
+function proceed_trial(){
+    Trial.submit();
+}
+
+</script>
+<!--
+    <div class="buttons">
+<button class="collectorButton collectorAdvance">Submit</butto n>
+    </div>
+ -->
+<style>
+
+td {
+ text-align:center;}
+
+form .likert li {
+  display:inline-block;
+  width:62px;
+  text-align:center;
+  vertical-align: top;
+ }
+
+form .likert li input[type=radio] {
+  display:block;
+  position:relative;
+  top:0;
+  left:50%;
+  margin-left:-6px;}
+  
+form .buttons {
+  margin:30px 0;
+  text-align:right;}
+ 
+img {
+       display: block;
+       margin: auto;} 
+</style><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !-->

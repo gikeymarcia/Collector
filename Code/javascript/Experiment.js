@@ -220,7 +220,11 @@ Experiment.prototype = {
         }
         else {
             this.record_remaining_trials();
-            $("#ExperimentContainer").html("<h1>Done!</h1>");
+            if(typeof(parent.completion_code) !== "undefined"){
+                $("#ExperimentContainer").html("<h1>"+parent.completion_code+"</h1>");
+            } else {
+                $("#ExperimentContainer").html("<h1>Done</h1>");
+            }
         }
     },
 

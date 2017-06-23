@@ -49,7 +49,7 @@ var server_paths = {
 
 
 
-var Collector_Experiment = new Experiment(
+var Collector_Experiment = new Experiment( // var removed
     User_Data.Experiment_Data,
     $("#ExperimentContainer"),
     trial_page,
