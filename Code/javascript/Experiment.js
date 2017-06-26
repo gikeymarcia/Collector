@@ -1,4 +1,4 @@
-var Experiment = function (exp_data, $container, trial_page, trial_types, server_paths) {
+Experiment = function (exp_data, $container, trial_page, trial_types, server_paths) {
     this.data = {
         stimuli: exp_data.stimuli,
         procedure: this.parse_procedure(exp_data.procedure),
@@ -180,46 +180,53 @@ Experiment.prototype = {
     },
 
 
-	run_trial(position,buffer) {
+    /* run_trial has Anthony's attempt to buffer coded out */
+	run_trial(position) { //,buffer
         if (typeof position == "undefined") {
             position = this.data.globals.position;           
         }
-        
+        /*
         if(typeof buffer == "undefined"){
-            buffer = 1;
+            buffer = 2;
         }
-        console.dir(position);
+        //console.dir(position);
         buffer_positions=[];
         buffer_positions[0]=position;
-        console.dir(buffer_positions);
-        
-        /*
+        //console.dir(buffer_positions);
+
         
         for(var i=0; i<buffer; i++){
             buffer_positions[i+1]= JSON.parse(JSON.stringify(buffer_positions[i]));
-            buffer_positions[i][0]++;
+            buffer_positions[i+1][0]++;
 //            this_position = buffer_positions[i]; //one too few - right?
         } 
         console.dir(buffer_positions);
+        
+        trial_page_array=[];
         */
-        
-        
-        for(var i=0; i<buffer; i++){
-            this_position = position;
 
-            $("#ExperimentContainer").children().remove();
-            var new_iframe = $("<iframe>");
-            new_iframe.appendTo("#ExperimentContainer");
-            var doc = new_iframe[0].contentDocument;
         
-            this.data.globals.position = this_position;
-            
-            
+        $("#ExperimentContainer").children().remove();
+        new_iframe = $("<iframe>");
+        new_iframe.appendTo("#ExperimentContainer");
+        var doc = new_iframe[0].contentDocument;
         
-            doc.open();
-            doc.write(this.trial_page);
-            doc.close();
-        }
+        doc.open();
+        this.data.globals.position = position; //buffer_positions[0]
+        doc.write(this.trial_page);
+        doc.close();
+        
+
+/* --- was looking at multiple trial pages --- //
+        var new_iframe2 = $("<iframe>");
+        new_iframe2.appendTo("#ExperimentContainer");
+        var doc2 = new_iframe2[0].contentDocument;      
+        doc2.open();
+        this.data.globals.position = buffer_positions[1];
+        doc2.write(this.trial_page);
+        doc2.close();
+*/
+        
     },
     
     end_trial: function(data, inputs, globals) {
