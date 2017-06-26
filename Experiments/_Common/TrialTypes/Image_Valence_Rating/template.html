@@ -23,28 +23,55 @@
   }
 </style>
 
-<img id="trial_image" src="[Cue]" width="900" height="400"> <br><br>
 <div id="loading_screen">Image Loading. If it doesn't load after a minute please refresh the page.</div>
-<table id="valence_table" style="display:none">
-  <tr>
 
-    <td> <label> <input type="radio" class="response_no" name="valence" value="1" style="display:none"> <span class="click_button">1</span><br><br> Extremely negative </label> </td>
-    <td> <label> <input type="radio" class="response_no" name="valence" value="2" style="display:none"> <span class="click_button">2</span><br></label> </td>
-    <td> <label> <input type="radio" class="response_no" name="valence" value="3" style="display:none"> <span class="click_button">3</span><br></label> </td>
-    <td> <label> <input type="radio" class="response_no" name="valence" value="4" style="display:none"> <span class="click_button">4</span><br></label> </td>
-    <td> <label> <input type="radio" class="response_no" name="valence" value="5" style="display:none"> <span class="click_button">5</span><br></label> </td>
-    <td> <label> <input type="radio" class="response_no" name="valence" value="6" style="display:none"> <span class="click_button">6</span><br></label> </td>
-    <td> <label> <input type="radio" class="response_no" name="valence" value="7" style="display:none"> <span class="click_button">7</span><br></label> </td>
-    <td> <label> <input type="radio" class="response_no" name="valence" value="8" style="display:none"> <span class="click_button">8</span><br></label> </td>
-    <td> <label> <input type="radio" class="response_no" name="valence" value="9" style="display:none"> <span class="click_button">9</span><br><br>Extremely positive </label> </td>
+<div id="trial_page" style="display:none">
+    <img id="trial_image" src="[Cue]" width="900" height="400"> <br><br>
+    <table id="valence_table" style="display:none">
+      <tr>
     
-  </tr>
-</table>
+        <td> <label> <input type="radio" class="response_no" name="valence" value="1" style="display:none"> <span class="click_button">1</span><br><br>Extremely negative</label> </td>
+        <td> <label> <input type="radio" class="response_no" name="valence" value="2" style="display:none"> <span class="click_button">2</span><br></label> </td>
+        <td> <label> <input type="radio" class="response_no" name="valence" value="3" style="display:none"> <span class="click_button">3</span><br></label> </td>
+        <td> <label> <input type="radio" class="response_no" name="valence" value="4" style="display:none"> <span class="click_button">4</span><br></label> </td>
+        <td> <label> <input type="radio" class="response_no" name="valence" value="5" style="display:none"> <span class="click_button">5</span><br></label> </td>
+        <td> <label> <input type="radio" class="response_no" name="valence" value="6" style="display:none"> <span class="click_button">6</span><br></label> </td>
+        <td> <label> <input type="radio" class="response_no" name="valence" value="7" style="display:none"> <span class="click_button">7</span><br></label> </td>
+        <td> <label> <input type="radio" class="response_no" name="valence" value="8" style="display:none"> <span class="click_button">8</span><br></label> </td>
+        <td> <label> <input type="radio" class="response_no" name="valence" value="9" style="display:none"> <span class="click_button">9</span><br><br>Extremely positive</label> </td>
+        
+      </tr>
+    </table>    
+</div>
+
 
 <script>
 
+var $elems = $('#trial_page').find('img,audio,video,iframe'); // only media types?
+
+// count them
+var elemsCount = $elems.length;
+console.dir("no.elements = "+elemsCount);
+// the loaded elements flag
+var loadedCount = 0;
+
+// attach the load event to elements
+$elems.on('load', function () {
+    // increase the loaded count 
+    loadedCount++;
+
+    // if loaded count flag is equal to elements count
+    if (loadedCount == elemsCount) {
+        // do what you want
+        $("#trial_page").show();
+//        alert('elements loaded successfully');
+    }
+});
+
+
+
 $("#trial_image").on("load",function(){
-    $("#valence_table").show(500);
+    $("#valence_table").show(0);
     $("#loading_screen").hide(0);
 });
 
@@ -86,4 +113,4 @@ form .buttons {
 img {
        display: block;
        margin: auto;} 
-</style><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !-->
+</style><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !-->

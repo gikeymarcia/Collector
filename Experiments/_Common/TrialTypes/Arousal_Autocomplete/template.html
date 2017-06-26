@@ -1,0 +1,102 @@
+<style>
+  .manikin{
+    height:100px;
+    width:100px;
+  }
+  .click_button{
+      padding:15px;
+      color:white;
+      background-color:blue;
+      border-radius:5px;
+  }
+  .click_button:hover{
+      background-color:LightBlue;
+      color:black;
+  }
+  td{
+    padding:25px;
+  }
+  #loading_screen{
+      font-weight: bold;
+      width: 900px;
+      text-align: center;
+  }
+</style>
+
+<div id="loading_screen">Image Loading. If it doesn't load after a minute please refresh the page.</div>
+
+<div id="trial_page" style="display:none">
+    <img id="trial_image" src="[Cue]" width="900" height="400"> <br><br>
+    <table id="arousal_table" style="display:none">
+      <tr>
+    
+        <td> <label> <input type="radio" class="response_no" name="arousal" id="arousal1" value="1" style="display:none"> <span class="click_button">1</span><br><br>Extremely negative</label> </td>
+        <td> <label> <input type="radio" class="response_no" name="arousal" id="arousal2" value="2" style="display:none"> <span class="click_button">2</span><br></label> </td>
+        <td> <label> <input type="radio" class="response_no" name="arousal" id="arousal3" value="3" style="display:none"> <span class="click_button">3</span><br></label> </td>
+        <td> <label> <input type="radio" class="response_no" name="arousal" id="arousal4" value="4" style="display:none"> <span class="click_button">4</span><br></label> </td>
+        <td> <label> <input type="radio" class="response_no" name="arousal" id="arousal5" value="5" style="display:none"> <span class="click_button">5</span><br></label> </td>
+        <td> <label> <input type="radio" class="response_no" name="arousal" id="arousal6" value="6" style="display:none"> <span class="click_button">6</span><br></label> </td>
+        <td> <label> <input type="radio" class="response_no" name="arousal" id="arousal7" value="7" style="display:none"> <span class="click_button">7</span><br></label> </td>
+        <td> <label> <input type="radio" class="response_no" name="arousal" id="arousal8" value="8" style="display:none"> <span class="click_button">8</span><br></label> </td>
+        <td> <label> <input type="radio" class="response_no" name="arousal" id="arousal9" value="9" style="display:none"> <span class="click_button">9</span><br><br>Extremely positive</label> </td>
+        
+      </tr>
+    </table>    
+</div>
+
+
+<script>
+
+var $elems = $('#trial_page').find('img,audio,video,iframe'); // only media types?
+
+// count them
+var elemsCount = $elems.length;
+console.dir("no.elements = "+elemsCount);
+// the loaded elements flag
+var loadedCount = 0;
+
+// attach the load event to elements
+$elems.on('load', function () {
+    // increase the loaded count 
+    loadedCount++;
+
+    // if loaded count flag is equal to elements count
+    if (loadedCount == elemsCount) {
+        // do what you want
+        $("#trial_page").show();
+        
+        // autocomplete;
+        if(typeof(parent.arousal_response == "undefined")){
+            parent.arousal_response = 1;
+        } else{
+            if(parent.arousal_response == 9){
+                parent.arousal_response = 1;
+            }
+            parent.arousal_response++;
+        }   
+        
+        $("#arousal"+parent.arousal_response).prop("checked", true);           
+        $("#arousal"+parent.arousal_response).click();
+    }
+});
+
+
+
+$("#trial_image").on("load",function(){
+    $("#arousal_table").show(0);
+    $("#loading_screen").hide(0);
+});
+
+$(".manikin,.response_no").on("click",function(){
+    proceed_trial();
+})
+
+function proceed_trial(){
+    Trial.submit();
+}
+
+</script>
+
+
+
+<!-- Warn if try to edit with GUI !-->

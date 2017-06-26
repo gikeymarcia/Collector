@@ -46,16 +46,10 @@ var Trial = {
         this.define_defaults();
         this.run_custom_inputs_calculation();
         this.apply_trial_type_template();
-
+        
         // prepare the page for display
-        $(document).ready(function() {
-            self.apply_force_numeric();
-            self.prevent_autocomplete();
-            self.prevent_back_nav();
-            self.prepare_to_catch_action_timestamps();
-            self.prepare_form_submit();
-            self.start_checking_focus();
-        });
+        
+        
 
         // start the trial
         $(window).on('load', function() {
@@ -72,7 +66,23 @@ var Trial = {
             if (typeof self.start === 'function') {
                 self.start();
             }
+            
+            $(document).ready(function() {
+                self.apply_force_numeric();
+                self.prevent_autocomplete();
+                self.prevent_back_nav();
+                self.prepare_to_catch_action_timestamps();
+                self.prepare_form_submit();
+                self.start_checking_focus();
+            });
+            
+            
         });
+        
+        
+        
+        
+        
     },
 
     /* * * * * * * * * * *
@@ -141,8 +151,9 @@ var Trial = {
         var scripts = template.find('script').replaceWith('__COLLECTOR__SCRIPT__');
         scripts = $.makeArray(scripts);
 
+        
         // fill template with replacements for [values] and {custom inputs}
-        var content = this.fill_template(template.html());
+        var content = this.fill_template(template.html());        
 
         // put back all <script> elements in template.html
         content = content.replace(/__COLLECTOR__SCRIPT__/g, function(match) {
@@ -150,7 +161,7 @@ var Trial = {
         });
 
         // put the tempalte on the page.
-        $('#content').html(content);
+        $('#content').html(content);       
     },
 
     fill_template: function(template) {
@@ -207,6 +218,9 @@ var Trial = {
     },
 
     get_input_as_string: function(input_request_string, categories) {
+        
+        
+        
         // input_request comes back with .name .url and .index
         var input_request = this.decipher_input_request(input_request_string);
 
@@ -217,11 +231,13 @@ var Trial = {
         );
         if (val === null) return null;
         if (typeof val === 'object') val = val.join(' ');
+        
 
         // if input was in form [Cue:url] then return proper media link
         return (input_request.url)
              ? this.prepare_media_link(val)
              : val;
+        
     },
 
     decipher_input_request(input_request) {
@@ -317,6 +333,7 @@ var Trial = {
                 self.end();
             }
         });
+        
     },
 
     prepare_to_catch_action_timestamps: function() {
@@ -381,7 +398,7 @@ var Trial = {
         }
     },
 
-    get_elapsed_time: function() {
+    get_elapsed_time: function() {        
         return this.page_timer.elapsed();
     },
 
