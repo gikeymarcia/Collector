@@ -1,6 +1,4 @@
 Item,"Trial Type","Max Time",Text,Settings,"Shuffle 1","Post 1 Trial Type","Post 1 Text"
-2,Valence_Autocomplete,user,"This is the start of a new experiment.",,off,Arousal_Autocomplete,
-3,Valence_Autocomplete,user,"This is the start of a new experiment.",,off,Arousal_Autocomplete,
-4,Valence_Autocomplete,user,"This is the start of a new experiment.",,off,Arousal_Autocomplete,
-5,Valence_Autocomplete,user,"This is the start of a new experiment.",,off,Arousal_Autocomplete,
-6,Valence_Autocomplete,user,"This is the start of a new experiment.",,off,Arousal_Autocomplete,
+2,Image_Valence_Rating,user,"This is the start of a new experiment.",,off,Image_Arousal_Rating,
+3,Image_Valence_Rating,user,"This is the start of a new experiment.",,off,Image_Arousal_Rating,
+4,Image_Valence_Rating,user,"This is the start of a new experiment.",,off,Image_Arousal_Rating,

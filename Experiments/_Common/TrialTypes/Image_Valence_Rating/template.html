@@ -14,103 +14,58 @@
       color:black;
   }
   td{
-    padding:25px;
-  }
-  #loading_screen{
-      font-weight: bold;
-      width: 900px;
-      text-align: center;
+      padding:30px;
   }
 </style>
 
-<div id="loading_screen">Image Loading. If it doesn't load after a minute please refresh the page.</div>
 
-<div id="trial_page" style="display:none">
+<div id="loading_screen">Image Loading. If it doesn't load after a minute please refresh the page.</div>
+<div id="everything" style="display:none">
     <img id="trial_image" src="[Cue]" width="900" height="400"> <br><br>
     <table id="valence_table" style="display:none">
-      <tr>
+        <tr>
+            <td> <label> <input type="radio" class="response_no" name="valence" value="1" style="display:none"> <span class="click_button">1</span><br><br> Not all all </label> </td>
+            <td> <label> <input type="radio" class="response_no" name="valence" value="2" style="display:none"> <span class="click_button">2</span><br></label> </td>
+            <td> <label> <input type="radio" class="response_no" name="valence" value="3" style="display:none"> <span class="click_button">3</span><br></label> </td>
+            <td> <label> <input type="radio" class="response_no" name="valence" value="4" style="display:none"> <span class="click_button">4</span><br></label> </td>
+            <td> <label> <input type="radio" class="response_no" name="valence" value="5" style="display:none"> <span class="click_button">5</span><br></label> </td>
+            <td> <label> <input type="radio" class="response_no" name="valence" value="6" style="display:none"> <span class="click_button">6</span><br></label> </td>
+            <td> <label> <input type="radio" class="response_no" name="valence" value="7" style="display:none"> <span class="click_button">7</span><br></label> </td>
+            <td> <label> <input type="radio" class="response_no" name="valence" value="8" style="display:none"> <span class="click_button">8</span><br></label> </td>
+            <td> <label> <input type="radio" class="response_no" name="valence" value="9" style="display:none"> <span class="click_button">9</span><br><br>Extremely arousing </label> </td>
+        </tr>
+    </table>
     
-        <td> <label> <input type="radio" class="response_no" name="valence" value="1" style="display:none"> <span class="click_button">1</span><br><br>Extremely negative</label> </td>
-        <td> <label> <input type="radio" class="response_no" name="valence" value="2" style="display:none"> <span class="click_button">2</span><br></label> </td>
-        <td> <label> <input type="radio" class="response_no" name="valence" value="3" style="display:none"> <span class="click_button">3</span><br></label> </td>
-        <td> <label> <input type="radio" class="response_no" name="valence" value="4" style="display:none"> <span class="click_button">4</span><br></label> </td>
-        <td> <label> <input type="radio" class="response_no" name="valence" value="5" style="display:none"> <span class="click_button">5</span><br></label> </td>
-        <td> <label> <input type="radio" class="response_no" name="valence" value="6" style="display:none"> <span class="click_button">6</span><br></label> </td>
-        <td> <label> <input type="radio" class="response_no" name="valence" value="7" style="display:none"> <span class="click_button">7</span><br></label> </td>
-        <td> <label> <input type="radio" class="response_no" name="valence" value="8" style="display:none"> <span class="click_button">8</span><br></label> </td>
-        <td> <label> <input type="radio" class="response_no" name="valence" value="9" style="display:none"> <span class="click_button">9</span><br><br>Extremely positive</label> </td>
-        
-      </tr>
-    </table>    
 </div>
-
+<input type="hidden" name="valence_rt" id="valence_rt_input">
 
 <script>
-
-var $elems = $('#trial_page').find('img,audio,video,iframe'); // only media types?
-
-// count them
-var elemsCount = $elems.length;
-console.dir("no.elements = "+elemsCount);
-// the loaded elements flag
-var loadedCount = 0;
-
-// attach the load event to elements
-$elems.on('load', function () {
-    // increase the loaded count 
-    loadedCount++;
-
-    // if loaded count flag is equal to elements count
-    if (loadedCount == elemsCount) {
-        // do what you want
-        $("#trial_page").show();
-//        alert('elements loaded successfully');
-    }
-});
 
 
 
 $("#trial_image").on("load",function(){
-    $("#valence_table").show(0);
+    $("#everything").show();
     $("#loading_screen").hide(0);
+    setTimeout(function(){
+        baseline_time=(new Date()).getTime();
+        $("#valence_table").show(500);
+    },2000);
 });
 
 $(".manikin,.response_no").on("click",function(){
+    $("#valence_rt_input").val((new Date()).getTime()-baseline_time);
     proceed_trial();
-})
+});
 
 function proceed_trial(){
     Trial.submit();
 }
 
+
 </script>
-
-<style>
-
-td {
- text-align:center;
-    
-}
-
-form .likert li {
-  display:inline-block;
-  width:62px;
-  text-align:center;
-  vertical-align: top;
- }
-
-form .likert li input[type=radio] {
-  display:block;
-  position:relative;
-  top:0;
-  left:50%;
-  margin-left:-6px;}
-  
-form .buttons {
-  margin:30px 0;
-  text-align:right;}
- 
-img {
-       display: block;
-       margin: auto;} 
-</style><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !-->
+<!--
+    <div class="buttons">
+<button class="collectorButton collectorAdvance">Submit</butto n>
+    </div>
+ -->
+<!-- Warn if try to edit with GUI !-->
