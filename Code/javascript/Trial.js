@@ -144,24 +144,28 @@ var Trial = {
     },
 
     apply_trial_type_template: function() {
+        
+        var pre_div_template = this.type.template;
+
+        // fill template with replacements for [values] and {custom inputs}
+        pre_div_content = this.fill_template(pre_div_template);
+        
+        
         // make a placeholder <div> containing the template.html
-        var template = $('<div>' + this.type.template + '</div>');
+        var template = $('<div>' + pre_div_content + '</div>');
 
         // remove all script elements from template.html
         var scripts = template.find('script').replaceWith('__COLLECTOR__SCRIPT__');
         scripts = $.makeArray(scripts);
 
-        
-        // fill template with replacements for [values] and {custom inputs}
-        var content = this.fill_template(template.html());        
-
         // put back all <script> elements in template.html
-        content = content.replace(/__COLLECTOR__SCRIPT__/g, function(match) {
+        content = pre_div_content.replace(/__COLLECTOR__SCRIPT__/g, function(match) {
             return scripts.shift().outerHTML;
         });
 
         // put the tempalte on the page.
-        $('#content').html(content);       
+        $('#content').html(content);
+              
     },
 
     fill_template: function(template) {
