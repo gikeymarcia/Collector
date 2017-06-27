@@ -119,7 +119,7 @@ if ($_SETTINGS->show_condition_selector == true && !$is_returning_user) {
     </div>
 
     <div class="flexChild">
-      <input name="Username" type="text" value="" class="collectorInput" placeholder="<?= $_SETTINGS->ask_for_login ?>" autofocus>
+      <input name="Username" id="username_input" type="text" value="" class="collectorInput" placeholder="<?= $_SETTINGS->ask_for_login ?>" autofocus>
 
       <!-- Condition selector -->
       <select name="Condition" class="<?= $select_class ?>">
@@ -138,11 +138,21 @@ if ($_SETTINGS->show_condition_selector == true && !$is_returning_user) {
       <input type="hidden" name="returning" value="1">
       <?php endif; ?>
       <input type="hidden" name="Experiment" value="<?= $current_exp ?>">
-      <button class="collectorButton" type="submit">Login</button>
+      <input type="button" class="collectorButton" value="Login" id="login_button">
+<!--      <button class="collectorButton" type="submit">Login</button> -->
 
     </div>
   </section>
 </form>
-
+<script>
+    $("#login_button").on("click",function(){
+        var username = $("#username_input").val();
+        if(username.length<4){
+            alert("Your Username is too short!");
+        } else {
+            $("form").submit();
+        }
+    });
+</script>
 <?php
 output_page_footer($FILE_SYS);
