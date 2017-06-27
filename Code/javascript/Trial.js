@@ -690,6 +690,7 @@ function calculate_percent_similar(given, answer) {
 * Ajaxing Json files
 */
 
+
 function ajax_json_read_write(file,data,experiment_name,read_write,ajax_textarea){
   var ajax_path = parent.Collector_Experiment['ajax_tools_path'];
   data_read = [];

@@ -11,9 +11,10 @@
 
     
     //setting up varialbes new Experiment.js needs
-    $media_path = $FILE_SYS->get_path("Media Dir");
-    $root_path  = $FILE_SYS->get_path("Root");
-    //$ajax_json_path = $_FILES->get_path("Ajax Json");
+    $media_path         = $FILE_SYS->get_path("Media Dir");
+    $root_path          = $FILE_SYS->get_path("Root");
+    $ajax_json_path     = $FILE_SYS->get_path("Ajax Json");
+    $ajax_survey_path   = $FILE_SYS->get_path("Ajax Survey");
 ?>
 
 <style>
@@ -44,7 +45,9 @@ var trial_types  = <?= json_encode($trial_type_data) ?>;
 var server_paths = {
     media_path: '<?= $media_path ?>',
     root_path:  '<?= $root_path ?>',
-    // ajax_tools: ' $ajax_json_path ' // php ajax tools in
+    ajax_tools: '<?= $ajax_json_path ?>', 
+    ajax_survey: '<?= $ajax_survey_path ?>' ,
+    fuck_you: 'really'
 };
 
 

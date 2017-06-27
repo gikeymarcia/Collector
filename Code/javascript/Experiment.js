@@ -8,7 +8,8 @@ Experiment = function (exp_data, $container, trial_page, trial_types, server_pat
 
     this.exp_data   = exp_data;
     this.trial_page = trial_page;
-    this.ajax_tools_path = server_paths.ajax_tools;    
+    this.ajax_tools_path = server_paths.ajax_tools;
+    this.ajax_survey_path = server_paths.ajax_survey;
     this.media_path = server_paths.media_path;
     this.root_path  = server_paths.root_path;
     this.data.globals.position   = exp_data.globals.position;

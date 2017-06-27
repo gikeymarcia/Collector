@@ -55,23 +55,42 @@ $("#restart_button").on("click",function(){
     Trial.submit();
 }); */
 
+function ajax_collector_survey(filename){
+    var ajax_path = parent.Collector_Experiment['ajax_survey_path'];
+    $.post(
+        ajax_path,
+        {
+            file:filename,
+        },
+        function(returned_data){            
+            process_returned_questionnaire (returned_data);
+        },
+    );
+}
 
-parent.Papa.parse(survey_address, { //"https://dl.dropbox.com/s/b00w7ysovtwd3b2/demographics.csv?dl=0"
-	download: true,
-	complete: function(results) {
-		this_survey = (results);
-		write_survey(this_survey,"this_survey_id");
-	}
-});
+if(survey_address.indexOf("http") == -1){
+    ajax_collector_survey(survey_address);
+} else {
+    parent.Papa.parse(survey_address, { 
+    	download: true,
+    	complete: function(results) {
+    		this_survey = (results);
+    		write_survey(this_survey,"this_survey_id");
+    	}
+    });
+}
+
+function process_returned_questionnaire(data){
+    write_survey(parent.Papa.parse(data),"this_survey_id");
+}
+
 
 function write_survey(this_survey,this_id){
-	this_survey_html='<table>';
+    this_survey_html='<table>';
 	for(i=1;i<this_survey.data.length;i++){
 	    this_survey_html += "<tr>";
 	    this_row=rename_indexes(this_survey.data[i],this_survey.data[0]);
-	    console.dir(this_row);
 	    row_html = process_survey_question(this_row);
-	    console.dir(row_html);
 	    this_survey_html += row_html + "</tr>";
 	}
 	this_survey_html += "</table>";
@@ -144,11 +163,13 @@ function process_survey_question(this_row){
         return '';
     } else {
         var this_row_html="<td><b>"+this_row["question"]+"</b></td>"+question_td+"</label></td>";
-        console.dir(this_row["optional"].toLowerCase());
-        if(this_row["optional"].toLowerCase() == "no"){
-            console.dir("hello there");
-            proceed_array.push(this_row["question name"]);    
+        if(typeof(this_row["optional"]) !== "undefined"){
+            console.dir(this_row["optional"].toLowerCase());
+            if(this_row["optional"].toLowerCase() == "no"){
+                proceed_array.push(this_row["question name"]);    
+            }
         }
+
         return this_row_html;
     }
 }
@@ -169,4 +190,4 @@ function rename_indexes(this_row,header_row){
     return new_row;
 }
 
-</script><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !-->
+</script><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !-->
