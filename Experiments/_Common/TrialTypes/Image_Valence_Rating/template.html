@@ -14,7 +14,11 @@
       color:black;
   }
   td{
-      padding:30px;
+      padding:12px;
+      font-size:24px;
+  }
+  span,div{
+    font-size:24px;    
   }
 </style>
 
@@ -24,7 +28,8 @@
     <img id="trial_image" src="[Cue]" width="900" height="400"> <br><br>
     <table id="valence_table" style="display:none">
         <tr>
-            <td> <label> <input type="radio" class="response_no" name="valence" value="1" style="display:none"> <span class="click_button">1</span><br><br> Not all all </label> </td>
+            <td> Extremely negative </td>
+            <td> <label> <input type="radio" class="response_no" name="valence" value="1" style="display:none"> <span class="click_button">1</span><br></label> </td>
             <td> <label> <input type="radio" class="response_no" name="valence" value="2" style="display:none"> <span class="click_button">2</span><br></label> </td>
             <td> <label> <input type="radio" class="response_no" name="valence" value="3" style="display:none"> <span class="click_button">3</span><br></label> </td>
             <td> <label> <input type="radio" class="response_no" name="valence" value="4" style="display:none"> <span class="click_button">4</span><br></label> </td>
@@ -32,7 +37,8 @@
             <td> <label> <input type="radio" class="response_no" name="valence" value="6" style="display:none"> <span class="click_button">6</span><br></label> </td>
             <td> <label> <input type="radio" class="response_no" name="valence" value="7" style="display:none"> <span class="click_button">7</span><br></label> </td>
             <td> <label> <input type="radio" class="response_no" name="valence" value="8" style="display:none"> <span class="click_button">8</span><br></label> </td>
-            <td> <label> <input type="radio" class="response_no" name="valence" value="9" style="display:none"> <span class="click_button">9</span><br><br>Extremely arousing </label> </td>
+            <td> <label> <input type="radio" class="response_no" name="valence" value="9" style="display:none"> <span class="click_button">9</span><br></label> </td>
+            <td> Extremely positive </td>
         </tr>
     </table>
     
@@ -44,12 +50,12 @@
 
 
 $("#trial_image").on("load",function(){
-    $("#everything").show();
+    $("#everything").show(0);
     $("#loading_screen").hide(0);
-    setTimeout(function(){
+    //setTimeout(function(){
         baseline_time=(new Date()).getTime();
         $("#valence_table").show(500);
-    },2000);
+    //},2000);
 });
 
 $(".manikin,.response_no").on("click",function(){
@@ -68,4 +74,4 @@ function proceed_trial(){
 <button class="collectorButton collectorAdvance">Submit</butto n>
     </div>
  -->
-<!-- Warn if try to edit with GUI !-->
+<!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !-->
