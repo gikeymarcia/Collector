@@ -55,21 +55,27 @@ $("#restart_button").on("click",function(){
 }); */
 
 function ajax_collector_survey(filename){
+    
     var ajax_path = parent.Collector_Experiment['ajax_survey_path'];
     $.post(
         ajax_path,
         {
             file:filename,
         },
-        function(returned_data){            
+        function(returned_data){
+            console.dir(returned_data);
             process_returned_questionnaire (returned_data);
         },
     );
 }
-
+console.dir(survey_address);
+ajax_collector_survey(survey_address);
+/*
 if(survey_address.indexOf("http") == -1){
+    console.dir("ajaxing?");
     ajax_collector_survey(survey_address);
 } else {
+    console.dir("papa!?");
     parent.Papa.parse(survey_address, { 
     	download: true,
     	complete: function(results) {
@@ -78,6 +84,7 @@ if(survey_address.indexOf("http") == -1){
     	}
     });
 }
+*/
 
 function process_returned_questionnaire(data){
     write_survey(parent.Papa.parse(data),"this_survey_id");
@@ -176,6 +183,8 @@ function process_survey_question(this_row){
 function rename_indexes(this_row,header_row){
     
     // this_header=header_row[j];
+    console.dir(this_row);
+    console.dir(header_row);
     new_row=[]; 
     for(var i=0;i<this_row.length;i++){
         var this_header=header_row[i].toLowerCase(); //to avoid caps issues
@@ -189,4 +198,4 @@ function rename_indexes(this_row,header_row){
     return new_row;
 }
 
-</script><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !-->
+</script><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !-->
