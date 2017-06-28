@@ -122,7 +122,7 @@ if ($_SETTINGS->show_condition_selector == true && !$is_returning_user) {
       <input name="Username" id="username_input" type="text" value="" class="collectorInput" placeholder="<?= $_SETTINGS->ask_for_login ?>" autofocus>
 
       <!-- Condition selector -->
-      <select name="Condition" class="<?= $select_class ?>">
+      <select name="Condition" class="<?= $select_class ?>" id="select_condition">
         <option default selected value="Auto">Auto</option>
 
         <?php foreach ($options as $o): ?>
@@ -153,6 +153,9 @@ if ($_SETTINGS->show_condition_selector == true && !$is_returning_user) {
             $("form").submit();
         }
     });
+    if($("#select_condition")[0].options.length<3){
+        $("#select_condition").hide();
+    }
 </script>
 <?php
 output_page_footer($FILE_SYS);

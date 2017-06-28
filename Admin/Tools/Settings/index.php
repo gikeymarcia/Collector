@@ -21,22 +21,21 @@ if (!empty($_DATA['exp'])) {
     $FILE_SYS->set_default('Current Experiment', $_DATA['exp']);
 }
 
-
-
-
 // make a new instance of the settings class
+$yourSettings = new Collector\Settings(
+    $FILE_SYS
+);
+
+/* -- this was causing the crash :-( 
 $yourSettings = new Collector\Settings(
     $FILE_SYS->get_path('Common Settings'),
     $FILE_SYS->get_path('Experiment Settings'),
     $FILE_SYS->get_path('Password')
 );
-
-
-/*
-require __DIR__ . '/saveSettings.php';
-require __DIR__ . '/makeSettingOptions.php';
 */
 
+require __DIR__ . '/saveSettings.php';
+require __DIR__ . '/makeSettingOptions.php';
 
 ?>
 <link rel="stylesheet" type="text/css" href="styles.css">
@@ -48,8 +47,9 @@ require __DIR__ . '/makeSettingOptions.php';
         <option id="selectLabel">Choose your settings</option>
         <?php
             foreach ($exps as $name => $i) {
-                $selected = ($_DATA["exp"] == $name) ? " selected" : "";
-                echo "<option value='$name' $selected>$name</option>";
+                $selected = ($_DATA["exp"] == $i) ? " selected" : "";
+                //echo "<option value='$name' $selected>$name</option>";
+                echo "<option value='$i' $selected>$i</option>";
             }
         ?>
     </select>
@@ -57,7 +57,13 @@ require __DIR__ . '/makeSettingOptions.php';
 </div>
 
 <?php
+    print_r($_DATA['exp']);
+    // resume here
+    
+    
+    
     if (!empty($_DATA['exp'])) {
+        
         $name = $_DATA['exp'];
         echo '<div class="exp settings toolWidth">';
             echo "<h3 class='type'>Experiment Settings ($name)<button type='button' class='expander'>&#8679;</button></h3>";
@@ -80,7 +86,7 @@ require __DIR__ . '/makeSettingOptions.php';
             echo "</div>";
 
         echo '</div>';
-    }
+    } 
 ?>
 
 <!-- This is where you edit common experiment settings -->
@@ -136,4 +142,3 @@ require __DIR__ . '/makeSettingOptions.php';
         }
     });
 </script>
-*/
