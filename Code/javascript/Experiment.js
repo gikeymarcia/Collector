@@ -272,7 +272,7 @@ Experiment.prototype = {
     },
 
     get_unrecorded_trials: function(current_row_index) {
-        var responses = this.data.responses;
+        var responses = this.data.responses;        
 
         // dont try to record trial rows that we are still working on
         if (typeof current_row_index !== "undefined") {
@@ -281,8 +281,9 @@ Experiment.prototype = {
             });
         }
 
+        
         // find all the saved responses that haven't yet been recorded to the server
-        return responses.filter(function(trial_set) {
+        return responses.filter(function(trial_set) {                        
             for (var index in trial_set) {
                 return (trial_set[index]['recorded'] === false);
             }
@@ -390,7 +391,7 @@ Experiment.prototype = {
 
         for (var i=0; i<number_of_rows; ++i) {
             var output_row = {};
-
+            
             for (post_level in trial_outputs) {
                 if (typeof trial_outputs[post_level][i] !== 'undefined') {
                     var response_index = i;
@@ -413,10 +414,15 @@ Experiment.prototype = {
                     }
                 }
             }
-
-            rows_in_recording_form.push(output_row);
+            if(i > 0){                
+                if(JSON.stringify(rows_in_recording_form[0]) !== JSON.stringify(output_row)){
+                    console.dir("new row"); // not sure this should ever happen
+                    rows_in_recording_form.push(output_row);
+                }                
+            } else {
+                rows_in_recording_form.push(output_row);
+            }
         }
-
         return rows_in_recording_form;
     },
 
@@ -429,17 +435,22 @@ Experiment.prototype = {
 
         var self = this;
         var rows = trial_sets
-                  .map(function(set) { return self.get_trial_set_output(set); })
-                  .reduce(concat_arrays, [])
-                  .map(function(row) {
-                    row["Username"] = User_Data.Username;
-                    row["ID"]       = User_Data.ID;
-                    row["Exp_Name"] = User_Data.Exp_Name;
-                    return row;
-                  });
+                        .map(function(set) {                            
+                            return self.get_trial_set_output(set); 
+                        })
+                        .reduce(concat_arrays, [])
+                        .map(function(row) {
+                            row["Username"] = User_Data.Username;
+                            row["ID"]       = User_Data.ID;
+                            row["Exp_Name"] = User_Data.Exp_Name;
+                            return row;
+                        });
 
         var rows    = JSON.stringify(rows);
+        
+
         var globals = JSON.stringify(this.data.globals);
+        
         
         $.ajax({
             url: this.root_path + '/Code/trialRecord.php',
