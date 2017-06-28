@@ -47,12 +47,7 @@ function proceed_checks(){
     return(invalid_array);
 }
 proceed_array = [];
-/*
-$("#restart_button").on("click",function(){
 
-    set_trial_position([0,0]);
-    Trial.submit();
-}); */
 
 function ajax_collector_survey(filename){
     
@@ -68,23 +63,7 @@ function ajax_collector_survey(filename){
         },
     );
 }
-console.dir(survey_address);
 ajax_collector_survey(survey_address);
-/*
-if(survey_address.indexOf("http") == -1){
-    console.dir("ajaxing?");
-    ajax_collector_survey(survey_address);
-} else {
-    console.dir("papa!?");
-    parent.Papa.parse(survey_address, { 
-    	download: true,
-    	complete: function(results) {
-    		this_survey = (results);
-    		write_survey(this_survey,"this_survey_id");
-    	}
-    });
-}
-*/
 
 function process_returned_questionnaire(data){
     write_survey(parent.Papa.parse(data),"this_survey_id");
@@ -109,8 +88,14 @@ function process_survey_question(this_row){
         case "radio":
             var options = this_row["answers"].split("|");
             var question_td='<td>';
+            
+            //identify which option has the longest length
+            var longest_option = options.sort(function (a, b) { return b.length - a.length; })[0];
+            console.dir(options);
+            console.dir(longest_option.length);
+            var pix_width = longest_option.length * 10;
             for(var i=0; i<options.length;i++){
-                question_td += "<label>"+options[i] +"<input type='radio' name='survey_"+this_row["question name"].toLowerCase()+"' value='"+options[i]+"'></label><br>";
+                question_td += "<label><span class='radio_"+this_row["question name"]+"' style='display:inline-block; width:"+pix_width+"px'>"+options[i] +"</span><input type='radio' name='survey_"+this_row["question name"].toLowerCase()+"' value='"+options[i]+"'></label><br>";
             }
             question_td += '</td>';
         break;
@@ -198,4 +183,4 @@ function rename_indexes(this_row,header_row){
     return new_row;
 }
 
-</script><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !--><!-- Warn if try to edit with GUI !-->
+</script><!-- Warn if try to edit with GUI !-->
