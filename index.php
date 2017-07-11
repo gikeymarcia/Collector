@@ -18,6 +18,13 @@
  */
 require 'Code/initiateCollector.php';
 
+if(isset($_SESSION['username'])){    
+    print_r($_SESSION['username']);
+    $login_style = "display:none";
+} else {
+    $login_style = "";
+}
+
 // get possible experiments to choose from
 $experiments = array();
 $exp_folder  = $FILE_SYS->get_path('Experiments');
@@ -26,11 +33,42 @@ foreach (get_Collector_experiments($FILE_SYS) as $exp_name) {
 }
 
 output_page_header($FILE_SYS, 'Collector Homepage');
+
+
 ?>
 
 <style>
   .inlineUL { display: inline-block; margin: auto; text-align: left; }
+  #header_bar{
+    position:fixed;
+    right:0px;
+    z-index:5;
+    width:100%;
+    background-color:white;
+    top:0px;
+    left:0px;
+    padding: 10px;
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+    border-bottom-color: blue;
+    box-shadow: -1px 2px 5px grey;  
+  }
+  #username_input{
+      width:400px;
+  }
+
 </style>
+<form action="index.php" method="post">
+    <div id="header_bar" align="right">
+        <span id="username"></span>
+        <input id="username_input" type="email" placeholder="e-mail as username (may not be necessary)">
+        <input type="button" id="register_button" value="register" style="<?= $login_style ?>">
+        <input type="button" id="register_button" value="login" style="<?= $login_style ?>">
+        <span style="color:white">-----</span><!-- laze fix for keeping content on screen -->
+    </div>
+</form>
+
+
 <div class="collectorRoot">
     <h1>Collector</h1>
     <h2>A program for running experiments on the web</h2>

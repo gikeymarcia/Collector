@@ -1,4 +1,5 @@
 <?php
+
 error_reporting(E_ALL);
 
 require_once __DIR__.'/customFunctions.php';
@@ -20,3 +21,5 @@ $_SETTINGS = $_SESSION['settings'];
 if ($_SETTINGS->password === null) {
     require $FILE_SYS->get_path("Set Password");
 }
+
+
