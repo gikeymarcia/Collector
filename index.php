@@ -93,7 +93,15 @@ foreach (get_Collector_experiments($FILE_SYS) as $exp_name) {
 
 output_page_header($FILE_SYS, 'Collector Homepage');
 
-$apps = array();
+$apps_folder  = $FILE_SYS->get_path('apps');
+
+
+$apps = json_encode(array_slice(scandir($apps_folder), 2));
+/*
+foreach (get_Collector_experiments($FILE_SYS) as $exp_name) {
+    $experiments[$exp_name] = "$exp_folder/$exp_name";
+}
+*/
 
 
 ?>
@@ -123,6 +131,9 @@ $apps = array();
         position:absolute;
         left:10px;
     }
+    li{
+        color:white;
+    }
 
 </style>
 <form action="index.php" method="post">
@@ -142,6 +153,7 @@ $apps = array();
         <input id="username_input" type="email" placeholder="e-mail as username (may not be necessary)">
         <input type="button" id="register_button" value="register" style="<?= $login_style ?>">
         <input type="button" id="register_button" value="login" style="<?= $login_style ?>">
+        <a href="<?= $FILE_SYS->get_path('Admin') ?>">Old Login</a>.
         <span style="color:white">-----</span><!-- laze fix for keeping content on screen -->
     </div>
 </form>
@@ -173,20 +185,30 @@ $apps = array();
     </div>
     
     <div id="Apps_div" class="interface_div">
-    
-        here's where the apps will be
+        <h1>Apps</h1>
+        <h2>Select an App to run it!</h2>
+        
+        <div id="apps_list_div">here's where the apps will be</div>
         
     </div>
         
-    <p>Otherwise, you can access one of the other tools
-       <a href="<?= $FILE_SYS->get_path('Admin') ?>">here</a>.
-    </p>
 </div>
 
 
 <script>
 
 var current_skin = "<?= $_SESSION['skin'] ?>";
+
+var apps = <?= $apps ?>;
+console.dir(apps);
+
+if(apps.length > 0){
+    $("#apps_list_div").html("");
+}
+apps.forEach(function(element){
+    $("#apps_list_div").append("<li><a href='Apps/"+element+"'>"+element+"</a></li>");
+});
+
 
 $(".skin_button").each(function(i,obj){
     console.dir(i);

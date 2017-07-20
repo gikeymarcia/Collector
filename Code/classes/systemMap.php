@@ -3,6 +3,9 @@ return array(
 'root'                       => array('Dir'  , '.'),
 'index'                      => array('File' , 'index.php'),
 
+'Apps'                       => array('Dir'  , 'Apps'),
+
+
 'Experiments'                => array('Dir'  , 'Experiments'),
   'Common'                   => array('Dir'  , 'Experiments/_Common'),
     'Common Settings'        => array('File' , 'Experiments/_Common/Common Settings.json'),
