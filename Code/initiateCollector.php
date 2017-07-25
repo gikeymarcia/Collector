@@ -21,5 +21,4 @@ $_SETTINGS = $_SESSION['settings'];
 if ($_SETTINGS->password === null) {
     require $FILE_SYS->get_path("Set Password");
 }
-
-
+?>

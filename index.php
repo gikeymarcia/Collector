@@ -19,7 +19,7 @@
 require 'Code/initiateCollector.php';
 
 
-
+/*
     $servername     = "localhost";
     $username       = "anthony";
     $password       = "HVIg1Xg6XChmYb33";
@@ -31,7 +31,7 @@ require 'Code/initiateCollector.php';
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     } 
-
+*/
     
     
     

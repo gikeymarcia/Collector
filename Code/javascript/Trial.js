@@ -691,25 +691,27 @@ function calculate_percent_similar(given, answer) {
 */
 
 
-function ajax_json_read_write(file,data,experiment_name,read_write,ajax_textarea){
+function ajax_json_read_write(file,data,read_write){
   var ajax_path = parent.Collector_Experiment['ajax_tools_path'];
-  data_read = [];
   $.post(
         ajax_path,
         {
             file:             file,
-            data:             data,
-            experiment_name:  experiment_name,
+            data:             data,            
             read_write:       read_write            
         },
         //callback_function,
         function (returned_data){
-          callback_function(returned_data,ajax_textarea)
+            if(read_write.toLowerCase == "read"){
+                load_completed(returned_data);
+            } else {
+                console.dir(returned_data);
+                save_completed();
+            }
         },
         //document.getElementById(ajax_textarea).value=return_data,
         'text'
     );
-  return data_read;
 }
 
 // Anthony's attempt at functions

@@ -93,10 +93,12 @@ return array(
     'Output Dir'             => array('Dir'  , 'Data/[Current Experiment]-Data[Data Sub Dir]/Output'),
       'Output'               => array('CSV'  , 'Data/[Current Experiment]-Data[Data Sub Dir]/Output/[Username].csv'),
 
+
+      
 'Admin'                      => array('Dir'  , 'Admin'),
   'Admin Index'              => array('File' , 'Admin/index.php'),
   'Tools'                    => array('Dir'  , 'Admin/Tools'),
-
+'Jsons'                      => array('Dir'  , 'Jsons'),
 'Trial Types'                => array('Dir'  , 'TrialTypes'),
   'Trial Type Dir'           => array('Dir'  , 'TrialTypes/[var]'),
     'Trial Template'         => array('File' , 'TrialTypes/[var]/template.html'),
