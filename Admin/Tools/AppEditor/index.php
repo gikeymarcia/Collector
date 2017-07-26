@@ -33,13 +33,16 @@
                     }
                 ?>
             </select>
+            <button id="rename_app" style="display:none">Rename</button>
             <button id="regenerate_page" style="display:none">
-                Regenerate Page
+                Preview Page
             </button>
             <button id="save_app" style="display:none">
                 Save
             </button>
-            <span id="backup_save"></span>
+            <span id="save_status"></span>
+            <button id="new_app">New App</button>
+            
             
         </td>
     </tr>
@@ -60,11 +63,33 @@
 
 parent.ajax_json_location = "../../../Code/classes/Ajax_Json.php";
 
+function save_completed(returned_data){
+    console.dir(returned_data);
+    $("#save_status").html("saved");
+    $("#save_status").fadeIn(1000);
+    setTimeout(function(){
+        $("#save_status").fadeOut(1000);        
+    },3000);
+}
+
 $("#save_app").on("click",function(){
    var this_file = $("#app_select").val();
    var this_content = editor.getValue();   
    ajax_json_read_write (this_file,this_content,"write","app");
 });
+
+$(window).bind('keydown', function(event) {
+    if (event.ctrlKey || event.metaKey) {
+        switch (String.fromCharCode(event.which).toLowerCase()) {
+            case 's':
+                event.preventDefault();
+                $("#save_app").click();
+            break;
+        }
+    }
+  
+});
+
 
 $("#regenerate_page").on("click",function(){
     var content = editor.getValue();
@@ -120,6 +145,7 @@ $("#app_select").on("change",function(){
     
     $("#regenerate_page").show(500);
     $("#save_app").show(500);
+    $("#rename_app").show(500);
     // load app into ace editor   
     
     
