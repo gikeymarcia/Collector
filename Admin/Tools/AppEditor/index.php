@@ -158,7 +158,8 @@ var editor = ace.edit("ACE_editor");
     editor.setOptions({
         enableBasicAutocompletion: true,
         enableSnippets: false,
-        enableLiveAutocompletion: true,                
+        enableLiveAutocompletion: true,  
+        wrap:true,
     });
     
     langTools = ace.require('ace/ext/language_tools'); 

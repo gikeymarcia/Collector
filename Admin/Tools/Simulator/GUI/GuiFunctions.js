@@ -81,6 +81,12 @@ trial_management = {
         code_preview_editor.setTheme("ace/theme/chrome");       
         code_preview_editor.getSession().setMode("ace/mode/html");        
         code_preview_editor.setValue(preview_trial);
+        
+        editor.setOptions({
+            wrap:true,
+        });
+        
+        
     
     },
   processing_canvas_children: function(child){     
