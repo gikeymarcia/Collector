@@ -19,71 +19,6 @@
 require 'Code/initiateCollector.php';
 
 
-/*
-    $servername     = "localhost";
-    $username       = "anthony";
-    $password       = "HVIg1Xg6XChmYb33";
-    $database_name  = "Collector_Users";
-
-    // Create connection
-    $conn = new mysqli($servername, $username, $password,$database_name);
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    } 
-*/
-    
-    
-    
-    /*
-    
-    // sql to create table
-    $sql = "CREATE TABLE Users (
-    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-    email VARCHAR(50),    
-    reg_date TIMESTAMP
-    )";
-
-    
-    
-    if ($conn->query($sql) === TRUE) {
-        echo "Table  created successfully";
-    } else {
-        echo "Error creating table: " . $conn->error;
-    }
-    $conn->close();
-    */
-    
-    
-    /*
-    // Create database
-    $sql = "CREATE DATABASE $database_name";
-    if ($conn->query($sql) === TRUE) {
-        echo "Database created successfully";
-    } else {
-        echo "Error creating database: " . $conn->error;
-    }
- 
-    $conn->close();
-   */
-
-
-if(isset($_SESSION['username'])){    
-    print_r($_SESSION['username']);
-    $login_style = "display:none";
-} else {
-    $login_style = "";
-}
-
-if(isset($_POST['skin'])){
-    $_SESSION['skin'] = $_POST['skin']; 
-}
-
-
-if(!isset($_SESSION['skin'])){
-    $_SESSION['skin'] = "Collector";
-}
-
 // get possible experiments to choose from
 $experiments = array();
 $exp_folder  = $FILE_SYS->get_path('Experiments');
@@ -104,39 +39,58 @@ foreach (get_Collector_experiments($FILE_SYS) as $exp_name) {
 */
 
 
+if(isset($_SESSION['user_email'])){    
+    $login_style = "display:none";
+} else {
+    $login_style = "";
+}
+
+if(isset($_POST['skin'])){
+    $_SESSION['skin'] = $_POST['skin']; 
+}
+
+
+if(!isset($_SESSION['skin'])){
+    $_SESSION['skin'] = "Collector";
+}
+
+
 ?>
 
 <style>
-    .inlineUL { display: inline-block; margin: auto; text-align: left; }
-  
-    .interface_div {
-        display:none;
-    }
-  
-    #header_bar{
-        position:fixed;
-        right:0px;
-        z-index:5;
-        width:100%;
-        background-color:white;
-        top:0px;
-        left:0px;
-        padding: 10px;
-        box-shadow: -1px 2px 5px grey;  
-    }
-    #username_input{
-        width:400px;
-    }
-    #skin_span{
-        position:absolute;
-        left:10px;
-    }
-    li{
-        color:white;
-    }
+.inlineUL { display: inline-block; margin: auto; text-align: left; }
+
+.interface_div {
+    display:none;
+}
+
+#header_bar{
+    position:fixed;
+    right:0px;
+    z-index:5;
+    width:100%;
+    background-color:white;
+    top:0px;
+    left:0px;
+    padding: 10px;
+    box-shadow: -1px 2px 5px grey;  
+}
+#username_input{
+    width:400px;
+}
+#skin_span{
+    position:absolute;
+    left:10px;
+}
+#user_email_span{
+    color:blue;
+}
+li{
+    color:white;
+}
 
 </style>
-<form action="index.php" method="post">
+<form action="login.php" method="post">
     <div id="header_bar" align="right">
         <span id='skin_span'>
             <span id="Collector_skin"   class="skin_button" value="Collector"></span>
@@ -149,14 +103,30 @@ foreach (get_Collector_experiments($FILE_SYS) as $exp_name) {
             <span> other tools for allowing users to select courses etc. </span>
         </span>
         
-        <span id="username"></span>
-        <input id="username_input" type="email" placeholder="e-mail as username (may not be necessary)">
-        <input type="button" id="register_button" value="register" style="<?= $login_style ?>">
-        <input type="button" id="register_button" value="login" style="<?= $login_style ?>">
+        <span id="login_register_span" style="<?= $login_style ?>">
+            <span id="username"></span>
+            <input id="username_input" name="user_email" type="email" placeholder="e-mail address">
+            <input id="password_input" name="user_password" type="password" placeholder="password">
+            
+            <input type="submit" id="register_button" name='login_type' value="register">
+            <input type="submit" id="register_button" name='login_type' value="login">
+        </span>
+        <span id="logout_span">
+            <span id = "user_email_span">
+                <?php
+                    if(isset($_SESSION['user_email'])){
+                        echo $_SESSION['user_email'];
+                    }
+                ?>
+            </span>
+            <button type="submit" name="logout" value="logout" class="collectorButton">Log out</button>
+        </span>
         <a href="<?= $FILE_SYS->get_path('Admin') ?>">Old Login</a>.
         <span style="color:white">-----</span><!-- laze fix for keeping content on screen -->
     </div>
 </form>
+
+<?php if(isset($_SESSION['user_email'])){ ?>
 
 <div class="collectorRoot">
 
@@ -194,6 +164,9 @@ foreach (get_Collector_experiments($FILE_SYS) as $exp_name) {
         
 </div>
 
+<?php 
+} 
+?>
 
 <script>
 
