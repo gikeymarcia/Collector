@@ -15,22 +15,39 @@ $conn = new mysqli($servername, $username, $password, $database_name);
 $user_email = $_POST['user_email'];
 $user_password = $_POST['user_password'];
 
+if($_POST["login_type"]=="logout"){
+    unset($_SESSION['user_email']);
+    header("Location:index.php");
+}
 
-// is the person registering?
 if($_POST["login_type"]=="register"){
-    $sql = "INSERT INTO `users` ( `email`, `password`) VALUES('$user_email', '$user_password')";
-
-    if ($conn->query($sql) === TRUE) {
-        $success_fail = "success"; 
+    // check if email address exists BEFORE saving account
+    
+    $sql="SELECT * FROM users WHERE email='$user_email'"; // "WHERE email='".$user_email."' LIMIT 1;
+    
+    $result = $conn->query($sql);
+    
+    if($result->num_rows>0){
+        $_SESSION['login_error'] = "user already exists";
+        header("Location:index.php");
     } else {
-        echo "Error adding user: " . $conn->error;
+        $sql = "INSERT INTO `users` ( `email`, `password`) VALUES('$user_email', '$user_password')";
+
+        if ($conn->query($sql) === TRUE) {
+            $success_fail = "success"; 
+        } else {
+            $success_fail = "fail";
+            $_SESSION['login_error'] = "Error adding user: " . $conn->error;
+            header("Location:index.php");
+        }
     }
 }
+
 
 // is the user logging in
 if($_POST["login_type"]=="login"){
     
-    $sql="SELECT password FROM users WHERE email='anthony.haffey@reading.ac.uk'"; // "WHERE email='".$user_email."' LIMIT 1;
+    $sql="SELECT password FROM users WHERE email='$user_email'"; // "WHERE email='".$user_email."' LIMIT 1;
     
     $result = $conn->query($sql);
     
@@ -42,6 +59,10 @@ if($_POST["login_type"]=="login"){
         $actual_password = $row['password'];
         if($actual_password == $user_password){
             $success_fail = "success";
+        } else {
+            $success_fail = "fail";            
+            $_SESSION['login_error'] = "invalid username and/or password";
+            header("Location:index.php");
         }
     }    
 }

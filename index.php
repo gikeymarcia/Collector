@@ -41,8 +41,10 @@ foreach (get_Collector_experiments($FILE_SYS) as $exp_name) {
 
 if(isset($_SESSION['user_email'])){    
     $login_style = "display:none";
+    $logout_style = '';
 } else {
     $login_style = "";
+    $logout_style = "display:none";
 }
 
 if(isset($_POST['skin'])){
@@ -63,7 +65,10 @@ if(!isset($_SESSION['skin'])){
 .interface_div {
     display:none;
 }
-
+#error_message{
+    font-size:100px;
+    color: red;
+}
 #header_bar{
     position:fixed;
     right:0px;
@@ -89,42 +94,87 @@ li{
     color:white;
 }
 
+
 </style>
-<form action="login.php" method="post">
-    <div id="header_bar" align="right">
-        <span id='skin_span'>
-            <span id="Collector_skin"   class="skin_button" value="Collector"></span>
-            <span id="CoLecture_skin"   class="skin_button" value="CoLecture"></span>
-            <span id="Apps_skin"        class="skin_button" value="Apps"></span>    
-        </span>
-        
-        <span>
-            <span> Batteries of tasks ... or way to sub group tasks </span>
-            <span> other tools for allowing users to select courses etc. </span>
-        </span>
-        
-        <span id="login_register_span" style="<?= $login_style ?>">
-            <span id="username"></span>
-            <input id="username_input" name="user_email" type="email" placeholder="e-mail address">
-            <input id="password_input" name="user_password" type="password" placeholder="password">
-            
-            <input type="submit" id="register_button" name='login_type' value="register">
-            <input type="submit" id="register_button" name='login_type' value="login">
-        </span>
-        <span id="logout_span">
-            <span id = "user_email_span">
-                <?php
-                    if(isset($_SESSION['user_email'])){
-                        echo $_SESSION['user_email'];
-                    }
-                ?>
-            </span>
-            <button type="submit" name="logout" value="logout" class="collectorButton">Log out</button>
-        </span>
-        <a href="<?= $FILE_SYS->get_path('Admin') ?>">Old Login</a>.
-        <span style="color:white">-----</span><!-- laze fix for keeping content on screen -->
-    </div>
-</form>
+<div id="header_bar" align="right">
+    <table>
+        <tr>
+            <td>
+                <form action="index.php" method="post">
+                    <span id='skin_span'>
+                        <span id="Collector_skin"   class="skin_button" value="Collector"></span>
+                        <span id="CoLecture_skin"   class="skin_button" value="CoLecture"></span>
+                        <span id="Apps_skin"        class="skin_button" value="Apps"></span>    
+                    </span>
+                </form>
+            </td>
+            <td>
+                <span>
+                    <span style="display:none"> Batteries of tasks ... or way to sub group tasks </span>
+                    <span style="display:none"> other tools for allowing users to select courses etc. </span>
+                </span>                            
+            </td>
+            <td>
+                <form action="login.php" method="post">
+                    <span id="login_register_span" style="<?= $login_style ?>">
+                        <span id="username"></span>
+                        <input id="username_input" name="user_email" type="email" placeholder="e-mail address">
+                        <input id="password_input" name="user_password" type="password" placeholder="password">
+                        <input type="submit" class="collectorButton" id="login_button" name='login_type' value="login">
+                        <input type="button" class="collectorButton" id="register_button" value="register">
+                        <input style="display:none" type="submit" class="collectorButton" id="register_submit" name='login_type' value="register">                        
+                    </span>
+                    <span id="logout_span" style="<?= $logout_style ?>">
+                        <span id = "user_email_span">
+                            <?php
+                                if(isset($_SESSION['user_email'])){
+                                    echo $_SESSION['user_email'];
+                                }
+                            ?>
+                        </span>
+                        <button type="submit" name="login_type" value="logout" class="collectorButton">Log out</button>
+                    </span>
+                </form>
+            </td>
+            <td>
+                <button id='admin_button' class='collectorButton' style="<?= $logout_style ?>">Admin</button>
+                <span style="color:white">-------</span><!-- laze fix for keeping content on screen -->
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div id="error_message">
+    <?php
+        if(isset($_SESSION['login_error'])){
+            echo ($_SESSION['login_error']);
+            unset($_SESSION['login_error']);
+        }
+    ?>
+</div>
+
+<script>
+$("#admin_button").on("click",function(){
+    window.location.href = '<?= $FILE_SYS->get_path('Admin') ?>';
+});
+
+$("#register_button").on("click",function(){
+    // checks
+    // password long enough?
+    if($("#password_input").val().length<8){
+        alert("Your password is too short. Please make a password of at least 8 characters. Ideally with a mixture of capital letters, numbers and characters");
+    } else {
+        confirm_password = prompt("Please confirm your password");
+        if(confirm_password == $("#password_input").val()){
+            $("#register_submit").click();
+        } else {
+            alert("The password you just wrote did not match the original password.");
+        }
+    }
+    
+});
+
+</script>
 
 <?php if(isset($_SESSION['user_email'])){ ?>
 

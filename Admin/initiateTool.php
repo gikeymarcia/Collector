@@ -2,7 +2,11 @@
 require __DIR__ . '/../Code/initiateCollector.php';
 require __DIR__ . '/toolsFunctions.php';
 
-verifyLogin($_SETTINGS->password);
+//verifyLogin($_SETTINGS->password);
+if(!isset($_SESSION['user_email'])){
+    $redirect_page = $FILE_SYS->get_path("index");
+    header("Location:$redirect_page");
+}
 
 
 #### Create Aliases
