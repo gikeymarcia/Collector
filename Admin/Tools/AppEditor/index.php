@@ -14,6 +14,7 @@
     #ACE_editor { 
         height:100%;
         width: 100%;
+        display:none;
     }
     #canvas_iframe{
         height: 100%;
@@ -25,14 +26,8 @@
 <table style="height:80%; width:100%">
     <tr>
         <td colspan="2">
-            <select id="app_select">
-                <option selected="true" disabled>Select an App</option>                
-                <?php
-                    foreach($app_files as $app_file){
-                        echo "<option>$app_file</option>";
-                    }
-                ?>
-            </select>
+            <span id="app_select_span"></span>
+            
             <button id="rename_app" style="display:none">Rename</button>
             <button id="regenerate_page" style="display:none">
                 Preview Page
@@ -61,15 +56,64 @@
 
 <script>
 
+var app_files = <?= json_encode($app_files) ?>;
+
+function update_app_files(new_app){
+    if(new_app !== "-initiate-"){
+        if(app_files.indexOf(new_app) == -1){
+            app_files.push(new_app);
+            $("#ACE_editor").show();
+        }
+    }
+    if(new_app == "-initiate-" | app_files.indexOf(new_app) !== -1){
+        app_files_html = '<select id="app_select"><option selected="true" disabled>Select an App</option>';
+        app_files.forEach(function(element){
+            app_files_html += "<option>"+element+"</option>";
+        });
+        app_files_html += "</select>";   
+
+        $("#app_select_span").html(app_files_html); 
+               
+    }
+    $("#app_select").on("change",function(){
+        //alert($("#app_select").val());
+        console.dir(this.value);
+        
+        ajax_json_read_write(this.value,"","read","app");    
+        
+        $("#regenerate_page").show(500);
+        $("#save_app").show(500);
+        $("#rename_app").show(500);
+        // load app into ace editor  
+        $("#ACE_editor").show();
+    });
+    
+}
+update_app_files("-initiate-");
+
+
+
+$("#new_app").on("click",function(){
+    var new_app_name = prompt("What would you like to call your new app?");
+    if(new_app_name !== null){
+        ajax_json_read_write (new_app_name,"","write","app");
+        
+        // update list of apps and select newly created one
+        
+        
+        
+    }   
+});
+
 parent.ajax_json_location = "../../../Code/classes/Ajax_Json.php";
 
 function save_completed(returned_data){
-    console.dir(returned_data);
     $("#save_status").html("saved");
     $("#save_status").fadeIn(1000);
     setTimeout(function(){
         $("#save_status").fadeOut(1000);        
     },3000);
+    update_app_files(returned_data);
 }
 
 $("#save_app").on("click",function(){
@@ -115,7 +159,7 @@ function ajax_json_read_write(file,data,read_write_list,json_app){
                 load_completed(returned_data);
             }
             if(read_write_list.toLowerCase() == "write"){
-                save_completed(); // redundant - no saving should be occurring!
+                save_completed(returned_data); // redundant - no saving should be occurring!
             }
             if(read_write_list.toLowerCase() == "list"){                
                 list_completed(returned_data); // redundant - no saving should be occurring!
@@ -137,19 +181,7 @@ function load_completed(returned_data){
     doc.close();
 }
 
-$("#app_select").on("change",function(){
-    //alert($("#app_select").val());
-    console.dir(this.value);
-    
-    ajax_json_read_write(this.value,"","read","app");    
-    
-    $("#regenerate_page").show(500);
-    $("#save_app").show(500);
-    $("#rename_app").show(500);
-    // load app into ace editor   
-    
-    
-});
+
 
 var editor = ace.edit("ACE_editor");
     editor.setTheme("ace/theme/chrome");       

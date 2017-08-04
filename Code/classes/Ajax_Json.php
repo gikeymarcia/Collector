@@ -14,6 +14,10 @@ $json_app         = strtolower($_POST['json_app']);
 
 if($json_app == "app"){
     // do checks here
+    
+    $file = str_ireplace(".html","",$file);
+    $file = "$file.html";
+    
 } else {
     
     if ($file === '' OR preg_match('/[^a-zA-Z0-9._ -]/', $file) !== 0) {
@@ -49,8 +53,7 @@ if($read_write_list == "read"){
 } 
 if($read_write_list == "write"){
     file_put_contents($file_location,$data);
-    echo $file_location;
-    echo $data;
+    echo $file;
 }
 if($read_write_list == "list"){
     $files = glob("$file_directory/*");
