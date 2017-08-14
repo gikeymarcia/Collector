@@ -58,7 +58,7 @@ function createExpEditorHoT(sheet,selected_handsonTable, sheet_name) {
   
   area.html("<span class='sheet_name' style='display: none'>" + sheet_name + "</span>");
   var container = $("<div>").appendTo(area)[0];
-  window[table_name] = createHoT(container, JSON.parse(JSON.stringify(sheet)));
+  window[table_name] = createHoT(container, JSON.parse(JSON.stringify(sheet)),selected_handsonTable);
 }
 
 function get_HoT_data(current_sheet) { // needs to be adjusted for 

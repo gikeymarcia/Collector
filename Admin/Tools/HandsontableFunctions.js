@@ -68,6 +68,7 @@ function isTrialTypeHeader(colHeader) {
       var addH = addHeight || 0;
       
       var container   = hot.container;
+      
       var thisSizeBox = $(container).find(".wtHider");
       
       var thisWidth  = thisSizeBox.width()+22+addW;
@@ -89,11 +90,11 @@ function isTrialTypeHeader(colHeader) {
             updateDimensions(hot);
         }, 0);
     }
-    function createHoT(container, data) {
+    function createHoT(container, data,sheet_name) {
         var table = new Handsontable(container, {
             data: data,
             minSpareCols: 1,
-            minSpareRows: 1,
+            minSpareRows: 1,            
 
             /* next release - make these properties work without problems with scrollbar
             
@@ -134,11 +135,7 @@ function isTrialTypeHeader(colHeader) {
                 for (var k=0; k<this.countCols()-1; k++){
                     //checking for invalid item number (1)
                     if(this.getDataAtCell(0,k).toLowerCase()=="item"){
-                        // check if there's a console.dir("looking here");
-                        console.dir(this.countRows());
                         for(m=0;m<this.countRows();m++){
-                            console.dir(this);
-                            console.dir(this.getDataAtCell(m,k)); 
                             if(this.getDataAtCell(m,k)==1){
                                 alert("Warning v1: 1 does not refer to any row in the Stimuli sheet! The first row is row 2 (as row 1 is the header). Fix row "+(m+1)+" in your Procedure's Item column.");
                             }
@@ -202,13 +199,12 @@ function isTrialTypeHeader(colHeader) {
             },
             
             afterSelectionEnd: function(){
-              var coords        = this.getSelected();
-              var column        = this.getDataAtCell(0,coords[1]); 
-              var thisCellValue = this.getDataAtCell(coords[0],coords[1]);
-              window['Current HoT Coordinates'] = coords;
-              
-              helperActivate(column, thisCellValue);
-            
+                var coords        = this.getSelected();
+                var column        = this.getDataAtCell(0,coords[1]); 
+                var thisCellValue = this.getDataAtCell(coords[0],coords[1]);
+                window['Current HoT Coordinates'] = coords;              
+                helperActivate(column, thisCellValue);                          
+                cell_content_process(thisCellValue,coords,sheet_name);
             },
             cells: function(row, col, prop) {
               var cellProperties = {};        

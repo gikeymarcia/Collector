@@ -23,29 +23,39 @@
     }
 ?>
 
+<style>
+#cell_content{
+    /* nothing yet */
+}
+</style>
 
 
 <link rel="stylesheet" href="../handsontables/handsontables.full.css">
 <script src="../handsontables/handsontables.full.js"></script>
-
+<br><br><br>
 <table id="exp_data">
-  <tr>
-    <div id="Conditions" class="hide_show_elements"> 
-      <h3>Conditions</h3>
-      <div id="conditionsArea"> Select study
-        <!-- <div id="sheetTable"></div> -->
-      </div>
-    </div>
-  </tr>
-  <tr>
-    <td id="Stimuli" class="hide_show_elements">
-      <h3>Stimuli</h3>
-      <select id="stim_select"></select>
-      <button type="button" id="new_stim_button" class="collectorButton">New Stimuli Sheet</button>
-      <span id="stimsArea">
-        <div id="stimsheetTable"></div> 
-      </span>
-    </td>
+    <tr>
+        <td colspan="2" align="left"><textarea id="cell_content" rows="1"></textarea></td>
+    </tr>
+    <tr>
+        <td>
+            <div id="Conditions" class="hide_show_elements"> 
+                <h3>Conditions</h3>
+                <div id="conditionsArea"> Select study
+                    <!-- <div id="sheetTable"></div> -->
+                </div>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td id="Stimuli" class="hide_show_elements">
+            <h3>Stimuli</h3>
+            <select id="stim_select"></select>
+            <button type="button" id="new_stim_button" class="collectorButton">New Stimuli Sheet</button>
+            <span id="stimsArea">
+                <div id="stimsheetTable"></div> 
+            </span>
+        </td>
     
     <td id="Procedure" class="hide_show_elements">
       <h3>Procedure</h3>
@@ -65,8 +75,32 @@
 
 <script src="../ExperimentEditor/ExpEditorActions.js"></script>
 <script src="../ExperimentEditor/ExpEditorFunctions.js"></script>
-
 <script>
+
+sheet_management = {
+    current_sheet:'',
+    current_coords:[], 
+}
+
+$("#cell_content").on("keyup",function(){
+    console.dir(this.value);
+    console.dir(sheet_management.current_sheet);
+    console.dir(sheet_management.current_coords);
+    
+    // change cell value
+    
+    
+});
+
+function cell_content_process(thisCellValue,coords,this_sheet){
+    $("#cell_content").val(thisCellValue);
+    sheet_management.current_sheet = this_sheet;
+    sheet_management.current_coords = coords;
+}
+
+var cell_width = $(window).width()*0.9;
+$("#cell_content").css("width",cell_width+"px");
+
 
 var simulator_on_off = "<?= $simulator_on_off; ?>";
 var experiment_files = <?= json_encode($experiment_files); ?>;
